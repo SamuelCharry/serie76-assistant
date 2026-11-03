@@ -97,6 +97,12 @@ typography:
     fontWeight: 400
     lineHeight: "18sp"
     letterSpacing: "0sp"
+  label-medium:
+    fontFamily: "Rethink Sans"
+    fontSize: "12sp"
+    fontWeight: 500
+    lineHeight: "16sp"
+    letterSpacing: "0sp"
   label:
     fontFamily: "Rethink Sans"
     fontSize: "14sp"
@@ -109,6 +115,7 @@ rounded:
   card: "16dp"
   message: "20dp"
   composer: "24dp"
+  profile-avatar: "50%"
 spacing:
   "4": "4dp"
   "6": "6dp"
@@ -189,6 +196,50 @@ components:
   button-text-dark:
     textColor: "{colors.dark-on-primary-container}"
     typography: "{typography.label}"
+  profile-footer-light:
+    backgroundColor: "{colors.light-background}"
+    textColor: "{colors.light-on-background}"
+    rounded: "{rounded.history}"
+    padding: "14dp 4dp"
+    typography: "{typography.title-small}"
+  profile-avatar-light:
+    textColor: "{colors.light-on-primary-container}"
+    rounded: "{rounded.profile-avatar}"
+    size: "40dp"
+  profile-menu-light:
+    backgroundColor: "{colors.light-surface}"
+    textColor: "{colors.light-on-surface}"
+    rounded: "{rounded.card}"
+  profile-editor-light:
+    backgroundColor: "{colors.light-surface}"
+    textColor: "{colors.light-on-surface}"
+    rounded: "{rounded.composer}"
+  profile-appearance-heading-light:
+    textColor: "{colors.light-on-surface-variant}"
+    typography: "{typography.label-medium}"
+    padding: "12dp 16dp"
+  profile-footer-dark:
+    backgroundColor: "{colors.dark-background}"
+    textColor: "{colors.dark-on-background}"
+    rounded: "{rounded.history}"
+    padding: "14dp 4dp"
+    typography: "{typography.title-small}"
+  profile-avatar-dark:
+    textColor: "{colors.dark-on-primary-container}"
+    rounded: "{rounded.profile-avatar}"
+    size: "40dp"
+  profile-menu-dark:
+    backgroundColor: "{colors.dark-surface}"
+    textColor: "{colors.dark-on-surface}"
+    rounded: "{rounded.card}"
+  profile-editor-dark:
+    backgroundColor: "{colors.dark-surface}"
+    textColor: "{colors.dark-on-surface}"
+    rounded: "{rounded.composer}"
+  profile-appearance-heading-dark:
+    textColor: "{colors.dark-on-surface-variant}"
+    typography: "{typography.label-medium}"
+    padding: "12dp 16dp"
 ---
 
 # Design System: Konecto Series 76 Android
@@ -199,12 +250,12 @@ components:
 
 A quiet native conversation workspace with an open center, soft violet controls and locally bundled Rethink Sans. Near-white light surfaces and graphite dark surfaces keep technical reading clear. A static diffuse light field and sourced Konecto wave give the empty chat atmosphere without placing geometry behind the results.
 
-This refresh records the implemented V4 refinement of the retained editorial components. The scope is English Android phone UI in both light and dark modes: chat, left conversation history and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality, backend integration or physical-device performance.
+This record retains the implemented V4 editorial system and adds the local profile extension. The scope is English Android phone UI in both light and dark modes: chat, left conversation history with a compact profile footer/menu/editor, and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality, backend integration or physical-device performance.
 
 **Key Characteristics:**
 - Centered Hello and icon-only empty-chat toolbar.
 - Soft gradient actions, outlined composer and restrained static background.
-- Matched light/dark semantic roles with a saved native appearance switch.
+- Matched light/dark semantic roles with saved Light/Dark/System appearance choices.
 - Complete technical evidence in readable cards and synchronized comparison columns.
 
 ## Colors
@@ -242,7 +293,7 @@ The frontmatter records the explicit light/dark Material roles and soft-action s
 - **Body small:** dates, source disclosure and comparison guidance.
 - **Label:** native actions and the functional Assistant speaker label.
 
-The theme also defines headlineLarge, labelMedium and labelSmall; they are not promoted as new surface patterns. Hello and Thinking expose stable whole-text accessibility semantics rather than individual animated letters.
+The profile Appearance heading uses the label-medium role. The theme also defines headlineLarge and labelSmall; they are not promoted as new surface patterns. Hello and Thinking expose stable whole-text accessibility semantics rather than individual animated letters.
 
 **The Context Stays Visible Rule.** Preserve complete technical identifiers, units, unavailable states and source notes; retain native font scaling rather than shrinking data to fit.
 
@@ -252,13 +303,13 @@ Chat fills the phone window. Empty-chat toolbar contains menu and new-conversati
 
 The composer is anchored using navigation-bar and IME insets, 16dp horizontal/12dp vertical outer padding and an 8dp gap. The field grows from two to five lines; Send is 48dp. Chat content uses 20dp horizontal/16dp vertical padding and 24dp message gaps. User bubbles align right with a 320dp maximum width; assistant prose remains unboxed.
 
-The modal drawer occupies 84% of the parent width with 20dp internal horizontal padding. History uses 6dp row gaps, two-line ellipsized titles and dates. The Dark theme switch has a 56dp minimum row height. Android system appearance is used until the user makes an explicit selection; the Boolean choice persists in local SharedPreferences. Status/navigation icon appearance follows the effective scheme.
+The modal drawer occupies 84% of the parent width with 20dp internal horizontal padding. History uses 6dp row gaps, two-line ellipsized titles and dates. A profile footer stays below the scrolling history and a half-alpha outlineVariant divider. Its compact anchored menu is constrained to 240 to 300dp width. Light, Dark and System replace the previous binary switch; System follows Android appearance and is the initial choice. The selected mode persists in local SharedPreferences; an existing Boolean preference restores Light or Dark until a mode is selected. Status/navigation icon appearance follows the effective scheme.
 
 Comparison fixes specification labels while product columns share horizontal scrolling. At fontScale 1, label/product widths are 148/216dp and header/row heights are 96/76dp; these multiply by fontScale clamped to at least 1. No tablet breakpoint is established.
 
 ## Elevation & Depth
 
-Custom surfaces use tonal separation and thin rules without custom shadows. Native Material state layers and modal behavior remain. The drawer scrim uses onSurface at 24% alpha. Borders and gradients are native materials of this world.
+Custom surfaces use tonal separation and thin rules without custom shadows. Native Material state layers, popup shadows and modal behavior remain. The profile menu explicitly uses surface with zero tonal elevation; the editor explicitly uses surface rather than a tinted container. The drawer scrim uses onSurface at 24% alpha. Borders and gradients are native materials of this world.
 
 The static background has two radial light fields. Their empty-chat alphas are 0.85/0.8 in light and 0.6/0.8 in dark; both reduce to 0.25 when content appears. Only the empty idle canvas carries the original 184-path Konecto vector, tinted muted violet at 0.32 light/0.24 dark alpha, cropped into a 320dp-high lower region with a -38dp offset. The native conversion and source hash are recorded in .impeccable/references/konecto-wave-origin.json. No shipping raster is used.
 
@@ -268,7 +319,7 @@ Hello reveals per-letter tint, opacity and baseline over 640ms with cubic-bezier
 
 ## Shapes
 
-Fine boundaries pair with rounded native surfaces. Theme small/medium/large corners are 12/16/24dp. History, soft New chat, product/error cards, user bubbles and composer use the frontmatter radii. Send is circular. The drawer rounds its trailing corners only. Composer and technical cards use 1dp borders. Native text/outlined buttons and switches retain their own shape and state behavior.
+Fine boundaries pair with rounded native surfaces. Theme small/medium/large corners are 12/16/24dp. History, soft New chat, product/error cards, user bubbles and composer use the frontmatter radii. Send is circular. The drawer rounds its trailing corners only. Composer and technical cards use 1dp borders. The profile avatar is circular, its menu uses the card radius and its editor uses the composer radius. Native text/outlined buttons, text fields and radio controls retain their shape and state behavior.
 
 ## Components
 
@@ -282,7 +333,17 @@ The outlined composer uses the active surface and onSurface body text, a muted p
 
 ### Navigation
 
-Menu opens left modal history; the edit vector creates a conversation. Scrim, swipe and system Back dismiss history while retaining chat/draft. Selected history uses primaryContainer. Session switching and New chat disable while sending. The Dark theme row toggles the local appearance choice. Debug entry and response inspection remain development-only; release source-set composables are no-ops.
+Menu opens left modal history; the edit vector creates a conversation. Scrim, swipe and system Back dismiss history while retaining chat/draft. Selected history uses primaryContainer. Session switching and New chat disable while sending. The profile footer opens the local profile and appearance menu. Debug entry and response inspection remain development-only; release source-set composables are no-ops.
+
+### Local Profile and Appearance
+
+The footer is a quiet navigation surface, not an authenticated account. It uses background, the history radius, 14dp vertical/4dp horizontal padding and a 12dp avatar/text gap. The 40dp circular avatar reuses Soft Accent with a 20dp fine-stroke profile vector in onPrimaryContainer; it carries no invented photograph or initials. The summary uses title-small and muted body-small, a 2dp text gap and one-line ellipsis. Blank details show Profile / Local profile.
+
+The surface menu has the card radius, native popup dismissal and 48dp native menu actions. Its header uses 16dp horizontal/12dp vertical padding, 4dp gaps, title-medium (up to two lines), muted body-medium email that wraps, and body-small device-storage disclosure. Blank details show Local profile / No email added. Edit profile opens the editor; Light, Dark and System have trailing native radios and selected semantics. Selection saves the mode and closes the menu without changing the conversation or draft. Scrim/outside tap and system Back use native dismissal.
+
+The editor is a native AlertDialog with the composer radius and an explicit surface container. A scrollable form uses 16dp gaps, short device-storage disclosure and native outlined Name/Email fields. Fields are optional and single-line; limits are 80/254 characters, with an email keyboard and inline error for invalid nonblank email. Save stays disabled while the email is invalid, trims both values and persists them only on this device. Cancel or dismissal leaves the stored details unchanged. Native field labels, focus/selection, error roles and text-button feedback remain authoritative; the editor adds no custom form colors or type scale.
+
+ProfileDetails and its save callback isolate presentation from storage. No identity is shipped as a default; examples are fixtures only. Account switching and authentication are future work with no inert account controls in this menu.
 
 ### Cards / Containers
 
@@ -301,6 +362,7 @@ Conversation controls use native fine-stroke vectors, meaningful content descrip
 ### Do:
 - Do preserve scalable text, 48dp action targets, meaningful icon descriptions and system/keyboard insets.
 - Do use scheme-specific content roles for readable controls, messages, history and data surfaces.
+- Do keep local profile disclosure explicit, preserve optional details and offer Light/Dark/System through native selectable rows.
 - Do retain full identifiers, units, N/A, source disclosure and expandable notes.
 - Do preserve fixed comparison labels and synchronized product scrolling.
 - Do keep the sourced wave decorative and static, with its provenance alongside the native vector.
@@ -310,4 +372,5 @@ Conversation controls use native fine-stroke vectors, meaningful content descrip
 - Don't use saturated purple slabs, decorative kickers, hard offset shadows or system display faces.
 - Don't put wave geometry behind populated chat or animate the background at idle.
 - Don't add voice, attachments, model selectors, search or unrelated controls.
+- Don't invent a default identity, imply authentication or add a nonfunctional account-switch action.
 - Don't place developer traces in release product data or replace semantic content with rasterized text.

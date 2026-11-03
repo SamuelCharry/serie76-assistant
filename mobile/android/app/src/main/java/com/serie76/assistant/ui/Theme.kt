@@ -51,8 +51,18 @@ private val darkColors = darkColorScheme(
     error = Color(0xFFFFB2BD), errorContainer = Color(0xFF42232D), onErrorContainer = Color(0xFFFFDCE2),
 )
 
-data class Appearance(val dark: Boolean, val setDark: (Boolean) -> Unit)
-val LocalAppearance = staticCompositionLocalOf { Appearance(false, {}) }
+enum class AppearanceMode(val key: String, val label: String) {
+    Light("light", "Light"), Dark("dark", "Dark"), System("system", "System");
+
+    companion object {
+        fun restored(key: String?, legacyDark: Boolean?): AppearanceMode =
+            if (key != null) entries.firstOrNull { it.key == key } ?: System
+            else when (legacyDark) { true -> Dark; false -> Light; null -> System }
+    }
+}
+
+data class Appearance(val dark: Boolean, val mode: AppearanceMode, val setMode: (AppearanceMode) -> Unit)
+val LocalAppearance = staticCompositionLocalOf { Appearance(false, AppearanceMode.System, {}) }
 
 // Quiet washes rather than saturated purple controls, in both color schemes.
 val SoftAccent: Brush
@@ -85,9 +95,14 @@ fun SeriesTheme(darkOverride: Boolean? = null, content: @Composable () -> Unit) 
     val context = LocalContext.current
     val systemDark = isSystemInDarkTheme()
     val preferences = remember(context) { context.getSharedPreferences("appearance", Context.MODE_PRIVATE) }
-    var saved by remember(preferences) { mutableStateOf<Boolean?>(
-        if (preferences.contains("dark")) preferences.getBoolean("dark", false) else null) }
-    val dark = darkOverride ?: saved ?: systemDark
+    var mode by remember(preferences) { mutableStateOf(AppearanceMode.restored(
+        preferences.getString("mode", null),
+        if (preferences.contains("dark")) preferences.getBoolean("dark", false) else null)) }
+    val dark = darkOverride ?: when (mode) {
+        AppearanceMode.Light -> false
+        AppearanceMode.Dark -> true
+        AppearanceMode.System -> systemDark
+    }
     val view = LocalView.current
     val activity = remember(view.context) {
         generateSequence(view.context) { (it as? ContextWrapper)?.baseContext }.filterIsInstance<Activity>().firstOrNull()
@@ -99,9 +114,9 @@ fun SeriesTheme(darkOverride: Boolean? = null, content: @Composable () -> Unit) 
         } }
     }
     CompositionLocalProvider(LocalContentColor provides (if (dark) darkColors else colors).onBackground,
-        LocalAppearance provides Appearance(dark) { value ->
-        saved = value
-        preferences.edit().putBoolean("dark", value).apply()
+        LocalAppearance provides Appearance(dark, mode) { value ->
+        mode = value
+        preferences.edit().putString("mode", value.key).remove("dark").apply()
     }) {
     MaterialTheme(colorScheme = if (dark) darkColors else colors, typography = editorialType, shapes = Shapes(
         small = RoundedCornerShape(12.dp), medium = RoundedCornerShape(16.dp), large = RoundedCornerShape(24.dp)

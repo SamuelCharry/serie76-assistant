@@ -28,6 +28,8 @@ Exactly three screens: conversations, multi-turn chat, developer debug. The back
 
 ## Brand Commitments
 
+Profile extension: user requested a compact profile menu in the drawer with editable local name/email and Light/Dark/System appearance. Preserve V4 visual tokens and chat. Account switching/authentication remain future work; do not show invented identity or a nonfunctional switch-account control. Details and theme choice stay on-device. See docs/MOBILE_PROFILE.md.
+
 Current refinement: centered Hello with a gentle letter entrance, animated waiting text only while sending, no shortcut rows/slogan/redundant Series76 labels. Both light and dark modes are explicitly requested; a local drawer switch saves the choice. Use only Konecto's sourced wave background language, with diffuse light and readable native content. Prior Editorial A and V2 home compositions are historical for the user-replaced parts. See docs/MOBILE_DIRECTION_V4.md.
 
 Current redesign: the user rejected the generic V2 finish, retained chat-first startup and left history, and approved Editorial A across the whole app with native adaptations. Use locally bundled Rethink Sans, Konecto white/plum/lilac, an editorial two-line actuator greeting, ruled text shortcut rows, outlined white composer and coherent fine-stroke icons. Native drawer, restrained entrance and press motion; no added business features. V2/C are historical, not current visual authority.

@@ -1,5 +1,7 @@
 # Ambient chat: light and dark
 
+Profile extension: docs/MOBILE_PROFILE.md supersedes the binary Dark theme switch with the compact profile menu and Light/Dark/System options. All other visual and motion commitments remain.
+
 Mode: Operate. This is a precise user-directed refinement of the existing native app, not a new feature or visual-concept tournament.
 
 The user removed the two draft shortcuts, supporting slogan, oversized actuator headline and redundant Series76 labels. They requested a centered Hello, letter animation on arrival and while waiting, softer purple gradients, and finally both light/dark modes with only the background language of Konecto's website. The website's text, logos, cards and business capabilities are excluded.

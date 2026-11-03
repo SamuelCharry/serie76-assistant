@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-03T16:37:14.421276+00:00",
+  "generatedAt": "2026-11-03T17:05:02.168467+00:00",
   "title": "Design System: Konecto Series 76 Android",
   "extensions": {
     "colorMeta": {
@@ -676,6 +676,10 @@
       },
       "label": {
         "displayName": "Label"
+      },
+      "label-medium": {
+        "displayName": "Appearance heading",
+        "purpose": "Native profile menu section label; existing Theme.kt labelMedium metrics."
       }
     },
     "shadows": [],
@@ -779,15 +783,47 @@
       "description": "Technical reading container without invented catalogue figures.",
       "html": "<article class=\"ds-product\"><h3>Product identifier</h3><div class=\"ds-attribute\"><span>Attribute</span><span>Reported value</span></div><small>Source: supplied catalogue</small></article>",
       "css": ".ds-product{font-family:\"Rethink Sans\",sans-serif;display:grid;gap:10px;padding:16px;border:1px solid #44394F;border-radius:16px;background:#1B1921;color:#F4F0F8}.ds-product h3{margin:0;font-size:18px;font-weight:600;line-height:24px}.ds-attribute{display:grid;grid-template-columns:1fr 1fr;gap:16px;border-top:1px solid #44394F;padding-top:10px;font-size:14px;line-height:21px}.ds-attribute>span:first-child,.ds-product small{color:#BFB4CB}.ds-product small{font-size:12px;line-height:18px}"
+    },
+    {
+      "name": "Profile footer (light)",
+      "kind": "nav",
+      "refersTo": "profile-footer-light",
+      "description": "Local details only. SVG translates the native profile vector; browser states approximate native feedback.",
+      "html": "<button class=\"ds-profile\" aria-label=\"Open profile menu\"><span class=\"ds-avatar\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 8C16 10.2 14.2 12 12 12C9.8 12 8 10.2 8 8C8 5.8 9.8 4 12 4C14.2 4 16 5.8 16 8M4 21C4 16.6 7.6 14 12 14C16.4 14 20 16.6 20 21\"/></svg></span><span class=\"ds-profile-copy\"><strong>Profile</strong><small>Local profile</small></span></button>",
+      "css": ".ds-profile{font-family:\"Rethink Sans\",sans-serif;display:flex;align-items:center;gap:12px;width:100%;padding:14px 4px;border:0;border-radius:12px;text-align:left;background:#FCFCFD;color:#211A2B}.ds-avatar{display:grid;place-items:center;flex-shrink:0;width:40px;height:40px;border-radius:50%;background:linear-gradient(90deg,#F4ECFD,#E5DCF3);color:#675479}.ds-profile-copy{display:grid;gap:2px;min-width:0}.ds-profile-copy strong{font-size:15px;line-height:22px;font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.ds-profile-copy small{font-size:12px;line-height:18px;color:#62596C;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.ds-profile:hover{filter:brightness(.98)}.ds-profile:focus-visible{outline:2px solid #73617F;outline-offset:2px}.ds-profile:active{filter:brightness(.94)}"
+    },
+    {
+      "name": "Profile menu (light)",
+      "kind": "custom",
+      "refersTo": "profile-menu-light",
+      "description": "Surface popup with native elevation. HTML is a static content/state preview; native placement, dismissal and persistence are not simulated.",
+      "html": "<section class=\"ds-profile-menu\" aria-label=\"Local profile\"><header><strong>Local profile</strong><span>No email added</span><small>Saved on this device</small></header><button>Edit profile</button><hr><h4>Appearance</h4><label><span>Light</span><input type=\"radio\" name=\"ds-appearance-light\" checked></label><label><span>Dark</span><input type=\"radio\" name=\"ds-appearance-light\" ></label><label><span>System</span><input type=\"radio\" name=\"ds-appearance-light\"></label></section>",
+      "css": ".ds-profile-menu{font-family:\"Rethink Sans\",sans-serif;width:240px;max-width:300px;padding:8px 0;border-radius:16px;background:#FFFFFF;color:#211A2B}.ds-profile-menu header{display:grid;gap:4px;padding:12px 16px}.ds-profile-menu strong{font-size:18px;line-height:24px;font-weight:600}.ds-profile-menu header span{font-size:14px;line-height:21px;color:#62596C;overflow-wrap:anywhere}.ds-profile-menu small{font-size:12px;line-height:18px;color:#62596C}.ds-profile-menu button,.ds-profile-menu label{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:0 12px;background:transparent;color:#211A2B;border:0;font:400 16px/24px \"Rethink Sans\",sans-serif}.ds-profile-menu button{width:100%;text-align:left}.ds-profile-menu hr{margin:0 16px;border:0;border-top:1px solid #E7E1EF}.ds-profile-menu h4{margin:0;padding:12px 16px;font-size:12px;line-height:16px;font-weight:500;color:#62596C}.ds-profile-menu input{accent-color:#73617F;width:20px;height:20px}.ds-profile-menu button:hover,.ds-profile-menu label:hover{background:#E7E1EF33}.ds-profile-menu button:focus-visible,.ds-profile-menu label:focus-within{outline:2px solid #73617F;outline-offset:-2px}.ds-profile-menu button:active{background:#E7E1EF66}"
+    },
+    {
+      "name": "Profile footer (dark)",
+      "kind": "nav",
+      "refersTo": "profile-footer-dark",
+      "description": "Local details only. SVG translates the native profile vector; browser states approximate native feedback.",
+      "html": "<button class=\"ds-profile\" aria-label=\"Open profile menu\"><span class=\"ds-avatar\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 8C16 10.2 14.2 12 12 12C9.8 12 8 10.2 8 8C8 5.8 9.8 4 12 4C14.2 4 16 5.8 16 8M4 21C4 16.6 7.6 14 12 14C16.4 14 20 16.6 20 21\"/></svg></span><span class=\"ds-profile-copy\"><strong>Profile</strong><small>Local profile</small></span></button>",
+      "css": ".ds-profile{font-family:\"Rethink Sans\",sans-serif;display:flex;align-items:center;gap:12px;width:100%;padding:14px 4px;border:0;border-radius:12px;text-align:left;background:#101014;color:#F4F0F8}.ds-avatar{display:grid;place-items:center;flex-shrink:0;width:40px;height:40px;border-radius:50%;background:linear-gradient(90deg,#30273E,#433354);color:#E1D1F0}.ds-profile-copy{display:grid;gap:2px;min-width:0}.ds-profile-copy strong{font-size:15px;line-height:22px;font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.ds-profile-copy small{font-size:12px;line-height:18px;color:#BFB4CB;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.ds-profile:hover{filter:brightness(.98)}.ds-profile:focus-visible{outline:2px solid #D0BDE2;outline-offset:2px}.ds-profile:active{filter:brightness(.94)}"
+    },
+    {
+      "name": "Profile menu (dark)",
+      "kind": "custom",
+      "refersTo": "profile-menu-dark",
+      "description": "Surface popup with native elevation. HTML is a static content/state preview; native placement, dismissal and persistence are not simulated.",
+      "html": "<section class=\"ds-profile-menu\" aria-label=\"Local profile\"><header><strong>Local profile</strong><span>No email added</span><small>Saved on this device</small></header><button>Edit profile</button><hr><h4>Appearance</h4><label><span>Light</span><input type=\"radio\" name=\"ds-appearance-dark\" ></label><label><span>Dark</span><input type=\"radio\" name=\"ds-appearance-dark\" checked></label><label><span>System</span><input type=\"radio\" name=\"ds-appearance-dark\"></label></section>",
+      "css": ".ds-profile-menu{font-family:\"Rethink Sans\",sans-serif;width:240px;max-width:300px;padding:8px 0;border-radius:16px;background:#1B1921;color:#F4F0F8}.ds-profile-menu header{display:grid;gap:4px;padding:12px 16px}.ds-profile-menu strong{font-size:18px;line-height:24px;font-weight:600}.ds-profile-menu header span{font-size:14px;line-height:21px;color:#BFB4CB;overflow-wrap:anywhere}.ds-profile-menu small{font-size:12px;line-height:18px;color:#BFB4CB}.ds-profile-menu button,.ds-profile-menu label{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:0 12px;background:transparent;color:#F4F0F8;border:0;font:400 16px/24px \"Rethink Sans\",sans-serif}.ds-profile-menu button{width:100%;text-align:left}.ds-profile-menu hr{margin:0 16px;border:0;border-top:1px solid #44394F}.ds-profile-menu h4{margin:0;padding:12px 16px;font-size:12px;line-height:16px;font-weight:500;color:#BFB4CB}.ds-profile-menu input{accent-color:#D0BDE2;width:20px;height:20px}.ds-profile-menu button:hover,.ds-profile-menu label:hover{background:#44394F33}.ds-profile-menu button:focus-visible,.ds-profile-menu label:focus-within{outline:2px solid #D0BDE2;outline-offset:-2px}.ds-profile-menu button:active{background:#44394F66}"
     }
   ],
   "narrative": {
     "northStar": "The Engineering Journal",
-    "overview": "A quiet native conversation workspace with an open center, soft violet controls and locally bundled Rethink Sans. Near-white light surfaces and graphite dark surfaces keep technical reading clear. A static diffuse light field and sourced Konecto wave give the empty chat atmosphere without placing geometry behind the results.\n\nThis refresh records the implemented V4 refinement of the retained editorial components. The scope is English Android phone UI in both light and dark modes: chat, left conversation history and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality, backend integration or physical-device performance.",
+    "overview": "A quiet native conversation workspace with an open center, soft violet controls and locally bundled Rethink Sans. Near-white light surfaces and graphite dark surfaces keep technical reading clear. A static diffuse light field and sourced Konecto wave give the empty chat atmosphere without placing geometry behind the results.\n\nThis record retains the implemented V4 editorial system and adds the local profile extension. The scope is English Android phone UI in both light and dark modes: chat, left conversation history with a compact profile footer/menu/editor, and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality, backend integration or physical-device performance.",
     "keyCharacteristics": [
       "Centered Hello and icon-only empty-chat toolbar.",
       "Soft gradient actions, outlined composer and restrained static background.",
-      "Matched light/dark semantic roles with a saved native appearance switch.",
+      "Matched light/dark semantic roles with saved Light/Dark/System appearance choices.",
       "Complete technical evidence in readable cards and synchronized comparison columns."
     ],
     "rules": [
@@ -810,6 +846,7 @@
     "dos": [
       "Do preserve scalable text, 48dp action targets, meaningful icon descriptions and system/keyboard insets.",
       "Do use scheme-specific content roles for readable controls, messages, history and data surfaces.",
+      "Do keep local profile disclosure explicit, preserve optional details and offer Light/Dark/System through native selectable rows.",
       "Do retain full identifiers, units, N/A, source disclosure and expandable notes.",
       "Do preserve fixed comparison labels and synchronized product scrolling.",
       "Do keep the sourced wave decorative and static, with its provenance alongside the native vector."
@@ -819,6 +856,7 @@
       "Don't use saturated purple slabs, decorative kickers, hard offset shadows or system display faces.",
       "Don't put wave geometry behind populated chat or animate the background at idle.",
       "Don't add voice, attachments, model selectors, search or unrelated controls.",
+      "Don't invent a default identity, imply authentication or add a nonfunctional account-switch action.",
       "Don't place developer traces in release product data or replace semantic content with rasterized text."
     ]
   }

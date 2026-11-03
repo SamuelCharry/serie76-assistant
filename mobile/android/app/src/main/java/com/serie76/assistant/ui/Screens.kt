@@ -6,7 +6,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,7 +36,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.CollectionInfo
 import androidx.compose.ui.semantics.collectionInfo
 import androidx.compose.ui.semantics.selected
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -95,7 +93,6 @@ fun SeriesApp(viewModel: AppViewModel) {
 @Composable
 fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) -> Unit,
                         onRefresh: () -> Unit, onMore: () -> Unit, onClose: () -> Unit = {}, onDebug: () -> Unit = {}) {
-    val appearance = LocalAppearance.current
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(horizontal = 20.dp)) {
         Row(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("Conversations", Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
@@ -141,12 +138,7 @@ fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) ->
             if (state.sessionsHaveMore) item { TextButton(onClick = onMore, enabled = !state.sessionsLoading) { Text("Load more conversations") } }
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(
-            value = appearance.dark, role = Role.Switch, onValueChange = appearance.setDark),
-            verticalAlignment = Alignment.CenterVertically) {
-            Text("Dark theme", Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
-            Switch(checked = appearance.dark, onCheckedChange = null)
-        }
+        ProfileMenu()
         DeveloperEntry(onDebug)
         Spacer(Modifier.height(12.dp))
     }

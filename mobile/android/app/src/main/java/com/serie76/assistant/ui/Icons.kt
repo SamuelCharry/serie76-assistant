@@ -69,3 +69,19 @@ val HistoryLines: ImageVector by lazy {
         }
     }.build()
 }
+
+val ProfileLines: ImageVector by lazy {
+    ImageVector.Builder("ProfileLines", 24.dp, 24.dp, 24f, 24f).apply {
+        path(fill = null, stroke = SolidColor(Color.Black), strokeLineWidth = 1.6f,
+            strokeLineCap = StrokeCap.Round, strokeLineJoin = StrokeJoin.Round) {
+            moveTo(16f, 8f)
+            curveTo(16f, 10.2f, 14.2f, 12f, 12f, 12f)
+            curveTo(9.8f, 12f, 8f, 10.2f, 8f, 8f)
+            curveTo(8f, 5.8f, 9.8f, 4f, 12f, 4f)
+            curveTo(14.2f, 4f, 16f, 5.8f, 16f, 8f)
+            moveTo(4f, 21f)
+            curveTo(4f, 16.6f, 7.6f, 14f, 12f, 14f)
+            curveTo(16.4f, 14f, 20f, 16.6f, 20f, 21f)
+        }
+    }.build()
+}

@@ -119,19 +119,62 @@ class ScreenTest {
 
     @Test fun appearanceChoiceIsSaved() {
         val preferences = InstrumentationRegistry.getInstrumentation().targetContext.getSharedPreferences("appearance", android.content.Context.MODE_PRIVATE)
-        val existed = preferences.contains("dark")
-        val original = preferences.getBoolean("dark", false)
+        val originalMode = preferences.getString("mode", null)
+        val legacy = if (preferences.contains("dark")) preferences.getBoolean("dark", false) else null
         try {
-            preferences.edit().putBoolean("dark", false).commit()
+            preferences.edit().putString("mode", "light").commit()
             compose.setContent { SeriesTheme { Box(Modifier.fillMaxSize().background(androidx.compose.material3.MaterialTheme.colorScheme.background).statusBarsPadding()) { ConversationsScreen(AppState(), {}, {}, {}, {}) } } }
-            compose.onNodeWithText("Dark theme").assertIsOff().performClick().assertIsOn()
-            compose.runOnIdle { assertTrue(preferences.getBoolean("dark", false)) }
-            screenshot("dark-drawer-fixed")
-            compose.onNodeWithText("Dark theme").performClick().assertIsOff()
-            compose.runOnIdle { assertFalse(preferences.getBoolean("dark", true)) }
+            compose.onNodeWithContentDescription("Open profile menu").performClick()
+            compose.onNodeWithText("Light").assertIsSelected()
+            screenshot("profile-menu-light")
+            compose.onNodeWithText("Dark").performClick()
+            compose.runOnIdle { assertEquals("dark", preferences.getString("mode", null)) }
+            compose.onNodeWithContentDescription("Open profile menu").performClick()
+            compose.onNodeWithText("Dark").assertIsSelected()
+            screenshot("profile-menu-dark")
+            compose.onNodeWithText("System").performClick()
+            compose.runOnIdle { assertEquals("system", preferences.getString("mode", null)) }
+            compose.onNodeWithContentDescription("Open profile menu").performClick()
+            compose.onNodeWithText("System").assertIsSelected()
+            compose.onNodeWithText("Light").performClick()
+            compose.runOnIdle { assertEquals("light", preferences.getString("mode", null)) }
         } finally {
-            if (existed) preferences.edit().putBoolean("dark", original).commit()
-            else preferences.edit().remove("dark").commit()
+            val editor = preferences.edit()
+            if (originalMode == null) editor.remove("mode") else editor.putString("mode", originalMode)
+            if (legacy == null) editor.remove("dark") else editor.putBoolean("dark", legacy)
+            editor.commit()
+        }
+    }
+
+    @Test fun localProfileCanBeEditedWithoutCreatingAnAccount() {
+        val preferences = InstrumentationRegistry.getInstrumentation().targetContext.getSharedPreferences("profile", android.content.Context.MODE_PRIVATE)
+        val oldName = preferences.getString("name", null)
+        val oldEmail = preferences.getString("email", null)
+        try {
+            preferences.edit().remove("name").remove("email").commit()
+            compose.setContent { SeriesTheme(darkOverride = false) { Box(Modifier.fillMaxSize().background(androidx.compose.material3.MaterialTheme.colorScheme.background).statusBarsPadding()) { ConversationsScreen(AppState(), {}, {}, {}, {}) } } }
+            compose.onNodeWithContentDescription("Open profile menu").performClick()
+            compose.onNodeWithText("No email added").assertIsDisplayed()
+            compose.onNodeWithText("Edit profile").performClick()
+            compose.onNodeWithContentDescription("Profile name").performTextInput("Example user")
+            compose.onNodeWithContentDescription("Profile email").performTextInput("not-an-email")
+            compose.onNodeWithText("Save").assertIsNotEnabled()
+            compose.onNodeWithContentDescription("Profile email").performTextClearance()
+            compose.onNodeWithContentDescription("Profile email").performTextInput("user@example.test")
+            screenshot("profile-editor-final")
+            compose.onNodeWithText("Save").performClick()
+            compose.onNodeWithContentDescription("Open profile menu").performClick()
+            compose.onNodeWithText("Saved on this device").assertIsDisplayed()
+            compose.runOnIdle {
+                assertEquals("Example user", preferences.getString("name", null))
+                assertEquals("user@example.test", preferences.getString("email", null))
+            }
+            screenshot("profile-details")
+        } finally {
+            val editor = preferences.edit()
+            if (oldName == null) editor.remove("name") else editor.putString("name", oldName)
+            if (oldEmail == null) editor.remove("email") else editor.putString("email", oldEmail)
+            editor.commit()
         }
     }
 
@@ -204,7 +247,7 @@ class ScreenTest {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         instrumentation.waitForIdleSync()
         // System bar appearance is applied by WindowManager on the next frame.
-        if (name.startsWith("chat-keyboard") || name == "chat-sent") {
+        if (name.startsWith("chat-keyboard") || name == "chat-sent" || name.startsWith("profile-editor")) {
             var previous = -1
             var stable = 0
             val deadline = android.os.SystemClock.uptimeMillis() + 8000
@@ -212,8 +255,10 @@ class ScreenTest {
                 var height = 0
                 compose.runOnUiThread {
                     val activity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).first()
-                    height = androidx.core.view.ViewCompat.getRootWindowInsets(activity.window.decorView)
-                        ?.getInsets(androidx.core.view.WindowInsetsCompat.Type.ime())?.bottom ?: 0
+                    val windows = if (android.os.Build.VERSION.SDK_INT >= 29)
+                        android.view.inspector.WindowInspector.getGlobalWindowViews() else listOf(activity.window.decorView)
+                    height = windows.maxOfOrNull { window -> androidx.core.view.ViewCompat.getRootWindowInsets(window)
+                        ?.getInsets(androidx.core.view.WindowInsetsCompat.Type.ime())?.bottom ?: 0 } ?: 0
                 }
                 stable = if (height > 0 && height == previous) stable + 1 else 0
                 previous = height
@@ -226,7 +271,7 @@ class ScreenTest {
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, "$name.png")
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Series76Verification/ambient-v4-verified")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Series76Verification/profile-v5-round-1")
             put(MediaStore.Images.Media.IS_PENDING, 1)
         }
         val uri = requireNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))

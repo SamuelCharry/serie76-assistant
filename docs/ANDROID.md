@@ -1,6 +1,6 @@
 # Android Serie 76
 
-Kotlin/Jetpack Compose, interfaz en inglés y tres superficies: conversaciones guardadas, chat y Developer debug. Presentación vigente: Hello centrado, fondo de ondas Konecto y luz difusa, con modos claro/oscuro. Dark theme en el menú izquierdo guarda la preferencia local; antes de elegir sigue el sistema. Rethink Sans local y compositor delineado. Sin accesos iniciales, slogan ni etiquetas de marca redundantes. Saludo por letras y Thinking animado solo durante envío, con alternativa estática según la escala de animación de Android. Dirección: MOBILE_DIRECTION_V4.md. Sin Firebase, login, voz ni servicios nuevos.
+Kotlin/Jetpack Compose, interfaz en inglés y tres superficies: conversaciones guardadas, chat y Developer debug. Presentación vigente: Hello centrado, fondo de ondas Konecto y luz difusa. El perfil al pie del menú izquierdo reúne nombre/correo locales y Appearance: Light/Dark/System. Guarda la preferencia y conserva las elecciones del switch anterior. Rethink Sans local y compositor delineado. Sin accesos iniciales, slogan ni etiquetas de marca redundantes. Saludo por letras y Thinking animado solo durante envío, con alternativa estática según la escala de animación de Android. Dirección: MOBILE_DIRECTION_V4.md y MOBILE_PROFILE.md. Sin Firebase, login, voz ni servicios nuevos.
 
 ## Requisitos y compilación
 
@@ -60,6 +60,8 @@ Para interpretar lenguaje real, configurar OPENROUTER_API_KEY y OPENROUTER_CHAT_
 Se utiliza langchain-openai con el contrato estándar Chat Completions de OpenRouter, sin campos de razonamiento ni extensiones. La integración langchain-openrouter disponible durante esta ejecución exigía una versión de Pydantic incompatible con el runtime fijado. Se preservó el runtime PostgreSQL; este compromiso debe reevaluarse al seleccionar el modelo.
 
 ## Acceso a debug
+
+El pie del menú izquierdo abre el perfil local: nombre/correo editables y Appearance → Light / Dark / System. System vuelve a seguir la configuración Android; el modo se guarda y conserva las elecciones del switch anterior al actualizar. La ficha no es una cuenta autenticada y no altera el contrato backend. Ver MOBILE_PROFILE.md.
 
 1. Instalar la variante Android debug.
 2. Configurar DEV_DEBUG=true en .env del backend local y ejecutar docker compose up -d backend.
