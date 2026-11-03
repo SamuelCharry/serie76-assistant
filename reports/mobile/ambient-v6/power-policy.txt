@@ -1,0 +1,6 @@
+  mIsPowered=false
+  mBatteryLevel=100
+  Battery Saver is currently: ON
+  mIsPowered=false
+  mBatteryLevel=100
+  mSettingBatterySaverEnabled=true

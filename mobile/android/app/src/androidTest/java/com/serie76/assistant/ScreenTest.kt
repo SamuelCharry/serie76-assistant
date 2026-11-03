@@ -271,7 +271,7 @@ class ScreenTest {
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, "$name.png")
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Series76Verification/profile-v5-round-1")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Series76Verification/ambient-v6-round-1")
             put(MediaStore.Images.Media.IS_PENDING, 1)
         }
         val uri = requireNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))

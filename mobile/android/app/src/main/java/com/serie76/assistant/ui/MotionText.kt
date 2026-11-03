@@ -29,7 +29,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 
 @Composable
-private fun motionEnabled(): Boolean {
+internal fun motionEnabled(): Boolean {
     val resolver = LocalContext.current.contentResolver
     fun enabled() = Settings.Global.getFloat(resolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f
     var value by remember(resolver) { mutableStateOf(enabled()) }

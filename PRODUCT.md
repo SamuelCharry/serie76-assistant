@@ -28,6 +28,8 @@ Exactly three screens: conversations, multi-turn chat, developer debug. The back
 
 ## Brand Commitments
 
+Ambient motion extension: user requests a living background with low work budget. Preserve composition; add twelve restrained particles and minimal mesh drift only on empty visible idle chat. Respect disabled Android animations, battery saver and active lifecycle. No physics, network or new dependencies. See docs/MOBILE_AMBIENT_MOTION.md and docs/MOBILE_NEXT_STEPS.md. Local profile still does not imply authentication.
+
 Profile extension: user requested a compact profile menu in the drawer with editable local name/email and Light/Dark/System appearance. Preserve V4 visual tokens and chat. Account switching/authentication remain future work; do not show invented identity or a nonfunctional switch-account control. Details and theme choice stay on-device. See docs/MOBILE_PROFILE.md.
 
 Current refinement: centered Hello with a gentle letter entrance, animated waiting text only while sending, no shortcut rows/slogan/redundant Series76 labels. Both light and dark modes are explicitly requested; a local drawer switch saves the choice. Use only Konecto's sourced wave background language, with diffuse light and readable native content. Prior Editorial A and V2 home compositions are historical for the user-replaced parts. See docs/MOBILE_DIRECTION_V4.md.

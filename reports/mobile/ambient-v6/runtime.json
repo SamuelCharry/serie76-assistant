@@ -1,0 +1,19 @@
+{
+  "active_6s_frames": [
+    "102"
+  ],
+  "battery_saver_observed": true,
+  "saver_6s_frames": [
+    "0"
+  ],
+  "active_lower_region_changed": true,
+  "saver_lower_region_changed": false,
+  "battery_saver_confirmation": [
+    "  mIsPowered=false",
+    "  mBatteryLevel=100",
+    "  Battery Saver is currently: ON",
+    "  mIsPowered=false",
+    "  mBatteryLevel=100",
+    "  mSettingBatterySaverEnabled=true"
+  ]
+}

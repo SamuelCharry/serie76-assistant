@@ -1,5 +1,7 @@
 # Ambient chat: light and dark
 
+Motion extension: docs/MOBILE_AMBIENT_MOTION.md supersedes the static-only idle background constraint. Preserve all other commitments; bounded motion only on visible empty idle chat.
+
 Profile extension: docs/MOBILE_PROFILE.md supersedes the binary Dark theme switch with the compact profile menu and Light/Dark/System options. All other visual and motion commitments remain.
 
 Mode: Operate. This is a precise user-directed refinement of the existing native app, not a new feature or visual-concept tournament.

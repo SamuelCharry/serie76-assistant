@@ -248,13 +248,13 @@ components:
 
 **Creative North Star: "The Engineering Journal"**
 
-A quiet native conversation workspace with an open center, soft violet controls and locally bundled Rethink Sans. Near-white light surfaces and graphite dark surfaces keep technical reading clear. A static diffuse light field and sourced Konecto wave give the empty chat atmosphere without placing geometry behind the results.
+A quiet native conversation workspace with an open center, soft violet controls and locally bundled Rethink Sans. Near-white light surfaces and graphite dark surfaces keep technical reading clear. A diffuse light field, gently drifting sourced Konecto wave and twelve quiet motes give the empty chat atmosphere without placing geometry behind the results.
 
-This record retains the implemented V4 editorial system and adds the local profile extension. The scope is English Android phone UI in both light and dark modes: chat, left conversation history with a compact profile footer/menu/editor, and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality, backend integration or physical-device performance.
+This record retains the approved editorial system and local profile extension, with bounded ambient motion on the empty chat. The scope is English Android phone UI in both light and dark modes: chat, left conversation history with a compact profile footer/menu/editor, and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality, backend integration or physical-device performance.
 
 **Key Characteristics:**
 - Centered Hello and icon-only empty-chat toolbar.
-- Soft gradient actions, outlined composer and restrained static background.
+- Soft gradient actions, outlined composer and restrained empty-chat ambient motion.
 - Matched light/dark semantic roles with saved Light/Dark/System appearance choices.
 - Complete technical evidence in readable cards and synchronized comparison columns.
 
@@ -276,7 +276,7 @@ The frontmatter records the explicit light/dark Material roles and soft-action s
 - **Outline and Fine Rule:** `outline` supports native outlined controls; `outline-variant` supplies composer/card borders and dividers.
 - **Semantic Error:** `error`, `error-container` and `on-error-container` distinguish unavailable values and recovery panels in each scheme.
 
-**The Content First Rule.** Show the sourced wave only on the empty, idle chat; remove its geometry while typing, sending or reading messages.
+**The Content First Rule.** Show the sourced wave and motes only on the visible, empty, idle chat; remove them while typing, sending, loading history, showing a history error, opening history or reading messages.
 
 ## Typography
 
@@ -311,9 +311,13 @@ Comparison fixes specification labels while product columns share horizontal scr
 
 Custom surfaces use tonal separation and thin rules without custom shadows. Native Material state layers, popup shadows and modal behavior remain. The profile menu explicitly uses surface with zero tonal elevation; the editor explicitly uses surface rather than a tinted container. The drawer scrim uses onSurface at 24% alpha. Borders and gradients are native materials of this world.
 
-The static background has two radial light fields. Their empty-chat alphas are 0.85/0.8 in light and 0.6/0.8 in dark; both reduce to 0.25 when content appears. Only the empty idle canvas carries the original 184-path Konecto vector, tinted muted violet at 0.32 light/0.24 dark alpha, cropped into a 320dp-high lower region with a -38dp offset. The native conversion and source hash are recorded in .impeccable/references/konecto-wave-origin.json. No shipping raster is used.
+The background retains two static radial light fields. Their empty-chat alphas are 0.85/0.8 in light and 0.6/0.8 in dark; both reduce to 0.25 when content appears. Only the empty idle canvas carries the original 184-path Konecto vector, tinted muted violet at 0.32 light/0.24 dark alpha, cropped into a 320dp-high lower region with a -38dp offset. The native conversion and source hash are recorded in .impeccable/references/konecto-wave-origin.json. No shipping raster is used.
 
-**The Native Feedback Rule.** Retain native press, drawer and list feedback; make custom text motion static when Android animations are disabled.
+**The Native Feedback Rule.** Retain native press, drawer and list feedback; make custom text and ambient motion static when Android animations are disabled.
+
+Ambient motion uses twelve deterministic violet motes in the same lower 320dp region as the wave. Their radii repeat 1.1/1.45/1.8dp; each follows a smooth 10dp horizontal/14dp vertical orbit over 32 seconds, with 0.30 light/0.38 dark alpha. The wave layer drifts from -3 to +3dp horizontally and -4 to 0dp vertically. The light fields, text and composer do not join this drift. No particle physics, per-frame randomness, connecting lines or blur is introduced.
+
+The ambient clock updates at most once every 50ms (20 updates/second), and phase is read only during Canvas drawing or graphicsLayer updates. It runs only while the screen is RESUMED and the chat is visible, empty and idle: no messages, nonblank draft, keyboard, pending send, history loading or history error; opening history removes the decoration. Android animator-scale zero and battery saver pause the clock, observed while mounted. Pausing retains a still phase and resuming does not catch up elapsed background time; disposal cancels the clock. This bounded work is an implementation policy, not a measured energy or physical-device smoothness claim.
 
 Hello reveals per-letter tint, opacity and baseline over 640ms with cubic-bezier(0.22,1,0.36,1), beginning visibly at 35% opacity. Thinking uses a 1500ms linear color wave only during an actual pending send. Both observe live Android animator-scale changes and become static when disabled. The native drawer and list placement retain native motion; debug uses a 180ms crossfade. A waiting label does not claim access to model internals.
 
@@ -355,7 +359,7 @@ Fixed specification labels, synchronized product scrolling, scalable cells and p
 
 ### Icons and Background
 
-Conversation controls use native fine-stroke vectors, meaningful content descriptions and at least 48dp touch controls. The sourced Konecto wave is background-only, has a null content description and contains no logo, copy or web controls. It is not a replacement for semantic Compose UI.
+Conversation controls use native fine-stroke vectors, meaningful content descriptions and at least 48dp touch controls. The sourced Konecto wave and Canvas motes are decorative background-only content; the wave has a null content description and contains no logo, copy or web controls. It is not a replacement for semantic Compose UI.
 
 ## Do's and Don'ts
 
@@ -365,12 +369,12 @@ Conversation controls use native fine-stroke vectors, meaningful content descrip
 - Do keep local profile disclosure explicit, preserve optional details and offer Light/Dark/System through native selectable rows.
 - Do retain full identifiers, units, N/A, source disclosure and expandable notes.
 - Do preserve fixed comparison labels and synchronized product scrolling.
-- Do keep the sourced wave decorative and static, with its provenance alongside the native vector.
+- Do keep the sourced wave decorative with its provenance alongside the native vector; gate its bounded drift and motes by chat visibility, lifecycle, reduced motion and battery saver.
 
 ### Don't:
 - Don't restore shortcut rows, a slogan, redundant branding labels or the superseded two-line greeting.
 - Don't use saturated purple slabs, decorative kickers, hard offset shadows or system display faces.
-- Don't put wave geometry behind populated chat or animate the background at idle.
+- Don't put wave geometry or motes behind populated or busy chat, or run ambient motion while inactive, reduced motion is enabled or battery saver is active.
 - Don't add voice, attachments, model selectors, search or unrelated controls.
 - Don't invent a default identity, imply authentication or add a nonfunctional account-switch action.
 - Don't place developer traces in release product data or replace semantic content with rasterized text.

@@ -1,0 +1,12 @@
+{
+  "debug": {
+    "path": "mobile/android/app/build/outputs/apk/debug/app-debug.apk",
+    "sha256": "97573fabd2c2b1eff74bcd63a4d8f1e8f87559aa755ad298d7030ed4d759ac06",
+    "size_bytes": 12458746
+  },
+  "release": {
+    "path": "mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk",
+    "sha256": "97618e5eaba519576cf694ebe7048d4e95403f835b424e80b64fceba284e0d2b",
+    "size_bytes": 2035061
+  }
+}

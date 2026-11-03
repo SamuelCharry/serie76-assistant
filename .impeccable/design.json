@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-03T17:05:02.168467+00:00",
+  "generatedAt": "2026-11-03T17:19:43.430962+00:00",
   "title": "Design System: Konecto Series 76 Android",
   "extensions": {
     "colorMeta": {
@@ -697,12 +697,32 @@
       {
         "name": "android-animation-preference",
         "value": "Settings.Global.ANIMATOR_DURATION_SCALE > 0; ContentObserver",
-        "purpose": "Both custom text effects become static when disabled, including changes while mounted."
+        "purpose": "Custom text effects and ambient motion become static when disabled, including changes while mounted."
       },
       {
         "name": "debug-transition",
         "value": "180ms FastOutSlowInEasing",
         "purpose": "Native debug crossfade."
+      },
+      {
+        "name": "ambient-cycle",
+        "value": "32000ms; update delay 50ms; at most 20 updates/s",
+        "purpose": "Deterministic phase shared by twelve Canvas motes and the wave graphicsLayer; phase reads do not recompose or relayout chat."
+      },
+      {
+        "name": "ambient-motes",
+        "value": "12 circles; radii 1.1/1.45/1.8dp; orbit X +/-10dp, Y +/-14dp; alpha light .30/dark .38",
+        "purpose": "Quiet violet decoration in the existing lower 320dp region; absent outside visible empty idle chat."
+      },
+      {
+        "name": "ambient-wave-drift",
+        "value": "X -3 to +3dp; Y -4 to 0dp; sine/cosine of shared phase",
+        "purpose": "Transform the existing vector layer without moving text, composer or diffuse fields."
+      },
+      {
+        "name": "ambient-run-policy",
+        "value": "RESUMED AND visible empty idle chat AND animator scale > 0 AND NOT battery saver",
+        "purpose": "Stop on messages, nonblank draft, IME, pending send, history loading/error, history opening, inactive lifecycle, reduced motion or battery saver. Hold phase without background-time catch-up; disposal cancels. Power saver and animation preference changes are observed live."
       }
     ],
     "breakpoints": []
@@ -819,17 +839,17 @@
   ],
   "narrative": {
     "northStar": "The Engineering Journal",
-    "overview": "A quiet native conversation workspace with an open center, soft violet controls and locally bundled Rethink Sans. Near-white light surfaces and graphite dark surfaces keep technical reading clear. A static diffuse light field and sourced Konecto wave give the empty chat atmosphere without placing geometry behind the results.\n\nThis record retains the implemented V4 editorial system and adds the local profile extension. The scope is English Android phone UI in both light and dark modes: chat, left conversation history with a compact profile footer/menu/editor, and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality, backend integration or physical-device performance.",
+    "overview": "A quiet native conversation workspace with an open center, soft violet controls and locally bundled Rethink Sans. Near-white light surfaces and graphite dark surfaces keep technical reading clear. A diffuse light field, gently drifting sourced Konecto wave and twelve quiet motes give the empty chat atmosphere without placing geometry behind the results.\n\nThis record retains the approved editorial system and local profile extension, with bounded ambient motion on the empty chat. The scope is English Android phone UI in both light and dark modes: chat, left conversation history with a compact profile footer/menu/editor, and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality, backend integration or physical-device performance.",
     "keyCharacteristics": [
       "Centered Hello and icon-only empty-chat toolbar.",
-      "Soft gradient actions, outlined composer and restrained static background.",
+      "Soft gradient actions, outlined composer and restrained empty-chat ambient motion.",
       "Matched light/dark semantic roles with saved Light/Dark/System appearance choices.",
       "Complete technical evidence in readable cards and synchronized comparison columns."
     ],
     "rules": [
       {
         "name": "The Content First Rule",
-        "body": "Show the sourced wave only on the empty, idle chat; remove its geometry while typing, sending or reading messages.",
+        "body": "Show the sourced wave and motes only on the visible, empty, idle chat; remove them while typing, sending, loading history, showing a history error, opening history or reading messages.",
         "section": "colors"
       },
       {
@@ -839,7 +859,7 @@
       },
       {
         "name": "The Native Feedback Rule",
-        "body": "Retain native press, drawer and list feedback; make custom text motion static when Android animations are disabled.",
+        "body": "Retain native press, drawer and list feedback; make custom text and ambient motion static when Android animations are disabled.",
         "section": "elevation"
       }
     ],
@@ -849,12 +869,12 @@
       "Do keep local profile disclosure explicit, preserve optional details and offer Light/Dark/System through native selectable rows.",
       "Do retain full identifiers, units, N/A, source disclosure and expandable notes.",
       "Do preserve fixed comparison labels and synchronized product scrolling.",
-      "Do keep the sourced wave decorative and static, with its provenance alongside the native vector."
+      "Do keep the sourced wave decorative with its provenance alongside the native vector; gate its bounded drift and motes by chat visibility, lifecycle, reduced motion and battery saver."
     ],
     "donts": [
       "Don't restore shortcut rows, a slogan, redundant branding labels or the superseded two-line greeting.",
       "Don't use saturated purple slabs, decorative kickers, hard offset shadows or system display faces.",
-      "Don't put wave geometry behind populated chat or animate the background at idle.",
+      "Don't put wave geometry or motes behind populated or busy chat, or run ambient motion while inactive, reduced motion is enabled or battery saver is active.",
       "Don't add voice, attachments, model selectors, search or unrelated controls.",
       "Don't invent a default identity, imply authentication or add a nonfunctional account-switch action.",
       "Don't place developer traces in release product data or replace semantic content with rasterized text."

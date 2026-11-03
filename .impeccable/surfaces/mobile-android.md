@@ -7,6 +7,8 @@ related_targets: []
 
 # Ambient chat: light and dark
 
+Motion extension: docs/MOBILE_AMBIENT_MOTION.md supersedes static-only idle background. Twelve quiet motes and minimal cached mesh drift, 32s cycle, at most20 updates/s; pause on hidden/input/content/loading/error, Android disabled animations and battery saver. No other visual changes.
+
 Profile extension: docs/MOBILE_PROFILE.md supersedes the binary Dark theme switch with the compact profile menu and Light/Dark/System options. All other visual and motion commitments remain.
 
 Mode: Operate. This is a precise user-directed refinement of the existing native app, not a new feature or visual-concept tournament.

@@ -155,7 +155,8 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
         if (state.messages.isNotEmpty()) listState.animateScrollToItem((listState.layoutInfo.totalItemsCount - 1).coerceAtLeast(0))
     }
     Box(Modifier.fillMaxSize()) {
-    ChatBackdrop(Modifier.fillMaxSize(), empty = state.messages.isEmpty() && !keyboardVisible && !state.sending)
+    ChatBackdrop(Modifier.fillMaxSize(), empty = state.screen == "chat" && state.messages.isEmpty() &&
+        state.draft.isBlank() && !keyboardVisible && !state.sending && !state.historyLoading && state.historyError == null)
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
