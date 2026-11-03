@@ -2,7 +2,7 @@
 
 Continuación en otro agente: [carpeta de contexto](contexto/00_EMPEZAR_AQUI.md).
 
-Repositorio para el assessment de Konecto. **Etapa actual: OCR/PostgreSQL verificados; app Android y conversaciones implementadas. Falta evaluar/configurar el LLM real.**
+Repositorio para el assessment de Konecto. **Etapa actual:** OCR y PostgreSQL verificados. El agente definitivo A+ está implementado y aceptado con un LLM real (Google, endpoint OpenAI-compatible, mismo cliente de producción). La aceptación final con OpenRouter sigue pendiente. [Arquitectura](docs/ARQUITECTURA.md) · [ADR 0001](docs/adr/0001-arquitectura-agente.md) · [aceptación con LLM real](reports/agent_acceptance/RESULTADOS.md).
 
 **Android:** [compilación, ejecución, URL, debug y arquitectura](docs/ANDROID.md). Kotlin/Compose, login nativo, chat e historial aislado por usuario; diseño claro/oscuro aprobado, sin Firebase ni voz. [Autenticación, cuentas de prueba y migración](docs/AUTH.md). Hay pruebas de UI en emulador y persistencia HTTP con interpretación controlada. Eso no equivale a validar un modelo real. Evidencia: [reports/mobile](reports/mobile).
 
@@ -156,7 +156,15 @@ La imagen se construye desde Python, siguiendo el enfoque de FastAPI: https://fa
 
 ## Conversaciones
 
-POST /api/conversation recibe query y session_id opcional; devuelve session_id, answer, message_id y products estructurados. La interpretación necesita OPENROUTER_API_KEY y OPENROUTER_CHAT_MODEL. Sin configuración devuelve 503; no inventa respuestas. El candidato recomendado tras ensayar Google es google/gemini-3.6-flash; su configuración y validación OpenRouter siguen pendientes.
+POST /api/conversation recibe `query` y un `session_id` opcional. Devuelve `session_id`, `answer`, `message_id` y `products` estructurados. Además incluye tres campos aditivos:
+
+- `clarification`: el campo que falta, opciones o la contradicción detectada.
+- `terms`: definiciones literales con su página.
+- `assumptions`: palabras del usuario que el agente interpretó como un filtro.
+
+La interpretación necesita OPENROUTER_API_KEY y OPENROUTER_CHAT_MODEL. Sin ellas, la respuesta es 503 con `error_code=not_configured` y el agente no inventa nada. Los errores del proveedor también devuelven 503 con un `error_code` (`timeout`, `rate_limited`, `budget_exhausted`, `provider_unreachable` o `provider_error`) y el turno no se guarda a medias.
+
+**Glosario del resumen:** `python scripts/ingest_summary.py` genera `data/extracted/series76_summary/terms.json`, con 16 definiciones literales, página y sin OCR. Después, `python -m backend.catalog.cli load-context` las carga en `series76.context_terms`. Con Docker: `docker compose exec -T backend python -m backend.catalog.cli load-context`. `/ready` exige el glosario.
 
 GET /api/sessions y GET /api/sessions/{id}/messages permiten listar y reabrir historial. GET /api/messages/{id}/debug solo funciona con DEV_DEBUG=true. [Contrato, paginación, acceso y límites](docs/ANDROID.md).
 
@@ -168,16 +176,29 @@ GET /api/sessions y GET /api/sessions/{id}/messages permiten listar y reabrir hi
 | API_PORT | Puerto local publicado, por defecto 8000. |
 | OPENROUTER_API_KEY | Futuro agente, nunca versionar una clave real. |
 | OPENROUTER_BASE_URL | Endpoint OpenRouter del agente futuro. |
-| OPENROUTER_CHAT_MODEL | ID configurable; candidato google/gemini-3.6-flash evaluado en Google, pendiente de validación OpenRouter. |
+| OPENROUTER_CHAT_MODEL | ID configurable. El candidato es google/gemini-3.6-flash, aceptado con el endpoint de Google; falta validarlo en OpenRouter. |
+| AGENT_MAX_TOKENS / AGENT_REASONING_EFFORT | 2048 / low, como en la evaluación. La llamada solo emite una tool call (36 tokens de salida de media). |
+| AGENT_TOOL_CHOICE | `required` por defecto. Está documentado en OpenRouter y verificado en Google. |
+| AGENT_TIMEOUT_S / AGENT_TEMPERATURE | 45 s. Una temperatura vacía usa el muestreo por defecto del proveedor. |
 | DEV_DEBUG | false por defecto; habilita las trazas separadas en el backend local. |
-| OPENROUTER_EMBEDDING_MODEL | Solo si posteriormente se justifica búsqueda vectorial. |
+| OPENROUTER_EMBEDDING_MODEL | No se usa. Las definiciones salen de un glosario estructurado (ADR 0001). |
 | TESSERACT_CMD | Ejecutable local opcional; exportar como variable de proceso o usar argumento. |
 
-## Arquitectura prevista y límites
+## Arquitectura: decisiones y trade-offs
+
+**A+: un agente, una decisión por turno y herramientas deterministas.** Decisión completa en el [ADR 0001](docs/adr/0001-arquitectura-agente.md).
+
+- **LLM.** Interpreta el lenguaje y emite una tool call: `get_actuator`, `search_actuators`, `explain_terms` o `ask_clarification`.
+- **Código.** Valida la llamada, fundamenta cada valor en la conversación, fusiona los seguimientos y convierte las contradicciones en preguntas. Después consulta SQL y redacta la respuesta con plantillas.
+- **Garantía.** El LLM no escribe cifras ni definiciones. Las cifras salen del PDF eléctrico y las definiciones son citas literales del resumen.
+- **Trade-off aceptado.** Las respuestas son menos fluidas que la prosa de un LLM, a cambio de exactitud demostrable.
+- **Sin pgvector.** El resumen tiene 348 palabras y 16 definiciones; un glosario estructurado da recall completo y cita exacta. pgvector solo se justificaría con un corpus mayor.
+- **Sin multiagente.** Los diseños C/D/E multiplican llamadas y costo. Un revisor del mismo modelo no sustituye la validación determinista. La comparación A–E quedó archivada como inconclusa en el tag `arch-eval-cohort-1`.
+- **Evidencia con LLM real:** ver [reports/agent_acceptance](reports/agent_acceptance/RESULTADOS.md). Las pruebas con interpretación simulada (`tests/test_agent_scenarios.py`) validan la capa determinista, no la comprensión lingüística.
+
+Notas de implementación:
 
 - PDF -> extracción -> validación -> PostgreSQL. El resumen aporta contexto; solo el PDF eléctrico aporta cifras.
-- Un agente LangChain interpreta consultas y llama herramientas con parámetros validados.
-- Consultas deterministas buscan referencias y filtran requisitos. No se necesita búsqueda vectorial en el primer alcance.
 - get_actuator y search_actuators consultan PostgreSQL y cuentan con wrappers LangChain; código valida argumentos y construye la información técnica desde SQL.
 - FastAPI persiste conversaciones y snapshots en PostgreSQL; herramientas y resultados se recuperan aparte para debug.
 - Android implementa conversaciones, chat con fichas/tabla y debug mediante source sets debug/release separados.

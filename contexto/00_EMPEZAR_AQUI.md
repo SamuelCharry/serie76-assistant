@@ -1,5 +1,20 @@
 # Continuación del assessment Serie 76
 
+## Leer primero: arquitectura definitiva A+ (3 de noviembre de 2026)
+
+La arquitectura está **decidida e implementada**: A+, un agente LangChain con una tool call por turno (`get_actuator`, `search_actuators`, `explain_terms`, `ask_clarification`). El código valida, fundamenta cada valor en la conversación, fusiona los seguimientos, convierte las contradicciones en preguntas, consulta SQL y redacta la respuesta con plantillas. El LLM no escribe cifras.
+
+- **Por qué:** [ADR 0001](../docs/adr/0001-arquitectura-agente.md). Se descartaron B (pgvector sobre un resumen de 348 palabras) y C/D/E (multiagente). La recomendación provisional "B corregida" del relevo 06 queda superada.
+- **Datos:** glosario literal del resumen (`scripts/ingest_summary.py` → `data/extracted/series76_summary/terms.json` → `cli load-context` → `series76.context_terms`, migración 003_context_terms.sql). `/ready` lo exige. El catálogo y el OCR no se tocaron.
+- **Código:** `backend/conversation/agent.py`, `policy.py` y `rendering.py`. El contrato añade `clarification`, `terms` y `assumptions`, y los errores del proveedor responden 503 con `error_code`.
+- **Pruebas sin red:** `tests/test_agent_policy.py` y `tests/test_agent_scenarios.py`, con interpretación simulada y SQL real. Con SERIES76_TEST_DB=1 hay 138 pruebas OK y 2 omitidas. El OCR pasa en `.venv-ingest`.
+- **LLM real:** Google `gemini-3.6-flash` a través del endpoint OpenAI-compatible, con el cliente de producción. Cuatro cohortes: v1 25/27, v2 38/43, v3 46/51 y v4 50/55, con escenarios de reserva escritos antes de cada ejecución. El extremo a extremo con reinicio del contenedor pasa. Ver [RESULTADOS](../reports/agent_acceptance/RESULTADOS.md).
+- **Pendiente conocido:** "below 5 W" (corregido en el prompt, sin verificar con LLM real) y 4 escenarios sin evaluar por 503.
+- **Presupuesto Google:** el usuario autorizó el saldo de COP 19.258; el tope de seguridad es USD 3,50. Se gastaron USD 2,49 con reserva conservadora (USD 0,37 por tokens reportados). Los ledgers anteriores no se tocaron. **Cero llamadas a OpenRouter.**
+- **Evidencia A–E archivada:** commit 3c786b2 y tag `arch-eval-cohort-1`. Sus pruebas se omiten de forma explícita en la rama y pasan en el tag.
+- **Próximo paso:** aceptación con OpenRouter. Configurar OPENROUTER_API_KEY y OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash, ejecutar `scripts/agent_acceptance.py run --cohort or1` adaptando la configuración a OpenRouter (precio y URL), y después recorrer Android → LLM → Android.
+- **Trabajo concurrente:** el login (otro agente, aprobado por el usuario) vive en el mismo checkout. Las dos migraciones 003 ya están aplicadas y no se deben renombrar. Este bloque no hizo push.
+
 ## Actualización Android: login y aislamiento por usuario
 
 El usuario eligió implementar login sobre FastAPI/PostgreSQL. Guía vigente: docs/AUTH.md; evidencia reports/mobile/auth-v7. Migración aditiva003_auth.sql: usuarios, sesiones con token hasheado, límites de login y owner_id. Historial anterior conservado con owner_id=NULL, sin asignación automática. La app valida /me antes de mostrar contenido, cifra el token con Android Keystore y destruye el estado del chat al salir o expirar. Demo1/2 tienen credenciales aleatorias solo en .cache/auth-demo-credentials.json ignorado: nunca imprimirlas ni versionarlas. Sin Firebase ni voz. No confundir pruebas de autenticación/historial con validación del LLM real. Fondo y perfil visual aprobados conservados; docs/MOBILE_AMBIENT_MOTION.md documenta el movimiento. Los apartados visuales anteriores más abajo son históricos.

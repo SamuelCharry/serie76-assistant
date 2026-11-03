@@ -1,5 +1,7 @@
 # Relevo: arquitecturas, evidencia y decisión pendiente
 
+> **Estado actualizado (3 de noviembre de 2026): decisión tomada.** Se eligió e implementó A+, una evolución de A con glosario estructurado, política determinista y trazas completas (ver [ADR 0001](../docs/adr/0001-arquitectura-agente.md) y [00_EMPEZAR_AQUI](00_EMPEZAR_AQUI.md)). Los defectos 1, 2, 3 y 5 de este documento están corregidos. El 1 tenía otra causa además del filtro de dígitos: no había caracteres U+FFFD en los datos, el `�` era de la consola; lo defectuoso eran viñetas concatenadas con saltos de maquetado. El defecto 4 (costos por invocación) queda resuelto con un ledger por llamada en `reports/agent_acceptance`. El resto del documento es histórico.
+
 Corte: 3 de noviembre de 2026. Samuel cambiará a un modelo de mayor capacidad para razonar mejor sobre arquitectura. Pidió dejar todo en contexto, especialmente las alternativas. Este archivo resume el último bloque; los pendientes antiguos sobre implementar PostgreSQL, herramientas o conversaciones pueden estar superados.
 
 ## Intención y estado de la decisión

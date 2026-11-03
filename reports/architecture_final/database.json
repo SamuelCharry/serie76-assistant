@@ -1,0 +1,876 @@
+{
+  "columns": [
+    {
+      "table_name": "auth_login_limits",
+      "column_name": "scope_hash",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "auth_login_limits",
+      "column_name": "window_start",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "auth_login_limits",
+      "column_name": "attempts",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "auth_sessions",
+      "column_name": "token_hash",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "auth_sessions",
+      "column_name": "user_id",
+      "data_type": "uuid",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "auth_sessions",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "auth_sessions",
+      "column_name": "expires_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "catalog_state",
+      "column_name": "singleton",
+      "data_type": "boolean",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "catalog_state",
+      "column_name": "active_import_id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "document_sha256",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "extractor",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "term_key",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "label",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 5
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "definition",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 6
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "section",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "ordinal_position": 7
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "term_group",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "ordinal_position": 8
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "page",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "ordinal_position": 9
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "ordinal",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "ordinal_position": 10
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "aliases",
+      "data_type": "ARRAY",
+      "is_nullable": "NO",
+      "ordinal_position": 11
+    },
+    {
+      "table_name": "context_terms",
+      "column_name": "catalog_fields",
+      "data_type": "ARRAY",
+      "is_nullable": "NO",
+      "ordinal_position": 12
+    },
+    {
+      "table_name": "conversations",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "conversations",
+      "column_name": "title",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "conversations",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "conversations",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "conversations",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "YES",
+      "ordinal_position": 5
+    },
+    {
+      "table_name": "documents",
+      "column_name": "sha256",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "documents",
+      "column_name": "filename",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "documents",
+      "column_name": "kind",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "entries",
+      "column_name": "id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "entries",
+      "column_name": "import_id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "entries",
+      "column_name": "table_id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "entries",
+      "column_name": "source_row",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "entries",
+      "column_name": "base_part_number",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 5
+    },
+    {
+      "table_name": "entries",
+      "column_name": "source_part_number",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 6
+    },
+    {
+      "table_name": "entries",
+      "column_name": "enclosure",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 7
+    },
+    {
+      "table_name": "entries",
+      "column_name": "supply_voltage_v",
+      "data_type": "numeric",
+      "is_nullable": "NO",
+      "ordinal_position": 8
+    },
+    {
+      "table_name": "entries",
+      "column_name": "supply_current",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 9
+    },
+    {
+      "table_name": "entries",
+      "column_name": "phase_count",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "ordinal_position": 10
+    },
+    {
+      "table_name": "entries",
+      "column_name": "data_status",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 11
+    },
+    {
+      "table_name": "entries",
+      "column_name": "motor_power_w",
+      "data_type": "numeric",
+      "is_nullable": "YES",
+      "ordinal_position": 12
+    },
+    {
+      "table_name": "entries",
+      "column_name": "field_status",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "ordinal_position": 13
+    },
+    {
+      "table_name": "entries",
+      "column_name": "certification_header_raw",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 14
+    },
+    {
+      "table_name": "entries",
+      "column_name": "source_footnote",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "ordinal_position": 15
+    },
+    {
+      "table_name": "entries",
+      "column_name": "csa_status",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 16
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "entry_id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "frequency_hz",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "frequency_scope",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "operating_time_s",
+      "data_type": "numeric",
+      "is_nullable": "YES",
+      "ordinal_position": 5
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "fla_a",
+      "data_type": "numeric",
+      "is_nullable": "YES",
+      "ordinal_position": 6
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "lra_a",
+      "data_type": "numeric",
+      "is_nullable": "YES",
+      "ordinal_position": 7
+    },
+    {
+      "table_name": "imports",
+      "column_name": "id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "imports",
+      "column_name": "document_sha256",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "imports",
+      "column_name": "pipeline_signature",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "imports",
+      "column_name": "artifact_fingerprint",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "imports",
+      "column_name": "artifact_hashes",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "ordinal_position": 5
+    },
+    {
+      "table_name": "imports",
+      "column_name": "manifest",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "ordinal_position": 6
+    },
+    {
+      "table_name": "imports",
+      "column_name": "imported_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "ordinal_position": 7
+    },
+    {
+      "table_name": "messages",
+      "column_name": "sequence",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "messages",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "messages",
+      "column_name": "session_id",
+      "data_type": "uuid",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "messages",
+      "column_name": "role",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "messages",
+      "column_name": "content",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 5
+    },
+    {
+      "table_name": "messages",
+      "column_name": "products",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "ordinal_position": 6
+    },
+    {
+      "table_name": "messages",
+      "column_name": "tool_calls",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "ordinal_position": 7
+    },
+    {
+      "table_name": "messages",
+      "column_name": "context",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "ordinal_position": 8
+    },
+    {
+      "table_name": "messages",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "ordinal_position": 9
+    },
+    {
+      "table_name": "schema_migrations",
+      "column_name": "name",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "schema_migrations",
+      "column_name": "checksum",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "schema_migrations",
+      "column_name": "applied_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "entry_id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "service",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "torque_in_lb",
+      "data_type": "numeric",
+      "is_nullable": "YES",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "torque_nm",
+      "data_type": "numeric",
+      "is_nullable": "YES",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "duty_s4_percent",
+      "data_type": "numeric",
+      "is_nullable": "YES",
+      "ordinal_position": 5
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "cycles_per_hour",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "ordinal_position": 6
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "starts_per_hour",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "ordinal_position": 7
+    },
+    {
+      "table_name": "source_cells",
+      "column_name": "entry_id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "source_cells",
+      "column_name": "field",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "source_cells",
+      "column_name": "status",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "source_cells",
+      "column_name": "unit",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "source_cells",
+      "column_name": "evidence",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "ordinal_position": 5
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "import_id",
+      "data_type": "bigint",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "source_table",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "source_page",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "title",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 5
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "layout",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 6
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "header",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "ordinal_position": 7
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "page_metadata",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "ordinal_position": 8
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "notes",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "ordinal_position": 9
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "shared_services_confirmed",
+      "data_type": "boolean",
+      "is_nullable": "NO",
+      "ordinal_position": 10
+    },
+    {
+      "table_name": "users",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO",
+      "ordinal_position": 1
+    },
+    {
+      "table_name": "users",
+      "column_name": "email",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 2
+    },
+    {
+      "table_name": "users",
+      "column_name": "name",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 3
+    },
+    {
+      "table_name": "users",
+      "column_name": "password_hash",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "ordinal_position": 4
+    },
+    {
+      "table_name": "users",
+      "column_name": "active",
+      "data_type": "boolean",
+      "is_nullable": "NO",
+      "ordinal_position": 5
+    },
+    {
+      "table_name": "users",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "ordinal_position": 6
+    }
+  ],
+  "foreign_keys": [
+    {
+      "child": "auth_sessions",
+      "parent": "users",
+      "definition": "FOREIGN KEY (user_id) REFERENCES users(id)"
+    },
+    {
+      "child": "catalog_state",
+      "parent": "imports",
+      "definition": "FOREIGN KEY (active_import_id) REFERENCES imports(id)"
+    },
+    {
+      "child": "context_terms",
+      "parent": "documents",
+      "definition": "FOREIGN KEY (document_sha256) REFERENCES documents(sha256)"
+    },
+    {
+      "child": "conversations",
+      "parent": "users",
+      "definition": "FOREIGN KEY (owner_id) REFERENCES users(id)"
+    },
+    {
+      "child": "entries",
+      "parent": "imports",
+      "definition": "FOREIGN KEY (import_id) REFERENCES imports(id)"
+    },
+    {
+      "child": "entries",
+      "parent": "source_tables",
+      "definition": "FOREIGN KEY (table_id, import_id) REFERENCES source_tables(id, import_id)"
+    },
+    {
+      "child": "frequency_specs",
+      "parent": "entries",
+      "definition": "FOREIGN KEY (entry_id) REFERENCES entries(id)"
+    },
+    {
+      "child": "imports",
+      "parent": "documents",
+      "definition": "FOREIGN KEY (document_sha256) REFERENCES documents(sha256)"
+    },
+    {
+      "child": "messages",
+      "parent": "conversations",
+      "definition": "FOREIGN KEY (session_id) REFERENCES conversations(id)"
+    },
+    {
+      "child": "service_specs",
+      "parent": "entries",
+      "definition": "FOREIGN KEY (entry_id) REFERENCES entries(id)"
+    },
+    {
+      "child": "source_cells",
+      "parent": "entries",
+      "definition": "FOREIGN KEY (entry_id) REFERENCES entries(id)"
+    },
+    {
+      "child": "source_tables",
+      "parent": "imports",
+      "definition": "FOREIGN KEY (import_id) REFERENCES imports(id)"
+    }
+  ],
+  "keys": [
+    {
+      "table_name": "auth_login_limits",
+      "contype": "p",
+      "definition": "PRIMARY KEY (scope_hash)"
+    },
+    {
+      "table_name": "auth_sessions",
+      "contype": "p",
+      "definition": "PRIMARY KEY (token_hash)"
+    },
+    {
+      "table_name": "catalog_state",
+      "contype": "p",
+      "definition": "PRIMARY KEY (singleton)"
+    },
+    {
+      "table_name": "context_terms",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "context_terms",
+      "contype": "u",
+      "definition": "UNIQUE (document_sha256, term_key)"
+    },
+    {
+      "table_name": "conversations",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "documents",
+      "contype": "p",
+      "definition": "PRIMARY KEY (sha256)"
+    },
+    {
+      "table_name": "entries",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "entries",
+      "contype": "u",
+      "definition": "UNIQUE (table_id, source_row)"
+    },
+    {
+      "table_name": "frequency_specs",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "frequency_specs",
+      "contype": "u",
+      "definition": "UNIQUE NULLS NOT DISTINCT (entry_id, frequency_hz)"
+    },
+    {
+      "table_name": "imports",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "imports",
+      "contype": "u",
+      "definition": "UNIQUE (document_sha256, pipeline_signature)"
+    },
+    {
+      "table_name": "messages",
+      "contype": "p",
+      "definition": "PRIMARY KEY (sequence)"
+    },
+    {
+      "table_name": "messages",
+      "contype": "u",
+      "definition": "UNIQUE (id)"
+    },
+    {
+      "table_name": "schema_migrations",
+      "contype": "p",
+      "definition": "PRIMARY KEY (name)"
+    },
+    {
+      "table_name": "service_specs",
+      "contype": "p",
+      "definition": "PRIMARY KEY (entry_id, service)"
+    },
+    {
+      "table_name": "source_cells",
+      "contype": "p",
+      "definition": "PRIMARY KEY (entry_id, field)"
+    },
+    {
+      "table_name": "source_tables",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "source_tables",
+      "contype": "u",
+      "definition": "UNIQUE (id, import_id)"
+    },
+    {
+      "table_name": "source_tables",
+      "contype": "u",
+      "definition": "UNIQUE (import_id, source_table)"
+    },
+    {
+      "table_name": "users",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "users",
+      "contype": "u",
+      "definition": "UNIQUE (email)"
+    }
+  ]
+}
