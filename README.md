@@ -4,7 +4,7 @@ Continuación en otro agente: [carpeta de contexto](contexto/00_EMPEZAR_AQUI.md)
 
 Repositorio para el assessment de Konecto. **Etapa actual: OCR/PostgreSQL verificados; app Android y conversaciones implementadas. Falta evaluar/configurar el LLM real.**
 
-**Android:** [compilación, ejecución, URL, debug y arquitectura](docs/ANDROID.md). Kotlin/Compose, tres pantallas, diseño claro/lila aprobado; sin Firebase, login ni voz. Hay pruebas de UI en emulador y persistencia HTTP tras reiniciar DB/backend con interpretación controlada. Eso no equivale a validar un modelo real. Evidencia: [reports/mobile](reports/mobile).
+**Android:** [compilación, ejecución, URL, debug y arquitectura](docs/ANDROID.md). Kotlin/Compose, login nativo, chat e historial aislado por usuario; diseño claro/oscuro aprobado, sin Firebase ni voz. [Autenticación, cuentas de prueba y migración](docs/AUTH.md). Hay pruebas de UI en emulador y persistencia HTTP con interpretación controlada. Eso no equivale a validar un modelo real. Evidencia: [reports/mobile](reports/mobile).
 
 El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver reports/pipeline/RESULTADOS.md y reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL y consultas técnicas ya están verificados; agente y Android siguen pendientes. Ver docs/POSTGRES.md.
 

@@ -1,0 +1,6 @@
+test_blocked_ip_cannot_create_unbounded_email_limit_rows (tests.test_auth.AuthIntegrationTests.test_blocked_ip_cannot_create_unbounded_email_limit_rows) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.691s
+
+OK

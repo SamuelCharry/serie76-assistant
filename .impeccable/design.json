@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-03T17:19:43.430962+00:00",
+  "generatedAt": "2026-11-03T18:08:44.280762+00:00",
   "title": "Design System: Konecto Series 76 Android",
   "extensions": {
     "colorMeta": {
@@ -680,6 +680,10 @@
       "label-medium": {
         "displayName": "Appearance heading",
         "purpose": "Native profile menu section label; existing Theme.kt labelMedium metrics."
+      },
+      "login-heading": {
+        "displayName": "Sign-in heading",
+        "purpose": "Existing Theme.kt displaySmall semibold metrics for Welcome back; Hello retains its medium override."
       }
     },
     "shadows": [],
@@ -808,42 +812,59 @@
       "name": "Profile footer (light)",
       "kind": "nav",
       "refersTo": "profile-footer-light",
-      "description": "Local details only. SVG translates the native profile vector; browser states approximate native feedback.",
-      "html": "<button class=\"ds-profile\" aria-label=\"Open profile menu\"><span class=\"ds-avatar\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 8C16 10.2 14.2 12 12 12C9.8 12 8 10.2 8 8C8 5.8 9.8 4 12 4C14.2 4 16 5.8 16 8M4 21C4 16.6 7.6 14 12 14C16.4 14 20 16.6 20 21\"/></svg></span><span class=\"ds-profile-copy\"><strong>Profile</strong><small>Local profile</small></span></button>",
+      "description": "Server profile layout shown with declared fixture identity; not a real account. SVG translates the native vector and browser states approximate native feedback.",
+      "html": "<button class=\"ds-profile\" aria-label=\"Open profile menu\"><span class=\"ds-avatar\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 8C16 10.2 14.2 12 12 12C9.8 12 8 10.2 8 8C8 5.8 9.8 4 12 4C14.2 4 16 5.8 16 8M4 21C4 16.6 7.6 14 12 14C16.4 14 20 16.6 20 21\"/></svg></span><span class=\"ds-profile-copy\"><strong>Preview user</strong><small>preview@example.test</small></span></button>",
       "css": ".ds-profile{font-family:\"Rethink Sans\",sans-serif;display:flex;align-items:center;gap:12px;width:100%;padding:14px 4px;border:0;border-radius:12px;text-align:left;background:#FCFCFD;color:#211A2B}.ds-avatar{display:grid;place-items:center;flex-shrink:0;width:40px;height:40px;border-radius:50%;background:linear-gradient(90deg,#F4ECFD,#E5DCF3);color:#675479}.ds-profile-copy{display:grid;gap:2px;min-width:0}.ds-profile-copy strong{font-size:15px;line-height:22px;font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.ds-profile-copy small{font-size:12px;line-height:18px;color:#62596C;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.ds-profile:hover{filter:brightness(.98)}.ds-profile:focus-visible{outline:2px solid #73617F;outline-offset:2px}.ds-profile:active{filter:brightness(.94)}"
     },
     {
       "name": "Profile menu (light)",
       "kind": "custom",
       "refersTo": "profile-menu-light",
-      "description": "Surface popup with native elevation. HTML is a static content/state preview; native placement, dismissal and persistence are not simulated.",
-      "html": "<section class=\"ds-profile-menu\" aria-label=\"Local profile\"><header><strong>Local profile</strong><span>No email added</span><small>Saved on this device</small></header><button>Edit profile</button><hr><h4>Appearance</h4><label><span>Light</span><input type=\"radio\" name=\"ds-appearance-light\" checked></label><label><span>Dark</span><input type=\"radio\" name=\"ds-appearance-light\" ></label><label><span>System</span><input type=\"radio\" name=\"ds-appearance-light\"></label></section>",
+      "description": "Authenticated-state layout using declared fixture identity, not a real session. Native placement, dismissal, sign-out and persistence are not simulated.",
+      "html": "<section class=\"ds-profile-menu\" aria-label=\"Profile preview fixture\"><header><strong>Preview user</strong><span>preview@example.test</span><small>Signed in</small></header><button>Sign out</button><hr><h4>Appearance</h4><label><span>Light</span><input type=\"radio\" name=\"ds-appearance-light\" checked></label><label><span>Dark</span><input type=\"radio\" name=\"ds-appearance-light\" ></label><label><span>System</span><input type=\"radio\" name=\"ds-appearance-light\"></label></section>",
       "css": ".ds-profile-menu{font-family:\"Rethink Sans\",sans-serif;width:240px;max-width:300px;padding:8px 0;border-radius:16px;background:#FFFFFF;color:#211A2B}.ds-profile-menu header{display:grid;gap:4px;padding:12px 16px}.ds-profile-menu strong{font-size:18px;line-height:24px;font-weight:600}.ds-profile-menu header span{font-size:14px;line-height:21px;color:#62596C;overflow-wrap:anywhere}.ds-profile-menu small{font-size:12px;line-height:18px;color:#62596C}.ds-profile-menu button,.ds-profile-menu label{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:0 12px;background:transparent;color:#211A2B;border:0;font:400 16px/24px \"Rethink Sans\",sans-serif}.ds-profile-menu button{width:100%;text-align:left}.ds-profile-menu hr{margin:0 16px;border:0;border-top:1px solid #E7E1EF}.ds-profile-menu h4{margin:0;padding:12px 16px;font-size:12px;line-height:16px;font-weight:500;color:#62596C}.ds-profile-menu input{accent-color:#73617F;width:20px;height:20px}.ds-profile-menu button:hover,.ds-profile-menu label:hover{background:#E7E1EF33}.ds-profile-menu button:focus-visible,.ds-profile-menu label:focus-within{outline:2px solid #73617F;outline-offset:-2px}.ds-profile-menu button:active{background:#E7E1EF66}"
     },
     {
       "name": "Profile footer (dark)",
       "kind": "nav",
       "refersTo": "profile-footer-dark",
-      "description": "Local details only. SVG translates the native profile vector; browser states approximate native feedback.",
-      "html": "<button class=\"ds-profile\" aria-label=\"Open profile menu\"><span class=\"ds-avatar\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 8C16 10.2 14.2 12 12 12C9.8 12 8 10.2 8 8C8 5.8 9.8 4 12 4C14.2 4 16 5.8 16 8M4 21C4 16.6 7.6 14 12 14C16.4 14 20 16.6 20 21\"/></svg></span><span class=\"ds-profile-copy\"><strong>Profile</strong><small>Local profile</small></span></button>",
+      "description": "Server profile layout shown with declared fixture identity; not a real account. SVG translates the native vector and browser states approximate native feedback.",
+      "html": "<button class=\"ds-profile\" aria-label=\"Open profile menu\"><span class=\"ds-avatar\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 8C16 10.2 14.2 12 12 12C9.8 12 8 10.2 8 8C8 5.8 9.8 4 12 4C14.2 4 16 5.8 16 8M4 21C4 16.6 7.6 14 12 14C16.4 14 20 16.6 20 21\"/></svg></span><span class=\"ds-profile-copy\"><strong>Preview user</strong><small>preview@example.test</small></span></button>",
       "css": ".ds-profile{font-family:\"Rethink Sans\",sans-serif;display:flex;align-items:center;gap:12px;width:100%;padding:14px 4px;border:0;border-radius:12px;text-align:left;background:#101014;color:#F4F0F8}.ds-avatar{display:grid;place-items:center;flex-shrink:0;width:40px;height:40px;border-radius:50%;background:linear-gradient(90deg,#30273E,#433354);color:#E1D1F0}.ds-profile-copy{display:grid;gap:2px;min-width:0}.ds-profile-copy strong{font-size:15px;line-height:22px;font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.ds-profile-copy small{font-size:12px;line-height:18px;color:#BFB4CB;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.ds-profile:hover{filter:brightness(.98)}.ds-profile:focus-visible{outline:2px solid #D0BDE2;outline-offset:2px}.ds-profile:active{filter:brightness(.94)}"
     },
     {
       "name": "Profile menu (dark)",
       "kind": "custom",
       "refersTo": "profile-menu-dark",
-      "description": "Surface popup with native elevation. HTML is a static content/state preview; native placement, dismissal and persistence are not simulated.",
-      "html": "<section class=\"ds-profile-menu\" aria-label=\"Local profile\"><header><strong>Local profile</strong><span>No email added</span><small>Saved on this device</small></header><button>Edit profile</button><hr><h4>Appearance</h4><label><span>Light</span><input type=\"radio\" name=\"ds-appearance-dark\" ></label><label><span>Dark</span><input type=\"radio\" name=\"ds-appearance-dark\" checked></label><label><span>System</span><input type=\"radio\" name=\"ds-appearance-dark\"></label></section>",
+      "description": "Authenticated-state layout using declared fixture identity, not a real session. Native placement, dismissal, sign-out and persistence are not simulated.",
+      "html": "<section class=\"ds-profile-menu\" aria-label=\"Profile preview fixture\"><header><strong>Preview user</strong><span>preview@example.test</span><small>Signed in</small></header><button>Sign out</button><hr><h4>Appearance</h4><label><span>Light</span><input type=\"radio\" name=\"ds-appearance-dark\" ></label><label><span>Dark</span><input type=\"radio\" name=\"ds-appearance-dark\" checked></label><label><span>System</span><input type=\"radio\" name=\"ds-appearance-dark\"></label></section>",
       "css": ".ds-profile-menu{font-family:\"Rethink Sans\",sans-serif;width:240px;max-width:300px;padding:8px 0;border-radius:16px;background:#1B1921;color:#F4F0F8}.ds-profile-menu header{display:grid;gap:4px;padding:12px 16px}.ds-profile-menu strong{font-size:18px;line-height:24px;font-weight:600}.ds-profile-menu header span{font-size:14px;line-height:21px;color:#BFB4CB;overflow-wrap:anywhere}.ds-profile-menu small{font-size:12px;line-height:18px;color:#BFB4CB}.ds-profile-menu button,.ds-profile-menu label{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:0 12px;background:transparent;color:#F4F0F8;border:0;font:400 16px/24px \"Rethink Sans\",sans-serif}.ds-profile-menu button{width:100%;text-align:left}.ds-profile-menu hr{margin:0 16px;border:0;border-top:1px solid #44394F}.ds-profile-menu h4{margin:0;padding:12px 16px;font-size:12px;line-height:16px;font-weight:500;color:#BFB4CB}.ds-profile-menu input{accent-color:#D0BDE2;width:20px;height:20px}.ds-profile-menu button:hover,.ds-profile-menu label:hover{background:#44394F33}.ds-profile-menu button:focus-visible,.ds-profile-menu label:focus-within{outline:2px solid #D0BDE2;outline-offset:-2px}.ds-profile-menu button:active{background:#44394F66}"
+    },
+    {
+      "name": "Sign in (light)",
+      "kind": "button",
+      "refersTo": "button-sign-in-light",
+      "description": "Native Material primary action translated for preview; 52dp minimum height. Browser focus/press approximates native feedback; native disabled colors remain authoritative. No authentication is performed by the preview.",
+      "html": "<button class=\"ds-sign-in\">Sign in</button>",
+      "css": ".ds-sign-in{font-family:\"Rethink Sans\",sans-serif;width:100%;min-height:52px;padding:10px 24px;border:0;border-radius:16px;background:#73617F;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500}.ds-sign-in:hover{filter:brightness(.98)}.ds-sign-in:focus-visible{outline:2px solid #73617F;outline-offset:3px}.ds-sign-in:active{filter:brightness(.94)}"
+    },
+    {
+      "name": "Sign in (dark)",
+      "kind": "button",
+      "refersTo": "button-sign-in-dark",
+      "description": "Native Material primary action translated for preview; 52dp minimum height. Browser focus/press approximates native feedback; native disabled colors remain authoritative. No authentication is performed by the preview.",
+      "html": "<button class=\"ds-sign-in\">Sign in</button>",
+      "css": ".ds-sign-in{font-family:\"Rethink Sans\",sans-serif;width:100%;min-height:52px;padding:10px 24px;border:0;border-radius:16px;background:#D0BDE2;color:#21182C;font-size:14px;line-height:20px;font-weight:500}.ds-sign-in:hover{filter:brightness(.98)}.ds-sign-in:focus-visible{outline:2px solid #D0BDE2;outline-offset:3px}.ds-sign-in:active{filter:brightness(.94)}"
     }
   ],
   "narrative": {
     "northStar": "The Engineering Journal",
-    "overview": "A quiet native conversation workspace with an open center, soft violet controls and locally bundled Rethink Sans. Near-white light surfaces and graphite dark surfaces keep technical reading clear. A diffuse light field, gently drifting sourced Konecto wave and twelve quiet motes give the empty chat atmosphere without placing geometry behind the results.\n\nThis record retains the approved editorial system and local profile extension, with bounded ambient motion on the empty chat. The scope is English Android phone UI in both light and dark modes: chat, left conversation history with a compact profile footer/menu/editor, and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality, backend integration or physical-device performance.",
+    "overview": "A quiet native conversation workspace with an open center, soft violet controls and locally bundled Rethink Sans. Near-white light surfaces and graphite dark surfaces keep technical reading clear. A diffuse light field, gently drifting sourced Konecto wave and twelve quiet motes give the empty chat atmosphere without placing geometry behind the results.\n\nThis record retains the approved editorial system and bounded empty-chat ambient motion, with a native sign-in form and server-backed profile. The scope is English Android phone UI in both light and dark modes: sign-in, chat, left conversation history with a compact profile footer/menu, and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality or physical-device performance; authentication integration evidence is recorded separately from visual fixtures.",
     "keyCharacteristics": [
       "Centered Hello and icon-only empty-chat toolbar.",
       "Soft gradient actions, outlined composer and restrained empty-chat ambient motion.",
       "Matched light/dark semantic roles with saved Light/Dark/System appearance choices.",
+      "Unboxed native sign-in and an explicit server-backed profile state.",
       "Complete technical evidence in readable cards and synchronized comparison columns."
     ],
     "rules": [
@@ -866,7 +887,7 @@
     "dos": [
       "Do preserve scalable text, 48dp action targets, meaningful icon descriptions and system/keyboard insets.",
       "Do use scheme-specific content roles for readable controls, messages, history and data surfaces.",
-      "Do keep local profile disclosure explicit, preserve optional details and offer Light/Dark/System through native selectable rows.",
+      "Do show server-provided identity and explicit sign-in/sign-out states, and retain Light/Dark/System through native selectable rows.",
       "Do retain full identifiers, units, N/A, source disclosure and expandable notes.",
       "Do preserve fixed comparison labels and synchronized product scrolling.",
       "Do keep the sourced wave decorative with its provenance alongside the native vector; gate its bounded drift and motes by chat visibility, lifecycle, reduced motion and battery saver."
@@ -876,7 +897,7 @@
       "Don't use saturated purple slabs, decorative kickers, hard offset shadows or system display faces.",
       "Don't put wave geometry or motes behind populated or busy chat, or run ambient motion while inactive, reduced motion is enabled or battery saver is active.",
       "Don't add voice, attachments, model selectors, search or unrelated controls.",
-      "Don't invent a default identity, imply authentication or add a nonfunctional account-switch action.",
+      "Don't invent a signed-in identity, edit authenticated identity through the legacy local form or show a nonfunctional account-switch action.",
       "Don't place developer traces in release product data or replace semantic content with rasterized text."
     ]
   }

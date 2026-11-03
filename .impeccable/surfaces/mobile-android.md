@@ -7,6 +7,8 @@ related_targets: []
 
 # Ambient chat: light and dark
 
+Authentication extension: docs/MOBILE_AUTH_DIRECTION.md and docs/AUTH.md govern login and server identity, superseding local-profile-only/no-login statements. Preserve the current world and ambient motion; form and account controls use existing native tokens. Finish with native captures and review.
+
 Motion extension: docs/MOBILE_AMBIENT_MOTION.md supersedes static-only idle background. Twelve quiet motes and minimal cached mesh drift, 32s cycle, at most20 updates/s; pause on hidden/input/content/loading/error, Android disabled animations and battery saver. No other visual changes.
 
 Profile extension: docs/MOBILE_PROFILE.md supersedes the binary Dark theme switch with the compact profile menu and Light/Dark/System options. All other visual and motion commitments remain.

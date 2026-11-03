@@ -27,18 +27,23 @@ data class ProfileDetails(val name: String = "", val email: String = "")
 /** Presentation details saved locally; this is not an authenticated account. */
 @Composable
 fun ProfileMenu() {
+    val account = LocalAccount.current
+    if (account != null) {
+        ProfileMenu(ProfileDetails(account.user.name, account.user.email), {}, account)
+        return
+    }
     val context = LocalContext.current
     val preferences = remember(context) { context.getSharedPreferences("profile", Context.MODE_PRIVATE) }
     var profile by remember(preferences) { mutableStateOf(ProfileDetails(
         preferences.getString("name", "").orEmpty(), preferences.getString("email", "").orEmpty())) }
-    ProfileMenu(profile) { details ->
+    ProfileMenu(profile, onSave = { details ->
         preferences.edit().putString("name", details.name).putString("email", details.email).apply()
         profile = details
-    }
+    })
 }
 
 @Composable
-internal fun ProfileMenu(profile: ProfileDetails, onSave: (ProfileDetails) -> Unit) {
+internal fun ProfileMenu(profile: ProfileDetails, onSave: (ProfileDetails) -> Unit, account: AccountControls? = null) {
     val appearance = LocalAppearance.current
     var expanded by rememberSaveable { mutableStateOf(false) }
     var editing by rememberSaveable { mutableStateOf(false) }
@@ -67,10 +72,13 @@ internal fun ProfileMenu(profile: ProfileDetails, onSave: (ProfileDetails) -> Un
                     maxLines = 2, overflow = TextOverflow.Ellipsis)
                 Text(profile.email.ifBlank { "No email added" }, style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("Saved on this device", style = MaterialTheme.typography.bodySmall,
+                Text(if (account == null) "Saved on this device" else "Signed in", style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
+                account?.error?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error) }
             }
-            DropdownMenuItem(text = { Text("Edit profile") }, onClick = { expanded = false; editing = true })
+            if (account == null) DropdownMenuItem(text = { Text("Edit profile") }, onClick = { expanded = false; editing = true })
+            else DropdownMenuItem(text = { Text(if (account.busy) "Signing out…" else "Sign out") },
+                onClick = account.logout, enabled = !account.busy)
             HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
             Text("Appearance", Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                 style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -35,9 +35,18 @@ class ApiConversationRepository(private val api: ConversationApi) : Conversation
     override suspend fun send(query: String, sessionId: String?) = api.conversation(ConversationRequest(query, sessionId))
 }
 
-fun createRetrofit(url: String): Retrofit = Retrofit.Builder()
+fun createRetrofit(url: String, bearer: () -> String? = { null }, expired: (String) -> Unit = {}): Retrofit = Retrofit.Builder()
     .baseUrl(url)
     .client(OkHttpClient.Builder()
+        .followRedirects(false)
+        .followSslRedirects(false)
+        .addInterceptor { chain ->
+            val token = bearer()
+            val request = chain.request().newBuilder().apply { token?.let { header("Authorization", "Bearer $it") } }.build()
+            chain.proceed(request).also { response ->
+                if (response.code == 401 && token != null && request.url.encodedPath != "/api/auth/login") expired(token)
+            }
+        }
         .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(70, TimeUnit.SECONDS)
         .callTimeout(75, TimeUnit.SECONDS)
@@ -48,6 +57,7 @@ fun createRetrofit(url: String): Retrofit = Retrofit.Builder()
 
 fun failureMessage(error: Throwable): String = when (error) {
     is HttpException -> when (error.code()) {
+        401 -> "Your session has expired. Please sign in again."
         404 -> "This conversation could not be found. Return to Conversations and refresh."
         409 -> "A response is already being prepared. Reload the conversation before sending again."
         422 -> "The request could not be accepted. Check your message and try again."

@@ -35,7 +35,8 @@ fun DeveloperEntry(onOpen: () -> Unit) {
 @Composable
 fun DeveloperScreen(state: AppState, onBack: () -> Unit, onChoose: (String) -> Unit,
                     loadTrace: (suspend (String) -> DebugResponse)? = null) {
-    val api = remember { createRetrofit(BuildConfig.BACKEND_URL).create(DebugApi::class.java) }
+    val authenticated = LocalAuthenticatedApi.current
+    val api = remember(authenticated) { (authenticated ?: createRetrofit(BuildConfig.BACKEND_URL)).create(DebugApi::class.java) }
     val answers = state.messages.filter { it.role == "assistant" }
     val selected = state.debugMessageId?.takeIf { id -> answers.any { it.id == id } } ?: answers.lastOrNull()?.id
     var trace by remember(selected) { mutableStateOf<DebugResponse?>(null) }

@@ -10,6 +10,17 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class ContractTest {
+    @Test fun `authenticated transport attaches bearer and expires only the rejected token`() = runTest {
+        MockWebServer().use { server ->
+            server.start()
+            server.enqueue(MockResponse().setResponseCode(401).setBody("{}"))
+            var rejected: String? = null
+            val api = createRetrofit(server.url("/").toString(), { "synthetic-token" }, { rejected = it }).create(AuthApi::class.java)
+            try { api.me(); fail("Expected unauthorized") } catch (_: retrofit2.HttpException) { }
+            assertEquals("Bearer synthetic-token", server.takeRequest().getHeader("Authorization"))
+            assertEquals("synthetic-token", rejected)
+        }
+    }
     @Test fun `JSON keeps exact decimal representation and unavailable states`() {
         val p = wireJson.decodeFromString<Product>("""{
           "base_part_number":"761A00-11300000/A",

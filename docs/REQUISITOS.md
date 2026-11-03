@@ -81,7 +81,7 @@ Request mínimo: {"query":"..."}. Request de continuación: {"session_id":"...",
 - [x] R10. URL del backend configurable por propiedad Gradle y documentada (p. 6).
 - [x] R11. Acceso a debug y aislamiento de release documentados (p. 6).
 - [ ] R12. README con arquitectura, decisiones y trade-offs, incluyendo modelos (p. 2, 6).
-- [ ] R13. Si se agregan opcionales: usuarios de prueba y explicación de voz (p. 6).
+- [x] R13. Si se agregan opcionales: usuarios de prueba y explicación de voz (p. 6). Login implementado; cuentas de prueba y generación de credenciales locales documentadas en AUTH.md. Voz no implementada; no se declara verificada.
 - [ ] R14. Directorio real de configuración del asistente de IA utilizado (p. 6). Se incluye .codex/ con alcance documentado y AGENTS.md.
 - [ ] R15. Instrucciones completas y reproducibles sin consultas adicionales; verificar ejecución limpia antes de entregar (p. 6).
 
@@ -93,6 +93,8 @@ Request mínimo: {"query":"..."}. Request de continuación: {"session_id":"...",
 - Se pueden cambiar nombres y formatos de estos endpoints explicándolo en README (p. 3). Las funciones de listar/reabrir siguen siendo necesarias para la app.
 
 ## Opcionales: solo después de completar lo obligatorio
+
+El usuario seleccionó expresamente login y aislamiento por usuario. Implementación y evidencia en AUTH.md y reports/mobile/auth-v7: contraseña con hash, token por petición, propietario derivado del token, login nativo y usuarios de prueba. El historial antiguo se conserva sin asignarlo automáticamente. Estas pruebas no cierran las condiciones aún pendientes de interpretación con LLM real; voz sigue sin implementar.
 
 Login (p. 5): email/password -> token; contraseñas con hash; usuarios de prueba precargados y documentados; cuarta pantalla de login; token en cada petición; usuario obtenido del token por backend; aislamiento de conversaciones por usuario. No se pide registro, recuperación de contraseña ni OAuth.
 

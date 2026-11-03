@@ -55,6 +55,12 @@ typography:
     fontWeight: 500
     lineHeight: "42sp"
     letterSpacing: "-0.8sp"
+  login-heading:
+    fontFamily: "Rethink Sans"
+    fontSize: "38sp"
+    fontWeight: 600
+    lineHeight: "42sp"
+    letterSpacing: "-0.8sp"
   headline:
     fontFamily: "Rethink Sans"
     fontSize: "24sp"
@@ -240,6 +246,22 @@ components:
     textColor: "{colors.dark-on-surface-variant}"
     typography: "{typography.label-medium}"
     padding: "12dp 16dp"
+  button-sign-in-light:
+    backgroundColor: "{colors.light-primary}"
+    textColor: "{colors.light-on-primary}"
+    rounded: "{rounded.card}"
+    typography: "{typography.label}"
+  login-heading-light:
+    textColor: "{colors.light-on-background}"
+    typography: "{typography.login-heading}"
+  button-sign-in-dark:
+    backgroundColor: "{colors.dark-primary}"
+    textColor: "{colors.dark-on-primary}"
+    rounded: "{rounded.card}"
+    typography: "{typography.label}"
+  login-heading-dark:
+    textColor: "{colors.dark-on-background}"
+    typography: "{typography.login-heading}"
 ---
 
 # Design System: Konecto Series 76 Android
@@ -250,12 +272,13 @@ components:
 
 A quiet native conversation workspace with an open center, soft violet controls and locally bundled Rethink Sans. Near-white light surfaces and graphite dark surfaces keep technical reading clear. A diffuse light field, gently drifting sourced Konecto wave and twelve quiet motes give the empty chat atmosphere without placing geometry behind the results.
 
-This record retains the approved editorial system and local profile extension, with bounded ambient motion on the empty chat. The scope is English Android phone UI in both light and dark modes: chat, left conversation history with a compact profile footer/menu/editor, and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality, backend integration or physical-device performance.
+This record retains the approved editorial system and bounded empty-chat ambient motion, with a native sign-in form and server-backed profile. The scope is English Android phone UI in both light and dark modes: sign-in, chat, left conversation history with a compact profile footer/menu, and development-only debug. Geometry uses dp and text uses sp. UI fixtures demonstrate presentation, not model quality or physical-device performance; authentication integration evidence is recorded separately from visual fixtures.
 
 **Key Characteristics:**
 - Centered Hello and icon-only empty-chat toolbar.
 - Soft gradient actions, outlined composer and restrained empty-chat ambient motion.
 - Matched light/dark semantic roles with saved Light/Dark/System appearance choices.
+- Unboxed native sign-in and an explicit server-backed profile state.
 - Complete technical evidence in readable cards and synchronized comparison columns.
 
 ## Colors
@@ -284,6 +307,7 @@ The frontmatter records the explicit light/dark Material roles and soft-action s
 
 ### Hierarchy
 - **Display:** Hello uses the display metrics with medium weight and tightened tracking. The theme's underlying displaySmall remains semibold; the component override is the visible greeting.
+- **Login heading:** Welcome back uses the existing theme displaySmall semibold metrics; the separate role records its weight without changing Hello.
 - **Headline:** retained medium heading role; not the greeting.
 - **Title large:** conversation heading and active session title.
 - **Title medium:** product identifiers, comparison and empty-history headings.
@@ -305,11 +329,13 @@ The composer is anchored using navigation-bar and IME insets, 16dp horizontal/12
 
 The modal drawer occupies 84% of the parent width with 20dp internal horizontal padding. History uses 6dp row gaps, two-line ellipsized titles and dates. A profile footer stays below the scrolling history and a half-alpha outlineVariant divider. Its compact anchored menu is constrained to 240 to 300dp width. Light, Dark and System replace the previous binary switch; System follows Android appearance and is the initial choice. The selected mode persists in local SharedPreferences; an existing Boolean preference restores Light or Dark until a mode is selected. Status/navigation icon appearance follows the effective scheme.
 
+Sign-in uses an unboxed form centered in the available window, a 420dp maximum width, 28dp horizontal/32dp vertical outer padding and 20dp vertical gaps. Safe-drawing and IME insets plus vertical scrolling keep the form reachable with keyboard or enlarged text. It uses the quiet diffuse field without wave geometry or motes.
+
 Comparison fixes specification labels while product columns share horizontal scrolling. At fontScale 1, label/product widths are 148/216dp and header/row heights are 96/76dp; these multiply by fontScale clamped to at least 1. No tablet breakpoint is established.
 
 ## Elevation & Depth
 
-Custom surfaces use tonal separation and thin rules without custom shadows. Native Material state layers, popup shadows and modal behavior remain. The profile menu explicitly uses surface with zero tonal elevation; the editor explicitly uses surface rather than a tinted container. The drawer scrim uses onSurface at 24% alpha. Borders and gradients are native materials of this world.
+Custom surfaces use tonal separation and thin rules without custom shadows. Native Material state layers, popup shadows and modal behavior remain. The profile menu explicitly uses surface with zero tonal elevation; the retained legacy-only editor explicitly uses surface rather than a tinted container. The current sign-in form adds no card, raised slab or custom shadow. The drawer scrim uses onSurface at 24% alpha. Borders and gradients are native materials of this world.
 
 The background retains two static radial light fields. Their empty-chat alphas are 0.85/0.8 in light and 0.6/0.8 in dark; both reduce to 0.25 when content appears. Only the empty idle canvas carries the original 184-path Konecto vector, tinted muted violet at 0.32 light/0.24 dark alpha, cropped into a 320dp-high lower region with a -38dp offset. The native conversion and source hash are recorded in .impeccable/references/konecto-wave-origin.json. No shipping raster is used.
 
@@ -323,7 +349,7 @@ Hello reveals per-letter tint, opacity and baseline over 640ms with cubic-bezier
 
 ## Shapes
 
-Fine boundaries pair with rounded native surfaces. Theme small/medium/large corners are 12/16/24dp. History, soft New chat, product/error cards, user bubbles and composer use the frontmatter radii. Send is circular. The drawer rounds its trailing corners only. Composer and technical cards use 1dp borders. The profile avatar is circular, its menu uses the card radius and its editor uses the composer radius. Native text/outlined buttons, text fields and radio controls retain their shape and state behavior.
+Fine boundaries pair with rounded native surfaces. Theme small/medium/large corners are 12/16/24dp. History, soft New chat, product/error cards, user bubbles and composer use the frontmatter radii. Send is circular. The drawer rounds its trailing corners only. Composer and technical cards use 1dp borders. The profile avatar is circular, its menu uses the card radius and the retained legacy-only editor uses the composer radius. Sign in uses the card radius. Native text/outlined buttons, text fields and radio controls retain their shape and state behavior.
 
 ## Components
 
@@ -337,17 +363,23 @@ The outlined composer uses the active surface and onSurface body text, a muted p
 
 ### Navigation
 
-Menu opens left modal history; the edit vector creates a conversation. Scrim, swipe and system Back dismiss history while retaining chat/draft. Selected history uses primaryContainer. Session switching and New chat disable while sending. The profile footer opens the local profile and appearance menu. Debug entry and response inspection remain development-only; release source-set composables are no-ops.
+Menu opens left modal history; the edit vector creates a conversation. Scrim, swipe and system Back dismiss history while retaining chat/draft. Selected history uses primaryContainer. Session switching and New chat disable while sending. The profile footer opens the authenticated profile and appearance menu. Sign out returns to sign-in after revocation; changing account uses a subsequent sign-in. Debug entry and response inspection remain development-only; release source-set composables are no-ops.
 
-### Local Profile and Appearance
+### Sign-in
 
-The footer is a quiet navigation surface, not an authenticated account. It uses background, the history radius, 14dp vertical/4dp horizontal padding and a 12dp avatar/text gap. The 40dp circular avatar reuses Soft Accent with a 20dp fine-stroke profile vector in onPrimaryContainer; it carries no invented photograph or initials. The summary uses title-small and muted body-small, a 2dp text gap and one-line ellipsis. Blank details show Profile / Local profile.
+A native form leads directly to the existing workspace without a new card family. Welcome back uses login-heading; supporting text uses body and onSurfaceVariant. The Email and Password fields are single-line native outlined fields with visible labels, email/password keyboards and disabled state while busy. Password starts masked, has a functional Show/Hide action and is cleared from the field at submission. IME Done and Sign in invoke the same action. Sign in has the card radius and a 52dp minimum height; its enabled primary/onPrimary treatment and native disabled/focus/press states remain Material-owned.
 
-The surface menu has the card radius, native popup dismissal and 48dp native menu actions. Its header uses 16dp horizontal/12dp vertical padding, 4dp gaps, title-medium (up to two lines), muted body-medium email that wraps, and body-small device-storage disclosure. Blank details show Local profile / No email added. Edit profile opens the editor; Light, Dark and System have trailing native radios and selected semantics. Selection saves the mode and closes the menu without changing the conversation or draft. Scrim/outside tap and system Back use native dismissal.
+Checking your session shows a native linear progress indicator and body-medium status instead of credential fields. Invalid credentials, throttling and connection failures use explicit body-medium error text in the error role. Signing in changes the button label and disables repeated submission; a failed saved-session check can offer Retry saved session. No workspace history is shown before the server validates identity. No registration, password recovery or promotional controls are implied.
 
-The editor is a native AlertDialog with the composer radius and an explicit surface container. A scrollable form uses 16dp gaps, short device-storage disclosure and native outlined Name/Email fields. Fields are optional and single-line; limits are 80/254 characters, with an email keyboard and inline error for invalid nonblank email. Save stays disabled while the email is invalid, trims both values and persists them only on this device. Cancel or dismissal leaves the stored details unchanged. Native field labels, focus/selection, error roles and text-button feedback remain authoritative; the editor adds no custom form colors or type scale.
+### Authenticated Profile and Appearance
 
-ProfileDetails and its save callback isolate presentation from storage. No identity is shipped as a default; examples are fixtures only. Account switching and authentication are future work with no inert account controls in this menu.
+The footer reuses background, the history radius, 14dp vertical/4dp horizontal padding and a 12dp avatar/text gap. The 40dp circular avatar retains Soft Accent and a 20dp fine-stroke profile vector in onPrimaryContainer, without an invented photograph or initials. Server-provided name and email use title-small and muted body-small, with a 2dp gap and one-line ellipsis.
+
+The surface menu retains the card radius, native popup dismissal and 48dp native menu actions. Its header uses 16dp horizontal/12dp vertical padding, 4dp gaps, title-medium name (up to two lines), wrapping muted body-medium email and body-small Signed in status. Sign out replaces local identity editing; while busy its label becomes Signing out and the action disables. Failure stays visible in the error role and retains the account for retry, rather than claiming a successful exit. A different account signs in after sign-out; there is no inert switch-account control.
+
+Light, Dark and System remain native selectable rows with trailing radios and selected semantics. Choosing appearance persists the local mode and closes the menu without changing the conversation or draft. Outside tap and system Back use native dismissal. The old local profile/editor remains only as a source fallback for isolated legacy presentation; its retained editor tokens do not authorize editing authenticated identity or treating local preferences as a server account.
+
+Production uses FLAG_SECURE for sensitive windows. Visual evidence may remove it only in a test instance with declared fixtures; previews and screenshots never establish a real signed-in identity or expose credentials.
 
 ### Cards / Containers
 
@@ -366,7 +398,7 @@ Conversation controls use native fine-stroke vectors, meaningful content descrip
 ### Do:
 - Do preserve scalable text, 48dp action targets, meaningful icon descriptions and system/keyboard insets.
 - Do use scheme-specific content roles for readable controls, messages, history and data surfaces.
-- Do keep local profile disclosure explicit, preserve optional details and offer Light/Dark/System through native selectable rows.
+- Do show server-provided identity and explicit sign-in/sign-out states, and retain Light/Dark/System through native selectable rows.
 - Do retain full identifiers, units, N/A, source disclosure and expandable notes.
 - Do preserve fixed comparison labels and synchronized product scrolling.
 - Do keep the sourced wave decorative with its provenance alongside the native vector; gate its bounded drift and motes by chat visibility, lifecycle, reduced motion and battery saver.
@@ -376,5 +408,5 @@ Conversation controls use native fine-stroke vectors, meaningful content descrip
 - Don't use saturated purple slabs, decorative kickers, hard offset shadows or system display faces.
 - Don't put wave geometry or motes behind populated or busy chat, or run ambient motion while inactive, reduced motion is enabled or battery saver is active.
 - Don't add voice, attachments, model selectors, search or unrelated controls.
-- Don't invent a default identity, imply authentication or add a nonfunctional account-switch action.
+- Don't invent a signed-in identity, edit authenticated identity through the legacy local form or show a nonfunctional account-switch action.
 - Don't place developer traces in release product data or replace semantic content with rasterized text.

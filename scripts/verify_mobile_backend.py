@@ -14,6 +14,7 @@ import sys
 import time
 from types import SimpleNamespace
 from uuid import uuid4
+import secrets
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -23,6 +24,7 @@ from backend.catalog.cli import local_environment
 from backend.catalog.db import connect
 from backend.conversation.agent import run_agent
 from backend.conversation import store
+from backend.auth.cli import create_user
 
 
 class RoutingFixture:
@@ -41,17 +43,26 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--restart", action="store_true", help="Restart existing db/backend without removing volumes")
     parser.add_argument("--url", default="http://127.0.0.1:8000")
+    parser.add_argument("--report", type=Path, default=ROOT / "reports/mobile/auth-v7/persistence.json")
     args = parser.parse_args()
     local_environment()
     session_id = uuid4()
+    email, password = f"verification-{uuid4()}@example.test", secrets.token_urlsafe(24)
+    user_id = None
     report = {"status": "running", "model": "scripted routing fixture; no external LLM", "postgres": "real"}
     try:
         with connect() as connection:
-            result = run_agent(connection, "Compare the torque of these two actuators", [], {}, model=RoutingFixture())
-            message_id = store.append_turn(connection, session_id, "[Verification] Compare two actuators", result, new=True)
+            user_id = create_user(connection, email, "Temporary verification", password)
+            result = run_agent(connection, "Compare the torque of 761A00-11300000/A and 761B00-11300000/A", [], {}, model=RoutingFixture())
+            assert len(result.products) == 2, "Verification must restore actual catalogue products"
+            message_id = store.append_turn(connection, session_id, "[Verification] Compare two actuators", result, new=True, owner_id=user_id)
+        with httpx.Client(base_url=args.url, timeout=10) as client:
+            login = client.post("/api/auth/login", json={"email": email, "password": password})
+            login.raise_for_status()
+            token = login.json()["access_token"]
         if args.restart:
             subprocess.run(["docker", "compose", "restart", "db", "backend"], cwd=ROOT, check=True, capture_output=True)
-        with httpx.Client(base_url=args.url, timeout=10) as client:
+        with httpx.Client(base_url=args.url, timeout=10, headers={"Authorization": f"Bearer {token}"}) as client:
             for attempt in range(30):
                 try:
                     if client.get("/ready").status_code == 200:
@@ -62,6 +73,7 @@ def main():
             else:
                 raise AssertionError("Backend did not become ready")
             page = client.get(f"/api/sessions/{session_id}/messages"); page.raise_for_status()
+            assert client.get("/api/auth/me").status_code == 200
             history = page.json()["messages"]
             assert len(history) == 2
             assert history[1]["id"] == str(message_id)
@@ -76,13 +88,17 @@ def main():
                 assert debug.json()["tool_calls"] == result.tool_calls
         report.update(status="passed", restart_requested=args.restart, restored_messages=len(history),
                       restored_products=len(history[1]["products"]), debug_status=debug.status_code,
-                      no_tool_details_in_public_history=True, external_model_calls=0)
+                      no_tool_details_in_public_history=True, external_model_calls=0, authenticated=True,
+                      session_token_survived_restart=args.restart)
     finally:
         with connect() as connection:
             # Exact identifiers created by this run only; never delete existing user sessions.
             connection.execute("DELETE FROM series76.messages WHERE session_id=%s", (session_id,))
             connection.execute("DELETE FROM series76.conversations WHERE id=%s", (session_id,))
-    destination = ROOT / "reports/mobile/backend.json"
+            if user_id:
+                connection.execute("DELETE FROM series76.auth_sessions WHERE user_id=%s", (user_id,))
+                connection.execute("DELETE FROM series76.users WHERE id=%s", (user_id,))
+    destination = args.report
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report))

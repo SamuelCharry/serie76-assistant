@@ -1,5 +1,7 @@
 # Base visual y siguientes funciones
 
+Actualización: el usuario seleccionó login y aislamiento por usuario. La implementación, migración y contrato vigentes están en [AUTH.md](AUTH.md); la voz sigue pendiente. Los planes de abajo conservan las dependencias y el historial de decisión, no sustituyen la evidencia en reports/mobile/auth-v7.
+
 ## Versión inicial conservada
 
 Base visual aprobada y publicada en `design/android-editorial-v3`: `6e82513`, con evidencia normalizada en `2af3cde`. Perfil local editable, Light/Dark/System y fondo Konecto; 9 pruebas JVM y 10 Compose aprobadas. Evidencia en `reports/mobile/profile-v5/`. El movimiento posterior es una extensión separada: `MOBILE_AMBIENT_MOTION.md`.
@@ -37,4 +39,4 @@ Firebase no es necesario para esta propuesta. Añadir otro proveedor requeriría
 3. Comprobar números de parte, cifras y unidades pronunciados. Permitir corrección; no convertir transcripción dudosa en dato técnico válido.
 4. Documentar privacidad y descarte del audio; verificar interrupciones y permisos en hardware físico. OpenRouter, si se usa, comparte el presupuesto existente.
 
-Prioridad pendiente de respuesta del usuario. Este plan no implica implementación ni aceptación de opcionales.
+Prioridad elegida: login y aislamiento de conversaciones por usuario. Ver AUTH.md y su evidencia; voz sin implementar. La aceptación del modelo sigue siendo independiente.

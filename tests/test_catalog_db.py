@@ -306,6 +306,7 @@ class PostgresCatalogTests(unittest.TestCase):
     def test_api_contract_and_unavailable_database(self):
         from fastapi.testclient import TestClient
         from backend.app.main import app
+        from backend.auth.api import require_user
 
         @contextmanager
         def current_connection():
@@ -313,6 +314,7 @@ class PostgresCatalogTests(unittest.TestCase):
 
         with (
             patch("backend.app.main.connect", current_connection),
+            patch.dict(app.dependency_overrides, {require_user: lambda: {"id": "catalog-test"}}),
             TestClient(app) as client,
         ):
             self.assertEqual(client.get("/health").status_code, 200)

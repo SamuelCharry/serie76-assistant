@@ -21,6 +21,7 @@ from backend.catalog.cli import local_environment
 from backend.catalog.db import connect
 from backend.conversation.agent import AgentUnavailable, run_agent
 from backend.conversation import store
+from backend.auth.api import require_user
 
 
 class RouterFixture:
@@ -45,7 +46,7 @@ class RequestTests(unittest.TestCase):
 
     def test_debug_disabled_without_database(self):
         with patch.dict(os.environ, {"DEV_DEBUG": "false"}):
-            self.assertEqual(TestClient(app).get(f"/api/messages/{uuid4()}/debug").status_code, 404)
+            self.assertEqual(TestClient(app).get(f"/api/messages/{uuid4()}/debug").status_code, 401)
 
     def test_openrouter_compatible_transport_without_external_calls(self):
         from backend.conversation.agent import create_model
@@ -89,8 +90,14 @@ class ConversationIntegrationTests(unittest.TestCase):
         self.connection = connect()
         self.transaction = self.connection.transaction(force_rollback=True)
         self.transaction.__enter__()
+        self.user_id = uuid4()
+        self.connection.execute("INSERT INTO series76.users(id,email,name,password_hash) VALUES (%s,%s,'Test','unused')", (self.user_id, f"{self.user_id}@example.test"))
+        self.previous_overrides = app.dependency_overrides.copy()
+        app.dependency_overrides[require_user] = lambda: {"id": self.user_id}
 
     def tearDown(self):
+        app.dependency_overrides.clear()
+        app.dependency_overrides.update(self.previous_overrides)
         self.transaction.__exit__(None, None, None)
         self.connection.close()
 
@@ -169,7 +176,7 @@ class ConversationIntegrationTests(unittest.TestCase):
             with patch("backend.conversation.api.run_agent", side_effect=AgentUnavailable):
                 failed = client.post("/api/conversation", json={"query": "failure", "session_id": sid})
                 self.assertEqual(failed.status_code, 503)
-            self.assertEqual(len(store.history(self.connection, sid)), 2)
+            self.assertEqual(len(store.history(self.connection, sid, owner_id=self.user_id)), 2)
             self.assertEqual(client.post("/api/conversation", json={"query": "missing", "session_id": str(uuid4())}).status_code, 404)
 
     def test_session_lock_serializes_across_connections(self):

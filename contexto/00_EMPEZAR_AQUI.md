@@ -1,5 +1,9 @@
 # Continuación del assessment Serie 76
 
+## Actualización Android: login y aislamiento por usuario
+
+El usuario eligió implementar login sobre FastAPI/PostgreSQL. Guía vigente: docs/AUTH.md; evidencia reports/mobile/auth-v7. Migración aditiva003_auth.sql: usuarios, sesiones con token hasheado, límites de login y owner_id. Historial anterior conservado con owner_id=NULL, sin asignación automática. La app valida /me antes de mostrar contenido, cifra el token con Android Keystore y destruye el estado del chat al salir o expirar. Demo1/2 tienen credenciales aleatorias solo en .cache/auth-demo-credentials.json ignorado: nunca imprimirlas ni versionarlas. Sin Firebase ni voz. No confundir pruebas de autenticación/historial con validación del LLM real. Fondo y perfil visual aprobados conservados; docs/MOBILE_AMBIENT_MOTION.md documenta el movimiento. Los apartados visuales anteriores más abajo son históricos.
+
 ## Leer primero: relevo de arquitectura para cambio de modelo
 
 Samuel cambiará a un modelo de mayor capacidad y pidió guardar las arquitecturas y el razonamiento. Leer [06_ARQUITECTURAS_Y_RELEVO.md](06_ARQUITECTURAS_Y_RELEVO.md): cinco diseños A–E, ER, fuentes industriales/ETIM, fallos, presupuesto y próximos pasos. **No hay arquitectura ganadora ni integración aprobada.** Recomendación provisional comunicada: B corregida como base y D para evaluación; el nuevo modelo debe revisarla, no tratarla como resultado experimental.
