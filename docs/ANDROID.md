@@ -1,6 +1,6 @@
 # Android Serie 76
 
-Kotlin/Jetpack Compose, interfaz en inglés y tres superficies: conversaciones guardadas, chat y Developer debug. El rediseño actual, aprobado por el usuario, sigue una composición tipo Gemini: inicio directamente en chat, historial en un menú deslizable izquierdo, saludo tipográfico, dos accesos que solo preparan consultas y compositor tonal redondeado. La dirección C anterior queda como historial de diseño. Sin Firebase, login, voz ni funciones opcionales de negocio.
+Kotlin/Jetpack Compose, interfaz en inglés y tres superficies: conversaciones guardadas, chat y Developer debug. Presentación vigente Editorial A: Rethink Sans local, blanco/ciruela/lila Konecto, sugerencias en filas con separadores finos y compositor blanco delineado. Conserva chat inicial y menú izquierdo. Movimiento nativo del drawer, entrada breve y respuesta de las flechas al pulsar; Compose respeta la escala de animación del sistema. Dirección: MOBILE_DIRECTION_V3.md. Las composiciones anteriores son históricas. Sin Firebase, login, voz ni funciones opcionales de negocio.
 
 ## Requisitos y compilación
 

@@ -1,0 +1,22 @@
+{
+  "debug": {
+    "path": "mobile\\android\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+    "sha256": "7480ae397bdf546349ed3b7d8d90ad0417c30e29dab0bd5b528c260feb2fa7f9",
+    "size_bytes": 12238266,
+    "debug_strings": {
+      "api/messages/": true,
+      "Developer debug": true,
+      "Returned data": true
+    }
+  },
+  "release": {
+    "path": "mobile\\android\\app\\build\\outputs\\apk\\release\\app-release-unsigned.apk",
+    "sha256": "597bb27cf08e0fda298da236086d40fd726d761d4618ddb513b4d2512ca99a99",
+    "size_bytes": 1937953,
+    "debug_strings": {
+      "api/messages/": false,
+      "Developer debug": false,
+      "Returned data": false
+    }
+  }
+}

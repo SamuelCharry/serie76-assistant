@@ -1,6 +1,10 @@
 # Continuación del assessment Serie 76
 
-## Actualización visual Android: Gemini
+## Android: presentación Editorial A vigente
+
+El usuario rechazó la apariencia genérica de V2, mantuvo chat inicial/historial lateral y aprobó la opción Editorial A para toda la app con adaptación nativa. Nueva dirección docs/MOBILE_DIRECTION_V3.md; evidencia reports/mobile/redesign-v3 y .impeccable/review/redesign-v3. Rethink Sans local, blanco/ciruela/lila Konecto, compositor delineado, filas de sugerencias y movimiento nativo. Base anterior publicada en main:7f69e9c; cambios visuales en design/android-editorial-v3. Trece pruebas Android pasan y debug/release compilan. No cambiar backend/modelos como parte del diseño.
+
+## Historial visual Android: V2
 
 El usuario sustituyó la composición C por una dirección más cercana a Gemini y aprobó explícitamente sus adaptaciones nativas. Inicio en chat, historial en drawer izquierdo y compositor tonal; alcance funcional sin cambios. Dirección vigente: docs/MOBILE_DIRECTION_V2.md; evidencia nueva: reports/mobile/redesign-v2 y .impeccable/review/redesign-v2. Siete pruebas unitarias/contrato y seis instrumentadas pasan en API35, debug/release compilados. La revisión visual y documentación de este rediseño se registran separadas de la evidencia histórica C. No interpretar estas pruebas UI con repositorio controlado como validación app→LLM→SQL→app.
 

@@ -1,237 +1,271 @@
 ---
-name: Series 76 Android
-description: A native conversation workspace with compact history and Konecto lilac.
+name: Konecto Series 76 Android
+description: An editorial actuator research workspace with native conversation history.
 colors:
-  primary: "#BD7BFF"
-  ink: "#211A2B"
-  primary-container: "#ECE4F6"
-  dark-action: "#4C315E"
-  background: "#FAFAFC"
-  background-ink: "#25232A"
+  primary: "#412C64"
+  accent: "#BD7BFF"
+  selection: "#EEE3FC"
+  background: "#FCFCFD"
   surface: "#FFFFFF"
-  surface-variant: "#EFEEF4"
-  muted-ink: "#66616F"
-  outline: "#807887"
-  divider: "#DFDCE5"
+  ink: "#211A2B"
+  quiet-surface: "#F6F3F9"
+  muted-ink: "#62596C"
+  outline: "#8A7E98"
+  rule: "#D0ACE5"
   error: "#9E2036"
-  error-container: "#FFE9ED"
+  error-wash: "#FFE9ED"
   error-ink: "#6E1324"
 typography:
+  display:
+    fontFamily: "Rethink Sans"
+    fontSize: "38sp"
+    fontWeight: 600
+    lineHeight: "42sp"
+    letterSpacing: "-0.8sp"
   headline:
-    fontFamily: "Roboto (Android system sans-serif)"
-    fontSize: "32sp"
-    fontWeight: 400
-    lineHeight: "40sp"
+    fontFamily: "Rethink Sans"
+    fontSize: "24sp"
+    fontWeight: 500
+    lineHeight: "30sp"
     letterSpacing: "0sp"
   title-large:
-    fontFamily: "Roboto (Android system sans-serif)"
+    fontFamily: "Rethink Sans"
     fontSize: "22sp"
     fontWeight: 500
     lineHeight: "28sp"
     letterSpacing: "0sp"
   title-medium:
-    fontFamily: "Roboto (Android system sans-serif)"
-    fontSize: "16sp"
-    fontWeight: 500
-    lineHeight: "24sp"
-    letterSpacing: "0.15sp"
-  title-emphasis:
-    fontFamily: "Roboto (Android system sans-serif)"
-    fontSize: "16sp"
+    fontFamily: "Rethink Sans"
+    fontSize: "18sp"
     fontWeight: 600
     lineHeight: "24sp"
-    letterSpacing: "0.15sp"
+    letterSpacing: "0sp"
   title-small:
-    fontFamily: "Roboto (Android system sans-serif)"
-    fontSize: "14sp"
+    fontFamily: "Rethink Sans"
+    fontSize: "15sp"
     fontWeight: 500
-    lineHeight: "20sp"
-    letterSpacing: "0.1sp"
+    lineHeight: "22sp"
+    letterSpacing: "0sp"
   body:
-    fontFamily: "Roboto (Android system sans-serif)"
+    fontFamily: "Rethink Sans"
     fontSize: "16sp"
     fontWeight: 400
     lineHeight: "24sp"
-    letterSpacing: "0.5sp"
+    letterSpacing: "0sp"
   body-medium:
-    fontFamily: "Roboto (Android system sans-serif)"
+    fontFamily: "Rethink Sans"
     fontSize: "14sp"
     fontWeight: 400
-    lineHeight: "20sp"
-    letterSpacing: "0.25sp"
+    lineHeight: "21sp"
+    letterSpacing: "0sp"
   body-small:
-    fontFamily: "Roboto (Android system sans-serif)"
+    fontFamily: "Rethink Sans"
     fontSize: "12sp"
     fontWeight: 400
-    lineHeight: "16sp"
-    letterSpacing: "0.4sp"
+    lineHeight: "18sp"
+    letterSpacing: "0sp"
   label:
-    fontFamily: "Roboto (Android system sans-serif)"
+    fontFamily: "Rethink Sans"
     fontSize: "14sp"
     fontWeight: 500
     lineHeight: "20sp"
-    letterSpacing: "0.1sp"
+    letterSpacing: "0sp"
 rounded:
-  "small": "12dp"
-  "row": "16dp"
-  "medium": "20dp"
-  "drawer-end": "24dp"
-  "large": "28dp"
+  shortcut: "4dp"
+  history: "12dp"
+  action: "14dp"
+  card: "16dp"
+  message: "20dp"
+  composer: "24dp"
 spacing:
   "4": "4dp"
+  "6": "6dp"
   "8": "8dp"
   "10": "10dp"
   "12": "12dp"
+  "14": "14dp"
   "16": "16dp"
+  "18": "18dp"
   "20": "20dp"
   "24": "24dp"
+  "28": "28dp"
+  "48": "48dp"
 components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.action}"
+    padding: "14dp 18dp"
+    height: "52dp"
+    typography: "{typography.label}"
   button-send:
-    backgroundColor: "{colors.dark-action}"
+    backgroundColor: "{colors.primary}"
     textColor: "{colors.surface}"
     size: "48dp"
-  button-tonal:
-    backgroundColor: "{colors.surface-variant}"
-    textColor: "{colors.ink}"
-    typography: "{typography.label}"
   button-text:
-    textColor: "{colors.dark-action}"
+    textColor: "{colors.primary}"
+    typography: "{typography.label}"
+  button-outlined:
+    textColor: "{colors.primary}"
     typography: "{typography.label}"
   field-composer:
-    backgroundColor: "{colors.surface-variant}"
+    backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.large}"
+    rounded: "{rounded.composer}"
     padding: "16dp 10dp 10dp 20dp"
     typography: "{typography.body}"
-  row-selected:
-    backgroundColor: "{colors.primary-container}"
+  row-shortcut:
+    backgroundColor: "{colors.background}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.row}"
-    padding: "12dp 16dp"
+    rounded: "{rounded.shortcut}"
+    padding: "18dp 4dp"
+    typography: "{typography.title-large}"
+  row-selected:
+    backgroundColor: "{colors.selection}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.history}"
+    padding: "14dp 12dp"
+    typography: "{typography.title-small}"
   card-product:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.row}"
+    rounded: "{rounded.card}"
     padding: "16dp"
   panel-error:
-    backgroundColor: "{colors.error-container}"
+    backgroundColor: "{colors.error-wash}"
     textColor: "{colors.error-ink}"
-    rounded: "{rounded.medium}"
+    rounded: "{rounded.card}"
     padding: "16dp"
   bubble-user:
-    backgroundColor: "{colors.surface-variant}"
+    backgroundColor: "{colors.quiet-surface}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.medium}"
+    rounded: "{rounded.message}"
     padding: "16dp"
 ---
-# Design System: Series 76 Android
+
+# Design System: Konecto Series 76 Android
 
 ## Overview
 
-**Creative North Star: "The Native Conversation Workspace"**
+**Creative North Star: "The Engineering Journal"**
 
-A quiet, Gemini-inspired conversation shell puts technical dialogue on a near-white canvas. Charcoal text, neutral tonal surfaces and restrained plum emphasis carry the hierarchy. Compact history lives in a left drawer; the rounded composer remains the primary working control.
+A contemporary engineering journal translated into native Android conversation controls. Near-white space, plum ink, fine lilac rules and locally bundled Rethink Sans establish a clear reading hierarchy. The interface leads with the question and gives technical results room to retain their context.
 
-This records the approved replacement of composition C, as implemented in Kotlin/Compose. Native Material 3 typography, controls, insets and Android system bars are deliberate approved adaptations. Layout uses dp and type uses sp; these are native units, not CSS pixels. The documented scope is a light phone interface, with no implemented dark/dynamic palette or verified tablet layout. UI fixtures establish rendering and interaction evidence; they do not establish a live LLM or physical-device result.
+This records the user-approved Editorial A replacement of V2 as implemented in Kotlin and Jetpack Compose. The scope is light-mode phones, English UI and existing chat, history and development-only debug navigation. Native units remain dp for geometry and sp for text. Screenshot fixtures demonstrate presentation, not a real model or physical-device result.
 
 **Key Characteristics:**
-- Near-white canvas with neutral tonal input and navigation surfaces.
-- Compact native navigation, scalable typography and quiet plum actions.
-- Technical context retained in outlined results and synchronized comparison columns.
-- Loading, empty and recovery states within the same hierarchy.
+- Open editorial composition with ruled shortcuts and an outlined white composer.
+- Regular, medium and semibold Rethink Sans with restrained plum emphasis.
+- Compact native navigation, fine-stroke vectors and quiet motion.
+- Complete technical evidence in readable cards and synchronized comparison columns.
 
 ## Colors
 
-Konecto lilac anchors the identity while neutral tones and deep plum make the working surfaces readable. The frontmatter records explicit Theme.kt overrides; other Material color roles retain library defaults.
+A near-white reading canvas gives plum actions and fine lilac rules their contrast. The frontmatter records explicit reused theme roles; unlisted Material roles remain library defaults.
 
 ### Primary
-- **Konecto Lilac** (`primary`): retained identity role; never substitute it for the dark action ink on small light-background text.
-- **Selection Lilac** (`primary-container`): selected conversation row.
-- **Deep Plum** (`dark-action`): greeting emphasis, send background, text actions, input cursor and loading indicator.
+- **Konecto Plum** (`primary`): primary and secondary Material action color, greeting emphasis, send fill, cursor and progress indicator.
+- **Selection Wash** (`selection`): primary/secondary containers and selected conversation background, with plum content.
+
+### Secondary
+- **Konecto Lilac** (`accent`): the explicit tertiary identity role; the current main surfaces do not use it for body text.
+- **Lilac Rule** (`rule`): outlined composer, technical card boundaries, header and shortcut dividers.
 
 ### Neutral
-- **Near White** (`background`): chat canvas and compact app bar; `background-ink` supplies its native content role.
-- **Reading White** (`surface`) and **Charcoal Plum** (`ink`): technical reading cards and strong text.
-- **Quiet Neutral** (`surface-variant`): composer, drawer, starter pills, user bubbles and comparison labels.
-- **Muted Ink** (`muted-ink`): source text, dates, subtitle and placeholder.
-- **Outline** (`outline`) and **Fine Divider** (`divider`): Material boundaries and technical result lines.
-- **Catalogue Error**, **Error Wash** and **Error Ink** (`error`, `error-container`, `error-ink`): unavailable catalogue status and recovery panels.
+- **Near White** (`background`): chat, drawer and app-bar canvas.
+- **Reading White** (`surface`) and **Plum Ink** (`ink`): reading surfaces and high-priority text.
+- **Quiet Surface** (`quiet-surface`): user messages and comparison label column.
+- **Muted Ink** (`muted-ink`): dates, support text, source disclosure and placeholder.
+- **Quiet Outline** (`outline`): native outlined-control boundaries.
+- **Error**, **Error Wash** and **Error Ink** (`error`, `error-wash`, `error-ink`): missing catalogue values and recovery panels.
 
-**The Dark Action Rule.** Use deep plum for small action text and the send control; keep lilac as identity and selection rather than light-background body text.
-
-The New chat FilledTonalButton currently inherits Material's default secondary-container roles because Theme.kt does not override them. Its default-derived lavender is not a new Konecto primitive.
+**The The Plum Action Rule.** Use plum for readable small actions and the enabled send control; lilac carries identity and fine structural accents.
 
 ## Typography
 
-**Display and Body Font:** native Android system sans through Material 3 `Typography()`; Roboto is the reference emulator rendering. No font file ships. The approved native adaptation explicitly retains this family for the greeting.
-**Label/Mono Font:** Material labels; native monospace only for debug JSON.
+**Display and Body Font:** locally bundled Rethink Sans, regular/medium/semibold; font resources ship under Android res/font and the OFL license is recorded in mobile/android/FONT-LICENSE.txt. Native monospace is reserved for selectable debug JSON. Material role metrics are explicitly overridden in Theme.kt.
 
 ### Hierarchy
-- **Headline:** Material headlineLarge for the greeting; normal second line and semibold plum Hello span.
-- **Title large:** drawer identity and empty-state titles, medium emphasis.
-- **Title medium:** compact chat title, result identifiers and comparison heading; product identifiers use the title-emphasis weight.
-- **Title small:** Recent section label.
-- **Body:** messages, composer, drawer titles and domain subtitle.
-- **Body medium:** result attributes, recovery messages and loading text.
-- **Body small:** dates, source disclosure and comparison instructions; debug JSON uses the same metrics with monospace.
-- **Label:** assistant identity, text actions and native buttons.
+- **Display:** two-line greeting with semibold plum second line and slightly tightened tracking.
+- **Headline:** medium drawer section heading.
+- **Title large:** compact identity and shortcut titles; shortcuts override medium to semibold.
+- **Title medium:** product identifiers, comparison and empty-history heading.
+- **Title small:** history titles and Recent label.
+- **Body:** messages, composer and greeting support.
+- **Body medium:** attributes, shortcut support, recovery and loading text.
+- **Body small:** dates, product caption, disclosure and debug JSON metrics.
+- **Label:** assistant speaker label, native buttons and text actions.
 
-**The Context Stays Visible Rule.** Preserve complete technical identifiers, units, N/A and source disclosure; keep native font scaling instead of shrinking data to force a row to fit.
+The theme additionally declares headlineLarge, labelMedium and labelSmall; these are not promoted to the reusable ramp because the sampled screens do not explicitly use them.
+
+**The The Context Stays Visible Rule.** Preserve complete technical identifiers, units, unavailable states and source notes; retain native font scaling rather than shrinking data to fit.
 
 ## Layout
 
-Chat fills the available phone window. A compact native TopAppBar sits above the scrollable dialogue. The empty greeting receives a top inset of 22% of available content height, clamped between 32dp and 144dp, and disappears while the keyboard is visible. Two starter pills wrap through FlowRow. They fill and focus the draft without submitting it.
+Chat fills the phone window beneath a native compact app bar and its inset rule. Main content has 20dp horizontal and 16dp vertical padding with 24dp message gaps. The empty greeting starts at 17% of the available content height, clamped to 24?100dp, with an additional 4dp horizontal inset. Its support line is followed by 48dp space before two full-width ruled shortcut rows. Shortcuts populate and focus the draft without submitting. The greeting hides when the keyboard is visible.
 
-The message list uses 20dp horizontal and 16dp vertical padding with 24dp between items. The bottom composer area uses 16dp horizontal and 12dp vertical padding, navigation-bar and IME insets. The field grows from two to five lines. User bubbles align right with a 320dp maximum width. Assistant prose reads directly on the canvas.
+The anchored composer area uses 16dp horizontal and 12dp vertical padding, navigation-bar and IME insets, and 8dp between elements. The field grows from two to five lines; its send target is 48dp. User bubbles align right with a 320dp maximum width; assistant prose is unboxed.
 
-The modal drawer occupies 84% of its parent width with 12dp horizontal inset. History rows use 16dp horizontal and 12dp vertical padding, 4dp internal and inter-row spacing, a two-line ellipsized title and a date. The selected row receives tonal lilac. History is a compact list, with paging and recovery as needed.
+The drawer occupies 84% of the parent width with 20dp internal horizontal padding. It separates identity, new chat, history and footer with rules and deliberate spacing. History rows have 6dp gaps, two-line ellipsized titles and a date. Empty history is plain content rather than a decorative panel.
 
-Comparison keeps the specification column fixed while all product columns share a horizontal scroll state. At font scale 1, label columns are 148dp and product columns 216dp, with 96dp headers and 76dp rows; dimensions multiply by fontScale clamped to at least 1. No tablet breakpoint has been implemented.
+Comparison keeps labels fixed while product columns share a horizontal scroll. At fontScale 1 the label/product widths are 148/216dp and header/row heights are 96/76dp; dimensions multiply by fontScale clamped to at least 1. These are the implemented native dimensions, not a claim of arbitrary text-fit coverage. No responsive tablet breakpoint or dark palette is implemented.
 
 ## Elevation & Depth
 
-Tonal layering and fine technical outlines provide the main depth. No custom hard shadow or shadow scale is defined. Native Material components retain their own elevation and state layers; the drawer overlays chat with an onSurface scrim at 38% alpha. Do not remove native modal separation to enforce an absolute flatness rule.
+Custom surfaces use white, restrained tonal separation and thin rules, without custom shadows. Native Material components retain their own state layers and modal behavior. The drawer uses an ink scrim at 24% alpha; native modal separation is part of the system rather than a violation of flat composition.
 
-**The Native Feedback Rule.** Retain Material interaction feedback and Android animation scaling. Debug surface navigation uses a 180ms Compose crossfade; drawer motion and message scrolling use native Compose behavior.
+**The The Native Feedback Rule.** Retain native interaction feedback, modal separation and Android animation scaling; do not add perpetual animation.
+
+Welcome text enters over 480ms with cubic-bezier(0.22, 1, 0.36, 1), starting at 86% opacity and about 5dp below its resting position; the rule grows from 86% width. Content is visible on the first frame. Shortcut arrows shift 3dp right/up on press over 140ms. History uses native animateItem placement, the drawer uses native motion, and debug changes surface through a 180ms crossfade. No hand-coded animation-scale override exists.
 
 ## Shapes
 
-Soft geometry distinguishes interaction from reading. Theme small, medium and large corners are recorded in frontmatter. The composer uses large corners; product cards and selected history rows use row corners; user bubbles, comparisons and error panels use medium corners. Drawer corners are rounded only on the trailing edge. Native tonal buttons are pills and the send button is circular. Technical cards retain a fine 1dp outline; a border prohibition would contradict the actual reading system.
+Fine rules pair with gently rounded interactive surfaces. The theme supplies small/medium/large corners of 12/16/24dp. Component-specific frontmatter records the smaller shortcut radius, history corners, new-chat action, user message, product card and composer. The drawer rounds only its trailing corners. Send is circular; native text and outlined buttons preserve native shape and state behavior. Technical cards and the composer use a 1dp border. Borders are a native material of this world and must not be banned.
 
 ## Components
 
 ### Buttons
 
-Quiet native actions. FilledIconButton sends with a 48dp circular target, deep plum background and white arrow. Blank, pending, loading, failed-history or reconciliation states disable sending. Disabled fill uses onSurface at 12% alpha and disabled icon at 38%. The vector arrow is 24dp with a 2-unit round-capped stroke. Text actions use deep plum; starter FilledTonalButtons use quiet neutral and charcoal. Drawer New chat uses native default tonal roles, 20dp horizontal and 12dp vertical content padding. Native Material press, focus and accessibility semantics remain authoritative.
+The full-width plum New chat action has white content, a 52dp minimum height, edit vector and directional arrow. The send circle uses the same plum and white at 48dp. It disables for blank drafts, sending, unresolved history or reconciliation. Its disabled fill uses plum at 55% alpha with white icon; this state is a subdued action, not a separate primitive. Text actions use plum; the debug response selector is a native outlined button. Native press/focus semantics remain authoritative.
 
 ### Inputs / Fields
 
-The broad tonal composer has no outlined-field box or floating label. BasicTextField uses the body role, Ask Series 76 placeholder and a deep-plum cursor. Padding and corner values are frontmatter primitives. The arrow aligns to the bottom. Native IME Send invokes the same validated action as the button. Do not add attachment, recording, tools or model controls.
+The white composer has a fine lilac outline, generous internal padding and no floating label. BasicTextField uses body type, a muted placeholder and plum cursor. The arrow aligns to its bottom. IME Send calls the same send action. Do not add unrelated accessory controls. The outline does not currently change on focus; native text cursor/selection and semantics supply feedback.
 
 ### Navigation
 
-A hamburger opens modal history; a compact Series 76/session title and new-conversation edit icon complete the header. Scrim, swipe and system Back dismiss history while retaining the conversation and draft. Selecting history resumes the backend session. New-chat/session switching is disabled during a pending send. Debug access appears only in the debug drawer; release source-set composables are no-ops.
+A hamburger opens the left modal history; identity/session title and a new-conversation edit vector complete the ruled header. Scrim, swipe and system Back dismiss history while retaining chat/draft. Selected history has a lilac wash. New-chat/session switching disables while sending. The separated footer links to debug only in debug builds; release source-set composables are no-ops.
+
+### Ruled shortcuts
+
+Text rows use semibold title, smaller muted subtitle, 24dp fine-stroke diagonal arrow and lilac separators. The whole row is actionable with a native 48dp minimum content height. Reuse this ruled text grammar rather than tonal action pills.
 
 ### Cards / Containers
 
-Outlined white product cards use 16dp padding, 10dp gaps and paired attribute/value columns. Preserve complete identifiers and source disclosure; source notes expand via a text action. User messages use neutral bubbles; assistant text remains unboxed. Error panels use the semantic wash with a recovery text action. The assistant Series 76 label identifies the speaker and is not a decorative eyebrow.
+White outlined product cards use paired attribute/value columns, 16dp padding and 10dp gaps. Source notes expand via a text action. Assistant identity is a functional speaker label, not an ornamental eyebrow. User messages use quiet-surface bubbles; error panels use semantic error wash, body text and recovery action. Progress appears only while a real operation is pending.
 
 ### Comparison
 
-A reading surface with fixed labels, synchronized product scrolling, native text scaling and per-cell product/attribute accessibility context. Preserve the current dimensional strategy described in Layout. Source notes follow the table for each product; unavailable values stay explicit.
+Fixed specification labels, synchronized product scrolling, scaled cells and per-cell accessibility context support technical reading. Source notes follow each product. Complete identifiers, units and unavailable values stay explicit.
+
+### Icons
+
+Production conversation controls use native vectors with round caps/joins and approximately 1.4?2 unit strokes in a 24-unit viewport. No icon font or text glyph substitutes. No shipping raster UI assets are used. The debug-only filled back arrow is an existing native exception, not the icon style to reproduce across new screens.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** preserve native scalable text, 48dp action targets, system/keyboard insets and meaningful vector-icon descriptions.
-- **Do** keep the neutral tonal composer and compact left history drawer coherent with the approved conversation shell.
+- **Do** preserve native scalable text, 48dp action targets, system/keyboard insets and meaningful icon descriptions.
+- **Do** use the outlined white composer and ruled text shortcuts established by the editorial world.
 - **Do** retain full technical identifiers, units, N/A, source disclosure and expandable notes.
 - **Do** preserve fixed comparison labels and synchronized product scrolling.
 - **Do** distinguish UI fixture evidence from live model, backend and device verification.
 
 ### Don't:
-- **Don't** restore the oversized Conversations dashboard or card-based history from historical composition C.
-- **Don't** add decorative kickers, monograms, gradients, avatars, model selectors, voice, attachment controls or unrelated destinations.
+- **Don't** restore the historical tonal composer or oversized history dashboard.
+- **Don't** add decorative kickers, gradients, ornamental imagery, hard offset shadows or system display faces.
+- **Don't** introduce voice, attachments, model selectors, search or unrelated controls.
 - **Don't** put developer traces in release or inside customer product data.
 - **Don't** replace semantic Compose content with screenshot backgrounds or rasterized text.
-- **Don't** treat unimplemented dark/dynamic palettes, tablet layouts or physical-device behavior as verified capabilities.
+
+Not canonized: the debug-only filled back arrow remains a visual exception; inherited Material role defaults are not additional brand tokens. Fixed-height comparison cells are an implementation constraint, not evidence of universal large-text fit. These were recorded rather than silently repaired during documentation.

@@ -11,7 +11,7 @@ Desde la raíz del repositorio:
 
 URL predeterminada: http://10.0.2.2:8000/. Modificar con -PbackendUrl=<URL> y recompilar.
 
-Inicio directamente en chat; menú izquierdo con historial y New chat. Estilo tipo Gemini aprobado, acento lila Konecto y compositor tonal. Los accesos iniciales solo preparan el borrador.
+Inicio directamente en chat; menú izquierdo con historial y New chat. Presentación Editorial A aprobada, Rethink Sans local, blanco/ciruela/lila Konecto y compositor delineado. Los accesos iniciales solo preparan el borrador.
 
 Debug de herramientas: variante debug, abrir el menú izquierdo y pulsar Developer debug; requiere DEV_DEBUG=true en el backend local. Excluido de release. Sin login ni voz.
 

@@ -1,5 +1,7 @@
 # Android conversation-first redesign
 
+Historical direction, superseded by MOBILE_DIRECTION_V3.md after the user requested a less generic finish.
+
 Mode: Operate. User explicitly rejected the large index/cards and selected Gemini as the closer reference. English and Konecto lilac remain; scope stays strictly within the assessment.
 
 ## Direction contract

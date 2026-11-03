@@ -64,7 +64,7 @@ class ScreenTest {
         compose.setContent { SeriesTheme { SeriesApp(androidx.lifecycle.viewmodel.compose.viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST") override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T = AppViewModel(repo, SavedStateHandle()) as T
         })) } }
-        compose.onNodeWithText("Hello.\nHow can I help?").assertIsDisplayed()
+        compose.onNodeWithText("Find the right\nactuator.").assertIsDisplayed()
         screenshot("chat-home")
         compose.onNodeWithContentDescription("Open conversation history").performClick()
         compose.onNodeWithText("110 V actuator selection").assertIsDisplayed()
@@ -73,7 +73,7 @@ class ScreenTest {
             val activity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).first() as androidx.activity.ComponentActivity
             activity.onBackPressedDispatcher.onBackPressed()
         }
-        compose.onNodeWithText("Hello.\nHow can I help?").assertIsDisplayed()
+        compose.onNodeWithText("Find the right\nactuator.").assertIsDisplayed()
         compose.onNodeWithContentDescription("Open conversation history").performClick()
         compose.onNodeWithText("110 V actuator selection").performClick()
         compose.onNodeWithText("Saved response").assertExists()
@@ -82,6 +82,7 @@ class ScreenTest {
         compose.onNodeWithText("Look up a part").performClick()
         compose.onNodeWithContentDescription("Ask Series 76").assertTextContains("Look up the actuator", substring = true)
         compose.onNodeWithContentDescription("Ask Series 76").performTextClearance()
+        compose.onNodeWithContentDescription("Ask Series 76").performClick()
         compose.onNodeWithContentDescription("Ask Series 76").performTextInput("Look up 761A00-11300000/A")
         screenshot("chat-keyboard")
         compose.onNodeWithContentDescription("Send message").performClick()
@@ -158,12 +159,12 @@ class ScreenTest {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         instrumentation.waitForIdleSync()
         // System bar appearance is applied by WindowManager on the next frame.
-        android.os.SystemClock.sleep(100)
+        android.os.SystemClock.sleep(if (name == "chat-keyboard" || name == "chat-sent") 600 else 100)
         val resolver = instrumentation.targetContext.contentResolver
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, "$name.png")
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Series76Verification/gemini-v2-final")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Series76Verification/editorial-v3-final")
             put(MediaStore.Images.Media.IS_PENDING, 1)
         }
         val uri = requireNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))

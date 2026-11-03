@@ -1,0 +1,293 @@
+{
+  "tool": "build-phase",
+  "version": 2,
+  "startedAt": "2026-11-03T12:55:10.535Z",
+  "comp": ".impeccable/mocks/redesign-v2/gemini-home.png",
+  "direction": "67e85cdc",
+  "breakpoint": "853x1844",
+  "artifact": null,
+  "phase": "review",
+  "phases": {
+    "comps": {
+      "status": "skipped",
+      "openedAt": null,
+      "closedAt": null,
+      "attempts": 0,
+      "notes": [
+        {
+          "at": "2026-11-03T12:55:10.535Z",
+          "text": "started with an approved comp; the comp round happened before this state (surface round or manual)"
+        }
+      ],
+      "gate": null,
+      "forced": null
+    },
+    "spec": {
+      "status": "closed",
+      "openedAt": "2026-11-03T12:55:10.535Z",
+      "closedAt": "2026-11-03T12:57:08.747Z",
+      "attempts": 5,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "8 regions, 0 plates, 4 text regions measured",
+        "at": "2026-11-03T12:57:08.747Z"
+      },
+      "forced": null
+    },
+    "plates": {
+      "status": "closed",
+      "openedAt": "2026-11-03T12:57:08.747Z",
+      "closedAt": "2026-11-03T12:57:08.800Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "no plates owed",
+        "at": "2026-11-03T12:57:08.800Z"
+      },
+      "forced": null
+    },
+    "hero": {
+      "status": "closed",
+      "openedAt": "2026-11-03T12:57:08.800Z",
+      "closedAt": "2026-11-03T13:16:23.167Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": false,
+        "reasons": [
+          "native-status: drift",
+          "app-title: missing",
+          "greeting: missing",
+          "question: contradicted",
+          "purpose: drift",
+          "lookup-shortcut: missing",
+          "find-shortcut: missing",
+          "composer: missing"
+        ],
+        "summary": "V2 hero 74.59% (drift); native adaptation approved, mechanical fidelity not passed",
+        "score": 0.7459,
+        "verdict": "drift",
+        "report": ".impeccable/review/diff/hero/report.json",
+        "sideBySide": "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/hero/side-by-side.png",
+        "at": "2026-11-03T13:26:25.871422+00:00",
+        "measurement": "Corrected comp semantic bounds; current V2 screenshot"
+      },
+      "forced": {
+        "at": "2026-11-03T13:16:23.167Z",
+        "reason": "User said: 'Apruebo esta version tipo Gemini y sus adaptaciones nativas'. English translation: 'I approve this Gemini-style version and its native adaptations'. The approval question explicitly waived exact pixels. The user approved the comp as a style reference, approximate fidelity, not pixel-perfect. Native Material typography, OS insets and phone dimensions differ; raw 74 percent comparison and region flags are retained.",
+        "reasons": [
+          "hero overall 58.9% < 72% (structure 75%, color 93%, detail 15%)",
+          "region native-status is missing (detail 1%, structure 81%): the comp shows material the build does not",
+          "region app-title is missing (detail 0%, structure 48%): the comp shows material the build does not",
+          "region greeting is missing (detail 0%, structure 43%): the comp shows material the build does not",
+          "region question is missing (detail 1%, structure 39%): the comp shows material the build does not",
+          "region purpose is missing (detail 1%, structure 39%): the comp shows material the build does not",
+          "region lookup-shortcut is missing (detail 0%, structure 53%): the comp shows material the build does not",
+          "region find-shortcut is missing (detail 0%, structure 50%): the comp shows material the build does not",
+          "region composer is missing (detail 0%, structure 76%): the comp shows material the build does not",
+          "the build carries ink in 19 grid cells where the comp is calm (B1, C1, D1, E1, F1, G1, D4, B5, C5, D5, E5, F5, ...); nothing exists on the page that the comp does not show (a kicker, an extra nav item, a divider, a second row of controls); remove it or name it in a stated decision after the hero passes"
+        ]
+      },
+      "readingsSeen": {
+        "text question: ink is #483858 in the build, #1e1c23 in the comp; use the comp's colour": 2,
+        "text purpose: ink is #483858 in the build, #1e1c23 in the comp; use the comp's colour": 2,
+        "control lookup-shortcut: its rule sits 30px into the box in the comp and 2px in the build (-28px), so the strip is shorter than the comp's; match the height, not only the position": 2,
+        "control find-shortcut: its ink is 4px tall in the build and 25px in the comp (-21px); match the height, not only the position": 2
+      },
+      "records": 2,
+      "history": [
+        {
+          "at": "2026-11-03T13:16:23.167Z",
+          "score": 0.5893,
+          "worstIds": [
+            "find-shortcut",
+            "lookup-shortcut",
+            "composer"
+          ],
+          "regionVerdicts": {
+            "native-status": "missing",
+            "app-title": "missing",
+            "greeting": "missing",
+            "question": "missing",
+            "purpose": "missing",
+            "lookup-shortcut": "missing",
+            "find-shortcut": "missing",
+            "composer": "missing"
+          },
+          "artifactHash": null
+        }
+      ]
+    },
+    "sections": {
+      "status": "closed",
+      "openedAt": "2026-11-03T13:16:23.167Z",
+      "closedAt": "2026-11-03T13:16:24.592Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "no mechanical gate",
+        "at": "2026-11-03T13:16:24.592Z"
+      },
+      "forced": null
+    },
+    "motion": {
+      "status": "closed",
+      "openedAt": "2026-11-03T13:16:24.592Z",
+      "closedAt": "2026-11-03T13:16:25.755Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "no mechanical gate",
+        "at": "2026-11-03T13:16:25.755Z"
+      },
+      "forced": null
+    },
+    "responsive": {
+      "status": "closed",
+      "openedAt": "2026-11-03T13:16:25.755Z",
+      "closedAt": "2026-11-03T13:16:37.784Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": false,
+        "reasons": [
+          "no .impeccable/review/desktop.png: capture the page at a common desktop width (1440 wide, full page) into that path"
+        ],
+        "at": "2026-11-03T13:16:37.777Z"
+      },
+      "forced": {
+        "at": "2026-11-03T13:16:37.784Z",
+        "reason": "User said: 'Apruebo esta version tipo Gemini y sus adaptaciones nativas'. English translation: 'I approve this Gemini-style version and its native adaptations'. The user approved the comp as a style reference, approximate fidelity, not pixel-perfect. This is native Android phone only; mobile.png is the real API35 phone screenshot. No desktop surface ships and no desktop screenshot is fabricated. Retain all mechanical fidelity failures.",
+        "reasons": [
+          "no .impeccable/review/desktop.png: capture the page at a common desktop width (1440 wide, full page) into that path"
+        ]
+      }
+    },
+    "review": {
+      "status": "closed",
+      "openedAt": "2026-11-03T13:16:37.784Z",
+      "closedAt": "2026-11-03T13:28:02.755Z",
+      "attempts": 0,
+      "notes": [
+        {
+          "at": "2026-11-03T13:20:23.233Z",
+          "text": "Review recapture corrected: hero-repro.png was stale V1. Current hero-repro and hero/final diff files now use final V2 chat-home. Earlier gate59 percent is historical invalid V1 comparison, not V2 quality. Current V2 diff about75 percent drift remains raw; user approved native approximation."
+        }
+      ],
+      "gate": null,
+      "forced": null
+    }
+  },
+  "finish": {
+    "disposition": "ship",
+    "at": "2026-11-03T13:28:02.755Z",
+    "phaseAtFinish": "review"
+  },
+  "plates": {},
+  "history": [
+    {
+      "kind": "invalid-v1-hero-gate",
+      "reason": "Stale V1 image compared by advance; invalid for V2",
+      "gate": {
+        "ok": false,
+        "reasons": [
+          "hero overall 58.9% < 72% (structure 75%, color 93%, detail 15%)",
+          "region native-status is missing (detail 1%, structure 81%): the comp shows material the build does not",
+          "region app-title is missing (detail 0%, structure 48%): the comp shows material the build does not",
+          "region greeting is missing (detail 0%, structure 43%): the comp shows material the build does not",
+          "region question is missing (detail 1%, structure 39%): the comp shows material the build does not",
+          "region purpose is missing (detail 1%, structure 39%): the comp shows material the build does not",
+          "region lookup-shortcut is missing (detail 0%, structure 53%): the comp shows material the build does not",
+          "region find-shortcut is missing (detail 0%, structure 50%): the comp shows material the build does not",
+          "region composer is missing (detail 0%, structure 76%): the comp shows material the build does not",
+          "the build carries ink in 19 grid cells where the comp is calm (B1, C1, D1, E1, F1, G1, D4, B5, C5, D5, E5, F5, ...); nothing exists on the page that the comp does not show (a kicker, an extra nav item, a divider, a second row of controls); remove it or name it in a stated decision after the hero passes"
+        ],
+        "summary": "hero 59% (contradicted)",
+        "score": 0.5893,
+        "verdict": "contradicted",
+        "report": ".impeccable/review/redesign-v2/hero-prior/report.json",
+        "sideBySide": ".impeccable/review/redesign-v2/hero-prior/side-by-side.png",
+        "worst": [
+          "find-shortcut missing 38%",
+          "lookup-shortcut missing 39%",
+          "composer missing 42%"
+        ],
+        "worstIds": [
+          "find-shortcut",
+          "lookup-shortcut",
+          "composer"
+        ],
+        "worstCrops": [
+          {
+            "id": "find-shortcut",
+            "verdict": "missing",
+            "score": {
+              "overall": 0.3751,
+              "structure": 0.5043,
+              "color": 0.4233,
+              "colorIntersection": 0.1192,
+              "paletteMatch": 0.5871,
+              "detail": 0,
+              "detailRaw": 0,
+              "detailAdded": 0,
+              "bands": 0.4
+            },
+            "file": ".impeccable/review/diff/hero/regions/find-shortcut.png"
+          },
+          {
+            "id": "lookup-shortcut",
+            "verdict": "missing",
+            "score": {
+              "overall": 0.3881,
+              "structure": 0.5345,
+              "color": 0.4217,
+              "colorIntersection": 0.1156,
+              "paletteMatch": 0.5865,
+              "detail": 0.0001,
+              "detailRaw": 0.0001,
+              "detailAdded": 0,
+              "bands": 0.4
+            },
+            "file": ".impeccable/review/diff/hero/regions/lookup-shortcut.png"
+          },
+          {
+            "id": "composer",
+            "verdict": "missing",
+            "score": {
+              "overall": 0.4199,
+              "structure": 0.7631,
+              "color": 0.2185,
+              "colorIntersection": 0.0339,
+              "paletteMatch": 0.3179,
+              "detail": 0,
+              "detailRaw": 0,
+              "detailAdded": 0,
+              "bands": 1
+            },
+            "file": ".impeccable/review/diff/hero/regions/composer.png"
+          }
+        ],
+        "regionVerdicts": {
+          "native-status": "missing",
+          "app-title": "missing",
+          "greeting": "missing",
+          "question": "missing",
+          "purpose": "missing",
+          "lookup-shortcut": "missing",
+          "find-shortcut": "missing",
+          "composer": "missing"
+        },
+        "at": "2026-11-03T13:16:23.161Z"
+      },
+      "artifact": ".impeccable/review/redesign-v2/hero-v1-historical.png"
+    }
+  ]
+}

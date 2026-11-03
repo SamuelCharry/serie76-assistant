@@ -5,26 +5,24 @@ primary_target: "mobile/android"
 related_targets: []
 ---
 
-# Android conversation-first redesign
+# Android editorial workspace
 
-Mode: Operate. User explicitly rejected the large index/cards and selected Gemini as the closer reference. English and Konecto lilac remain; scope stays strictly within the assessment.
+Mode: Operate. The user rejected the generic V2 presentation, retained chat-first and left history, and selected A, Editorial abierta, explicitly approving native sizing/type adaptations across home, drawer and results. Earlier V2 and C are historical.
 
-## Direction contract
+THESIS: An actuator research workspace with editorial clarity: the question leads, technical evidence remains complete, history stays one gesture away.
 
-THESIS: The conversation is the workspace. Saved conversations are a compact left drawer, not the landing dashboard. The user confirmed chat-first startup and history on the left.
+OWN-WORLD: Nearwhite #FCFCFD, ink #211A2B, Konecto plum #412C64, lilac #BD7BFF and muted #D0ACE5. Locally bundled Rethink Sans, disciplined regular/medium/semibold hierarchy, thin rules and white outlined composer. No default lavender canvas, gradients, ornamental illustration, shadows or unrelated controls.
 
-OWN-WORLD: Near-white #FAFAFC canvas, softly neutral #EFEEF4 composer/drawer, charcoal text, dark plum #4C315E actions and a restrained lilac selection. Native Material type and controls. No giant Conversations heading, decorative monogram, gradient, avatar, model selector, tools/voice/attachment controls or unrelated destinations.
+STORY: Open the chat, choose a draft shortcut or write a question; inspect complete technical results; open the left drawer to resume saved research. No new backend capabilities.
 
-STORY: Arrive at the empty chat, type or fill a starter prompt, consult technical results, open the left menu to resume a saved session. Developer-only trace access belongs in the drawer, never the end-user toolbar.
+FIRST VIEWPORT: Compact ruled native header. Left-aligned 'Find the right / actuator.' headline, 'Technical data. Clear decisions.' support. Two text action rows separated by hairlines, subtitle and diagonal arrow each. White lightly outlined composer anchored above insets, send circle and quiet product caption. Drawer has ruled header, clear New chat action, compact saved titles/date, deliberate empty state, separate developer-only footer.
 
-FIRST VIEWPORT: Compact left-aligned Series 76 app-bar title with hamburger and new-chat action. Left-aligned Hello./How can I help? greeting near upper-middle, domain subtitle, two compact tonal shortcut pills. A broad tonal rounded composer sits at the bottom above native insets. In a populated chat, the greeting gives way to messages and an outlined technical result. Drawer is about 82% of a compact phone width; rows have title/date with a selected highlight and a New chat pill.
+FORM: Contemporary engineering journal translated into native Material navigation and accessible semantic controls. Direction seed 6870d996, assigned index5. Grounded alternatives: engineering handbook, measurement sheet, instrument panel, publisher index, engineering journal, specification archive, technical library. Dealt signage, metro and other catalog alternatives do not override the user's pinned clean editorial world and brand palette. Their useful disciplines are clear decision hierarchy and deliberate typographic scale, not borrowed colors or motifs.
 
-FORM: User-pinned Gemini-inspired native conversation shell; seed 67e85cdc. Approved mockup gemini-home.png and gemini-drawer.png in .impeccable/mocks/redesign-v2. User said: 'Apruebo esta versión tipo Gemini y sus adaptaciones nativas' in response to a question explicitly stating no pixel-for-pixel clone was required. Native typography, real OS bars, responsive text and dynamic history may differ from image pixels; the layout hierarchy and component character govern.
+MOTION: Native drawer/scrim; brief entry of welcome text with a growing rule; press feedback with a small directional arrow movement; animated list placements. Content remains visible from the first frame. Compose animation scale follows Android settings; no perpetual animation or simulated loading. Functional progress only during real requests.
 
-INTERACTION: Native ModalNavigationDrawer: scrim, dismiss gesture and system Back close it without losing session/draft. Opening history refreshes the existing list. Selecting a saved conversation retains backend context and closes the drawer. Two starter actions fill the draft and focus the existing composer; they never send automatically or create capabilities. One pending send blocks switching/new-chat. Compose motion respects Android animation scale.
+QUALITY BAR: Careful typographic proportions, compact native header, no arbitrary empty-state panel, deliberate whitespace, 48dp minimum touch targets, legible scaled text, accurate technical context. Strong identity without marketing claims or decorative clutter.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
-## Truth and bounds
-
-The catalogue/backend are unchanged by this redesign. Preserve full codes, units, frequency, service, N/A and notes; preserve comparison semantics and release/debug separation. Test against current API35 phone emulator with keyboard, drawer, errors and font130 captures. No fake app records or answers. Mockup history is illustrative only. No Android UI raster assets ship; all controls and text are Compose.
+Approved comp: .impeccable/mocks/redesign-v3/editorial-a.png. User answer: 'A · Editorial abierta (recomendada)' to a question covering whole-app native implementation and animation with size/type adaptations. No raster UI assets ship; type, controls and rules remain native. Interface English; phone/light scope, no authentication, voice, search, model chooser, settings or new services. Test fixtures remain outside production. V2 baseline published at 7f69e9c before redesign, branch design/android-editorial-v3.

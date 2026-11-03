@@ -28,7 +28,7 @@ Exactly three screens: conversations, multi-turn chat, developer debug. The back
 
 ## Brand Commitments
 
-Latest redesign request: the user rejected the large index/cards as too basic, chose Gemini as the closer reference, and confirmed chat-first startup with conversation history in a left slide-out drawer. They approved the revised Gemini-style home/drawer mockups and their native adaptations. Preserve English and the Konecto lilac accent, neutral surfaces, compact header, typography-led greeting, two draft-only shortcut pills and a rounded tonal composer. The prior composition C is historical, not visual authority for this redesign. Native Android behavior and the assessment's existing functions remain binding. No additional business capabilities.
+Current redesign: the user rejected the generic V2 finish, retained chat-first startup and left history, and approved Editorial A across the whole app with native adaptations. Use locally bundled Rethink Sans, Konecto white/plum/lilac, an editorial two-line actuator greeting, ruled text shortcut rows, outlined white composer and coherent fine-stroke icons. Native drawer, restrained entrance and press motion; no added business features. V2/C are historical, not current visual authority.
 
 User approved an English interface, clear soft light surfaces, rounded cards inspired by supplied references 2 and 3, and the Konecto lilac palette (website primary #BD7BFF). Reference 1 informs typographic confidence only, not oversized overlapping text. No recording controls, search, login, voice, onboarding or unrelated features. Mockup-first workflow was explicitly chosen. Composition C (action in header) was approved through a structured user reply on 2026-11-03.
 

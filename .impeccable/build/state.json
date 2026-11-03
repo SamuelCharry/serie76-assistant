@@ -1,0 +1,284 @@
+{
+  "tool": "build-phase",
+  "version": 2,
+  "startedAt": "2026-11-03T15:45:53.297Z",
+  "comp": ".impeccable/mocks/redesign-v3/editorial-a.png",
+  "direction": "6870d996",
+  "breakpoint": "830x1896",
+  "artifact": null,
+  "phase": "review",
+  "phases": {
+    "comps": {
+      "status": "skipped",
+      "openedAt": null,
+      "closedAt": null,
+      "attempts": 0,
+      "notes": [
+        {
+          "at": "2026-11-03T15:45:53.296Z",
+          "text": "started with an approved comp; the comp round happened before this state (surface round or manual)"
+        }
+      ],
+      "gate": null,
+      "forced": null
+    },
+    "spec": {
+      "status": "closed",
+      "openedAt": "2026-11-03T15:45:53.296Z",
+      "closedAt": "2026-11-03T15:46:09.102Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "6 regions, 0 plates, 2 text regions measured",
+        "at": "2026-11-03T15:46:09.102Z"
+      },
+      "forced": null
+    },
+    "plates": {
+      "status": "closed",
+      "openedAt": "2026-11-03T15:46:09.102Z",
+      "closedAt": "2026-11-03T15:46:09.158Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "no plates owed",
+        "at": "2026-11-03T15:46:09.158Z"
+      },
+      "forced": null
+    },
+    "hero": {
+      "status": "closed",
+      "openedAt": "2026-11-03T15:46:09.158Z",
+      "closedAt": "2026-11-03T15:54:17.188Z",
+      "attempts": 4,
+      "notes": [],
+      "gate": {
+        "ok": false,
+        "reasons": [
+          "region headline (text) is contradicted (structure 37%, detail added 17%): the composition of this text region differs from the comp; re-derive it from the spec box"
+        ],
+        "summary": "V3 hero 78.95% (drift); native adaptation approved; mechanical fidelity not passed",
+        "score": 0.7895,
+        "verdict": "drift",
+        "report": ".impeccable/review/diff/hero/report.json",
+        "sideBySide": "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/hero/side-by-side.png",
+        "worst": [
+          "headline contradicted 50%",
+          "purpose drift 58%",
+          "header drift 60%"
+        ],
+        "worstIds": [
+          "headline",
+          "purpose",
+          "header"
+        ],
+        "worstCrops": [
+          {
+            "id": "headline",
+            "verdict": "contradicted",
+            "score": {
+              "overall": 0.5048,
+              "structure": 0.3655,
+              "color": 0.8557,
+              "colorIntersection": 0.7718,
+              "paletteMatch": 0.9009,
+              "detail": 0.2563,
+              "detailRaw": 0.3397,
+              "detailAdded": 0.1667,
+              "bands": 0.697
+            },
+            "file": ".impeccable/review/diff/hero/regions/headline.png"
+          },
+          {
+            "id": "purpose",
+            "verdict": "drift",
+            "score": {
+              "overall": 0.5804,
+              "structure": 0.6129,
+              "color": 0.9108,
+              "colorIntersection": 0.8785,
+              "paletteMatch": 0.9282,
+              "detail": 0.0878,
+              "detailRaw": 0.1815,
+              "detailAdded": 0.1875,
+              "bands": 0.3314
+            },
+            "file": ".impeccable/review/diff/hero/regions/purpose.png"
+          },
+          {
+            "id": "header",
+            "verdict": "drift",
+            "score": {
+              "overall": 0.5973,
+              "structure": 0.8447,
+              "color": 0.9696,
+              "colorIntersection": 0.948,
+              "paletteMatch": 0.9812,
+              "detail": 0.237,
+              "detailRaw": 0.2943,
+              "detailAdded": 0.1146,
+              "bands": 0
+            },
+            "file": ".impeccable/review/diff/hero/regions/header.png"
+          }
+        ],
+        "advisories": [
+          "(advisory, unchanged for 3+ attempts) text headline: cap height 50.5px in the build, 69px in the comp (-27%); set font-size so the cap height renders at 69px",
+          "(advisory, unchanged for 3+ attempts) text headline: its first line starts 37px lower than in the comp (41px vs 4px into the region box); the spacing above it is too large",
+          "(advisory, unchanged for 3+ attempts) control lookup: its rule sits 1px into the box in the comp and 169px in the build (+168px), so the strip is taller than the comp's; match the height, not only the position",
+          "(advisory, unchanged for 3+ attempts) control requirements: its rule sits 1px into the box in the comp and 163px in the build (+162px), so the strip is taller than the comp's; match the height, not only the position",
+          "(advisory, unchanged for 3+ attempts) control composer: its rule sits 1px into the box in the comp and 120px in the build (+119px), so the strip is taller than the comp's; match the height, not only the position"
+        ],
+        "regionVerdicts": {
+          "header": "drift",
+          "headline": "contradicted",
+          "purpose": "drift",
+          "lookup": "drift",
+          "requirements": "drift",
+          "composer": "drift"
+        },
+        "at": "2026-11-03T15:55:12.151Z"
+      },
+      "forced": {
+        "at": "2026-11-03T15:54:17.188Z",
+        "reason": "User selected 'A: Editorial abierta (recomendada)' and approved native Android size and typography adaptations. The user approved the comp as a style reference, approximate fidelity, not pixel-perfect. This ships native phone/light only, not a desktop website. mobile.png is an actual API35 phone capture, not a fabricated desktop shot.",
+        "reasons": [
+          "region headline has been the worst region for three attempts and the score moved less than 3 points: value edits are not reaching it. Open .impeccable/review/diff/hero/regions/headline.png and rebuild that region from the comp crop (place its plate, or produce one with C:\\Users\\nrir\\.agents\\skills\\impeccable\\scripts\\impeccable.cmd generate-image --ref <crop.png> --prompt-file <prompt.txt> --out <plate.png>, or re-derive its structure from the spec box), then recapture.",
+          "region headline (text) is contradicted (structure 37%, detail added 17%): the composition of this text region differs from the comp; re-derive it from the spec box"
+        ]
+      },
+      "readingsSeen": {
+        "text headline: cap height 50.5px in the build, 69px in the comp (-27%); set font-size so the cap height renders at 69px": 5,
+        "text headline: its first line starts 37px lower than in the comp (41px vs 4px into the region box); the spacing above it is too large": 5,
+        "control lookup: its rule sits 1px into the box in the comp and 169px in the build (+168px), so the strip is taller than the comp's; match the height, not only the position": 5,
+        "control requirements: its rule sits 1px into the box in the comp and 163px in the build (+162px), so the strip is taller than the comp's; match the height, not only the position": 5,
+        "control composer: its rule sits 1px into the box in the comp and 120px in the build (+119px), so the strip is taller than the comp's; match the height, not only the position": 5
+      },
+      "records": 1,
+      "history": [
+        {
+          "at": "2026-11-03T15:54:14.106Z",
+          "score": 0.7893,
+          "worstIds": [
+            "headline",
+            "purpose",
+            "header"
+          ],
+          "regionVerdicts": {
+            "header": "drift",
+            "headline": "contradicted",
+            "purpose": "drift",
+            "lookup": "drift",
+            "requirements": "drift",
+            "composer": "drift"
+          },
+          "artifactHash": null
+        },
+        {
+          "at": "2026-11-03T15:54:15.027Z",
+          "score": 0.7893,
+          "worstIds": [
+            "headline",
+            "purpose",
+            "header"
+          ],
+          "regionVerdicts": {
+            "header": "drift",
+            "headline": "contradicted",
+            "purpose": "drift",
+            "lookup": "drift",
+            "requirements": "drift",
+            "composer": "drift"
+          },
+          "artifactHash": null
+        },
+        {
+          "at": "2026-11-03T15:54:17.187Z",
+          "score": 0.7893,
+          "worstIds": [
+            "headline",
+            "purpose",
+            "header"
+          ],
+          "regionVerdicts": {
+            "header": "drift",
+            "headline": "contradicted",
+            "purpose": "drift",
+            "lookup": "drift",
+            "requirements": "drift",
+            "composer": "drift"
+          },
+          "artifactHash": null
+        }
+      ]
+    },
+    "sections": {
+      "status": "closed",
+      "openedAt": "2026-11-03T15:54:17.188Z",
+      "closedAt": "2026-11-03T15:54:53.972Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "no mechanical gate",
+        "at": "2026-11-03T15:54:53.972Z"
+      },
+      "forced": null
+    },
+    "motion": {
+      "status": "closed",
+      "openedAt": "2026-11-03T15:54:53.972Z",
+      "closedAt": "2026-11-03T15:54:54.028Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "no mechanical gate",
+        "at": "2026-11-03T15:54:54.028Z"
+      },
+      "forced": null
+    },
+    "responsive": {
+      "status": "closed",
+      "openedAt": "2026-11-03T15:54:54.028Z",
+      "closedAt": "2026-11-03T15:54:55.193Z",
+      "attempts": 1,
+      "notes": [],
+      "gate": {
+        "ok": false,
+        "reasons": [
+          "no .impeccable/review/desktop.png: capture the page at a common desktop width (1440 wide, full page) into that path"
+        ],
+        "at": "2026-11-03T15:54:55.180Z"
+      },
+      "forced": {
+        "at": "2026-11-03T15:54:55.193Z",
+        "reason": "User selected 'A: Editorial abierta (recomendada)' and approved native Android size and typography adaptations. The user approved the comp as a style reference, approximate fidelity, not pixel-perfect. Native phone/light only; mobile.png is an actual API35 phone capture, no desktop surface ships.",
+        "reasons": [
+          "no .impeccable/review/desktop.png: capture the page at a common desktop width (1440 wide, full page) into that path"
+        ]
+      }
+    },
+    "review": {
+      "status": "closed",
+      "openedAt": "2026-11-03T15:54:55.194Z",
+      "closedAt": "2026-11-03T15:58:46.908Z",
+      "attempts": 0,
+      "notes": [],
+      "gate": null,
+      "forced": null
+    }
+  },
+  "finish": {
+    "disposition": "ship",
+    "at": "2026-11-03T15:58:46.908Z",
+    "phaseAtFinish": "review"
+  },
+  "plates": {}
+}

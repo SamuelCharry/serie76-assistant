@@ -1,12 +1,26 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-03T13:23:45.849466+00:00",
-  "title": "Design System: Series 76 Android",
+  "generatedAt": "2026-11-03T15:58:42.450312+00:00",
+  "title": "Design System: Konecto Series 76 Android",
   "extensions": {
     "colorMeta": {
       "primary": {
         "role": "primary",
         "displayName": "Primary",
+        "tonalRamp": [
+          "oklch(15% 0.09565 298.62)",
+          "oklch(26% 0.09565 298.62)",
+          "oklch(38% 0.09565 298.62)",
+          "oklch(49% 0.09565 298.62)",
+          "oklch(61% 0.09565 298.62)",
+          "oklch(72% 0.09565 298.62)",
+          "oklch(84% 0.09565 298.62)",
+          "oklch(95% 0.09565 298.62)"
+        ]
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Accent",
         "tonalRamp": [
           "oklch(15% 0.19322 305.06)",
           "oklch(26% 0.19322 305.06)",
@@ -18,74 +32,32 @@
           "oklch(95% 0.19322 305.06)"
         ]
       },
-      "ink": {
-        "role": "neutral",
-        "displayName": "Ink",
-        "tonalRamp": [
-          "oklch(15% 0.03345 302.80)",
-          "oklch(26% 0.03345 302.80)",
-          "oklch(38% 0.03345 302.80)",
-          "oklch(49% 0.03345 302.80)",
-          "oklch(61% 0.03345 302.80)",
-          "oklch(72% 0.03345 302.80)",
-          "oklch(84% 0.03345 302.80)",
-          "oklch(95% 0.03345 302.80)"
-        ]
-      },
-      "primary-container": {
+      "selection": {
         "role": "primary",
-        "displayName": "Primary Container",
+        "displayName": "Selection",
         "tonalRamp": [
-          "oklch(15% 0.02552 305.84)",
-          "oklch(26% 0.02552 305.84)",
-          "oklch(38% 0.02552 305.84)",
-          "oklch(49% 0.02552 305.84)",
-          "oklch(61% 0.02552 305.84)",
-          "oklch(72% 0.02552 305.84)",
-          "oklch(84% 0.02552 305.84)",
-          "oklch(95% 0.02552 305.84)"
-        ]
-      },
-      "dark-action": {
-        "role": "primary",
-        "displayName": "Dark Action",
-        "tonalRamp": [
-          "oklch(15% 0.08124 310.58)",
-          "oklch(26% 0.08124 310.58)",
-          "oklch(38% 0.08124 310.58)",
-          "oklch(49% 0.08124 310.58)",
-          "oklch(61% 0.08124 310.58)",
-          "oklch(72% 0.08124 310.58)",
-          "oklch(84% 0.08124 310.58)",
-          "oklch(95% 0.08124 310.58)"
+          "oklch(15% 0.03539 305.52)",
+          "oklch(26% 0.03539 305.52)",
+          "oklch(38% 0.03539 305.52)",
+          "oklch(49% 0.03539 305.52)",
+          "oklch(61% 0.03539 305.52)",
+          "oklch(72% 0.03539 305.52)",
+          "oklch(84% 0.03539 305.52)",
+          "oklch(95% 0.03539 305.52)"
         ]
       },
       "background": {
         "role": "neutral",
         "displayName": "Background",
         "tonalRamp": [
-          "oklch(15% 0.00264 286.35)",
-          "oklch(26% 0.00264 286.35)",
-          "oklch(38% 0.00264 286.35)",
-          "oklch(49% 0.00264 286.35)",
-          "oklch(61% 0.00264 286.35)",
-          "oklch(72% 0.00264 286.35)",
-          "oklch(84% 0.00264 286.35)",
-          "oklch(95% 0.00264 286.35)"
-        ]
-      },
-      "background-ink": {
-        "role": "neutral",
-        "displayName": "Background Ink",
-        "tonalRamp": [
-          "oklch(15% 0.01322 298.54)",
-          "oklch(26% 0.01322 298.54)",
-          "oklch(38% 0.01322 298.54)",
-          "oklch(49% 0.01322 298.54)",
-          "oklch(61% 0.01322 298.54)",
-          "oklch(72% 0.01322 298.54)",
-          "oklch(84% 0.01322 298.54)",
-          "oklch(95% 0.01322 298.54)"
+          "oklch(15% 0.00132 286.38)",
+          "oklch(26% 0.00132 286.38)",
+          "oklch(38% 0.00132 286.38)",
+          "oklch(49% 0.00132 286.38)",
+          "oklch(61% 0.00132 286.38)",
+          "oklch(72% 0.00132 286.38)",
+          "oklch(84% 0.00132 286.38)",
+          "oklch(95% 0.00132 286.38)"
         ]
       },
       "surface": {
@@ -102,60 +74,74 @@
           "oklch(95% 0.00000 89.88)"
         ]
       },
-      "surface-variant": {
+      "ink": {
         "role": "neutral",
-        "displayName": "Surface Variant",
+        "displayName": "Ink",
         "tonalRamp": [
-          "oklch(15% 0.00806 293.91)",
-          "oklch(26% 0.00806 293.91)",
-          "oklch(38% 0.00806 293.91)",
-          "oklch(49% 0.00806 293.91)",
-          "oklch(61% 0.00806 293.91)",
-          "oklch(72% 0.00806 293.91)",
-          "oklch(84% 0.00806 293.91)",
-          "oklch(95% 0.00806 293.91)"
+          "oklch(15% 0.03345 302.80)",
+          "oklch(26% 0.03345 302.80)",
+          "oklch(38% 0.03345 302.80)",
+          "oklch(49% 0.03345 302.80)",
+          "oklch(61% 0.03345 302.80)",
+          "oklch(72% 0.03345 302.80)",
+          "oklch(84% 0.03345 302.80)",
+          "oklch(95% 0.03345 302.80)"
+        ]
+      },
+      "quiet-surface": {
+        "role": "neutral",
+        "displayName": "Quiet Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00854 308.36)",
+          "oklch(26% 0.00854 308.36)",
+          "oklch(38% 0.00854 308.36)",
+          "oklch(49% 0.00854 308.36)",
+          "oklch(61% 0.00854 308.36)",
+          "oklch(72% 0.00854 308.36)",
+          "oklch(84% 0.00854 308.36)",
+          "oklch(95% 0.00854 308.36)"
         ]
       },
       "muted-ink": {
         "role": "neutral",
         "displayName": "Muted Ink",
         "tonalRamp": [
-          "oklch(15% 0.02273 301.82)",
-          "oklch(26% 0.02273 301.82)",
-          "oklch(38% 0.02273 301.82)",
-          "oklch(49% 0.02273 301.82)",
-          "oklch(61% 0.02273 301.82)",
-          "oklch(72% 0.02273 301.82)",
-          "oklch(84% 0.02273 301.82)",
-          "oklch(95% 0.02273 301.82)"
+          "oklch(15% 0.03199 306.60)",
+          "oklch(26% 0.03199 306.60)",
+          "oklch(38% 0.03199 306.60)",
+          "oklch(49% 0.03199 306.60)",
+          "oklch(61% 0.03199 306.60)",
+          "oklch(72% 0.03199 306.60)",
+          "oklch(84% 0.03199 306.60)",
+          "oklch(95% 0.03199 306.60)"
         ]
       },
       "outline": {
         "role": "neutral",
         "displayName": "Outline",
         "tonalRamp": [
-          "oklch(15% 0.02444 309.37)",
-          "oklch(26% 0.02444 309.37)",
-          "oklch(38% 0.02444 309.37)",
-          "oklch(49% 0.02444 309.37)",
-          "oklch(61% 0.02444 309.37)",
-          "oklch(72% 0.02444 309.37)",
-          "oklch(84% 0.02444 309.37)",
-          "oklch(95% 0.02444 309.37)"
+          "oklch(15% 0.04105 306.07)",
+          "oklch(26% 0.04105 306.07)",
+          "oklch(38% 0.04105 306.07)",
+          "oklch(49% 0.04105 306.07)",
+          "oklch(61% 0.04105 306.07)",
+          "oklch(72% 0.04105 306.07)",
+          "oklch(84% 0.04105 306.07)",
+          "oklch(95% 0.04105 306.07)"
         ]
       },
-      "divider": {
-        "role": "neutral",
-        "displayName": "Divider",
+      "rule": {
+        "role": "secondary",
+        "displayName": "Rule",
         "tonalRamp": [
-          "oklch(15% 0.01256 301.27)",
-          "oklch(26% 0.01256 301.27)",
-          "oklch(38% 0.01256 301.27)",
-          "oklch(49% 0.01256 301.27)",
-          "oklch(61% 0.01256 301.27)",
-          "oklch(72% 0.01256 301.27)",
-          "oklch(84% 0.01256 301.27)",
-          "oklch(95% 0.01256 301.27)"
+          "oklch(15% 0.08794 312.85)",
+          "oklch(26% 0.08794 312.85)",
+          "oklch(38% 0.08794 312.85)",
+          "oklch(49% 0.08794 312.85)",
+          "oklch(61% 0.08794 312.85)",
+          "oklch(72% 0.08794 312.85)",
+          "oklch(84% 0.08794 312.85)",
+          "oklch(95% 0.08794 312.85)"
         ]
       },
       "error": {
@@ -172,9 +158,9 @@
           "oklch(95% 0.16045 17.22)"
         ]
       },
-      "error-container": {
+      "error-wash": {
         "role": "neutral",
-        "displayName": "Error Container",
+        "displayName": "Error Wash",
         "tonalRamp": [
           "oklch(15% 0.02451 5.09)",
           "oklch(26% 0.02451 5.09)",
@@ -202,143 +188,159 @@
       }
     },
     "typographyMeta": {
+      "display": {
+        "displayName": "Display"
+      },
       "headline": {
-        "displayName": "Native greeting",
-        "purpose": "Material headlineLarge with semibold Hello span; approved native type adaptation."
+        "displayName": "Headline"
+      },
+      "title-large": {
+        "displayName": "Title Large"
+      },
+      "title-medium": {
+        "displayName": "Title Medium"
+      },
+      "title-small": {
+        "displayName": "Title Small"
+      },
+      "body": {
+        "displayName": "Body"
+      },
+      "body-medium": {
+        "displayName": "Body Medium"
+      },
+      "body-small": {
+        "displayName": "Body Small"
+      },
+      "label": {
+        "displayName": "Label"
       }
     },
     "shadows": [],
     "motion": [
       {
-        "name": "debug-crossfade",
-        "value": "180ms",
-        "purpose": "Compose tween for chat/debug surface change; follows Android animator scale."
+        "name": "welcome-entry",
+        "value": "480ms cubic-bezier(0.22,1,0.36,1)",
+        "purpose": "Opacity .86 to 1, slight vertical entrance and rule width .86 to 1."
+      },
+      {
+        "name": "shortcut-press",
+        "value": "140ms FastOutSlowInEasing; 3dp right/up",
+        "purpose": "Directional arrow press feedback."
+      },
+      {
+        "name": "debug-transition",
+        "value": "180ms FastOutSlowInEasing",
+        "purpose": "Native debug surface crossfade."
       }
     ],
-    "breakpoints": [],
-    "platform": {
-      "name": "android",
-      "implementation": "Jetpack Compose / Material 3",
-      "units": "dp for layout and sp for text; CSS panel snippets illustrate baseline only.",
-      "scheme": "Explicit light scheme; other Material roles retain library defaults.",
-      "systemBars": "Explicit light transparent bars with dark system icons.",
-      "tonalRamps": "Synthesized same-hue/chroma OKLCH strips for panel display only; not shipping tokens. Semantic error metadata uses neutral grouping.",
-      "evidence": [
-        "mobile/android/app/src/main/java/com/serie76/assistant/ui/Theme.kt",
-        "mobile/android/app/src/main/java/com/serie76/assistant/ui/Screens.kt",
-        "mobile/android/app/src/main/java/com/serie76/assistant/ui/Icons.kt",
-        "mobile/android/app/src/main/java/com/serie76/assistant/ui/AppViewModel.kt",
-        "mobile/android/app/src/main/java/com/serie76/assistant/MainActivity.kt",
-        "mobile/android/app/src/debug/java/com/serie76/assistant/ui/DeveloperScreen.kt",
-        "mobile/android/app/src/release/java/com/serie76/assistant/ui/DeveloperScreen.kt",
-        ".impeccable/review/redesign-v2/chat-home.png",
-        ".impeccable/review/redesign-v2/conversations.png"
-      ],
-      "limits": [
-        "Light phone scope; no dark/dynamic scheme or tablet verification.",
-        "UI fixtures are not live LLM, production data or physical-device evidence.",
-        "New chat inherits Material default tonal roles; no invented secondary palette primitive.",
-        "Historic composition C review/pixel-comparison results do not establish this replacement design."
-      ]
-    }
+    "breakpoints": []
   },
   "components": [
     {
-      "name": "Send message",
+      "name": "New chat",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Native filled action translated for panel preview.",
+      "html": "<button class=\"ds-new\">New chat <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 19 19 5M6 5h13v13\"/></svg></button>",
+      "css": ".ds-new{font-family:\"Rethink Sans\",sans-serif;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:14px 18px;background:#412C64;color:#fff;border:0;border-radius:14px;font-size:14px;font-weight:500}.ds-new:hover{filter:brightness(.96)}.ds-new:focus-visible{outline:2px solid #412C64;outline-offset:3px}.ds-new:active{filter:brightness(.9)}"
+    },
+    {
+      "name": "Send",
       "kind": "button",
       "refersTo": "button-send",
-      "description": "Panel-only baseline translation of Compose dp/sp; browser states approximate native Material feedback.",
-      "html": "<button class=\"ds-control ds-send\" aria-label=\"Send message\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 19V5M5 12l7-7 7 7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></button>",
-      "css": ".ds-send{display:grid;place-items:center;width:48px;height:48px;border:0;border-radius:50%;background:#4C315E;color:#FFFFFF;cursor:pointer}.ds-send:disabled{background:rgba(33,26,43,.12);color:rgba(33,26,43,.38)}.ds-control:hover{filter:brightness(.97)}.ds-control:focus-visible{outline:2px solid #4C315E;outline-offset:2px}.ds-control:active{filter:brightness(.92)}"
+      "description": "Enabled circular send action.",
+      "html": "<button class=\"ds-send\" aria-label=\"Send message\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 19V5M5 12l7-7 7 7\"/></svg></button>",
+      "css": ".ds-send{width:48px;height:48px;border:0;border-radius:50%;background:#412C64;color:white;display:grid;place-items:center}.ds-send:hover{filter:brightness(.96)}.ds-send:focus-visible{outline:2px solid #412C64;outline-offset:3px}.ds-send:active{filter:brightness(.9)}.ds-send:disabled{background:rgba(65,44,100,.55)}"
     },
     {
-      "name": "Starter prompt",
-      "kind": "button",
-      "refersTo": "button-tonal",
-      "description": "Panel-only baseline translation of Compose dp/sp; browser states approximate native Material feedback.",
-      "html": "<button class=\"ds-control ds-tonal\">Look up a part</button>",
-      "css": ".ds-tonal{font:500 14px/20px Roboto,sans-serif;letter-spacing:.1px;min-height:48px;padding:10px 24px;border:0;border-radius:999px;background:#EFEEF4;color:#211A2B;cursor:pointer}.ds-control:hover{filter:brightness(.97)}.ds-control:focus-visible{outline:2px solid #4C315E;outline-offset:2px}.ds-control:active{filter:brightness(.92)}"
-    },
-    {
-      "name": "Source disclosure action",
+      "name": "Text action",
       "kind": "button",
       "refersTo": "button-text",
-      "description": "Panel-only baseline translation of Compose dp/sp; browser states approximate native Material feedback.",
-      "html": "<button class=\"ds-control ds-text\">Source notes &amp; exceptions</button>",
-      "css": ".ds-text{font:500 14px/20px Roboto,sans-serif;letter-spacing:.1px;min-height:48px;padding:10px 12px;border:0;border-radius:999px;background:transparent;color:#4C315E;cursor:pointer}.ds-control:hover{filter:brightness(.97)}.ds-control:focus-visible{outline:2px solid #4C315E;outline-offset:2px}.ds-control:active{filter:brightness(.92)}"
+      "description": "Source-note and recovery action.",
+      "html": "<button class=\"ds-text\">Source notes &amp; exceptions</button>",
+      "css": ".ds-text{font-family:\"Rethink Sans\",sans-serif;color:#412C64;background:transparent;border:0;border-radius:20px;min-height:48px;padding:10px 12px;font-size:14px;font-weight:500}.ds-text:hover,.ds-text:focus-visible{background:rgba(65,44,100,.08)}.ds-text:focus-visible{outline:2px solid #412C64}.ds-text:active{background:rgba(65,44,100,.12)}"
     },
     {
-      "name": "Tonal composer",
+      "name": "Inspect response",
+      "kind": "button",
+      "refersTo": "button-outlined",
+      "description": "Debug-only native outlined selection.",
+      "html": "<button class=\"ds-inspect\">Inspect response</button>",
+      "css": ".ds-inspect{font-family:\"Rethink Sans\",sans-serif;border:1px solid #8A7E98;border-radius:24px;min-height:48px;padding:10px 24px;background:transparent;color:#412C64;font-size:14px;font-weight:500}.ds-inspect:hover,.ds-inspect:focus-visible{background:rgba(65,44,100,.08)}.ds-inspect:focus-visible{outline:2px solid #412C64;outline-offset:2px}.ds-inspect:active{background:rgba(65,44,100,.12)}"
+    },
+    {
+      "name": "Composer",
       "kind": "input",
       "refersTo": "field-composer",
-      "description": "Panel-only baseline translation of Compose dp/sp; browser states approximate native Material feedback.",
-      "html": "<label class=\"ds-composer\"><textarea aria-label=\"Ask Series 76\" placeholder=\"Ask Series 76\" rows=\"2\"></textarea></label>",
-      "css": ".ds-composer{display:block;border-radius:28px;padding:16px 10px 10px 20px;background:#EFEEF4}.ds-composer textarea{font:400 16px/24px Roboto,sans-serif;display:block;max-width:100%;width:100%;color:#211A2B;background:transparent;border:0;resize:vertical;caret-color:#4C315E}.ds-composer textarea::placeholder{color:#66616F}.ds-composer:hover{filter:brightness(.99)}.ds-composer textarea:focus-visible{outline:2px solid #4C315E;outline-offset:2px}"
+      "description": "White outlined growing input; native trailing send is documented separately.",
+      "html": "<div class=\"ds-composer\"><textarea class=\"ds-draft\" rows=\"2\" aria-label=\"Ask Series 76\" placeholder=\"Ask about Series 76\"></textarea></div>",
+      "css": ".ds-composer{padding:16px 10px 10px 20px;background:#fff;border:1px solid #D0ACE5;border-radius:24px}.ds-draft{font-family:\"Rethink Sans\",sans-serif;width:100%;resize:vertical;border:0;outline:none;background:transparent;color:#211A2B;font-size:16px;line-height:24px;caret-color:#412C64}.ds-draft::placeholder{color:#62596C}.ds-composer:hover{border-color:#D0ACE5}.ds-draft:focus-visible{outline:none}.ds-draft::selection{background:#EEE3FC}"
     },
     {
-      "name": "Selected history row",
+      "name": "Ruled shortcut",
+      "kind": "custom",
+      "refersTo": "row-shortcut",
+      "description": "Full-width editorial draft shortcut.",
+      "html": "<button class=\"ds-shortcut\"><span class=\"ds-shortcut-copy\"><strong>Look up a part</strong><span>Start with a part number</span></span><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 19 19 5M6 5h13v13\"/></svg></button>",
+      "css": ".ds-shortcut{font-family:\"Rethink Sans\",sans-serif;width:100%;display:flex;align-items:center;gap:12px;padding:18px 4px;min-height:84px;background:#FCFCFD;border:0;border-top:1px solid #D0ACE5;border-bottom:1px solid #D0ACE5;color:#412C64;text-align:left}.ds-shortcut-copy{flex:1;display:grid;gap:4px}.ds-shortcut strong{font-size:22px;font-weight:600;line-height:28px;color:#211A2B}.ds-shortcut-copy>span{font-size:14px;line-height:21px;color:#62596C}.ds-shortcut svg{transition:transform 140ms}.ds-shortcut:hover,.ds-shortcut:focus-visible{background:#F6F3F9}.ds-shortcut:focus-visible{outline:2px solid #412C64;outline-offset:2px}.ds-shortcut:active svg{transform:translate(3px,-3px)}@media(prefers-reduced-motion:reduce){.ds-shortcut svg{transition:none}}"
+    },
+    {
+      "name": "Selected conversation",
       "kind": "nav",
       "refersTo": "row-selected",
-      "description": "Panel-only baseline translation of Compose dp/sp; browser states approximate native Material feedback.",
-      "html": "<button class=\"ds-control ds-row\" aria-current=\"page\"><span>Saved conversation</span><small>Nov 3</small></button>",
-      "css": ".ds-row{font:400 16px/24px Roboto,sans-serif;display:grid;gap:4px;width:100%;text-align:left;padding:12px 16px;border:0;border-radius:16px;background:#ECE4F6;color:#211A2B;cursor:pointer}.ds-row small{font:400 12px/16px Roboto,sans-serif;color:#66616F}.ds-control:hover{filter:brightness(.97)}.ds-control:focus-visible{outline:2px solid #4C315E;outline-offset:2px}.ds-control:active{filter:brightness(.92)}"
+      "description": "History title/date selection; sample text is a panel fixture.",
+      "html": "<button class=\"ds-history\" aria-current=\"page\"><span>Saved conversation</span><small>Nov 3</small></button>",
+      "css": ".ds-history{font-family:\"Rethink Sans\",sans-serif;display:grid;gap:6px;text-align:left;width:100%;padding:14px 12px;border:0;border-radius:12px;background:#EEE3FC;color:#211A2B;font-size:15px;font-weight:500;line-height:22px}.ds-history small{font-size:12px;font-weight:400;line-height:18px;color:#62596C}.ds-history:hover,.ds-history:focus-visible{filter:brightness(.98)}.ds-history:focus-visible{outline:2px solid #412C64;outline-offset:2px}.ds-history:active{filter:brightness(.95)}"
     },
     {
-      "name": "Product reading surface",
+      "name": "Product card",
       "kind": "card",
       "refersTo": "card-product",
-      "description": "Panel-only baseline translation of Compose dp/sp; browser states approximate native Material feedback.",
-      "html": "<article class=\"ds-product\"><strong>Complete part number</strong><p>Catalogue context and measurements</p><small>Source document and page</small></article>",
-      "css": ".ds-product{font:400 16px/24px Roboto,sans-serif;display:grid;gap:10px;background:#FFFFFF;color:#211A2B;border:1px solid #DFDCE5;border-radius:16px;padding:16px}.ds-product strong{font-weight:600}.ds-product p{font:400 14px/20px Roboto,sans-serif;margin:0}.ds-product small{font:400 12px/16px Roboto,sans-serif;color:#66616F}"
-    },
-    {
-      "name": "Recovery panel",
-      "kind": "card",
-      "refersTo": "panel-error",
-      "description": "Panel-only baseline translation of Compose dp/sp; browser states approximate native Material feedback.",
-      "html": "<aside class=\"ds-error\"><p>Cannot reach the backend.</p><button class=\"ds-control\">Try again</button></aside>",
-      "css": ".ds-error{font:400 14px/20px Roboto,sans-serif;background:#FFE9ED;color:#6E1324;border-radius:20px;padding:16px}.ds-error p{margin:0 0 4px}.ds-error button{font:500 14px/20px Roboto,sans-serif;background:transparent;color:#4C315E;border:0;border-radius:999px;min-height:48px;padding:10px 12px;cursor:pointer}.ds-control:hover{filter:brightness(.97)}.ds-control:focus-visible{outline:2px solid #4C315E;outline-offset:2px}.ds-control:active{filter:brightness(.92)}"
+      "description": "Technical reading container without invented catalogue figures.",
+      "html": "<article class=\"ds-product\"><h3>Product identifier</h3><div class=\"ds-attribute\"><span>Attribute</span><span>Reported value</span></div><small>Source: supplied catalogue</small></article>",
+      "css": ".ds-product{font-family:\"Rethink Sans\",sans-serif;padding:16px;display:grid;gap:10px;border:1px solid #D0ACE5;border-radius:16px;background:#fff;color:#211A2B}.ds-product h3{margin:0;font-size:18px;font-weight:600;line-height:24px}.ds-attribute{display:grid;grid-template-columns:1fr 1fr;gap:16px;border-top:1px solid #D0ACE5;padding-top:10px;font-size:14px;line-height:21px}.ds-attribute>span:first-child,.ds-product small{color:#62596C}.ds-product small{font-size:12px;line-height:18px}"
     }
   ],
   "narrative": {
-    "northStar": "The Native Conversation Workspace",
-    "overview": "A quiet, Gemini-inspired conversation shell puts technical dialogue on a near-white canvas. Charcoal text, neutral tonal surfaces and restrained plum emphasis carry the hierarchy. Compact history lives in a left drawer; the rounded composer remains the primary working control.\n\nThis records the approved replacement of composition C, as implemented in Kotlin/Compose. Native Material 3 typography, controls, insets and Android system bars are deliberate approved adaptations. Layout uses dp and type uses sp; these are native units, not CSS pixels. The documented scope is a light phone interface, with no implemented dark/dynamic palette or verified tablet layout. UI fixtures establish rendering and interaction evidence; they do not establish a live LLM or physical-device result.",
+    "northStar": "The Engineering Journal",
+    "overview": "A contemporary engineering journal translated into native Android conversation controls. Near-white space, plum ink, fine lilac rules and locally bundled Rethink Sans establish a clear reading hierarchy. The interface leads with the question and gives technical results room to retain their context.\n\nThis records the user-approved Editorial A replacement of V2 as implemented in Kotlin and Jetpack Compose. The scope is light-mode phones, English UI and existing chat, history and development-only debug navigation. Native units remain dp for geometry and sp for text. Screenshot fixtures demonstrate presentation, not a real model or physical-device result.",
     "keyCharacteristics": [
-      "Near-white canvas with neutral tonal input and navigation surfaces.",
-      "Compact native navigation, scalable typography and quiet plum actions.",
-      "Technical context retained in outlined results and synchronized comparison columns.",
-      "Loading, empty and recovery states within the same hierarchy."
+      "Open editorial composition with ruled shortcuts and an outlined white composer.",
+      "Regular, medium and semibold Rethink Sans with restrained plum emphasis.",
+      "Compact native navigation, fine-stroke vectors and quiet motion.",
+      "Complete technical evidence in readable cards and synchronized comparison columns."
     ],
     "rules": [
       {
-        "name": "The Dark Action Rule",
-        "body": "Use deep plum for small action text and the send control; keep lilac as identity and selection rather than light-background body text.",
+        "name": "The Plum Action Rule",
+        "body": "Use plum for readable small actions and the enabled send control; lilac carries identity and fine structural accents.",
         "section": "colors"
       },
       {
         "name": "The Context Stays Visible Rule",
-        "body": "Preserve complete technical identifiers, units, N/A and source disclosure; keep native font scaling instead of shrinking data to force a row to fit.",
+        "body": "Preserve complete technical identifiers, units, unavailable states and source notes; retain native font scaling rather than shrinking data to fit.",
         "section": "typography"
       },
       {
         "name": "The Native Feedback Rule",
-        "body": "Retain Material interaction feedback and Android animation scaling. Debug surface navigation uses a 180ms Compose crossfade; drawer motion and message scrolling use native Compose behavior.",
+        "body": "Retain native interaction feedback, modal separation and Android animation scaling; do not add perpetual animation.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "**Do** preserve native scalable text, 48dp action targets, system/keyboard insets and meaningful vector-icon descriptions.",
-      "**Do** keep the neutral tonal composer and compact left history drawer coherent with the approved conversation shell.",
-      "**Do** retain full technical identifiers, units, N/A, source disclosure and expandable notes.",
-      "**Do** preserve fixed comparison labels and synchronized product scrolling.",
-      "**Do** distinguish UI fixture evidence from live model, backend and device verification."
+      "Do preserve native scalable text, 48dp action targets, system/keyboard insets and meaningful icon descriptions.",
+      "Do use the outlined white composer and ruled text shortcuts established by the editorial world.",
+      "Do retain full technical identifiers, units, N/A, source disclosure and expandable notes.",
+      "Do preserve fixed comparison labels and synchronized product scrolling.",
+      "Do distinguish UI fixture evidence from live model, backend and device verification."
     ],
     "donts": [
-      "**Don't** restore the oversized Conversations dashboard or card-based history from historical composition C.",
-      "**Don't** add decorative kickers, monograms, gradients, avatars, model selectors, voice, attachment controls or unrelated destinations.",
-      "**Don't** put developer traces in release or inside customer product data.",
-      "**Don't** replace semantic Compose content with screenshot backgrounds or rasterized text.",
-      "**Don't** treat unimplemented dark/dynamic palettes, tablet layouts or physical-device behavior as verified capabilities."
+      "Don't restore the historical tonal composer or oversized history dashboard.",
+      "Don't add decorative kickers, gradients, ornamental imagery, hard offset shadows or system display faces.",
+      "Don't introduce voice, attachments, model selectors, search or unrelated controls.",
+      "Don't put developer traces in release or inside customer product data.",
+      "Don't replace semantic Compose content with screenshot backgrounds or rasterized text."
     ]
   }
 }
