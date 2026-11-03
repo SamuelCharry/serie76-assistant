@@ -84,6 +84,14 @@ Method: freeze corpus/code/config/catalogue hashes before inference; keep expect
 
 [CI workflow](../../../.github/workflows/ci.yml) provisions PostgreSQL, installs backend dev dependencies, migrates, loads catalogue/glossary and runs unittest; Android runs JVM tests on JDK 17. It does not run paid inference, full OCR inference or emulator instrumented tests. Workflow presence is implementation evidence, not proof of the latest remote CI run. This task runs local checks only.
 
+## Tool-schema preflight before any cohort
+
+Run `python scripts/check_tool_schemas.py` offline first. It builds the real four production tools without a database or credentials and prints compact bytes, enum values, arrays, required fields, depth, numeric range keywords and lookup object arrays. Offline guards cap enums/arrays/required/depth at the pre-T6 counts (108/6/5/7) and reject numeric ranges, nullable unions/references and object arrays in get_actuator. Byte size alone did not predict the provider's cumulative schema limit.
+
+Only after explicit paid-call approval, run `python scripts/check_tool_schemas.py --live` with OPENROUTER_API_KEY, OPENROUTER_CHAT_MODEL and optional OPENROUTER_BASE_URL already in the process environment. It never loads .env or prints the key, provider response or exception body; it sends exactly one request with all four tools and the production system/glossary prompt, disables tracing, performs no tool/SQL execution and has no retries. A 400 or other failure exits non-zero: stop before the cohort. A successful preflight checks schema acceptance only, not conversation quality. Re-run after any tool-schema change; the compact-schema live check is pending until the coordinator runs it.
+
+Where: [preflight script](../../../scripts/check_tool_schemas.py), [complexity/one-call tests](../../../tests/test_tool_schema_budget.py), [metadata-only readiness script](../../../scripts/check_openrouter.py).
+
 ## Where in the code
 
 - [tests/test_agent_scenarios.py](../../../tests/test_agent_scenarios.py#L1)

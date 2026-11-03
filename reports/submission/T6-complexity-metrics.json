@@ -1,0 +1,30 @@
+{
+  "baseline_0152ed6_coordinator_measurement": {
+    "enum_values": 108,
+    "arrays": 6,
+    "required": 5,
+    "depth": 7
+  },
+  "before_b1fdb49": {
+    "enum_values": 131,
+    "arrays": 9,
+    "required": 9,
+    "depth": 7,
+    "numeric_ranges": 6,
+    "forbidden_nodes": 0,
+    "get_actuator_object_arrays": 1,
+    "bytes": 4643
+  },
+  "after": {
+    "enum_values": 83,
+    "arrays": 6,
+    "required": 3,
+    "depth": 7,
+    "numeric_ranges": 0,
+    "forbidden_nodes": 0,
+    "get_actuator_object_arrays": 0,
+    "bytes": 3854
+  },
+  "measurement": "Converted production OpenAI tools; enum lengths and required lengths summed; dictionary depth starts at tool object zero, lists do not add depth; compact ASCII JSON bytes",
+  "live": "NOT RUN; coordinator must run --live before any cohort"
+}

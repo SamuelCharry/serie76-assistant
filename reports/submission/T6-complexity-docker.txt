@@ -1,0 +1,81 @@
+Command: docker compose up -d --build backend (provider/tracing credentials explicitly empty in shell)
+#1 [internal] load local bake definitions
+#1 reading from stdin 600B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 493B 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#3 DONE 0.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 184B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 38.01kB 0.0s done
+#5 DONE 0.0s
+
+#6 [base 1/6] FROM docker.io/library/python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#6 resolve docker.io/library/python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30 0.1s done
+#6 DONE 0.1s
+
+#7 [base 2/6] WORKDIR /app
+#7 CACHED
+
+#8 [base 3/6] COPY requirements.txt requirements.lock.txt ./
+#8 CACHED
+
+#9 [base 4/6] RUN pip install --no-cache-dir -r requirements.lock.txt
+#9 CACHED
+
+#10 [base 5/6] COPY backend backend
+#10 DONE 0.1s
+
+#11 [base 6/6] COPY scripts scripts
+#11 DONE 0.1s
+
+#12 [backend 1/1] COPY docker/entrypoint.sh /app/docker/entrypoint.sh
+#12 DONE 0.1s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 0.5s done
+#13 exporting manifest sha256:46b56ff182b91a718728e32185a0e10dbacbefbfbc3ec6b2a013d4462f338b22 0.0s done
+#13 exporting config sha256:4eb27eeca345b5646020077f75fef3009d740d6b92c3b7ca0c30bccafe95db1f 0.0s done
+#13 exporting attestation manifest sha256:a9e9fee03c34b52f3130e54eb2e91db127c2ca3767c128a27eaf3c0cf68289a3
+#13 exporting attestation manifest sha256:a9e9fee03c34b52f3130e54eb2e91db127c2ca3767c128a27eaf3c0cf68289a3 0.1s done
+#13 exporting manifest list sha256:756d63fcd104e0b80a3f7a7dec020d9e3bef3c331c684bbd64f4a6d9abdb968b 0.0s done
+#13 naming to docker.io/library/serie76-assistant-backend:latest done
+#13 unpacking to docker.io/library/serie76-assistant-backend:latest
+#13 unpacking to docker.io/library/serie76-assistant-backend:latest 0.2s done
+#13 DONE 0.9s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ Image serie76-assistant-backend Building
+ Image serie76-assistant-backend Built
+ Container serie76-assistant-db-1 Running
+ Container serie76-assistant-backend-1 Recreate
+ Container serie76-assistant-backend-1 Recreated
+ Container serie76-assistant-db-1 Waiting
+ Container serie76-assistant-db-1 Healthy
+ Container serie76-assistant-backend-1 Starting
+ Container serie76-assistant-backend-1 Started
+
+Exit: 0
+
+Keyless verification: {"model_key_present": false, "tracing_key_present": false}
+Ready HTTP: 200
+{
+  "status": "ready",
+  "catalog": {
+    "id": 2,
+    "document_sha256": "4c28023929183df8e2a763e759cc84572b44604b30837a21e22c1166f88267e0",
+    "pipeline_signature": "d7e1c05b179f6b44dc77cda695cfd83a4b570e0db1ee2083d537fd709df70b27",
+    "rows": 68
+  },
+  "context_terms": 16
+}

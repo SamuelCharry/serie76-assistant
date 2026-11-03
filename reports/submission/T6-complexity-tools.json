@@ -1,0 +1,330 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "get_actuator",
+      "description": "Look up complete Base Part Numbers (up to four) in the electrical catalogue.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "part_numbers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "focus": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "overview",
+                "motor_power",
+                "torque",
+                "operating_time",
+                "fla",
+                "lra",
+                "duty",
+                "rates",
+                "certification"
+              ]
+            }
+          },
+          "focus_frequency_hz": {
+            "type": "integer",
+            "enum": [
+              50,
+              60
+            ]
+          },
+          "focus_service": {
+            "type": "string",
+            "enum": [
+              "on_off",
+              "modulating"
+            ]
+          },
+          "explain_terms": {
+            "type": "string"
+          },
+          "cancel_previous": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "part_numbers"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_actuators",
+      "description": "Find actuators meeting stated requirements; refine/more/remove for follow-ups. Unknown data never passes a threshold.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "enclosure": {
+            "type": "string",
+            "enum": [
+              "weatherproof",
+              "explosionproof"
+            ]
+          },
+          "supply_voltage_v": {
+            "type": "number"
+          },
+          "supply_current": {
+            "type": "string",
+            "enum": [
+              "AC",
+              "DC",
+              "AC/DC"
+            ]
+          },
+          "phase_count": {
+            "type": "integer",
+            "enum": [
+              1,
+              3
+            ]
+          },
+          "service": {
+            "type": "string",
+            "enum": [
+              "on_off",
+              "modulating"
+            ]
+          },
+          "frequency_hz": {
+            "type": "integer",
+            "enum": [
+              50,
+              60
+            ]
+          },
+          "csa_required": {
+            "type": "boolean"
+          },
+          "bounds": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "enum": [
+                    "min_torque_nm",
+                    "min_torque_in_lb",
+                    "min_duty_s4_percent",
+                    "min_cycles_per_hour",
+                    "min_starts_per_hour",
+                    "max_motor_power_w",
+                    "max_operating_time_s",
+                    "max_fla_a",
+                    "max_lra_a"
+                  ]
+                },
+                "op": {
+                  "type": "string",
+                  "enum": [
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte"
+                  ]
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "sort_by": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "fastest",
+                "lowest_power",
+                "highest_torque",
+                "lowest_current"
+              ]
+            }
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "refine": {
+            "type": "boolean"
+          },
+          "more": {
+            "type": "boolean"
+          },
+          "cancel_previous": {
+            "type": "boolean"
+          },
+          "remove": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "enclosure",
+                "supply_current",
+                "phase_count",
+                "service",
+                "csa_required",
+                "supply_voltage_v",
+                "frequency_hz",
+                "min_torque_nm",
+                "min_torque_in_lb",
+                "min_duty_s4_percent",
+                "min_cycles_per_hour",
+                "min_starts_per_hour",
+                "max_operating_time_s",
+                "max_fla_a",
+                "max_lra_a",
+                "max_motor_power_w"
+              ]
+            }
+          },
+          "assumptions": {
+            "type": "object",
+            "properties": {
+              "enclosure": {
+                "type": "string"
+              },
+              "supply_current": {
+                "type": "string"
+              },
+              "phase_count": {
+                "type": "string"
+              },
+              "service": {
+                "type": "string"
+              },
+              "csa_required": {
+                "type": "string"
+              },
+              "supply_voltage_v": {
+                "type": "string"
+              },
+              "frequency_hz": {
+                "type": "string"
+              },
+              "min_torque_nm": {
+                "type": "string"
+              },
+              "min_torque_in_lb": {
+                "type": "string"
+              },
+              "min_duty_s4_percent": {
+                "type": "string"
+              },
+              "min_cycles_per_hour": {
+                "type": "string"
+              },
+              "min_starts_per_hour": {
+                "type": "string"
+              },
+              "max_operating_time_s": {
+                "type": "string"
+              },
+              "max_fla_a": {
+                "type": "string"
+              },
+              "max_lra_a": {
+                "type": "string"
+              },
+              "max_motor_power_w": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "explain_terms": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "explain_terms",
+      "description": "Quote glossary definitions of catalogue terms.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "term_keys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "series_76_overview",
+                "data_tables",
+                "weatherproof",
+                "explosionproof",
+                "supply_24v_ac_dc",
+                "supply_110v_1ph",
+                "supply_220v_1ph",
+                "on_off",
+                "modulating",
+                "base_part_number",
+                "output_torque",
+                "duty_cycle",
+                "operating_speed",
+                "fla",
+                "lra",
+                "motor_power"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "term_keys"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "ask_clarification",
+      "description": "Ask for a missing requirement, part number or disambiguation.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "enum": [
+              "part_number",
+              "service",
+              "frequency",
+              "supply",
+              "requirements",
+              "which_product",
+              "term_not_in_summary",
+              "unsupported",
+              "cancel",
+              "decline"
+            ]
+          },
+          "cancel_previous": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "field"
+        ]
+      }
+    }
+  }
+]

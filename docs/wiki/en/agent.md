@@ -34,7 +34,7 @@ sequenceDiagram
 
 Provider-facing `args_schema` values are compact JSON Schema dictionaries. Code normalises and validates every decision against strict Pydantic models before execution. The LLM supplies intent/arguments, never SQL or final technical prose.
 
-The provider uses `bounds=[{"field":"min_torque_in_lb","op":"gt","value":1000}]` for numeric limits and omits unknown properties instead of sending null. Code expands these into the canonical value/op fields described below; legacy internal arguments and the direct search API remain accepted. Focus uses plain object items with field and optional service/frequency, without schema references or nullable unions. All four tools are still bound in one request and only one model decision runs per turn. [Wire contract](../../../backend/conversation/tool_wire.py) and [offline schema budget test](../../../tests/test_tool_schema_budget.py) prevent union/reference growth beyond the 0152ed6 baseline; provider probing remains a separate coordinator check.
+The provider uses `bounds=[{"field":"min_torque_in_lb","op":"gt","value":1000}]` for numeric limits and omits unknown properties instead of sending null. Code expands these into the canonical value/op fields described below; legacy internal arguments and the direct search API remain accepted. Focus uses field strings plus optional scalar service/frequency qualifiers. All four tools are still bound in one request and only one model decision runs per turn. [Wire contract](../../../backend/conversation/tool_wire.py) and [offline schema budget test](../../../tests/test_tool_schema_budget.py) limit cumulative structural complexity; provider probing remains a separate coordinator check. The table below describes the canonical internal arguments after expansion.
 
 | Tool | Input schema |
 |---|---|
@@ -113,3 +113,5 @@ Impossibility extrema retain their published scope: when service is unknown, On/
 ## Known limits
 
 The lexical policy and numeric grounding remain bounded: occurrence of a number does not prove correct semantic assignment. T6 focus, strict thresholds, ranking, cancellation and comparison are verified offline with scripted decisions and SQL; the coordinator’s real-LLM v5 check is pending. Only 12 recent messages (truncated to 2000 chars each) plus persisted context are supplied. OpenRouter and full Android-to-real-LLM acceptance remain pending.
+
+Provider focus is a flat list of field names, with optional focus_service for torque and focus_frequency_hz for operating time/FLA/LRA. Code expands these into the persisted per-field canonical focus. Combined explain_terms uses comma-separated glossary keys; assumptions maps filter names to verbatim user phrases. Bounds remain field/op/value records. Numeric ranges and list/string limits are checked by canonical Pydantic validation, not advertised to the provider. Run the [schema preflight](operations.md#tool-schema-preflight-before-any-cohort) before any paid cohort.
