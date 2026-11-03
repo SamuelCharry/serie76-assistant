@@ -91,8 +91,10 @@ SQLite aquí solo es caché/spool, no la base consultada por las herramientas de
 
 ```powershell
 ./.venv-ingest/Scripts/python.exe scripts/evaluate_ingestion.py --catalog <directorio-del-documento>/catalog.csv --reference data/reference/serie76_tablas_extraidas.csv --out reports/pipeline/evaluation.json
-./.venv-ingest/Scripts/python.exe -m unittest discover -s tests -v
+./.venv/Scripts/python.exe -m unittest discover -s tests -v
 ```
+
+La suite completa requiere requirements-dev.txt en .venv; SERIES76_TEST_DB=1 habilita pruebas reales de PostgreSQL. .venv-ingest sigue siendo el runtime OCR aislado.
 
 La evaluación lee la referencia después de la extracción. El proceso de producción no la importa. El resultado compara contra una revisión visual falible, no certifica exactitud universal.
 
@@ -108,4 +110,4 @@ El ensayo de 100 páginas repite cuatro páginas 25 veces. Es una prueba de volu
 
 ## Pendientes del assessment
 
-Carga idempotente/transaccional en PostgreSQL, herramientas LangChain, agente, conversaciones persistentes y Android. No se declara implementado ese producto por tener CSV/JSON correctos.
+PostgreSQL y su carga ya están verificados: docs/POSTGRES.md. Siguen pendientes herramientas LangChain, agente, conversaciones persistentes y Android. No se declara implementado ese producto por tener CSV/JSON correctos.

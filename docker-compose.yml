@@ -1,6 +1,8 @@
 services:
   db:
-    image: postgres:17
+    image: postgres:17@sha256:f4c66b820c6f974249089d3d16d86a3698eae11e8746eb6644b2271031e91232
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-series76}
       POSTGRES_USER: ${POSTGRES_USER:-series76}
@@ -25,12 +27,16 @@ services:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
       OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
       OPENROUTER_CHAT_MODEL: ${OPENROUTER_CHAT_MODEL:-}
+      DEV_DEBUG: ${DEV_DEBUG:-false}
       OPENROUTER_EMBEDDING_MODEL: ${OPENROUTER_EMBEDDING_MODEL:-}
     ports:
       - "127.0.0.1:${API_PORT:-8000}:8000"
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./data/extracted:/app/data/extracted:ro
+      - ./data/raw:/app/data/raw:ro
   ocr:
     profiles: ["ocr"]
     build:

@@ -1,0 +1,354 @@
+{
+  "tool": "comp-diff",
+  "version": 1,
+  "createdAt": "2026-11-03T13:26:12.137Z",
+  "label": "chat-home",
+  "comp": ".impeccable/mocks/redesign-v2/gemini-home.png",
+  "build": ".impeccable/review/redesign-v2/chat-home.png",
+  "spec": ".impeccable/build/spec.json",
+  "compSize": "853x1844",
+  "buildSize": "1080x2400",
+  "align": "top",
+  "overall": 0.7459,
+  "verdict": "drift",
+  "scores": {
+    "overall": 0.7459,
+    "structure": 0.8823,
+    "color": 0.9891,
+    "colorIntersection": 0.9828,
+    "paletteMatch": 0.9925,
+    "detail": 0.3993,
+    "detailRaw": 0.4514,
+    "detailAdded": 0.1042,
+    "bands": 0.6
+  },
+  "palette": {
+    "comp": [
+      {
+        "hex": "#f6f6f8",
+        "coverage": 0.9881
+      },
+      {
+        "hex": "#1c1b21",
+        "coverage": 0.0052
+      },
+      {
+        "hex": "#827c90",
+        "coverage": 0.0041
+      },
+      {
+        "hex": "#4e1e5e",
+        "coverage": 0.0014
+      },
+      {
+        "hex": "#484850",
+        "coverage": 0.0011
+      }
+    ],
+    "build": [
+      {
+        "hex": "#f6f6f8",
+        "coverage": 0.9908
+      },
+      {
+        "hex": "#282828",
+        "coverage": 0.0033
+      },
+      {
+        "hex": "#686868",
+        "coverage": 0.0022
+      },
+      {
+        "hex": "#281828",
+        "coverage": 0.002
+      },
+      {
+        "hex": "#483858",
+        "coverage": 0.0017
+      }
+    ]
+  },
+  "regions": [
+    {
+      "id": "native-status",
+      "x": 0,
+      "y": 0,
+      "w": 1,
+      "h": 0.03524945770065076,
+      "kind": "chrome",
+      "score": {
+        "overall": 0.6569,
+        "structure": 0.869,
+        "color": 0.964,
+        "colorIntersection": 0.9579,
+        "paletteMatch": 0.9673,
+        "detail": 0.2072,
+        "detailRaw": 0.2697,
+        "detailAdded": 0.125,
+        "bands": 0.4
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 51,
+          "y": 18,
+          "w": 757,
+          "h": 27
+        },
+        "build": {
+          "x": 64,
+          "y": 8,
+          "w": 730,
+          "h": 27
+        }
+      }
+    },
+    {
+      "id": "app-title",
+      "x": 0.141852286049238,
+      "y": 0.055314533622559656,
+      "w": 0.1969519343493552,
+      "h": 0.0227765726681128,
+      "kind": "text",
+      "score": {
+        "overall": 0.4996,
+        "structure": 0.4094,
+        "color": 0.8686,
+        "colorIntersection": 0.7713,
+        "paletteMatch": 0.921,
+        "detail": 0.1112,
+        "detailRaw": 0.1894,
+        "detailAdded": 0.1563,
+        "bands": 0.6103
+      },
+      "verdict": "missing",
+      "inkBox": {
+        "comp": {
+          "x": 8,
+          "y": 10,
+          "w": 149,
+          "h": 30
+        },
+        "build": {
+          "x": 0,
+          "y": 29,
+          "w": 138,
+          "h": 19
+        }
+      }
+    },
+    {
+      "id": "greeting",
+      "x": 0.06330597889800703,
+      "y": 0.2586767895878525,
+      "w": 0.23446658851113716,
+      "h": 0.03579175704989154,
+      "kind": "text",
+      "score": {
+        "overall": 0.4272,
+        "structure": 0.4299,
+        "color": 0.689,
+        "colorIntersection": 0.6894,
+        "paletteMatch": 0.6889,
+        "detail": 0,
+        "detailRaw": 0,
+        "detailAdded": 0,
+        "bands": 0.4
+      },
+      "verdict": "missing",
+      "inkBox": {
+        "comp": {
+          "x": 6,
+          "y": 11,
+          "w": 176,
+          "h": 49
+        },
+        "build": null
+      }
+    },
+    {
+      "id": "question",
+      "x": 0.06330597889800703,
+      "y": 0.30314533622559653,
+      "w": 0.5451348182883939,
+      "h": 0.033622559652928416,
+      "kind": "text",
+      "score": {
+        "overall": 0.4041,
+        "structure": 0.3039,
+        "color": 0.7863,
+        "colorIntersection": 0.7478,
+        "paletteMatch": 0.8071,
+        "detail": 0.1876,
+        "detailRaw": 0.2189,
+        "detailAdded": 0.0625,
+        "bands": 0.275
+      },
+      "verdict": "contradicted",
+      "inkBox": {
+        "comp": {
+          "x": 6,
+          "y": 5,
+          "w": 446,
+          "h": 57
+        },
+        "build": {
+          "x": 9,
+          "y": 0,
+          "w": 165,
+          "h": 45
+        }
+      }
+    },
+    {
+      "id": "purpose",
+      "x": 0.06330597889800703,
+      "y": 0.3481561822125813,
+      "w": 0.5861664712778429,
+      "h": 0.021691973969631236,
+      "kind": "text",
+      "score": {
+        "overall": 0.4854,
+        "structure": 0.3529,
+        "color": 0.8782,
+        "colorIntersection": 0.7653,
+        "paletteMatch": 0.9389,
+        "detail": 0.4628,
+        "detailRaw": 0.6607,
+        "detailAdded": 0.3958,
+        "bands": 0.2
+      },
+      "verdict": "drift",
+      "inkBox": {
+        "comp": {
+          "x": 3,
+          "y": 10,
+          "w": 480,
+          "h": 26
+        },
+        "build": {
+          "x": 10,
+          "y": 0,
+          "w": 459,
+          "h": 48
+        }
+      }
+    },
+    {
+      "id": "lookup-shortcut",
+      "x": 0.05861664712778429,
+      "y": 0.4094360086767896,
+      "w": 0.32590855803048063,
+      "h": 0.039045553145336226,
+      "kind": "control",
+      "score": {
+        "overall": 0.4195,
+        "structure": 0.5374,
+        "color": 0.5078,
+        "colorIntersection": 0.2048,
+        "paletteMatch": 0.6709,
+        "detail": 0,
+        "detailRaw": 0.0006,
+        "detailAdded": 0.25,
+        "bands": 0
+      },
+      "verdict": "missing",
+      "inkBox": {
+        "comp": {
+          "x": 35,
+          "y": 21,
+          "w": 206,
+          "h": 30
+        },
+        "build": {
+          "x": 10,
+          "y": 0,
+          "w": 260,
+          "h": 17
+        }
+      }
+    },
+    {
+      "id": "find-shortcut",
+      "x": 0.41031652989449,
+      "y": 0.4094360086767896,
+      "w": 0.3516998827667057,
+      "h": 0.039045553145336226,
+      "kind": "control",
+      "score": {
+        "overall": 0.4199,
+        "structure": 0.5377,
+        "color": 0.5083,
+        "colorIntersection": 0.1983,
+        "paletteMatch": 0.6752,
+        "detail": 0,
+        "detailRaw": 0.001,
+        "detailAdded": 0.1667,
+        "bands": 0
+      },
+      "verdict": "missing",
+      "inkBox": {
+        "comp": {
+          "x": 35,
+          "y": 21,
+          "w": 232,
+          "h": 25
+        },
+        "build": {
+          "x": 4,
+          "y": 0,
+          "w": 183,
+          "h": 17
+        }
+      }
+    },
+    {
+      "id": "composer",
+      "x": 0.03985932004689332,
+      "y": 0.8671366594360087,
+      "w": 0.9202813599062134,
+      "h": 0.09598698481561822,
+      "kind": "control",
+      "score": {
+        "overall": 0.6973,
+        "structure": 0.8397,
+        "color": 0.8735,
+        "colorIntersection": 0.7867,
+        "paletteMatch": 0.9203,
+        "detail": 0.0683,
+        "detailRaw": 0.11,
+        "detailAdded": 0.0833,
+        "bands": 1
+      },
+      "verdict": "missing",
+      "inkBox": {
+        "comp": {
+          "x": 46,
+          "y": 38,
+          "w": 718,
+          "h": 108
+        },
+        "build": {
+          "x": 42,
+          "y": 80,
+          "w": 691,
+          "h": 56
+        }
+      }
+    }
+  ],
+  "files": {
+    "sideBySide": "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/final/side-by-side.png",
+    "heatmap": "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/final/heatmap.png",
+    "regionFiles": [
+      "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/final/regions/native-status.png",
+      "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/final/regions/app-title.png",
+      "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/final/regions/greeting.png",
+      "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/final/regions/question.png",
+      "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/final/regions/purpose.png",
+      "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/final/regions/lookup-shortcut.png",
+      "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/final/regions/find-shortcut.png",
+      "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/review/diff/final/regions/composer.png"
+    ]
+  }
+}

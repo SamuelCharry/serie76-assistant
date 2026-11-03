@@ -1,9 +1,11 @@
-"""Draft schemas; the mandatory conversation endpoint is not implemented yet."""
-from pydantic import BaseModel, Field, field_validator
+"""Public conversation contract. Tool traces use a separate development endpoint."""
+from uuid import UUID
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 class ConversationRequest(BaseModel):
-    session_id: str | None = None
-    query: str = Field(min_length=1)
+    model_config = ConfigDict(extra="forbid")
+    session_id: UUID | None = None
+    query: str = Field(min_length=1, max_length=4000)
 
     @field_validator("query")
     @classmethod
@@ -13,7 +15,7 @@ class ConversationRequest(BaseModel):
         return value
 
 class ConversationResponse(BaseModel):
-    session_id: str
+    session_id: UUID
     answer: str
-
-# Product cards and debug traces will be designed after validating the data model.
+    message_id: UUID
+    products: list[dict] = Field(default_factory=list)

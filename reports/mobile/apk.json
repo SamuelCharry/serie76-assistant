@@ -1,0 +1,20 @@
+{
+  "debug": {
+    "sha256": "370459462d14836f4b485b36ecf42f9d19f1736a4c00b813ae14a355293db36a",
+    "size_bytes": 12115342,
+    "debug_strings": {
+      "api/messages/": true,
+      "Developer debug": true,
+      "Returned data": true
+    }
+  },
+  "release": {
+    "sha256": "d3e845f46c80c80838418393ee6d821d18048c68829643e6e9da72a8cd5da7f9",
+    "size_bytes": 1794237,
+    "debug_strings": {
+      "api/messages/": false,
+      "Developer debug": false,
+      "Returned data": false
+    }
+  }
+}

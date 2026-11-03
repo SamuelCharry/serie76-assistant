@@ -1,0 +1,599 @@
+{
+  "tool": "comp-spec",
+  "version": 1,
+  "createdAt": "2026-11-03T12:56:09.164Z",
+  "comp": ".impeccable/mocks/redesign-v2/gemini-home.png",
+  "warnings": [
+    "region native-status: \"codeDrawn\": true set in the regions file (the painted-material refusal is overridden: code draws this region)",
+    "region app-title: \"codeDrawn\": true set in the regions file (the painted-material refusal is overridden: code draws this region)",
+    "region greeting: \"codeDrawn\": true set in the regions file (the painted-material refusal is overridden: code draws this region)",
+    "region question: \"codeDrawn\": true set in the regions file (the painted-material refusal is overridden: code draws this region)",
+    "region purpose: \"codeDrawn\": true set in the regions file (the painted-material refusal is overridden: code draws this region)",
+    "region lookup-shortcut: \"codeDrawn\": true set in the regions file (the painted-material refusal is overridden: code draws this region)",
+    "region find-shortcut: \"codeDrawn\": true set in the regions file (the painted-material refusal is overridden: code draws this region)",
+    "region composer: \"codeDrawn\": true set in the regions file (the painted-material refusal is overridden: code draws this region)"
+  ],
+  "uncoveredInkCells": [],
+  "compSize": {
+    "width": 853,
+    "height": 1844
+  },
+  "aspect": 0.4626,
+  "orientation": "portrait",
+  "palette": [
+    {
+      "hex": "#f6f6f8",
+      "coverage": 0.9881
+    },
+    {
+      "hex": "#1c1b21",
+      "coverage": 0.0052
+    },
+    {
+      "hex": "#827c90",
+      "coverage": 0.0041
+    },
+    {
+      "hex": "#4e1e5e",
+      "coverage": 0.0014
+    },
+    {
+      "hex": "#484850",
+      "coverage": 0.0011
+    }
+  ],
+  "bands": [
+    {
+      "y": 0.0108,
+      "strength": 0.2646
+    },
+    {
+      "y": 0.0758,
+      "strength": 0.2691
+    },
+    {
+      "y": 0.3141,
+      "strength": 0.4375
+    },
+    {
+      "y": 0.3646,
+      "strength": 0.2935
+    },
+    {
+      "y": 0.426,
+      "strength": 0.3523
+    },
+    {
+      "y": 0.9892,
+      "strength": 0.5312
+    }
+  ],
+  "regions": [
+    {
+      "id": "native-status",
+      "kind": "chrome",
+      "note": "Android native system bar, real clock and standard OS icons",
+      "grid": "A0:J0",
+      "codeDrawn": true,
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 0.1
+      },
+      "px": {
+        "x": 0,
+        "y": 0,
+        "w": 853,
+        "h": 184
+      },
+      "aspect": 4.6359,
+      "palette": [
+        {
+          "hex": "#f8f8f8",
+          "coverage": 0.9754
+        },
+        {
+          "hex": "#1f1c28",
+          "coverage": 0.0181
+        },
+        {
+          "hex": "#98989c",
+          "coverage": 0.0029
+        },
+        {
+          "hex": "#cdc8d3",
+          "coverage": 0.0018
+        },
+        {
+          "hex": "#481858",
+          "coverage": 0.0017
+        }
+      ],
+      "detail": {
+        "energy": 15.4873
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "app-title",
+      "kind": "text",
+      "note": "Static Series 76 title in native app bar, not an eyebrow",
+      "grid": "B0:E0",
+      "codeDrawn": true,
+      "coverBox": {
+        "x": 0.1,
+        "y": 0,
+        "w": 0.4,
+        "h": 0.1
+      },
+      "box": {
+        "x": 0.1419,
+        "y": 0.0553,
+        "w": 0.197,
+        "h": 0.0228
+      },
+      "px": {
+        "x": 121,
+        "y": 102,
+        "w": 168,
+        "h": 42
+      },
+      "aspect": 4,
+      "palette": [
+        {
+          "hex": "#f7f7f7",
+          "coverage": 0.7649
+        },
+        {
+          "hex": "#191820",
+          "coverage": 0.1532
+        },
+        {
+          "hex": "#5d5d62",
+          "coverage": 0.0299
+        },
+        {
+          "hex": "#85858a",
+          "coverage": 0.0273
+        },
+        {
+          "hex": "#c5c5ca",
+          "coverage": 0.0247
+        }
+      ],
+      "detail": {
+        "energy": 42.4702
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 8,
+          "capHeightPx": 28,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.6261,
+          "advTall": 0.5903,
+          "advX": 0.6261,
+          "gap": 0.0716,
+          "xRatio": 0.7147,
+          "stemW": 0.167,
+          "contrast": 1.1314,
+          "serif": null,
+          "densTall": 0.4857,
+          "densX": 0.5733,
+          "weight": 0.4857
+        },
+        "widthClass": "normal",
+        "weightClass": "medium"
+      }
+    },
+    {
+      "id": "greeting",
+      "kind": "text",
+      "note": "Hello. first line of the user-approved greeting",
+      "grid": "A2:D2",
+      "codeDrawn": true,
+      "coverBox": {
+        "x": 0,
+        "y": 0.2,
+        "w": 0.4,
+        "h": 0.1
+      },
+      "box": {
+        "x": 0.0633,
+        "y": 0.2587,
+        "w": 0.2251,
+        "h": 0.0358
+      },
+      "px": {
+        "x": 54,
+        "y": 477,
+        "w": 192,
+        "h": 66
+      },
+      "aspect": 2.9091,
+      "palette": [
+        {
+          "hex": "#f8f8f8",
+          "coverage": 0.6795
+        },
+        {
+          "hex": "#4f1e5c",
+          "coverage": 0.2389
+        },
+        {
+          "hex": "#a28aaa",
+          "coverage": 0.0529
+        },
+        {
+          "hex": "#d0c0d1",
+          "coverage": 0.0193
+        },
+        {
+          "hex": "#8e6e9a",
+          "coverage": 0.0093
+        }
+      ],
+      "detail": {
+        "energy": 26.7881
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 5,
+          "capHeightPx": 47.7,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.7332,
+          "advTall": 0.1885,
+          "advX": 0.7541,
+          "gap": 0.1362,
+          "xRatio": 0.7277,
+          "stemW": 0.1886,
+          "contrast": 1.1089,
+          "serif": null,
+          "densTall": 0.9633,
+          "densX": 0.5849,
+          "weight": 0.9633
+        },
+        "widthClass": "wide",
+        "weightClass": "black",
+        "chosen": {
+          "family": "Rethink Sans",
+          "weight": 700,
+          "fontSizePx": 68,
+          "source": "catalog",
+          "estimatedSize": true,
+          "stamp": "1fd4aae155f7"
+        }
+      }
+    },
+    {
+      "id": "question",
+      "kind": "text",
+      "note": "How can I help? native Material headline role",
+      "grid": "A3:G3",
+      "codeDrawn": true,
+      "coverBox": {
+        "x": 0,
+        "y": 0.3,
+        "w": 0.7,
+        "h": 0.1
+      },
+      "box": {
+        "x": 0.0633,
+        "y": 0.3031,
+        "w": 0.3025,
+        "h": 0.0325
+      },
+      "px": {
+        "x": 54,
+        "y": 559,
+        "w": 258,
+        "h": 60
+      },
+      "aspect": 4.3,
+      "palette": [
+        {
+          "hex": "#f7f7f8",
+          "coverage": 0.7547
+        },
+        {
+          "hex": "#1e1c23",
+          "coverage": 0.1686
+        },
+        {
+          "hex": "#aaaaae",
+          "coverage": 0.0355
+        },
+        {
+          "hex": "#47464b",
+          "coverage": 0.025
+        },
+        {
+          "hex": "#797981",
+          "coverage": 0.0163
+        }
+      ],
+      "detail": {
+        "energy": 44.3118
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 6,
+          "capHeightPx": 44.5,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.7071,
+          "advTall": 0.7633,
+          "advX": 0.6735,
+          "gap": 0.1571,
+          "xRatio": 0.7418,
+          "stemW": 0.1419,
+          "contrast": 1.0652,
+          "serif": null,
+          "densTall": 0.4435,
+          "densX": 0.4606,
+          "weight": 0.4435
+        },
+        "widthClass": "normal",
+        "weightClass": "regular",
+        "chosen": {
+          "family": "Inclusive Sans",
+          "weight": 400,
+          "fontSizePx": 64,
+          "source": "catalog",
+          "estimatedSize": true,
+          "stamp": "21583497b7d0"
+        }
+      }
+    },
+    {
+      "id": "purpose",
+      "kind": "text",
+      "note": "Ask about Series 76 actuators.",
+      "grid": "A3:I3",
+      "codeDrawn": true,
+      "coverBox": {
+        "x": 0,
+        "y": 0.3,
+        "w": 0.9,
+        "h": 0.1
+      },
+      "box": {
+        "x": 0.0633,
+        "y": 0.3031,
+        "w": 0.3025,
+        "h": 0.0325
+      },
+      "px": {
+        "x": 54,
+        "y": 559,
+        "w": 258,
+        "h": 60
+      },
+      "aspect": 4.3,
+      "palette": [
+        {
+          "hex": "#f7f7f8",
+          "coverage": 0.7547
+        },
+        {
+          "hex": "#1e1c23",
+          "coverage": 0.1686
+        },
+        {
+          "hex": "#aaaaae",
+          "coverage": 0.0355
+        },
+        {
+          "hex": "#47464b",
+          "coverage": 0.025
+        },
+        {
+          "hex": "#797981",
+          "coverage": 0.0163
+        }
+      ],
+      "detail": {
+        "energy": 44.3118
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 6,
+          "capHeightPx": 44.5,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.7071,
+          "advTall": 0.7633,
+          "advX": 0.6735,
+          "gap": 0.1571,
+          "xRatio": 0.7418,
+          "stemW": 0.1419,
+          "contrast": 1.0652,
+          "serif": null,
+          "densTall": 0.4435,
+          "densX": 0.4606,
+          "weight": 0.4435
+        },
+        "widthClass": "normal",
+        "weightClass": "regular"
+      }
+    },
+    {
+      "id": "lookup-shortcut",
+      "kind": "control",
+      "note": "Tonal pill fills draft only, no automatic send",
+      "grid": "A4:D4",
+      "codeDrawn": true,
+      "coverBox": {
+        "x": 0,
+        "y": 0.4,
+        "w": 0.4,
+        "h": 0.1
+      },
+      "box": {
+        "x": 0.0914,
+        "y": 0.4165,
+        "w": 0.2603,
+        "h": 0.026
+      },
+      "px": {
+        "x": 78,
+        "y": 768,
+        "w": 222,
+        "h": 48
+      },
+      "aspect": 4.625,
+      "palette": [
+        {
+          "hex": "#eaeaf6",
+          "coverage": 0.8545
+        },
+        {
+          "hex": "#0e0e0e",
+          "coverage": 0.0838
+        },
+        {
+          "hex": "#bab9bf",
+          "coverage": 0.0245
+        },
+        {
+          "hex": "#838289",
+          "coverage": 0.022
+        },
+        {
+          "hex": "#36373c",
+          "coverage": 0.0152
+        }
+      ],
+      "detail": {
+        "energy": 39.9929
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "find-shortcut",
+      "kind": "control",
+      "note": "Tonal pill fills existing chat draft",
+      "grid": "E4:H4",
+      "codeDrawn": true,
+      "coverBox": {
+        "x": 0.4,
+        "y": 0.4,
+        "w": 0.4,
+        "h": 0.1
+      },
+      "box": {
+        "x": 0.442,
+        "y": 0.4165,
+        "w": 0.2884,
+        "h": 0.0228
+      },
+      "px": {
+        "x": 377,
+        "y": 768,
+        "w": 246,
+        "h": 42
+      },
+      "aspect": 5.8571,
+      "palette": [
+        {
+          "hex": "#eaeaf5",
+          "coverage": 0.8336
+        },
+        {
+          "hex": "#0c0b0d",
+          "coverage": 0.088
+        },
+        {
+          "hex": "#3a3b3e",
+          "coverage": 0.034
+        },
+        {
+          "hex": "#7d7d86",
+          "coverage": 0.0253
+        },
+        {
+          "hex": "#b2afb4",
+          "coverage": 0.0192
+        }
+      ],
+      "detail": {
+        "energy": 53.2535
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "composer",
+      "kind": "control",
+      "note": "Native editable input and send action, tonal surface and adaptive height",
+      "grid": "A8:J9",
+      "codeDrawn": true,
+      "coverBox": {
+        "x": 0,
+        "y": 0.8,
+        "w": 1,
+        "h": 0.2
+      },
+      "box": {
+        "x": 0.837,
+        "y": 0.904,
+        "w": 0.109,
+        "h": 0.0456
+      },
+      "px": {
+        "x": 714,
+        "y": 1667,
+        "w": 93,
+        "h": 84
+      },
+      "aspect": 1.1071,
+      "palette": [
+        {
+          "hex": "#e8e8f7",
+          "coverage": 0.4988
+        },
+        {
+          "hex": "#8b8198",
+          "coverage": 0.4689
+        },
+        {
+          "hex": "#aca7b8",
+          "coverage": 0.03
+        },
+        {
+          "hex": "#d0c8d0",
+          "coverage": 0.0023
+        }
+      ],
+      "detail": {
+        "energy": 5.3625
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    }
+  ]
+}

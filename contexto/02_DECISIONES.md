@@ -1,3 +1,9 @@
+# Actualización PostgreSQL
+
+OCR, PostgreSQL y consultas técnicas están implementados y verificados. PostgreSQL 17.11 y backend corren en Docker. La reconstrucción SQL coincide en 68 referencias, 869 cifras, cuatro N/A, cinco marcas y 272 atributos de contexto (941/941 comprobaciones primarias). Las 62 pruebas actuales pasan con SERIES76_TEST_DB=1. El reinicio de DB/backend conserva catálogo y hash. Ver docs/POSTGRES.md y reports/postgres/summary.json. Agente, LangChain, historial, selección del LLM y Android siguen pendientes.
+
+Los apartados siguientes conservan historia anterior. Sus pendientes de PostgreSQL/Docker ya fueron resueltos. No se modificaron issues remotos; el grupo de datos sigue abierto porque falta integración/modelos.
+
 # Decisiones, restricciones y colaboración
 
 ## Cómo quiere trabajar Samuel
@@ -7,6 +13,8 @@ Samuel pidió comprender el dominio antes de programar y después avanzar de for
 Prefiere auditoría rigurosa: señalar fallos concretos y su impacto antes de alternativas. No inventar problemas, exagerar avances ni convertir escepticismo en insultos. La diferencia entre lo planeado y lo comprobado es esencial.
 
 ## Alcance y decisiones tomadas
+
+Actualización del plan Android autorizado: Kotlin/Compose, inglés, paleta clara/lila Konecto y maqueta C aprobada antes de programar. Una ficha para un producto y tabla comparativa en el chat para varios. Tres pantallas; sin Firebase, login, voz, búsqueda de conversaciones ni onboarding. Wrappers LangChain y conversaciones implementados con pruebas controladas; elección/evaluación de LLM sigue diferida. Ver docs/ANDROID.md. Esto actualiza las referencias históricas a capacidades pendientes de este archivo.
 
 - Backend Python/FastAPI, agente LangChain y PostgreSQL: obligatorios del assessment.
 - App elegida: Android, Kotlin + Jetpack Compose. Flutter no satisface este enunciado.

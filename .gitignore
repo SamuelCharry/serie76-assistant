@@ -4,6 +4,8 @@
 .venv/
 .venv-ocr/
 .venv-ingest/
+.venv-model-eval/
+.venv-chat/
 .cache/
 .ipynb_checkpoints/
 __pycache__/

@@ -1,10 +1,20 @@
-# Android: pendiente de implementación
+# Series 76 Android
 
-Plataforma elegida para este proyecto: Kotlin con Jetpack Compose.
-Esta carpeta todavía NO contiene una aplicación compilable ni un proyecto Gradle.
+Aplicación Kotlin + Jetpack Compose. Abrir esta carpeta en Android Studio.
 
-Pantallas requeridas: conversaciones, chat con fichas comparables y debug solo para desarrolladores. Todas deben manejar carga y errores. Mantener session_id y permitir reabrir historial.
+Desde la raíz del repositorio:
 
-Antes de la entrega: crear el proyecto Android, fijar versiones y Gradle Wrapper, implementar las pantallas, documentar cómo compilar/ejecutar y configurar la URL del backend. Probar conectividad de emulador/dispositivo y documentar acceso a debug.
+```powershell
+./mobile/android/gradlew.bat -p mobile/android :app:assembleDebug
+./mobile/android/gradlew.bat -p mobile/android :app:testDebugUnitTest
+```
 
-Login y voz son opcionales y quedan fuera del primer alcance.
+URL predeterminada: http://10.0.2.2:8000/. Modificar con -PbackendUrl=<URL> y recompilar.
+
+Inicio directamente en chat; menú izquierdo con historial y New chat. Estilo tipo Gemini aprobado, acento lila Konecto y compositor tonal. Los accesos iniciales solo preparan el borrador.
+
+Debug de herramientas: variante debug, abrir el menú izquierdo y pulsar Developer debug; requiere DEV_DEBUG=true en el backend local. Excluido de release. Sin login ni voz.
+
+Instrucciones completas de SDK, backend, dispositivo, URL, debug, contratos y límites: [docs/ANDROID.md](../../docs/ANDROID.md).
+
+No hay respuestas simuladas en la aplicación. La verificación con un LLM real queda pendiente de configurar/evaluar OpenRouter; evidencia en [reports/mobile](../../reports/mobile).

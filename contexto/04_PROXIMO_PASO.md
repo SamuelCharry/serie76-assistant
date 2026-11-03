@@ -1,11 +1,21 @@
-# Próximo bloque: PostgreSQL y consultas deterministas
+# Próximo bloque: herramientas y conversaciones
 
-El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver reports/pipeline/RESULTADOS.md y reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL, agente y Android siguen pendientes.
+## Actualización: evaluación real del modelo en Google
 
-1. Diseñar esquema que preserve códigos completos, servicio, frecuencia, unidades, source_NA/not_in_layout, notas y procedencia por documento/tabla/celda.
-2. Cargar la salida OCR de data/extracted/series76 transaccionalmente e idempotentemente. Usar hashes de fuente/pipeline y definir versiones entre documentos; no importar la referencia manual.
-3. Verificar Docker/PostgreSQL sin borrar volúmenes ni resetear el equipo; su fallo histórico no demuestra el estado actual.
-4. Probar consulta exacta y filtros técnicos, incluyendo torque compartido trifásico, N/A y tablas separadas de 24 V.
-5. Después integrar herramientas LangChain, agente OpenRouter configurable, historial/API y Android.
+El usuario autorizó agentes para comparar y luego uso eficiente de20.000COP cargados a Google. Se completaron18casos con3modelos:3.6 Flash17/18,3 Flash Preview17/18,3.5 Flash-Lite16/18. Candidato recomendado google/gemini-3.6-flash por menor gravedad del fallo: omitiófocus en un N/A pero no inventó cifras; Preview añadió60Hz no pedidos. Desempate mecánico costo/latencia favorecePreview, preferenciaingenieril3.6 está explícita.3.8 y3.1Lite no respondieron por503 y no se puntúan como0.
 
-No sustituir BOO por 800 ni eliminar decimales globalmente. Las columnas se asignan por unidades y encabezados; las potencias solo se propagan dentro de límites medidos. Las relecturas OCR deben resolver las dudas; si no, revisión explícita. Ver docs/PIPELINE_ACCEPTANCE.md para el contrato ya verificado.
+Evidencia reports/model_eval/RESULTADOS.md y comparison.json; código model_eval/, CLI de evaluación y continuación con ledger append-only. Costo por tokensUSD0.06533735; reserva conjunta conservadoraUSD0.22145935, capclienteUSD0.50. Cero inferencias OpenRouter. No modificar ni divulgar GOOGLE_API_KEY en .env. No se cambió el cliente de producción concurrente: actualmente600tokens/temperatura0 difiere deGooglelow/2048. Próximo paso: alinear cliente y probar porOpenRouter con parámetros/proveedor explícitos; después verificar app→LLM→SQL→app. No declarar validado ese recorrido con esta prueba directa de run_agent. Mantener otros cambios Android/conversación y sus decisiones de diseño.
+
+## Actualización posterior: plan Android implementado
+
+Herramientas, persistencia de conversaciones y Android ya tienen implementación. Leer docs/ANDROID.md y reports/mobile antes de retomar; los pasos anteriores de abajo son históricos. Usuario aprobó maqueta C, inglés, estilo claro/lila y tabla de comparación. Próximo bloque funcional pendiente: elegir/configurar/evaluar el modelo OpenRouter y verificar lenguaje/contexto en el recorrido completo app -> LLM -> SQL -> app. No gastar presupuesto ni elegir un modelo por inferencia; la selección fue diferida por el usuario. No añadir Firebase/login/voz. Consultar evidencia de emulador, contratos y reinicio; ninguna de esas pruebas equivale a evaluación de un modelo real.
+
+OCR, PostgreSQL y consultas técnicas están implementados y verificados. PostgreSQL 17.11 y backend corren en Docker. La reconstrucción SQL coincide en 68 referencias, 869 cifras, cuatro N/A, cinco marcas y 272 atributos de contexto (941/941 comprobaciones primarias). Las 62 pruebas actuales pasan con SERIES76_TEST_DB=1. El reinicio de DB/backend conserva catálogo y hash. Ver docs/POSTGRES.md y reports/postgres/summary.json. Agente, LangChain, historial, selección del LLM y Android siguen pendientes.
+
+1. Reutilizar get_actuator/search_actuators de backend/catalog/repository.py para wrappers LangChain; no permitir SQL arbitrario del LLM ni releer el CSV en consultas.
+2. Diseñar sesiones/mensajes persistentes en PostgreSQL con migraciones nuevas; no editar SQL ya aplicado.
+3. Definir contrato conversacional con productos comparables, aclaraciones y trazas separadas para debug.
+4. Probar contexto, historial y errores de forma determinista.
+5. Elegir/evaluar LLM y costo más adelante; no consumir OpenRouter ahora. Después Android.
+
+POST /api/conversation aún no existe. El catálogo SQL sí está listo: comprobar /ready. Evidencia en reports/postgres. No hacer commit/push ni actualizar memorias sin solicitud.

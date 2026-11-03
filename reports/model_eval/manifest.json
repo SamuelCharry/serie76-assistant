@@ -1,0 +1,14 @@
+{
+  "RESULTADOS.md": "6bec238f3ddb67becb8f945229ecebff18deb46a02204cc5002162288cc8ac22",
+  "comparison.json": "9a60a5b811d382307b166a5468b45e95c7e2f22f777a1c51f1ce3cdadeeda010",
+  "continuation.json": "dd1a4bce89abb1f26c02b7d334d2c19fa59d5ea6c3ad237c65a1e291052dbea9",
+  "google-additional\\reservation_refinements.json": "bd2facc9641a2383514359c653731a72600b817748ab5366a4719f274d08fe9c",
+  "google-additional\\results.jsonl": "db3555adca8b93c5933e66d02502965f8f31e1f0e99d3a7ab2b8d83134d11c76",
+  "google-additional\\run.json": "617056828e7b6478fab529f6b210528dc6d46274d3a3beedef210444818c11b3",
+  "google-additional\\summary.json": "bda33f9d3ea6fdf9a41ee0e0a9b4b61cd3daede4874eb8328cecb8b836181387",
+  "google-comparison-v2\\preflight.json": "fd56277a8a0f8555976a4bfdef7ec961eef06734166b7cdb4d5379a9fb7991da",
+  "google-comparison-v2\\reservation_refinements.json": "23f67c1b486774f3249c02627e059d19862d01b9d7565990d77f17fe27dbff7f",
+  "google-comparison-v2\\results.jsonl": "1ac5fbbcac5de59cca243f47b1c9d0a57744c148b282df21704f5c13cadff012",
+  "google-comparison-v2\\run.json": "65466604558b7ad60d5b5bf24438cad79e28b008a8eb87d0f22a066af196d3c4",
+  "google-comparison-v2\\summary.json": "315631e0aa550275e46d824e11af185edda172755d9c933cd3fffb5cee23108b"
+}

@@ -1,0 +1,601 @@
+{
+  "tool": "comp-spec",
+  "version": 1,
+  "createdAt": "2026-11-03T11:57:14.834Z",
+  "comp": ".impeccable/mocks/conversations-c.png",
+  "warnings": [
+    "region conversation-list: \"container\": true set in the regions file (the region-size refusal is overridden: one undivided element)"
+  ],
+  "uncoveredInkCells": [],
+  "compSize": {
+    "width": 852,
+    "height": 1846
+  },
+  "aspect": 0.4615,
+  "orientation": "portrait",
+  "palette": [
+    {
+      "hex": "#f8f8f8",
+      "coverage": 0.9402
+    },
+    {
+      "hex": "#b771f8",
+      "coverage": 0.0229
+    },
+    {
+      "hex": "#15121a",
+      "coverage": 0.0179
+    },
+    {
+      "hex": "#4f4e4f",
+      "coverage": 0.0133
+    },
+    {
+      "hex": "#b9b9b9",
+      "coverage": 0.0056
+    }
+  ],
+  "bands": [
+    {
+      "y": 0.0108,
+      "strength": 0.2477
+    },
+    {
+      "y": 0.0903,
+      "strength": 0.2903
+    },
+    {
+      "y": 0.1264,
+      "strength": 0.9826
+    },
+    {
+      "y": 0.1516,
+      "strength": 1
+    },
+    {
+      "y": 0.1805,
+      "strength": 0.3636
+    },
+    {
+      "y": 0.2022,
+      "strength": 0.2408
+    },
+    {
+      "y": 0.231,
+      "strength": 0.4038
+    },
+    {
+      "y": 0.3177,
+      "strength": 0.6999
+    },
+    {
+      "y": 0.361,
+      "strength": 0.531
+    },
+    {
+      "y": 0.3827,
+      "strength": 0.3949
+    },
+    {
+      "y": 0.4729,
+      "strength": 1
+    },
+    {
+      "y": 0.4946,
+      "strength": 0.579
+    },
+    {
+      "y": 0.5271,
+      "strength": 0.5459
+    },
+    {
+      "y": 0.6065,
+      "strength": 0.8825
+    },
+    {
+      "y": 0.639,
+      "strength": 0.536
+    },
+    {
+      "y": 0.6715,
+      "strength": 0.6713
+    },
+    {
+      "y": 0.9892,
+      "strength": 0.5306
+    }
+  ],
+  "regions": [
+    {
+      "id": "status",
+      "kind": "chrome",
+      "note": "Native Android status inset",
+      "grid": "A0:J0",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 0.1
+      },
+      "px": {
+        "x": 0,
+        "y": 0,
+        "w": 852,
+        "h": 185
+      },
+      "aspect": 4.6054,
+      "palette": [
+        {
+          "hex": "#f8f8f8",
+          "coverage": 0.9737
+        },
+        {
+          "hex": "#4f4f4f",
+          "coverage": 0.013
+        },
+        {
+          "hex": "#100c17",
+          "coverage": 0.0083
+        },
+        {
+          "hex": "#8a8a8a",
+          "coverage": 0.0025
+        },
+        {
+          "hex": "#b9b9b9",
+          "coverage": 0.0025
+        }
+      ],
+      "detail": {
+        "energy": 14.1415
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "brand",
+      "kind": "text",
+      "note": "Series 76 native Roboto",
+      "grid": "A0:D0",
+      "coverBox": {
+        "x": 0,
+        "y": 0,
+        "w": 0.4,
+        "h": 0.1
+      },
+      "box": {
+        "x": 0.0423,
+        "y": 0.0683,
+        "w": 0.2183,
+        "h": 0.026
+      },
+      "px": {
+        "x": 36,
+        "y": 126,
+        "w": 186,
+        "h": 48
+      },
+      "aspect": 3.875,
+      "palette": [
+        {
+          "hex": "#f7f7f7",
+          "coverage": 0.7646
+        },
+        {
+          "hex": "#120e19",
+          "coverage": 0.1597
+        },
+        {
+          "hex": "#aba6b1",
+          "coverage": 0.0328
+        },
+        {
+          "hex": "#1d0d2d",
+          "coverage": 0.0266
+        },
+        {
+          "hex": "#453d4d",
+          "coverage": 0.0164
+        }
+      ],
+      "detail": {
+        "energy": 41.5006
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 8,
+          "capHeightPx": 28,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.6611,
+          "advTall": 0.6253,
+          "advX": 0.6611,
+          "gap": 0.1072,
+          "xRatio": 0.7552,
+          "stemW": 0.2101,
+          "contrast": 1.1917,
+          "serif": 0.5624,
+          "densTall": 0.5703,
+          "densX": 0.6161,
+          "weight": 0.5703
+        },
+        "widthClass": "normal",
+        "weightClass": "bold"
+      }
+    },
+    {
+      "id": "heading",
+      "kind": "text",
+      "note": "Conversations, wraps with font scale",
+      "grid": "A1:J1",
+      "coverBox": {
+        "x": 0,
+        "y": 0.1,
+        "w": 1,
+        "h": 0.1
+      },
+      "box": {
+        "x": 0.0423,
+        "y": 0.1132,
+        "w": 0.6901,
+        "h": 0.0423
+      },
+      "px": {
+        "x": 36,
+        "y": 209,
+        "w": 588,
+        "h": 78
+      },
+      "aspect": 7.5385,
+      "palette": [
+        {
+          "hex": "#f7f7f7",
+          "coverage": 0.6501
+        },
+        {
+          "hex": "#181818",
+          "coverage": 0.1873
+        },
+        {
+          "hex": "#1f1626",
+          "coverage": 0.1212
+        },
+        {
+          "hex": "#b2b1b3",
+          "coverage": 0.0285
+        },
+        {
+          "hex": "#474649",
+          "coverage": 0.0129
+        }
+      ],
+      "detail": {
+        "energy": 84.5482
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 12,
+          "capHeightPx": 63.5,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.6453,
+          "advTall": 0.4564,
+          "advX": 0.661,
+          "gap": 0.0944,
+          "xRatio": 0.7188,
+          "stemW": 0.199,
+          "contrast": 1.169,
+          "serif": 0.9951,
+          "densTall": 0.5651,
+          "densX": 0.6057,
+          "weight": 0.5651
+        },
+        "widthClass": "normal",
+        "weightClass": "bold",
+        "chosen": {
+          "family": "Ysabeau SC",
+          "weight": 700,
+          "fontSizePx": 91,
+          "source": "catalog",
+          "estimatedSize": true,
+          "stamp": "81eb0e2f812a"
+        }
+      }
+    },
+    {
+      "id": "new-conversation",
+      "kind": "control",
+      "note": "Lilac rounded action; dark text instead of generated low-contrast white",
+      "grid": "A1:F2",
+      "coverBox": {
+        "x": 0,
+        "y": 0.1,
+        "w": 0.6,
+        "h": 0.2
+      },
+      "box": {
+        "x": 0.0246,
+        "y": 0.175,
+        "w": 0.5634,
+        "h": 0.065
+      },
+      "px": {
+        "x": 21,
+        "y": 323,
+        "w": 480,
+        "h": 120
+      },
+      "aspect": 4,
+      "palette": [
+        {
+          "hex": "#b770f8",
+          "coverage": 0.6033
+        },
+        {
+          "hex": "#f8f8f8",
+          "coverage": 0.3274
+        },
+        {
+          "hex": "#cfa8f8",
+          "coverage": 0.0536
+        },
+        {
+          "hex": "#bc88f8",
+          "coverage": 0.0091
+        },
+        {
+          "hex": "#e8d1f8",
+          "coverage": 0.0066
+        }
+      ],
+      "detail": {
+        "energy": 23.9836
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "conversation-list",
+      "kind": "chrome",
+      "note": "Soft lilac surface and white native cards",
+      "grid": "A2:J7",
+      "container": true,
+      "box": {
+        "x": 0,
+        "y": 0.2,
+        "w": 1,
+        "h": 0.6
+      },
+      "px": {
+        "x": 0,
+        "y": 369,
+        "w": 852,
+        "h": 1108
+      },
+      "aspect": 0.769,
+      "palette": [
+        {
+          "hex": "#f8f8f8",
+          "coverage": 0.9392
+        },
+        {
+          "hex": "#b770f8",
+          "coverage": 0.0233
+        },
+        {
+          "hex": "#4d4d4d",
+          "coverage": 0.0174
+        },
+        {
+          "hex": "#0f0b17",
+          "coverage": 0.0121
+        },
+        {
+          "hex": "#b9b9b9",
+          "coverage": 0.008
+        }
+      ],
+      "detail": {
+        "energy": 24.1127
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    },
+    {
+      "id": "first-title",
+      "kind": "text",
+      "note": "Title, label role; no literal demo records shipped",
+      "grid": "A3:G3",
+      "coverBox": {
+        "x": 0,
+        "y": 0.3,
+        "w": 0.7,
+        "h": 0.1
+      },
+      "box": {
+        "x": 0.0634,
+        "y": 0.3066,
+        "w": 0.5563,
+        "h": 0.0293
+      },
+      "px": {
+        "x": 54,
+        "y": 566,
+        "w": 474,
+        "h": 54
+      },
+      "aspect": 8.7778,
+      "palette": [
+        {
+          "hex": "#f7f7f7",
+          "coverage": 0.7807
+        },
+        {
+          "hex": "#0e0a15",
+          "coverage": 0.1383
+        },
+        {
+          "hex": "#180828",
+          "coverage": 0.0388
+        },
+        {
+          "hex": "#4c4653",
+          "coverage": 0.0218
+        },
+        {
+          "hex": "#c1c0c5",
+          "coverage": 0.0203
+        }
+      ],
+      "detail": {
+        "energy": 91.7594
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 1,
+          "glyphs": 23,
+          "capHeightPx": 31.6,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.6328,
+          "advTall": 0.443,
+          "advX": 0.6328,
+          "gap": 0.0949,
+          "xRatio": 0.7311,
+          "stemW": 0.1963,
+          "contrast": 1.1814,
+          "serif": 0.4797,
+          "densTall": 0.57,
+          "densX": 0.6142,
+          "weight": 0.57
+        },
+        "widthClass": "normal",
+        "weightClass": "bold"
+      }
+    },
+    {
+      "id": "first-preview",
+      "kind": "text",
+      "note": "Preview body role",
+      "grid": "A3:I4",
+      "coverBox": {
+        "x": 0,
+        "y": 0.3,
+        "w": 0.9,
+        "h": 0.2
+      },
+      "box": {
+        "x": 0.0563,
+        "y": 0.3066,
+        "w": 0.7324,
+        "h": 0.0845
+      },
+      "px": {
+        "x": 48,
+        "y": 566,
+        "w": 624,
+        "h": 156
+      },
+      "aspect": 4,
+      "palette": [
+        {
+          "hex": "#f7f7f7",
+          "coverage": 0.8628
+        },
+        {
+          "hex": "#444346",
+          "coverage": 0.0502
+        },
+        {
+          "hex": "#0e0a15",
+          "coverage": 0.0354
+        },
+        {
+          "hex": "#b1b1b2",
+          "coverage": 0.0332
+        },
+        {
+          "hex": "#7a797b",
+          "coverage": 0.0184
+        }
+      ],
+      "detail": {
+        "energy": 63.1089
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null,
+      "type": {
+        "comp": {
+          "lines": 2,
+          "glyphs": 66,
+          "capHeightPx": 22,
+          "inkIsDark": true,
+          "allCaps": false,
+          "advance": 0.5841,
+          "advTall": 0.4133,
+          "advX": 0.5969,
+          "gap": 0.1837,
+          "xRatio": 0.7283,
+          "stemW": 0.1189,
+          "contrast": 1.1127,
+          "serif": 1.0192,
+          "densTall": 0.4042,
+          "densX": 0.4607,
+          "weight": 0.4042
+        },
+        "widthClass": "normal",
+        "weightClass": "regular"
+      }
+    },
+    {
+      "id": "gesture-inset",
+      "kind": "chrome",
+      "note": "Native system navigation inset",
+      "grid": "A9:J9",
+      "box": {
+        "x": 0,
+        "y": 0.9,
+        "w": 1,
+        "h": 0.1
+      },
+      "px": {
+        "x": 0,
+        "y": 1661,
+        "w": 852,
+        "h": 185
+      },
+      "aspect": 4.6054,
+      "palette": [
+        {
+          "hex": "#f8f8f8",
+          "coverage": 0.9874
+        },
+        {
+          "hex": "#585558",
+          "coverage": 0.0126
+        }
+      ],
+      "detail": {
+        "energy": 4.1442
+      },
+      "medium": "semantic",
+      "plate": null,
+      "text": null
+    }
+  ]
+}

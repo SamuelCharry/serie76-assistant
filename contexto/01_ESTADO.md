@@ -1,3 +1,9 @@
+# Estado actual verificado
+
+OCR, PostgreSQL y consultas técnicas están implementados y verificados. PostgreSQL 17.11 y backend corren en Docker. La reconstrucción SQL coincide en 68 referencias, 869 cifras, cuatro N/A, cinco marcas y 272 atributos de contexto (941/941 comprobaciones primarias). Las 62 pruebas actuales pasan con SERIES76_TEST_DB=1. El reinicio de DB/backend conserva catálogo y hash. Ver docs/POSTGRES.md y reports/postgres/summary.json. Agente, LangChain, historial, selección del LLM y Android siguen pendientes.
+
+Los apartados siguientes conservan historia anterior. Sus pendientes de PostgreSQL/Docker ya fueron resueltos. No se modificaron issues remotos; el grupo de datos sigue abierto porque falta integración/modelos.
+
 # Estado verificado y límites
 
 ## Estado actual del pipeline
