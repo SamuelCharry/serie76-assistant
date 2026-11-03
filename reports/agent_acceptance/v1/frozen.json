@@ -1,0 +1,19 @@
+{
+  "files": {
+    "config/agent_acceptance.json": "4fa4847d39d360486c2bc4b5186972a7e8d025dfa75796a00dd35751cb57059e",
+    "config/agent_acceptance_cases.json": "3d6f585e64ccea2e67d79bb414f0b9a274ce01c677d47000f8af6c0aa0d411e9",
+    "scripts/agent_acceptance.py": "af93b22603b507efbc81a8b30e38e64eea7de36e6c0284ff6205a333d9e02040",
+    "backend/conversation/agent.py": "038d44cb23b5cba24e80390725d4a11a1428c8f1491fb8fa27d62c8384bc3ee6",
+    "backend/conversation/policy.py": "678139f7b433150614b4ffd87ac0e9fd4ce82638fffd639272c27422e63a8423",
+    "backend/conversation/rendering.py": "4fe6078e00f5a400f481e7ff8f7d980598f51de9be41485c9ee9b65fe7b0ef38",
+    "backend/conversation/api.py": "f39781bbcd9373a33dfbd076f6b806532dfb811dd59eef502e4cd4be503f136c",
+    "backend/app/contracts.py": "96ececda709db4aa3f6cce6c9d299f3685251ee0ff8ea62e5821fbbb6e2ae506",
+    "backend/catalog/models.py": "87fc1035043d4a876d3ec68faf0cc1cb0bad7ac5de90776ed438f6536a2cb31f",
+    "backend/catalog/repository.py": "64c08ca21630124c914dafe3381e08b82a5bc515d73c5077fa3fff506ab3150a",
+    "backend/catalog/context.py": "2ec4c70a554500dbfd82769a68612b6e71f8e30e2ddaa46b43b5b5b7a15601f2",
+    "data/extracted/series76_summary/terms.json": "5f42c40c386d9b648f1634a31a6dc6f53e7519ee2e592150cd68d992b710732b",
+    "data/extracted/series76/catalog.csv": "7fc3f2086668fe7fcab62f4b2d7e0d1d2a31e7737a316ddf51d441ce2ee38d83"
+  },
+  "cases_version": "acceptance-v1",
+  "frozen_at": 1793729439.5860846
+}

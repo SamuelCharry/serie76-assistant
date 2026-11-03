@@ -1,0 +1,504 @@
+"""Real-LLM acceptance of the A+ agent (experimental Google endpoint, production client).
+
+The production code path is used unchanged: FastAPI /api/conversation -> run_agent ->
+LangChain ChatOpenAI -> tool decision -> code validation -> SQL -> rendered answer.
+Only the OpenAI-compatible base URL/model differ from OpenRouter. Each scenario runs in a
+rollback-only transaction, so the operational database keeps no acceptance data.
+
+Commands:
+  selfcheck  scripted ideal decisions: proves expectations are reachable (no network)
+  probe      one paid call: does the endpoint accept tool_choice=required?
+  run        paid cohort; resumable, append-only results and ledger, frozen inputs
+  report     offline summary from results.jsonl and ledger.jsonl
+
+The key is read from GOOGLE_API_KEY (process env or ignored .env); it is never printed.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import sys
+import time
+from contextlib import contextmanager
+from decimal import Decimal
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
+from uuid import uuid4
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+OUT = ROOT / "reports/agent_acceptance/v2"  # overridden by --cohort
+CONFIG = ROOT / "config/agent_acceptance.json"
+CASES = ROOT / "config/agent_acceptance_cases.json"
+FROZEN_FILES = ["config/agent_acceptance.json", "config/agent_acceptance_cases.json", "scripts/agent_acceptance.py",
+                "backend/conversation/agent.py", "backend/conversation/policy.py", "backend/conversation/rendering.py",
+                "backend/conversation/api.py", "backend/app/contracts.py", "backend/catalog/models.py",
+                "backend/catalog/repository.py", "backend/catalog/context.py", "data/extracted/series76_summary/terms.json",
+                "data/extracted/series76/catalog.csv"]
+
+
+def canonical(value):
+    return json.dumps(value, sort_keys=True, ensure_ascii=False, default=str)
+
+
+def sha(path):
+    return hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
+
+
+def append(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as stream:
+        stream.write(canonical(value) + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def read_jsonl(path):
+    return [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines()] if path.exists() else []
+
+
+def google_key():
+    key = os.environ.get("GOOGLE_API_KEY", "").strip()
+    env = ROOT / ".env"
+    if not key and env.is_file():
+        for line in env.read_text(encoding="utf-8-sig").splitlines():
+            if line.startswith("GOOGLE_API_KEY="):
+                key = line.split("=", 1)[1].strip().strip("\"'")
+    if not key:
+        raise SystemExit("GOOGLE_API_KEY not configured")
+    return key
+
+
+# --- budget -------------------------------------------------------------------------------
+class BudgetStop(Exception):
+    pass
+
+
+class Ledger:
+    def __init__(self, config):
+        self.path, self.config, self.last = OUT / "ledger.jsonl", config, 0.0
+
+    def spent(self):
+        charges = {}
+        for event in read_jsonl(self.path):
+            charges[event["id"]] = event["charged_usd"]
+        return sum(charges.values())
+
+    def reserve(self, payload_bytes, label):
+        c = self.config
+        amount = ((payload_bytes + 4096) * c["input_usd_per_million"] + c["max_tokens"] * c["output_usd_per_million"]) / 1e6
+        if self.spent() + amount > c["safety_cap_usd"]:
+            raise BudgetStop("Safety cap reached")
+        event = dict(id=len({e["id"] for e in read_jsonl(self.path)}) + 1, state="reserved", charged_usd=amount,
+                     reserved_usd=amount, label=label, time=time.time())
+        append(self.path, event)
+        return event
+
+    def settle(self, event, usage, latency):
+        c = self.config
+        prompt = usage.get("prompt_tokens") or 0
+        completion = usage.get("completion_tokens") or 0
+        reasoning = (usage.get("completion_tokens_details") or {}).get("reasoning_tokens") or 0
+        # Conservative: reasoning is added even if the provider already counted it in completion.
+        charged = (prompt * c["input_usd_per_million"] + (completion + reasoning) * c["output_usd_per_million"]) / 1e6
+        append(self.path, dict(event, state="settled", charged_usd=charged, usage=usage, latency_s=latency))
+
+    def fail(self, event, error, status, latency):
+        append(self.path, dict(event, state="failed", error=error, status=status, latency_s=latency))
+
+
+class Budgeted:
+    """Wraps the production ChatOpenAI: reserve before the network, settle after."""
+
+    def __init__(self, client, ledger, label):
+        self.client, self.ledger, self.label, self.bound = client, ledger, label, None
+
+    def bind_tools(self, tools, **kwargs):
+        self.tools = tools
+        self.bound = self.client.bind_tools(tools, **kwargs)
+        return self
+
+    def invoke(self, messages, **kwargs):
+        from langchain_core.utils.function_calling import convert_to_openai_tool
+        payload = canonical([[getattr(m, "content", m) for m in messages], [convert_to_openai_tool(t) for t in self.tools]])
+        event = self.ledger.reserve(len(payload.encode("utf-8")), self.label)
+        wait = self.ledger.config["min_interval_seconds"] - (time.monotonic() - self.ledger.last)
+        if wait > 0:
+            time.sleep(wait)
+        start = time.perf_counter()
+        try:
+            response = self.bound.invoke(messages, **kwargs)
+        except Exception as exc:
+            self.ledger.last = time.monotonic()
+            self.ledger.fail(event, type(exc).__name__, getattr(exc, "status_code", None), time.perf_counter() - start)
+            raise
+        self.ledger.last = time.monotonic()
+        usage = (getattr(response, "response_metadata", {}) or {}).get("token_usage") or {}
+        self.ledger.settle(event, usage, time.perf_counter() - start)
+        return response
+
+
+def configure_env(config, key):
+    os.environ.update(OPENROUTER_API_KEY=key, OPENROUTER_BASE_URL=config["base_url"], OPENROUTER_CHAT_MODEL=config["model"],
+                      AGENT_MAX_TOKENS=str(config["max_tokens"]), AGENT_REASONING_EFFORT=config["reasoning_effort"],
+                      AGENT_TOOL_CHOICE=config["tool_choice"])
+
+
+# --- scoring ------------------------------------------------------------------------------
+def same(a, b):
+    try:
+        return Decimal(str(a)) == Decimal(str(b))
+    except Exception:
+        return a == b
+
+
+def check(expect, observed):
+    failures = []
+    trace = observed["trace"]
+    params = trace.get("parameters") or {}
+    if "tool" in expect and trace.get("name") != expect["tool"]:
+        failures.append(f"tool {trace.get('name')} != {expect['tool']}")
+    for field, value in (expect.get("args") or {}).items():
+        got = params.get(field)
+        if isinstance(value, list):
+            if sorted(got or []) != sorted(value):
+                failures.append(f"{field} {got} != {value}")
+        elif not same(got, value):
+            failures.append(f"{field} {got} != {value}")
+    if expect.get("only_filters"):
+        from backend.conversation.policy import FILTER_FIELDS
+        present = {k for k in FILTER_FIELDS if params.get(k) not in (None, False)}
+        extra = present - set(expect.get("args", {})) - set(expect.get("allow_extra", []))
+        if extra:
+            failures.append(f"added filters {sorted(extra)}")
+    clarification = observed["clarification"]
+    if "clarification" in expect and (not clarification or clarification.get("field") not in expect["clarification"]):
+        failures.append(f"clarification {clarification and clarification.get('field')} not in {expect['clarification']}")
+    if "conflict" in expect and ((clarification or {}).get("conflict") or {}).get("kind") != expect["conflict"]:
+        failures.append(f"conflict {(clarification or {}).get('conflict')} != {expect['conflict']}")
+    for text in expect.get("contains", []):
+        if text not in observed["answer"]:
+            failures.append(f"missing text: {text}")
+    for text in expect.get("not_contains", []):
+        if text in observed["answer"]:
+            failures.append(f"forbidden text: {text}")
+    codes = [p["base_part_number"] for p in observed["products"]]
+    for code in expect.get("products_include", []):
+        if code not in codes:
+            failures.append(f"product {code} missing")
+    if expect.get("no_products") and codes:
+        failures.append(f"unexpected products {codes[:3]}")
+    terms = [t["term_key"] for t in observed["terms"]]
+    for term in expect.get("terms", []):
+        if term not in terms:
+            failures.append(f"term {term} missing")
+    return failures
+
+
+def score(turn, observed):
+    options = turn.get("expect_any") or [turn["expect"]]
+    results = [check(o, observed) for o in options]
+    best = min(results, key=len)
+    return not best, best
+
+
+# --- execution ----------------------------------------------------------------------------
+@contextmanager
+def scenario_environment():
+    from backend.auth.api import require_user
+    from backend.app.main import app
+    from backend.catalog.cli import local_environment
+    from backend.catalog.db import connect
+    local_environment()
+    connection = connect()
+    transaction = connection.transaction(force_rollback=True)
+    transaction.__enter__()
+    user = uuid4()
+    connection.execute("INSERT INTO series76.users(id,email,name,password_hash) VALUES (%s,%s,'Acceptance','unused')",
+                       (user, f"acceptance-{user}@example.test"))
+    previous = app.dependency_overrides.copy()
+    app.dependency_overrides[require_user] = lambda: {"id": user}
+
+    @contextmanager
+    def same_connection():
+        yield connection
+
+    try:
+        with patch("backend.conversation.api.connect", same_connection):
+            yield app, connection, user
+    finally:
+        app.dependency_overrides.clear()
+        app.dependency_overrides.update(previous)
+        transaction.__exit__(None, None, None)
+        connection.close()
+
+
+def run_scenario(scenario, model_factory):
+    from fastapi.testclient import TestClient
+    from backend.conversation import store
+    turns, session = [], None
+    with scenario_environment() as (app, connection, user):
+        client = TestClient(app)
+        for index, turn in enumerate(scenario["turns"]):
+            with patch("backend.conversation.agent.create_model_client", lambda: model_factory(scenario, index)):
+                started = time.perf_counter()
+                body = {"query": turn["query"]} | ({"session_id": session} if session else {})
+                response = client.post("/api/conversation", json=body)
+            elapsed = time.perf_counter() - started
+            if response.status_code == 503:
+                return dict(status="provider_failure", error_code=response.json().get("error_code"), turns=turns)
+            if response.status_code != 200:
+                return dict(status="http_error", http_status=response.status_code, turns=turns)
+            payload = response.json()
+            session = payload["session_id"]
+            debug = store.debug_for_message(connection, payload["message_id"], user)["tool_calls"][0]
+            trace = {k: debug.get(k) for k in ("name", "parameters", "raw_parameters", "validation", "renderer",
+                                                 "overrides", "context_before", "context_after", "model")}
+            observed = dict(answer=payload["answer"], products=payload["products"], terms=payload["terms"],
+                            clarification=payload["clarification"], assumptions=payload["assumptions"], trace=trace)
+            passed, failures = score(turn, observed)
+            turns.append(dict(query=turn["query"], passed=passed, failures=failures, elapsed_s=round(elapsed, 3),
+                              answer=payload["answer"], clarification=payload["clarification"],
+                              products=[p["base_part_number"] for p in payload["products"]],
+                              terms=[t["term_key"] for t in payload["terms"]], assumptions=payload["assumptions"], trace=trace))
+    return dict(status="passed" if all(t["passed"] for t in turns) else "failed", turns=turns)
+
+
+class IdealModel:
+    """Scripted 'perfect interpreter' used only by selfcheck."""
+
+    def __init__(self, call):
+        self.call = call
+
+    def bind_tools(self, tools, **kwargs):
+        return self
+
+    def invoke(self, messages, **kwargs):
+        return SimpleNamespace(tool_calls=[dict(name=self.call[0], args=self.call[1], id="ideal")],
+                               usage_metadata={}, response_metadata={"model_name": "ideal"})
+
+
+IDEAL = {
+    "exact_operating_time": [("get_actuator", {"part_numbers": ["761A00-11300000/A"], "focus": "operating_time"})],
+    "exact_noncanonical": [("get_actuator", {"part_numbers": ["761a0011300000/a"]})],
+    "exact_unknown": [("get_actuator", {"part_numbers": ["769Z99-11300000/A"]})],
+    "exact_partial": [("get_actuator", {"part_numbers": ["761A00-113"], "focus": "torque"})],
+    "missing_data_na": [("get_actuator", {"part_numbers": ["761A00-11330C00/A"], "focus": "motor_power"})],
+    "dc_no_frequency": [("get_actuator", {"part_numbers": ["761X30-11370000/A"], "focus": "fla"})],
+    "followup_power": [("get_actuator", {"part_numbers": ["761A00-11300000/A"]}),
+                       ("get_actuator", {"part_numbers": ["761A00-11300000/A"], "focus": "motor_power"})],
+    "followup_ambiguous_it": [("get_actuator", {"part_numbers": ["761A00-11300000/A", "761B00-11300000/A"]}),
+                              ("ask_clarification", {"field": "which_product"})],
+    "search_basic": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "min_torque_nm": 70})],
+    "search_inlb": [("search_actuators", {"service": "on_off", "supply_voltage_v": 220, "phase_count": 1, "min_torque_in_lb": 2000})],
+    "search_no_match": [("search_actuators", {"service": "modulating", "supply_voltage_v": 24, "supply_current": "DC", "min_torque_nm": 500})],
+    "missing_service_then_answer": [("search_actuators", {"supply_voltage_v": 110, "min_torque_nm": 100}),
+                                    ("search_actuators", {"refine": True, "service": "on_off"})],
+    "conflict_dc_60hz": [("search_actuators", {"supply_voltage_v": 24, "supply_current": "DC", "frequency_hz": 60}),
+                         ("search_actuators", {"refine": True, "supply_current": "DC", "service": "modulating"})],
+    "conflict_rate_service": [("search_actuators", {"service": "modulating", "min_cycles_per_hour": 40})],
+    "informal_modulating": [("search_actuators", {"service": "modulating", "supply_voltage_v": 220, "phase_count": 1})],
+    "vague_application": [("ask_clarification", {"field": "requirements"})],
+    "definition_s4": [("explain_terms", {"term_keys": ["duty_cycle"]})],
+    "definition_fla_lra": [("explain_terms", {"term_keys": ["fla", "lra"]})],
+    "definition_absent": [("ask_clarification", {"field": "term_not_in_summary"})],
+    "combined_definition_lookup": [("get_actuator", {"part_numbers": ["761B00-11300000/A"], "focus": "duty", "explain_terms": ["duty_cycle"]})],
+    "frequency_needed": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "max_fla_a": 1.5})],
+    "unrelated": [("ask_clarification", {"field": "unsupported"})],
+    "injection_number": [("get_actuator", {"part_numbers": ["761A00-11300000/A"], "focus": "torque"})],
+    "no_added_filters": [("search_actuators", {"enclosure": "explosionproof"})],
+    "more_results": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110}), ("search_actuators", {"more": True})],
+    "changed_requirement": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "min_torque_nm": 70}),
+                            ("search_actuators", {"refine": True, "supply_voltage_v": 220})],
+    "csa_header": [("search_actuators", {"enclosure": "weatherproof", "supply_voltage_v": 110, "csa_required": True})],
+    "h_compare_three": [("get_actuator", {"part_numbers": ["761A00-11300000/A", "761B00-11300000/A", "762A00-11300000/A"], "focus": "torque"})],
+    "h_lra_50": [("get_actuator", {"part_numbers": ["763A00-11330C00/A"], "focus": "lra"})],
+    "h_wrong_suffix": [("get_actuator", {"part_numbers": ["761A00-11300000/B"]})],
+    "h_explosion_24v": [("search_actuators", {"enclosure": "explosionproof", "supply_voltage_v": 24, "service": "modulating"})],
+    "h_informal_onoff": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "min_torque_nm": 50})],
+    "h_three_phase": [("search_actuators", {"supply_voltage_v": 220, "phase_count": 3, "service": "on_off", "min_torque_nm": 250})],
+    "h_no_match_power": [("search_actuators", {"service": "on_off", "max_motor_power_w": 5})],
+    "h_duty_threshold": [("search_actuators", {"service": "modulating", "min_duty_s4_percent": 50})],
+    "h_definition_speed": [("explain_terms", {"term_keys": ["operating_speed"]})],
+    "h_definition_nema": [("ask_clarification", {"field": "term_not_in_summary"})],
+    "h_followup_frequency": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "max_fla_a": 1.5}),
+                             ("search_actuators", {"refine": True, "frequency_hz": 60})],
+    "h_followup_second": [("get_actuator", {"part_numbers": ["761A00-11300000/A", "761B00-11300000/A"]}),
+                          ("get_actuator", {"part_numbers": ["761B00-11300000/A"], "focus": "motor_power"})],
+    "h_remove_constraint": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "min_torque_nm": 70}),
+                            ("search_actuators", {"refine": True, "remove": ["min_torque_nm"]})],
+    "h_spanish_lookup": [("get_actuator", {"part_numbers": ["761A00-11300000/A"], "focus": "torque"})],
+    "h_prompt_leak": [("ask_clarification", {"field": "unsupported"})],
+    "h_24v_ac": [("search_actuators", {"supply_voltage_v": 24, "supply_current": "AC", "service": "on_off"})],
+    "hd_locked_rotor": [("explain_terms", {"term_keys": ["lra"]})],
+    "hd_onoff_vs_mod": [("explain_terms", {"term_keys": ["on_off", "modulating"]})],
+    "hd_weatherproof": [("explain_terms", {"term_keys": ["weatherproof"]})],
+    "hd_24v_acdc": [("explain_terms", {"term_keys": ["supply_24v_ac_dc"]})],
+    "hd_base_part": [("explain_terms", {"term_keys": ["base_part_number"]})],
+    "hd_inrush": [("explain_terms", {"term_keys": ["lra"]})],
+    "hd_joke": [("ask_clarification", {"field": "unsupported"})],
+    "hd_ip65": [("explain_terms", {"term_keys": ["weatherproof"]})],
+    "h4_forget_voltage": [("search_actuators", {"service": "modulating", "supply_voltage_v": 220, "min_torque_nm": 100}),
+                          ("search_actuators", {"remove": ["supply_voltage_v"]})],
+    "h4_remove_service": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110}),
+                          ("search_actuators", {"remove": ["service"]})],
+    "h4_hello": [("ask_clarification", {"field": "unsupported"})],
+    "h4_any_recommendation": [("ask_clarification", {"field": "requirements"})],
+}
+
+
+def manifest(cases_path=CASES):
+    files = {path: sha(path) for path in FROZEN_FILES}
+    rel = str(Path(cases_path).resolve().relative_to(ROOT)).replace("\\", "/")
+    files[rel] = sha(rel)
+    return files
+
+
+def command_selfcheck(cases):
+    bad = []
+    for scenario in cases["scenarios"]:
+        result = run_scenario(scenario, lambda s, i: IdealModel(IDEAL[s["id"]][i]))
+        print(scenario["id"], result["status"], *[t["failures"] for t in result["turns"] if t["failures"]])
+        if result["status"] != "passed":
+            bad.append(scenario["id"])
+    print(json.dumps(dict(selfcheck="ok" if not bad else "failed", failing=bad)))
+    return 1 if bad else 0
+
+
+def command_probe(config):
+    configure_env(config, google_key())
+    from backend.conversation.agent import create_model_client
+    ledger = Ledger(config)
+    from langchain.tools import tool
+
+    @tool
+    def ping(value: str) -> str:
+        """Echo a value."""
+        return value
+
+    model = Budgeted(create_model_client(), ledger, dict(stage="probe_tool_choice_required"))
+    model.bind_tools([ping], tool_choice="required")
+    try:
+        response = model.invoke([("human", "Call the ping tool with value 'ok'.")])
+        result = dict(status="ok", tool_calls=[c["name"] for c in response.tool_calls],
+                      usage=response.response_metadata.get("token_usage"), model=response.response_metadata.get("model_name"))
+    except Exception as exc:
+        result = dict(status="error", error=type(exc).__name__, http_status=getattr(exc, "status_code", None))
+    append(OUT / "probe.jsonl", dict(result, time=time.time()))
+    print(json.dumps(result, default=str))
+
+
+def command_run(config, cases, only, cases_path=CASES):
+    OUT.mkdir(parents=True, exist_ok=True)
+    frozen_path = OUT / "frozen.json"
+    current = manifest(cases_path)
+    if frozen_path.exists():
+        frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
+        drift = sorted(k for k in current if frozen["files"].get(k) != current[k])
+        if drift:
+            raise SystemExit(f"Frozen inputs changed: {drift}. Start a new cohort instead of mixing results.")
+    else:
+        frozen_path.write_text(json.dumps(dict(files=current, cases_version=cases["version"], frozen_at=time.time()), indent=2), encoding="utf-8")
+    configure_env(config, google_key())
+    from backend.conversation.agent import create_model_client
+    ledger = Ledger(config)
+    results = read_jsonl(OUT / "results.jsonl")
+    attempts = {}
+    for r in results:
+        attempts.setdefault(r["scenario"], []).append(r["status"])
+    consecutive = 0
+    for scenario in cases["scenarios"]:
+        sid = scenario["id"]
+        if only and sid not in only:
+            continue
+        history = attempts.get(sid, [])
+        if any(s != "provider_failure" for s in history):
+            continue  # Quality result already recorded: never re-run to improve a score.
+        if len(history) > config["provider_failure_retries_per_scenario"]:
+            continue
+        try:
+            result = run_scenario(scenario, lambda s, i: Budgeted(create_model_client(), ledger, dict(scenario=s["id"], turn=i)))
+        except BudgetStop:
+            print(json.dumps(dict(stopped="safety_cap", spent=ledger.spent())))
+            break
+        record = dict(scenario=sid, category=scenario["category"], attempt=len(history) + 1, **result, time=time.time())
+        append(OUT / "results.jsonl", record)
+        print(sid, result["status"], *[t["failures"] for t in result["turns"] if t["failures"]], flush=True)
+        if result["status"] == "provider_failure":
+            consecutive += 1
+            if result.get("error_code") == "budget_exhausted" or consecutive >= config["consecutive_provider_failures_stop"]:
+                print(json.dumps(dict(stopped=result.get("error_code") or "provider_failures")))
+                break
+        else:
+            consecutive = 0
+    print(json.dumps(dict(spent_conservative_usd=round(ledger.spent(), 6))))
+
+
+def command_report(config, cases):
+    results = read_jsonl(OUT / "results.jsonl")
+    ledger = read_jsonl(OUT / "ledger.jsonl")
+    final = {}
+    for r in results:
+        if r["status"] != "provider_failure" or r["scenario"] not in final:
+            final[r["scenario"]] = r
+    categories = {}
+    for s in cases["scenarios"]:
+        r = final.get(s["id"])
+        status = r["status"] if r else "not_run"
+        categories.setdefault(s["category"], []).append(status)
+    charges, states = {}, {}
+    for e in ledger:
+        charges[e["id"]] = e["charged_usd"]
+        states[e["id"]] = e["state"]
+    turns = [t for r in final.values() for t in r.get("turns", [])]
+    tokens = [e.get("usage", {}) for e in ledger if e["state"] == "settled"]
+    latencies = sorted(e["latency_s"] for e in ledger if e["state"] == "settled")
+    summary = dict(
+        cohort=cases["version"], model=config["model"], provider=config["provider"],
+        scenarios=len(cases["scenarios"]), passed=sum(r["status"] == "passed" for r in final.values()),
+        failed=sum(r["status"] == "failed" for r in final.values()),
+        provider_failure_only=sum(r["status"] == "provider_failure" for r in final.values()),
+        not_run=len(cases["scenarios"]) - len(final),
+        turns=len(turns), turns_passed=sum(t["passed"] for t in turns),
+        by_category={k: dict(total=len(v), passed=v.count("passed")) for k, v in categories.items()},
+        failing=[dict(scenario=r["scenario"], failures=[t["failures"] for t in r["turns"] if t["failures"]])
+                 for r in final.values() if r["status"] == "failed"],
+        calls=len(charges), failed_calls=sum(s == "failed" for s in states.values()),
+        unsettled_reservations=sum(s == "reserved" for s in states.values()),
+        conservative_charge_usd=round(sum(charges.values()), 8),
+        usage_based_charge_usd=round(sum(e["charged_usd"] for e in ledger if e["state"] == "settled"), 8),
+        mean_prompt_tokens=round(sum(t.get("prompt_tokens", 0) for t in tokens) / len(tokens)) if tokens else None,
+        mean_completion_tokens=round(sum(t.get("completion_tokens", 0) for t in tokens) / len(tokens)) if tokens else None,
+        latency_p50_s=latencies[len(latencies) // 2] if latencies else None,
+        latency_p95_s=latencies[int(len(latencies) * 0.95) - 1] if len(latencies) >= 20 else None,
+        safety_cap_usd=config["safety_cap_usd"], openrouter_calls=0)
+    (OUT / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(json.dumps(summary, indent=2, ensure_ascii=False))
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("command", choices=["selfcheck", "probe", "run", "report"])
+    parser.add_argument("--only", nargs="*", default=None)
+    parser.add_argument("--cohort", default="v2", help="reports/agent_acceptance/<cohort>; v1 is archived")
+    parser.add_argument("--cases", default=str(CASES))
+    args = parser.parse_args()
+    global OUT
+    OUT = ROOT / "reports/agent_acceptance" / args.cohort
+    config = json.loads(CONFIG.read_text(encoding="utf-8"))
+    cases = json.loads(Path(args.cases).read_text(encoding="utf-8"))
+    if args.command == "selfcheck":
+        return command_selfcheck(cases)
+    if args.command == "probe":
+        return command_probe(config)
+    if args.command == "run":
+        return command_run(config, cases, set(args.only or []), args.cases)
+    return command_report(config, cases)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

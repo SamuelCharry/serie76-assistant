@@ -1,0 +1,19 @@
+{
+  "purpose": "Real-LLM acceptance of the A+ agent before OpenRouter. Experimental provider; not the final OpenRouter acceptance.",
+  "provider": "google-openai-compatible",
+  "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+  "model": "gemini-3.6-flash",
+  "reasoning_effort": "low",
+  "max_tokens": 2048,
+  "tool_choice": "required",
+  "input_usd_per_million": 0.75,
+  "output_usd_per_million": 3.75,
+  "price_checked": "2026-11-03",
+  "price_source": "https://aistudio.google.com/docs/pricing (same figures as config/architecture_eval.json)",
+  "safety_cap_usd": 3.50,
+  "safety_cap_basis": "User authorised the Google credit balance of COP 19,258 for architecture definition. Exchange-rate sources disagreed (about 3,046-4,850 COP/USD, none dated 2026-11-03); USD 3.50 is below that balance even at 5,500 COP/USD. Any HTTP 402 also stops the run.",
+  "reservation": "utf8_bytes_of_messages_and_tools + 4096 input tokens, plus max_tokens output, reserved before every call; replaced by reported usage (completion + reasoning tokens) when known",
+  "min_interval_seconds": 2,
+  "provider_failure_retries_per_scenario": 2,
+  "consecutive_provider_failures_stop": 4
+}
