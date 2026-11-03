@@ -2,11 +2,11 @@
   "source_sha256": "4c28023929183df8e2a763e759cc84572b44604b30837a21e22c1166f88267e0",
   "method": "Each correction visually re-read in the corresponding rendered PDF table; no global punctuation replacement or unit conversion.",
   "corrections": [
-    {"table": "p1_t2", "row": 1, "field": "on_off_torque_nm", "ocr_text": "8:0", "source_text": "80", "evidence": "reports/manual_review/p1_t2.png"},
-    {"table": "p1_t2", "row": 8, "field": "starts_per_hour", "ocr_text": "8:40", "source_text": "840", "evidence": "reports/manual_review/p1_t2.png"},
-    {"table": "p1_t2", "row": 9, "field": "starts_per_hour", "ocr_text": "8:40", "source_text": "840", "evidence": "reports/manual_review/p1_t2.png"},
-    {"table": "p1_t2", "row": 11, "field": "starts_per_hour", "ocr_text": "8:40", "source_text": "840", "evidence": "reports/manual_review/p1_t2.png"},
-    {"table": "p2_t1", "row": 7, "field": "cycles_per_hour", "ocr_text": "3:2", "source_text": "32", "evidence": "reports/manual_review/p2_t1.png"},
-    {"table": "p2_t1", "row": 7, "field": "operating_time_60hz_s", "ocr_text": "3.2", "source_text": "32", "evidence": "reports/manual_review/p2_t1.png"}
+    {"table": "p1_t2", "row": 1, "field": "on_off_torque_nm", "ocr_text": "8:0", "source_text": "80", "evidence": "https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/manual_review/p1_t2.png"},
+    {"table": "p1_t2", "row": 8, "field": "starts_per_hour", "ocr_text": "8:40", "source_text": "840", "evidence": "https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/manual_review/p1_t2.png"},
+    {"table": "p1_t2", "row": 9, "field": "starts_per_hour", "ocr_text": "8:40", "source_text": "840", "evidence": "https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/manual_review/p1_t2.png"},
+    {"table": "p1_t2", "row": 11, "field": "starts_per_hour", "ocr_text": "8:40", "source_text": "840", "evidence": "https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/manual_review/p1_t2.png"},
+    {"table": "p2_t1", "row": 7, "field": "cycles_per_hour", "ocr_text": "3:2", "source_text": "32", "evidence": "https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/manual_review/p2_t1.png"},
+    {"table": "p2_t1", "row": 7, "field": "operating_time_60hz_s", "ocr_text": "3.2", "source_text": "32", "evidence": "https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/manual_review/p2_t1.png"}
   ]
 }

@@ -1,44 +1,44 @@
 # Lista completa de condiciones del assessment
 
-Fuente: docs/assessment-en.pdf, seis páginas. Las casillas representan capacidades verificadas, no la mera existencia de archivos. Agente A+ verificado con un LLM real (Google, mismo cliente) en 4 cohortes y de extremo a extremo con reinicio del contenedor. La validación con OpenRouter y el recorrido Android→LLM→Android siguen pendientes. Ver reports/agent_acceptance, docs/ANDROID.md y reports/mobile.
+Fuente: docs/assessment-en.pdf, seis páginas. Las casillas representan capacidades verificadas, no la mera existencia de archivos. Agente A+ verificado con un LLM real (Google, mismo cliente) en 4 cohortes y de extremo a extremo con reinicio del contenedor. La validación con OpenRouter y el recorrido Android→LLM→Android siguen pendientes. Ver https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance, docs/ANDROID.md y https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/mobile.
 
 ## Entorno y entrega
 
 - [ ] E01. Un único repositorio GitHub con todo el backend y la app (p. 2, 5-6). Repositorio inicial publicado y clonado; código completo pendiente.
 - [x] E02. Entorno local Python aislado creado y dependencias instaladas; pip check correcto (p. 2).
-- [x] E03. Docker local para construir y ejecutar el backend contenerizado (p. 2). Construcción y ejecución DB/backend verificadas; reports/postgres/summary.json.
+- [x] E03. Docker local para construir y ejecutar el backend contenerizado (p. 2). Construcción y ejecución DB/backend verificadas; https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/postgres/summary.json.
 - [x] E04. Android Studio o Xcode, según la plataforma (p. 2). Android SDK/JDK y Gradle verificados; app Kotlin/Compose compilada en debug/release.
 - [ ] E05. Entregar respondiendo al correo con el enlace GitHub dentro de una semana desde la recepción (p. 6). Verificar fecha real de recepción; no inferirla de la fecha de creación del repo.
 - [ ] E06. Entender la arquitectura y defender las decisiones/trade-offs en la entrevista posterior (p. 1).
 
 ## Datos y modelos
 
-- [x] D01. Usar series_76_electric_data.pdf como única fuente de cifras del agente (p. 2, 4). Las cifras salen solo de SQL; el resumen no aporta magnitudes (ADR 0001).
-- [x] D02. Usar series_76_summary.pdf como contexto de negocio, sin reemplazar las tablas eléctricas (p. 2). Glosario literal en series76.context_terms (16 términos con página); sin FK a productos.
+- [x] D01. Usar data/raw/series_76_electric_data.pdf como única fuente de cifras del agente (p. 2, 4). Las cifras salen solo de SQL; el resumen no aporta magnitudes (ADR 0001).
+- [x] D02. Usar data/raw/series_76_summary.pdf como contexto de negocio, sin reemplazar las tablas eléctricas (p. 2). Glosario literal en series76.context_terms (16 términos con página); sin FK a productos.
 - [x] D03. Script/pipeline que procese el PDF crudo y lo transforme al formato consultado por la herramienta (p. 3, 6). PDF → OCR → PostgreSQL y funciones de consulta verificados. Wrapper LangChain pendiente en B03. Ver docs/POSTGRES.md.
-- [x] D04. Datos procesados incluidos o instrucciones claras para generarlos (p. 6). Salida real OCR en data/extracted/series76 e instrucciones reproducibles en docs/INGESTION.md; evaluación completa en reports/pipeline/verified.
+- [x] D04. Datos procesados incluidos o instrucciones claras para generarlos (p. 6). Salida real OCR en data/extracted/series76 e instrucciones reproducibles en docs/INGESTION.md; evaluación completa en https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/pipeline/verified.
 - [x] D05. PostgreSQL ejecutándose localmente (p. 4). PostgreSQL 17.11 y persistencia tras reiniciar verificados.
 - [x] D06. Si se implementa búsqueda semántica/vectorial, usar pgvector (condicional, p. 4). No aplica a producción: sin búsqueda vectorial (ADR 0001). El experimento archivado usó pgvector.
 - [ ] D07. Utilizar modelos del API OpenRouter proporcionado para el LLM y embeddings, si se usan (p. 2-3).
 - [x] D08. Modelos configurables por variables de entorno (p. 2). OPENROUTER_CHAT_MODEL y AGENT_* en Compose y .env.example.
 - [x] D09. Explicar elección de modelos en README (p. 2). Comparación Google y candidato3.6 Flash justificados con resultados y costo; despliegue OpenRouter todavía pendiente.
 - [ ] D10. Respetar presupuesto total de USD 10; no habrá recarga (p. 2-3).
-- [x] D11. Las cifras mostradas deben coincidir con las tablas; el LLM no debe inventarlas ni responderlas de memoria (p. 4). Las respuestas se renderizan desde SQL; las cifras que el modelo propone deben aparecer en la conversación. Ver la trampa de inyección en Evidencia LLM real (Google, cliente de producción): reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
+- [x] D11. Las cifras mostradas deben coincidir con las tablas; el LLM no debe inventarlas ni responderlas de memoria (p. 4). Las respuestas se renderizan desde SQL; las cifras que el modelo propone deben aparecer en la conversación. Ver la trampa de inyección en Evidencia LLM real (Google, cliente de producción): https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
 
 ## Backend y comportamiento
 
 - [x] B01. Servicio REST en Python con FastAPI (p. 2-4). Catálogo, sesiones, mensajes y conversación implementados y probados; interpretar lenguaje requiere configurar modelo.
-- [x] B02. Agente orquestado con LangChain (p. 3-4). A+: una tool call por turno con cuatro herramientas. Evidencia LLM real (Google, cliente de producción): reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
+- [x] B02. Agente orquestado con LangChain (p. 3-4). A+: una tool call por turno con cuatro herramientas. Evidencia LLM real (Google, cliente de producción): https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
 - [x] B03. Al menos una LangChain Tool propia que consulte datos de las tablas (p. 3). Wrappers get_actuator/search_actuators ejecutados contra PostgreSQL en pruebas.
-- [x] B04. Consulta exacta de datos por Base Part Number (p. 1). Evidencia LLM real (Google, cliente de producción): reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
-- [x] B05. Recomendación de uno o más actuadores según requisitos técnicos (p. 2). Evidencia LLM real (Google, cliente de producción): reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
-- [x] B06. Conversación de varios turnos por session_id (p. 3). Evidencia LLM real (Google, cliente de producción): reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
-- [x] B07. Resolver referencias al contexto previo, como preguntar por potencia sin repetir el código (p. 3). También tras reiniciar el contenedor: reports/agent_acceptance/e2e/restart_check.json. OpenRouter pendiente.
-- [x] B08. Historial persistente, recuperable después de reiniciar el backend; no solo memoria (p. 3-4). Mensajes y productos restaurados por HTTP tras reinicio real DB/backend; routing controlado, reports/mobile/backend.json.
-- [x] B09. Manejar números de parte inválidos (p. 3, 6). Inexistente, parcial, sin /A, sufijo erróneo y canonicalización. Evidencia LLM real (Google, cliente de producción): reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
-- [x] B10. Manejar datos ausentes (p. 3, 6). source_NA frente a not_in_layout y DC sin frecuencia. Evidencia LLM real (Google, cliente de producción): reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
-- [x] B11. Manejar consultas ambiguas (p. 3, 6). Aclaraciones de servicio, frecuencia, producto y requisitos, y contradicciones. Evidencia LLM real (Google, cliente de producción): reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
-- [x] B12. Manejar requisitos que ningún modelo satisface (p. 3). Indica qué requisito bloquea. Pendiente: un límite estricto ('below 5 W') falló en la cohorte v4; corregido en el prompt, sin verificar con LLM real. Evidencia LLM real (Google, cliente de producción): reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
+- [x] B04. Consulta exacta de datos por Base Part Number (p. 1). Evidencia LLM real (Google, cliente de producción): https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
+- [x] B05. Recomendación de uno o más actuadores según requisitos técnicos (p. 2). Evidencia LLM real (Google, cliente de producción): https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
+- [x] B06. Conversación de varios turnos por session_id (p. 3). Evidencia LLM real (Google, cliente de producción): https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
+- [x] B07. Resolver referencias al contexto previo, como preguntar por potencia sin repetir el código (p. 3). También tras reiniciar el contenedor: https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/e2e/restart_check.json. OpenRouter pendiente.
+- [x] B08. Historial persistente, recuperable después de reiniciar el backend; no solo memoria (p. 3-4). Mensajes y productos restaurados por HTTP tras reinicio real DB/backend; routing controlado, https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/mobile/backend.json.
+- [x] B09. Manejar números de parte inválidos (p. 3, 6). Inexistente, parcial, sin /A, sufijo erróneo y canonicalización. Evidencia LLM real (Google, cliente de producción): https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
+- [x] B10. Manejar datos ausentes (p. 3, 6). source_NA frente a not_in_layout y DC sin frecuencia. Evidencia LLM real (Google, cliente de producción): https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
+- [x] B11. Manejar consultas ambiguas (p. 3, 6). Aclaraciones de servicio, frecuencia, producto y requisitos, y contradicciones. Evidencia LLM real (Google, cliente de producción): https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
+- [x] B12. Manejar requisitos que ningún modelo satisface (p. 3). Indica qué requisito bloquea. Pendiente: un límite estricto ('below 5 W') falló en la cohorte v4; corregido en el prompt, sin verificar con LLM real. Evidencia LLM real (Google, cliente de producción): https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/RESULTADOS.md; OpenRouter pendiente.
 - [ ] B13. Manejar entradas inesperadas y casos distintos de los ejemplos; evaluación con casos propios de Konecto (p. 6). 28 escenarios de reserva escritos antes de ejecutar (inyección, fuera de alcance, español). Los casos de Konecto no se pueden verificar de antemano.
 
 ## Contrato obligatorio de API
@@ -94,7 +94,7 @@ Request mínimo: {"query":"..."}. Request de continuación: {"session_id":"...",
 
 ## Opcionales: solo después de completar lo obligatorio
 
-El usuario seleccionó expresamente login y aislamiento por usuario. Implementación y evidencia en AUTH.md y reports/mobile/auth-v7: contraseña con hash, token por petición, propietario derivado del token, login nativo y usuarios de prueba. El historial antiguo se conserva sin asignarlo automáticamente. Estas pruebas no cierran las condiciones aún pendientes de interpretación con LLM real; voz sigue sin implementar.
+El usuario seleccionó expresamente login y aislamiento por usuario. Implementación y evidencia en AUTH.md y https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/mobile/auth-v7: contraseña con hash, token por petición, propietario derivado del token, login nativo y usuarios de prueba. El historial antiguo se conserva sin asignarlo automáticamente. Estas pruebas no cierran las condiciones aún pendientes de interpretación con LLM real; voz sigue sin implementar.
 
 Login (p. 5): email/password -> token; contraseñas con hash; usuarios de prueba precargados y documentados; cuarta pantalla de login; token en cada petición; usuario obtenido del token por backend; aislamiento de conversaciones por usuario. No se pide registro, recuperación de contraseña ni OAuth.
 

@@ -1,6 +1,0 @@
-{
-  "switcher_logic_passed": true,
-  "configurations": 5,
-  "actual_browser_checked": false,
-  "limitation": "Browser and native UI hosts unavailable; SVG rendered and inspected separately"
-}

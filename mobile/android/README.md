@@ -17,4 +17,4 @@ Debug de herramientas: variante debug, abrir el menú izquierdo y pulsar Develop
 
 Instrucciones completas de SDK, backend, dispositivo, URL, debug, contratos y límites: [docs/ANDROID.md](../../docs/ANDROID.md).
 
-No hay respuestas simuladas en la aplicación. La verificación con un LLM real queda pendiente de configurar/evaluar OpenRouter; evidencia en [reports/mobile](../../reports/mobile).
+No hay respuestas simuladas en la aplicación. La verificación con un LLM real queda pendiente de configurar/evaluar OpenRouter; evidencia en [https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/mobile](../../docs/evidence/mobile.md).

@@ -93,6 +93,6 @@ Rotación conserva el estado en memoria mediante AuthViewModel. Después de muer
 
 ## Verificación y pendientes
 
-Guía de evidencia: `reports/mobile/auth-v7/README.md`. Pruebas de aislamiento usan dos usuarios, acceso directo por UUID, listado, contexto, continuación y trazas. Las pruebas HTTP reales y las nativas de reapertura usan conversaciones marcadas de verificación; no prueban la interpretación del LLM. No se hicieron llamadas pagadas para implementar login.
+Guía de evidencia: `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/mobile/auth-v7/README.md`. Pruebas de aislamiento usan dos usuarios, acceso directo por UUID, listado, contexto, continuación y trazas. Las pruebas HTTP reales y las nativas de reapertura usan conversaciones marcadas de verificación; no prueban la interpretación del LLM. No se hicieron llamadas pagadas para implementar login.
 
 La aceptación integral con OpenRouter, medición en teléfono físico, despliegue HTTPS real y voz siguen pendientes. No cerrar requisitos de calidad del modelo con estas pruebas.

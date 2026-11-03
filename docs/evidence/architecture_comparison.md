@@ -1,6 +1,6 @@
 # Architecture comparison
 
-The A?E experiment was inconclusive: 1/24 common scenarios, 103 calls and 19 provider failures. No measured superiority was established. Available scenario sets differ, so their pass counts cannot rank architectures.
+The A-E experiment was inconclusive: 1/24 common scenarios, 103 calls and 19 provider failures. No measured superiority was established. Available scenario sets differ, so their pass counts cannot rank architectures.
 
 A: single SQL agent; B: contextual agent with pgvector; C: two specialists; D: supervisor; E: proposer/reviewer.
 

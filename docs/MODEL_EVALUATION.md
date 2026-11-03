@@ -1,3 +1,5 @@
+> Historical experiment documentation. Source and commands are in [archive/pre-cleanup](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/). Current verification summaries: [evidence](evidence/).
+
 # Evaluación de modelos para el agente Serie 76
 
 El objetivo es elegir un modelo que traduzca consultas a herramientas y argumentos correctos. No se vuelve a evaluar OCR ni se permite que el LLM produzca cifras del catálogo de memoria. El agente actual realiza una sola inferencia y el servidor redacta los datos técnicos desde PostgreSQL.
@@ -20,7 +22,7 @@ Fuentes primarias: [precios](https://aistudio.google.com/docs/pricing), [errores
 
 ## Casos y medición
 
-Corpus de desarrollo fijo de18casos en model_eval/cases.py, con subconjunto estratificado de12 para pruebas de acceso. Incluye códigos completos/incompletos/malformados/inexistentes, On/Off frente a modulación, AC/DC, trifásico compartido, N/A, campo no publicado, CSA, frecuencia ambigua, seguimiento y petición adversarial de inventar cifras.
+Corpus de desarrollo fijo de18casos en https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/model_eval/cases.py, con subconjunto estratificado de12 para pruebas de acceso. Incluye códigos completos/incompletos/malformados/inexistentes, On/Off frente a modulación, AC/DC, trifásico compartido, N/A, campo no publicado, CSA, frecuencia ambigua, seguimiento y petición adversarial de inventar cifras.
 
 Se verifica cada expectativa primero contra PostgreSQL usando un router determinista sin inferencia. Ese preflight valida el evaluador y las expectativas; nunca se presenta como una puntuación de modelos.
 
@@ -57,33 +59,25 @@ Resultados parciales se escriben incrementalmente y permiten continuar sin repet
 
 Entorno de evaluación independiente del backend y del runtime OCR:
 
-```powershell
-python -m venv .venv-model-eval
-./.venv-model-eval/Scripts/python.exe -m pip install -r requirements-model-eval.lock.txt
-./.venv-model-eval/Scripts/python.exe -m unittest discover -s tests -p 'test_model_eval*.py' -v
-./.venv-model-eval/Scripts/python.exe -m model_eval.runner --dry-run
-```
+[Historical commands and dependencies in archive/pre-cleanup](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/).
 
-Para inferencia real, configurar la clave privada, verificar el tier/saldo del proyecto y revisar precios/cap en config/model_eval.json:
 
-```powershell
-./.venv-model-eval/Scripts/python.exe -m model_eval.runner --out reports/model_eval/nueva-ejecucion
-```
+Para inferencia real, configurar la clave privada, verificar el tier/saldo del proyecto y revisar precios/cap en https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/config/model_eval.json:
+
+[Historical commands and dependencies in archive/pre-cleanup](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/).
+
 
 No iniciar múltiples evaluadores. En una reanudación solo usar --retry-provider-errors después de revisar el motivo del fallo. No borrar resultados fallidos ni el bloqueo de un proceso vivo. Una clave distinta del mismo proyecto no recupera su cuota.
 
-La ejecución publicada se continuó con `scripts/continue_model_eval.py`: preserva ambos JSONL, verifica código/corpus/catálogo, captura sin red el payload exacto y publica refinamientos de reserva en sidecars. Antes de cada llamada comprueba que bytes/hash coinciden con lo capturado. El presupuesto suma ambas cohortes sin duplicar el parent. Amplió explícitamente el límite operacional de20a24intentos por modelo para recuperar errores503; mantuvo USD0,50 compartidos y nunca repitió casos ya evaluados. `--dry-run` no hace inferencias ni guarda puntajes de sus mocks. Las pruebas de captura no se mezclan con las54generaciones reales.
+La ejecución publicada se continuó con `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/scripts/continue_model_eval.py`: preserva ambos JSONL, verifica código/corpus/catálogo, captura sin red el payload exacto y publica refinamientos de reserva en sidecars. Antes de cada llamada comprueba que bytes/hash coinciden con lo capturado. El presupuesto suma ambas cohortes sin duplicar el parent. Amplió explícitamente el límite operacional de20a24intentos por modelo para recuperar errores503; mantuvo USD0,50 compartidos y nunca repitió casos ya evaluados. `--dry-run` no hace inferencias ni guarda puntajes de sus mocks. Las pruebas de captura no se mezclan con las54generaciones reales.
 
-```powershell
-./.venv-model-eval/Scripts/python.exe scripts/continue_model_eval.py --dry-run
-./.venv-model-eval/Scripts/python.exe scripts/continue_model_eval.py --models gemini-3.6-flash gemini-3-flash-preview
-./.venv-model-eval/Scripts/python.exe scripts/report_model_eval.py
-```
+[Historical commands and dependencies in archive/pre-cleanup](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/).
 
-El generador de informe describe los snapshots revisados de esta ejecución; no elige automáticamente un ganador futuro ni debe reutilizarse sin revisar su análisis cualitativo. Los hashes de artefactos están en reports/model_eval/manifest.json.
+
+El generador de informe describe los snapshots revisados de esta ejecución; no elige automáticamente un ganador futuro ni debe reutilizarse sin revisar su análisis cualitativo. Los hashes de artefactos están en https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/model_eval/manifest.json.
 
 ## Selección y límites
 
-Los resultados reales y la recomendación observada se publican en reports/model_eval/RESULTADOS.md. Una comparación válida exige los mismos casos y protocolo; se muestran aparte candidatos no disponibles y ejecuciones incompletas. Una muestra por caso y un corpus público de desarrollo no demuestran superioridad universal ni significancia estadística.
+Los resultados reales y la recomendación observada se publican en https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/model_eval/RESULTADOS.md. Una comparación válida exige los mismos casos y protocolo; se muestran aparte candidatos no disponibles y ejecuciones incompletas. Una muestra por caso y un corpus público de desarrollo no demuestran superioridad universal ni significancia estadística.
 
 El ensayo Google no valida el endpoint de despliegue OpenRouter. El cliente de producción actual utiliza parámetros distintos (temperatura0/máximo600); debe alinearse y someterse a una prueba pequeña por OpenRouter antes de declarar integración verificada. Esa prueba y la clave de OpenRouter quedan fuera de este gasto autorizado de Google. No se cambia automáticamente el modelo de producción a partir de un resultado parcial.

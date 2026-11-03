@@ -2,7 +2,7 @@
 
 - Estado: aceptada para la entrega, pendiente de aceptación final con OpenRouter.
 - Fecha: 2026-11-03.
-- Sustituye: la recomendación provisional "B corregida" de `contexto/06_ARQUITECTURAS_Y_RELEVO.md`, que nunca fue un resultado experimental.
+- Sustituye: la recomendación provisional "B corregida" de `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/contexto/06_ARQUITECTURAS_Y_RELEVO.md`, que nunca fue un resultado experimental.
 
 ## Contexto
 
@@ -24,7 +24,7 @@ Se compararon cinco configuraciones (A–E) en Google y la comparación quedó *
 - un código bien formado inexistente que se pedía completar;
 - trazas incompletas.
 
-**Dato medido que decide el diseño:** `series_76_summary.pdf` tiene 348 palabras y 16 definiciones. Todo el corpus de contexto cabe en unos 600 tokens.
+**Dato medido que decide el diseño:** `data/raw/series_76_summary.pdf` tiene 348 palabras y 16 definiciones. Todo el corpus de contexto cabe en unos 600 tokens.
 
 ## Decisión
 
@@ -67,7 +67,7 @@ La guarda del punto 1 también corrige el fallo de D: si el modelo pide un códi
 - **Afirmación comercial:** TraceParts + Leo AI ofrece búsqueda de componentes en lenguaje natural con aclaraciones. No revela motor, ER ni número de agentes. La página no devolvió contenido el 2026-11-03; se cita según el relevo.
 - **Documentación de datos, no de agentes:** la API Product Catalog de Schneider Electric (referencias, especificaciones, clasificación ETIM) y ETIM (clases, características, unidades). Respondió 403 el 2026-11-03. De aquí se adoptó el rigor de unidades y sinónimos, no un modelo EAV.
 - **Inferencia propia:** que un glosario estructurado basta para este corpus y que un solo agente basta para estas tareas.
-- **Lo que falta:** no hay una comparación emparejada que demuestre que A+ supera a B o D. La decisión es de ingeniería (responsabilidades, costo y control) y se valida con una cohorte de aceptación propia con un LLM real (`reports/agent_acceptance/`), no con un ranking.
+- **Lo que falta:** no hay una comparación emparejada que demuestre que A+ supera a B o D. La decisión es de ingeniería (responsabilidades, costo y control) y se valida con una cohorte de aceptación propia con un LLM real (`https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/`), no con un ranking.
 
 ## Riesgos aceptados
 

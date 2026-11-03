@@ -2,7 +2,7 @@
 
 Login email/password obligatorio en la versión actual; perfil de cuenta real, token cifrado con Android Keystore y Sign out con revocación. Cada cuenta recupera únicamente su historial. Configuración, usuarios de prueba, migración y límites: [AUTH.md](AUTH.md). El perfil local de las versiones visuales anteriores es histórico y no da acceso al backend.
 
-Movimiento ambiental acotado: [MOBILE_AMBIENT_MOTION.md](MOBILE_AMBIENT_MOTION.md). Base visual, issues existentes y plan de opcionales con PostgreSQL: [MOBILE_NEXT_STEPS.md](MOBILE_NEXT_STEPS.md).
+Movimiento ambiental acotado: [MOBILE_AMBIENT_MOTION.md](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/docs/MOBILE_AMBIENT_MOTION.md). Base visual, issues existentes y plan de opcionales con PostgreSQL: [MOBILE_NEXT_STEPS.md](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/docs/MOBILE_NEXT_STEPS.md).
 
 Kotlin/Jetpack Compose, interfaz en inglés y tres superficies: conversaciones guardadas, chat y Developer debug. Presentación vigente: Hello centrado, fondo de ondas Konecto y luz difusa. El perfil al pie del menú izquierdo reúne nombre/correo locales y Appearance: Light/Dark/System. Guarda la preferencia y conserva las elecciones del switch anterior. Rethink Sans local y compositor delineado. Sin accesos iniciales, slogan ni etiquetas de marca redundantes. Saludo por letras y Thinking animado solo durante envío, con alternativa estática según la escala de animación de Android. Dirección: MOBILE_DIRECTION_V4.md y MOBILE_PROFILE.md. Login local con FastAPI/PostgreSQL; sin Firebase ni voz. Ver AUTH.md.
 
@@ -107,10 +107,10 @@ Productos: identidad, alimentación, measurements, field_status, certificación,
 ./mobile/android/gradlew.bat -p mobile/android :app:connectedDebugAndroidTest
 
 python -m venv .venv-chat
-./.venv-chat/Scripts/python.exe -m pip install -r requirements-backend.lock.txt -r requirements-conversation.lock.txt
+./.venv-chat/Scripts/python.exe -m pip install -r requirements.lock.txt
 $env:SERIES76_TEST_DB='1'
 ./.venv-chat/Scripts/python.exe -m unittest discover -s tests -p test_conversations.py -v
 ./.venv-chat/Scripts/python.exe scripts/verify_mobile_backend.py --restart
 ```
 
-Fixtures de pantalla solo en androidTest. Herramientas/SQL reales con interpretación controlada en pruebas backend; cero llamadas OpenRouter. El verificador de reinicio crea un registro marcado y limpia únicamente su propio UUID; no borra catálogo ni volúmenes. Evidencia y límites en reports/mobile.
+Fixtures de pantalla solo en androidTest. Herramientas/SQL reales con interpretación controlada en pruebas backend; cero llamadas OpenRouter. El verificador de reinicio crea un registro marcado y limpia únicamente su propio UUID; no borra catálogo ni volúmenes. Evidencia y límites en https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/mobile.

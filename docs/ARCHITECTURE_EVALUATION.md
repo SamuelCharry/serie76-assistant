@@ -1,3 +1,5 @@
+> Historical experiment documentation. Source and commands are in [archive/pre-cleanup](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/). Current verification summaries: [evidence](evidence/).
+
 # Protocolo de comparación
 
 ## Objetivo y controles
@@ -12,18 +14,10 @@ Los criterios de exactitud se basan en el PDF eléctrico y el SQL previamente au
 
 ## Ejecución Windows
 
-```powershell
-./.venv-model-eval/Scripts/python.exe -m pip install -r requirements-architecture-eval.txt
-./.venv-model-eval/Scripts/python.exe -m unittest discover -s tests -p test_architecture_eval.py -v
-./.venv-model-eval/Scripts/python.exe -m architecture_eval setup
-./.venv-model-eval/Scripts/python.exe -m architecture_eval prepare
-./.venv-model-eval/Scripts/python.exe -m architecture_eval pilot
-./.venv-model-eval/Scripts/python.exe scripts/continue_architecture_eval.py
-./.venv-model-eval/Scripts/python.exe -m architecture_eval report
-./.venv-model-eval/Scripts/python.exe scripts/analyze_architecture_eval.py
-```
+[Historical commands and dependencies in archive/pre-cleanup](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/).
 
-`setup` crea credenciales aleatorias solo en `.cache`, instancia pgvector aislada e importa la salida OCR validada. No usa manual/reference para cargar. Nunca usar `down -v` sobre el proyecto operativo. `prepare` genera embeddings reales en Google. La configuración está en `config/architecture_eval.json`; clave únicamente en `.env` ignorado o variable de entorno.
+
+`setup` crea credenciales aleatorias solo en `.cache`, instancia pgvector aislada e importa la salida OCR validada. No usa manual/reference para cargar. Nunca usar `down -v` sobre el proyecto operativo. `prepare` genera embeddings reales en Google. La configuración está en `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/config/architecture_eval.json`; clave únicamente en `.env` ignorado o variable de entorno.
 
 `frozen.json` registra hashes de implementación, casos, configuración, PDFs y catálogo. Reanudar no repite escenarios ya registrados ni cambia sus resultados. Un cambio congelado bloquea el append; no se permite modificar prompts para mejorar esta misma cohorte. El controlador usa bloqueo de archivo Windows; una sola ejecución pagada a la vez.
 

@@ -1,6 +1,6 @@
 # Seguimiento local actual
 
-OCR, PostgreSQL y consultas técnicas están implementados y verificados. PostgreSQL 17.11 y backend corren en Docker. La reconstrucción SQL coincide en 68 referencias, 869 cifras, cuatro N/A, cinco marcas y 272 atributos de contexto (941/941 comprobaciones primarias). Las 62 pruebas actuales pasan con SERIES76_TEST_DB=1. El reinicio de DB/backend conserva catálogo y hash. Ver docs/POSTGRES.md y reports/postgres/summary.json. Agente, LangChain, historial, selección del LLM y Android siguen pendientes.
+OCR, PostgreSQL y consultas técnicas están implementados y verificados. PostgreSQL 17.11 y backend corren en Docker. La reconstrucción SQL coincide en 68 referencias, 869 cifras, cuatro N/A, cinco marcas y 272 atributos de contexto (941/941 comprobaciones primarias). Las 62 pruebas actuales pasan con SERIES76_TEST_DB=1. El reinicio de DB/backend conserva catálogo y hash. Ver docs/POSTGRES.md y https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/postgres/summary.json. Agente, LangChain, historial, selección del LLM y Android siguen pendientes.
 
 Los apartados siguientes conservan historia anterior. Sus pendientes de PostgreSQL/Docker ya fueron resueltos. No se modificaron issues remotos; el grupo de datos sigue abierto porque falta integración/modelos.
 
@@ -29,13 +29,13 @@ Repositorio: https://github.com/SamuelCharry/serie76-assistant (privado).
 
 ## Estado actual
 
-El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver reports/pipeline/RESULTADOS.md y reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL, agente y Android siguen pendientes.
+El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/pipeline/RESULTADOS.md y https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL, agente y Android siguen pendientes.
 
 Siguiente acción: PostgreSQL. La sección siguiente conserva el estado histórico de revisión manual y los issues; no afirma una nueva revisión remota.
 
 ## Siguiente acción histórica
 
-El catálogo revisado está en data/reviewed/catalog-v1 y la auditoría completa en reports/manual_review/AUDIT.md. Se revisaron visualmente las siete tablas y notas; las seis diferencias del OCR están resueltas en esa exportación mediante decisiones exactas. El siguiente bloque es esquema y carga idempotente PostgreSQL (#2). Docker debe verificarse para la base y el backend (#1). Después implementar herramientas/agente (#3), contrato conversacional (#4) y Android (#5). Los perfiles HTML anteriores siguen describiendo el OCR crudo y la referencia del benchmark.
+El catálogo revisado está en https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/data/reviewed/catalog-v1 y la auditoría completa en https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/manual_review/AUDIT.md. Se revisaron visualmente las siete tablas y notas; las seis diferencias del OCR están resueltas en esa exportación mediante decisiones exactas. El siguiente bloque es esquema y carga idempotente PostgreSQL (#2). Docker debe verificarse para la base y el backend (#1). Después implementar herramientas/agente (#3), contrato conversacional (#4) y Android (#5). Los perfiles HTML anteriores siguen describiendo el OCR crudo y la referencia del benchmark.
 
 Revisión en vivo de los siete issues: todos abiertos. El issue #2 conserva sin marcar los tres primeros subpasos ya comprobados localmente (OCR, comparación y revisión de las 11 filas iniciales). No corresponde cerrar el issue: faltan validación completa, ingestión y modelos. No se modificaron los issues remotos durante esta revisión. Los cambios del laboratorio siguen sin commit; no confundir archivos locales con una entrega publicada.
 

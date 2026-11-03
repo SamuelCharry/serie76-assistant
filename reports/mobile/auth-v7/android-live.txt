@@ -1,5 +1,0 @@
-com.serie76.assistant.LiveAuthTest:.
-
-Time: 29.024
-
-OK (1 test)

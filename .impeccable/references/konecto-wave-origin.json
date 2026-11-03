@@ -1,8 +1,0 @@
-{
-  "source": "https://konecto.ai/wp-content/uploads/2025/05/Clip-path-group.svg",
-  "page": "https://konecto.ai/",
-  "source_sha256": "1d4046ee705c775fc1e613fad079c89397d5ede56109ad75eb2cb9c0b69646da",
-  "native_resource": "mobile/android/app/src/main/res/drawable/konecto_wave.xml",
-  "paths": 184,
-  "adaptation": "Original path geometry; SVG rectangular mask maps to native viewport clipping. Stroke0.25 becomes0.8 viewport units for phone legibility. Tint, opacity and crop applied by native UI. No text, logos or web controls."
-}

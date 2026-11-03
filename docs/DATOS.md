@@ -1,6 +1,6 @@
 # Serie 76: tablas extraídas y datos que debemos guardar
 
-Fuente: series_76_electric_data.pdf, cuatro páginas, copia localizada en data/raw.
+Fuente: data/raw/series_76_electric_data.pdf, cuatro páginas, copia localizada en data/raw.
 
 ## Alcance y método
 
@@ -10,7 +10,7 @@ Archivos: serie76_tablas_extraidas.csv (filas y valores) y serie76_tablas_extrai
 
 Controles ejecutados: 68 filas y códigos únicos; conteos por tabla; cuatro filas N/A; cinco excepciones CSA; porcentajes en rango; potencia presente en las 64 filas con cifras. La revisión no incluye una segunda transcripción independiente ni aclaraciones del fabricante. Estos controles estructurales no demuestran por sí solos exactitud numérica.
 
-Actualización: se realizó otra entrada visual completa de las siete tablas y notas desde los recortes del PDF. Coincide numéricamente con la referencia ya corregida. El catálogo exportado y sus decisiones están en `data/reviewed/catalog-v1`; auditoría en `reports/manual_review/AUDIT.md`. Ambas revisiones fueron del asistente de IA, sin segunda revisión humana ni aclaración del fabricante. La exportación distingue valores reportados, N/A explícitos y campos no publicados en cada diseño.
+Actualización: se realizó otra entrada visual completa de las siete tablas y notas desde los recortes del PDF. Coincide numéricamente con la referencia ya corregida. El catálogo exportado y sus decisiones están en `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/data/reviewed/catalog-v1`; auditoría en `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/manual_review/AUDIT.md`. Ambas revisiones fueron del asistente de IA, sin segunda revisión humana ni aclaración del fabricante. La exportación distingue valores reportados, N/A explícitos y campos no publicados en cada diseño.
 
 ## Inventario
 
@@ -113,4 +113,4 @@ Guardar una identidad por número de parte, vinculada a sus valores por servicio
 
 ## Actualización: pipeline OCR verificable
 
-El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver reports/pipeline/RESULTADOS.md y reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL, agente y Android siguen pendientes.
+El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/pipeline/RESULTADOS.md y https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL, agente y Android siguen pendientes.

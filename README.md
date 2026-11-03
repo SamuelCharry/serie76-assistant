@@ -1,14 +1,14 @@
 # Series 76 Technical Assistant
 
-Continuación en otro agente: [carpeta de contexto](contexto/00_EMPEZAR_AQUI.md).
+Evidencia de verificación: [OCR](docs/evidence/ocr.md), [PostgreSQL](docs/evidence/postgres.md), [agente](docs/evidence/agent_acceptance.md), [arquitecturas](docs/evidence/architecture_comparison.md), [Android](docs/evidence/mobile.md).
 
-Repositorio para el assessment de Konecto. **Etapa actual:** OCR y PostgreSQL verificados. El agente definitivo A+ está implementado y aceptado con un LLM real (Google, endpoint OpenAI-compatible, mismo cliente de producción). La aceptación final con OpenRouter sigue pendiente. [Arquitectura](docs/ARQUITECTURA.md) · [ADR 0001](docs/adr/0001-arquitectura-agente.md) · [aceptación con LLM real](reports/agent_acceptance/RESULTADOS.md).
+Repositorio para el assessment de Konecto. **Etapa actual:** OCR y PostgreSQL verificados. El agente definitivo A+ está implementado y aceptado con un LLM real (Google, endpoint OpenAI-compatible, mismo cliente de producción). La aceptación final con OpenRouter sigue pendiente. [Arquitectura](docs/ARQUITECTURA.md) · [ADR 0001](docs/adr/0001-arquitectura-agente.md) · [aceptación con LLM real](docs/evidence/agent_acceptance.md).
 
-**Android:** [compilación, ejecución, URL, debug y arquitectura](docs/ANDROID.md). Kotlin/Compose, login nativo, chat e historial aislado por usuario; diseño claro/oscuro aprobado, sin Firebase ni voz. [Autenticación, cuentas de prueba y migración](docs/AUTH.md). Hay pruebas de UI en emulador y persistencia HTTP con interpretación controlada. Eso no equivale a validar un modelo real. Evidencia: [reports/mobile](reports/mobile).
+**Android:** [compilación, ejecución, URL, debug y arquitectura](docs/ANDROID.md). Kotlin/Compose, login nativo, chat e historial aislado por usuario; diseño claro/oscuro aprobado, sin Firebase ni voz. [Autenticación, cuentas de prueba y migración](docs/AUTH.md). Hay pruebas de UI en emulador y persistencia HTTP con interpretación controlada. Eso no equivale a validar un modelo real. Evidencia: [https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/mobile](docs/evidence/mobile.md).
 
-El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver reports/pipeline/RESULTADOS.md y reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL y consultas técnicas ya están verificados; la aceptaci?n final OpenRouter sigue pendiente. Ver docs/POSTGRES.md.
+El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/pipeline/RESULTADOS.md y https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL y consultas técnicas ya están verificados; la aceptaci?n final OpenRouter sigue pendiente. Ver docs/POSTGRES.md.
 
-**Salida del pipeline:** [tablas HTML](data/extracted/series76/catalog.html), [CSV](data/extracted/series76/catalog.csv), [JSON](data/extracted/series76/catalog.json). [Resultados y límites](reports/pipeline/RESULTADOS.md).
+**Salida del pipeline:** [tablas HTML](data/extracted/series76/catalog.html), [CSV](data/extracted/series76/catalog.csv), [JSON](data/extracted/series76/catalog.json). [Resultados y límites](docs/evidence/ocr.md).
 
 ## Ejecutar la ingestión
 
@@ -20,7 +20,7 @@ python -m venv .venv-ingest
 
 Acepta archivos o directorios. Usa RapidOCR/PP-OCRv5 local; no requiere Tesseract ni OpenRouter. Reconstruye columnas por encabezados/unidades y celdas combinadas por geometría. Las dudas bloquean la exportación validada. [Instalación, formatos, lotes, caché y reproducción](docs/INGESTION.md).
 
-`data/reviewed/catalog-v1` y `extract_reviewed_catalog.py` conservan la referencia manual histórica; no generan esta salida. `config/ocr.json` pertenece al laboratorio anterior y no gobierna `scripts/ingest.py`. El Docker OCR existente conserva el ensayo Tesseract; el pipeline nuevo se verificó directamente en Windows, no en ese contenedor.
+`https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/data/reviewed/catalog-v1` y `extract_reviewed_catalog.py` conservan la referencia manual histórica; no generan esta salida. `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/config/ocr.json` pertenece al laboratorio anterior y no gobierna `scripts/ingest.py`. El ensayo Docker OCR queda archivado en el tag; el pipeline nuevo se verificó directamente en Windows, no en ese contenedor.
 
 ## PostgreSQL y API técnica
 
@@ -56,11 +56,11 @@ aprovisionamiento privado expl?cito.
 - GET /api/actuators/{part_number}: código completo incluido /A.
 - POST /api/actuators/search: filtros técnicos y aclaraciones explícitas.
 
-Carga transaccional/idempotente, versiones y activación atómica. Magnitudes NUMERIC por servicio/frecuencia; evidencia OCR vinculada. [Esquema, filtros, instalación y pruebas](docs/POSTGRES.md). [Resultados ejecutados](reports/postgres/RESULTADOS.md): 941/941 y 272/272 contexto desde SQL, HTTP real y persistencia tras reinicio.
+Carga transaccional/idempotente, versiones y activación atómica. Magnitudes NUMERIC por servicio/frecuencia; evidencia OCR vinculada. [Esquema, filtros, instalación y pruebas](docs/POSTGRES.md). [Resultados ejecutados](docs/evidence/postgres.md): 941/941 y 272/272 contexto desde SQL, HTTP real y persistencia tras reinicio.
 
 ## Requisitos y decisiones
 
-- [Arquitectura, ER y alternativas multiagente](docs/ARQUITECTURA.md), [visor de diagramas](docs/architecture.html) y [protocolo experimental](docs/ARCHITECTURE_EVALUATION.md). Experimento aislado en pgvector/Google; no cambia la arquitectura operativa ni cierra la aceptación OpenRouter. [Resultados](reports/architecture_eval/ANALISIS.md).
+- [Arquitectura, ER y alternativas multiagente](docs/ARQUITECTURA.md), [visor de diagramas](docs/architecture.html) y [protocolo experimental](docs/ARCHITECTURE_EVALUATION.md). Experimento aislado en pgvector/Google; no cambia la arquitectura operativa ni cierra la aceptación OpenRouter. [Resultados](docs/evidence/architecture_comparison.md).
 
 - Lista completa, con referencias al enunciado: [docs/REQUISITOS.md](docs/REQUISITOS.md).
 - Enunciado original: [docs/assessment-en.pdf](docs/assessment-en.pdf).
@@ -75,21 +75,18 @@ Carga transaccional/idempotente, versiones y activación atómica. Magnitudes NU
 
 El usuario autorizó usar saldo Google tras los402 iniciales. Costo calculado con tokens: aproximadamente USD0,0653; reserva conservadora conjunta incluyendo errores sin consumo informado: USD0,2215, bajo el tope del cliente USD0,50. Hubo503 en varios candidatos; los modelos sin respuestas no reciben precisión cero. No se hicieron inferencias OpenRouter.
 
-[Resultados, trazas y límites](reports/model_eval/RESULTADOS.md), [metodología y reproducción](docs/MODEL_EVALUATION.md). El ensayo usa thinking low, máximo2048tokens y muestreo predeterminado. **Falta alinear la configuración del cliente y validar el endpoint OpenRouter**, además del recorrido completo app→LLM→SQL→app. No se activó automáticamente un modelo de producción.
+[Resultados, trazas y límites](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/model_eval/RESULTADOS.md), [metodología y reproducción](docs/MODEL_EVALUATION.md). El ensayo usa thinking low, máximo2048tokens y muestreo predeterminado. **Falta alinear la configuración del cliente y validar el endpoint OpenRouter**, además del recorrido completo app→LLM→SQL→app. No se activó automáticamente un modelo de producción.
 
-## Laboratorio OCR: tres motores, sin OpenRouter
+## Laboratorio OCR archivado: tres motores, sin OpenRouter
 
-Ver [instalación, comparación y ejecución](docs/OCR.md). Notebooks: [comparación](notebooks/01_comparar_ocr.ipynb) y [exploración breve con ydata-profiling](notebooks/02_exploracion_ydata.ipynb).
+Ver [instalación, comparación y ejecución](docs/OCR.md). Notebooks: [comparación](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/notebooks/01_comparar_ocr.ipynb) y [exploración breve con ydata-profiling](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/notebooks/02_exploracion_ydata.ipynb).
 
-```powershell
-./scripts/setup_ocr.ps1
-./.venv-ocr/Scripts/python.exe scripts/run_ocr_notebooks.py
-./.venv-ocr/Scripts/python.exe scripts/ocr_lab.py --config config/ocr.json --out data/ocr/nueva-ejecucion
-```
+[Historical commands and dependencies in archive/pre-cleanup](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/).
 
-El entorno `.venv-ocr` es independiente del backend. Descarga pesos públicos; no usa OpenRouter ni sube el PDF. La configuración elegida, las métricas y las discrepancias históricas se conservan en `config/ocr.json` y `reports/ocr`. El OCR crudo sigue sin validar por sí solo; el catálogo revisado es una salida distinta, con seis correcciones auditadas. Se corrigieron además tres celdas de la referencia inicial al volver al PDF: [evidencia](docs/OCR_REFERENCE_REVIEW.md).
 
-**HTML de ydata-profiling:** abrir [informes de referencia y OCR](reports/ocr/index.html) en un navegador. El notebook 02 también enlaza ambos informes.
+El entorno `.venv-ocr` es independiente del backend. Descarga pesos públicos; no usa OpenRouter ni sube el PDF. La configuración elegida, las métricas y las discrepancias históricas se conservan en `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/config/ocr.json` y `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/ocr`. El OCR crudo sigue sin validar por sí solo; el catálogo revisado es una salida distinta, con seis correcciones auditadas. Se corrigieron además tres celdas de la referencia inicial al volver al PDF: [evidencia](docs/OCR_REFERENCE_REVIEW.md).
+
+**HTML de ydata-profiling:** abrir [informes de referencia y OCR](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/ocr/index.html) en un navegador. El notebook 02 también enlaza ambos informes.
 
 ## Ensayo original de Tesseract: sin OpenRouter
 
@@ -97,11 +94,8 @@ Los comandos siguientes conservan la prueba inicial con el ejecutable Tesseract.
 
 Desde la raíz del repositorio, en PowerShell:
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe scripts/ocr_probe.py --page 1 --render-only --out data/ocr/page1-render
-```
+[Historical commands and dependencies in archive/pre-cleanup](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/).
+
 
 Este comando solo genera una imagen. No realiza OCR ni consume APIs.
 
@@ -109,12 +103,8 @@ Este comando solo genera una imagen. No realiza OCR ni consume APIs.
 
 Abrir Docker Desktop y esperar a que el motor esté listo. Copiar el ejemplo y configurar una contraseña local para PostgreSQL:
 
-```powershell
-Copy-Item .env.example .env
-docker compose --profile ocr build ocr
-docker compose --profile ocr run --rm --no-deps ocr --page 1 --psm 3 --out data/ocr/page1-psm3
-docker compose --profile ocr run --rm --no-deps ocr --page 1 --psm 6 --out data/ocr/page1-psm6
-```
+[Historical commands and dependencies in archive/pre-cleanup](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/).
+
 
 No se requiere rellenar OPENROUTER_API_KEY ni elegir un modelo para estos ensayos. La configuración Compose requiere POSTGRES_PASSWORD aunque el servicio OCR no se conecta a PostgreSQL.
 
@@ -122,9 +112,8 @@ No se requiere rellenar OPENROUTER_API_KEY ni elegir un modelo para estos ensayo
 
 Consultar la instalación oficial: https://tesseract-ocr.github.io/tessdoc/Installation.html
 
-```powershell
-.\.venv\Scripts\python.exe scripts/ocr_probe.py --page 1 --psm 3 --out data/ocr/page1-local
-```
+[Historical commands and dependencies in archive/pre-cleanup](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/).
+
 
 Si no está en PATH, añadir `--tesseract-cmd 'C:\Program Files\Tesseract-OCR\tesseract.exe'` con la ruta real. También acepta la variable de proceso TESSERACT_CMD. El script NO carga .env automáticamente: .env es para Compose y como plantilla de configuración futura.
 
@@ -212,7 +201,7 @@ GET /api/sessions y GET /api/sessions/{id}/messages permiten listar y reabrir hi
 - **Trade-off aceptado.** Las respuestas son menos fluidas que la prosa de un LLM, a cambio de exactitud demostrable.
 - **Sin pgvector.** El resumen tiene 348 palabras y 16 definiciones; un glosario estructurado da recall completo y cita exacta. pgvector solo se justificaría con un corpus mayor.
 - **Sin multiagente.** Los diseños C/D/E multiplican llamadas y costo. Un revisor del mismo modelo no sustituye la validación determinista. La comparación A–E quedó archivada como inconclusa en el tag `arch-eval-cohort-1`.
-- **Evidencia con LLM real:** ver [reports/agent_acceptance](reports/agent_acceptance/RESULTADOS.md). Las pruebas con interpretación simulada (`tests/test_agent_scenarios.py`) validan la capa determinista, no la comprensión lingüística.
+- **Evidencia con LLM real:** ver [https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance](docs/evidence/agent_acceptance.md). Las pruebas con interpretación simulada (`tests/test_agent_scenarios.py`) validan la capa determinista, no la comprensión lingüística.
 
 Notas de implementación:
 

@@ -1,4 +1,0 @@
-engine,cells,exact,errors,complete_rows,inference_seconds,load_seconds,code_exact,code_total,numeric_exact,numeric_total,status_exact,status_total,csa_markers_exact
-rapidocr,941,935,6,63,64.03800129999945,1.875989499996649,68,68,863,869,4,4,5
-easyocr,942,714,228,12,463.1061864999938,15.003419100001338,13,68,701,869,0,4,0
-tesseract,944,692,252,12,13.23146569999517,0.19052609999926062,30,68,662,869,0,4,0

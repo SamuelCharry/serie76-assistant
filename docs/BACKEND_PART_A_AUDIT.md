@@ -1,6 +1,6 @@
 # Auditoría de Part A: Backend y Technical Considerations
 
-Corte: 3 de noviembre de 2026. Fuente: [assessment original](assessment-en.pdf), páginas 2–4. Esta revisión separa implementación, pruebas por capas y validación con el proveedor requerido. No se hicieron inferencias externas ni cambios de código durante la auditoría.
+Corte: 3 de noviembre de 2026. Fuente: [assessment original](docs/assessment-en.pdf), páginas 2–4. Esta revisión separa implementación, pruebas por capas y validación con el proveedor requerido. No se hicieron inferencias externas ni cambios de código durante la auditoría.
 
 ## Resultado general
 
@@ -18,7 +18,7 @@ La evaluación previa sí usó modelos reales mediante la API de Google y run_ag
 | Agente LangChain con al menos una herramienta propia que consulte tablas | run_agent enlaza herramientas LangChain; get_actuator y search_actuators consultan PostgreSQL real. | Probar el cliente OpenRouter, no reimplementar las herramientas. |
 | Script de ingestión PDF a formato consultado | OCR validado, CSV/JSON, carga SQL transaccional y consultas sobre esa base. | Ningún bloque funcional de ingestión pendiente; conservar regresiones. |
 | Historial y conversación por session_id | Mensajes, productos y contexto persistidos; dos turnos HTTP con el mismo ID comprobados mediante routing controlado. | Dos o más turnos naturales por OpenRouter, incluyendo seguimiento sin repetir código. |
-| Reanudar conversación tras reiniciar backend | Evidencia previa de reinicio real y recuperación de mensajes/productos en reports/mobile/backend.json. | Completar la reanudación con interpretación real después del reinicio. |
+| Reanudar conversación tras reiniciar backend | Evidencia previa de reinicio real y recuperación de mensajes/productos en https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/mobile/backend.json. | Completar la reanudación con interpretación real después del reinicio. |
 | Código de parte inválido | Diferencia formato inválido, código bien formado inexistente y referencia conocida. | Confirmar respuestas naturales con el proveedor final. |
 | Datos ausentes | source_NA y not_in_layout diferenciados; no se inventan valores ni se convierten en cero. | Verificar la respuesta final y su estructura por OpenRouter. |
 | Consultas ambiguas | ask_clarification y búsqueda con needs_clarification; contexto y validaciones disponibles. | Probar resolución de aclaraciones entre turnos, preservando requisitos. |
@@ -67,6 +67,6 @@ La omisión de focus en el caso adversarial de3.6 es una observación de present
 
 - backend/app/contracts.py; backend/conversation/api.py, agent.py y store.py.
 - tests/test_conversations.py: nueve pruebas aprobadas en esta revisión, sin proveedor externo.
-- reports/mobile/backend.json: PostgreSQL real, reinicio y recuperación con routing controlado.
-- reports/postgres/roundtrip_evaluation.json: igualdad numérica y contexto reconstruidos desde SQL.
-- reports/model_eval/comparison.json: tres candidatos completos, selección Google y límites del ensayo.
+- https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/mobile/backend.json: PostgreSQL real, reinicio y recuperación con routing controlado.
+- https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/postgres/roundtrip_evaluation.json: igualdad numérica y contexto reconstruidos desde SQL.
+- https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/model_eval/comparison.json: tres candidatos completos, selección Google y límites del ensayo.

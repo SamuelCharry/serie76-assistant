@@ -2,7 +2,7 @@
 
 **Arquitectura final: A+.** Un agente LangChain hace una sola llamada LLM por turno, en la que elige una herramienta y sus argumentos. El código valida, consulta PostgreSQL con SQL parametrizado y redacta la respuesta desde las filas o desde citas literales del resumen. El LLM nunca escribe cifras. La decisión y sus alternativas están en [ADR 0001](adr/0001-arquitectura-agente.md).
 
-[Visor HTML](architecture.html) · [ER en SVG](er-series76.svg) · esquema inspeccionado en [`reports/architecture_final/database.json`](../reports/architecture_final/database.json) · aceptación con un LLM real en [`reports/agent_acceptance`](../reports/agent_acceptance/RESULTADOS.md).
+[Visor HTML](architecture.html) · [ER en SVG](er-series76.svg) · esquema inspeccionado en [`https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/architecture_final/database.json`](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/architecture_final/database.json) · aceptación con un LLM real en [`https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance`](evidence/agent_acceptance.md).
 
 ## Un turno
 
@@ -72,11 +72,11 @@ El diagrama completo, con las 99 columnas y las 12 FK reales, está en [er-serie
 
 ## Coste y escala
 
-Hay una llamada de generación por turno, sin embeddings. En la cohorte de aceptación v2, la media fue de 2.154 tokens de entrada y 36 de salida por llamada, con una latencia p50 de 2,4 s y p95 de 7,6 s (ver `reports/agent_acceptance/v2/summary.json`). Con 100 turnos, A+ hace como máximo 100 llamadas; C/E harían 200 y D, 300. Esos números son límites del flujo, no una prueba de carga. `CAPACITY` (4 turnos simultáneos) y el bloqueo por sesión de PostgreSQL acotan la concurrencia.
+Hay una llamada de generación por turno, sin embeddings. En la cohorte de aceptación v2, la media fue de 2.154 tokens de entrada y 36 de salida por llamada, con una latencia p50 de 2,4 s y p95 de 7,6 s (ver `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance/v2/summary.json`). Con 100 turnos, A+ hace como máximo 100 llamadas; C/E harían 200 y D, 300. Esos números son límites del flujo, no una prueba de carga. `CAPACITY` (4 turnos simultáneos) y el bloqueo por sesión de PostgreSQL acotan la concurrencia.
 
 ## Apéndice: configuraciones A–E (archivadas)
 
-La comparación de cinco diseños quedó inconclusa: 1 escenario común de 24 y 19 fallos del proveedor. Código, protocolo y evidencia están en el tag `arch-eval-cohort-1`, en [ARCHITECTURE_EVALUATION.md](ARCHITECTURE_EVALUATION.md) y en [ANALISIS.md](../reports/architecture_eval/ANALISIS.md).
+La comparación de cinco diseños quedó inconclusa: 1 escenario común de 24 y 19 fallos del proveedor. Código, protocolo y evidencia están en el tag `arch-eval-cohort-1`, en [ARCHITECTURE_EVALUATION.md](ARCHITECTURE_EVALUATION.md) y en [ANALISIS.md](evidence/architecture_comparison.md).
 
 | ID | Diseño | LLM por turno | Destino |
 |---|---|---:|---|

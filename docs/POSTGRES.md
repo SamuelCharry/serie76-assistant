@@ -4,7 +4,7 @@ Este bloque implementa almacenamiento y consultas técnicas. No incluye todavía
 
 ## Arranque reproducible con Docker
 
-Requisitos: Docker Desktop con contenedores Linux, Git y este repositorio completo. Las imágenes base Python y PostgreSQL 17 están fijadas por digest; las dependencias del backend están congeladas en requirements-backend.lock.txt.
+Requisitos: Docker Desktop con contenedores Linux, Git y este repositorio completo. Las imágenes base Python y PostgreSQL 17 están fijadas por digest; las dependencias del backend están congeladas en requirements.lock.txt.
 
 Desde la raíz, PowerShell:
 
@@ -110,4 +110,4 @@ $env:SERIES76_TEST_DB='1'
 
 La variable habilita pruebas reales de PostgreSQL. Sin ella se omiten explícitamente esas pruebas; no se presentan como éxitos. Las pruebas usan rollback y no borran esquema/volúmenes. El driver reconstruye CSV desde SQL, compara todas las cifras y contexto, prueba HTTP real, verifica persistencia tras reiniciar y examina tablas temporales sintéticas de 100.000 filas. La referencia manual se usa exclusivamente en el evaluador posterior.
 
-Resultados: reports/postgres/summary.json, roundtrip_evaluation.json, query_plans.json y RESULTADOS.md. Para exportar manualmente: `python -m backend.catalog.cli export --out .cache/catalog-from-postgres.csv`. Para ejecutar el backend fuera de Docker, exportar las variables PG* de conexión antes de iniciar uvicorn; el servidor no carga .env automáticamente.
+Resultados: https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/postgres/summary.json, roundtrip_evaluation.json, query_plans.json y RESULTADOS.md. Para exportar manualmente: `python -m backend.catalog.cli export --out .cache/catalog-from-postgres.csv`. Para ejecutar el backend fuera de Docker, exportar las variables PG* de conexión antes de iniciar uvicorn; el servidor no carga .env automáticamente.

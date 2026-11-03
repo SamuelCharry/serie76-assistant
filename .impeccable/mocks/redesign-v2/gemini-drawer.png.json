@@ -1,9 +1,0 @@
-{
-  "prompt": "Edit this native Android Series 76 OPEN LEFT DRAWER screenshot to feel more like Gemini's light Android conversation history panel. Single full portrait flat Android UI, no device case. Sidebar occupies about82% width, very light cool-grey #F0EFF5. Compact hamburger/close control top left and Series 76 product title 20sp, not a huge headline. New chat is a compact TONAL PILL with a small edit icon and label 'New chat', near top left, not a large full-width outlined rectangle. Under a quietly styled 'Recent' label, three dense text-led history rows with 18dp horizontal margins, titles aligned left: '110 V actuator selection', 'Compare modulating models', '24 V power requirements'. Selected first row uses faint lilac rounded highlight, 16dp radius. Use smaller subordinate dates Nov3 under the title if needed, never crowd or truncate the date into title. Keep the content dense, natural and readable with 48dp touch targets, no big cards, no account or settings footer, no pinned/search/delete capabilities. Behind drawer show a narrow dimmed sliver of the neutral chat and grey rounded composer. Strong understated native Gemini-like hierarchy with dark charcoal text; Konecto lilac only highlights selection. Native legible Android status/gesture bars. Preserve strict functionality: only new chat and saved history.",
-  "source": "C:\\Users\\nrir\\.codex\\generated_images\\01a1a11b-f724-7d93-81d3-cda37191a331\\exec-ec42b285-53fe-435d-bfa3-addb9718711a.png",
-  "approved": true,
-  "role": "gemini-drawer",
-  "generator": "image_gen built-in edit",
-  "reference": "C:/Users/nrir/Desktop/dev/serie76-assistant/.impeccable/mocks/redesign-v2/drawer.png",
-  "approval": "User: Apruebo esta versi?n tipo Gemini y sus adaptaciones nativas"
-}

@@ -12,8 +12,8 @@ Documento: `data/raw/series_76_electric_data.pdf`, SHA-256 `4c28023929183df8e2a7
 
 Evidencia renderizada directamente del PDF, a 300 DPI:
 
-- [Potencia de la tabla de 110 V](../reports/ocr/reference_review/p4-top-power.png), rectángulo PDF en puntos `(70, 245, 520, 312)`.
-- [Torque y ciclos de la tabla de 220 V](../reports/ocr/reference_review/p4-bottom.png), rectángulo `(70, 433, 520, 495)`.
+- [Potencia de la tabla de 110 V](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/ocr/reference_review/p4-top-power.png), rectángulo PDF en puntos `(70, 245, 520, 312)`.
+- [Torque y ciclos de la tabla de 220 V](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/ocr/reference_review/p4-bottom.png), rectángulo `(70, 433, 520, 495)`.
 
 La celda de 90 W de 110 V incluye 763Y30 y 764X30. En 220 V, 90 W solo corresponde a 763Y30 y la celda de 180 W empieza en 764X30. La plantilla respeta esa diferencia: no copia el mismo alcance entre tablas.
 

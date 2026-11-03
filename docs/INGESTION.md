@@ -87,26 +87,20 @@ Los vacíos numéricos de catalog.json distinguen source_NA de not_in_layout. La
 
 SQLite aquí solo es caché/spool, no la base consultada por las herramientas del assessment. La base de negocio y las conversaciones deberán ser PostgreSQL.
 
-## Evaluación independiente y pruebas
+## Independent evaluation and tests
 
 ```powershell
-./.venv-ingest/Scripts/python.exe scripts/evaluate_ingestion.py --catalog <directorio-del-documento>/catalog.csv --reference data/reference/serie76_tablas_extraidas.csv --out reports/pipeline/evaluation.json
-./.venv/Scripts/python.exe -m unittest discover -s tests -v
+$env:SERIES76_TEST_DB='1'
+./.venv-model-eval/Scripts/python.exe -m unittest discover -s tests
+./.venv-ingest/Scripts/python.exe -m unittest tests.test_dynamic_geometry tests.test_pipeline_safety
+./.venv-ingest/Scripts/python.exe scripts/verify_ingestion.py
 ```
 
-La suite completa requiere requirements-dev.txt en .venv; SERIES76_TEST_DB=1 habilita pruebas reales de PostgreSQL. .venv-ingest sigue siendo el runtime OCR aislado.
-
-La evaluación lee la referencia después de la extracción. El proceso de producción no la importa. El resultado compara contra una revisión visual falible, no certifica exactitud universal.
-
-Para reproducir la suite real (instalar requirements-ingest-dev.txt en un entorno de desarrollo separado, o usar .venv-ocr para el driver):
-
-```powershell
-./.venv-ocr/Scripts/python.exe scripts/verify_ingestion.py --python .venv-ingest/Scripts/python.exe --out reports/pipeline/verified --scale
-```
+Install `requirements-dev.txt` for backend tests and `requirements-ingest.lock.txt` in the isolated OCR runtime. The evaluator compares output against the fallible visual reference only after extraction; the production process never imports it. For the optional `--scale` memory measurement install `psutil==7.2.2` in the isolated verification environment. [Validation summary](evidence/ocr.md).
 
 La suite bloquea lecturas de las carpetas manual/reference/reviewed y conexiones de red durante la ejecución original; comprueba datos nuevos, tres filas, desplazamiento, reordenación de páginas, aislamiento de archivos corruptos/no soportados, integridad al reutilizar resultados y un ensayo de 100 páginas.
 
-El ensayo de 100 páginas repite cuatro páginas 25 veces. Es una prueba de volumen y caché; no una evaluación de precisión sobre 100 diseños nuevos. Los tiempos y RAM medidos se publican con ese alcance en reports/pipeline/RESULTADOS.md.
+El ensayo de 100 páginas repite cuatro páginas 25 veces. Es una prueba de volumen y caché; no una evaluación de precisión sobre 100 diseños nuevos. Los tiempos y RAM medidos se publican con ese alcance en https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/pipeline/RESULTADOS.md.
 
 ## Pendientes del assessment
 

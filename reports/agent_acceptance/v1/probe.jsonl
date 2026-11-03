@@ -1,1 +1,0 @@
-{"model": "gemini-3.6-flash", "status": "ok", "time": 1793729428.4791546, "tool_calls": ["ping"], "usage": {"completion_tokens": 14, "completion_tokens_details": null, "prompt_tokens": 49, "prompt_tokens_details": null, "total_tokens": 63}}
