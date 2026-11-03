@@ -39,6 +39,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
-      - run: chmod +x gradlew && ./gradlew testDebugUnitTest
+      # ubuntu-latest ships the Android SDK (ANDROID_HOME); no setup action needed.
+      - run: ./gradlew testDebugUnitTest
         working-directory: mobile/android
