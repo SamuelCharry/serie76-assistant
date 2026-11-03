@@ -1,0 +1,71 @@
+docker :  Image serie76-assistant-backend Building
+At line:2 char:1
++ docker compose up --build -d backend *> reports/submission/T2-docker. ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( Image serie76-...ckend Building :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+#1 [internal] load local bake definitions
+#1 reading from stdin 600B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 493B 0.0s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#3 DONE 0.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 184B 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 28.25kB 0.0s done
+#5 DONE 0.1s
+
+#6 [base 1/6] FROM docker.io/library/python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30
+#6 resolve docker.io/library/python:3.12-slim@sha256:b18b261e1b4974b4f321451ad5251ded85abb22c2b8b262da527dda1d031ab30 0.1s done
+#6 DONE 0.1s
+
+#7 [base 2/6] WORKDIR /app
+#7 CACHED
+
+#8 [base 3/6] COPY requirements.txt requirements.lock.txt ./
+#8 CACHED
+
+#9 [base 4/6] RUN pip install --no-cache-dir -r requirements.lock.txt
+#9 CACHED
+
+#10 [base 5/6] COPY backend backend
+#10 CACHED
+
+#11 [base 6/6] COPY scripts scripts
+#11 DONE 0.1s
+
+#12 [backend 1/1] COPY docker/entrypoint.sh /app/docker/entrypoint.sh
+#12 DONE 0.1s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 0.3s done
+#13 exporting manifest sha256:91110d33528c58f2783ae82230ae42f8a6918241910cb4257096ce39dde0fa62 0.0s done
+#13 exporting config sha256:e075a7b5d1ca6016acfe8c3677b5803886bc9089cba1772f5a05e4c5decdfd50 0.0s done
+#13 exporting attestation manifest sha256:c8326bd1ec3ef33a546ed15df5aebf916a0bcf68347c883dac7fb2cc138f69fc
+#13 exporting attestation manifest sha256:c8326bd1ec3ef33a546ed15df5aebf916a0bcf68347c883dac7fb2cc138f69fc 0.1s done
+#13 exporting manifest list sha256:59520d3d0912a6ca1e4fbe77566d161da20ef3222d7c3ec502dbdc0f81aa22cb 0.0s done
+#13 naming to docker.io/library/serie76-assistant-backend:latest done
+#13 unpacking to docker.io/library/serie76-assistant-backend:latest
+#13 unpacking to docker.io/library/serie76-assistant-backend:latest 0.1s done
+#13 DONE 0.7s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ Image serie76-assistant-backend Built
+ Container serie76-assistant-db-1 Running
+ Container serie76-assistant-backend-1 Recreate
+ Container serie76-assistant-backend-1 Recreated
+ Container serie76-assistant-db-1 Waiting
+ Container serie76-assistant-db-1 Healthy
+ Container serie76-assistant-backend-1 Starting
+ Container serie76-assistant-backend-1 Started

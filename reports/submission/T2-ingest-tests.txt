@@ -1,0 +1,23 @@
+input.pdf: page 1/1, rows=3, issues=0, 0.1s
+two-pages.pdf: page 1/2, rows=3, issues=0, 0.0s
+two-pages.pdf: page 2/2, rows=5, issues=1, 0.0s
+input.pdf: page 1/1, rows=3, issues=0, 0.0s
+two-pages.pdf: page 1/2, rows=3, issues=0, 0.0s
+two-pages.pdf: page 2/2, rows=6, issues=0, 0.0s
+input.pdf: page 1/1, rows=3, issues=0, 0.0s
+input.pdf: page 1/1, rows=3, issues=21, 0.0s
+input.pdf: page 1/1, rows=0, issues=1, 0.0s
+input.pdf: page 1/1, rows=0, issues=1, 0.0s
+input.pdf: page 1/1, rows=3, issues=0, 0.0s
+input.pdf: page 1/1, rows=3, issues=0, 0.0s
+.venv-ingest/Scripts/python.exe : .........................
+At line:2 char:1
++ .venv-ingest/Scripts/python.exe -m unittest tests.test_dynamic_geomet ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (.........................:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+----------------------------------------------------------------------
+Ran 25 tests in 1.690s
+
+OK

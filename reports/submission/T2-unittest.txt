@@ -1,0 +1,23 @@
+.venv-model-eval/Scripts/python.exe : ..........................process_outputs failed for run None; dropping outputs:
+'NoneType' object has no attribute 'answer'
+At line:2 char:28
++ ... EST_DB='1'; .venv-model-eval/Scripts/python.exe -m unittest discover  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (..................ribute 'answer':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+.Run compression is not enabled. Please update to the latest version of LangSmith. Falling back to regular multipart
+ingestion.
+............process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+.process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+.................................................process_outputs failed for run None; dropping outputs: 'NoneType'
+object has no attribute 'answer'
+........ss..............
+----------------------------------------------------------------------
+Ran 113 tests in 22.480s
+
+OK (skipped=2)

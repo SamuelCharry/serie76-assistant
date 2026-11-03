@@ -1,0 +1,1 @@
+{"status":"ready","catalog":{"id":2,"document_sha256":"4c28023929183df8e2a763e759cc84572b44604b30837a21e22c1166f88267e0","pipeline_signature":"d7e1c05b179f6b44dc77cda695cfd83a4b570e0db1ee2083d537fd709df70b27","rows":68},"context_terms":16} HTTP 200
