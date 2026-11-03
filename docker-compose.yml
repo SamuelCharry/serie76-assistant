@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-series76}
+      POSTGRES_USER: ${POSTGRES_USER:-series76}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Copy .env.example to .env and set a local password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  backend:
+    build:
+      context: .
+      target: backend
+    environment:
+      PGHOST: db
+      PGPORT: "5432"
+      PGDATABASE: ${POSTGRES_DB:-series76}
+      PGUSER: ${POSTGRES_USER:-series76}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Set a local password}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+      OPENROUTER_CHAT_MODEL: ${OPENROUTER_CHAT_MODEL:-}
+      OPENROUTER_EMBEDDING_MODEL: ${OPENROUTER_EMBEDDING_MODEL:-}
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+  ocr:
+    profiles: ["ocr"]
+    build:
+      context: .
+      target: ocr
+    volumes:
+      - ./data/raw:/app/data/raw:ro
+      - ./data/ocr:/app/data/ocr
+    command: ["--page", "1", "--psm", "3", "--out", "data/ocr/page1-psm3"]
+volumes:
+  postgres_data:

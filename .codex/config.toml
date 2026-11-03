@@ -1,0 +1,3 @@
+# Project configuration intentionally inherits model/provider from the user's Codex setup.
+# Active project instructions live in ../AGENTS.md.
+# Do not copy global credentials, auth.json, private logs, or user-level permissions here.
