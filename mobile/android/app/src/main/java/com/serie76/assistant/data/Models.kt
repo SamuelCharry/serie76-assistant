@@ -25,6 +25,8 @@ data class Message(
     val products: List<Product> = emptyList(),
     @SerialName("created_at") val createdAt: String = "",
     val sequence: Long = 0,
+    @SerialName("suggested_replies") val suggestedReplies: List<String> = emptyList(),
+    val comparison: DifferenceComparison? = null,
 )
 
 @Serializable
@@ -48,7 +50,22 @@ data class ConversationResponse(
     val answer: String,
     @SerialName("message_id") val messageId: String,
     val products: List<Product> = emptyList(),
+    @SerialName("suggested_replies") val suggestedReplies: List<String> = emptyList(),
+    val comparison: DifferenceComparison? = null,
 )
+
+@Serializable
+data class DifferenceRow(val field: String, val label: String, val a: String, val b: String, val better: String? = null) {
+    init { require(better == null || better == "a" || better == "b") }
+}
+
+@Serializable
+data class DifferenceComparison(
+    val models: List<String>, val rows: List<DifferenceRow>,
+    @SerialName("identical_fields_hidden") val identicalFieldsHidden: Int = 0,
+) {
+    init { require(models.size == 2) }
+}
 
 @Serializable
 data class Product(

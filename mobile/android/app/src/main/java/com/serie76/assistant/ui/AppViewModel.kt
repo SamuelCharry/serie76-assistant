@@ -149,7 +149,8 @@ class AppViewModel(private val repository: ConversationRepository, private val s
                     mutable.update { it.copy(sessionId = response.sessionId, title = if (current.sessionId == null) query.take(100) else it.title,
                         draft = "", sending = false,
                         messages = it.messages + listOf(Message(UUID.randomUUID().toString(), "user", query),
-                            Message(response.messageId, "assistant", response.answer, response.products))) }
+                            Message(response.messageId, "assistant", response.answer, response.products,
+                                suggestedReplies = response.suggestedReplies, comparison = response.comparison))) }
                 }
                 refreshSessions()
             } catch (error: CancellationException) { throw error }

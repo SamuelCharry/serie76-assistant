@@ -208,7 +208,16 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
             if (state.historyBefore != null) item { TextButton(colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onPrimaryContainer), onClick = onOlder, enabled = !state.historyLoading) { Text("Load earlier messages") } }
             if (state.historyLoading) item { LoadingLine("Loading messages") }
             state.historyError?.let { item { ErrorPanel(it, "Try again", onReload) } }
-            items(state.messages, key = Message::id) { message -> MessageContent(message) }
+            items(state.messages, key = Message::id) { message ->
+                MessageContent(message)
+                if (message.role == "assistant" && message.id == state.messages.lastOrNull { it.role == "assistant" }?.id) {
+                    SuggestedReplyChips(message.suggestedReplies,
+                        enabled = !state.sending && !state.needsReconcile && !state.historyLoading) { reply ->
+                        onDraft(reply)
+                        onSend()
+                    }
+                }
+            }
             if (state.sending) item {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(state.draft.trim(), style = MaterialTheme.typography.bodyLarge)
@@ -234,8 +243,41 @@ fun MessageContent(message: Message) {
             Text("Assistant", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(message.content, style = MaterialTheme.typography.bodyLarge)
         }
-        if (message.products.size == 1) ProductCard(message.products.first())
+        if (message.comparison != null) DifferenceComparisonCard(message.comparison)
+        else if (message.products.size == 1) ProductCard(message.products.first())
         else if (message.products.isNotEmpty()) ComparisonTable(message.products)
+    }
+}
+
+@Composable
+fun SuggestedReplyChips(replies: List<String>, enabled: Boolean, onReply: (String) -> Unit) {
+    FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        replies.take(3).forEach { reply ->
+            SuggestionChip(onClick = { onReply(reply) }, enabled = enabled, label = { Text(reply) })
+        }
+    }
+}
+
+@Composable
+fun DifferenceComparisonCard(comparison: DifferenceComparison) {
+    OutlinedCard(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Field", Modifier.weight(1f), fontWeight = FontWeight.Bold)
+                comparison.models.forEach { Text(it, Modifier.weight(1f), style = MaterialTheme.typography.labelMedium) }
+            }
+            comparison.rows.forEach { row ->
+                HorizontalDivider()
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(row.label, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
+                    Text(row.a, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall,
+                        fontWeight = if (row.better == "a") FontWeight.Bold else FontWeight.Normal)
+                    Text(row.b, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall,
+                        fontWeight = if (row.better == "b") FontWeight.Bold else FontWeight.Normal)
+                }
+            }
+            Text("${comparison.identicalFieldsHidden} identical fields hidden", style = MaterialTheme.typography.labelSmall)
+        }
     }
 }
 
