@@ -74,4 +74,7 @@ def readiness(connection):
         FROM series76.catalog_state c JOIN series76.imports i ON i.id=c.active_import_id""").fetchone()
     if not row or not row["rows"]:
         raise ValueError("No populated active catalogue")
-    return dict(status="ready", catalog=row)
+    terms = connection.execute("SELECT count(*) AS n FROM series76.context_terms").fetchone()["n"]
+    if not terms:
+        raise ValueError("Business-context glossary not loaded")
+    return dict(status="ready", catalog=row, context_terms=terms)

@@ -1,0 +1,281 @@
+{
+  "document": "series_76_summary.pdf",
+  "document_sha256": "e4b7cd97f4a6e8dded24fa94ab6c5b01a4a5752700d5f117b1a05f43e0adaf0f",
+  "kind": "business_context",
+  "extractor": "summary-typography-v1",
+  "terms": [
+    {
+      "term_key": "series_76_overview",
+      "label": "Series 76 Electric Actuators",
+      "definition": "The data provided pertains to the Series 76, a line of heavy-duty electric actuators. These devices are critical components in industrial automation, used to remotely open, close, or precisely control valves and dampers in a wide range of applications, from HVAC systems to industrial processing plants.",
+      "section": "Series 76 Electric Actuators",
+      "group": null,
+      "page": 1,
+      "ordinal": 1,
+      "aliases": [
+        "Series 76",
+        "what are these actuators"
+      ],
+      "catalog_fields": []
+    },
+    {
+      "term_key": "data_tables",
+      "label": "Understanding the Data Tables",
+      "definition": "The provided tables contain the Electrical Data for the Series 76 actuators. This data is essential for engineers and technicians to select the correct actuator model for a specific application based on power availability and performance requirements. The data is segmented based on several key criteria:",
+      "section": "Understanding the Data Tables",
+      "group": null,
+      "page": 1,
+      "ordinal": 2,
+      "aliases": [
+        "table segmentation",
+        "how the tables are organised"
+      ],
+      "catalog_fields": []
+    },
+    {
+      "term_key": "weatherproof",
+      "label": "Weatherproof",
+      "definition": "Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).",
+      "section": "Understanding the Data Tables",
+      "group": "Enclosure Type",
+      "page": 1,
+      "ordinal": 3,
+      "aliases": [
+        "weather proof",
+        "outdoor enclosure",
+        "CE",
+        "UKCA"
+      ],
+      "catalog_fields": [
+        "enclosure"
+      ]
+    },
+    {
+      "term_key": "explosionproof",
+      "label": "Explosionproof",
+      "definition": "Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards).",
+      "section": "Understanding the Data Tables",
+      "group": "Enclosure Type",
+      "page": 1,
+      "ordinal": 4,
+      "aliases": [
+        "explosion proof",
+        "hazardous area",
+        "ATEX",
+        "IECEx",
+        "flammable gas"
+      ],
+      "catalog_fields": [
+        "enclosure"
+      ]
+    },
+    {
+      "term_key": "supply_24v_ac_dc",
+      "label": "24V AC/DC",
+      "definition": "Low voltage direct or alternating current.",
+      "section": "Understanding the Data Tables",
+      "group": "Power Supply",
+      "page": 1,
+      "ordinal": 5,
+      "aliases": [
+        "24 V",
+        "low voltage"
+      ],
+      "catalog_fields": [
+        "supply_voltage_v",
+        "supply_current"
+      ]
+    },
+    {
+      "term_key": "supply_110v_1ph",
+      "label": "110V Single Phase",
+      "definition": "Standard North American voltage.",
+      "section": "Understanding the Data Tables",
+      "group": "Power Supply",
+      "page": 1,
+      "ordinal": 6,
+      "aliases": [
+        "110 V"
+      ],
+      "catalog_fields": [
+        "supply_voltage_v",
+        "phase_count"
+      ]
+    },
+    {
+      "term_key": "supply_220v_1ph",
+      "label": "220V Single Phase",
+      "definition": "Common international voltage.",
+      "section": "Understanding the Data Tables",
+      "group": "Power Supply",
+      "page": 1,
+      "ordinal": 7,
+      "aliases": [
+        "220 V"
+      ],
+      "catalog_fields": [
+        "supply_voltage_v",
+        "phase_count"
+      ]
+    },
+    {
+      "term_key": "on_off",
+      "label": "On/Off",
+      "definition": "The actuator operates in two positions: fully open or fully closed.",
+      "section": "Understanding the Data Tables",
+      "group": "Application Type",
+      "page": 1,
+      "ordinal": 8,
+      "aliases": [
+        "on-off",
+        "open/close",
+        "two-position",
+        "isolation"
+      ],
+      "catalog_fields": [
+        "service"
+      ]
+    },
+    {
+      "term_key": "modulating",
+      "label": "Modulating",
+      "definition": "The actuator can be controlled to stop at any point in its 90-degree rotation, allowing for precise flow control.",
+      "section": "Understanding the Data Tables",
+      "group": "Application Type",
+      "page": 1,
+      "ordinal": 9,
+      "aliases": [
+        "modulation",
+        "positioning",
+        "throttling",
+        "control how much it opens"
+      ],
+      "catalog_fields": [
+        "service"
+      ]
+    },
+    {
+      "term_key": "base_part_number",
+      "label": "Base Part Number",
+      "definition": "The unique identifier for each actuator model (e.g., 761A00-11380000/A).",
+      "section": "Data Fields in the Tables",
+      "group": null,
+      "page": 1,
+      "ordinal": 11,
+      "aliases": [
+        "part number",
+        "model code",
+        "BPN"
+      ],
+      "catalog_fields": [
+        "base_part_number"
+      ]
+    },
+    {
+      "term_key": "output_torque",
+      "label": "Output Torque",
+      "definition": "The rotational force the actuator can produce, measured in in-lbs (inch-pounds) and Nm (Newton-meters). This is a primary performance metric.",
+      "section": "Data Fields in the Tables",
+      "group": null,
+      "page": 1,
+      "ordinal": 12,
+      "aliases": [
+        "torque",
+        "in-lb",
+        "Nm"
+      ],
+      "catalog_fields": [
+        "torque_nm",
+        "torque_in_lb"
+      ]
+    },
+    {
+      "term_key": "duty_cycle",
+      "label": "Duty Cycle (S4%)",
+      "definition": "The percentage of time the actuator can be in operation over a given cycle without overheating.",
+      "section": "Data Fields in the Tables",
+      "group": null,
+      "page": 2,
+      "ordinal": 13,
+      "aliases": [
+        "S4",
+        "duty",
+        "duty cycle",
+        "S4%"
+      ],
+      "catalog_fields": [
+        "duty_s4_percent"
+      ]
+    },
+    {
+      "term_key": "operating_speed",
+      "label": "Operating Speed (Sec)",
+      "definition": "The time it takes for the actuator to complete a full 90-degree turn. For AC models, this can vary based on the power frequency (50 Hz vs. 60 Hz).",
+      "section": "Data Fields in the Tables",
+      "group": null,
+      "page": 2,
+      "ordinal": 14,
+      "aliases": [
+        "operating time",
+        "stroke time",
+        "speed",
+        "travel time"
+      ],
+      "catalog_fields": [
+        "operating_time_s"
+      ]
+    },
+    {
+      "term_key": "fla",
+      "label": "Full Load Current (FLA)",
+      "definition": "The electric current (in Amps) drawn by the motor under its maximum rated load.",
+      "section": "Data Fields in the Tables",
+      "group": null,
+      "page": 2,
+      "ordinal": 15,
+      "aliases": [
+        "FLA",
+        "full load amps",
+        "running current"
+      ],
+      "catalog_fields": [
+        "fla_a"
+      ]
+    },
+    {
+      "term_key": "lra",
+      "label": "Locked Rotor Current (LRA)",
+      "definition": "The current drawn by the motor at startup, which is significantly higher than the FLA.",
+      "section": "Data Fields in the Tables",
+      "group": null,
+      "page": 2,
+      "ordinal": 16,
+      "aliases": [
+        "LRA",
+        "inrush",
+        "starting current"
+      ],
+      "catalog_fields": [
+        "lra_a"
+      ]
+    },
+    {
+      "term_key": "motor_power",
+      "label": "Motor Power",
+      "definition": "The power rating of the internal motor, measured in Watts.",
+      "section": "Data Fields in the Tables",
+      "group": null,
+      "page": 2,
+      "ordinal": 17,
+      "aliases": [
+        "power",
+        "watts",
+        "wattage",
+        "power draw"
+      ],
+      "catalog_fields": [
+        "motor_power_w"
+      ]
+    }
+  ]
+}
