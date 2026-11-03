@@ -62,7 +62,7 @@ OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash
 docker compose up -d backend
 curl http://localhost:8000/ready
 ```
-The model ID is the historical candidate, not a verified-current availability guarantee. A ready=200 response checks catalogue/glossary, not credentials, model routing or remaining balance. LangSmith remains off unless tracing=true and a key are both present; enabling it sends prompts/user text/tool data/catalogue rows externally. See [agent](agent.md).
+The model was evaluated through Google's OpenAI-compatible endpoint; OpenRouter acceptance is pending. A ready=200 response checks catalogue/glossary, not credentials, model routing or remaining balance. LangSmith remains off unless tracing=true and a key are both present; enabling it sends prompts/user text/tool data/catalogue rows externally. See [agent](agent.md).
 
 ## Troubleshooting
 

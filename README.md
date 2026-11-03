@@ -8,13 +8,14 @@ Local OCR extracts the electrical PDF; the supplied summary provides glossary de
 
 ```mermaid
 flowchart LR
-    PDF[Electrical PDF] --> Ingestion[Local ingestion]
-    Ingestion --> DB[(PostgreSQL)]
-    API[FastAPI] --> DB
-    Agent[LangChain agent] --> API
-    Android[Android] --> API
-    API --> Agent
-    Agent --> DB
+    Android[Android] --> API[FastAPI]
+    API --> Agent["LangChain: one LLM decision"]
+    Agent --> Tools[Tools]
+    Tools --> DB[(PostgreSQL)]
+    API -->|history| DB
+    PDF[PDF] --> OCR[OCR]
+    OCR --> Validation[Validation]
+    Validation -->|ingestion| DB
 ```
 
 ## Quick start: three commands
@@ -61,7 +62,7 @@ With a valid token and no model key/model set, expect **HTTP 503**:
 {"detail":"Conversation service unavailable. Check backend configuration and try again.","error_code":"not_configured"}
 ```
 
-To enable interpretation after explicit inference authorization, set `OPENROUTER_API_KEY=<private-key>` and `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash` in your ignored .env, then `docker compose up -d backend`. This is a historical candidate; OpenRouter acceptance is **pending**. One tool decision per turn, SQL values and template answers; no embeddings. [Design/trade-offs](docs/wiki/en/patterns.md), [model evidence](docs/wiki/en/testing.md). Send the returned session_id on follow-ups. [Complete API](docs/wiki/en/api.md).
+To enable interpretation after explicit inference authorization, set `OPENROUTER_API_KEY=<private-key>` and `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash` in your ignored .env, then `docker compose up -d backend`. The model was evaluated through Google's OpenAI-compatible endpoint; OpenRouter acceptance is **pending**. One tool decision per turn, SQL values and template answers; no embeddings. [Design/trade-offs](docs/wiki/en/patterns.md), [model evidence](docs/wiki/en/testing.md). Send the returned session_id on follow-ups. [Complete API](docs/wiki/en/api.md).
 
 ## Android
 
@@ -80,11 +81,23 @@ Default backend: `http://10.0.2.2:8000/` (emulator); override with `-PbackendUrl
 Validated outputs: [CSV](data/extracted/series76/catalog.csv), [JSON](data/extracted/series76/catalog.json), [HTML](data/extracted/series76/catalog.html). [Re-run OCR and SQL loading](docs/wiki/en/ingestion.md). Python 3.12 + requirements-dev.txt; separate OCR runtime uses requirements-ingest.lock.txt. With local DB ready:
 
 ```sh
-SERIES76_TEST_DB=1 .venv-model-eval/bin/python -m unittest discover -s tests
-# Windows PowerShell:
-# $env:SERIES76_TEST_DB='1'
-# .venv-model-eval/Scripts/python.exe -m unittest discover -s tests
+# macOS/Linux
+python -m venv .venv
+. .venv/bin/activate
+pip install -r requirements-dev.txt
+SERIES76_TEST_DB=1 python -m unittest discover -s tests
 ```
+
+```powershell
+# Windows PowerShell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt
+$env:SERIES76_TEST_DB='1'
+python -m unittest discover -s tests
+```
+
+Tests use Compose PostgreSQL on `127.0.0.1:5432` (or POSTGRES_PORT): `local_environment()` maps .env POSTGRES_* to PG*; existing process PG* wins. [Connection mapping and CI](docs/wiki/en/testing.md#postgresql-connection). OCR uses a second activated environment: [setup](docs/wiki/en/ingestion.md#rerun).
 
 [Environment setup, all suites, Android and CI](docs/wiki/en/testing.md). Scripted tool calls prove code behavior; they do not establish real-model acceptance.
 
@@ -100,8 +113,6 @@ SERIES76_TEST_DB=1 .venv-model-eval/bin/python -m unittest discover -s tests
 - `reports/` — submission verification records.
 - `scripts/` — ingestion, loading and verification CLIs.
 - `tests/` — offline/scripted and opt-in PostgreSQL checks.
-- `architecture_eval/` — retained experiment package marker; implementation archived.
-- `model_eval/` — retained model-evaluation package marker; implementation archived.
 - `.claude/, .codex/` — real project assistant configuration.
 - `.github/` — CI and contribution templates.
 

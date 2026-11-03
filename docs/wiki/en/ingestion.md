@@ -23,14 +23,22 @@ The production extractor reads the PDF, never `data/manual`, `data/reference` or
 
 Use Python 3.12, 64-bit. First execution downloads public OCR weights; subsequent recognition is local. Use a new output root to preserve evidence. Passing a directory processes a batch; `--no-images --threads 2` reduces retained images and controls runtime threads.
 
+Run only your shell block; `deactivate` leaves an active environment before switching.
+
 ```sh
+# macOS/Linux: deactivate the backend environment first, if active
 python -m venv .venv-ingest
-# macOS/Linux
-.venv-ingest/bin/python -m pip install -r requirements-ingest.lock.txt
-.venv-ingest/bin/python scripts/ingest.py data/raw/series_76_electric_data.pdf --out data/processed/new-import
-# Windows PowerShell
-.venv-ingest/Scripts/python.exe -m pip install -r requirements-ingest.lock.txt
-.venv-ingest/Scripts/python.exe scripts/ingest.py data/raw/series_76_electric_data.pdf --out data/processed/new-import
+. .venv-ingest/bin/activate
+pip install -r requirements-ingest.lock.txt
+python scripts/ingest.py data/raw/series_76_electric_data.pdf --out data/processed/new-import
+```
+
+```powershell
+# Windows PowerShell: deactivate the backend environment first, if active
+python -m venv .venv-ingest
+.\.venv-ingest\Scripts\Activate.ps1
+pip install -r requirements-ingest.lock.txt
+python scripts/ingest.py data/raw/series_76_electric_data.pdf --out data/processed/new-import
 ```
 
 Each document gets its own hash/signature folder. `manifest.json` records `ready`, `needs_review` or `failed`; `cells.jsonl` retains raw text, alternate reads, bounding boxes, units, page/table/row and source hash. `review_queue.jsonl` blocks validated exports when unresolved. CSV/JSON/HTML appear only on success. The batch exits 2 if a document fails or needs review; other documents continue. Identical completed output is reused only after hash checks.

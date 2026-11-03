@@ -42,9 +42,11 @@ Pattern — where — why: decisions to defend in review.
 
 ### One agent
 
-[backend/conversation/agent.py](../../../backend/conversation/agent.py#L456) — One decision reduces call paths; literal glossary fits this context, so no vector store is needed. The A–E experiment was inconclusive; this is engineering judgment, not measured superiority.
+Deterministic defects found in A–E (DC + 60 Hz validation and asking to complete a well-formed nonexistent code) were fixed in code; another LLM does not repair the validator or renderer. A reviewer shares model failure modes and gives no numeric guarantee: validation + SQL + templates own the numbers. [Archived defects, fixes and design](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/docs/adr/0001-arquitectura-agente.md), [reviewer limitation](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/reports/architecture_eval/ANALISIS.md).
 
-The [architecture comparison](../../evidence/architecture_comparison.md) had only 1/24 common scenarios and 19 provider failures; heterogeneous available sets cannot rank variants. A SQL agent, contextual vector agent, two specialists, supervisor and proposer/reviewer were compared. See [ADR 0001](../../adr/0001-arquitectura-agente.md) and [testing](testing.md) for frozen records.
+The [archived engine](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/architecture_eval/engine.py) makes 2 provider decisions for completed C/E turns; D uses 1 for clarification, 2 for catalogue or 3 with context, excluding embeddings/local FixedRouter. With [19 provider failures in 103 calls](../../evidence/architecture_comparison.md) and the [USD 10 assessment budget](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/docs/adr/0001-arquitectura-agente.md), extra calls add failure exposure, latency and cost. These observations do not establish independent failure probabilities.
+
+A+ achieved [50/55 in v4 with 4 provider-only failures](../../evidence/agent_acceptance.md), through Google. A–E was inconclusive: one agent is an engineering decision, not measured superiority. Reconsider multiple agents for genuinely different workflows or a large corpus requiring specialised retrieval; OpenRouter acceptance remains pending.
 
 ## Where in the code
 

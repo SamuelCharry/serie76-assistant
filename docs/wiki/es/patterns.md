@@ -42,9 +42,11 @@ Patrón — dónde — por qué: decisiones que defender en revisión.
 
 ### Un agente
 
-[backend/conversation/agent.py](../../../backend/conversation/agent.py#L456) — Una decisión reduce caminos de llamada; el glosario literal cabe en contexto y no necesita vectores. El experimento A–E fue inconcluso; es decisión de ingeniería, no superioridad medida.
+Los defectos deterministas de A–E (validación DC + 60 Hz y pedir completar un código bien formado inexistente) se corrigieron en código; otro LLM no repara validador ni renderizador. Un revisor comparte modos de fallo y no garantiza cifras: las controla validación + SQL + plantillas. [Defectos, correcciones y diseño archivados](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/docs/adr/0001-arquitectura-agente.md), [límite del revisor](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/reports/architecture_eval/ANALISIS.md).
 
-La [comparación de arquitecturas](../../evidence/architecture_comparison.md) solo tuvo 1/24 escenarios comunes y 19 fallos de proveedor; conjuntos disponibles distintos no permiten ordenar variantes. Se compararon agente SQL, agente contextual con vectores, dos especialistas, supervisor y proponente/revisor. Ver [ADR 0001](../../adr/0001-arquitectura-agente.md) y [pruebas](testing.md) para registros congelados.
+El [motor archivado](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/architecture_eval/engine.py) hace 2 decisiones de proveedor en turnos completos C/E; D usa 1 al aclarar, 2 en catálogo o 3 con contexto, excluyendo embeddings/FixedRouter local. Con [19 fallos de proveedor en 103 llamadas](../../evidence/architecture_comparison.md) y [presupuesto de USD 10](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/docs/adr/0001-arquitectura-agente.md), cada llamada extra añade exposición a fallo, latencia y coste. No son probabilidades de fallo independientes.
+
+A+ logró [50/55 en v4 con 4 fallos solo de proveedor](../../evidence/agent_acceptance.md), mediante Google. A–E fue inconcluso: un agente es decisión de ingeniería, no superioridad medida. Reconsideraría varios ante flujos realmente distintos o un corpus grande que exija recuperación especializada; aceptación OpenRouter pendiente.
 
 ## Dónde está en el código
 

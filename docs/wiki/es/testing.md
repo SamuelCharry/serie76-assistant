@@ -18,30 +18,52 @@ Un modelo programado devuelve herramientas predeterminadas; las herramientas rea
 
 ## Ejecutar localmente
 
-Inicia Compose primero. Crea un entorno Python 3.12 e instala `requirements-dev.txt`; OCR requiere aparte `requirements-ingest.lock.txt`. Estos comandos usan el entorno local de verificación; créalo en un checkout nuevo:
+Inicia Compose desde el [README](../../../README.es.md); crea y activa un entorno Python 3.12 desde la raíz. Ejecuta solo el bloque de tu shell:
 
 ```sh
-python -m venv .venv-model-eval
 # macOS/Linux
-.venv-model-eval/bin/python -m pip install -r requirements-dev.txt
-SERIES76_TEST_DB=1 .venv-model-eval/bin/python -m unittest discover -s tests
-# Windows PowerShell
-.venv-model-eval/Scripts/python.exe -m pip install -r requirements-dev.txt
-$env:SERIES76_TEST_DB='1'
-.venv-model-eval/Scripts/python.exe -m unittest discover -s tests
+python -m venv .venv
+. .venv/bin/activate
+pip install -r requirements-dev.txt
+SERIES76_TEST_DB=1 python -m unittest discover -s tests
 ```
-Para completar los controles OCR locales instala también el runtime de [ingestión](ingestion.md); ejecuta sus dos suites y verificadores. En macOS/Linux sustituye las rutas Windows siguientes por `.venv-ingest/bin/python`.
 
 ```powershell
-.venv-ingest/Scripts/python.exe -m unittest discover -s tests -p test_dynamic_geometry.py
-.venv-ingest/Scripts/python.exe -m unittest discover -s tests -p test_pipeline_safety.py
-.venv-ingest/Scripts/python.exe scripts/verify_ingestion.py
-.venv-model-eval/Scripts/python.exe scripts/verify_catalog_db.py
-.venv-model-eval/Scripts/python.exe scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v4.json
+# Windows PowerShell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt
+$env:SERIES76_TEST_DB='1'
+python -m unittest discover -s tests
+```
+
+## Conexión PostgreSQL
+
+Las pruebas conectan al servicio Compose `db` por loopback del host `127.0.0.1:5432`, no por hostname Docker `db`. `backend.catalog.cli.local_environment()` lee .env desde la raíz sin mostrarlo: PGHOST predeterminado 127.0.0.1; POSTGRES_PORT → PGPORT (5432), POSTGRES_DB → PGDATABASE (series76), POSTGRES_USER → PGUSER (series76), POSTGRES_PASSWORD → PGPASSWORD. Prevalecen las PG* del proceso. Usa los valores que inicializaron el volumen Compose; cambiar .env no restablece su contraseña. CI define PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD directamente en el workflow. Sin SERIES76_TEST_DB=1 se omiten las pruebas DB.
+
+En el entorno backend activado:
+
+```sh
+python scripts/verify_catalog_db.py
+python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v4.json
+```
+
+OCR utiliza otro entorno: sigue la [preparación de ingestión](ingestion.md#reejecutar) y ejecuta con ese entorno OCR activo:
+
+```sh
+python -m unittest discover -s tests -p test_dynamic_geometry.py
+python -m unittest discover -s tests -p test_pipeline_safety.py
+python scripts/verify_ingestion.py
+```
+
+Android (Windows; en macOS/Linux sustituye el wrapper .bat por `sh mobile/android/gradlew`):
+
+```powershell
 ./mobile/android/gradlew.bat -p mobile/android testDebugUnitTest assembleDebug assembleRelease
 ./mobile/android/gradlew.bat -p mobile/android connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=com.serie76.assistant.LiveAuthTest
 ```
-En macOS/Linux usa `sh mobile/android/gradlew` en vez del wrapper .bat. Instrumentación exige emulador; el helper live auth excluido necesita backend/cuentas preparados. [`scripts/verify_android_auth.py`](../../../scripts/verify_android_auth.py) y [`scripts/verify_mobile_backend.py`](../../../scripts/verify_mobile_backend.py) prueban HTTP/reinicio con interpretación controlada y crean registros de verificación; no prueban LLM real. Conserva el volumen PostgreSQL. Sin SERIES76_TEST_DB=1 las pruebas DB se omiten explícitamente. El selfcheck valida expectativas, no calidad del modelo.
+
+La instrumentación exige emulador activo. El helper live-auth excluido necesita cuentas de prueba explícitas; ver [`verify_android_auth.py`](../../../scripts/verify_android_auth.py). [`verify_mobile_backend.py`](../../../scripts/verify_mobile_backend.py) prueba HTTP/reinicio controlado; ninguno acredita comprensión del modelo real. Conserva volumen DB. El selfcheck valida expectativas, no calidad del modelo.
 
 ## Evidencia de modelo real
 

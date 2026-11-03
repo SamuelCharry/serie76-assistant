@@ -6,13 +6,14 @@ A reading map for someone opening the repository for the first time.
 
 ```mermaid
 flowchart LR
-    PDF[Electrical PDF] --> Ingestion[Local ingestion]
-    Ingestion --> DB[(PostgreSQL)]
-    API[FastAPI] --> DB
-    Agent[LangChain agent] --> API
-    Android[Android] --> API
-    API --> Agent
-    Agent --> DB
+    Android[Android] --> API[FastAPI]
+    API --> Agent["LangChain: one LLM decision"]
+    Agent --> Tools[Tools]
+    Tools --> DB[(PostgreSQL)]
+    API -->|history| DB
+    PDF[PDF] --> OCR[OCR]
+    OCR --> Validation[Validation]
+    Validation -->|ingestion| DB
 ```
 
 Arrows show data access and requests; the agent runs inside the backend process. Catalogue numbers come only from the electrical PDF; definitions come from the supplied summary. PostgreSQL holds the active catalogue, auth and message snapshots.

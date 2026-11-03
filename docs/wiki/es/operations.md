@@ -62,7 +62,7 @@ OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash
 docker compose up -d backend
 curl http://localhost:8000/ready
 ```
-El ID es el candidato histórico, no una garantía de disponibilidad actual. ready=200 comprueba catálogo/glosario, no credenciales, routing ni saldo. LangSmith permanece apagado salvo tracing=true y clave; activarlo envía prompts/texto/herramientas/filas externamente. Ver [agente](agent.md).
+El modelo se evaluó mediante el endpoint Google compatible con OpenAI; la aceptación OpenRouter está pendiente. ready=200 comprueba catálogo/glosario, no credenciales, routing ni saldo. LangSmith permanece apagado salvo tracing=true y clave; activarlo envía prompts/texto/herramientas/filas externamente. Ver [agente](agent.md).
 
 ## Solución de problemas
 

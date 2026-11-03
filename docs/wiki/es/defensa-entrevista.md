@@ -6,9 +6,12 @@ Preguntas difíciles con respuestas breves que separan decisiones de ingeniería
 
 ## 1. ¿Por qué un agente y no varios?
 
-Porque las responsabilidades se separan mejor en código: decisión, validación, SQL y plantilla. La comparación A–E fue inconclusa; no puedo afirmar superioridad medida.
-
-Prueba: [docs/evidence/architecture_comparison.md](../../../docs/evidence/architecture_comparison.md#L1).
+- A–E encontró fallos deterministas: DC + 60 Hz terminaba en error de esquema y se pedía completar un código bien formado inexistente; se corrigieron en código, no añadiendo otro LLM. [ADR archivado](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/docs/adr/0001-arquitectura-agente.md).
+- Un revisor LLM no garantiza cifras; en el ensayo compartía modelo/proveedor y posibles sesgos. La garantía numérica viene de validación + SQL + plantillas. [Análisis archivado](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/reports/architecture_eval/ANALISIS.md) y [ADR](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/docs/adr/0001-arquitectura-agente.md).
+- En turnos completados C y E hacen 2 decisiones LLM; D hace 1 al aclarar, 2 en ruta catálogo o 3 con contexto. Se excluyen embeddings y FixedRouter local. [Código archivado verificado](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/architecture_eval/engine.py).
+- Con 19 fallos de proveedor en 103 llamadas observadas y presupuesto del assessment de USD 10, cada llamada extra añade exposición a fallo, latencia y coste; no estimo probabilidades independientes con esa muestra. [Comparación](../../evidence/architecture_comparison.md) y [presupuesto en ADR archivado](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/docs/adr/0001-arquitectura-agente.md).
+- A+ pasó 50/55 escenarios en v4, con 4 fallos solo de proveedor; es aceptación Google, no OpenRouter. [Cohortes](../../evidence/agent_acceptance.md).
+- A–E quedó inconcluso: es una decisión de ingeniería, no un ranking medido. Consideraría multiagente con flujos realmente distintos o un corpus grande que justifique recuperación especializada. [Comparación y límites](../../evidence/architecture_comparison.md).
 
 ## 2. ¿Por qué OCR y no un LLM para las tablas?
 
@@ -72,9 +75,11 @@ Prueba: [docs/adr/0001-arquitectura-agente.md](../../../docs/adr/0001-arquitectu
 
 ## 12. ¿Qué pasa cuando el proveedor devuelve 503?
 
-La API devuelve error seguro, revierte todo el turno y Android muestra indisponibilidad. Un timeout del cliente no prueba cancelación; hay que revisar historial antes de reenviar.
+El backend responde 503 y revierte todo el turno. Android muestra exactamente “The assistant is not configured on the server.” si `error_code=not_configured`; para cualquier otro 503 muestra “The assistant is temporarily unavailable. Please try again.”
 
-Prueba: [backend/conversation/api.py](../../../backend/conversation/api.py#L76).
+Los códigos del backend son `not_configured`, `timeout`, `rate_limited`, `budget_exhausted`, `provider_unreachable`, `provider_error` y `rate_limited_local` (guarda por proceso). Un 503 por DB/capacidad puede no llevar `error_code`. Un timeout del cliente no prueba cancelación: revisar historial antes de reenviar.
+
+Prueba: [mensajes Android](../../../mobile/android/app/src/main/java/com/serie76/assistant/data/ConversationRepository.kt#L61), [códigos del proveedor](../../../backend/conversation/agent.py#L219), [guarda local](../../../backend/conversation/agent.py#L179) y [rollback/API](../../../backend/conversation/api.py#L76).
 
 ## 13. ¿El límite horario impide agotar el saldo?
 

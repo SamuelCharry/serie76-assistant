@@ -18,30 +18,52 @@ A scripted model returns predetermined tool calls; the real tools then execute v
 
 ## Run locally
 
-Start Compose first. Create a Python 3.12 environment and install `requirements-dev.txt`; OCR needs the separate `requirements-ingest.lock.txt` environment. The commands use the existing local verification environment; on a fresh checkout create it first:
+Start Compose from the [README](../../../README.md); then create and activate a Python 3.12 environment from the repository root. Run only the block for your shell:
 
 ```sh
-python -m venv .venv-model-eval
 # macOS/Linux
-.venv-model-eval/bin/python -m pip install -r requirements-dev.txt
-SERIES76_TEST_DB=1 .venv-model-eval/bin/python -m unittest discover -s tests
-# Windows PowerShell
-.venv-model-eval/Scripts/python.exe -m pip install -r requirements-dev.txt
-$env:SERIES76_TEST_DB='1'
-.venv-model-eval/Scripts/python.exe -m unittest discover -s tests
+python -m venv .venv
+. .venv/bin/activate
+pip install -r requirements-dev.txt
+SERIES76_TEST_DB=1 python -m unittest discover -s tests
 ```
-For complete local OCR checks, also follow [ingestion](ingestion.md) to install its runtime; then run its two suites and verifiers. Use `.venv-ingest/bin/python` on macOS/Linux for the following Windows paths.
 
 ```powershell
-.venv-ingest/Scripts/python.exe -m unittest discover -s tests -p test_dynamic_geometry.py
-.venv-ingest/Scripts/python.exe -m unittest discover -s tests -p test_pipeline_safety.py
-.venv-ingest/Scripts/python.exe scripts/verify_ingestion.py
-.venv-model-eval/Scripts/python.exe scripts/verify_catalog_db.py
-.venv-model-eval/Scripts/python.exe scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v4.json
+# Windows PowerShell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt
+$env:SERIES76_TEST_DB='1'
+python -m unittest discover -s tests
+```
+
+## PostgreSQL connection
+
+Tests connect to Compose service `db` through host loopback `127.0.0.1:5432`, not Docker hostname `db`. The connection helper `backend.catalog.cli.local_environment()` reads the repository-root .env without printing it: PGHOST defaults to 127.0.0.1; POSTGRES_PORT → PGPORT (default 5432), POSTGRES_DB → PGDATABASE (default series76), POSTGRES_USER → PGUSER (default series76), POSTGRES_PASSWORD → PGPASSWORD. Existing process PG* values take precedence. Use the same local values that initialized the Compose volume; changing .env does not reset its password. CI supplies PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD directly in the workflow. Without SERIES76_TEST_DB=1 the database tests skip.
+
+In the activated backend environment:
+
+```sh
+python scripts/verify_catalog_db.py
+python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v4.json
+```
+
+OCR uses a second environment: follow [ingestion setup](ingestion.md#rerun), then run these commands with that OCR environment active:
+
+```sh
+python -m unittest discover -s tests -p test_dynamic_geometry.py
+python -m unittest discover -s tests -p test_pipeline_safety.py
+python scripts/verify_ingestion.py
+```
+
+Android (Windows; on macOS/Linux substitute `sh mobile/android/gradlew` for the .bat wrapper):
+
+```powershell
 ./mobile/android/gradlew.bat -p mobile/android testDebugUnitTest assembleDebug assembleRelease
 ./mobile/android/gradlew.bat -p mobile/android connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=com.serie76.assistant.LiveAuthTest
 ```
-On macOS/Linux use `sh mobile/android/gradlew` instead of the .bat wrapper. Instrumented tests require a running emulator; the excluded live auth helper requires its own backend/accounts setup. [`scripts/verify_android_auth.py`](../../../scripts/verify_android_auth.py) and [`scripts/verify_mobile_backend.py`](../../../scripts/verify_mobile_backend.py) exercise controlled HTTP/restart paths and create verification records; they do not test a real LLM. Preserve the PostgreSQL volume. Without SERIES76_TEST_DB=1, DB tests skip explicitly. An offline selfcheck validates expectations, not model quality.
+
+Instrumented tests require a running emulator. The excluded live-auth helper needs its own explicit test-account setup; see [`verify_android_auth.py`](../../../scripts/verify_android_auth.py). [`verify_mobile_backend.py`](../../../scripts/verify_mobile_backend.py) exercises controlled HTTP/restart paths; neither establishes real-model understanding. Preserve the DB volume. An offline selfcheck validates expectations, not model quality.
 
 ## Real-model evidence
 
