@@ -23,3 +23,5 @@ class ConversationResponse(BaseModel):
     clarification: dict | None = None  # {field, message, options?, conflict?} when the agent asks
     terms: list[dict] = Field(default_factory=list)  # verbatim glossary quotes with page
     assumptions: list[dict] = Field(default_factory=list)  # user wording the agent mapped to a filter
+    suggested_replies: list[str] = Field(default_factory=list)
+    comparison: dict | None = None

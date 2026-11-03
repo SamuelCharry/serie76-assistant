@@ -9,7 +9,7 @@ UNIT = {"s": "s", "a": "A"}
 
 
 def _num(value):
-    return f"{value:g}" if isinstance(value, float) else str(value)
+    return str(value)
 
 
 def _frequency_label(product, qualifier):

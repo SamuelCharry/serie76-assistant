@@ -112,7 +112,8 @@ class ConversationIntegrationTests(unittest.TestCase):
         result = self.run_tool("get_actuator", {"part_numbers": ["761A00-11300000/A"], "focus": "motor_power"})
         self.assertIn("15 W", result.answer)
         self.assertIn("does not publish total electrical consumption", result.answer)
-        self.assertEqual(result.products[0]["measurements"]["on_off_torque_nm"], 80)
+        self.assertNotIn("on_off_torque_nm", result.products[0]["measurements"])
+        self.assertEqual(result.products[0]["measurements"]["motor_power_w"], 15)
         self.assertEqual(result.tool_calls[0]["name"], "get_actuator")
         self.assertNotIn("evidence", result.products[0])
         self.assertNotIn("provenance", result.products[0])
@@ -135,7 +136,9 @@ class ConversationIntegrationTests(unittest.TestCase):
         self.assertFalse(empty.products)
         self.assertEqual(empty.context["part_numbers"], [])
         found = self.run_tool("search_actuators", {"service": "on_off", "min_torque_nm": 70, "supply_voltage_v": 24})
-        self.assertTrue(found.products)
+        self.assertEqual(found.products, [])  # five matches require narrowing, not listing
+        self.assertEqual(found.tool_calls[0]["data"]["total"], 5)
+        self.assertIsNotNone(found.clarification)
         self.assertEqual(found.tool_calls[0]["parameters"]["min_torque_nm"], "70")
 
     def test_saved_context_and_snapshots_round_trip(self):

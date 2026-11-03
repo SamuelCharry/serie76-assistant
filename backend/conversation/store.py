@@ -44,7 +44,7 @@ def list_sessions(connection, limit=50, offset=0, *, owner_id=None):
 
 
 def history(connection, session_id, limit=100, before=None, *, internal=False, owner_id=None):
-    columns = "id,role,content,products,created_at,sequence"
+    columns = "id,role,content,products,created_at,sequence,suggested_replies,comparison"
     if internal:
         columns += ",context"
     rows = connection.execute(
@@ -82,9 +82,11 @@ def append_turn(connection, session_id, query, result, *, new=False, owner_id=No
     ):
         connection.execute(
             """INSERT INTO series76.messages
-            (id,session_id,role,content,products,tool_calls,context)
-            VALUES (%s,%s,%s,%s,%s,%s,%s)""",
-            (identifier, session_id, role, content, Jsonb(products), Jsonb(traces), Jsonb(context)),
+            (id,session_id,role,content,products,tool_calls,context,suggested_replies,comparison)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+            (identifier, session_id, role, content, Jsonb(products), Jsonb(traces), Jsonb(context),
+             Jsonb(getattr(result, "suggested_replies", []) if role == "assistant" else []),
+             Jsonb(getattr(result, "comparison", None) if role == "assistant" else None)),
         )
     connection.execute(
         "UPDATE series76.conversations SET updated_at=clock_timestamp() WHERE id=%s", (session_id,)

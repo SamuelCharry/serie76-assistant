@@ -68,7 +68,8 @@ def conversation(request: ConversationRequest, user=Depends(require_user)):
         return ConversationResponse(session_id=session_id, answer=result.answer,
                                     message_id=message_id, products=result.products,
                                     clarification=result.clarification, terms=result.terms,
-                                    assumptions=result.assumptions)
+                                    assumptions=result.assumptions,
+                                    suggested_replies=result.suggested_replies, comparison=result.comparison)
     except store.MissingSession:
         raise HTTPException(404, "Conversation not found") from None
     except store.BusySession:

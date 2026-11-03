@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import re
 from decimal import Decimal, InvalidOperation
+from backend.catalog.models import bound_value, bound_operator
 
 CODE_RE = re.compile(r"^[A-Z0-9]{6}-[A-Z0-9]{8}/A$")
 CODE_IN_TEXT = re.compile(r"\b[A-Za-z0-9]{6}-?[A-Za-z0-9]{8}/[Aa]\b")
@@ -28,7 +29,7 @@ LEXICON = {
                             "fully open", "fully closed", "two-position", "two position", "isolation", "todo/nada", "todo o nada"),
     ("service", "modulating"): ("modulat", "positioning", "throttl", "proportional", "intermediate position", "modulante"),
     ("enclosure", "explosionproof"): ("explosion", "hazardous", "atex", "iecex", "flammable", "class i", "zone 1", "antiexplos"),
-    ("enclosure", "weatherproof"): ("weatherproof", "weather proof", "weather-proof", "outdoor", "rain", "intemperie"),
+    ("enclosure", "weatherproof"): ("weatherproof", "weather proof", "weather-proof", "outdoor", "rain", "intemperie", "exteriores"),
     ("supply_current", "DC"): ("dc", "direct current", "corriente continua", "battery"),
     # Phases exist only for AC supplies (DC has none), so stated phases ground AC.
     ("supply_current", "AC"): ("ac", "alternating", "alterna", "mains", "hz", "single phase", "single-phase",
@@ -91,7 +92,7 @@ def grounding_errors(delta, assumptions, texts):
         if value is None or field in assumed:
             continue
         if field in NUMERIC_FIELDS:
-            if Decimal(str(value)) not in numbers:
+            if Decimal(str(bound_value(value))) not in numbers:
                 errors.append(field)
         elif field in CATEGORICAL_FIELDS:
             if field == "csa_required" and value is False:
@@ -132,6 +133,8 @@ def merge_filters(previous, delta, *, refine, remove, more):
             merged.pop(incompatible)
     limit = delta.get("limit") or (previous or {}).get("limit") or 5
     offset = ((previous or {}).get("offset", 0) + (previous or {}).get("limit", limit)) if more else 0
+    if (refine or more) and previous and previous.get("sort_by"):
+        merged["sort_by"] = previous["sort_by"]
     merged.update(limit=limit, offset=offset)
     return merged, notes
 
@@ -189,6 +192,11 @@ def describe(filters):
             "max_motor_power_w": lambda v: f"motor power ≤ {v} W",
             "csa_required": lambda v: "CSA listed in the table header",
         }[field](value)
+        if isinstance(value, dict):
+            number = bound_value(value)
+            text = text.replace(str(value), str(number))
+            op = {"gt": ">", "gte": ">=", "lt": "<", "lte": "<="}[bound_operator(value, "gte" if field.startswith("min_") else "lte")]
+            text = text.replace("≥", op).replace("≤", op)
         parts.append(text)
     return ", ".join(parts)
 

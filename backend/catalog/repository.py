@@ -5,7 +5,7 @@ from __future__ import annotations
 from decimal import Decimal
 
 from .loader import FREQUENCY_FIELDS, NUMERIC_FIELDS, SERVICE_FIELDS
-from .models import SearchFilters, validate_part_number
+from .models import SearchFilters, validate_part_number, bound_value, bound_operator
 
 BASE_SELECT = """SELECT e.*, t.source_table, t.source_page, t.title, t.layout,
     t.notes, t.header, t.page_metadata, t.shared_services_confirmed,
@@ -139,29 +139,25 @@ def get_actuator(connection, part_number):
     return first
 
 
-def search_actuators(connection, filters: SearchFilters):
-    version = active_import(connection)
-    service_fields = (
-        "min_torque_nm",
-        "min_torque_in_lb",
-        "min_duty_s4_percent",
-        "min_cycles_per_hour",
-        "min_starts_per_hour",
-    )
-    if filters.service is None and any(
-        getattr(filters, f) is not None for f in service_fields
-    ):
-        return dict(
-            status="needs_clarification",
-            fields=["service"],
-            message="Specify on_off or modulating before comparing service performance.",
-            products=[],
-            total=0,
-        )
-    service = filters.service or "on_off"
-    joins = """ LEFT JOIN series76.service_specs s ON s.entry_id=e.id AND s.service=%s
+COMPARISONS = {
+    "min_torque_nm": ("COALESCE(s.torque_nm,sh.torque_nm)", "gte"),
+    "min_torque_in_lb": ("COALESCE(s.torque_in_lb,sh.torque_in_lb)", "gte"),
+    "min_duty_s4_percent": ("COALESCE(s.duty_s4_percent,sh.duty_s4_percent)", "gte"),
+    "min_cycles_per_hour": ("s.cycles_per_hour", "gte"),
+    "min_starts_per_hour": ("s.starts_per_hour", "gte"),
+    "max_motor_power_w": ("e.motor_power_w", "lte"),
+    "max_operating_time_s": ("f.operating_time_s", "lte"),
+    "max_fla_a": ("f.fla_a", "lte"),
+    "max_lra_a": ("f.lra_a", "lte"),
+}
+OPERATORS = {"gt": ">", "gte": ">=", "lt": "<", "lte": "<="}
+
+
+def _matching_sql(connection, filters):
+    joins = """ LEFT JOIN series76.service_specs s ON s.entry_id=e.id
+        AND (%s::text IS NULL OR s.service=%s)
         LEFT JOIN series76.service_specs sh ON sh.entry_id=e.id AND sh.service='shared' AND t.shared_services_confirmed"""
-    params = [service, version]
+    params = [filters.service, filters.service, active_import(connection)]
     conditions = ["e.import_id=%s", "e.data_status='reported'"]
     for field in ("enclosure", "supply_voltage_v", "phase_count"):
         value = getattr(filters, field)
@@ -169,96 +165,119 @@ def search_actuators(connection, filters: SearchFilters):
             conditions.append(f"e.{field}=%s")
             params.append(value)
     if filters.supply_current:
-        if filters.supply_current in ("AC", "DC"):
-            conditions.append("e.supply_current IN (%s,'AC/DC')")
-        else:
-            conditions.append("e.supply_current=%s")
+        conditions.append("e.supply_current IN (%s,'AC/DC')" if filters.supply_current in ("AC", "DC") else "e.supply_current=%s")
         params.append(filters.supply_current)
     if filters.service:
-        conditions.append(
-            "(t.layout IN ('mixed',%s) OR (t.layout='shared' AND t.shared_services_confirmed))"
-        )
-        params.append(service)
+        conditions.append("(t.layout IN ('mixed',%s) OR (t.layout='shared' AND t.shared_services_confirmed))")
+        params.append(filters.service)
     if filters.csa_required:
         conditions.append("e.csa_status='reported_in_header'")
-    comparisons = {
-        "min_torque_nm": ("COALESCE(s.torque_nm,sh.torque_nm)", ">="),
-        "min_torque_in_lb": ("COALESCE(s.torque_in_lb,sh.torque_in_lb)", ">="),
-        "min_duty_s4_percent": ("COALESCE(s.duty_s4_percent,sh.duty_s4_percent)", ">="),
-        "min_cycles_per_hour": ("s.cycles_per_hour", ">="),
-        "min_starts_per_hour": ("s.starts_per_hour", ">="),
-        "max_motor_power_w": ("e.motor_power_w", "<="),
-    }
-    for name, (expression, op) in comparisons.items():
-        value = getattr(filters, name)
-        if value is not None:
-            conditions.append(f"{expression}{op}%s")
-            params.append(value)
-    frequency_filters = {
-        name: getattr(filters, name)
-        for name in ("max_operating_time_s", "max_fla_a", "max_lra_a")
-        if getattr(filters, name) is not None
-    }
-    base = BASE_SELECT + joins + " WHERE " + " AND ".join(conditions)
-    if filters.frequency_hz is None and frequency_filters:
-        columns = [name.removeprefix("max_") for name in frequency_filters]
-        distinct = " OR ".join(f"count(DISTINCT f.{c})>1" for c in columns)
-        ambiguous = connection.execute(
-            "SELECT EXISTS(SELECT 1 FROM ("
-            + base
-            + ") candidates JOIN series76.frequency_specs f ON f.entry_id=candidates.id GROUP BY candidates.id HAVING "
-            + distinct
-            + ") AS ambiguous",
-            params,
-        ).fetchone()["ambiguous"]
-        if ambiguous:
-            return dict(
-                status="needs_clarification",
-                fields=["frequency_hz"],
-                message="Specify 50 or 60 Hz; published values differ for matching candidates.",
-                products=[],
-                total=0,
-            )
     frequency_conditions, frequency_params = [], []
     if filters.frequency_hz:
         frequency_conditions.append("f.frequency_hz=%s")
         frequency_params.append(filters.frequency_hz)
-    for name, value in frequency_filters.items():
-        frequency_conditions.append(f"f.{name.removeprefix('max_')}<=%s")
-        frequency_params.append(value)
+    for name, (expression, default) in COMPARISONS.items():
+        value = getattr(filters, name)
+        if value is not None:
+            condition = expression + OPERATORS[bound_operator(value, default)] + "%s"
+            if expression.startswith("f."):
+                frequency_conditions.append(condition)
+                frequency_params.append(bound_value(value))
+            else:
+                conditions.append(condition)
+                params.append(bound_value(value))
     if frequency_conditions:
-        base += (
-            " AND EXISTS(SELECT 1 FROM series76.frequency_specs f WHERE f.entry_id=e.id AND "
-            + " AND ".join(frequency_conditions)
-            + ")"
-        )
+        conditions.append("EXISTS(SELECT 1 FROM series76.frequency_specs f WHERE f.entry_id=e.id AND " + " AND ".join(frequency_conditions) + ")")
         params += frequency_params
-    # De-duplicate identical source occurrences, keeping all occurrences in exact lookup.
-    unique = (
-        "SELECT DISTINCT ON (base_part_number) * FROM ("
-        + base
-        + ") q ORDER BY base_part_number,source_page,source_table,source_row"
-    )
-    total = connection.execute(
-        "SELECT count(*) AS total FROM (" + unique + ") q", params
-    ).fetchone()["total"]
-    rows = connection.execute(
-        unique + " LIMIT %s OFFSET %s", [*params, filters.limit, filters.offset]
-    ).fetchall()
+    base = BASE_SELECT + joins + " WHERE " + " AND ".join(conditions)
+    unique = "SELECT DISTINCT ON (base_part_number) * FROM (" + base + ") q ORDER BY base_part_number,source_page,source_table,source_row"
+    return unique, params
+
+
+def search_actuators(connection, filters: SearchFilters, *, allow_ambiguous=False):
+    unique, params = _matching_sql(connection, filters)
+    total = connection.execute("SELECT count(*) AS total FROM (" + unique + ") q", params).fetchone()["total"]
+    # Feasibility precedes ambiguity: there is no reason to ask about an empty set.
+    fields = []
+    if total and not allow_ambiguous:
+        if filters.service is None and any(getattr(filters, name) is not None for name in COMPARISONS if name.startswith("min_")):
+            fields.append("service")
+        frequency_fields = [name.removeprefix("max_") for name in ("max_operating_time_s", "max_fla_a", "max_lra_a") if getattr(filters, name) is not None]
+        if filters.frequency_hz is None and frequency_fields:
+            distinct = " OR ".join(f"count(DISTINCT f.{name})>1" for name in frequency_fields)
+            ambiguous = connection.execute("SELECT EXISTS(SELECT 1 FROM (" + unique + ") q JOIN series76.frequency_specs f ON f.entry_id=q.id GROUP BY q.id HAVING " + distinct + ") AS ambiguous", params).fetchone()["ambiguous"]
+            if ambiguous:
+                fields.append("frequency_hz")
+    if fields:
+        return dict(status="needs_clarification", fields=fields, message="Specify service or frequency for matching candidates.", products=[], total=total)
+    # Explicit preferences use published extrema when no frequency/service was requested.
+    orders = []
+    rank_params = []
+    for preference in filters.sort_by:
+        if preference == "lowest_power":
+            expression = "q.motor_power_w ASC NULLS LAST"
+        elif preference == "highest_torque":
+            expression = "(SELECT max(s.torque_nm) FROM series76.service_specs s WHERE s.entry_id=q.id AND (%s::text IS NULL OR s.service=%s OR s.service='shared')) DESC NULLS LAST"
+            rank_params += [filters.service, filters.service]
+        else:
+            column = "operating_time_s" if preference == "fastest" else "fla_a"
+            expression = f"(SELECT min(f.{column}) FROM series76.frequency_specs f WHERE f.entry_id=q.id AND (%s::int IS NULL OR f.frequency_hz=%s)) ASC NULLS LAST"
+            rank_params += [filters.frequency_hz, filters.frequency_hz]
+        orders.append(expression)
+    ordered = "SELECT * FROM (" + unique + ") q ORDER BY " + ",".join([*orders, "q.base_part_number"])
+    rows = connection.execute(ordered + " LIMIT %s OFFSET %s", [*params, *rank_params, filters.limit, filters.offset]).fetchall()
     products = hydrate(connection, rows)
+    facets = {}
+    if total > 4:
+        for name in ("supply_voltage_v", "enclosure", "supply_current", "phase_count"):
+            groups = connection.execute(f"SELECT {name} AS value,count(*) AS n FROM (" + unique + f") q GROUP BY {name} ORDER BY {name} NULLS LAST", params).fetchall()
+            # A missing phase cannot be submitted as a phase filter. Prefer a
+            # fully reported, filterable facet rather than offering "None".
+            if len(groups) > 1 and all(group["value"] is not None for group in groups):
+                facets[name] = json_numbers(groups)
     for product in products:
-        product["matched_constraints"] = json_numbers(
-            filters.model_dump(exclude_none=True, exclude={"limit", "offset"})
-        )
+        product["matched_constraints"] = json_numbers(filters.model_dump(exclude_none=True, exclude={"limit", "offset"}))
         if filters.service and product["service_layout"] == "shared":
             product["match_scope"] = "shared_as_published"
-    return dict(
-        status="ok",
-        total=total,
-        limit=filters.limit,
-        offset=filters.offset,
-        products=products,
-    )
+    return dict(status="ok", total=total, limit=filters.limit, offset=filters.offset, products=products, facets=facets)
+
+
+def closest_numeric(connection, filters):
+    """Published extrema for each failed bound under every other constraint (SQL)."""
+    results = []
+    for name, (expression, default) in COMPARISONS.items():
+        value = getattr(filters, name)
+        if value is None:
+            continue
+        trial = SearchFilters.model_validate(filters.model_dump(exclude={name, "sort_by"}))
+        unique, params = _matching_sql(connection, trial)
+        # Removing only this bound is diagnostic; do not silently relax other filters.
+        frequency = " AND f.frequency_hz=%s" if filters.frequency_hz else ""
+        frequency_params = [filters.frequency_hz] if frequency else []
+        expr = expression.replace("e.", "q.")
+        joins = """ LEFT JOIN series76.service_specs s ON s.entry_id=q.id AND (%s::text IS NULL OR s.service=%s)
+            LEFT JOIN series76.service_specs sh ON sh.entry_id=q.id AND sh.service='shared' AND q.shared_services_confirmed
+            LEFT JOIN series76.frequency_specs f ON f.entry_id=q.id""" + frequency
+        all_params = [*params, filters.service, filters.service, *frequency_params]
+        remaining = []
+        # Re-apply remaining measurement predicates to the SAME outer service/frequency
+        # row used for the extremum, not merely to another row of the same actuator.
+        for other, (other_expression, other_default) in COMPARISONS.items():
+            other_value = getattr(trial, other)
+            if other_value is not None:
+                remaining.append(other_expression.replace("e.", "q.") + OPERATORS[bound_operator(other_value, other_default)] + "%s")
+                all_params.append(bound_value(other_value))
+        values = "SELECT q.base_part_number," + expr + " AS value FROM (" + unique + ") q" + joins
+        if remaining:
+            values += " WHERE " + " AND ".join(remaining)
+        aggregate = "max" if bound_operator(value, default) in ("gt", "gte") else "min"
+        sql = "WITH bound_values AS (" + values + ") SELECT DISTINCT base_part_number,value FROM bound_values WHERE value=(SELECT " + aggregate + "(value) FROM bound_values) ORDER BY base_part_number"
+        found = connection.execute(sql, all_params).fetchall()
+        if found:
+            results.append(dict(field=name, value=json_numbers(found[0]["value"]), models=[r["base_part_number"] for r in found]))
+        else:
+            results.append(dict(field=name, value=None, models=[]))
+    return results
 
 
 def export_rows(connection):

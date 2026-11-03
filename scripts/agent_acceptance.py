@@ -35,6 +35,8 @@ OUT = ROOT / "reports/agent_acceptance/v2"  # overridden by --cohort
 CONFIG = ROOT / "config/agent_acceptance.json"
 CASES = ROOT / "config/agent_acceptance_cases.json"
 FROZEN_FILES = [ "config/agent_acceptance_cases.json", "scripts/agent_acceptance.py",
+                "backend/conversation/quality.py", "backend/conversation/store.py",
+                "backend/catalog/migrations/004_message_presentation.sql",
                 "backend/conversation/agent.py", "backend/conversation/policy.py", "backend/conversation/rendering.py",
                 "backend/conversation/api.py", "backend/app/contracts.py", "backend/catalog/models.py",
                 "backend/catalog/repository.py", "backend/catalog/context.py", "data/extracted/series76_summary/terms.json",
@@ -146,6 +148,12 @@ def configure_env(config, key):
 
 # --- scoring ------------------------------------------------------------------------------
 def same(a, b):
+    if isinstance(a, dict) and isinstance(b, dict):
+        a = {k: v for k, v in a.items() if v is not None}
+        b = {k: v for k, v in b.items() if v is not None}
+        return a.keys() == b.keys() and all(same(a[k], b[k]) for k in a)
+    if isinstance(a, list) and isinstance(b, list):
+        return len(a) == len(b) and all(same(x, y) for x, y in zip(a, b))
     try:
         return Decimal(str(a)) == Decimal(str(b))
     except Exception:
@@ -159,9 +167,9 @@ def check(expect, observed):
     if "tool" in expect and trace.get("name") != expect["tool"]:
         failures.append(f"tool {trace.get('name')} != {expect['tool']}")
     for field, value in (expect.get("args") or {}).items():
-        got = params.get(field)
+        got = trace.get("raw_parameters", {}).get(field) if field == "cancel_previous" else params.get(field)
         if isinstance(value, list):
-            if sorted(got or []) != sorted(value):
+            if not same(got or [], value):
                 failures.append(f"{field} {got} != {value}")
         elif not same(got, value):
             failures.append(f"{field} {got} != {value}")
@@ -186,8 +194,27 @@ def check(expect, observed):
     for code in expect.get("products_include", []):
         if code not in codes:
             failures.append(f"product {code} missing")
+    if "comparison_models" in expect and (observed.get("comparison") or {}).get("models") != expect["comparison_models"]:
+        failures.append("comparison models differ")
     if expect.get("no_products") and codes:
         failures.append(f"unexpected products {codes[:3]}")
+    if "candidates_include" in expect:
+        candidates = observed.get("candidates", [])
+        for code in expect["candidates_include"]:
+            if code not in candidates:
+                failures.append("SQL candidate missing: " + code)
+    if "product_count" in expect and len(codes) != expect["product_count"]:
+        failures.append("product count differs")
+    if expect.get("no_clarification") and clarification is not None:
+        failures.append("unexpected clarification")
+    if "suggested_replies_count" in expect and len(observed.get("suggested_replies", [])) != expect["suggested_replies_count"]:
+        failures.append("suggested reply count differs")
+    context = trace.get("context_after") or {}
+    if expect.get("cancel_cleared") and (context.get("filters") or context.get("pending_clarification")):
+        failures.append("cancel retained filters or pending clarification")
+    for name in expect.get("context_filter_absent", []):
+        if name in context.get("filters", {}):
+            failures.append("unexpected retained filter: " + name)
     terms = [t["term_key"] for t in observed["terms"]]
     for term in expect.get("terms", []):
         if term not in terms:
@@ -255,12 +282,15 @@ def run_scenario(scenario, model_factory):
             trace = {k: debug.get(k) for k in ("name", "parameters", "raw_parameters", "validation", "renderer",
                                                  "overrides", "context_before", "context_after", "model")}
             observed = dict(answer=payload["answer"], products=payload["products"], terms=payload["terms"],
-                            clarification=payload["clarification"], assumptions=payload["assumptions"], trace=trace)
+                            clarification=payload["clarification"], assumptions=payload["assumptions"], trace=trace,
+                            suggested_replies=payload["suggested_replies"], comparison=payload["comparison"],
+                            candidates=[p["base_part_number"] for p in debug.get("data", {}).get("products", [])] or debug.get("data", {}).get("candidates", []))
             passed, failures = score(turn, observed)
             turns.append(dict(query=turn["query"], passed=passed, failures=failures, elapsed_s=round(elapsed, 3),
                               answer=payload["answer"], clarification=payload["clarification"],
                               products=[p["base_part_number"] for p in payload["products"]],
-                              terms=[t["term_key"] for t in payload["terms"]], assumptions=payload["assumptions"], trace=trace))
+                              terms=[t["term_key"] for t in payload["terms"]], assumptions=payload["assumptions"], trace=trace,
+                              suggested_replies=payload["suggested_replies"], comparison=payload["comparison"]))
     return dict(status="passed" if all(t["passed"] for t in turns) else "failed", turns=turns)
 
 
@@ -345,6 +375,40 @@ IDEAL = {
     "h4_hello": [("ask_clarification", {"field": "unsupported"})],
     "h4_any_recommendation": [("ask_clarification", {"field": "requirements"})],
 }
+
+
+IDEAL.update({'t6_manual_01': [('search_actuators', {'min_torque_nm': 70}),
+                  ('get_actuator',
+                   {'part_numbers': ['761A00-11300000/A'],
+                    'focus': [{'field': 'torque', 'service': 'on_off'},
+                              {'field': 'operating_time', 'frequency_hz': 60}]})],
+ 't6_manual_02': [('search_actuators', {'min_torque_nm': 70}),
+                  ('search_actuators',
+                   {'enclosure': 'explosionproof',
+                    'supply_voltage_v': 24,
+                    'supply_current': 'DC',
+                    'service': 'modulating',
+                    'min_torque_in_lb': {'value': 1000, 'op': 'gt'}})],
+ 't6_manual_03': [('search_actuators', {'min_torque_nm': 70}),
+                  ('search_actuators',
+                   {'enclosure': 'weatherproof', 'sort_by': ['fastest', 'lowest_power']})],
+ 't6_manual_04': [('search_actuators', {'min_torque_nm': 70}),
+                  ('search_actuators',
+                   {'supply_voltage_v': 110, 'min_torque_in_lb': {'value': 100000, 'op': 'gte'}})],
+ 't6_manual_05': [('search_actuators', {'min_torque_nm': 70}),
+                  ('ask_clarification', {'field': 'decline'})],
+ 't6_manual_06': [('search_actuators', {'min_torque_nm': 70}),
+                  ('ask_clarification', {'field': 'cancel'})],
+ 't6_manual_07': [('search_actuators', {'min_torque_nm': 70}),
+                  ('ask_clarification', {'field': 'unsupported', 'cancel_previous': True})],
+ 't6_manual_08': [('search_actuators', {'min_torque_nm': 70}),
+                  ('search_actuators',
+                   {'supply_voltage_v': 110,
+                    'min_torque_in_lb': {'value': 100000, 'op': 'gt'},
+                    'cancel_previous': True})]})
+
+
+IDEAL["h_no_match_power"] = [("search_actuators", {"service": "on_off", "max_motor_power_w": {"value": 5, "op": "lt"}})]
 
 
 def manifest(cases_path=CASES):

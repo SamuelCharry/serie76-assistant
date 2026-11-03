@@ -21,19 +21,19 @@ from typing import Annotated, Literal
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.tools import StructuredTool
 from langsmith import traceable, tracing_context
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 from pydantic import create_model as pydantic_model
 
 from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import get_actuator, search_actuators
-from . import policy
+from . import policy, quality
 from .rendering import render_lookup, render_search, render_terms, supplies_text
 
 Focus = Literal["overview", "motor_power", "torque", "operating_time", "fla", "lra", "duty", "rates", "certification"]
 FilterName = Literal[policy.FILTER_FIELDS]
 ClarifyField = Literal["part_number", "service", "frequency", "supply", "requirements", "which_product",
-                       "term_not_in_summary", "unsupported"]
+                       "term_not_in_summary", "unsupported", "cancel", "decline"]
 
 
 class AgentUnavailable(Exception):
@@ -53,6 +53,15 @@ class AgentResult:
     clarification: dict | None = None
     terms: list = field(default_factory=list)
     assumptions: list = field(default_factory=list)
+    suggested_replies: list = field(default_factory=list)
+    comparison: dict | None = None
+
+
+class FocusSpec(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    field: Focus
+    frequency_hz: Literal[50, 60] | None = None
+    service: Literal["on_off", "modulating"] | None = None
 
 
 class Strict(BaseModel):
@@ -81,7 +90,10 @@ You never answer in text: the server renders every answer from the catalogue dat
 Tools:
 - get_actuator: explicit Base Part Numbers, or follow-ups about previously selected codes
   ("it", "that one", "how much power does it draw?"). Copy codes exactly as the user wrote
-  them; never complete, shorten or invent a code. Up to four codes for a comparison.
+  them; never complete, shorten or invent a code. At most TWO models in a comparison. For 3-4 candidates code offers pairs.
+  focus is a list of {field, service?, frequency_hz?}; use overview only for all specs.
+  Example torque On/Off + speed at 60Hz: [{field:torque,service:on_off},{field:operating_time,frequency_hz:60}].
+  Empty focus reuses persisted focus. Answers and suggested replies are English-only; understand Spanish input.
 - search_actuators: recommend actuators for requirements. Put ONLY requirements the user
   stated. For a follow-up that changes or adds requirements set refine=true and send ONLY
   the changed/added fields; list dropped requirements in remove. For "more/next" set
@@ -91,11 +103,20 @@ Tools:
   If you map informal wording to a value (e.g. "stop at any point" -> modulating), add an
   assumption quoting the user's exact words; the user will see it.
   Torque may be given in Nm (min_torque_nm) or in-lb (min_torque_in_lb); never convert.
-  Copy numbers exactly as the user wrote them. Limits are inclusive, so "below 5 W" is
-  max_motor_power_w=5 and "more than 70 Nm" is min_torque_nm=70; never adjust a number.
+  Numeric bounds use {value,op}, op=gt|gte|lt|lte. Copy the user's value unchanged.
+  More than/over/mayor a/más de => gt; below/menos de => lt;
+  at least/al menos => gte; up to/hasta => lte. Never replace a strict bound with an inclusive one.
+  sort_by is an ordered list: fastest, lowest_power, highest_torque, lowest_current.
+  Fast/rápido means fastest; low energy/no consuma mucha energía means lowest_power (motor power, not total energy).
+  For preference-only requests supply the stated enclosure and sort_by, never invent numeric thresholds.
+  Code ranks, counts, asks narrowing questions, computes closest values and comparisons from SQL.
+  Follow-up suggested replies such as Use 110 V refine=true, only the changed filter.
+  cancel_previous=true when a request begins with cancel/cancelar/olvídalo and then asks a new question.
 - explain_terms: definitions of catalogue terms from the glossary below (S4, FLA, LRA...).
   get_actuator and search_actuators also accept explain_terms for combined questions.
 - ask_clarification: a required detail is missing or the reference is ambiguous.
+  Bare cancel/cancelar/olvídalo => field=cancel; bare no after a clarification => decline.
+  Both run no catalogue tool and never repeat a declined question.
   Several previous products and "it" -> which_product. Unrelated request -> unsupported.
   A term, rating or standard that is NOT in the glossary (e.g. an IP or NEMA rating) ->
   term_not_in_summary, even when a related glossary term exists.
@@ -117,7 +138,13 @@ def schemas(term_keys):
 
     class LookupInput(Strict):
         part_numbers: Annotated[list[Annotated[str, Field(max_length=40)]], Field(min_length=1, max_length=4)]
-        focus: Focus = "overview"
+        focus: Annotated[list[FocusSpec], Field(max_length=9)] = []
+        cancel_previous: bool = False
+
+        @field_validator("focus", mode="before")
+        @classmethod
+        def legacy_focus(cls, value):
+            return quality.normalized_focus(value)
         explain_terms: explain = []
 
     filter_fields = {name: (f.annotation, f) for name, f in SearchFilters.model_fields.items()
@@ -125,6 +152,8 @@ def schemas(term_keys):
     SearchBase = pydantic_model("SearchBase", __base__=Strict, **filter_fields)
 
     class SearchInput(SearchBase):
+        sort_by: SearchFilters.model_fields["sort_by"].annotation = []
+        cancel_previous: bool = False
         limit: Annotated[int, Field(ge=1, le=20)] = 5
         refine: bool = False
         more: bool = False
@@ -137,6 +166,7 @@ def schemas(term_keys):
 
     class ClarifyInput(Strict):
         field: ClarifyField
+        cancel_previous: bool = False
 
     return {"get_actuator": LookupInput, "search_actuators": SearchInput,
             "explain_terms": ExplainInput, "ask_clarification": ClarifyInput}
@@ -252,6 +282,9 @@ class Turn:
 
     def clarify(self, field, message=None, **extra):
         text = message or QUESTIONS[field].format(labels=", ".join(t["label"] for t in self.terms))
+        if self.context.get("declined_clarification") == field:
+            return AgentResult("I will not repeat the declined question. To continue, state the missing " + field + " when ready.", context=self.context)
+        self.context["pending_clarification"] = field
         return AgentResult(text, context=self.context, clarification=dict(field=field, message=text, **extra))
 
     def relevant(self, keys):
@@ -311,17 +344,34 @@ class Turn:
                     JOIN series76.catalog_state c ON c.active_import_id=e.import_id
                     WHERE left(e.base_part_number,6)=%s ORDER BY 1 LIMIT 3""", (code[:6],)).fetchall()
                 missing.append((code, [r["base_part_number"] for r in family]))
+        if len(products) > 2:
+            self.trace["data"] = dict(status="choose_pair", candidates=[p["base_part_number"] for p in products])
+            self.context["part_numbers"] = [p["base_part_number"] for p in products]
+            return self.clarify("which_product", "Choose two models to compare; I compare differences between at most two models.")
         self.trace["data"] = dict(status="ok", products=products, missing=[m[0] for m in missing])
         self.trace["merged_parameters"] = dict(args, part_numbers=codes)
-        answer = render_lookup([public_product(p) | {"frequencies": p.get("frequencies", [])} for p in products],
-                               args["focus"], missing, notes)
+        focus = quality.normalized_focus(args.get("focus") or self.context.get("focus") or ["overview"])
+        self.context["focus"] = focus
+        public = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in products]
+        compared = quality.comparison(public) if len(public) == 2 else None
+        if compared:
+            answer = "Comparing " + " vs ".join(compared["models"]) + ". " + str(compared["identical_fields_hidden"]) + " identical fields hidden.\n"
+            answer += "\n".join(row["label"] + ": " + row["a"] + " vs " + row["b"] for row in compared["rows"])
+            if not compared["rows"]:
+                answer += "No published differences in comparable fields."
+        elif public:
+            answer = "\n".join(notes) + "\n" + "\n\n".join(quality.render_focused(p, focus) for p in public)
+            if len(focus) == 1 and focus[0]["field"] == "motor_power":
+                answer += "\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption."
+        else:
+            answer = render_lookup([], "overview", missing, notes)
         terms = []
         if args.get("explain_terms"):
             text, terms = self.explained(args["explain_terms"])
             answer += ("\n\n" + text) if text else ""
         if products:
             self.context["part_numbers"] = [p["base_part_number"] for p in products]
-        return AgentResult(answer, [public_product(p) for p in products], context=self.context, terms=terms)
+        return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared)
 
     def search(self, args):
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
@@ -341,10 +391,16 @@ class Turn:
                 return self.clarify("requirements")
         previous = self.context.get("filters") or {}
         merged, notes = policy.merge_filters(previous, delta, refine=args["refine"], remove=args["remove"], more=args["more"])
+        if args.get("sort_by"):
+            merged["sort_by"] = args["sort_by"]
+        if merged.get("sort_by"):
+            merged["limit"] = 3
         if dropped:
             notes.insert(0, "Not applied because it was not stated in the conversation: "
                          + "; ".join(policy.describe({f: v}) for f, v in dropped) + ". Tell me if you need it.")
         merged["limit"] = args.get("limit", merged["limit"]) if not args["more"] else merged["limit"]
+        if merged.get("sort_by"):
+            merged["limit"] = 3
         self.trace["merged_parameters"] = merged
         if not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS):
             # Never "recommend" the whole catalogue: a search needs at least one stated requirement.
@@ -369,27 +425,27 @@ class Turn:
         if result["status"] == "needs_clarification":
             field_name = "service" if "service" in result["fields"] else "frequency"
             return self.clarify(field_name, QUESTIONS[field_name], fields=result["fields"])
-        relaxations = []
-        if not result["products"]:
-            for name in [k for k in policy.FILTER_FIELDS if merged.get(k) not in (None, False)]:
-                trial = {k: v for k, v in merged.items() if k != name}
-                try:
-                    count = search_actuators(self.connection, SearchFilters.model_validate(dict(trial, limit=1, offset=0)))
-                except ValidationError:
-                    continue
-                if count["status"] == "ok" and count["total"]:
-                    relaxations.append((policy.describe({name: merged[name]}), count["total"]))
         shown = [dict(a, value=merged.get(a["field"])) for a in assumptions]
-        products = [public_product(p) for p in result["products"]]
-        answer = render_search(dict(result, products=[p | {"frequencies": r.get("frequencies", [])}
-                                                      for p, r in zip(products, result["products"])]),
-                               merged, notes, shown, self.supplies, relaxations)
+        products = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in result["products"]]
+        if not result["total"]:
+            from backend.catalog.repository import closest_numeric
+            closest = closest_numeric(self.connection, filters)
+            self.trace["data"]["closest"] = closest
+            answer = quality.render_impossible(merged, closest)
+            self.context["part_numbers"] = []
+            return AgentResult(answer, context=self.context)
+        answer, products, narrowing, options, focus = quality.search_presentation(result, products, merged, notes, shown)
+        self.context["focus"] = focus
+        if narrowing:
+            self.context["reply_options"] = options
+            self.context["pending_clarification"] = narrowing
         terms = []
         if args.get("explain_terms"):
             text, terms = self.explained(args["explain_terms"])
             answer += ("\n\n" + text) if text else ""
         self.context["part_numbers"] = [p["base_part_number"] for p in products]
-        return AgentResult(answer, products, context=self.context, terms=terms, assumptions=shown)
+        return AgentResult(answer, products, context=self.context, terms=terms, assumptions=shown,
+                           clarification=dict(field=narrowing, message=answer, options=options) if narrowing else None)
 
     def explain(self, args):
         text, terms = self.explained(args["term_keys"])
@@ -412,6 +468,15 @@ class Turn:
 
     def ask(self, args):
         field_name = args["field"]
+        if field_name == "cancel":
+            self.context.clear()
+            self.trace["data"] = dict(status="cancelled")
+            return AgentResult("Cancelled. I can look up Series 76 actuators, find models for requirements, compare two models or explain catalogue terms.", context=self.context)
+        if field_name == "decline":
+            previous = self.context.pop("pending_clarification", None)
+            self.context["declined_clarification"] = previous
+            self.trace["data"] = dict(status="declined")
+            return AgentResult("Understood. I will not repeat that question. To continue, state the missing " + policy.LABELS.get(previous, previous or "requirement") + " when ready, or ask about a complete Series 76 part number.", context=self.context)
         # Deterministic guard: a well-formed code in the query is looked up, never re-asked.
         if field_name == "part_number" and policy.codes_in_text(self.query):
             self.trace.setdefault("overrides", []).append("well_formed_code_lookup")
@@ -483,6 +548,18 @@ def _turn(connection, query, messages, context, *, model=None):
         main = next(c for c in calls if c["name"] != "explain_terms")
         extra = next(c for c in calls if c["name"] == "explain_terms").get("args", {}).get("term_keys", [])
         calls = [dict(main, args=dict(main.get("args", {}), explain_terms=list(main.get("args", {}).get("explain_terms", [])) + list(extra)))]
+    import re
+    bare = re.sub(r"[.!?]+$", "", query.strip().lower())
+    cancellation = bool(re.match(r"^(?:actually,?\s*)?(?:cancel(?:ar)?(?: that)?|olvídalo|olvidalo)\b", bare))
+    if bare in ("cancel", "cancelar", "olvídalo", "olvidalo", "cancel that", "actually, cancel that"):
+        calls = [dict(name="ask_clarification", args=dict(field="cancel"))]
+    elif bare == "no" and turn.context.get("pending_clarification"):
+        calls = [dict(name="ask_clarification", args=dict(field="decline"))]
+    cancel_previous = cancellation or any(c.get("args", {}).get("cancel_previous") for c in calls)
+    if bare != "no":
+        turn.context.pop("declined_clarification", None)
+    if cancel_previous:
+        turn.context.clear()
     trace = dict(name=None, parameters={}, data={}, raw_parameters={}, validation=["ok"],
                  context_before=context_before, model=meta)
     turn.trace = trace
@@ -502,6 +579,14 @@ def _turn(connection, query, messages, context, *, model=None):
             trace["parameters"] = args
             # The LangChain Tool executes the request: validation, SQL and rendering run inside it.
             result = tools[name].invoke(args, config={"run_name": name})
+    if cancel_previous and not result.answer.startswith("Cancelled"):
+        result.answer = "Cancelled the previous request. " + result.answer
+    if cancel_previous and result.clarification and result.clarification["field"] == "unsupported":
+        result.answer = result.answer.replace(" What would you like to check?", "")
+        result.clarification = None
+    if not result.clarification:
+        result.context.pop("pending_clarification", None)
+    result.suggested_replies = quality.replies(result)
     trace.setdefault("merged_parameters", trace.get("parameters"))
     trace["parameters"] = trace.get("merged_parameters") or trace.get("parameters") or {}
     trace["renderer"] = "clarification" if result.clarification else (trace["name"] or "none")

@@ -225,8 +225,9 @@ class SearchTests(Base):
         result = self.turn("On/Off, 110 V, at least 70 Nm",
                            ("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "min_torque_nm": 70}))
         self.assertIn("21 actuators meet: On/Off service, 110 V, torque ≥ 70 Nm", result.answer)
-        self.assertEqual(len(result.products), 5)
-        self.assertIn("Ask for more", result.answer)
+        self.assertEqual(result.products, [])
+        self.assertEqual(result.answer.count("?"), 1)
+        self.assertEqual(result.clarification["field"], "enclosure")
         self.assertNotIn("Modulating torque", result.answer)  # only the requested service is summarised
 
     def test_torque_in_inch_pounds_uses_published_column(self):
@@ -257,7 +258,9 @@ class SearchTests(Base):
                            ("search_actuators", {"service": "on_off", "min_torque_nm": 100000, "supply_voltage_v": 110}))
         self.assertFalse(result.products)
         self.assertIn("No actuator in the supplied catalogue meets all of", result.answer)
-        self.assertIn("without 'torque ≥ 100000 Nm' there would be", result.answer)
+        self.assertIn("Closest published torque: 3000 Nm", result.answer)
+        self.assertIsNone(result.clarification)
+        self.assertNotIn("?", result.answer)
 
     def test_missing_service_for_torque_asks(self):
         result = self.turn("110 V and 70 Nm", ("search_actuators", {"supply_voltage_v": 110, "min_torque_nm": 70}))
@@ -286,10 +289,12 @@ class SearchTests(Base):
     def test_follow_up_keeps_constraints_and_more_pages(self):
         self.turn("On/Off, 110 V, at least 70 Nm", ("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "min_torque_nm": 70}))
         more = self.turn("more", ("search_actuators", {"more": True}))
-        self.assertIn("Showing 6–10", more.answer)
+        self.assertEqual(more.context["filters"]["offset"], 5)
+        self.assertEqual(more.products, [])  # broad unsorted sets now ask one SQL-derived split
         changed = self.turn("what about modulating?", ("search_actuators", {"refine": True, "service": "modulating"}))
         self.assertIn("19 actuators meet: modulating service, 110 V, torque ≥ 70 Nm", changed.answer)
-        self.assertIn("Showing 1–5", changed.answer)
+        self.assertEqual(changed.context["filters"]["offset"], 0)
+        self.assertEqual(changed.products, [])
         trace = changed.tool_calls[0]
         self.assertEqual(trace["raw_parameters"], {"refine": True, "service": "modulating"})
         self.assertEqual(trace["parameters"]["min_torque_nm"], "70")
@@ -305,7 +310,9 @@ class SearchTests(Base):
 
     def test_poor_description_without_supply_asks_to_narrow(self):
         result = self.turn("an on/off actuator", ("search_actuators", {"service": "on_off"}))
-        self.assertIn("which power supply is available? Published supplies:", result.answer)
+        self.assertEqual(result.products, [])
+        self.assertEqual(result.answer.count("?"), 1)
+        self.assertEqual(len(result.suggested_replies), 3)
 
     def test_search_without_any_requirement_never_lists_the_catalogue(self):
         result = self.turn("Tell me a joke about valves", ("search_actuators", {"limit": 1}))
