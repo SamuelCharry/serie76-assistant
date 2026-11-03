@@ -22,15 +22,15 @@ Patrón — dónde — por qué: decisiones que defender en revisión.
 
 ### Política determinista alrededor del LLM
 
-[backend/conversation/policy.py](../../../backend/conversation/policy.py#L139) — Fundamenta filtros, fusiona seguimientos y pregunta ante contradicciones; SQL/plantilla controla cifras. DC + 60 Hz produce pregunta.
+[backend/conversation/policy.py](../../../backend/conversation/policy.py#L142) — Fundamenta filtros, fusiona seguimientos y pregunta ante contradicciones; SQL/plantilla controla cifras. DC + 60 Hz produce pregunta.
 
 ### Herramientas tipadas
 
-[backend/conversation/agent.py](../../../backend/conversation/agent.py#L156) — Pydantic args_schema y StructuredTool restringen nombres, enums y tamaños; salida malformada no se convierte en SQL arbitrario.
+[backend/conversation/agent.py](../../../backend/conversation/agent.py#L186) — Pydantic args_schema y StructuredTool restringen nombres, enums y tamaños; salida malformada no se convierte en SQL arbitrario.
 
 ### Ledger de gasto append-only
 
-[scripts/agent_acceptance.py](../../../scripts/agent_acceptance.py#L77) — El evaluador reserva antes de red y añade liquidación/fallo; uso desconocido conserva reserva. Es control de evaluación, no límite monetario productivo.
+[scripts/agent_acceptance.py](../../../scripts/agent_acceptance.py#L79) — El evaluador reserva antes de red y añade liquidación/fallo; uso desconocido conserva reserva. Es control de evaluación, no límite monetario productivo.
 
 ### Modelo de errores
 

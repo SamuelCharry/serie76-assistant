@@ -1,0 +1,302 @@
+[
+  {
+    "case": 1,
+    "test": "test_01_multi_focus_60hz",
+    "query": "Necesito las especificaciones del modelo 761A00-11300000/A. ¿Cuál es su torque On/Off y su velocidad de operación a 60Hz?",
+    "answer": "761A00-11300000/A\n  • On/Off torque: 700 in-lb / 80 Nm\n  • Operating time at 60 Hz: 17 s\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.",
+    "products": [
+      "761A00-11300000/A"
+    ],
+    "suggested_replies": [
+      "Show all specifications for 761A00-11300000/A",
+      "What is the motor power of 761A00-11300000/A?",
+      "What requirements do you need?"
+    ],
+    "comparison": null,
+    "clarification": null,
+    "parameters": {
+      "part_numbers": [
+        "761A00-11300000/A"
+      ],
+      "focus": [
+        {
+          "field": "torque",
+          "frequency_hz": null,
+          "service": "on_off"
+        },
+        {
+          "field": "operating_time",
+          "frequency_hz": 60,
+          "service": null
+        }
+      ],
+      "cancel_previous": false,
+      "explain_terms": []
+    },
+    "context": {
+      "focus": [
+        {
+          "field": "torque",
+          "frequency_hz": null,
+          "service": "on_off"
+        },
+        {
+          "field": "operating_time",
+          "frequency_hz": 60,
+          "service": null
+        }
+      ],
+      "part_numbers": [
+        "761A00-11300000/A"
+      ]
+    }
+  },
+  {
+    "case": 2,
+    "test": "test_02_strict_torque",
+    "query": "rRecomiéndame un actuador Explosionproof para 24V DC en servicio Modulating, que tenga un torque mayor a 1,000 In-Lbs.",
+    "answer": "3 actuators meet: explosionproof, DC, modulating service, 24 V, torque > 1000 in-lb.\n762X30-11370000/A — Modulating torque: 1150 in-lb / 130 Nm\n762Y30-11370000/A — Modulating torque: 1270 in-lb / 145 Nm\n763X30-11370000/A — Modulating torque: 1900 in-lb / 220 Nm\nChoose two models to compare their differences.",
+    "products": [
+      "762X30-11370000/A",
+      "762Y30-11370000/A",
+      "763X30-11370000/A"
+    ],
+    "suggested_replies": [
+      "Compare 762X30-11370000/A vs 762Y30-11370000/A",
+      "Compare 762X30-11370000/A vs 763X30-11370000/A",
+      "Compare 762Y30-11370000/A vs 763X30-11370000/A"
+    ],
+    "comparison": null,
+    "clarification": null,
+    "parameters": {
+      "enclosure": "explosionproof",
+      "supply_current": "DC",
+      "service": "modulating",
+      "supply_voltage_v": "24",
+      "min_torque_in_lb": {
+        "value": "1000",
+        "op": "gt"
+      },
+      "limit": 5,
+      "offset": 0
+    },
+    "context": {
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_current": "DC",
+        "service": "modulating",
+        "supply_voltage_v": "24",
+        "min_torque_in_lb": {
+          "value": "1000",
+          "op": "gt"
+        },
+        "limit": 5,
+        "offset": 0
+      },
+      "focus": [
+        {
+          "field": "torque",
+          "service": "modulating"
+        }
+      ],
+      "part_numbers": [
+        "762X30-11370000/A",
+        "762Y30-11370000/A",
+        "763X30-11370000/A"
+      ]
+    }
+  },
+  {
+    "case": 3,
+    "test": "test_03_preference_ranking",
+    "query": "Busco un actuador para exteriores que sea muy rápido y no consuma mucha energía.",
+    "answer": "34 actuators match weatherproof. Top 3 ranked by shortest operating time, then lowest motor power. Motor power is the published rated motor power, not total electrical consumption. Ranking uses the lowest published value across frequencies; all displayed values retain their frequency.\n\n761A00-11300000/A\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • Motor power: 15 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.\n\n761A00-11320000/A\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • Motor power: 15 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t2.\n\n762A00-11300000/A\n  • Operating time at 50 Hz: 21 s\n  • Operating time at 60 Hz: 18 s\n  • Motor power: 40 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.\nWhich supply voltage do you need?",
+    "products": [
+      "761A00-11300000/A",
+      "761A00-11320000/A",
+      "762A00-11300000/A"
+    ],
+    "suggested_replies": [
+      "Use 110 V",
+      "Use 220 V",
+      "Compare 761A00-11300000/A vs 761A00-11320000/A"
+    ],
+    "comparison": null,
+    "clarification": {
+      "field": "supply_voltage_v",
+      "message": "34 actuators match weatherproof. Top 3 ranked by shortest operating time, then lowest motor power. Motor power is the published rated motor power, not total electrical consumption. Ranking uses the lowest published value across frequencies; all displayed values retain their frequency.\n\n761A00-11300000/A\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • Motor power: 15 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.\n\n761A00-11320000/A\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • Motor power: 15 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t2.\n\n762A00-11300000/A\n  • Operating time at 50 Hz: 21 s\n  • Operating time at 60 Hz: 18 s\n  • Motor power: 40 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.\nWhich supply voltage do you need?",
+      "options": [
+        "Use 110 V",
+        "Use 220 V"
+      ]
+    },
+    "parameters": {
+      "enclosure": "weatherproof",
+      "limit": 3,
+      "offset": 0,
+      "sort_by": [
+        "fastest",
+        "lowest_power"
+      ]
+    },
+    "context": {
+      "filters": {
+        "enclosure": "weatherproof",
+        "limit": 3,
+        "offset": 0,
+        "sort_by": [
+          "fastest",
+          "lowest_power"
+        ]
+      },
+      "focus": [
+        {
+          "field": "operating_time"
+        },
+        {
+          "field": "motor_power"
+        }
+      ],
+      "pending_clarification": "supply_voltage_v",
+      "part_numbers": [
+        "761A00-11300000/A",
+        "761A00-11320000/A",
+        "762A00-11300000/A"
+      ]
+    }
+  },
+  {
+    "case": 4,
+    "test": "test_04_impossible_before_clarification",
+    "query": "¿Tienen algún modelo de la serie 76 que soporte 100,000 In-Lbs de torque en 110V?",
+    "answer": "No actuator in the supplied catalogue meets all of: 110 V, torque >= 100000 in-lb.\nClosest published torque: 26500 in-lb, held by 765B00-11300000/A.",
+    "products": [],
+    "suggested_replies": [
+      "Show more",
+      "What requirements do you need?",
+      "Explain On/Off service"
+    ],
+    "comparison": null,
+    "clarification": null,
+    "parameters": {
+      "supply_voltage_v": "110",
+      "min_torque_in_lb": {
+        "value": "100000",
+        "op": "gte"
+      },
+      "limit": 5,
+      "offset": 0
+    },
+    "context": {
+      "filters": {
+        "supply_voltage_v": "110",
+        "min_torque_in_lb": {
+          "value": "100000",
+          "op": "gte"
+        },
+        "limit": 5,
+        "offset": 0
+      },
+      "part_numbers": []
+    }
+  },
+  {
+    "case": 5,
+    "test": "test_05_decline_does_not_repeat",
+    "query": "no",
+    "answer": "Understood. I will not repeat that question. To continue, state the missing service when ready, or ask about a complete Series 76 part number.",
+    "products": [],
+    "suggested_replies": [
+      "Show more",
+      "What requirements do you need?",
+      "Explain On/Off service"
+    ],
+    "comparison": null,
+    "clarification": null,
+    "parameters": {
+      "field": "decline",
+      "cancel_previous": false
+    },
+    "context": {
+      "filters": {
+        "min_torque_nm": "70",
+        "limit": 5,
+        "offset": 0
+      },
+      "declined_clarification": "service"
+    }
+  },
+  {
+    "case": 6,
+    "test": "test_06_cancel_clears_context_without_catalogue_tool",
+    "query": "cancelar",
+    "answer": "Cancelled. I can look up Series 76 actuators, find models for requirements, compare two models or explain catalogue terms.",
+    "products": [],
+    "suggested_replies": [
+      "What requirements do you need?",
+      "Explain On/Off service",
+      "Cancel"
+    ],
+    "comparison": null,
+    "clarification": null,
+    "parameters": {
+      "field": "cancel",
+      "cancel_previous": false
+    },
+    "context": {}
+  },
+  {
+    "case": 7,
+    "test": "test_07_cancel_and_out_of_scope",
+    "query": "Actually, cancel that. Can you tell me about hydraulic pumps?",
+    "answer": "Cancelled the previous request. I can look up Series 76 catalogue data, find actuators that meet technical requirements, or explain catalogue terms.",
+    "products": [],
+    "suggested_replies": [
+      "What requirements do you need?",
+      "Explain On/Off service",
+      "Cancel"
+    ],
+    "comparison": null,
+    "clarification": null,
+    "parameters": {
+      "field": "unsupported",
+      "cancel_previous": true
+    },
+    "context": {}
+  },
+  {
+    "case": 8,
+    "test": "test_08_cancel_then_impossible",
+    "query": "Actually, cancel that Do you have any series 76 actuator that supports over 100,000 In-Lbs of torque at 110V?",
+    "answer": "Cancelled the previous request. No actuator in the supplied catalogue meets all of: 110 V, torque > 100000 in-lb.\nClosest published torque: 26500 in-lb, held by 765B00-11300000/A.",
+    "products": [],
+    "suggested_replies": [
+      "Show more",
+      "What requirements do you need?",
+      "Explain On/Off service"
+    ],
+    "comparison": null,
+    "clarification": null,
+    "parameters": {
+      "supply_voltage_v": "110",
+      "min_torque_in_lb": {
+        "value": "100000",
+        "op": "gt"
+      },
+      "limit": 5,
+      "offset": 0
+    },
+    "context": {
+      "filters": {
+        "supply_voltage_v": "110",
+        "min_torque_in_lb": {
+          "value": "100000",
+          "op": "gt"
+        },
+        "limit": 5,
+        "offset": 0
+      },
+      "part_numbers": []
+    }
+  }
+]

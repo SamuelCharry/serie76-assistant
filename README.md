@@ -4,7 +4,7 @@
 
 A native Android assistant for selecting Series 76 electric actuators and retrieving exact catalogue data.
 FastAPI + one LangChain tool decision + PostgreSQL; the LLM interprets intent and code renders the numbers.
-Local OCR extracts the electrical PDF; the supplied summary provides glossary definitions.
+Local OCR extracts the electrical PDF; the supplied summary provides definitions. Answers and suggested replies are English-only; input may be Spanish.
 
 ```mermaid
 flowchart LR
@@ -125,7 +125,7 @@ Tests use Compose PostgreSQL on `127.0.0.1:5432` (or POSTGRES_PORT): `local_envi
 | PDF ingestion + PostgreSQL | Yes | [941/941 primary checks](docs/evidence/ocr.md), [SQL](docs/evidence/postgres.md) | New document layouts |
 | FastAPI + LangChain custom tools | Yes | [Google A+ cohorts](docs/evidence/agent_acceptance.md), local scripted/SQL tests | OpenRouter acceptance |
 | Multi-turn + persisted history | Yes | Controlled HTTP/restart checks | Real OpenRouter continuation after restart |
-| Invalid codes, N/A, ambiguity, no matches | Yes | Code tests and scoped Google cohorts | Strict inequalities and provider-error cases |
+| Invalid codes, N/A, ambiguity, no matches | Yes | Offline T6 quality tests and scoped Google cohorts | Real-LLM v5 quality check and provider-error cases |
 | Native saved conversations/chat/debug + states | Yes | [Android evidence](docs/evidence/mobile.md) | Android → real LLM → SQL → Android |
 | Optional login + user isolation | Yes | Auth tests + controlled live checks | Public HTTPS/device deployment |
 | Docker, config, docs, assistant setup | Yes | [T1](reports/submission/T1.md), [T2](reports/submission/T2.md), [T3](reports/submission/T3.md) | Final evaluator reproduction |

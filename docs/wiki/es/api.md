@@ -17,7 +17,7 @@ Todas las rutas `/api/*`, excepto login, requieren `Authorization: Bearer <TOKEN
 | POST `/api/auth/logout` | Revoca token actual; 204 sin cuerpo |
 | GET `/api/actuators/{part_number}` | Código completo con `/A`; producto con measurements, field_status, services, frequencies, certification, notes, provenance, evidence, occurrences |
 | POST `/api/actuators/search` | JSON SearchFilters → `{status,total,limit,offset,products}` o needs_clarification con fields |
-| POST `/api/conversation` | `{query,session_id?}` → `{session_id,answer,message_id,products,clarification,terms,assumptions}` |
+| POST `/api/conversation` | `{query,session_id?}` → `{session_id,answer,message_id,products,clarification,terms,assumptions,suggested_replies,comparison}` |
 | GET `/api/sessions?limit=50&offset=0` | `{sessions:[{id,title,created_at,updated_at,preview}],limit,offset}`; limit 1..100, offset 0..1000000 |
 | GET `/api/sessions/{session_id}/messages?limit=100&before=SEQUENCE` | `{session_id,title,messages,has_more,next_before}`; página cronológica, limit 1..100; before opcional >=1 |
 | GET `/api/messages/{message_id}/debug` | `{message_id,session_id,tool_calls}`; propietario, DEV_DEBUG=true, fuera de OpenAPI |
@@ -85,6 +85,14 @@ Los campos y enumeraciones coinciden con los [filtros del agente](agent.md#herra
 | 503 | ausente | DB no disponible, capacidad de cuatro turnos llena u otro servicio | Asistente temporalmente no disponible (login tiene estado propio) |
 | sin HTTP | ausente | Fallo de red/conexión | No conecta al backend; revisar dirección |
 
+
+## Ampliaciones de respuesta T6
+
+Respuestas, mensajes fijos y sugerencias son solo en inglés; se admite entrada española. Cada respuesta conversacional nueva exitosa incluye `suggested_replies` (exactamente 3 mensajes breves, distintos y generados por código) y `comparison` nullable. El historial público incluye ambos. La migración aditiva 004 deja [] y comparación null en mensajes antiguos; el cliente admite esos valores.
+
+`comparison` contiene `models` (dos códigos completos), `rows` con `{field,label,a,b,better}` e `identical_fields_hidden`. Solo muestra diferencias; a/b son textos formateados desde SQL y better es a, b o null, solo si la dirección es inequívoca. Answer sigue en texto plano sin tablas Markdown. Pulsar un chip envía su texto exacto; la tarjeta Android tiene tres columnas con ajuste de línea y sin scroll horizontal.
+
+La búsqueda directa acepta umbrales `{value,op}` con gt/gte/lt/lte; los escalares antiguos siguen inclusivos. `sort_by` es lista ordenada fastest/lowest_power/highest_torque/lowest_current. El agente aplica [conteo/aclaración/valor cercano](agent.md#política-conversacional-t6); `/api/actuators/search` mantiene paginación de catálogo.
 
 ## Dónde está en el código
 

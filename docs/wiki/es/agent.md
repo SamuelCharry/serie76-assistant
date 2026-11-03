@@ -4,6 +4,8 @@
 
 Cómo una decisión LangChain se convierte en respuesta técnica validada y reproducible.
 
+Las respuestas, mensajes fijos y sugerencias son solo en inglés por decisión de producto; la entrada puede ser española. El LLM interpreta una herramienta por turno y nunca redacta texto, tablas ni sugerencias.
+
 ```mermaid
 sequenceDiagram
     participant U as Android o cliente API
@@ -34,10 +36,10 @@ Todos los modelos `args_schema` prohíben campos extra. El LLM aporta intención
 
 | Herramienta | Esquema de entrada |
 |---|---|
-| `get_actuator` | `part_numbers`: 1..4 textos de máximo 40 caracteres; `focus`: overview/motor_power/torque/operating_time/fla/lra/duty/rates/certification, predeterminado overview; `explain_terms`: hasta 3 claves, predeterminado [] |
+| `get_actuator` | `part_numbers`: 1..4 textos de máximo 40 caracteres; `focus`: lista `{field,service?,frequency_hz?}` con campos overview/motor_power/torque/operating_time/fla/lra/duty/rates/certification; sin focus reutiliza contexto; `explain_terms`: hasta 3 claves, predeterminado [] |
 | `search_actuators` | Filtros técnicos opcionales siguientes; `limit`: 1..20, predeterminado 5; `refine=false`, `more=false`, `remove`: hasta 8 nombres de filtro; `assumptions`: hasta 4 `{field,user_phrase}` (frase de 2..80 caracteres); `explain_terms`: hasta 3 claves |
 | `explain_terms` | `term_keys`: 1..3 claves restringidas al glosario cargado |
-| `ask_clarification` | `field`: part_number/service/frequency/supply/requirements/which_product/term_not_in_summary/unsupported |
+| `ask_clarification` | `field`: part_number/service/frequency/supply/requirements/which_product/term_not_in_summary/unsupported/cancel/decline; `cancel_previous=false` |
 
 Filtros: `enclosure` weatherproof/explosionproof; `supply_current` admite `AC`, `DC` y `AC/DC`; `phase_count` 1/3; `service` on_off/modulating; `frequency_hz` 50/60; `supply_voltage_v` positivo; valores no negativos `min_torque_nm`, `min_torque_in_lb`, `min_duty_s4_percent` (hasta 100), `min_cycles_per_hour`, `min_starts_per_hour`, `max_operating_time_s`, `max_fla_a`, `max_lra_a`, `max_motor_power_w`; `csa_required=false`. Las magnitudes decimales tienen máximo 1e12 y las tasas enteras 2147483647; null significa no agregar restricción. La paginación de búsqueda pública difiere: ver [API](api.md).
 
@@ -77,11 +79,33 @@ Acredita ejecución almacenada, no aceptación con proveedor real. [Pruebas y co
 
 ## Dónde está en el código
 
-- [backend/conversation/agent.py](../../../backend/conversation/agent.py#L114)
-- [backend/conversation/agent.py](../../../backend/conversation/agent.py#L456)
-- [backend/conversation/policy.py](../../../backend/conversation/policy.py#L84)
+- [backend/conversation/agent.py](../../../backend/conversation/agent.py#L135)
+- [backend/conversation/agent.py](../../../backend/conversation/agent.py#L521)
+- [backend/conversation/policy.py](../../../backend/conversation/policy.py#L85)
 - [backend/conversation/rendering.py](../../../backend/conversation/rendering.py#L1)
+
+## Política conversacional T6
+
+### Focus y umbrales
+
+`focus=[{"field":"torque","service":"on_off"},{"field":"operating_time","frequency_hz":60}]` muestra solo torque On/Off y tiempo a 60 Hz, también en los productos estructurados. Focus persiste para seguimientos; `overview` pide todos los campos. Se acepta el focus escalar antiguo por compatibilidad.
+
+Los filtros de magnitud aceptan `{value,op}` con `gt|gte|lt|lte`. “More than”, “over”, “mayor a”, “más de” son gt estricto; “below”/“menos de”, lt; “at least”/“al menos”, gte; “up to”/“hasta”, lte. Los operadores SQL vienen de una lista permitida; no se altera la cifra. Los filtros escalares antiguos siguen siendo inclusivos. El resumen imprime el operador aplicado.
+
+### Ranking y tamaño del resultado
+
+`sort_by` tiene orden: fastest (tiempo ascendente), lowest_power (potencia ascendente), highest_torque o lowest_current (FLA ascendente). Conserva servicio/frecuencia pedidos; sin frecuencia usa el menor valor publicado y lo aclara. Datos desconocidos quedan al final; N/A explícito se excluye de recomendaciones. Potencia de motor aproxima la preferencia expresada, no consumo total. Con orden muestra los 3 primeros y sus campos de ranking, más una pregunta para acotar.
+
+Sin orden, más de 4 coincidencias muestran conteo SQL y una pregunta, sin productos. El atributo maximiza entropía de las facetas SQL actuales de alimentación/carcasa/fases; sus opciones generan sugerencias. Entre 2 y 4 hay lista breve con un valor distintivo y pares para comparar; con 1, respuesta enfocada. Con 0 no pregunta servicio/frecuencia: retira cada umbral por turno y calcula min/max SQL y todos los modelos empatados bajo los demás requisitos. Si tampoco existe la combinación restante, lo indica; no inventa un sustituto cercano.
+
+### Cancelación, comparación y sugerencias
+
+`ask_clarification` acepta cancel/decline. Un no aislado tras pregunta pendiente la rechaza sin repetirla. Cancel limpia pregunta, filtros y focus, sin consulta/búsqueda de catálogo. `cancel_previous=true` permite cancelar y después buscar o pedir algo fuera de alcance. Una guarda reconoce cancelación/rechazo aislados aunque el modelo proponga otra herramienta; se conserva una decisión LLM por turno.
+
+Se comparan máximo dos códigos verificados en SQL. `comparison={models,rows,identical_fields_hidden}` solo incluye diferencias; cada fila tiene field, label, a, b y better=a|b|null. Solo se marca mejor con más torque o menos tiempo/corriente/potencia. Se cuentan campos idénticos ocultos; con 3–4 candidatos ofrece pares. `answer` sigue siendo texto plano sin tablas Markdown.
+
+Cada turno nuevo exitoso tiene exactamente 3 `suggested_replies` distintas en inglés, construidas por código desde opciones/códigos SQL y mensajes fijos admitidos. Ambos campos persisten en snapshots con migración aditiva 004; los mensajes antiguos conservan lectura con [] y comparación null. Android muestra chips bajo el último mensaje asistente (desactivados durante carga/reconciliación) y tarjeta de diferencias de tres columnas, valor mejor en negrita, sin scroll horizontal.
 
 ## Límites conocidos
 
-El léxico es acotado. Los umbrales son inclusivos: el prompt actual transforma “below 5 W” en <=5; las desigualdades estrictas siguen siendo una debilidad conocida. La corrección v4 no se revalidó con LLM real. Se envían 12 mensajes recientes (cada uno truncado a 2000 caracteres) más filtros/códigos persistidos. OpenRouter y aceptación integral Android pendientes.
+El léxico y la fundamentación siguen acotados: que una cifra aparezca no demuestra asignación semántica correcta. Focus, umbrales estrictos, ranking, cancelación y comparación T6 se verificaron offline con decisiones programadas y SQL; el coordinador aún debe ejecutar v5 con LLM real. Se envían 12 mensajes recientes (2000 caracteres por mensaje) más contexto persistido. OpenRouter y aceptación integral Android con LLM real siguen pendientes.

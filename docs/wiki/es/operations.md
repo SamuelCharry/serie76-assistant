@@ -103,7 +103,7 @@ Para administrar cuentas, `python -m backend.auth.cli create-user --email user@e
 ## Dónde está en el código
 
 - [docker/entrypoint.sh](../../../docker/entrypoint.sh#L1)
-- [backend/conversation/agent.py](../../../backend/conversation/agent.py#L194)
+- [backend/conversation/agent.py](../../../backend/conversation/agent.py#L224)
 - [backend/catalog/db.py](../../../backend/catalog/db.py#L15)
 - [backend/auth/cli.py](../../../backend/auth/cli.py#L34)
 

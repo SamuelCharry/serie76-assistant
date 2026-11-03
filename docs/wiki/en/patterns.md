@@ -22,15 +22,15 @@ Pattern — where — why: decisions to defend in review.
 
 ### Deterministic policy around the LLM
 
-[backend/conversation/policy.py](../../../backend/conversation/policy.py#L139) — Ground filters, merge follow-ups and ask on contradictions; SQL/template owns technical values. DC + 60 Hz becomes a question.
+[backend/conversation/policy.py](../../../backend/conversation/policy.py#L142) — Ground filters, merge follow-ups and ask on contradictions; SQL/template owns technical values. DC + 60 Hz becomes a question.
 
 ### Typed tools
 
-[backend/conversation/agent.py](../../../backend/conversation/agent.py#L156) — Pydantic args_schema and StructuredTool constrain names, enums and argument sizes; malformed output cannot become arbitrary SQL.
+[backend/conversation/agent.py](../../../backend/conversation/agent.py#L186) — Pydantic args_schema and StructuredTool constrain names, enums and argument sizes; malformed output cannot become arbitrary SQL.
 
 ### Append-only spend ledger
 
-[scripts/agent_acceptance.py](../../../scripts/agent_acceptance.py#L77) — The acceptance runner records reservation before network, then settlement/failure; unknown usage keeps its reservation. This is an evaluation control, not production billing enforcement.
+[scripts/agent_acceptance.py](../../../scripts/agent_acceptance.py#L79) — The acceptance runner records reservation before network, then settlement/failure; unknown usage keeps its reservation. This is an evaluation control, not production billing enforcement.
 
 ### Error model
 

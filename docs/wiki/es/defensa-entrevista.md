@@ -53,19 +53,19 @@ Prueba: [backend/catalog/models.py](../../../backend/catalog/models.py#L32).
 
 El código detecta contradicción y pregunta cuál requisito conservar. En búsqueda HTTP directa la validación puede devolver 422; la herramienta conversacional la intercepta antes.
 
-Prueba: [backend/conversation/policy.py](../../../backend/conversation/policy.py#L139).
+Prueba: [backend/conversation/policy.py](../../../backend/conversation/policy.py#L142).
 
 ## 9. ¿Cómo conserva restricciones en un seguimiento?
 
 El LLM envía delta con refine/more/remove; merge_filters fusiona con el contexto persistido. Al cambiar servicio retira una tasa anterior incompatible y lo informa.
 
-Prueba: [backend/conversation/policy.py](../../../backend/conversation/policy.py#L117).
+Prueba: [backend/conversation/policy.py](../../../backend/conversation/policy.py#L118).
 
 ## 10. ¿Qué hace ante un código incompleto?
 
 No añade /A ni inventa sufijo. Puede mostrar candidatos por prefijo y pedir selección. Un código completo inexistente se informa como ausente.
 
-Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L273).
+Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L306).
 
 ## 11. ¿Por qué no pgvector?
 
@@ -79,19 +79,19 @@ El backend responde 503 y revierte todo el turno. Android muestra exactamente �
 
 Los códigos del backend son `not_configured`, `timeout`, `rate_limited`, `budget_exhausted`, `provider_unreachable`, `provider_error` y `rate_limited_local` (guarda por proceso). Un 503 por DB/capacidad puede no llevar `error_code`. Un timeout del cliente no prueba cancelación: revisar historial antes de reenviar.
 
-Prueba: [mensajes Android](../../../mobile/android/app/src/main/java/com/serie76/assistant/data/ConversationRepository.kt#L61), [códigos del proveedor](../../../backend/conversation/agent.py#L219), [guarda local](../../../backend/conversation/agent.py#L179) y [rollback/API](../../../backend/conversation/api.py#L76).
+Prueba: [mensajes Android](../../../mobile/android/app/src/main/java/com/serie76/assistant/data/ConversationRepository.kt#L61), [códigos del proveedor](../../../backend/conversation/agent.py#L249), [guarda local](../../../backend/conversation/agent.py#L209) y [rollback/API](../../../backend/conversation/api.py#L76).
 
 ## 13. ¿El límite horario impide agotar el saldo?
 
 No. Cuenta intentos por proceso, se reinicia al reiniciar y se multiplica con workers. El ledger de evaluación reserva gasto conservador; tampoco consulta factura ni limita otras aplicaciones.
 
-Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L179).
+Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L209).
 
 ## 14. ¿require_parameters garantiza que el modelo entiende?
 
 No. Pide routing compatible con parámetros al host OpenRouter. No garantiza intención, exactitud semántica ni disponibilidad; debe aceptarse el proveedor final.
 
-Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L194).
+Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L224).
 
 ## 15. ¿Está verificado OpenRouter?
 
@@ -137,9 +137,9 @@ Prueba: [backend/conversation/api.py](../../../backend/conversation/api.py#L18).
 
 ## 22. ¿Cuál es una debilidad técnica concreta?
 
-Los umbrales son inclusivos: below 5 W se representa <=5. Además, presencia de un número en texto no prueba que corresponda al campo elegido. La corrección v4 no se revalidó con LLM real.
+Los umbrales estrictos ya se admiten: below 5 W usa lt y mayor a/over usa gt; al menos/hasta son inclusivos. Se verificaron offline con decisiones programadas, SQL y pruebas de frontera; la comprobación v5 con LLM real queda pendiente del coordinador. Sigue siendo una debilidad que presencia de un número no prueba su asignación al campo semántico correcto.
 
-Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L94).
+Prueba: [regresiones T6](../../../tests/test_conversation_quality.py), [SQL de filtros](../../../backend/catalog/repository.py) y [evidencia T6](../../../reports/submission/T6.md).
 
 ## 23. ¿Qué harías con más tiempo o menos presupuesto?
 
