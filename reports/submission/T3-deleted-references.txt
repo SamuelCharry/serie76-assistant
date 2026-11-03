@@ -1,0 +1,6 @@
+Command: git grep --cached -n -E <boundary-delimited deleted document basenames>
+Deleted document names checked: 16
+Matches: 0
+Expected git grep exit: 1 (no matches)
+Actual git grep exit: 1
+Normalized check exit: 0

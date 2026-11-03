@@ -1,6 +1,6 @@
 # Project instructions
 
-- Read docs/evidence/ocr.md, README.md and docs/REQUISITOS.md; check Git before acting.
+- Read README.md, docs/wiki/en/index.md and docs/evidence/ocr.md; check Git before acting.
 - Current system: validated local OCR and PostgreSQL 17 catalogue; A+ LangChain agent,
   login with hashed passwords and user-isolated history; Kotlin/Compose Android app.
 - One LLM tool decision per turn; code validates arguments and renders SQL values.

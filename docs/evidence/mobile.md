@@ -4,7 +4,7 @@ The archived auth-v7 record reports 14 JVM tests and 15 Compose tests: 29 distin
 
 T1 later recorded 15 JVM tests, failures=0, errors=0, skipped=0, and successful debug/release builds. These are separate verification snapshots, not additive unique coverage.
 
-Reproduce from `mobile/android`: `gradlew.bat testDebugUnitTest assembleDebug`. Instrumented checks require an emulator: `gradlew.bat connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=com.serie76.assistant.LiveAuthTest`. The live auth helper is `scripts/verify_android_auth.py`; see [AUTH](../AUTH.md) for prerequisites.
+Reproduce from `mobile/android`: `gradlew.bat testDebugUnitTest assembleDebug`. Instrumented checks require an emulator: `gradlew.bat connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=com.serie76.assistant.LiveAuthTest`. The live auth helper is `scripts/verify_android_auth.py`; see [Android/auth prerequisites](../wiki/en/android.md) and the helper's CLI for its explicit test-account credential-file requirements.
 
 No real OpenRouter or Android-to-real-LLM acceptance is established by these tests. No physical-device or public HTTPS deployment claim is made.
 

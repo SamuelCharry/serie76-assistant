@@ -1,0 +1,68 @@
+{
+  "validator": "@mermaid-js/mermaid-cli",
+  "version": "12.2.0",
+  "command": "node <mermaid-cli>/src/cli.js -i <temp>/input.md -o <temp>/rendered.md -p <temp>/puppeteer.json -j 2",
+  "exit_code": 0,
+  "results": [
+    {
+      "file": "README.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "README.es.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "docs/wiki/en/agent.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "docs/wiki/en/android.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "docs/wiki/en/database.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "docs/wiki/en/index.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "docs/wiki/en/ingestion.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "docs/wiki/es/agent.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "docs/wiki/es/android.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "docs/wiki/es/database.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "docs/wiki/es/index.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    },
+    {
+      "file": "docs/wiki/es/ingestion.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG using mermaid-cli with headless Chrome"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-"""Build docs/architecture.html and docs/er-series76.svg from the LIVE PostgreSQL schema.
+"""Build reports/architecture-preview.html and docs/er-series76.svg from the LIVE PostgreSQL schema.
 
   python scripts/render_architecture.py            # inspect DB -> docs/evidence/data/architecture-database.json -> render
   python scripts/render_architecture.py --offline  # render from the saved database.json
@@ -159,7 +159,9 @@ summary{{cursor:pointer;font-weight:600;margin:8px 0}}table{{border-collapse:col
 <div class="scroll">{svg}</div><details><summary>Claves foráneas</summary><ul>{fks}</ul></details><details><summary>Claves primarias y unicidad</summary><ul>{keys}</ul></details></section>
 <section><h2>Apéndice histórico: configuraciones A–E</h2><p>Comparación inconclusa (1 escenario común de 24, 19 fallos de proveedor). Código y evidencia en el tag <code>arch-eval-cohort-1</code>; <a href="evidence/architecture_comparison.md">análisis</a>. No es un ranking.</p>{history}</section>
 </main></html>'''
-    (ROOT / "docs/architecture.html").write_text(page, encoding="utf-8")
+    (ROOT / "reports/architecture-preview.html").write_text(
+        page.replace('href="adr/', 'href="../docs/adr/').replace(
+            'href="evidence/', 'href="../docs/evidence/'), encoding="utf-8")
 
 
 if __name__ == "__main__":
