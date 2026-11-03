@@ -2,7 +2,7 @@
 
 These prove the deterministic layer (validation, merge, contradictions, SQL, rendering,
 traces, persistence). They do NOT prove language understanding: the model's decision is
-scripted. Real-LLM acceptance lives in reports/agent_acceptance.
+scripted. Real-LLM acceptance is documented in docs/evidence/agent_acceptance.md.
 """
 import json
 import os

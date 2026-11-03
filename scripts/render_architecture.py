@@ -1,6 +1,6 @@
 """Build docs/architecture.html and docs/er-series76.svg from the LIVE PostgreSQL schema.
 
-  python scripts/render_architecture.py            # inspect DB -> reports/architecture_final/database.json -> render
+  python scripts/render_architecture.py            # inspect DB -> docs/evidence/data/architecture-database.json -> render
   python scripts/render_architecture.py --offline  # render from the saved database.json
 The A-E flows are kept as a historical appendix (code archived at tag arch-eval-cohort-1).
 """
@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-SNAPSHOT = ROOT / "reports/architecture_final/database.json"
+SNAPSHOT = ROOT / "docs/evidence/data/architecture-database.json"
 
 GROUPS = [
     ("Catálogo eléctrico (única fuente de cifras)", ["documents", "imports", "catalog_state", "source_tables"]),
@@ -157,7 +157,7 @@ summary{{cursor:pointer;font-weight:600;margin:8px 0}}table{{border-collapse:col
 <tr><td>Redacción de la respuesta</td><td>Plantillas (rendering.py); el LLM no escribe cifras</td></tr></table></section>
 <section><h2>Modelo entidad–relación (PostgreSQL inspeccionado)</h2><p>* = NOT NULL. Generado desde information_schema y pg_constraint. Sin pgvector: la tabla experimental de fragmentos vive solo en la instancia archivada.</p>
 <div class="scroll">{svg}</div><details><summary>Claves foráneas</summary><ul>{fks}</ul></details><details><summary>Claves primarias y unicidad</summary><ul>{keys}</ul></details></section>
-<section><h2>Apéndice histórico: configuraciones A–E</h2><p>Comparación inconclusa (1 escenario común de 24, 19 fallos de proveedor). Código y evidencia en el tag <code>arch-eval-cohort-1</code>; <a href="../reports/architecture_eval/ANALISIS.md">análisis</a>. No es un ranking.</p>{history}</section>
+<section><h2>Apéndice histórico: configuraciones A–E</h2><p>Comparación inconclusa (1 escenario común de 24, 19 fallos de proveedor). Código y evidencia en el tag <code>arch-eval-cohort-1</code>; <a href="evidence/architecture_comparison.md">análisis</a>. No es un ranking.</p>{history}</section>
 </main></html>'''
     (ROOT / "docs/architecture.html").write_text(page, encoding="utf-8")
 

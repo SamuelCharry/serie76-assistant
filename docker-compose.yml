@@ -50,14 +50,5 @@ services:
     volumes:
       - ./data/extracted:/app/data/extracted:ro
       - ./data/raw:/app/data/raw:ro
-  ocr:
-    profiles: ["ocr"]
-    build:
-      context: .
-      target: ocr
-    volumes:
-      - ./data/raw:/app/data/raw:ro
-      - ./data/ocr:/app/data/ocr
-    command: ["--page", "1", "--psm", "3", "--out", "data/ocr/page1-psm3"]
 volumes:
   postgres_data:

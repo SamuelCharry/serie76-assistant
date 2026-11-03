@@ -3,10 +3,8 @@
 .venv-ocr
 .venv-ingest
 .venv-chat
-.impeccable
 .venv-model-eval
 .cache
-notebooks
 reports
 .env
 .env.*
