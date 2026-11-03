@@ -21,6 +21,7 @@ from backend.catalog.cli import local_environment
 from backend.catalog.db import connect
 from backend.conversation.agent import AgentUnavailable, run_agent
 from backend.conversation import store
+from backend.auth.api import require_user
 
 
 class RouterFixture:
@@ -45,8 +46,9 @@ class RequestTests(unittest.TestCase):
 
     def test_debug_disabled_without_database(self):
         with patch.dict(os.environ, {"DEV_DEBUG": "false"}):
-            self.assertEqual(TestClient(app).get(f"/api/messages/{uuid4()}/debug").status_code, 404)
+            self.assertEqual(TestClient(app).get(f"/api/messages/{uuid4()}/debug").status_code, 401)
 
+    @unittest.skipUnless(os.environ.get("SERIES76_TEST_DB") == "1", "Glossary is read from the real database")
     def test_openrouter_compatible_transport_without_external_calls(self):
         from backend.conversation.agent import create_model
         received = []
@@ -71,7 +73,9 @@ class RequestTests(unittest.TestCase):
         try:
             with patch.dict(os.environ, {"OPENROUTER_API_KEY": "synthetic-local-test-key", "OPENROUTER_CHAT_MODEL": "fixture",
                   "OPENROUTER_BASE_URL": f"http://127.0.0.1:{server.server_port}/v1"}):
-                result = run_agent(None, "Need torque", [], {})
+                local_environment()
+                with connect() as connection:
+                    result = run_agent(connection, "Need torque", [], {})
             self.assertIn("On/Off", result.answer)
             self.assertEqual(received[0]["tool_choice"], "required")
             self.assertEqual(len(received), 1)
@@ -89,18 +93,25 @@ class ConversationIntegrationTests(unittest.TestCase):
         self.connection = connect()
         self.transaction = self.connection.transaction(force_rollback=True)
         self.transaction.__enter__()
+        self.user_id = uuid4()
+        self.connection.execute("INSERT INTO series76.users(id,email,name,password_hash) VALUES (%s,%s,'Test','unused')", (self.user_id, f"{self.user_id}@example.test"))
+        self.previous_overrides = app.dependency_overrides.copy()
+        app.dependency_overrides[require_user] = lambda: {"id": self.user_id}
 
     def tearDown(self):
+        app.dependency_overrides.clear()
+        app.dependency_overrides.update(self.previous_overrides)
         self.transaction.__exit__(None, None, None)
         self.connection.close()
 
     def run_tool(self, name, args, context=None):
-        return run_agent(self.connection, "technical query", [], context or {}, model=RouterFixture(name, args))
+        # The scripted decision must be grounded in the user's words, as a real model's must be.
+        return run_agent(self.connection, "technical query " + json.dumps(args), [], context or {}, model=RouterFixture(name, args))
 
     def test_exact_lookup_and_focus_use_published_numbers(self):
         result = self.run_tool("get_actuator", {"part_numbers": ["761A00-11300000/A"], "focus": "motor_power"})
         self.assertIn("15 W", result.answer)
-        self.assertIn("not a specification of total", result.answer)
+        self.assertIn("does not publish total electrical consumption", result.answer)
         self.assertEqual(result.products[0]["measurements"]["on_off_torque_nm"], 80)
         self.assertEqual(result.tool_calls[0]["name"], "get_actuator")
         self.assertNotIn("evidence", result.products[0])
@@ -113,7 +124,8 @@ class ConversationIntegrationTests(unittest.TestCase):
         self.assertIn("N/A", na.answer)
         self.assertEqual(na.products[0]["field_status"]["motor_power_w"], "source_NA")
         invalid = self.run_tool("get_actuator", {"part_numbers": ["761A00"]})
-        self.assertIn("could not be applied", invalid.answer)
+        self.assertIn("not a complete Base Part Number", invalid.answer)
+        self.assertEqual(invalid.clarification["field"], "part_number")
         self.assertFalse(invalid.products)
 
     def test_search_clarification_no_match_and_valid_constraints(self):
@@ -169,8 +181,19 @@ class ConversationIntegrationTests(unittest.TestCase):
             with patch("backend.conversation.api.run_agent", side_effect=AgentUnavailable):
                 failed = client.post("/api/conversation", json={"query": "failure", "session_id": sid})
                 self.assertEqual(failed.status_code, 503)
-            self.assertEqual(len(store.history(self.connection, sid)), 2)
+            self.assertEqual(len(store.history(self.connection, sid, owner_id=self.user_id)), 2)
             self.assertEqual(client.post("/api/conversation", json={"query": "missing", "session_id": str(uuid4())}).status_code, 404)
+
+    def test_local_rate_limit_is_503_and_does_not_invoke_provider(self):
+        @contextmanager
+        def connection_fixture():
+            yield self.connection
+        fixture = RouterFixture("ask_clarification", {"field": "service"})
+        with patch("backend.conversation.api.connect", connection_fixture), patch("backend.conversation.agent.create_model_client", return_value=fixture), patch.dict(os.environ, {"AGENT_MAX_CALLS_PER_HOUR": "0"}):
+            response = TestClient(app).post("/api/conversation", json={"query": "test"})
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()["error_code"], "rate_limited_local")
+        self.assertIsNone(fixture.seen)
 
     def test_session_lock_serializes_across_connections(self):
         sid = uuid4()

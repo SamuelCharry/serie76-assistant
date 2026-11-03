@@ -1,0 +1,67 @@
+{
+  "validator": "@mermaid-js/mermaid-cli",
+  "version": "12.2.0",
+  "exit_code": 0,
+  "results": [
+    {
+      "file": "README.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "README.es.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "docs/wiki/en/agent.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "docs/wiki/en/android.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "docs/wiki/en/database.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "docs/wiki/en/index.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "docs/wiki/en/ingestion.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "docs/wiki/es/agent.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "docs/wiki/es/android.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "docs/wiki/es/database.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "docs/wiki/es/index.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    },
+    {
+      "file": "docs/wiki/es/ingestion.md",
+      "diagram": 1,
+      "result": "PASS: parsed and rendered SVG"
+    }
+  ]
+}

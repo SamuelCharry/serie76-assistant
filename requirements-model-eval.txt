@@ -1,3 +1,0 @@
-# Isolated model comparison; no OCR runtime or Google SDK required.
--r requirements.txt
--r requirements-conversation.txt

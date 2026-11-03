@@ -143,6 +143,7 @@ def search_actuators(connection, filters: SearchFilters):
     version = active_import(connection)
     service_fields = (
         "min_torque_nm",
+        "min_torque_in_lb",
         "min_duty_s4_percent",
         "min_cycles_per_hour",
         "min_starts_per_hour",
@@ -182,6 +183,7 @@ def search_actuators(connection, filters: SearchFilters):
         conditions.append("e.csa_status='reported_in_header'")
     comparisons = {
         "min_torque_nm": ("COALESCE(s.torque_nm,sh.torque_nm)", ">="),
+        "min_torque_in_lb": ("COALESCE(s.torque_in_lb,sh.torque_in_lb)", ">="),
         "min_duty_s4_percent": ("COALESCE(s.duty_s4_percent,sh.duty_s4_percent)", ">="),
         "min_cycles_per_hour": ("s.cycles_per_hour", ">="),
         "min_starts_per_hour": ("s.starts_per_hour", ">="),

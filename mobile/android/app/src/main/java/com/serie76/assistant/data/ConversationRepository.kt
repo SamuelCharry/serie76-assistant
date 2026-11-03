@@ -4,6 +4,9 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.contentOrNull
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.HttpException
@@ -35,9 +38,18 @@ class ApiConversationRepository(private val api: ConversationApi) : Conversation
     override suspend fun send(query: String, sessionId: String?) = api.conversation(ConversationRequest(query, sessionId))
 }
 
-fun createRetrofit(url: String): Retrofit = Retrofit.Builder()
+fun createRetrofit(url: String, bearer: () -> String? = { null }, expired: (String) -> Unit = {}): Retrofit = Retrofit.Builder()
     .baseUrl(url)
     .client(OkHttpClient.Builder()
+        .followRedirects(false)
+        .followSslRedirects(false)
+        .addInterceptor { chain ->
+            val token = bearer()
+            val request = chain.request().newBuilder().apply { token?.let { header("Authorization", "Bearer $it") } }.build()
+            chain.proceed(request).also { response ->
+                if (response.code == 401 && token != null && request.url.encodedPath != "/api/auth/login") expired(token)
+            }
+        }
         .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(70, TimeUnit.SECONDS)
         .callTimeout(75, TimeUnit.SECONDS)
@@ -48,10 +60,20 @@ fun createRetrofit(url: String): Retrofit = Retrofit.Builder()
 
 fun failureMessage(error: Throwable): String = when (error) {
     is HttpException -> when (error.code()) {
+        401 -> "Your session has expired. Please sign in again."
         404 -> "This conversation could not be found. Return to Conversations and refresh."
         409 -> "A response is already being prepared. Reload the conversation before sending again."
         422 -> "The request could not be accepted. Check your message and try again."
         429 -> "Too many requests. Please wait before trying again."
+        503 -> {
+            val code = runCatching {
+                error.response()?.errorBody()?.string()?.let {
+                    wireJson.parseToJsonElement(it).jsonObject["error_code"]?.jsonPrimitive?.contentOrNull
+                }
+            }.getOrNull()
+            if (code == "not_configured") "The assistant is not configured on the server."
+            else "The assistant is temporarily unavailable. Please try again."
+        }
         else -> "The assistant is unavailable. Check that the backend is running and configured."
     }
     is IOException -> "Cannot reach the backend. Check your connection and the backend address."

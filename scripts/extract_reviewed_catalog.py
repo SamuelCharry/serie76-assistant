@@ -98,7 +98,7 @@ def compile_transcription(source):
                                   source_row=number, source_column=col, field=field,
                                   header=header, unit_raw=unit, raw_text=raw, value=value,
                                   status=state, source_span_rows=span,
-                                  evidence=f"reports/manual_review/{table['id']}.png"))
+                                  evidence=f"https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/manual_review/{table['id']}.png"))
             rows.append(row)
     return rows, cells
 

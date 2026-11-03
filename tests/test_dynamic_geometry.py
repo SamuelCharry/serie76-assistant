@@ -1,6 +1,9 @@
 """Data changes and layout changes must not be replaced with memorized answers."""
 
 import unittest
+import importlib.util
+if importlib.util.find_spec("numpy") is None:
+    raise unittest.SkipTest("Optional geometry tests require requirements-ingest.lock.txt")
 
 from catalog_ingest.geometry import (
     infer_columns,

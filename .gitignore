@@ -17,9 +17,14 @@ htmlcov/
 .gradle/
 local.properties
 **/build/
+**/.kotlin/
 data/ocr/*
 !data/ocr/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
 *.log
 .DS_Store
+
+# Generated verification runs; submission reports are retained.
+reports/*
+!reports/submission/

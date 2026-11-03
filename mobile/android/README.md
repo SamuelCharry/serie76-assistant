@@ -11,10 +11,10 @@ Desde la raíz del repositorio:
 
 URL predeterminada: http://10.0.2.2:8000/. Modificar con -PbackendUrl=<URL> y recompilar.
 
-Inicio directamente en chat; menú izquierdo con historial y New chat. Estilo tipo Gemini aprobado, acento lila Konecto y compositor tonal. Los accesos iniciales solo preparan el borrador.
+Tras iniciar sesión, chat con Hello centrado y fondo de ondas Konecto. Menú izquierdo con historial propio, New chat, perfil de cuenta y Sign out; Appearance ofrece Light, Dark y System. La selección se guarda y conserva la preferencia del switch anterior. Rethink Sans incluida, compositor delineado y texto de espera animado. Las sugerencias iniciales y etiquetas redundantes fueron retiradas por solicitud del usuario.
 
-Debug de herramientas: variante debug, abrir el menú izquierdo y pulsar Developer debug; requiere DEV_DEBUG=true en el backend local. Excluido de release. Sin login ni voz.
+Debug de herramientas: variante debug, abrir el menú izquierdo y pulsar Developer debug; requiere DEV_DEBUG=true y solo permite respuestas del propietario. Excluido de release. Login email/password con token cifrado y aislamiento de historial; sin voz. Ver [autenticación](../../docs/wiki/es/api.md).
 
-Instrucciones completas de SDK, backend, dispositivo, URL, debug, contratos y límites: [docs/ANDROID.md](../../docs/ANDROID.md).
+Instrucciones completas de SDK, backend, dispositivo, URL, debug, contratos y límites: [Español](../../docs/wiki/es/android.md) · [English](../../docs/wiki/en/android.md).
 
-No hay respuestas simuladas en la aplicación. La verificación con un LLM real queda pendiente de configurar/evaluar OpenRouter; evidencia en [reports/mobile](../../reports/mobile).
+No hay respuestas simuladas en la aplicación. La verificación con un LLM real queda pendiente de configurar/evaluar OpenRouter; evidencia en [https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/mobile](../../docs/evidence/mobile.md).

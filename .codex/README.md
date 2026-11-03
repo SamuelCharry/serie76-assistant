@@ -1,5 +1,10 @@
-# Configuración del asistente de desarrollo
+# Codex project configuration
 
-Este repositorio se está preparando con Codex. La configuración de proyecto está en config.toml y las instrucciones que deben usar las siguientes sesiones están en AGENTS.md, en la raíz. Modelo, proveedor y permisos se heredan del entorno del usuario; no se finge una configuración global distinta ni se incluyen credenciales.
+Codex implements scoped work coordinated by Claude Code through Orca. AGENTS.md
+contains project instructions. The repository includes the OCR pipeline, validated
+PostgreSQL catalogue, A+ LangChain agent, authentication, glossary and Kotlin Android
+app. LangSmith tracing is opt-in. Google acceptance evidence exists; final
+OpenRouter acceptance remains pending explicit approval for paid calls.
 
-Uso en esta etapa: lectura del assessment, transcripción visual de tablas, análisis del modelo de datos y creación del scaffold/ensayo OCR. No se ha ejecutado un agente conversacional ni consumido OpenRouter.
+Only project configuration belongs here: no credentials, personal memory or global
+settings. The complementary Claude Code project configuration is in ../.claude/.

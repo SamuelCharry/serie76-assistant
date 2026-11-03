@@ -10,6 +10,32 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class ContractTest {
+    @Test fun `503 failures explain configuration and allow retry for transient errors`() = runTest {
+        MockWebServer().use { server ->
+            server.start()
+            val api = createRetrofit(server.url("/").toString()).create(ConversationApi::class.java)
+            for (body in listOf("{}", "not json", "{\"error_code\":\"timeout\"}", "{\"error_code\":\"rate_limited_local\"}", "{\"error_code\":\"not_configured\"}")) {
+                server.enqueue(MockResponse().setResponseCode(503).setBody(body))
+                try { api.conversation(ConversationRequest("test", null)); fail("Expected 503") }
+                catch (error: retrofit2.HttpException) {
+                    assertEquals(if (body.contains("not_configured")) "The assistant is not configured on the server."
+                        else "The assistant is temporarily unavailable. Please try again.", failureMessage(error))
+                }
+            }
+        }
+    }
+
+    @Test fun `authenticated transport attaches bearer and expires only the rejected token`() = runTest {
+        MockWebServer().use { server ->
+            server.start()
+            server.enqueue(MockResponse().setResponseCode(401).setBody("{}"))
+            var rejected: String? = null
+            val api = createRetrofit(server.url("/").toString(), { "synthetic-token" }, { rejected = it }).create(AuthApi::class.java)
+            try { api.me(); fail("Expected unauthorized") } catch (_: retrofit2.HttpException) { }
+            assertEquals("Bearer synthetic-token", server.takeRequest().getHeader("Authorization"))
+            assertEquals("synthetic-token", rejected)
+        }
+    }
     @Test fun `JSON keeps exact decimal representation and unavailable states`() {
         val p = wireJson.decodeFromString<Product>("""{
           "base_part_number":"761A00-11300000/A",

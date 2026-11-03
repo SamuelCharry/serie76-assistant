@@ -12,6 +12,7 @@ from pathlib import Path
 import psycopg
 
 from .db import connect, migrate, readiness
+from .context import list_terms, load_context
 from .loader import import_catalog, set_active
 from .models import SearchFilters
 from .repository import export_rows, get_actuator, search_actuators
@@ -48,6 +49,10 @@ def main():
         "--source-pdf", type=Path, default=Path("data/raw/series_76_electric_data.pdf")
     )
     load.add_argument("--no-activate", action="store_true")
+    context = commands.add_parser("load-context")
+    context.add_argument("folder", type=Path, nargs="?", default=Path("data/extracted/series76_summary"))
+    context.add_argument("--source-pdf", type=Path, default=Path("data/raw/series_76_summary.pdf"))
+    commands.add_parser("terms")
     export = commands.add_parser("export")
     export.add_argument("--out", type=Path, required=True)
     get = commands.add_parser("get")
@@ -70,6 +75,10 @@ def main():
                     args.source_pdf,
                     activate=not args.no_activate,
                 )
+            elif args.command == "load-context":
+                result = load_context(connection, args.folder, args.source_pdf)
+            elif args.command == "terms":
+                result = dict(status="ok", terms=[dict(t) for t in list_terms(connection)])
             elif args.command == "status":
                 result = readiness(connection)
             elif args.command == "get":

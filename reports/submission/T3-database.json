@@ -1,0 +1,211 @@
+{
+  "transaction_read_only": {
+    "transaction_read_only": "on"
+  },
+  "queries": {
+    "entry": {
+      "sql": "SELECT e.base_part_number,e.supply_voltage_v,e.supply_current,e.phase_count,e.motor_power_w,s.service,s.torque_nm,s.torque_in_lb,s.duty_s4_percent,s.cycles_per_hour,s.starts_per_hour FROM series76.entries e JOIN series76.catalog_state c ON c.active_import_id=e.import_id JOIN series76.service_specs s ON s.entry_id=e.id WHERE e.base_part_number='761A00-11300000/A' ORDER BY s.service",
+      "rows": [
+        {
+          "base_part_number": "761A00-11300000/A",
+          "supply_voltage_v": "110",
+          "supply_current": "AC",
+          "phase_count": 1,
+          "motor_power_w": "15",
+          "service": "modulating",
+          "torque_nm": "65",
+          "torque_in_lb": "580",
+          "duty_s4_percent": "40",
+          "cycles_per_hour": null,
+          "starts_per_hour": 960
+        },
+        {
+          "base_part_number": "761A00-11300000/A",
+          "supply_voltage_v": "110",
+          "supply_current": "AC",
+          "phase_count": 1,
+          "motor_power_w": "15",
+          "service": "on_off",
+          "torque_nm": "80",
+          "torque_in_lb": "700",
+          "duty_s4_percent": "40",
+          "cycles_per_hour": 36,
+          "starts_per_hour": null
+        }
+      ]
+    },
+    "na": {
+      "sql": "SELECT e.base_part_number,e.data_status,e.motor_power_w,e.field_status->>'motor_power_w' AS power_status FROM series76.entries e JOIN series76.catalog_state c ON c.active_import_id=e.import_id WHERE e.data_status='source_NA' ORDER BY e.base_part_number LIMIT 1",
+      "rows": [
+        {
+          "base_part_number": "761A00-11330C00/A",
+          "data_status": "source_NA",
+          "motor_power_w": null,
+          "power_status": "source_NA"
+        }
+      ]
+    },
+    "evidence": {
+      "sql": "SELECT e.base_part_number,t.source_page,t.source_table,e.source_row,sc.field,sc.status,sc.unit,sc.evidence FROM series76.entries e JOIN series76.catalog_state c ON c.active_import_id=e.import_id JOIN series76.source_tables t ON t.id=e.table_id JOIN series76.source_cells sc ON sc.entry_id=e.id WHERE e.base_part_number='761A00-11300000/A' AND sc.field='motor_power_w'",
+      "rows": [
+        {
+          "base_part_number": "761A00-11300000/A",
+          "source_page": 1,
+          "source_table": "p1_t1",
+          "source_row": 1,
+          "field": "motor_power_w",
+          "status": "reported",
+          "unit": "W",
+          "evidence": {
+            "bbox": [
+              2051.25,
+              826.5,
+              2140.75,
+              923.0
+            ],
+            "unit": "W",
+            "field": "motor_power_w",
+            "value": 15,
+            "method": "image_consensus",
+            "status": "reported",
+            "service": null,
+            "raw_text": "15",
+            "readings": [
+              {
+                "text": "15",
+                "method": "page_ocr",
+                "confidence": 0.99997,
+                "detected_bbox": [
+                  2073.0,
+                  856.0,
+                  2116.0,
+                  894.0
+                ]
+              },
+              {
+                "text": "15",
+                "method": "cell_original",
+                "confidence": 0.99994
+              },
+              {
+                "text": "15",
+                "method": "cell_contrast",
+                "confidence": 0.99992
+              }
+            ],
+            "source_row": 1,
+            "source_page": 1,
+            "frequency_hz": null,
+            "source_table": "p1_t1",
+            "source_sha256": "4c28023929183df8e2a763e759cc84572b44604b30837a21e22c1166f88267e0",
+            "header_unit_raw": "Watts",
+            "source_span_rows": [
+              1,
+              2
+            ],
+            "confirmation_count": 3,
+            "source_merged_bbox": null,
+            "selection_source_methods": [
+              "cell_contrast",
+              "cell_original",
+              "page_ocr"
+            ]
+          }
+        }
+      ]
+    },
+    "glossary": {
+      "sql": "SELECT term_key,label,definition,page FROM series76.context_terms WHERE term_key='fla' ORDER BY id LIMIT 1",
+      "rows": [
+        {
+          "term_key": "fla",
+          "label": "Full Load Current (FLA)",
+          "definition": "The electric current (in Amps) drawn by the motor under its maximum rated load.",
+          "page": 2
+        }
+      ]
+    },
+    "message": {
+      "sql": "SELECT role,content,tool_calls->0->>'name' AS tool,tool_calls->0->'parameters'->'part_numbers' AS part_numbers,tool_calls->0->'validation' AS validation,tool_calls->0->>'renderer' AS renderer FROM series76.messages WHERE role='assistant' AND tool_calls->0->>'name'='get_actuator' AND tool_calls->0->'parameters'->'part_numbers'='[\"761A00-11300000/A\"]'::jsonb AND content LIKE '761A00-11300000/A%' ORDER BY sequence LIMIT 1",
+      "rows": [
+        {
+          "role": "assistant",
+          "content": "761A00-11300000/A — weatherproof, 110 V AC 1-phase\n  • On/Off torque: 700 in-lb / 80 Nm\n  • Modulating torque: 580 in-lb / 65 Nm\n  • Duty S4 On/Off: 40%\n  • Duty S4 Modulating: 40%\n  • On/Off cycles per hour: 36\n  • Modulating starts per hour: 960\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • FLA at 50 Hz: 1.1 A\n  • FLA at 60 Hz: 1.2 A\n  • LRA at 50 Hz: 1.3 A\n  • LRA at 60 Hz: 1.4 A\n  • Motor power: 15 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.",
+          "tool": "get_actuator",
+          "part_numbers": [
+            "761A00-11300000/A"
+          ],
+          "validation": [
+            "ok"
+          ],
+          "renderer": "get_actuator"
+        }
+      ]
+    },
+    "fk": {
+      "sql": "SELECT conrelid::regclass::text AS child,confrelid::regclass::text AS parent,pg_get_constraintdef(oid) AS definition FROM pg_constraint WHERE contype='f' AND connamespace='series76'::regnamespace ORDER BY 1,2,3",
+      "rows": [
+        {
+          "child": "auth_sessions",
+          "parent": "users",
+          "definition": "FOREIGN KEY (user_id) REFERENCES users(id)"
+        },
+        {
+          "child": "catalog_state",
+          "parent": "imports",
+          "definition": "FOREIGN KEY (active_import_id) REFERENCES imports(id)"
+        },
+        {
+          "child": "context_terms",
+          "parent": "documents",
+          "definition": "FOREIGN KEY (document_sha256) REFERENCES documents(sha256)"
+        },
+        {
+          "child": "conversations",
+          "parent": "users",
+          "definition": "FOREIGN KEY (owner_id) REFERENCES users(id)"
+        },
+        {
+          "child": "entries",
+          "parent": "imports",
+          "definition": "FOREIGN KEY (import_id) REFERENCES imports(id)"
+        },
+        {
+          "child": "entries",
+          "parent": "source_tables",
+          "definition": "FOREIGN KEY (table_id, import_id) REFERENCES source_tables(id, import_id)"
+        },
+        {
+          "child": "frequency_specs",
+          "parent": "entries",
+          "definition": "FOREIGN KEY (entry_id) REFERENCES entries(id)"
+        },
+        {
+          "child": "imports",
+          "parent": "documents",
+          "definition": "FOREIGN KEY (document_sha256) REFERENCES documents(sha256)"
+        },
+        {
+          "child": "messages",
+          "parent": "conversations",
+          "definition": "FOREIGN KEY (session_id) REFERENCES conversations(id)"
+        },
+        {
+          "child": "service_specs",
+          "parent": "entries",
+          "definition": "FOREIGN KEY (entry_id) REFERENCES entries(id)"
+        },
+        {
+          "child": "source_cells",
+          "parent": "entries",
+          "definition": "FOREIGN KEY (entry_id) REFERENCES entries(id)"
+        },
+        {
+          "child": "source_tables",
+          "parent": "imports",
+          "definition": "FOREIGN KEY (import_id) REFERENCES imports(id)"
+        }
+      ]
+    }
+  }
+}

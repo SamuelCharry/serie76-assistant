@@ -27,8 +27,21 @@ services:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
       OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
       OPENROUTER_CHAT_MODEL: ${OPENROUTER_CHAT_MODEL:-}
+      DEMO_USERS_JSON: ${DEMO_USERS_JSON:-}
+      OPENROUTER_REQUIRE_PARAMETERS: ${OPENROUTER_REQUIRE_PARAMETERS:-true}
+      AGENT_MAX_CALLS_PER_HOUR: ${AGENT_MAX_CALLS_PER_HOUR:-120}
       DEV_DEBUG: ${DEV_DEBUG:-false}
       OPENROUTER_EMBEDDING_MODEL: ${OPENROUTER_EMBEDDING_MODEL:-}
+      AGENT_MAX_TOKENS: ${AGENT_MAX_TOKENS:-2048}
+      AGENT_REASONING_EFFORT: ${AGENT_REASONING_EFFORT:-low}
+      AGENT_TOOL_CHOICE: ${AGENT_TOOL_CHOICE:-required}
+      AGENT_TIMEOUT_S: ${AGENT_TIMEOUT_S:-45}
+      AGENT_TEMPERATURE: ${AGENT_TEMPERATURE:-}
+      # Opt-in LangSmith tracing: sends prompts, user text and catalogue rows to LangSmith.
+      LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}
+      LANGSMITH_API_KEY: ${LANGSMITH_API_KEY:-}
+      LANGSMITH_PROJECT: ${LANGSMITH_PROJECT:-serie76-assistant}
+      LANGSMITH_ENDPOINT: ${LANGSMITH_ENDPOINT:-https://api.smith.langchain.com}
     ports:
       - "127.0.0.1:${API_PORT:-8000}:8000"
     depends_on:
@@ -37,14 +50,5 @@ services:
     volumes:
       - ./data/extracted:/app/data/extracted:ro
       - ./data/raw:/app/data/raw:ro
-  ocr:
-    profiles: ["ocr"]
-    build:
-      context: .
-      target: ocr
-    volumes:
-      - ./data/raw:/app/data/raw:ro
-      - ./data/ocr:/app/data/ocr
-    command: ["--page", "1", "--psm", "3", "--out", "data/ocr/page1-psm3"]
 volumes:
   postgres_data:

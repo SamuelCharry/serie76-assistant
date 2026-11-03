@@ -6,6 +6,8 @@ import android.provider.MediaStore
 import android.content.res.Configuration
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -61,10 +63,10 @@ class ScreenTest {
                 listOf(Message("saved-user", "user", "Look up 761A00-11300000/A"), Message("saved-answer", "assistant", "Saved response", listOf(product))))
             override suspend fun send(query: String, sessionId: String?) = ConversationResponse("test-session", "Published data", "answer")
         }
-        compose.setContent { SeriesTheme { SeriesApp(androidx.lifecycle.viewmodel.compose.viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+        compose.setContent { SeriesTheme(darkOverride = false) { SeriesApp(androidx.lifecycle.viewmodel.compose.viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST") override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T = AppViewModel(repo, SavedStateHandle()) as T
         })) } }
-        compose.onNodeWithText("Hello.\nHow can I help?").assertIsDisplayed()
+        compose.onNodeWithText("Hello").assertIsDisplayed()
         screenshot("chat-home")
         compose.onNodeWithContentDescription("Open conversation history").performClick()
         compose.onNodeWithText("110 V actuator selection").assertIsDisplayed()
@@ -73,25 +75,112 @@ class ScreenTest {
             val activity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).first() as androidx.activity.ComponentActivity
             activity.onBackPressedDispatcher.onBackPressed()
         }
-        compose.onNodeWithText("Hello.\nHow can I help?").assertIsDisplayed()
+        compose.onNodeWithText("Hello").assertIsDisplayed()
         compose.onNodeWithContentDescription("Open conversation history").performClick()
         compose.onNodeWithText("110 V actuator selection").performClick()
         compose.onNodeWithText("Saved response").assertExists()
         screenshot("chat-resumed")
         compose.onNodeWithContentDescription("New conversation").performClick()
-        compose.onNodeWithText("Look up a part").performClick()
-        compose.onNodeWithContentDescription("Ask Series 76").assertTextContains("Look up the actuator", substring = true)
-        compose.onNodeWithContentDescription("Ask Series 76").performTextClearance()
-        compose.onNodeWithContentDescription("Ask Series 76").performTextInput("Look up 761A00-11300000/A")
-        screenshot("chat-keyboard")
+        compose.onNodeWithText("Look up a part").assertDoesNotExist()
+        compose.onNodeWithText("Match requirements").assertDoesNotExist()
+        compose.onNodeWithText("Technical data. Clear decisions.").assertDoesNotExist()
+        val greeting = compose.onNodeWithText("Hello").fetchSemanticsNode().boundsInRoot
+        val root = compose.onRoot().fetchSemanticsNode().boundsInRoot
+        assertTrue(kotlin.math.abs(greeting.center.x - root.center.x) < 2f)
+        compose.onNodeWithContentDescription("Message").performClick()
+        compose.onNodeWithContentDescription("Message").performTextInput("Look up 761A00-11300000/A")
+        compose.waitUntil(timeoutMillis = 8000) { compose.onAllNodesWithText("Hello").fetchSemanticsNodes().isEmpty() }
+        screenshot("chat-keyboard-fixed")
         compose.onNodeWithContentDescription("Send message").performClick()
         compose.onNodeWithText("Published data").assertExists()
         screenshot("chat-sent")
     }
 
+    @Test fun pendingRequestHasAccessibleThinkingText() {
+        compose.setContent { SeriesTheme(darkOverride = false) { ChatScreen(AppState(sending = true, draft = "Check the published torque"),
+            {}, {}, {}, {}, {}, {}, {}) } }
+        compose.onNodeWithText("Thinking\u2026").assertIsDisplayed()
+        compose.onNodeWithText("Hello").assertDoesNotExist()
+        screenshot("thinking")
+    }
+
+    @Test fun darkHomeAndTechnicalResultsStayReadable() {
+        val state = androidx.compose.runtime.mutableStateOf(AppState())
+        compose.setContent { SeriesTheme(darkOverride = true) { ChatScreen(state.value, {}, {}, {}, {}, {}, {}, {}) } }
+        compose.onNodeWithText("Hello").assertIsDisplayed()
+        screenshot("dark-home")
+        compose.runOnIdle { state.value = AppState(messages = listOf(Message("answer", "assistant", "Published catalogue data.", listOf(product)))) }
+        compose.onNodeWithText(product.partNumber).assertIsDisplayed()
+        screenshot("dark-product")
+        compose.runOnIdle { state.value = AppState(sending = true, draft = "Check published data") }
+        compose.onNodeWithText("Thinking\u2026").assertIsDisplayed()
+        screenshot("dark-thinking")
+    }
+
+    @Test fun appearanceChoiceIsSaved() {
+        val preferences = InstrumentationRegistry.getInstrumentation().targetContext.getSharedPreferences("appearance", android.content.Context.MODE_PRIVATE)
+        val originalMode = preferences.getString("mode", null)
+        val legacy = if (preferences.contains("dark")) preferences.getBoolean("dark", false) else null
+        try {
+            preferences.edit().putString("mode", "light").commit()
+            compose.setContent { SeriesTheme { Box(Modifier.fillMaxSize().background(androidx.compose.material3.MaterialTheme.colorScheme.background).statusBarsPadding()) { ConversationsScreen(AppState(), {}, {}, {}, {}) } } }
+            compose.onNodeWithContentDescription("Open profile menu").performClick()
+            compose.onNodeWithText("Light").assertIsSelected()
+            screenshot("profile-menu-light")
+            compose.onNodeWithText("Dark").performClick()
+            compose.runOnIdle { assertEquals("dark", preferences.getString("mode", null)) }
+            compose.onNodeWithContentDescription("Open profile menu").performClick()
+            compose.onNodeWithText("Dark").assertIsSelected()
+            screenshot("profile-menu-dark")
+            compose.onNodeWithText("System").performClick()
+            compose.runOnIdle { assertEquals("system", preferences.getString("mode", null)) }
+            compose.onNodeWithContentDescription("Open profile menu").performClick()
+            compose.onNodeWithText("System").assertIsSelected()
+            compose.onNodeWithText("Light").performClick()
+            compose.runOnIdle { assertEquals("light", preferences.getString("mode", null)) }
+        } finally {
+            val editor = preferences.edit()
+            if (originalMode == null) editor.remove("mode") else editor.putString("mode", originalMode)
+            if (legacy == null) editor.remove("dark") else editor.putBoolean("dark", legacy)
+            editor.commit()
+        }
+    }
+
+    @Test fun localProfileCanBeEditedWithoutCreatingAnAccount() {
+        val preferences = InstrumentationRegistry.getInstrumentation().targetContext.getSharedPreferences("profile", android.content.Context.MODE_PRIVATE)
+        val oldName = preferences.getString("name", null)
+        val oldEmail = preferences.getString("email", null)
+        try {
+            preferences.edit().remove("name").remove("email").commit()
+            compose.setContent { SeriesTheme(darkOverride = false) { Box(Modifier.fillMaxSize().background(androidx.compose.material3.MaterialTheme.colorScheme.background).statusBarsPadding()) { ConversationsScreen(AppState(), {}, {}, {}, {}) } } }
+            compose.onNodeWithContentDescription("Open profile menu").performClick()
+            compose.onNodeWithText("No email added").assertIsDisplayed()
+            compose.onNodeWithText("Edit profile").performClick()
+            compose.onNodeWithContentDescription("Profile name").performTextInput("Example user")
+            compose.onNodeWithContentDescription("Profile email").performTextInput("not-an-email")
+            compose.onNodeWithText("Save").assertIsNotEnabled()
+            compose.onNodeWithContentDescription("Profile email").performTextClearance()
+            compose.onNodeWithContentDescription("Profile email").performTextInput("user@example.test")
+            screenshot("profile-editor-final")
+            compose.onNodeWithText("Save").performClick()
+            compose.onNodeWithContentDescription("Open profile menu").performClick()
+            compose.onNodeWithText("Saved on this device").assertIsDisplayed()
+            compose.runOnIdle {
+                assertEquals("Example user", preferences.getString("name", null))
+                assertEquals("user@example.test", preferences.getString("email", null))
+            }
+            screenshot("profile-details")
+        } finally {
+            val editor = preferences.edit()
+            if (oldName == null) editor.remove("name") else editor.putString("name", oldName)
+            if (oldEmail == null) editor.remove("email") else editor.putString("email", oldEmail)
+            editor.commit()
+        }
+    }
+
     @Test fun emptyAndErrorAreActionable() {
         var retry = false
-        compose.setContent { SeriesTheme { Box(Modifier.statusBarsPadding()) { ConversationsScreen(AppState(sessionsError = "Cannot reach the backend."), {}, {}, { retry = true }, {}) } } }
+        compose.setContent { SeriesTheme(darkOverride = false) { Box(Modifier.statusBarsPadding()) { ConversationsScreen(AppState(sessionsError = "Cannot reach the backend."), {}, {}, { retry = true }, {}) } } }
         compose.onNodeWithText("Cannot reach the backend.").assertExists()
         compose.onNodeWithText("Try again").performClick()
         assertTrue(retry)
@@ -99,7 +188,7 @@ class ScreenTest {
     }
 
     @Test fun emptyConversationsExplainsAction() {
-        compose.setContent { SeriesTheme { Box(Modifier.statusBarsPadding()) { ConversationsScreen(AppState(), {}, {}, {}, {}) } } }
+        compose.setContent { SeriesTheme(darkOverride = false) { Box(Modifier.statusBarsPadding()) { ConversationsScreen(AppState(), {}, {}, {}, {}) } } }
         compose.onNodeWithText("No conversations yet").assertExists()
         compose.onNodeWithText("New chat").assertIsEnabled()
         screenshot("conversations-empty")
@@ -109,7 +198,7 @@ class ScreenTest {
         val parameters = buildJsonObject { putJsonArray("part_numbers") { add(product.partNumber) } }
         val returned = buildJsonObject { put("status", "ok"); put("source", "PostgreSQL test fixture") }
         val state = AppState(screen = "debug", messages = listOf(Message("answer", "assistant", "Published catalogue data is shown below.")))
-        compose.setContent { SeriesTheme { DeveloperScreen(state, {}, {}, { id ->
+        compose.setContent { SeriesTheme(darkOverride = false) { DeveloperScreen(state, {}, {}, { id ->
             DebugResponse(id, "test-session", listOf(ToolCall("get_actuator", parameters, returned)))
         }) } }
         compose.onNodeWithText("get_actuator").assertExists()
@@ -122,7 +211,7 @@ class ScreenTest {
         compose.setContent {
             val density = LocalDensity.current
             CompositionLocalProvider(LocalDensity provides Density(density.density, 1.3f)) {
-                SeriesTheme { ChatScreen(AppState(screen = "chat", title = "Published specifications",
+                SeriesTheme(darkOverride = false) { ChatScreen(AppState(screen = "chat", title = "Published specifications",
                     messages = listOf(Message("answer", "assistant", "Published catalogue data is shown below.", listOf(product)))), {}, {}, {}, {}, {}, {}, {}) }
             }
         }
@@ -135,7 +224,7 @@ class ScreenTest {
     @Test fun comparisonScrollKeepsAttributeLabels() {
         val other = product.copy(partNumber = "761B00-11300000/A", measurements = product.measurements +
             mapOf("on_off_torque_nm" to JsonPrimitive(100), "modulating_torque_nm" to JsonPrimitive(70)))
-        compose.setContent { SeriesTheme { ChatScreen(AppState(screen = "chat", title = "Compare actuators",
+        compose.setContent { SeriesTheme(darkOverride = false) { ChatScreen(AppState(screen = "chat", title = "Compare actuators",
             messages = listOf(Message("comparison", "assistant", "Compare the published specifications below.", listOf(product, other)))), {}, {}, {}, {}, {}, {}, {}) } }
         compose.onNodeWithText("Swipe across to compare. Attribute labels stay in place.").assertExists()
         compose.onNodeWithText("On/Off torque (Nm)").assertExists()
@@ -149,8 +238,8 @@ class ScreenTest {
             // Empty Compose test host: match the production activity's explicit light bars.
             ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).firstOrNull()?.let { activity ->
                 WindowCompat.getInsetsController(activity.window, activity.window.decorView).apply {
-                    isAppearanceLightStatusBars = true
-                    isAppearanceLightNavigationBars = true
+                    isAppearanceLightStatusBars = !name.contains("dark")
+                    isAppearanceLightNavigationBars = !name.contains("dark")
                 }
             }
         }
@@ -158,12 +247,31 @@ class ScreenTest {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         instrumentation.waitForIdleSync()
         // System bar appearance is applied by WindowManager on the next frame.
-        android.os.SystemClock.sleep(100)
+        if (name.startsWith("chat-keyboard") || name == "chat-sent" || name.startsWith("profile-editor")) {
+            var previous = -1
+            var stable = 0
+            val deadline = android.os.SystemClock.uptimeMillis() + 8000
+            while (stable < 4 && android.os.SystemClock.uptimeMillis() < deadline) {
+                var height = 0
+                compose.runOnUiThread {
+                    val activity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).first()
+                    val windows = if (android.os.Build.VERSION.SDK_INT >= 29)
+                        android.view.inspector.WindowInspector.getGlobalWindowViews() else listOf(activity.window.decorView)
+                    height = windows.maxOfOrNull { window -> androidx.core.view.ViewCompat.getRootWindowInsets(window)
+                        ?.getInsets(androidx.core.view.WindowInsetsCompat.Type.ime())?.bottom ?: 0 } ?: 0
+                }
+                stable = if (height > 0 && height == previous) stable + 1 else 0
+                previous = height
+                android.os.SystemClock.sleep(120)
+            }
+            assertTrue("Docked keyboard must settle before capture", stable >= 4)
+            compose.waitForIdle()
+        } else android.os.SystemClock.sleep(100)
         val resolver = instrumentation.targetContext.contentResolver
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, "$name.png")
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Series76Verification/gemini-v2-final")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Series76Verification/ambient-v6-round-1")
             put(MediaStore.Images.Media.IS_PENDING, 1)
         }
         val uri = requireNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))

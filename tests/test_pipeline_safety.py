@@ -6,6 +6,10 @@ from types import SimpleNamespace
 import tempfile
 import unittest
 
+import importlib.util
+if any(importlib.util.find_spec(name) is None for name in ("numpy", "cv2", "pymupdf")):
+    raise unittest.SkipTest("Optional OCR tests require requirements-ingest.lock.txt")
+
 import pymupdf
 
 from catalog_ingest.geometry import Token
