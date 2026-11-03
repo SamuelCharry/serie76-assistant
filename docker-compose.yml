@@ -29,6 +29,16 @@ services:
       OPENROUTER_CHAT_MODEL: ${OPENROUTER_CHAT_MODEL:-}
       DEV_DEBUG: ${DEV_DEBUG:-false}
       OPENROUTER_EMBEDDING_MODEL: ${OPENROUTER_EMBEDDING_MODEL:-}
+      AGENT_MAX_TOKENS: ${AGENT_MAX_TOKENS:-2048}
+      AGENT_REASONING_EFFORT: ${AGENT_REASONING_EFFORT:-low}
+      AGENT_TOOL_CHOICE: ${AGENT_TOOL_CHOICE:-required}
+      AGENT_TIMEOUT_S: ${AGENT_TIMEOUT_S:-45}
+      AGENT_TEMPERATURE: ${AGENT_TEMPERATURE:-}
+      # Opt-in LangSmith tracing: sends prompts, user text and catalogue rows to LangSmith.
+      LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}
+      LANGSMITH_API_KEY: ${LANGSMITH_API_KEY:-}
+      LANGSMITH_PROJECT: ${LANGSMITH_PROJECT:-serie76-assistant}
+      LANGSMITH_ENDPOINT: ${LANGSMITH_ENDPOINT:-https://api.smith.langchain.com}
     ports:
       - "127.0.0.1:${API_PORT:-8000}:8000"
     depends_on:

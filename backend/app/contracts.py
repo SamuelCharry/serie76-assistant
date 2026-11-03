@@ -19,3 +19,7 @@ class ConversationResponse(BaseModel):
     answer: str
     message_id: UUID
     products: list[dict] = Field(default_factory=list)
+    # Additive fields (clients ignoring unknown keys keep working):
+    clarification: dict | None = None  # {field, message, options?, conflict?} when the agent asks
+    terms: list[dict] = Field(default_factory=list)  # verbatim glossary quotes with page
+    assumptions: list[dict] = Field(default_factory=list)  # user wording the agent mapped to a filter

@@ -6,6 +6,7 @@ from uuid import UUID, uuid4
 
 import psycopg
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import JSONResponse
 from backend.auth.api import require_user
 
 from backend.app.contracts import ConversationRequest, ConversationResponse
@@ -65,12 +66,19 @@ def conversation(request: ConversationRequest, user=Depends(require_user)):
                 result = run_agent(connection, request.query, history, context)
                 message_id = store.append_turn(connection, session_id, request.query, result, new=request.session_id is None, owner_id=user["id"])
         return ConversationResponse(session_id=session_id, answer=result.answer,
-                                    message_id=message_id, products=result.products)
+                                    message_id=message_id, products=result.products,
+                                    clarification=result.clarification, terms=result.terms,
+                                    assumptions=result.assumptions)
     except store.MissingSession:
         raise HTTPException(404, "Conversation not found") from None
     except store.BusySession:
         raise HTTPException(409, "A response is already being prepared for this conversation.") from None
-    except (AgentUnavailable, psycopg.Error):
+    except AgentUnavailable as exc:
+        # Nothing was persisted: the transaction rolled back with the failed turn.
+        return JSONResponse(status_code=503, content={
+            "detail": "Conversation service unavailable. Check backend configuration and try again.",
+            "error_code": exc.code})
+    except psycopg.Error:
         raise unavailable() from None
     finally:
         CAPACITY.release()

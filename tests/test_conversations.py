@@ -48,6 +48,7 @@ class RequestTests(unittest.TestCase):
         with patch.dict(os.environ, {"DEV_DEBUG": "false"}):
             self.assertEqual(TestClient(app).get(f"/api/messages/{uuid4()}/debug").status_code, 401)
 
+    @unittest.skipUnless(os.environ.get("SERIES76_TEST_DB") == "1", "Glossary is read from the real database")
     def test_openrouter_compatible_transport_without_external_calls(self):
         from backend.conversation.agent import create_model
         received = []
@@ -72,7 +73,9 @@ class RequestTests(unittest.TestCase):
         try:
             with patch.dict(os.environ, {"OPENROUTER_API_KEY": "synthetic-local-test-key", "OPENROUTER_CHAT_MODEL": "fixture",
                   "OPENROUTER_BASE_URL": f"http://127.0.0.1:{server.server_port}/v1"}):
-                result = run_agent(None, "Need torque", [], {})
+                local_environment()
+                with connect() as connection:
+                    result = run_agent(connection, "Need torque", [], {})
             self.assertIn("On/Off", result.answer)
             self.assertEqual(received[0]["tool_choice"], "required")
             self.assertEqual(len(received), 1)
@@ -102,12 +105,13 @@ class ConversationIntegrationTests(unittest.TestCase):
         self.connection.close()
 
     def run_tool(self, name, args, context=None):
-        return run_agent(self.connection, "technical query", [], context or {}, model=RouterFixture(name, args))
+        # The scripted decision must be grounded in the user's words, as a real model's must be.
+        return run_agent(self.connection, "technical query " + json.dumps(args), [], context or {}, model=RouterFixture(name, args))
 
     def test_exact_lookup_and_focus_use_published_numbers(self):
         result = self.run_tool("get_actuator", {"part_numbers": ["761A00-11300000/A"], "focus": "motor_power"})
         self.assertIn("15 W", result.answer)
-        self.assertIn("not a specification of total", result.answer)
+        self.assertIn("does not publish total electrical consumption", result.answer)
         self.assertEqual(result.products[0]["measurements"]["on_off_torque_nm"], 80)
         self.assertEqual(result.tool_calls[0]["name"], "get_actuator")
         self.assertNotIn("evidence", result.products[0])
@@ -120,7 +124,8 @@ class ConversationIntegrationTests(unittest.TestCase):
         self.assertIn("N/A", na.answer)
         self.assertEqual(na.products[0]["field_status"]["motor_power_w"], "source_NA")
         invalid = self.run_tool("get_actuator", {"part_numbers": ["761A00"]})
-        self.assertIn("could not be applied", invalid.answer)
+        self.assertIn("not a complete Base Part Number", invalid.answer)
+        self.assertEqual(invalid.clarification["field"], "part_number")
         self.assertFalse(invalid.products)
 
     def test_search_clarification_no_match_and_valid_constraints(self):

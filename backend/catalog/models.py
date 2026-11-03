@@ -28,6 +28,8 @@ class SearchFilters(BaseModel):
     service: Literal["on_off", "modulating"] | None = None
     frequency_hz: Literal[50, 60] | None = None
     min_torque_nm: NonNegative | None = None
+    # Published in-lb column, compared directly: no unit conversion by model or code.
+    min_torque_in_lb: NonNegative | None = None
     min_duty_s4_percent: (
         Annotated[Decimal, Field(ge=0, le=100, allow_inf_nan=False)] | None
     ) = None
