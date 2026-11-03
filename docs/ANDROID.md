@@ -1,6 +1,6 @@
 # Android Serie 76
 
-Kotlin/Jetpack Compose, interfaz en inglés y tres superficies: conversaciones guardadas, chat y Developer debug. Presentación vigente Editorial A: Rethink Sans local, blanco/ciruela/lila Konecto, sugerencias en filas con separadores finos y compositor blanco delineado. Conserva chat inicial y menú izquierdo. Movimiento nativo del drawer, entrada breve y respuesta de las flechas al pulsar; Compose respeta la escala de animación del sistema. Dirección: MOBILE_DIRECTION_V3.md. Las composiciones anteriores son históricas. Sin Firebase, login, voz ni funciones opcionales de negocio.
+Kotlin/Jetpack Compose, interfaz en inglés y tres superficies: conversaciones guardadas, chat y Developer debug. Presentación vigente: Hello centrado, fondo de ondas Konecto y luz difusa, con modos claro/oscuro. Dark theme en el menú izquierdo guarda la preferencia local; antes de elegir sigue el sistema. Rethink Sans local y compositor delineado. Sin accesos iniciales, slogan ni etiquetas de marca redundantes. Saludo por letras y Thinking animado solo durante envío, con alternativa estática según la escala de animación de Android. Dirección: MOBILE_DIRECTION_V4.md. Sin Firebase, login, voz ni servicios nuevos.
 
 ## Requisitos y compilación
 

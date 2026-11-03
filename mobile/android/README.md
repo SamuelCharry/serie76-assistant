@@ -11,7 +11,7 @@ Desde la raíz del repositorio:
 
 URL predeterminada: http://10.0.2.2:8000/. Modificar con -PbackendUrl=<URL> y recompilar.
 
-Inicio directamente en chat; menú izquierdo con historial y New chat. Presentación Editorial A aprobada, Rethink Sans local, blanco/ciruela/lila Konecto y compositor delineado. Los accesos iniciales solo preparan el borrador.
+Inicio en chat con Hello centrado y fondo de ondas Konecto. Menú izquierdo con historial, New chat y Dark theme; la elección claro/oscuro se guarda localmente. Rethink Sans incluida, compositor delineado y texto de espera animado. Las sugerencias iniciales y etiquetas redundantes fueron retiradas por solicitud del usuario.
 
 Debug de herramientas: variante debug, abrir el menú izquierdo y pulsar Developer debug; requiere DEV_DEBUG=true en el backend local. Excluido de release. Sin login ni voz.
 

@@ -5,24 +5,26 @@ primary_target: "mobile/android"
 related_targets: []
 ---
 
-# Android editorial workspace
+# Ambient chat: light and dark
 
-Mode: Operate. The user rejected the generic V2 presentation, retained chat-first and left history, and selected A, Editorial abierta, explicitly approving native sizing/type adaptations across home, drawer and results. Earlier V2 and C are historical.
+Mode: Operate. This is a precise user-directed refinement of the existing native app, not a new feature or visual-concept tournament.
 
-THESIS: An actuator research workspace with editorial clarity: the question leads, technical evidence remains complete, history stays one gesture away.
+The user removed the two draft shortcuts, supporting slogan, oversized actuator headline and redundant Series76 labels. They requested a centered Hello, letter animation on arrival and while waiting, softer purple gradients, and finally both light/dark modes with only the background language of Konecto's website. The website's text, logos, cards and business capabilities are excluded.
 
-OWN-WORLD: Nearwhite #FCFCFD, ink #211A2B, Konecto plum #412C64, lilac #BD7BFF and muted #D0ACE5. Locally bundled Rethink Sans, disciplined regular/medium/semibold hierarchy, thin rules and white outlined composer. No default lavender canvas, gradients, ornamental illustration, shadows or unrelated controls.
+THESIS: A calm conversational workspace with a recognizable but quiet brand atmosphere. Interaction and technical results lead; decoration yields when content appears.
 
-STORY: Open the chat, choose a draft shortcut or write a question; inspect complete technical results; open the left drawer to resume saved research. No new backend capabilities.
+OWN-WORLD: Bundled Rethink Sans, restrained nearwhite/lilac in light mode, graphite/violet in dark. A static diffuse light field and original sourced wave geometry give depth without constant background motion. No saturated purple slabs. Native controls, subtle outlined composer and legible data surfaces.
 
-FIRST VIEWPORT: Compact ruled native header. Left-aligned 'Find the right / actuator.' headline, 'Technical data. Clear decisions.' support. Two text action rows separated by hairlines, subtitle and diagonal arrow each. White lightly outlined composer anchored above insets, send circle and quiet product caption. Drawer has ruled header, clear New chat action, compact saved titles/date, deliberate empty state, separate developer-only footer.
+FIRST VIEWPORT: Menu and new-chat icons only in the toolbar, Hello centered in the available conversation area, white/dark composer anchored over native insets. No shortcut rows, slogan or product footer. The wave sits toward the lower part of the empty canvas; it is removed behind populated conversations and while typing. A quieter light field remains.
 
-FORM: Contemporary engineering journal translated into native Material navigation and accessible semantic controls. Direction seed 6870d996, assigned index5. Grounded alternatives: engineering handbook, measurement sheet, instrument panel, publisher index, engineering journal, specification archive, technical library. Dealt signage, metro and other catalog alternatives do not override the user's pinned clean editorial world and brand palette. Their useful disciplines are clear decision hierarchy and deliberate typographic scale, not borrowed colors or motifs.
+STORY: Write a question, observe Thinking only during an actual pending request, inspect complete sourced data, resume history in the left drawer. A Dark theme switch in that drawer saves a local appearance preference. Before an explicit selection, use the Android system scheme. No additional settings screen, authentication or backend changes.
 
-MOTION: Native drawer/scrim; brief entry of welcome text with a growing rule; press feedback with a small directional arrow movement; animated list placements. Content remains visible from the first frame. Compose animation scale follows Android settings; no perpetual animation or simulated loading. Functional progress only during real requests.
+MOTION: Hello appears by gentle per-letter tint/opacity/baseline reveal over640ms. Thinking has a1500ms color wave while sending, without exposing model internals or inventing activity. Both observe Android's animator scale and become static when disabled, including live preference changes. Native drawer/navigation/list feedback remains. No idle background animation.
 
-QUALITY BAR: Careful typographic proportions, compact native header, no arbitrary empty-state panel, deliberate whitespace, 48dp minimum touch targets, legible scaled text, accurate technical context. Strong identity without marketing claims or decorative clutter.
+FORM: User-specified native refinement. The previous Editorial A image is historical authority only for retained components, not for explicitly removed copy, shortcuts, colors or alignment. No pixel comparison to the superseded home can certify this change.
+
+QUALITY BAR: Deliberate centered greeting, recognizable wave geometry without interference, readable light/dark content and system bars, 48dp controls, complete part numbers/units/source notes, visible keyboard composer and no new service dependencies. The preference is a local UI flag; PostgreSQL remains the conversation/catalogue store.
+
+SOURCE: https://konecto.ai/wp-content/uploads/2025/05/Clip-path-group.svg and https://konecto.ai/. Native vector conversion retains184 original paths. Attribution, hash and adaptations: .impeccable/references/konecto-wave-origin.json. Native viewport clipping replaces a rectangular SVG mask; stroke is adapted to phone density. No shipping raster assets.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
-
-Approved comp: .impeccable/mocks/redesign-v3/editorial-a.png. User answer: 'A · Editorial abierta (recomendada)' to a question covering whole-app native implementation and animation with size/type adaptations. No raster UI assets ship; type, controls and rules remain native. Interface English; phone/light scope, no authentication, voice, search, model chooser, settings or new services. Test fixtures remain outside production. V2 baseline published at 7f69e9c before redesign, branch design/android-editorial-v3.

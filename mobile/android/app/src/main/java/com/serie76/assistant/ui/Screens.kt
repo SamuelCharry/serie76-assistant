@@ -5,13 +5,10 @@ package com.serie76.assistant.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -32,7 +29,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -40,10 +37,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.CollectionInfo
 import androidx.compose.ui.semantics.collectionInfo
 import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -100,20 +95,23 @@ fun SeriesApp(viewModel: AppViewModel) {
 @Composable
 fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) -> Unit,
                         onRefresh: () -> Unit, onMore: () -> Unit, onClose: () -> Unit = {}, onDebug: () -> Unit = {}) {
+    val appearance = LocalAppearance.current
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(horizontal = 20.dp)) {
         Row(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("Series 76", Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
+            Text("Conversations", Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
             IconButton(onClick = onClose) { Icon(CloseLines, "Close conversation history") }
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        Text("Conversations", Modifier.padding(top = 28.dp, bottom = 20.dp).semantics { heading() },
-            style = MaterialTheme.typography.headlineSmall)
-        Button(onClick = onNew, enabled = !state.sending, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
-            shape = RoundedCornerShape(14.dp), contentPadding = PaddingValues(horizontal = 18.dp, vertical = 14.dp)) {
-            Icon(EditLines, null, Modifier.size(20.dp))
-            Spacer(Modifier.width(10.dp))
-            Text("New chat", Modifier.weight(1f))
-            Icon(ArrowNorthEast, null, Modifier.size(18.dp))
+        Spacer(Modifier.height(24.dp))
+        Surface(onClick = onNew, enabled = !state.sending, color = Color.Transparent,
+            shape = RoundedCornerShape(14.dp), modifier = Modifier.fillMaxWidth().background(SoftAccent, RoundedCornerShape(14.dp))) {
+            Row(Modifier.heightIn(min = 52.dp).padding(horizontal = 18.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(EditLines, null, Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                Spacer(Modifier.width(10.dp))
+                Text("New chat", Modifier.weight(1f), style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer)
+                Icon(ArrowNorthEast, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onPrimaryContainer)
+            }
         }
         Text("Recent", Modifier.padding(top = 28.dp, bottom = 12.dp).semantics { heading() },
             style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -143,8 +141,12 @@ fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) ->
             if (state.sessionsHaveMore) item { TextButton(onClick = onMore, enabled = !state.sessionsLoading) { Text("Load more conversations") } }
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        Text("Series 76 technical assistant", Modifier.padding(top = 16.dp, bottom = 4.dp),
-            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(
+            value = appearance.dark, role = Role.Switch, onValueChange = appearance.setDark),
+            verticalAlignment = Alignment.CenterVertically) {
+            Text("Dark theme", Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+            Switch(checked = appearance.dark, onCheckedChange = null)
+        }
         DeveloperEntry(onDebug)
         Spacer(Modifier.height(12.dp))
     }
@@ -160,20 +162,21 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
     LaunchedEffect(state.messages.lastOrNull()?.id, state.sending) {
         if (state.messages.isNotEmpty()) listState.animateScrollToItem((listState.layoutInfo.totalItemsCount - 1).coerceAtLeast(0))
     }
+    Box(Modifier.fillMaxSize()) {
+    ChatBackdrop(Modifier.fillMaxSize(), empty = state.messages.isEmpty() && !keyboardVisible && !state.sending)
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Color.Transparent,
         topBar = {
             Column {
-            TopAppBar(title = { Text(if (state.messages.isEmpty() && state.sessionId == null) "Series 76" else state.title,
+            TopAppBar(title = { Text(if (state.messages.isEmpty() && state.sessionId == null) "" else state.title,
                     maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleLarge) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = { IconButton(onClick = onBack) { Icon(MenuLines, "Open conversation history") } },
                 actions = { IconButton(onClick = onNew, enabled = !state.sending) { Icon(EditLines, "New conversation") } })
-            HorizontalDivider(Modifier.padding(horizontal = 20.dp), color = MaterialTheme.colorScheme.outlineVariant)
             }
         },
         bottomBar = {
-            Surface(color = MaterialTheme.colorScheme.background) {
+            Surface(color = Color.Transparent) {
                 Column(Modifier.navigationBarsPadding().imePadding().padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     state.sendError?.let { ErrorPanel(it, if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile) }
                     if (state.needsReconcile && state.sendError == null) ErrorPanel("A previous request may have completed. Check saved messages before sending again.",
@@ -183,91 +186,45 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
                         Row(Modifier.fillMaxWidth().padding(start = 20.dp, end = 10.dp, top = 16.dp, bottom = 10.dp),
                             verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             BasicTextField(value = state.draft, onValueChange = onDraft, minLines = 2, maxLines = 5,
-                                modifier = Modifier.weight(1f).focusRequester(focus).semantics { contentDescription = "Ask Series 76" },
+                                modifier = Modifier.weight(1f).focusRequester(focus).semantics { contentDescription = "Message" },
                                 textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
                                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimaryContainer), enabled = !state.sending,
                                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send), keyboardActions = KeyboardActions(onSend = { onSend() }),
                                 decorationBox = { field ->
-                                    Box { if (state.draft.isEmpty()) Text("Ask about Series 76", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant); field() }
+                                    Box { if (state.draft.isEmpty()) Text("Ask a question", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant); field() }
                                 })
                             FilledIconButton(onClick = onSend, enabled = state.draft.isNotBlank() && !state.sending && !state.historyLoading && state.historyError == null && !state.needsReconcile,
-                                modifier = Modifier.size(48.dp), colors = IconButtonDefaults.filledIconButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.onPrimaryContainer, contentColor = MaterialTheme.colorScheme.surface,
-                                    disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.55f),
-                                    disabledContentColor = MaterialTheme.colorScheme.surface)) {
+                                modifier = Modifier.size(48.dp).background(SoftAccent, CircleShape), colors = IconButtonDefaults.filledIconButtonColors(
+                                    containerColor = Color.Transparent, contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    disabledContainerColor = Color.Transparent,
+                                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))) {
                                 Icon(SendUp, "Send message")
                             }
                         }
                     }
-                    if (!keyboardVisible) Text("Series 76 technical assistant", Modifier.padding(start = 4.dp),
-                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
     ) { insets ->
-        BoxWithConstraints(Modifier.fillMaxSize().padding(insets)) {
-          val welcomeInset = (maxHeight.value * 0.17f).coerceIn(24f, 100f).dp
+        Box(Modifier.fillMaxSize().padding(insets)) {
+          if (state.messages.isEmpty() && !state.sending && !state.historyLoading && state.historyError == null && !keyboardVisible) {
+              HelloGreeting(Modifier.align(Alignment.Center))
+          }
           LazyColumn(Modifier.fillMaxSize(), state = listState,
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
             if (state.historyBefore != null) item { TextButton(colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onPrimaryContainer), onClick = onOlder, enabled = !state.historyLoading) { Text("Load earlier messages") } }
             if (state.historyLoading) item { LoadingLine("Loading messages") }
             state.historyError?.let { item { ErrorPanel(it, "Try again", onReload) } }
-            if (state.messages.isEmpty() && !state.historyLoading && state.historyError == null && !keyboardVisible) item {
-                WelcomePrompt(Modifier.padding(top = welcomeInset)) { prompt ->
-                    onDraft(prompt); focus.requestFocus(); keyboard?.show()
-                }
-            }
             items(state.messages, key = Message::id) { message -> MessageContent(message) }
             if (state.sending) item {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(state.draft.trim(), style = MaterialTheme.typography.bodyLarge)
-                    LoadingLine("Checking the catalogue")
+                    ThinkingLabel()
                 }
             }
           }
         }
     }
-}
-
-@Composable
-private fun WelcomePrompt(modifier: Modifier = Modifier, onPrompt: (String) -> Unit) {
-    val entrance = remember { Animatable(0.86f) }
-    LaunchedEffect(Unit) { entrance.animateTo(1f, tween(480, easing = CubicBezierEasing(0.22f, 1f, 0.36f, 1f))) }
-    Column(modifier.padding(horizontal = 4.dp)) {
-        Column(Modifier.graphicsLayer {
-            alpha = entrance.value
-            translationY = (1f - entrance.value) * 36.dp.toPx()
-        }, verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            Text(buildAnnotatedString {
-                append("Find the right\n")
-                withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) { append("actuator.") }
-            }, style = MaterialTheme.typography.displaySmall, modifier = Modifier.semantics { heading() })
-            Text("Technical data. Clear decisions.", style = MaterialTheme.typography.bodyLarge)
-        }
-        Spacer(Modifier.height(48.dp))
-        HorizontalDivider(Modifier.fillMaxWidth(entrance.value), color = MaterialTheme.colorScheme.outlineVariant)
-        PromptRow("Look up a part", "Start with a part number") { onPrompt("Look up the actuator with Base Part Number ") }
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        PromptRow("Match requirements", "Find an actuator for your application") { onPrompt("Help me find an actuator with these requirements: ") }
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-    }
-}
-
-@Composable
-private fun PromptRow(title: String, subtitle: String, onClick: () -> Unit) {
-    val interaction = remember { MutableInteractionSource() }
-    val pressed by interaction.collectIsPressedAsState()
-    val arrowShift by animateDpAsState(if (pressed) 3.dp else 0.dp, tween(140), label = "Prompt direction")
-    Surface(onClick = onClick, interactionSource = interaction, color = MaterialTheme.colorScheme.background,
-        modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(4.dp)) {
-        Row(Modifier.padding(horizontal = 4.dp, vertical = 18.dp).heightIn(min = 48.dp),
-            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-                Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            Icon(ArrowNorthEast, null, Modifier.size(24.dp).offset(x = arrowShift, y = -arrowShift), tint = MaterialTheme.colorScheme.primary)
-        }
     }
 }
 
@@ -281,7 +238,7 @@ fun MessageContent(message: Message) {
                 }
             }
         } else {
-            Text("Series 76", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("Assistant", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(message.content, style = MaterialTheme.typography.bodyLarge)
         }
         if (message.products.size == 1) ProductCard(message.products.first())

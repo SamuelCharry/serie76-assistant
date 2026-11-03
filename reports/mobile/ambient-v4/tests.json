@@ -1,0 +1,26 @@
+[
+  {
+    "report": "mobile\\android\\app\\build\\test-results\\testDebugUnitTest\\TEST-com.serie76.assistant.AppViewModelTest.xml",
+    "suite": "com.serie76.assistant.AppViewModelTest",
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "report": "mobile\\android\\app\\build\\test-results\\testDebugUnitTest\\TEST-com.serie76.assistant.ContractTest.xml",
+    "suite": "com.serie76.assistant.ContractTest",
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "report": "mobile\\android\\app\\build\\outputs\\androidTest-results\\connected\\debug\\TEST-Series76_API35(AVD) - 15-_app-.xml",
+    "suite": "com.serie76.assistant.ScreenTest",
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+]

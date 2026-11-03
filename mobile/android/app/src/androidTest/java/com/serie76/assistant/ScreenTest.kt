@@ -6,6 +6,8 @@ import android.provider.MediaStore
 import android.content.res.Configuration
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -61,10 +63,10 @@ class ScreenTest {
                 listOf(Message("saved-user", "user", "Look up 761A00-11300000/A"), Message("saved-answer", "assistant", "Saved response", listOf(product))))
             override suspend fun send(query: String, sessionId: String?) = ConversationResponse("test-session", "Published data", "answer")
         }
-        compose.setContent { SeriesTheme { SeriesApp(androidx.lifecycle.viewmodel.compose.viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+        compose.setContent { SeriesTheme(darkOverride = false) { SeriesApp(androidx.lifecycle.viewmodel.compose.viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST") override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T = AppViewModel(repo, SavedStateHandle()) as T
         })) } }
-        compose.onNodeWithText("Find the right\nactuator.").assertIsDisplayed()
+        compose.onNodeWithText("Hello").assertIsDisplayed()
         screenshot("chat-home")
         compose.onNodeWithContentDescription("Open conversation history").performClick()
         compose.onNodeWithText("110 V actuator selection").assertIsDisplayed()
@@ -73,26 +75,69 @@ class ScreenTest {
             val activity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).first() as androidx.activity.ComponentActivity
             activity.onBackPressedDispatcher.onBackPressed()
         }
-        compose.onNodeWithText("Find the right\nactuator.").assertIsDisplayed()
+        compose.onNodeWithText("Hello").assertIsDisplayed()
         compose.onNodeWithContentDescription("Open conversation history").performClick()
         compose.onNodeWithText("110 V actuator selection").performClick()
         compose.onNodeWithText("Saved response").assertExists()
         screenshot("chat-resumed")
         compose.onNodeWithContentDescription("New conversation").performClick()
-        compose.onNodeWithText("Look up a part").performClick()
-        compose.onNodeWithContentDescription("Ask Series 76").assertTextContains("Look up the actuator", substring = true)
-        compose.onNodeWithContentDescription("Ask Series 76").performTextClearance()
-        compose.onNodeWithContentDescription("Ask Series 76").performClick()
-        compose.onNodeWithContentDescription("Ask Series 76").performTextInput("Look up 761A00-11300000/A")
-        screenshot("chat-keyboard")
+        compose.onNodeWithText("Look up a part").assertDoesNotExist()
+        compose.onNodeWithText("Match requirements").assertDoesNotExist()
+        compose.onNodeWithText("Technical data. Clear decisions.").assertDoesNotExist()
+        val greeting = compose.onNodeWithText("Hello").fetchSemanticsNode().boundsInRoot
+        val root = compose.onRoot().fetchSemanticsNode().boundsInRoot
+        assertTrue(kotlin.math.abs(greeting.center.x - root.center.x) < 2f)
+        compose.onNodeWithContentDescription("Message").performClick()
+        compose.onNodeWithContentDescription("Message").performTextInput("Look up 761A00-11300000/A")
+        compose.waitUntil(timeoutMillis = 8000) { compose.onAllNodesWithText("Hello").fetchSemanticsNodes().isEmpty() }
+        screenshot("chat-keyboard-fixed")
         compose.onNodeWithContentDescription("Send message").performClick()
         compose.onNodeWithText("Published data").assertExists()
         screenshot("chat-sent")
     }
 
+    @Test fun pendingRequestHasAccessibleThinkingText() {
+        compose.setContent { SeriesTheme(darkOverride = false) { ChatScreen(AppState(sending = true, draft = "Check the published torque"),
+            {}, {}, {}, {}, {}, {}, {}) } }
+        compose.onNodeWithText("Thinking\u2026").assertIsDisplayed()
+        compose.onNodeWithText("Hello").assertDoesNotExist()
+        screenshot("thinking")
+    }
+
+    @Test fun darkHomeAndTechnicalResultsStayReadable() {
+        val state = androidx.compose.runtime.mutableStateOf(AppState())
+        compose.setContent { SeriesTheme(darkOverride = true) { ChatScreen(state.value, {}, {}, {}, {}, {}, {}, {}) } }
+        compose.onNodeWithText("Hello").assertIsDisplayed()
+        screenshot("dark-home")
+        compose.runOnIdle { state.value = AppState(messages = listOf(Message("answer", "assistant", "Published catalogue data.", listOf(product)))) }
+        compose.onNodeWithText(product.partNumber).assertIsDisplayed()
+        screenshot("dark-product")
+        compose.runOnIdle { state.value = AppState(sending = true, draft = "Check published data") }
+        compose.onNodeWithText("Thinking\u2026").assertIsDisplayed()
+        screenshot("dark-thinking")
+    }
+
+    @Test fun appearanceChoiceIsSaved() {
+        val preferences = InstrumentationRegistry.getInstrumentation().targetContext.getSharedPreferences("appearance", android.content.Context.MODE_PRIVATE)
+        val existed = preferences.contains("dark")
+        val original = preferences.getBoolean("dark", false)
+        try {
+            preferences.edit().putBoolean("dark", false).commit()
+            compose.setContent { SeriesTheme { Box(Modifier.fillMaxSize().background(androidx.compose.material3.MaterialTheme.colorScheme.background).statusBarsPadding()) { ConversationsScreen(AppState(), {}, {}, {}, {}) } } }
+            compose.onNodeWithText("Dark theme").assertIsOff().performClick().assertIsOn()
+            compose.runOnIdle { assertTrue(preferences.getBoolean("dark", false)) }
+            screenshot("dark-drawer-fixed")
+            compose.onNodeWithText("Dark theme").performClick().assertIsOff()
+            compose.runOnIdle { assertFalse(preferences.getBoolean("dark", true)) }
+        } finally {
+            if (existed) preferences.edit().putBoolean("dark", original).commit()
+            else preferences.edit().remove("dark").commit()
+        }
+    }
+
     @Test fun emptyAndErrorAreActionable() {
         var retry = false
-        compose.setContent { SeriesTheme { Box(Modifier.statusBarsPadding()) { ConversationsScreen(AppState(sessionsError = "Cannot reach the backend."), {}, {}, { retry = true }, {}) } } }
+        compose.setContent { SeriesTheme(darkOverride = false) { Box(Modifier.statusBarsPadding()) { ConversationsScreen(AppState(sessionsError = "Cannot reach the backend."), {}, {}, { retry = true }, {}) } } }
         compose.onNodeWithText("Cannot reach the backend.").assertExists()
         compose.onNodeWithText("Try again").performClick()
         assertTrue(retry)
@@ -100,7 +145,7 @@ class ScreenTest {
     }
 
     @Test fun emptyConversationsExplainsAction() {
-        compose.setContent { SeriesTheme { Box(Modifier.statusBarsPadding()) { ConversationsScreen(AppState(), {}, {}, {}, {}) } } }
+        compose.setContent { SeriesTheme(darkOverride = false) { Box(Modifier.statusBarsPadding()) { ConversationsScreen(AppState(), {}, {}, {}, {}) } } }
         compose.onNodeWithText("No conversations yet").assertExists()
         compose.onNodeWithText("New chat").assertIsEnabled()
         screenshot("conversations-empty")
@@ -110,7 +155,7 @@ class ScreenTest {
         val parameters = buildJsonObject { putJsonArray("part_numbers") { add(product.partNumber) } }
         val returned = buildJsonObject { put("status", "ok"); put("source", "PostgreSQL test fixture") }
         val state = AppState(screen = "debug", messages = listOf(Message("answer", "assistant", "Published catalogue data is shown below.")))
-        compose.setContent { SeriesTheme { DeveloperScreen(state, {}, {}, { id ->
+        compose.setContent { SeriesTheme(darkOverride = false) { DeveloperScreen(state, {}, {}, { id ->
             DebugResponse(id, "test-session", listOf(ToolCall("get_actuator", parameters, returned)))
         }) } }
         compose.onNodeWithText("get_actuator").assertExists()
@@ -123,7 +168,7 @@ class ScreenTest {
         compose.setContent {
             val density = LocalDensity.current
             CompositionLocalProvider(LocalDensity provides Density(density.density, 1.3f)) {
-                SeriesTheme { ChatScreen(AppState(screen = "chat", title = "Published specifications",
+                SeriesTheme(darkOverride = false) { ChatScreen(AppState(screen = "chat", title = "Published specifications",
                     messages = listOf(Message("answer", "assistant", "Published catalogue data is shown below.", listOf(product)))), {}, {}, {}, {}, {}, {}, {}) }
             }
         }
@@ -136,7 +181,7 @@ class ScreenTest {
     @Test fun comparisonScrollKeepsAttributeLabels() {
         val other = product.copy(partNumber = "761B00-11300000/A", measurements = product.measurements +
             mapOf("on_off_torque_nm" to JsonPrimitive(100), "modulating_torque_nm" to JsonPrimitive(70)))
-        compose.setContent { SeriesTheme { ChatScreen(AppState(screen = "chat", title = "Compare actuators",
+        compose.setContent { SeriesTheme(darkOverride = false) { ChatScreen(AppState(screen = "chat", title = "Compare actuators",
             messages = listOf(Message("comparison", "assistant", "Compare the published specifications below.", listOf(product, other)))), {}, {}, {}, {}, {}, {}, {}) } }
         compose.onNodeWithText("Swipe across to compare. Attribute labels stay in place.").assertExists()
         compose.onNodeWithText("On/Off torque (Nm)").assertExists()
@@ -150,8 +195,8 @@ class ScreenTest {
             // Empty Compose test host: match the production activity's explicit light bars.
             ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).firstOrNull()?.let { activity ->
                 WindowCompat.getInsetsController(activity.window, activity.window.decorView).apply {
-                    isAppearanceLightStatusBars = true
-                    isAppearanceLightNavigationBars = true
+                    isAppearanceLightStatusBars = !name.contains("dark")
+                    isAppearanceLightNavigationBars = !name.contains("dark")
                 }
             }
         }
@@ -159,12 +204,29 @@ class ScreenTest {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         instrumentation.waitForIdleSync()
         // System bar appearance is applied by WindowManager on the next frame.
-        android.os.SystemClock.sleep(if (name == "chat-keyboard" || name == "chat-sent") 600 else 100)
+        if (name.startsWith("chat-keyboard") || name == "chat-sent") {
+            var previous = -1
+            var stable = 0
+            val deadline = android.os.SystemClock.uptimeMillis() + 8000
+            while (stable < 4 && android.os.SystemClock.uptimeMillis() < deadline) {
+                var height = 0
+                compose.runOnUiThread {
+                    val activity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).first()
+                    height = androidx.core.view.ViewCompat.getRootWindowInsets(activity.window.decorView)
+                        ?.getInsets(androidx.core.view.WindowInsetsCompat.Type.ime())?.bottom ?: 0
+                }
+                stable = if (height > 0 && height == previous) stable + 1 else 0
+                previous = height
+                android.os.SystemClock.sleep(120)
+            }
+            assertTrue("Docked keyboard must settle before capture", stable >= 4)
+            compose.waitForIdle()
+        } else android.os.SystemClock.sleep(100)
         val resolver = instrumentation.targetContext.contentResolver
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, "$name.png")
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Series76Verification/editorial-v3-final")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Series76Verification/ambient-v4-verified")
             put(MediaStore.Images.Media.IS_PENDING, 1)
         }
         val uri = requireNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))
