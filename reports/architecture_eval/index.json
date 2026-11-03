@@ -1,0 +1,7 @@
+{
+  "signature": "2b78e4991a241d27de5de5ba56a9883fa6982928eda7e2f6e9c85ed5e1f03685",
+  "model": "gemini-embedding-001",
+  "dimensions": 768,
+  "chunks": 9,
+  "price_source": "https://aistudio.google.com/docs/pricing"
+}

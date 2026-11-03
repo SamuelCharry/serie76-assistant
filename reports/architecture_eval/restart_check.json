@@ -1,0 +1,13 @@
+{
+  "before": {
+    "chunks": 9
+  },
+  "after": {
+    "chunks": 9
+  },
+  "catalog": {
+    "rows": 68
+  },
+  "passed": true,
+  "production_restarted": false
+}

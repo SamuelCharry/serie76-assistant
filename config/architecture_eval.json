@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.6-flash",
+  "embedding_model": "gemini-embedding-001",
+  "embedding_dimensions": 768,
+  "budget_usd": 0.50,
+  "input_usd_per_million": 0.75,
+  "output_usd_per_million": 3.75,
+  "embedding_usd_per_million": 0.15,
+  "max_output_tokens": 2048,
+  "min_interval_seconds": 5,
+  "price_checked": "2026-11-03",
+  "price_source": "https://aistudio.google.com/docs/pricing",
+  "configurations": ["A", "B", "C", "D", "E"],
+  "top_k": 4,
+  "chunk_max_tokens": 300,
+  "chunk_overlap_tokens": 40,
+  "promotion_min_additional_scenarios": 2,
+  "promotion_max_cost_ratio": 2,
+  "promotion_max_p95_ratio": 2
+}

@@ -1,0 +1,64 @@
+{
+  "configurations": {
+    "A": {
+      "attempted": 11,
+      "common_completed": 1,
+      "passed": 1,
+      "failures": 3,
+      "mean_cost_usd": 0.0019319999999999893,
+      "median_latency_s": 7.208929699998407,
+      "p95_latency_s": 7.208929699998407,
+      "changed_filters": 0
+    },
+    "B": {
+      "attempted": 11,
+      "common_completed": 1,
+      "passed": 1,
+      "failures": 4,
+      "mean_cost_usd": 0.002895150000000013,
+      "median_latency_s": 17.592667799999617,
+      "p95_latency_s": 17.592667799999617,
+      "changed_filters": 0
+    },
+    "C": {
+      "attempted": 11,
+      "common_completed": 1,
+      "passed": 1,
+      "failures": 5,
+      "mean_cost_usd": 0.005146499999999998,
+      "median_latency_s": 55.74970019999819,
+      "p95_latency_s": 55.74970019999819,
+      "changed_filters": 0
+    },
+    "D": {
+      "attempted": 11,
+      "common_completed": 1,
+      "passed": 1,
+      "failures": 5,
+      "mean_cost_usd": 0.002080500000000013,
+      "median_latency_s": 31.916602900000726,
+      "p95_latency_s": 31.916602900000726,
+      "changed_filters": 0
+    },
+    "E": {
+      "attempted": 10,
+      "common_completed": 1,
+      "passed": 1,
+      "failures": 5,
+      "mean_cost_usd": 0.01205324999999996,
+      "median_latency_s": 15.656236999999237,
+      "p95_latency_s": 15.656236999999237,
+      "changed_filters": 0
+    }
+  },
+  "common_scenarios": [
+    "trap_units"
+  ],
+  "planned_scenarios": 24,
+  "complete": false,
+  "recommendation": "inconclusive_partial_experiment",
+  "conservative_charge_usd": 0.48392565,
+  "cap_usd": 0.5,
+  "promoted": false,
+  "provider": "Google experimental; OpenRouter pending"
+}

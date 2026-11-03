@@ -42,6 +42,8 @@ Carga transaccional/idempotente, versiones y activación atómica. Magnitudes NU
 
 ## Requisitos y decisiones
 
+- [Arquitectura, ER y alternativas multiagente](docs/ARQUITECTURA.md), [visor de diagramas](docs/architecture.html) y [protocolo experimental](docs/ARCHITECTURE_EVALUATION.md). Experimento aislado en pgvector/Google; no cambia la arquitectura operativa ni cierra la aceptación OpenRouter. [Resultados](reports/architecture_eval/ANALISIS.md).
+
 - Lista completa, con referencias al enunciado: [docs/REQUISITOS.md](docs/REQUISITOS.md).
 - Enunciado original: [docs/assessment-en.pdf](docs/assessment-en.pdf).
 - Campos y particularidades de las tablas: [docs/DATOS.md](docs/DATOS.md).

@@ -1,5 +1,9 @@
 # Próximo bloque: herramientas y conversaciones
 
+## Prioridad vigente: razonar sobre arquitectura
+
+El título y los pendientes antiguos de abajo son históricos. Leer primero [06_ARQUITECTURAS_Y_RELEVO.md](06_ARQUITECTURAS_Y_RELEVO.md). Samuel pidió un relevo para un modelo de mayor capacidad. Están implementadas A–E, pero el ensayo quedó inconcluso y no hay ganadora aprobada. Revisar B frente a D con las fuentes industriales y ETIM; corregir rendererS4/segmentación, tratamiento de contradicciones, trazas y medición antes de otra cohorte. Mantener evidencia original y presupuesto: USD0.48392565 conservadores deUSD0.50 autorizados. No continuar llamadas por inercia. OpenRouter e integración final siguen pendientes; PostgreSQL, herramientas y conversaciones ya tienen implementación.
+
 ## Actualización: evaluación real del modelo en Google
 
 El usuario autorizó agentes para comparar y luego uso eficiente de20.000COP cargados a Google. Se completaron18casos con3modelos:3.6 Flash17/18,3 Flash Preview17/18,3.5 Flash-Lite16/18. Candidato recomendado google/gemini-3.6-flash por menor gravedad del fallo: omitiófocus en un N/A pero no inventó cifras; Preview añadió60Hz no pedidos. Desempate mecánico costo/latencia favorecePreview, preferenciaingenieril3.6 está explícita.3.8 y3.1Lite no respondieron por503 y no se puntúan como0.

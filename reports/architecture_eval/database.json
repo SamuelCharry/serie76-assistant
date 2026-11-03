@@ -1,0 +1,509 @@
+{
+  "image": "sha256:7d0a41464797aeb9862dfdc0bbf1526b82cfd324cdd8036df19e3545f4a9ccb8",
+  "state": {
+    "status": "ready",
+    "catalog": {
+      "id": 1,
+      "document_sha256": "4c28023929183df8e2a763e759cc84572b44604b30837a21e22c1166f88267e0",
+      "pipeline_signature": "d7e1c05b179f6b44dc77cda695cfd83a4b570e0db1ee2083d537fd709df70b27",
+      "rows": 68
+    }
+  },
+  "load": {
+    "status": "loaded",
+    "import_id": 1,
+    "rows": 68,
+    "activated": true
+  },
+  "columns": [
+    {
+      "table_name": "catalog_state",
+      "column_name": "singleton",
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "catalog_state",
+      "column_name": "active_import_id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "conversations",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "conversations",
+      "column_name": "title",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "conversations",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "conversations",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "documents",
+      "column_name": "sha256",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "documents",
+      "column_name": "filename",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "documents",
+      "column_name": "kind",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "import_id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "table_id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "source_row",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "base_part_number",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "source_part_number",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "enclosure",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "supply_voltage_v",
+      "data_type": "numeric",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "supply_current",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "phase_count",
+      "data_type": "integer",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "data_status",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "motor_power_w",
+      "data_type": "numeric",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "field_status",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "certification_header_raw",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "source_footnote",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "entries",
+      "column_name": "csa_status",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "entry_id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "frequency_hz",
+      "data_type": "integer",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "frequency_scope",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "operating_time_s",
+      "data_type": "numeric",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "fla_a",
+      "data_type": "numeric",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "frequency_specs",
+      "column_name": "lra_a",
+      "data_type": "numeric",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "imports",
+      "column_name": "id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "imports",
+      "column_name": "document_sha256",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "imports",
+      "column_name": "pipeline_signature",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "imports",
+      "column_name": "artifact_fingerprint",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "imports",
+      "column_name": "artifact_hashes",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "imports",
+      "column_name": "manifest",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "imports",
+      "column_name": "imported_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "messages",
+      "column_name": "sequence",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "messages",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "messages",
+      "column_name": "session_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "messages",
+      "column_name": "role",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "messages",
+      "column_name": "content",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "messages",
+      "column_name": "products",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "messages",
+      "column_name": "tool_calls",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "messages",
+      "column_name": "context",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "messages",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "schema_migrations",
+      "column_name": "name",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "schema_migrations",
+      "column_name": "checksum",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "schema_migrations",
+      "column_name": "applied_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "entry_id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "service",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "torque_in_lb",
+      "data_type": "numeric",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "torque_nm",
+      "data_type": "numeric",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "duty_s4_percent",
+      "data_type": "numeric",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "cycles_per_hour",
+      "data_type": "integer",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "service_specs",
+      "column_name": "starts_per_hour",
+      "data_type": "integer",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "source_cells",
+      "column_name": "entry_id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_cells",
+      "column_name": "field",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_cells",
+      "column_name": "status",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_cells",
+      "column_name": "unit",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "source_cells",
+      "column_name": "evidence",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "import_id",
+      "data_type": "bigint",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "source_table",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "source_page",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "title",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "layout",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "header",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "page_metadata",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "notes",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "source_tables",
+      "column_name": "shared_services_confirmed",
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    }
+  ],
+  "foreign_keys": [
+    {
+      "child": "series76.catalog_state",
+      "parent": "series76.imports",
+      "definition": "FOREIGN KEY (active_import_id) REFERENCES series76.imports(id)"
+    },
+    {
+      "child": "series76.entries",
+      "parent": "series76.imports",
+      "definition": "FOREIGN KEY (import_id) REFERENCES series76.imports(id)"
+    },
+    {
+      "child": "series76.entries",
+      "parent": "series76.source_tables",
+      "definition": "FOREIGN KEY (table_id, import_id) REFERENCES series76.source_tables(id, import_id)"
+    },
+    {
+      "child": "series76.frequency_specs",
+      "parent": "series76.entries",
+      "definition": "FOREIGN KEY (entry_id) REFERENCES series76.entries(id)"
+    },
+    {
+      "child": "series76.imports",
+      "parent": "series76.documents",
+      "definition": "FOREIGN KEY (document_sha256) REFERENCES series76.documents(sha256)"
+    },
+    {
+      "child": "series76.messages",
+      "parent": "series76.conversations",
+      "definition": "FOREIGN KEY (session_id) REFERENCES series76.conversations(id)"
+    },
+    {
+      "child": "series76.service_specs",
+      "parent": "series76.entries",
+      "definition": "FOREIGN KEY (entry_id) REFERENCES series76.entries(id)"
+    },
+    {
+      "child": "series76.source_cells",
+      "parent": "series76.entries",
+      "definition": "FOREIGN KEY (entry_id) REFERENCES series76.entries(id)"
+    },
+    {
+      "child": "series76.source_tables",
+      "parent": "series76.imports",
+      "definition": "FOREIGN KEY (import_id) REFERENCES series76.imports(id)"
+    }
+  ],
+  "isolation": {
+    "port": 5543,
+    "project": "series76-architecture-eval"
+  }
+}

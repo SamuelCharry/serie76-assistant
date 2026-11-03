@@ -1,0 +1,15 @@
+{
+  "tests": {
+    "architecture_eval": 17,
+    "conversations": 9,
+    "previous_model_eval": 28
+  },
+  "passed": 54,
+  "paid_calls_in_tests": 0,
+  "database": "real PostgreSQL, controlled routers",
+  "source_files_compile": 10,
+  "pip_check": "passed",
+  "production_catalog_equal": true,
+  "experimental_restart_passed": true,
+  "frozen_input_drift": []
+}

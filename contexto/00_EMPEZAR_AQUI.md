@@ -1,5 +1,13 @@
 # Continuación del assessment Serie 76
 
+## Leer primero: relevo de arquitectura para cambio de modelo
+
+Samuel cambiará a un modelo de mayor capacidad y pidió guardar las arquitecturas y el razonamiento. Leer [06_ARQUITECTURAS_Y_RELEVO.md](06_ARQUITECTURAS_Y_RELEVO.md): cinco diseños A–E, ER, fuentes industriales/ETIM, fallos, presupuesto y próximos pasos. **No hay arquitectura ganadora ni integración aprobada.** Recomendación provisional comunicada: B corregida como base y D para evaluación; el nuevo modelo debe revisarla, no tratarla como resultado experimental.
+
+## Experimento de arquitecturas: instancia separada
+
+Por instrucción del usuario se implementaron cinco configuraciones experimentales: actual, agente único contextual, dos especialistas, supervisor y proponente/revisor. Código architecture_eval/, configuración config/architecture_eval.json, protocolo docs/ARCHITECTURE_EVALUATION.md. Diagramas/ER: docs/architecture.html y docs/ARQUITECTURA.md. PostgreSQL+pgvector experimental en5543 con volumen separado; nunca sustituir el volumen operativo de5432. Clave Google solo en .env ignorado, credencial experimental en .cache ignorado. Límite nuevo USD0,50: cargo conservadorUSD0.48392565,103llamadas/19fallos proveedor,11de24escenarios intentados y solo1común a las cinco variantes. **Análisis final: reports/architecture_eval/ANALISIS.md y analysis.json**; RESULTADOS.md/comparison.json conservan el agregador original.54pruebas automatizadas pasan. Defecto conocido: filtro de cifras borra la definiciónS4; no integrar así. Datos OCR operativos y API no se modificaron. La aceptación por OpenRouter sigue pendiente. No gastar más por inercia ni retocar la cohorte congelada.
+
 ## Android: presentación Editorial A vigente
 
 El usuario rechazó la apariencia genérica de V2, mantuvo chat inicial/historial lateral y aprobó la opción Editorial A para toda la app con adaptación nativa. Nueva dirección docs/MOBILE_DIRECTION_V3.md; evidencia reports/mobile/redesign-v3 y .impeccable/review/redesign-v3. Rethink Sans local, blanco/ciruela/lila Konecto, compositor delineado, filas de sugerencias y movimiento nativo. Base anterior publicada en main:7f69e9c; cambios visuales en design/android-editorial-v3. Trece pruebas Android pasan y debug/release compilan. No cambiar backend/modelos como parte del diseño.
