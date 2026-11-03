@@ -2,11 +2,23 @@
 
 Continuación en otro agente: [carpeta de contexto](contexto/00_EMPEZAR_AQUI.md).
 
-Repositorio inicial para el assessment de Konecto. **Etapa actual: preparar y validar OCR.**
+Repositorio para el assessment de Konecto. **Etapa actual: ingestión OCR verificada; siguiente bloque PostgreSQL.**
 
-Implementado: estructura del proyecto, endpoint de salud FastAPI, esquemas mínimos del contrato, configuración Docker/PostgreSQL y ensayo de renderizado/OCR local. Pendiente: extracción tabular validada, ingestión en PostgreSQL, agente LangChain, conversaciones persistentes y aplicación Android.
+El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver reports/pipeline/RESULTADOS.md y reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL, agente y Android siguen pendientes.
 
-La existencia de archivos Docker, carpetas o contratos no significa que la aplicación final esté implementada. Estado comprobado en docs/VERIFICACION_INICIAL.md.
+**Salida del pipeline:** [tablas HTML](data/extracted/series76/catalog.html), [CSV](data/extracted/series76/catalog.csv), [JSON](data/extracted/series76/catalog.json). [Resultados y límites](reports/pipeline/RESULTADOS.md).
+
+## Ejecutar la ingestión
+
+```powershell
+python -m venv .venv-ingest
+./.venv-ingest/Scripts/python.exe -m pip install -r requirements-ingest.lock.txt
+./.venv-ingest/Scripts/python.exe scripts/ingest.py data/raw/series_76_electric_data.pdf --out data/processed/mi-importacion
+```
+
+Acepta archivos o directorios. Usa RapidOCR/PP-OCRv5 local; no requiere Tesseract ni OpenRouter. Reconstruye columnas por encabezados/unidades y celdas combinadas por geometría. Las dudas bloquean la exportación validada. [Instalación, formatos, lotes, caché y reproducción](docs/INGESTION.md).
+
+`data/reviewed/catalog-v1` y `extract_reviewed_catalog.py` conservan la referencia manual histórica; no generan esta salida. `config/ocr.json` pertenece al laboratorio anterior y no gobierna `scripts/ingest.py`. El Docker OCR existente conserva el ensayo Tesseract; el pipeline nuevo se verificó directamente en Windows, no en ese contenedor.
 
 ## Requisitos y decisiones
 
@@ -14,10 +26,26 @@ La existencia de archivos Docker, carpetas o contratos no significa que la aplic
 - Enunciado original: [docs/assessment-en.pdf](docs/assessment-en.pdf).
 - Campos y particularidades de las tablas: [docs/DATOS.md](docs/DATOS.md).
 - Python 3.12, Git; Docker Desktop con motor Linux activo para la ruta Docker.
-- Para ejecutar OCR directamente en Windows: Tesseract con idioma inglés, además de Python. No hace falta instalarlo en Windows si se usa el servicio Docker OCR.
+- El pipeline actual funciona en Windows con Python y requirements-ingest.lock.txt. Tesseract solo corresponde al ensayo histórico descrito más abajo.
 - Para la app futura: Android Studio. Se elige Kotlin/Jetpack Compose; aún no hay proyecto Android compilable.
 
-## Primer ensayo: sin OpenRouter
+## Laboratorio OCR: tres motores, sin OpenRouter
+
+Ver [instalación, comparación y ejecución](docs/OCR.md). Notebooks: [comparación](notebooks/01_comparar_ocr.ipynb) y [exploración breve con ydata-profiling](notebooks/02_exploracion_ydata.ipynb).
+
+```powershell
+./scripts/setup_ocr.ps1
+./.venv-ocr/Scripts/python.exe scripts/run_ocr_notebooks.py
+./.venv-ocr/Scripts/python.exe scripts/ocr_lab.py --config config/ocr.json --out data/ocr/nueva-ejecucion
+```
+
+El entorno `.venv-ocr` es independiente del backend. Descarga pesos públicos; no usa OpenRouter ni sube el PDF. La configuración elegida, las métricas y las discrepancias históricas se conservan en `config/ocr.json` y `reports/ocr`. El OCR crudo sigue sin validar por sí solo; el catálogo revisado es una salida distinta, con seis correcciones auditadas. Se corrigieron además tres celdas de la referencia inicial al volver al PDF: [evidencia](docs/OCR_REFERENCE_REVIEW.md).
+
+**HTML de ydata-profiling:** abrir [informes de referencia y OCR](reports/ocr/index.html) en un navegador. El notebook 02 también enlaza ambos informes.
+
+## Ensayo original de Tesseract: sin OpenRouter
+
+Los comandos siguientes conservan la prueba inicial con el ejecutable Tesseract. El laboratorio anterior conserva la comparación de motores; para ingestión usar scripts/ingest.py. El servicio Docker `ocr` sigue siendo ese ensayo original; no ejecuta la configuración seleccionada del laboratorio.
 
 Desde la raíz del repositorio, en PowerShell:
 
@@ -72,7 +100,7 @@ El TSV conserva ubicación espacial; todavía falta reconstruir filas, columnas,
 4. Revisar potencia en celdas combinadas y notas. Ante discrepancias, volver al PDF; la referencia manual también puede contener errores.
 5. Registrar fallos antes de elegir motor/configuración. No importar OCR crudo a producción.
 
-No existe aún ingest.py: este ensayo no pretende sustituir el pipeline final que deberá leer el PDF, validar tablas y cargar PostgreSQL sin duplicados.
+El ensayo anterior es histórico. El pipeline actual es scripts/ingest.py; produce CSV/JSON validados. Su carga transaccional en PostgreSQL aún está pendiente.
 
 ## Backend inicial
 
@@ -122,7 +150,7 @@ Listar sesiones y recuperar mensajes será necesario para la app. Los nombres su
 - Herramientas previstas: get_actuator y search_actuators, todavía no implementadas.
 - FastAPI gestionará conversaciones persistentes y respuestas estructuradas.
 - Android presentará conversaciones, fichas comparables y depuración de desarrollador.
-- Decisión de OCR inicial: Tesseract local, sin gasto de OpenRouter. Su calidad sobre estas tablas aún debe medirse.
+- OCR: comparar Tesseract, EasyOCR y PP-OCR/RapidOCR localmente, sin gasto de OpenRouter. Ver notebooks, configuración seleccionada y métricas en el laboratorio. La selección no equivale a validar todas las cifras ni las notas.
 - Selección de LLM pendiente; documentar resultados y costo antes de decidir. LangChain y su integración OpenRouter se incorporarán al implementar el agente, no están instalados ni implementados en este scaffold.
 - Login y voz excluidos del primer alcance por ser opcionales.
 

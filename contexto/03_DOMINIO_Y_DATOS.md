@@ -45,7 +45,7 @@ Identidad -> valores por servicio y frecuencia -> evidencia. Todavía no se dise
 4. Potencia tiene celdas combinadas: heredar solo según alcance visual comprobado.
 5. Cinco referencias de tamaños 6 y 7, sufijo -11320000/A, tienen excepción explícita «not CSA Certified». Guardar asterisco como nota, no como parte del identificador normalizado, conservando también el original.
 6. La tabla trifásica no separa torque/duty por servicio; conservar columnas compartidas y nota 5, sin inventar dos mediciones.
-7. Guardar ambos torques publicados, sin reemplazar por conversión exacta. Ejemplo: 764X30-11320000/A publica 5520 in-lb y 620 Nm para modulación; no corregirlo silenciosamente.
+7. Guardar ambos torques publicados, sin reemplazar por conversión exacta. La revisión del PDF durante el benchmark corrigió la referencia de 764X30-11320000/A: publica 5520 in-lb y **640 Nm**, no 620 Nm. Ver docs/OCR_REFERENCE_REVIEW.md.
 8. Las páginas explosionproof dicen CSA y clasificación de área; no añadir ATEX/IECEx desde el resumen genérico.
 9. null indica campo no publicado por separado; source_NA identifica N/A explícito. Nunca cero.
 

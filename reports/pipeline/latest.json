@@ -1,0 +1,6 @@
+{
+  "snapshot": "data/extracted/series76",
+  "source_output": "C:\\Users\\nrir\\Desktop\\dev\\serie76-assistant\\data\\processed\\acceptance-isolated\\doc-series_76_electric_data-4c28023929183df8-d7e1c05b17",
+  "verification": "reports/pipeline/verified/summary.json",
+  "pipeline_signature": "d7e1c05b179f6b44dc77cda695cfd83a4b570e0db1ee2083d537fd709df70b27"
+}

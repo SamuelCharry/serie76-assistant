@@ -1,5 +1,10 @@
 .git
 .venv
+.venv-ocr
+.venv-ingest
+.cache
+notebooks
+reports
 .env
 .env.*
 data

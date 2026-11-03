@@ -15,8 +15,8 @@ Fuente: docs/assessment-en.pdf, seis páginas. Las casillas representan cumplimi
 
 - [ ] D01. Usar series_76_electric_data.pdf como única fuente de cifras del agente (p. 2, 4).
 - [ ] D02. Usar series_76_summary.pdf como contexto de negocio, sin reemplazar las tablas eléctricas (p. 2).
-- [ ] D03. Script/pipeline que procese el PDF crudo y lo transforme al formato consultado por la herramienta (p. 3, 6). El ensayo OCR inicial NO completa este requisito.
-- [ ] D04. Datos procesados incluidos o instrucciones claras para generarlos (p. 6). La referencia manual incluida es provisional y debe verificarse con el pipeline.
+- [ ] D03. Script/pipeline que procese el PDF crudo y lo transforme al formato consultado por la herramienta (p. 3, 6). PDF → CSV/JSON implementado y verificado; falta integrar su carga PostgreSQL y herramienta final. Ver docs/INGESTION.md.
+- [x] D04. Datos procesados incluidos o instrucciones claras para generarlos (p. 6). Salida real OCR en data/extracted/series76 e instrucciones reproducibles en docs/INGESTION.md; evaluación completa en reports/pipeline/verified.
 - [ ] D05. PostgreSQL ejecutándose localmente, por ejemplo con Compose (p. 4).
 - [ ] D06. Si se implementa búsqueda semántica/vectorial, usar pgvector (condicional, p. 4). No es obligatorio agregar búsqueda vectorial.
 - [ ] D07. Utilizar modelos del API OpenRouter proporcionado para el LLM y embeddings, si se usan (p. 2-3).
@@ -76,7 +76,7 @@ Request mínimo: {"query":"..."}. Request de continuación: {"session_id":"...",
 - [ ] R05. .env.example con valores ficticios, sin claves reales (p. 6). Preparado.
 - [ ] R06. README con requisitos y variables de entorno (p. 6). Documentado para scaffold; completar al entregar.
 - [ ] R07. README con construcción/ejecución Docker y acceso a API (p. 6).
-- [ ] R08. README con ejecución de ingestión y ubicación de resultados (p. 6). Solo ensayo OCR por ahora.
+- [ ] R08. README con ejecución de ingestión y ubicación de resultados (p. 6). Pipeline real y ubicación de salida documentados; README y docs/INGESTION.md.
 - [ ] R09. README con compilación/ejecución app en emulador o dispositivo (p. 6). Pendiente.
 - [ ] R10. README con configuración de URL del backend en la app (p. 6). Pendiente.
 - [ ] R11. README con acceso a debug (p. 6). Pendiente.

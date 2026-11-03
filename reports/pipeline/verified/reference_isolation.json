@@ -1,0 +1,11 @@
+{
+  "guard_self_test_passed": true,
+  "forbidden_reference_reads": [],
+  "network_attempts": [],
+  "notebook_libraries_present": {
+    "torch": false,
+    "pandas": false,
+    "ydata_profiling": false,
+    "easyocr": false
+  }
+}

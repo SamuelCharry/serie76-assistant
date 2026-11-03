@@ -10,6 +10,8 @@ Archivos: serie76_tablas_extraidas.csv (filas y valores) y serie76_tablas_extrai
 
 Controles ejecutados: 68 filas y códigos únicos; conteos por tabla; cuatro filas N/A; cinco excepciones CSA; porcentajes en rango; potencia presente en las 64 filas con cifras. La revisión no incluye una segunda transcripción independiente ni aclaraciones del fabricante. Estos controles estructurales no demuestran por sí solos exactitud numérica.
 
+Actualización: se realizó otra entrada visual completa de las siete tablas y notas desde los recortes del PDF. Coincide numéricamente con la referencia ya corregida. El catálogo exportado y sus decisiones están en `data/reviewed/catalog-v1`; auditoría en `reports/manual_review/AUDIT.md`. Ambas revisiones fueron del asistente de IA, sin segunda revisión humana ni aclaración del fabricante. La exportación distingue valores reportados, N/A explícitos y campos no publicados en cada diseño.
+
 ## Inventario
 
 | Página / tabla | Carcasa | Alimentación | Presentación del servicio | Filas |
@@ -95,7 +97,7 @@ Una búsqueda de al menos 70 Nm puede aceptar este modelo por torque para On/Off
 4. **La potencia utiliza celdas combinadas.** Una celda visualmente vacía puede heredar el valor de su grupo, pero solo si el diseño de la tabla lo demuestra.
 5. **Hay cinco excepciones CSA.** 766A00, 766B00, 767A00, 767B00 y 767C00 con sufijo -11320000/A tienen asterisco: tamaños 6 y 7 no certificados CSA. El encabezado general no anula la excepción.
 6. **Explosionproof no demuestra automáticamente ATEX o IECEx.** Las páginas eléctricas dicen CSA y publican una clasificación de área; no añadir certificaciones desde el resumen genérico.
-7. **Conservar las dos unidades de torque publicadas.** Hay redondeos y valores que no se corresponden con una conversión exacta. Ejemplo: 764X30-11320000/A publica 5520 in-lb y 620 Nm en modulación. No corregir silenciosamente a partir de otra fila o de una conversión.
+7. **Conservar las dos unidades de torque publicadas.** No reemplazarlas por una conversión calculada. La revisión OCR encontró que la transcripción anterior de 764X30-11320000/A decía erróneamente 620 Nm: el PDF publica 5520 in-lb y **640 Nm** en modulación. Ver [correcciones con evidencia](OCR_REFERENCE_REVIEW.md).
 8. **El código completo distingue variantes.** No buscar únicamente por el prefijo 761A00; distintas alimentaciones tienen códigos diferentes.
 
 ## Lectura de los archivos extraídos
@@ -107,3 +109,8 @@ Un vacío en CSV o null en JSON significa que ese campo no se publica por separa
 ## Decisión propuesta
 
 Guardar una identidad por número de parte, vinculada a sus valores por servicio y por frecuencia, junto con la fuente y sus notas. No guardar un único torque, una única corriente o una única velocidad por actuador: se perderían condiciones necesarias para recomendar correctamente.
+
+
+## Actualización: pipeline OCR verificable
+
+El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver reports/pipeline/RESULTADOS.md y reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL, agente y Android siguen pendientes.

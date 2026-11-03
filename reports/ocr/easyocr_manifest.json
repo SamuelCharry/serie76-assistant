@@ -1,0 +1,59 @@
+{
+  "engine": "easyocr",
+  "source_sha256": "4c28023929183df8e2a763e759cc84572b44604b30837a21e22c1166f88267e0",
+  "dpi": 300,
+  "created_utc": "2026-11-03T01:54:13.296866+00:00",
+  "external_api_calls": 0,
+  "validated_table_data": false,
+  "status": "ocr_completed_unvalidated",
+  "layout": "fixed-series76-v1",
+  "pages": [
+    {
+      "page": 1,
+      "seconds": 132.95833079999647,
+      "tokens": 520
+    },
+    {
+      "page": 2,
+      "seconds": 102.60490070000014,
+      "tokens": 136
+    },
+    {
+      "page": 3,
+      "seconds": 98.99717569999848,
+      "tokens": 146
+    },
+    {
+      "page": 4,
+      "seconds": 128.54577929999869,
+      "tokens": 425
+    }
+  ],
+  "code_sha256": "b93376dce6c7ce6ce331cbcad2acf03925330d0bd7d7f836b7ae2dbd73dee135",
+  "settings": {
+    "language": "en",
+    "gpu": false,
+    "canvas_size": 3500,
+    "mag_ratio": 1.0,
+    "batch_size": 8,
+    "workers": 0,
+    "torch_threads": 2
+  },
+  "packages": {
+    "PyMuPDF": "1.28.2",
+    "easyocr": "1.7.2",
+    "torch": "2.15.0"
+  },
+  "engine_version": "1.7.2",
+  "load_seconds": 15.003419100001338,
+  "model_files": [
+    {
+      "path": ".cache\\ocr\\easyocr\\craft_mlt_25k.pth",
+      "sha256": "4a5efbfb48b4081100544e75e1e2b57f8de3d84f213004b14b85fd4b3748db17"
+    },
+    {
+      "path": ".cache\\ocr\\easyocr\\english_g2.pth",
+      "sha256": "e2272681d9d67a04e2dff396b6e95077bc19001f8f6d3593c307b9852e1c29e8"
+    }
+  ]
+}

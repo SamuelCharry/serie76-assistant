@@ -1,0 +1,986 @@
+﻿source_page,source_table,source_row,source_column,field,header,unit_raw,raw_text,value,status,source_span_rows,evidence
+1,p1_t1,1,1,base_part_number,Base Part Number,,761A00-11300000/A,761A00-11300000/A,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,700,700,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,3,on_off_torque_nm,On/Off Output Torque,Nm,80,80,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,5,cycles_per_hour,Cycles Per Hour,Cycles,36,36,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,580,580,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,7,modulating_torque_nm,Modulating Output Torque,Nm,65,65,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,17,17,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,20,20,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.2,1.2,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.1,1.1,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.4,1.4,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.3,1.3,reported,"[1, 1]",reports/manual_review/p1_t1.png
+1,p1_t1,1,16,motor_power_w,Motor Power,Watts,15,15,reported,"[1, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,1,base_part_number,Base Part Number,,761B00-11300000/A,761B00-11300000/A,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,880,880,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,3,on_off_torque_nm,On/Off Output Torque,Nm,100,100,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,5,cycles_per_hour,Cycles Per Hour,Cycles,31,31,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,620,620,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,7,modulating_torque_nm,Modulating Output Torque,Nm,70,70,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,19,19,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,23,23,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.3,1.3,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.2,1.2,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.4,1.4,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.3,1.3,reported,"[2, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,2,16,motor_power_w,Motor Power,Watts,15,15,reported,"[1, 2]",reports/manual_review/p1_t1.png
+1,p1_t1,3,1,base_part_number,Base Part Number,,762A00-11300000/A,762A00-11300000/A,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"1,330",1330,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,3,on_off_torque_nm,On/Off Output Torque,Nm,150,150,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,50,50,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,5,cycles_per_hour,Cycles Per Hour,Cycles,42,42,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,150",1150,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,7,modulating_torque_nm,Modulating Output Torque,Nm,130,130,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,18,18,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,21,21,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.3,2.3,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.3,2.3,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.5,2.5,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,2.4,2.4,reported,"[3, 3]",reports/manual_review/p1_t1.png
+1,p1_t1,3,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,4,1,base_part_number,Base Part Number,,762B00-11300000/A,762B00-11300000/A,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"1,750",1750,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,3,on_off_torque_nm,On/Off Output Torque,Nm,200,200,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,35,35,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,5,cycles_per_hour,Cycles Per Hour,Cycles,21,21,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,330",1330,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,7,modulating_torque_nm,Modulating Output Torque,Nm,150,150,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,25,25,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,30,30,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.3,2.3,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.3,2.3,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.5,2.5,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,2.4,2.4,reported,"[4, 4]",reports/manual_review/p1_t1.png
+1,p1_t1,4,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,1,base_part_number,Base Part Number,,763A00-11300000/A,763A00-11300000/A,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"2,650",2650,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,3,on_off_torque_nm,On/Off Output Torque,Nm,300,300,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,50,50,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,5,cycles_per_hour,Cycles Per Hour,Cycles,29,29,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,950",1950,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,7,modulating_torque_nm,Modulating Output Torque,Nm,220,220,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,25,25,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,31,31,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.6,2.6,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.5,2.5,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.9,2.9,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,3.0,3.0,reported,"[5, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,5,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p1_t1.png
+1,p1_t1,6,1,base_part_number,Base Part Number,,763B00-11300000/A,763B00-11300000/A,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"4,400",4400,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,3,on_off_torque_nm,On/Off Output Torque,Nm,500,500,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,5,cycles_per_hour,Cycles Per Hour,Cycles,16,16,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"3,350",3350,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,7,modulating_torque_nm,Modulating Output Torque,Nm,380,380,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,26,26,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,32,32,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,4.8,4.8,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,4.6,4.6,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,5.0,5.0,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,4.9,4.9,reported,"[6, 6]",reports/manual_review/p1_t1.png
+1,p1_t1,6,16,motor_power_w,Motor Power,Watts,90,90,reported,"[6, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,1,base_part_number,Base Part Number,,763C00-11300000/A,763C00-11300000/A,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"4,800",4800,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,3,on_off_torque_nm,On/Off Output Torque,Nm,550,550,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,5,cycles_per_hour,Cycles Per Hour,Cycles,13,13,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"3,540",3540,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,7,modulating_torque_nm,Modulating Output Torque,Nm,400,400,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,33,33,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,39,39,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,4.8,4.8,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,4.6,4.6,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,5.0,5.0,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,4.9,4.9,reported,"[7, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,7,16,motor_power_w,Motor Power,Watts,90,90,reported,"[6, 7]",reports/manual_review/p1_t1.png
+1,p1_t1,8,1,base_part_number,Base Part Number,,764A00-11300000/A,764A00-11300000/A,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"6,650",6650,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,3,on_off_torque_nm,On/Off Output Torque,Nm,750,750,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,25,25,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,5,cycles_per_hour,Cycles Per Hour,Cycles,12,12,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"6,020",6020,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,7,modulating_torque_nm,Modulating Output Torque,Nm,680,680,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,35,35,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,9,starts_per_hour,Starts Per Hour,Starts,840,840,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,30,30,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,36,36,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,6.5,6.5,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,6.5,6.5,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,7.3,7.3,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,7.4,7.4,reported,"[8, 8]",reports/manual_review/p1_t1.png
+1,p1_t1,8,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,9,1,base_part_number,Base Part Number,,764B00-11300000/A,764B00-11300000/A,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"9,700",9700,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,3,on_off_torque_nm,On/Off Output Torque,Nm,"1,100",1100,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,25,25,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,5,cycles_per_hour,Cycles Per Hour,Cycles,10,10,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"8,230",8230,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,7,modulating_torque_nm,Modulating Output Torque,Nm,930,930,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,35,35,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,9,starts_per_hour,Starts Per Hour,Starts,840,840,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,36,36,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,43,43,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,6.8,6.8,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,6.8,6.8,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,7.3,7.3,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,7.4,7.4,reported,"[9, 9]",reports/manual_review/p1_t1.png
+1,p1_t1,9,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,10,1,base_part_number,Base Part Number,,765A00-11300000/A,765A00-11300000/A,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"17,700",17700,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,3,on_off_torque_nm,On/Off Output Torque,Nm,"2,000",2000,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,25,25,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,5,cycles_per_hour,Cycles Per Hour,Cycles,4,4,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"15,000",15000,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,7,modulating_torque_nm,Modulating Output Torque,Nm,"1,700",1700,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,35,35,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,9,starts_per_hour,Starts Per Hour,Starts,840,840,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,88,88,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,106,106,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,6.8,6.8,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,6.8,6.8,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,7.4,7.4,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,7.4,7.4,reported,"[10, 10]",reports/manual_review/p1_t1.png
+1,p1_t1,10,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,1,base_part_number,Base Part Number,,765B00-11300000/A,765B00-11300000/A,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"26,500",26500,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,3,on_off_torque_nm,On/Off Output Torque,Nm,"3,000",3000,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,25,25,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,5,cycles_per_hour,Cycles Per Hour,Cycles,3,3,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"22,550",22550,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,7,modulating_torque_nm,Modulating Output Torque,Nm,"2,550",2550,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,35,35,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,9,starts_per_hour,Starts Per Hour,Starts,840,840,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,108,108,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,130,130,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,7.0,7.0,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,7.0,7.0,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,7.3,7.3,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,7.4,7.4,reported,"[11, 11]",reports/manual_review/p1_t1.png
+1,p1_t1,11,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p1_t1.png
+1,p1_t2,1,1,base_part_number,Base Part Number,,761A00-11320000/A,761A00-11320000/A,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,700,700,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,3,on_off_torque_nm,On/Off Output Torque,Nm,80,80,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,5,cycles_per_hour,Cycles Per Hour,Cycles,36,36,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,580,580,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,7,modulating_torque_nm,Modulating Output Torque,Nm,65,65,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,17,17,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,20,20,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,0.7,0.7,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,0.7,0.7,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,0.7,0.7,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,0.7,0.7,reported,"[1, 1]",reports/manual_review/p1_t2.png
+1,p1_t2,1,16,motor_power_w,Motor Power,Watts,15,15,reported,"[1, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,1,base_part_number,Base Part Number,,761B00-11320000/A,761B00-11320000/A,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,880,880,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,3,on_off_torque_nm,On/Off Output Torque,Nm,100,100,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,5,cycles_per_hour,Cycles Per Hour,Cycles,31,31,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,620,620,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,7,modulating_torque_nm,Modulating Output Torque,Nm,70,70,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,19,19,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,23,23,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,0.7,0.7,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,0.7,0.7,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,0.7,0.7,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,0.7,0.7,reported,"[2, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,2,16,motor_power_w,Motor Power,Watts,15,15,reported,"[1, 2]",reports/manual_review/p1_t2.png
+1,p1_t2,3,1,base_part_number,Base Part Number,,762A00-11320000/A,762A00-11320000/A,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"1,330",1330,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,3,on_off_torque_nm,On/Off Output Torque,Nm,150,150,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,35,35,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,5,cycles_per_hour,Cycles Per Hour,Cycles,30,30,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,150",1150,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,7,modulating_torque_nm,Modulating Output Torque,Nm,130,130,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,18,18,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,21,21,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.0,1.0,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.0,1.0,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.2,1.2,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.1,1.1,reported,"[3, 3]",reports/manual_review/p1_t2.png
+1,p1_t2,3,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,4,1,base_part_number,Base Part Number,,762B00-11320000/A,762B00-11320000/A,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"1,750",1750,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,3,on_off_torque_nm,On/Off Output Torque,Nm,200,200,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,35,35,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,5,cycles_per_hour,Cycles Per Hour,Cycles,21,21,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,330",1330,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,7,modulating_torque_nm,Modulating Output Torque,Nm,150,150,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,24,24,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,29,29,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.1,1.1,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.1,1.1,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.2,1.2,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.1,1.1,reported,"[4, 4]",reports/manual_review/p1_t2.png
+1,p1_t2,4,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,1,base_part_number,Base Part Number,,763A00-11320000/A,763A00-11320000/A,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"2,650",2650,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,3,on_off_torque_nm,On/Off Output Torque,Nm,300,300,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,5,cycles_per_hour,Cycles Per Hour,Cycles,24,24,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,950",1950,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,7,modulating_torque_nm,Modulating Output Torque,Nm,220,220,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,24,24,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,29,29,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.3,1.3,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.3,1.3,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.4,1.4,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.5,1.5,reported,"[5, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,5,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p1_t2.png
+1,p1_t2,6,1,base_part_number,Base Part Number,,763B00-11320000/A,763B00-11320000/A,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"4,400",4400,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,3,on_off_torque_nm,On/Off Output Torque,Nm,500,500,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,5,cycles_per_hour,Cycles Per Hour,Cycles,16,16,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"3,350",3350,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,7,modulating_torque_nm,Modulating Output Torque,Nm,380,380,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,26,26,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,32,32,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.2,2.2,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.1,2.1,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.4,2.4,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,2.5,2.5,reported,"[6, 6]",reports/manual_review/p1_t2.png
+1,p1_t2,6,16,motor_power_w,Motor Power,Watts,90,90,reported,"[6, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,1,base_part_number,Base Part Number,,763C00-11320000/A,763C00-11320000/A,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"4,800",4800,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,3,on_off_torque_nm,On/Off Output Torque,Nm,550,550,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,25,25,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,5,cycles_per_hour,Cycles Per Hour,Cycles,13,13,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"3,540",3540,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,7,modulating_torque_nm,Modulating Output Torque,Nm,400,400,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,28,28,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,34,34,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.2,2.2,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.1,2.1,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.4,2.4,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,2.5,2.5,reported,"[7, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,7,16,motor_power_w,Motor Power,Watts,90,90,reported,"[6, 7]",reports/manual_review/p1_t2.png
+1,p1_t2,8,1,base_part_number,Base Part Number,,764A00-11320000/A,764A00-11320000/A,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"6,650",6650,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,3,on_off_torque_nm,On/Off Output Torque,Nm,750,750,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,25,25,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,5,cycles_per_hour,Cycles Per Hour,Cycles,13,13,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"6,020",6020,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,7,modulating_torque_nm,Modulating Output Torque,Nm,680,680,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,35,35,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,9,starts_per_hour,Starts Per Hour,Starts,840,840,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,27,27,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,33,33,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,3.2,3.2,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.0,3.0,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,3.8,3.8,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,3.9,3.9,reported,"[8, 8]",reports/manual_review/p1_t2.png
+1,p1_t2,8,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,9,1,base_part_number,Base Part Number,,764B00-11320000/A,764B00-11320000/A,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"9,700",9700,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,3,on_off_torque_nm,On/Off Output Torque,Nm,"1,100",1100,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,25,25,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,5,cycles_per_hour,Cycles Per Hour,Cycles,10,10,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"7,080",7080,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,7,modulating_torque_nm,Modulating Output Torque,Nm,800,800,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,35,35,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,9,starts_per_hour,Starts Per Hour,Starts,840,840,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,36,36,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,43,43,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,3.6,3.6,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.5,3.5,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,3.9,3.9,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,3.6,3.6,reported,"[9, 9]",reports/manual_review/p1_t2.png
+1,p1_t2,9,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,10,1,base_part_number,Base Part Number,,765A00-11320000/A,765A00-11320000/A,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"17,700",17700,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,3,on_off_torque_nm,On/Off Output Torque,Nm,"2,000",2000,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,25,25,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,5,cycles_per_hour,Cycles Per Hour,Cycles,4,4,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"15,000",15000,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,7,modulating_torque_nm,Modulating Output Torque,Nm,"1,700",1700,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,35,35,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,9,starts_per_hour,Starts Per Hour,Starts,840,840,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,88,88,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,106,106,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,3.3,3.3,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.2,3.2,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,3.8,3.8,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,3.9,3.9,reported,"[10, 10]",reports/manual_review/p1_t2.png
+1,p1_t2,10,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,1,base_part_number,Base Part Number,,765B00-11320000/A,765B00-11320000/A,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"26,500",26500,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,3,on_off_torque_nm,On/Off Output Torque,Nm,"3,000",3000,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,25,25,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,5,cycles_per_hour,Cycles Per Hour,Cycles,3,3,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"22,550",22550,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,7,modulating_torque_nm,Modulating Output Torque,Nm,"2,550",2550,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,35,35,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,9,starts_per_hour,Starts Per Hour,Starts,840,840,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,108,108,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,130,130,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,3.5,3.5,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.5,3.5,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,3.8,3.8,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,3.9,3.9,reported,"[11, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,11,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p1_t2.png
+1,p1_t2,12,1,base_part_number,Base Part Number,,766A00-11320000/A*,766A00-11320000/A,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"31,000",31000,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,3,on_off_torque_nm,On/Off Output Torque,Nm,"3,500",3500,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,5,cycles_per_hour,Cycles Per Hour,Cycles,18,18,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"30,975",30975,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,7,modulating_torque_nm,Modulating Output Torque,Nm,"3,500",3500,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,33,33,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,39,39,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,11.2,11.2,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,11.2,11.2,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,17.0,17.0,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,17.0,17.0,reported,"[12, 12]",reports/manual_review/p1_t2.png
+1,p1_t2,12,16,motor_power_w,Motor Power,Watts,700,700,reported,"[12, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,13,1,base_part_number,Base Part Number,,766B00-11320000/A*,766B00-11320000/A,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"35,400",35400,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,3,on_off_torque_nm,On/Off Output Torque,Nm,"4,000",4000,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,5,cycles_per_hour,Cycles Per Hour,Cycles,12,12,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"35,400",35400,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,7,modulating_torque_nm,Modulating Output Torque,Nm,"4,000",4000,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,49,49,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,58,58,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,11.2,11.2,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,11.2,11.2,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,17.0,17.0,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,17.0,17.0,reported,"[13, 13]",reports/manual_review/p1_t2.png
+1,p1_t2,13,16,motor_power_w,Motor Power,Watts,700,700,reported,"[12, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,14,1,base_part_number,Base Part Number,,767A00-11320000/A*,767A00-11320000/A,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"53,100",53100,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,3,on_off_torque_nm,On/Off Output Torque,Nm,"6,000",6000,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,5,cycles_per_hour,Cycles Per Hour,Cycles,9,9,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"53,100",53100,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,7,modulating_torque_nm,Modulating Output Torque,Nm,"6,000",6000,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,66,66,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,78,78,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,9.0,9.0,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,9.0,9.0,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,17.0,17.0,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,17.0,17.0,reported,"[14, 14]",reports/manual_review/p1_t2.png
+1,p1_t2,14,16,motor_power_w,Motor Power,Watts,700,700,reported,"[12, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,15,1,base_part_number,Base Part Number,,767B00-11320000/A*,767B00-11320000/A,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"70,800",70800,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,3,on_off_torque_nm,On/Off Output Torque,Nm,"8,000",8000,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,5,cycles_per_hour,Cycles Per Hour,Cycles,6,6,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"70,800",70800,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,7,modulating_torque_nm,Modulating Output Torque,Nm,"8,000",8000,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,98,98,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,116,116,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,9.0,9.0,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,9.0,9.0,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,17.0,17.0,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,17.0,17.0,reported,"[15, 15]",reports/manual_review/p1_t2.png
+1,p1_t2,15,16,motor_power_w,Motor Power,Watts,700,700,reported,"[12, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,1,base_part_number,Base Part Number,,767C00-11320000/A*,767C00-11320000/A,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"79,700",79700,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,3,on_off_torque_nm,On/Off Output Torque,Nm,"9,000",9000,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,5,cycles_per_hour,Cycles Per Hour,Cycles,6,6,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"79,650",79650,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,7,modulating_torque_nm,Modulating Output Torque,Nm,"9,000",9000,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,99,99,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,117,117,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,9.0,9.0,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,9.0,9.0,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,17.0,17.0,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,17.0,17.0,reported,"[16, 16]",reports/manual_review/p1_t2.png
+1,p1_t2,16,16,motor_power_w,Motor Power,Watts,700,700,reported,"[12, 16]",reports/manual_review/p1_t2.png
+2,p2_t1,1,1,base_part_number,Base Part Number,,761A00-11330C00/A,761A00-11330C00/A,reported,"[1, 1]",reports/manual_review/p2_t1.png
+2,p2_t1,1,2,shared_torque_in_lb,Output Torque,In-Lbs.,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,3,shared_torque_nm,Output Torque,Nm,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,4,shared_duty_s4_percent,Duty Cycle,S4%,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,5,cycles_per_hour,Cycles per Hour,Cycles,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,6,starts_per_hour,Starts per Hour,Starts,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,1,13,motor_power_w,Motor Power,Watts,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,1,base_part_number,Base Part Number,,761B00-11330C00/A,761B00-11330C00/A,reported,"[2, 2]",reports/manual_review/p2_t1.png
+2,p2_t1,2,2,shared_torque_in_lb,Output Torque,In-Lbs.,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,3,shared_torque_nm,Output Torque,Nm,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,4,shared_duty_s4_percent,Duty Cycle,S4%,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,5,cycles_per_hour,Cycles per Hour,Cycles,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,6,starts_per_hour,Starts per Hour,Starts,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,2,13,motor_power_w,Motor Power,Watts,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,1,base_part_number,Base Part Number,,762A00-11330C00/A,762A00-11330C00/A,reported,"[3, 3]",reports/manual_review/p2_t1.png
+2,p2_t1,3,2,shared_torque_in_lb,Output Torque,In-Lbs.,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,3,shared_torque_nm,Output Torque,Nm,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,4,shared_duty_s4_percent,Duty Cycle,S4%,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,5,cycles_per_hour,Cycles per Hour,Cycles,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,6,starts_per_hour,Starts per Hour,Starts,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,3,13,motor_power_w,Motor Power,Watts,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,1,base_part_number,Base Part Number,,762B00-11330C00/A,762B00-11330C00/A,reported,"[4, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,2,shared_torque_in_lb,Output Torque,In-Lbs.,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,3,shared_torque_nm,Output Torque,Nm,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,4,shared_duty_s4_percent,Duty Cycle,S4%,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,5,cycles_per_hour,Cycles per Hour,Cycles,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,6,starts_per_hour,Starts per Hour,Starts,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,4,13,motor_power_w,Motor Power,Watts,N/A,,source_NA,"[1, 4]",reports/manual_review/p2_t1.png
+2,p2_t1,5,1,base_part_number,Base Part Number,,763A00-11330C00/A,763A00-11330C00/A,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,2,shared_torque_in_lb,Output Torque,In-Lbs.,"2,650",2650,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,3,shared_torque_nm,Output Torque,Nm,300,300,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,4,shared_duty_s4_percent,Duty Cycle,S4%,70,70,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,5,cycles_per_hour,Cycles per Hour,Cycles,39,39,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,6,starts_per_hour,Starts per Hour,Starts,1200,1200,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,26,26,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,32,32,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.0,1.0,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.0,1.0,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.2,1.2,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.2,1.2,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,5,13,motor_power_w,Motor Power,Watts,40,40,reported,"[5, 5]",reports/manual_review/p2_t1.png
+2,p2_t1,6,1,base_part_number,Base Part Number,,763B00-11330C00/A,763B00-11330C00/A,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,2,shared_torque_in_lb,Output Torque,In-Lbs.,"4,400",4400,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,3,shared_torque_nm,Output Torque,Nm,500,500,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,4,shared_duty_s4_percent,Duty Cycle,S4%,70,70,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,5,cycles_per_hour,Cycles per Hour,Cycles,39,39,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,6,starts_per_hour,Starts per Hour,Starts,1200,1200,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,26,26,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,32,32,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.0,2.0,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.0,2.0,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.4,2.4,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,2.4,2.4,reported,"[6, 6]",reports/manual_review/p2_t1.png
+2,p2_t1,6,13,motor_power_w,Motor Power,Watts,90,90,reported,"[6, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,1,base_part_number,Base Part Number,,763C00-11330C00/A,763C00-11330C00/A,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,2,shared_torque_in_lb,Output Torque,In-Lbs.,"5,300",5300,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,3,shared_torque_nm,Output Torque,Nm,600,600,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,4,shared_duty_s4_percent,Duty Cycle,S4%,70,70,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,5,cycles_per_hour,Cycles per Hour,Cycles,32,32,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,6,starts_per_hour,Starts per Hour,Starts,1200,1200,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,32,32,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,39,39,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.0,2.0,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.0,2.0,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.4,2.4,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,2.4,2.4,reported,"[7, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,7,13,motor_power_w,Motor Power,Watts,90,90,reported,"[6, 7]",reports/manual_review/p2_t1.png
+2,p2_t1,8,1,base_part_number,Base Part Number,,764A00-11330C00/A,764A00-11330C00/A,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,2,shared_torque_in_lb,Output Torque,In-Lbs.,"7,080",7080,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,3,shared_torque_nm,Output Torque,Nm,800,800,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,4,shared_duty_s4_percent,Duty Cycle,S4%,70,70,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,5,cycles_per_hour,Cycles per Hour,Cycles,36,36,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,6,starts_per_hour,Starts per Hour,Starts,1200,1200,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,29,29,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,35,35,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,3.4,3.4,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.4,3.4,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,4.0,4.0,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,4.0,4.0,reported,"[8, 8]",reports/manual_review/p2_t1.png
+2,p2_t1,8,13,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,9,1,base_part_number,Base Part Number,,764B00-11330C00/A,764B00-11330C00/A,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,2,shared_torque_in_lb,Output Torque,In-Lbs.,"10,600",10600,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,3,shared_torque_nm,Output Torque,Nm,"1,200",1200,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,4,shared_duty_s4_percent,Duty Cycle,S4%,70,70,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,5,cycles_per_hour,Cycles per Hour,Cycles,29,29,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,6,starts_per_hour,Starts per Hour,Starts,1200,1200,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,36,36,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,43,43,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,3.4,3.4,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.4,3.4,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,4.0,4.0,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,4.0,4.0,reported,"[9, 9]",reports/manual_review/p2_t1.png
+2,p2_t1,9,13,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,10,1,base_part_number,Base Part Number,,765A00-11330C00/A,765A00-11330C00/A,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,2,shared_torque_in_lb,Output Torque,In-Lbs.,"17,700",17700,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,3,shared_torque_nm,Output Torque,Nm,"2,000",2000,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,4,shared_duty_s4_percent,Duty Cycle,S4%,50,50,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,5,cycles_per_hour,Cycles per Hour,Cycles,8,8,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,6,starts_per_hour,Starts per Hour,Starts,1200,1200,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,88,88,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,105,105,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,3.4,3.4,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.4,3.4,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,4.0,4.0,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,4.0,4.0,reported,"[10, 10]",reports/manual_review/p2_t1.png
+2,p2_t1,10,13,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,1,base_part_number,Base Part Number,,765B00-11330C00/A,765B00-11330C00/A,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,2,shared_torque_in_lb,Output Torque,In-Lbs.,"26,500",26500,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,3,shared_torque_nm,Output Torque,Nm,"3,000",3000,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,4,shared_duty_s4_percent,Duty Cycle,S4%,50,50,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,5,cycles_per_hour,Cycles per Hour,Cycles,6,6,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,6,starts_per_hour,Starts per Hour,Starts,1200,1200,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,7,operating_time_60hz_s,Operating Speed (sec),60 Hz,108,108,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,8,operating_time_50hz_s,Operating Speed (sec),50 Hz,130,130,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,9,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,3.4,3.4,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,10,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.4,3.4,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,11,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,4.0,4.0,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,12,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,4.0,4.0,reported,"[11, 11]",reports/manual_review/p2_t1.png
+2,p2_t1,11,13,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 11]",reports/manual_review/p2_t1.png
+3,p3_t1,1,1,base_part_number,Base Part Number,,761X30-11380000/A,761X30-11380000/A,reported,"[1, 1]",reports/manual_review/p3_t1.png
+3,p3_t1,1,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,620,620,reported,"[1, 1]",reports/manual_review/p3_t1.png
+3,p3_t1,1,3,on_off_torque_nm,On/Off Output Torque,Nm,70,70,reported,"[1, 1]",reports/manual_review/p3_t1.png
+3,p3_t1,1,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[1, 1]",reports/manual_review/p3_t1.png
+3,p3_t1,1,5,cycles_per_hour,Cycles per Hour,Cycles,350,350,reported,"[1, 1]",reports/manual_review/p3_t1.png
+3,p3_t1,1,6,operating_time_unqualified_s,Operating Speed,Sec,17,17,reported,"[1, 1]",reports/manual_review/p3_t1.png
+3,p3_t1,1,7,fla_unqualified_a,Full Load Current (FLA),Amps,5.0,5.0,reported,"[1, 1]",reports/manual_review/p3_t1.png
+3,p3_t1,1,8,lra_unqualified_a,Locked Rotor Current (LRA),Amps,12.8,12.8,reported,"[1, 1]",reports/manual_review/p3_t1.png
+3,p3_t1,1,9,motor_power_w,Motor Power,Watts,40,40,reported,"[1, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,2,1,base_part_number,Base Part Number,,761Y30-11380000/A,761Y30-11380000/A,reported,"[2, 2]",reports/manual_review/p3_t1.png
+3,p3_t1,2,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,700,700,reported,"[2, 2]",reports/manual_review/p3_t1.png
+3,p3_t1,2,3,on_off_torque_nm,On/Off Output Torque,Nm,80,80,reported,"[2, 2]",reports/manual_review/p3_t1.png
+3,p3_t1,2,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[2, 2]",reports/manual_review/p3_t1.png
+3,p3_t1,2,5,cycles_per_hour,Cycles per Hour,Cycles,300,300,reported,"[2, 2]",reports/manual_review/p3_t1.png
+3,p3_t1,2,6,operating_time_unqualified_s,Operating Speed,Sec,20,20,reported,"[2, 2]",reports/manual_review/p3_t1.png
+3,p3_t1,2,7,fla_unqualified_a,Full Load Current (FLA),Amps,6.3,6.3,reported,"[2, 2]",reports/manual_review/p3_t1.png
+3,p3_t1,2,8,lra_unqualified_a,Locked Rotor Current (LRA),Amps,12.8,12.8,reported,"[2, 2]",reports/manual_review/p3_t1.png
+3,p3_t1,2,9,motor_power_w,Motor Power,Watts,40,40,reported,"[1, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,3,1,base_part_number,Base Part Number,,762X30-11380000/A,762X30-11380000/A,reported,"[3, 3]",reports/manual_review/p3_t1.png
+3,p3_t1,3,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"1,350",1350,reported,"[3, 3]",reports/manual_review/p3_t1.png
+3,p3_t1,3,3,on_off_torque_nm,On/Off Output Torque,Nm,150,150,reported,"[3, 3]",reports/manual_review/p3_t1.png
+3,p3_t1,3,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[3, 3]",reports/manual_review/p3_t1.png
+3,p3_t1,3,5,cycles_per_hour,Cycles per Hour,Cycles,200,200,reported,"[3, 3]",reports/manual_review/p3_t1.png
+3,p3_t1,3,6,operating_time_unqualified_s,Operating Speed,Sec,22,22,reported,"[3, 3]",reports/manual_review/p3_t1.png
+3,p3_t1,3,7,fla_unqualified_a,Full Load Current (FLA),Amps,6.0,6.0,reported,"[3, 3]",reports/manual_review/p3_t1.png
+3,p3_t1,3,8,lra_unqualified_a,Locked Rotor Current (LRA),Amps,16.9,16.9,reported,"[3, 3]",reports/manual_review/p3_t1.png
+3,p3_t1,3,9,motor_power_w,Motor Power,Watts,40,40,reported,"[1, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,4,1,base_part_number,Base Part Number,,762Y30-11380000/A,762Y30-11380000/A,reported,"[4, 4]",reports/manual_review/p3_t1.png
+3,p3_t1,4,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"1,410",1410,reported,"[4, 4]",reports/manual_review/p3_t1.png
+3,p3_t1,4,3,on_off_torque_nm,On/Off Output Torque,Nm,160,160,reported,"[4, 4]",reports/manual_review/p3_t1.png
+3,p3_t1,4,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[4, 4]",reports/manual_review/p3_t1.png
+3,p3_t1,4,5,cycles_per_hour,Cycles per Hour,Cycles,200,200,reported,"[4, 4]",reports/manual_review/p3_t1.png
+3,p3_t1,4,6,operating_time_unqualified_s,Operating Speed,Sec,22,22,reported,"[4, 4]",reports/manual_review/p3_t1.png
+3,p3_t1,4,7,fla_unqualified_a,Full Load Current (FLA),Amps,7.4,7.4,reported,"[4, 4]",reports/manual_review/p3_t1.png
+3,p3_t1,4,8,lra_unqualified_a,Locked Rotor Current (LRA),Amps,16.9,16.9,reported,"[4, 4]",reports/manual_review/p3_t1.png
+3,p3_t1,4,9,motor_power_w,Motor Power,Watts,40,40,reported,"[1, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,5,1,base_part_number,Base Part Number,,763X30-11380000/A,763X30-11380000/A,reported,"[5, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,5,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"2,120",2120,reported,"[5, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,5,3,on_off_torque_nm,On/Off Output Torque,Nm,240,240,reported,"[5, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,5,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,35,35,reported,"[5, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,5,5,cycles_per_hour,Cycles per Hour,Cycles,160,160,reported,"[5, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,5,6,operating_time_unqualified_s,Operating Speed,Sec,32,32,reported,"[5, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,5,7,fla_unqualified_a,Full Load Current (FLA),Amps,8.9,8.9,reported,"[5, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,5,8,lra_unqualified_a,Locked Rotor Current (LRA),Amps,30.8,30.8,reported,"[5, 5]",reports/manual_review/p3_t1.png
+3,p3_t1,5,9,motor_power_w,Motor Power,Watts,40,40,reported,"[1, 5]",reports/manual_review/p3_t1.png
+3,p3_t2,1,1,base_part_number,Base Part Number,,761X30-11370000/A,761X30-11370000/A,reported,"[1, 1]",reports/manual_review/p3_t2.png
+3,p3_t2,1,2,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,560,560,reported,"[1, 1]",reports/manual_review/p3_t2.png
+3,p3_t2,1,3,modulating_torque_nm,Modulating Output Torque,Nm,65,65,reported,"[1, 1]",reports/manual_review/p3_t2.png
+3,p3_t2,1,4,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[1, 1]",reports/manual_review/p3_t2.png
+3,p3_t2,1,5,starts_per_hour,Starts per Hour,Starts,720,720,reported,"[1, 1]",reports/manual_review/p3_t2.png
+3,p3_t2,1,6,operating_time_unqualified_s,Operating Speed,Sec,17,17,reported,"[1, 1]",reports/manual_review/p3_t2.png
+3,p3_t2,1,7,fla_unqualified_a,Full Load Current (FLA),Amps,5.0,5.0,reported,"[1, 1]",reports/manual_review/p3_t2.png
+3,p3_t2,1,8,lra_unqualified_a,Locked Rotor Current (LRA),Amps,12.8,12.8,reported,"[1, 1]",reports/manual_review/p3_t2.png
+3,p3_t2,1,9,motor_power_w,Motor Power,Watts,40,40,reported,"[1, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,2,1,base_part_number,Base Part Number,,761Y30-11370000/A,761Y30-11370000/A,reported,"[2, 2]",reports/manual_review/p3_t2.png
+3,p3_t2,2,2,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,630,630,reported,"[2, 2]",reports/manual_review/p3_t2.png
+3,p3_t2,2,3,modulating_torque_nm,Modulating Output Torque,Nm,72,72,reported,"[2, 2]",reports/manual_review/p3_t2.png
+3,p3_t2,2,4,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[2, 2]",reports/manual_review/p3_t2.png
+3,p3_t2,2,5,starts_per_hour,Starts per Hour,Starts,720,720,reported,"[2, 2]",reports/manual_review/p3_t2.png
+3,p3_t2,2,6,operating_time_unqualified_s,Operating Speed,Sec,20,20,reported,"[2, 2]",reports/manual_review/p3_t2.png
+3,p3_t2,2,7,fla_unqualified_a,Full Load Current (FLA),Amps,6.3,6.3,reported,"[2, 2]",reports/manual_review/p3_t2.png
+3,p3_t2,2,8,lra_unqualified_a,Locked Rotor Current (LRA),Amps,12.8,12.8,reported,"[2, 2]",reports/manual_review/p3_t2.png
+3,p3_t2,2,9,motor_power_w,Motor Power,Watts,40,40,reported,"[1, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,3,1,base_part_number,Base Part Number,,762X30-11370000/A,762X30-11370000/A,reported,"[3, 3]",reports/manual_review/p3_t2.png
+3,p3_t2,3,2,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,150",1150,reported,"[3, 3]",reports/manual_review/p3_t2.png
+3,p3_t2,3,3,modulating_torque_nm,Modulating Output Torque,Nm,130,130,reported,"[3, 3]",reports/manual_review/p3_t2.png
+3,p3_t2,3,4,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[3, 3]",reports/manual_review/p3_t2.png
+3,p3_t2,3,5,starts_per_hour,Starts per Hour,Starts,960,960,reported,"[3, 3]",reports/manual_review/p3_t2.png
+3,p3_t2,3,6,operating_time_unqualified_s,Operating Speed,Sec,22,22,reported,"[3, 3]",reports/manual_review/p3_t2.png
+3,p3_t2,3,7,fla_unqualified_a,Full Load Current (FLA),Amps,6.0,6.0,reported,"[3, 3]",reports/manual_review/p3_t2.png
+3,p3_t2,3,8,lra_unqualified_a,Locked Rotor Current (LRA),Amps,16.9,16.9,reported,"[3, 3]",reports/manual_review/p3_t2.png
+3,p3_t2,3,9,motor_power_w,Motor Power,Watts,40,40,reported,"[1, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,4,1,base_part_number,Base Part Number,,762Y30-11370000/A,762Y30-11370000/A,reported,"[4, 4]",reports/manual_review/p3_t2.png
+3,p3_t2,4,2,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,270",1270,reported,"[4, 4]",reports/manual_review/p3_t2.png
+3,p3_t2,4,3,modulating_torque_nm,Modulating Output Torque,Nm,145,145,reported,"[4, 4]",reports/manual_review/p3_t2.png
+3,p3_t2,4,4,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[4, 4]",reports/manual_review/p3_t2.png
+3,p3_t2,4,5,starts_per_hour,Starts per Hour,Starts,960,960,reported,"[4, 4]",reports/manual_review/p3_t2.png
+3,p3_t2,4,6,operating_time_unqualified_s,Operating Speed,Sec,22,22,reported,"[4, 4]",reports/manual_review/p3_t2.png
+3,p3_t2,4,7,fla_unqualified_a,Full Load Current (FLA),Amps,7.4,7.4,reported,"[4, 4]",reports/manual_review/p3_t2.png
+3,p3_t2,4,8,lra_unqualified_a,Locked Rotor Current (LRA),Amps,16.9,16.9,reported,"[4, 4]",reports/manual_review/p3_t2.png
+3,p3_t2,4,9,motor_power_w,Motor Power,Watts,40,40,reported,"[1, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,5,1,base_part_number,Base Part Number,,763X30-11370000/A,763X30-11370000/A,reported,"[5, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,5,2,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,900",1900,reported,"[5, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,5,3,modulating_torque_nm,Modulating Output Torque,Nm,220,220,reported,"[5, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,5,4,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,35,35,reported,"[5, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,5,5,starts_per_hour,Starts per Hour,Starts,840,840,reported,"[5, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,5,6,operating_time_unqualified_s,Operating Speed,Sec,32,32,reported,"[5, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,5,7,fla_unqualified_a,Full Load Current (FLA),Amps,8.9,8.9,reported,"[5, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,5,8,lra_unqualified_a,Locked Rotor Current (LRA),Amps,30.8,30.8,reported,"[5, 5]",reports/manual_review/p3_t2.png
+3,p3_t2,5,9,motor_power_w,Motor Power,Watts,40,40,reported,"[1, 5]",reports/manual_review/p3_t2.png
+4,p4_t1,1,1,base_part_number,Base Part Number,,761X30-11300000/A,761X30-11300000/A,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,690,690,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,3,on_off_torque_nm,On/Off Output Torque,Nm,80,80,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,5,cycles_per_hour,Cycles Per Hour,Cycles,190,190,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,550,550,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,7,modulating_torque_nm,Modulating Output Torque,Nm,65,65,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,20,20,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,23,23,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.2,1.2,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.1,1.1,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.4,1.4,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.3,1.3,reported,"[1, 1]",reports/manual_review/p4_t1.png
+4,p4_t1,1,16,motor_power_w,Motor Power,Watts,15,15,reported,"[1, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,1,base_part_number,Base Part Number,,761Y30-11300000/A,761Y30-11300000/A,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,860,860,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,3,on_off_torque_nm,On/Off Output Torque,Nm,100,100,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,5,cycles_per_hour,Cycles Per Hour,Cycles,190,190,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,680,680,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,7,modulating_torque_nm,Modulating Output Torque,Nm,80,80,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,20,20,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,23,23,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.2,1.2,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.1,1.1,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.4,1.4,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.3,1.3,reported,"[2, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,2,16,motor_power_w,Motor Power,Watts,15,15,reported,"[1, 2]",reports/manual_review/p4_t1.png
+4,p4_t1,3,1,base_part_number,Base Part Number,,762X30-11300000/A,762X30-11300000/A,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"1,350",1350,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,3,on_off_torque_nm,On/Off Output Torque,Nm,150,150,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,70,70,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,5,cycles_per_hour,Cycles Per Hour,Cycles,100,100,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,150",1150,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,7,modulating_torque_nm,Modulating Output Torque,Nm,130,130,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,21,21,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,25,25,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.0,2.0,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.9,1.9,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.5,2.5,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,2.4,2.4,reported,"[3, 3]",reports/manual_review/p4_t1.png
+4,p4_t1,3,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,4,1,base_part_number,Base Part Number,,762Y30-11300000/A,762Y30-11300000/A,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"1,770",1770,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,3,on_off_torque_nm,On/Off Output Torque,Nm,200,200,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,70,70,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,5,cycles_per_hour,Cycles Per Hour,Cycles,100,100,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,360",1360,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,7,modulating_torque_nm,Modulating Output Torque,Nm,160,160,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,21,21,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,25,25,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.3,2.3,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.2,2.2,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.5,2.5,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,2.4,2.4,reported,"[4, 4]",reports/manual_review/p4_t1.png
+4,p4_t1,4,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,1,base_part_number,Base Part Number,,763X30-11300000/A,763X30-11300000/A,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"2,640",2640,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,3,on_off_torque_nm,On/Off Output Torque,Nm,300,300,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,70,70,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,5,cycles_per_hour,Cycles Per Hour,Cycles,80,80,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"2,110",2110,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,7,modulating_torque_nm,Modulating Output Torque,Nm,240,240,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,26,26,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,31,31,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.3,2.3,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.0,2.0,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.9,2.9,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,3.0,3.0,reported,"[5, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,5,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p4_t1.png
+4,p4_t1,6,1,base_part_number,Base Part Number,,763Y30-11300000/A,763Y30-11300000/A,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"3,980",3980,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,3,on_off_torque_nm,On/Off Output Torque,Nm,450,450,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,5,cycles_per_hour,Cycles Per Hour,Cycles,170,170,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"3,180",3180,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,7,modulating_torque_nm,Modulating Output Torque,Nm,360,360,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,9,starts_per_hour,Starts Per Hour,Starts,720,720,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,29,29,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,35,35,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,4.5,4.5,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.8,3.8,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,5.0,5.0,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,4.9,4.9,reported,"[6, 6]",reports/manual_review/p4_t1.png
+4,p4_t1,6,16,motor_power_w,Motor Power,Watts,90,90,reported,"[6, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,1,base_part_number,Base Part Number,,764X30-11300000/A,764X30-11300000/A,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"6,900",6900,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,3,on_off_torque_nm,On/Off Output Torque,Nm,800,800,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,5,cycles_per_hour,Cycles Per Hour,Cycles,160,160,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"5,520",5520,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,7,modulating_torque_nm,Modulating Output Torque,Nm,640,640,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,9,starts_per_hour,Starts Per Hour,Starts,720,720,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,31,31,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,37,37,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,5.1,5.1,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,5.0,5.0,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,7.3,7.3,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,7.4,7.4,reported,"[7, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,7,16,motor_power_w,Motor Power,Watts,90,90,reported,"[6, 7]",reports/manual_review/p4_t1.png
+4,p4_t1,8,1,base_part_number,Base Part Number,,764Y30-11300000/A,764Y30-11300000/A,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"9,600",9600,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,3,on_off_torque_nm,On/Off Output Torque,Nm,"1,100",1100,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,5,cycles_per_hour,Cycles Per Hour,Cycles,160,160,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"7,680",7680,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,7,modulating_torque_nm,Modulating Output Torque,Nm,880,880,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,9,starts_per_hour,Starts Per Hour,Starts,720,720,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,31,31,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,37,37,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,5.4,5.4,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,5.4,5.4,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,7.3,7.3,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,7.4,7.4,reported,"[8, 8]",reports/manual_review/p4_t1.png
+4,p4_t1,8,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,9,1,base_part_number,Base Part Number,,765X30-11300000/A,765X30-11300000/A,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"17,500",17500,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,3,on_off_torque_nm,On/Off Output Torque,Nm,"2,000",2000,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,5,cycles_per_hour,Cycles Per Hour,Cycles,50,50,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"14,000",14000,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,7,modulating_torque_nm,Modulating Output Torque,Nm,"1,600",1600,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,9,starts_per_hour,Starts Per Hour,Starts,720,720,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,93,93,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,112,112,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,5.8,5.8,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,5.7,5.7,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,7.3,7.3,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,7.4,7.4,reported,"[9, 9]",reports/manual_review/p4_t1.png
+4,p4_t1,9,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,1,base_part_number,Base Part Number,,765Y30-11300000/A,765Y30-11300000/A,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"25,900",25900,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,3,on_off_torque_nm,On/Off Output Torque,Nm,"3,000",3000,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,5,cycles_per_hour,Cycles Per Hour,Cycles,50,50,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"20,720",20720,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,7,modulating_torque_nm,Modulating Output Torque,Nm,"2,400",2400,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,9,starts_per_hour,Starts Per Hour,Starts,720,720,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,93,93,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,112,112,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,6.3,6.3,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,6.3,6.3,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,7.3,7.3,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,7.4,7.4,reported,"[10, 10]",reports/manual_review/p4_t1.png
+4,p4_t1,10,16,motor_power_w,Motor Power,Watts,180,180,reported,"[8, 10]",reports/manual_review/p4_t1.png
+4,p4_t2,1,1,base_part_number,Base Part Number,,761X30-11320000/A,761X30-11320000/A,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,690,690,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,3,on_off_torque_nm,On/Off Output Torque,Nm,80,80,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,5,cycles_per_hour,Cycles Per Hour,Cycles,190,190,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,550,550,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,7,modulating_torque_nm,Modulating Output Torque,Nm,65,65,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,20,20,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,23,23,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,0.6,0.6,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,0.6,0.6,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,0.7,0.7,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,0.7,0.7,reported,"[1, 1]",reports/manual_review/p4_t2.png
+4,p4_t2,1,16,motor_power_w,Motor Power,Watts,15,15,reported,"[1, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,1,base_part_number,Base Part Number,,761Y30-11320000/A,761Y30-11320000/A,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,790,790,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,3,on_off_torque_nm,On/Off Output Torque,Nm,90,90,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,5,cycles_per_hour,Cycles Per Hour,Cycles,190,190,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,630,630,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,7,modulating_torque_nm,Modulating Output Torque,Nm,72,72,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,20,20,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,23,23,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,0.6,0.6,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,0.6,0.6,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,0.7,0.7,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,0.7,0.7,reported,"[2, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,2,16,motor_power_w,Motor Power,Watts,15,15,reported,"[1, 2]",reports/manual_review/p4_t2.png
+4,p4_t2,3,1,base_part_number,Base Part Number,,762X30-11320000/A,762X30-11320000/A,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"1,350",1350,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,3,on_off_torque_nm,On/Off Output Torque,Nm,150,150,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,35,35,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,5,cycles_per_hour,Cycles Per Hour,Cycles,180,180,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,150",1150,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,7,modulating_torque_nm,Modulating Output Torque,Nm,130,130,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,23,23,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,28,28,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.0,1.0,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,0.9,0.9,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.2,1.2,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.1,1.1,reported,"[3, 3]",reports/manual_review/p4_t2.png
+4,p4_t2,3,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,4,1,base_part_number,Base Part Number,,762Y30-11320000/A,762Y30-11320000/A,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"1,590",1590,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,3,on_off_torque_nm,On/Off Output Torque,Nm,180,180,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,35,35,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,5,cycles_per_hour,Cycles Per Hour,Cycles,180,180,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,270",1270,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,7,modulating_torque_nm,Modulating Output Torque,Nm,145,145,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,23,23,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,28,28,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.1,1.1,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.0,1.0,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.2,1.2,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.1,1.1,reported,"[4, 4]",reports/manual_review/p4_t2.png
+4,p4_t2,4,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,1,base_part_number,Base Part Number,,763X30-11320000/A,763X30-11320000/A,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"2,300",2300,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,3,on_off_torque_nm,On/Off Output Torque,Nm,260,260,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,40,40,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,5,cycles_per_hour,Cycles Per Hour,Cycles,140,140,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"1,900",1900,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,7,modulating_torque_nm,Modulating Output Torque,Nm,220,220,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,40,40,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,9,starts_per_hour,Starts Per Hour,Starts,960,960,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,26,26,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,31,31,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.3,1.3,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.3,1.3,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,1.4,1.4,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,1.5,1.5,reported,"[5, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,5,16,motor_power_w,Motor Power,Watts,40,40,reported,"[3, 5]",reports/manual_review/p4_t2.png
+4,p4_t2,6,1,base_part_number,Base Part Number,,763Y30-11320000/A,763Y30-11320000/A,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"3,980",3980,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,3,on_off_torque_nm,On/Off Output Torque,Nm,450,450,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,5,cycles_per_hour,Cycles Per Hour,Cycles,170,170,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"3,180",3180,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,7,modulating_torque_nm,Modulating Output Torque,Nm,360,360,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,9,starts_per_hour,Starts Per Hour,Starts,720,720,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,29,29,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,35,35,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,1.9,1.9,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,1.5,1.5,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,2.4,2.4,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,2.5,2.5,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,6,16,motor_power_w,Motor Power,Watts,90,90,reported,"[6, 6]",reports/manual_review/p4_t2.png
+4,p4_t2,7,1,base_part_number,Base Part Number,,764X30-11320000/A,764X30-11320000/A,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"6,900",6900,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,3,on_off_torque_nm,On/Off Output Torque,Nm,800,800,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,5,cycles_per_hour,Cycles Per Hour,Cycles,140,140,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"5,520",5520,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,7,modulating_torque_nm,Modulating Output Torque,Nm,640,640,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,9,starts_per_hour,Starts Per Hour,Starts,720,720,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,34,34,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,41,41,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.4,2.4,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.2,2.2,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,3.8,3.8,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,3.9,3.9,reported,"[7, 7]",reports/manual_review/p4_t2.png
+4,p4_t2,7,16,motor_power_w,Motor Power,Watts,180,180,reported,"[7, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,8,1,base_part_number,Base Part Number,,764Y30-11320000/A,764Y30-11320000/A,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"8,300",8300,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,3,on_off_torque_nm,On/Off Output Torque,Nm,940,940,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,5,cycles_per_hour,Cycles Per Hour,Cycles,140,140,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"6,640",6640,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,7,modulating_torque_nm,Modulating Output Torque,Nm,750,750,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,9,starts_per_hour,Starts Per Hour,Starts,720,720,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,34,34,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,41,41,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,3.4,3.4,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.3,3.3,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,3.8,3.8,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,3.9,3.9,reported,"[8, 8]",reports/manual_review/p4_t2.png
+4,p4_t2,8,16,motor_power_w,Motor Power,Watts,180,180,reported,"[7, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,9,1,base_part_number,Base Part Number,,765X30-11320000/A,765X30-11320000/A,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"17,500",17500,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,3,on_off_torque_nm,On/Off Output Torque,Nm,"2,000",2000,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,5,cycles_per_hour,Cycles Per Hour,Cycles,50,50,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"14,000",14000,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,7,modulating_torque_nm,Modulating Output Torque,Nm,"1,600",1600,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,9,starts_per_hour,Starts Per Hour,Starts,720,720,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,93,93,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,112,112,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,2.4,2.4,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,2.2,2.2,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,3.8,3.8,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,3.9,3.9,reported,"[9, 9]",reports/manual_review/p4_t2.png
+4,p4_t2,9,16,motor_power_w,Motor Power,Watts,180,180,reported,"[7, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,1,base_part_number,Base Part Number,,765Y30-11320000/A,765Y30-11320000/A,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,2,on_off_torque_in_lb,On/Off Output Torque,In-Lbs.,"25,900",25900,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,3,on_off_torque_nm,On/Off Output Torque,Nm,"3,000",3000,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,4,on_off_duty_s4_percent,On/Off Duty Cycle,S4%,30,30,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,5,cycles_per_hour,Cycles Per Hour,Cycles,50,50,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,6,modulating_torque_in_lb,Modulating Output Torque,In-Lbs.,"20,720",20720,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,7,modulating_torque_nm,Modulating Output Torque,Nm,"2,400",2400,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,8,modulating_duty_s4_percent,Modulating Duty Cycle,S4%,30,30,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,9,starts_per_hour,Starts Per Hour,Starts,720,720,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,10,operating_time_60hz_s,Operating Speed (sec),60 Hz,93,93,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,11,operating_time_50hz_s,Operating Speed (sec),50 Hz,112,112,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,12,fla_60hz_a,Full Load Current (FLA) [A],60 Hz,3.4,3.4,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,13,fla_50hz_a,Full Load Current (FLA) [A],50 Hz,3.3,3.3,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,14,lra_60hz_a,Locked Rotor Current (LRA) [A],60 Hz,3.8,3.8,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,15,lra_50hz_a,Locked Rotor Current (LRA) [A],50 Hz,3.9,3.9,reported,"[10, 10]",reports/manual_review/p4_t2.png
+4,p4_t2,10,16,motor_power_w,Motor Power,Watts,180,180,reported,"[7, 10]",reports/manual_review/p4_t2.png

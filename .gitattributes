@@ -1,3 +1,5 @@
-* text=auto eol=lf
+# Preserve generated evidence byte-for-byte: manifests contain SHA256 hashes.
 *.pdf binary
 *.png binary
+data/extracted/** -text
+data/reviewed/** -text

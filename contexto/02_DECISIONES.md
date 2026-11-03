@@ -14,7 +14,9 @@ Prefiere auditoría rigurosa: señalar fallos concretos y su impacto antes de al
 - El agente interpreta lenguaje, resuelve referencias y decide qué herramienta llamar; código valida argumentos, filtra restricciones y consulta datos.
 - Dos herramientas previstas: get_actuator y search_actuators. Son diseños pendientes, no implementaciones.
 - Las fichas de producto deben derivarse de resultados estructurados, no de cifras improvisadas por el modelo.
-- Primera estrategia de extracción: probar Tesseract local. Su calidad aún no se midió y no se eligió definitivamente sobre evidencia.
+- Primera estrategia de extracción: probar Tesseract local. Fue una hipótesis inicial, posteriormente evaluada junto con los otros dos motores.
+- Actualización: se compararon tres motores en notebooks ejecutados. RapidOCR/PP-OCRv5 inglés fue seleccionado con 935/941 coincidencias; Tesseract dejó de ser la ruta elegida. Se mantiene inferencia local, plantilla específica del PDF y revisión obligatoria de seis discrepancias antes de ingerir.
+- Actualización posterior: revisión visual completa y nueva transcripción de las siete tablas/notas; catálogo en data/reviewed/catalog-v1 con las seis correcciones registradas. No modificar el OCR crudo ni llamarlo perfecto. Un valor nuevo que difiera sin revisión debe detener la exportación.
 - Un modelo de visión podría evaluarse como extractor acotado si hace falta; una llamada a un modelo no implica construir un agente.
 - No usar embeddings/pgvector inicialmente: primero consultas exactas y filtros. Si después se justifica búsqueda vectorial, pgvector es obligatorio.
 - No fine-tuning, LoRA, RLHF/DPO ni votaciones multiagente para verificar cifras.
@@ -40,3 +42,8 @@ Se revisó el índice del libro de 310 páginas de Rubén Francisco Manrique y s
 - Seguridad (pp. 276-277, 298): documentos son datos no confiables, herramientas limitadas, argumentos validados.
 
 La pantalla debug debe mostrar llamadas reales, parámetros y resultados, no supuestas cadenas de razonamiento internas.
+
+
+## Actualización: pipeline OCR verificable
+
+El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver reports/pipeline/RESULTADOS.md y reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL, agente y Android siguen pendientes.

@@ -2,9 +2,15 @@
 .env.*
 !.env.example
 .venv/
+.venv-ocr/
+.venv-ingest/
+.cache/
+.ipynb_checkpoints/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.coverage
+htmlcov/
 .idea/
 .gradle/
 local.properties
