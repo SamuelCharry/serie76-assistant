@@ -1,0 +1,17 @@
+Command: SERIES76_TEST_DB=1 .venv-model-eval/Scripts/python.exe -m unittest discover -s tests
+..........................process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+.Run compression is not enabled. Please update to the latest version of LangSmith. Falling back to regular multipart ingestion.
+............process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+.process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+...............................................................process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+........ss....................
+----------------------------------------------------------------------
+Ran 133 tests in 42.001s
+
+OK (skipped=2)
+
+Exit: 0

@@ -1,0 +1,245 @@
+[
+  {
+    "turn": 4,
+    "query": "¿Tienen algún modelo de la serie 76 que soporte 100,000 In-Lbs de torque en 110V?",
+    "answer": "No actuator in the supplied catalogue meets all of: 110 V, torque >= 100000 in-lb.\nClosest published On/Off torque: 26500 in-lb, held by 765B00-11300000/A.\nClosest published Modulating torque: 22550 in-lb, held by 765B00-11300000/A.",
+    "suggested_replies": [
+      "Show 765B00-11300000/A",
+      "Find actuators with On/Off service, 110 V, torque >= 26500 in-lb",
+      "Find actuators with modulating service, 110 V, torque >= 22550 in-lb"
+    ],
+    "closest": [
+      {
+        "field": "min_torque_in_lb",
+        "value": 26500,
+        "models": [
+          "765B00-11300000/A"
+        ],
+        "service": "on_off",
+        "frequency_hz": null,
+        "frequency_scope": null,
+        "shared_as_published": false
+      },
+      {
+        "field": "min_torque_in_lb",
+        "value": 22550,
+        "models": [
+          "765B00-11300000/A"
+        ],
+        "service": "modulating",
+        "frequency_hz": null,
+        "frequency_scope": null,
+        "shared_as_published": false
+      }
+    ],
+    "next_steps": [
+      {
+        "query": "Show 765B00-11300000/A",
+        "answer": "765B00-11300000/A\n  • On/Off torque: 26500 in-lb / 3000 Nm\n  • Modulating torque: 22550 in-lb / 2550 Nm\n  • Duty S4 On/Off: 25%\n  • Duty S4 Modulating: 35%\n  • On/Off cycles per hour: 3\n  • Modulating starts per hour: 840\n  • Operating time at 50 Hz: 130 s\n  • Operating time at 60 Hz: 108 s\n  • FLA at 50 Hz: 7 A\n  • FLA at 60 Hz: 7 A\n  • LRA at 50 Hz: 7.4 A\n  • LRA at 60 Hz: 7.3 A\n  • Motor power: 180 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.",
+        "products": [
+          "765B00-11300000/A"
+        ],
+        "validation": [
+          "ok"
+        ]
+      },
+      {
+        "query": "Find actuators with On/Off service, 110 V, torque >= 26500 in-lb",
+        "answer": "1 actuators meet: On/Off service, 110 V, torque >= 26500 in-lb.\n765B00-11300000/A\n  • On/Off torque: 26500 in-lb / 3000 Nm\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.",
+        "products": [
+          "765B00-11300000/A"
+        ],
+        "validation": [
+          "ok"
+        ]
+      },
+      {
+        "query": "Find actuators with modulating service, 110 V, torque >= 22550 in-lb",
+        "answer": "1 actuators meet: modulating service, 110 V, torque >= 22550 in-lb.\n765B00-11300000/A\n  • Modulating torque: 22550 in-lb / 2550 Nm\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.",
+        "products": [
+          "765B00-11300000/A"
+        ],
+        "validation": [
+          "ok"
+        ]
+      }
+    ]
+  },
+  {
+    "turn": 5,
+    "query": "no",
+    "answer": "No problem. Tell me the service (On/Off or modulating) whenever you like, or ask about a specific part number.",
+    "suggested_replies": [
+      "Find an actuator for my requirements",
+      "Explain Base Part Number",
+      "Explain FLA"
+    ],
+    "closest": null,
+    "next_steps": [
+      {
+        "query": "Find an actuator for my requirements",
+        "answer": "Which power supply, service and performance requirements should the actuator meet?",
+        "products": [],
+        "validation": [
+          "ok"
+        ]
+      },
+      {
+        "query": "Explain Base Part Number",
+        "answer": "Base Part Number: The unique identifier for each actuator model (e.g., 761A00-11380000/A). [series_76_summary.pdf, p. 1]",
+        "products": [],
+        "validation": [
+          "ok"
+        ]
+      },
+      {
+        "query": "Explain FLA",
+        "answer": "Full Load Current (FLA): The electric current (in Amps) drawn by the motor under its maximum rated load. [series_76_summary.pdf, p. 2]",
+        "products": [],
+        "validation": [
+          "ok"
+        ]
+      }
+    ]
+  },
+  {
+    "turn": 6,
+    "query": "cancelar",
+    "answer": "Cancelled. I can look up Series 76 actuators, find models for requirements, compare two models or explain catalogue terms.",
+    "suggested_replies": [
+      "Find an actuator for my requirements",
+      "Explain Base Part Number",
+      "Explain FLA"
+    ],
+    "closest": null,
+    "next_steps": [
+      {
+        "query": "Find an actuator for my requirements",
+        "answer": "Which power supply, service and performance requirements should the actuator meet?",
+        "products": [],
+        "validation": [
+          "ok"
+        ]
+      },
+      {
+        "query": "Explain Base Part Number",
+        "answer": "Base Part Number: The unique identifier for each actuator model (e.g., 761A00-11380000/A). [series_76_summary.pdf, p. 1]",
+        "products": [],
+        "validation": [
+          "ok"
+        ]
+      },
+      {
+        "query": "Explain FLA",
+        "answer": "Full Load Current (FLA): The electric current (in Amps) drawn by the motor under its maximum rated load. [series_76_summary.pdf, p. 2]",
+        "products": [],
+        "validation": [
+          "ok"
+        ]
+      }
+    ]
+  },
+  {
+    "turn": 7,
+    "query": "Actually, cancel that. Can you tell me about hydraulic pumps?",
+    "answer": "Cancelled the previous request. I can look up Series 76 catalogue data, find actuators that meet technical requirements, or explain catalogue terms.",
+    "suggested_replies": [
+      "Find an actuator for my requirements",
+      "Explain Base Part Number",
+      "Explain FLA"
+    ],
+    "closest": null,
+    "next_steps": [
+      {
+        "query": "Find an actuator for my requirements",
+        "answer": "Which power supply, service and performance requirements should the actuator meet?",
+        "products": [],
+        "validation": [
+          "ok"
+        ]
+      },
+      {
+        "query": "Explain Base Part Number",
+        "answer": "Base Part Number: The unique identifier for each actuator model (e.g., 761A00-11380000/A). [series_76_summary.pdf, p. 1]",
+        "products": [],
+        "validation": [
+          "ok"
+        ]
+      },
+      {
+        "query": "Explain FLA",
+        "answer": "Full Load Current (FLA): The electric current (in Amps) drawn by the motor under its maximum rated load. [series_76_summary.pdf, p. 2]",
+        "products": [],
+        "validation": [
+          "ok"
+        ]
+      }
+    ]
+  },
+  {
+    "turn": 8,
+    "query": "Actually, cancel that Do you have any series 76 actuator that supports over 100,000 In-Lbs of torque at 110V?",
+    "answer": "Cancelled the previous request. No actuator in the supplied catalogue meets all of: 110 V, torque > 100000 in-lb.\nClosest published On/Off torque: 26500 in-lb, held by 765B00-11300000/A.\nClosest published Modulating torque: 22550 in-lb, held by 765B00-11300000/A.",
+    "suggested_replies": [
+      "Show 765B00-11300000/A",
+      "Find actuators with On/Off service, 110 V, torque >= 26500 in-lb",
+      "Find actuators with modulating service, 110 V, torque >= 22550 in-lb"
+    ],
+    "closest": [
+      {
+        "field": "min_torque_in_lb",
+        "value": 26500,
+        "models": [
+          "765B00-11300000/A"
+        ],
+        "service": "on_off",
+        "frequency_hz": null,
+        "frequency_scope": null,
+        "shared_as_published": false
+      },
+      {
+        "field": "min_torque_in_lb",
+        "value": 22550,
+        "models": [
+          "765B00-11300000/A"
+        ],
+        "service": "modulating",
+        "frequency_hz": null,
+        "frequency_scope": null,
+        "shared_as_published": false
+      }
+    ],
+    "next_steps": [
+      {
+        "query": "Show 765B00-11300000/A",
+        "answer": "765B00-11300000/A\n  • On/Off torque: 26500 in-lb / 3000 Nm\n  • Modulating torque: 22550 in-lb / 2550 Nm\n  • Duty S4 On/Off: 25%\n  • Duty S4 Modulating: 35%\n  • On/Off cycles per hour: 3\n  • Modulating starts per hour: 840\n  • Operating time at 50 Hz: 130 s\n  • Operating time at 60 Hz: 108 s\n  • FLA at 50 Hz: 7 A\n  • FLA at 60 Hz: 7 A\n  • LRA at 50 Hz: 7.4 A\n  • LRA at 60 Hz: 7.3 A\n  • Motor power: 180 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.",
+        "products": [
+          "765B00-11300000/A"
+        ],
+        "validation": [
+          "ok"
+        ]
+      },
+      {
+        "query": "Find actuators with On/Off service, 110 V, torque >= 26500 in-lb",
+        "answer": "1 actuators meet: On/Off service, 110 V, torque >= 26500 in-lb.\n765B00-11300000/A\n  • On/Off torque: 26500 in-lb / 3000 Nm\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.",
+        "products": [
+          "765B00-11300000/A"
+        ],
+        "validation": [
+          "ok"
+        ]
+      },
+      {
+        "query": "Find actuators with modulating service, 110 V, torque >= 22550 in-lb",
+        "answer": "1 actuators meet: modulating service, 110 V, torque >= 22550 in-lb.\n765B00-11300000/A\n  • Modulating torque: 22550 in-lb / 2550 Nm\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.",
+        "products": [
+          "765B00-11300000/A"
+        ],
+        "validation": [
+          "ok"
+        ]
+      }
+    ]
+  }
+]
