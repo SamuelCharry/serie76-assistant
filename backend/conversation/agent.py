@@ -12,6 +12,9 @@ from __future__ import annotations
 import json
 import os
 import time
+from collections import deque
+from threading import Lock
+from urllib.parse import urlsplit
 from dataclasses import dataclass, field
 from typing import Annotated, Literal
 
@@ -169,6 +172,25 @@ def tracing_enabled():
     return os.environ.get("LANGSMITH_TRACING", "").strip().lower() == "true" and bool(os.environ.get("LANGSMITH_API_KEY", "").strip())
 
 
+_call_times = deque()
+_call_lock = Lock()
+
+
+def reserve_agent_call():
+    """Process-wide rolling-hour cap; failed provider attempts count too.
+
+    Each process has its own cap and restart resets it. This is not a billing cap.
+    """
+    maximum = int(os.environ.get("AGENT_MAX_CALLS_PER_HOUR", "120"))
+    now = time.monotonic()
+    with _call_lock:
+        while _call_times and _call_times[0] <= now - 3600:
+            _call_times.popleft()
+        if len(_call_times) >= maximum:
+            raise AgentUnavailable("rate_limited_local")
+        _call_times.append(now)
+
+
 def create_model_client():
     key = os.environ.get("OPENROUTER_API_KEY", "").strip()
     model = os.environ.get("OPENROUTER_CHAT_MODEL", "").strip()
@@ -179,6 +201,9 @@ def create_model_client():
                    base_url=os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
                    max_tokens=int(os.environ.get("AGENT_MAX_TOKENS", "2048")),
                    timeout=float(os.environ.get("AGENT_TIMEOUT_S", "45")), max_retries=0)
+    if urlsplit(options["base_url"]).hostname == "openrouter.ai":
+        options["extra_body"] = {"provider": {"require_parameters":
+            os.environ.get("OPENROUTER_REQUIRE_PARAMETERS", "true").strip().lower() == "true"}}
     effort = os.environ.get("AGENT_REASONING_EFFORT", "low").strip()
     if effort:
         options["reasoning_effort"] = effort
@@ -442,6 +467,7 @@ def _turn(connection, query, messages, context, *, model=None):
     started = time.perf_counter()
     try:
         router = client.bind_tools(list(tools.values()), tool_choice=os.environ.get("AGENT_TOOL_CHOICE", "required") or None)
+        reserve_agent_call()
         response = router.invoke(chat, config={"run_name": "llm_decision"})
     except AgentUnavailable:
         raise

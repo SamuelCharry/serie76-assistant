@@ -11,7 +11,7 @@ Commands:
   run        paid cohort; resumable, append-only results and ledger, frozen inputs
   report     offline summary from results.jsonl and ledger.jsonl
 
-The key is read from GOOGLE_API_KEY (process env or ignored .env); it is never printed.
+The provider key is read from the process environment only; it is never printed.
 """
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ sys.path.insert(0, str(ROOT))
 OUT = ROOT / "reports/agent_acceptance/v2"  # overridden by --cohort
 CONFIG = ROOT / "config/agent_acceptance.json"
 CASES = ROOT / "config/agent_acceptance_cases.json"
-FROZEN_FILES = ["config/agent_acceptance.json", "config/agent_acceptance_cases.json", "scripts/agent_acceptance.py",
+FROZEN_FILES = [ "config/agent_acceptance_cases.json", "scripts/agent_acceptance.py",
                 "backend/conversation/agent.py", "backend/conversation/policy.py", "backend/conversation/rendering.py",
                 "backend/conversation/api.py", "backend/app/contracts.py", "backend/catalog/models.py",
                 "backend/catalog/repository.py", "backend/catalog/context.py", "data/extracted/series76_summary/terms.json",
@@ -61,15 +61,11 @@ def read_jsonl(path):
     return [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines()] if path.exists() else []
 
 
-def google_key():
-    key = os.environ.get("GOOGLE_API_KEY", "").strip()
-    env = ROOT / ".env"
-    if not key and env.is_file():
-        for line in env.read_text(encoding="utf-8-sig").splitlines():
-            if line.startswith("GOOGLE_API_KEY="):
-                key = line.split("=", 1)[1].strip().strip("\"'")
+def provider_key(config):
+    variable = "OPENROUTER_API_KEY" if config["provider"] == "openrouter" else "GOOGLE_API_KEY"
+    key = os.environ.get(variable, "").strip()
     if not key:
-        raise SystemExit("GOOGLE_API_KEY not configured")
+        raise SystemExit(f"{variable} not configured in process environment")
     return key
 
 
@@ -370,7 +366,7 @@ def command_selfcheck(cases):
 
 
 def command_probe(config):
-    configure_env(config, google_key())
+    configure_env(config, provider_key(config))
     from backend.conversation.agent import create_model_client
     ledger = Ledger(config)
     from langchain.tools import tool
@@ -403,7 +399,7 @@ def command_run(config, cases, only, cases_path=CASES):
             raise SystemExit(f"Frozen inputs changed: {drift}. Start a new cohort instead of mixing results.")
     else:
         frozen_path.write_text(json.dumps(dict(files=current, cases_version=cases["version"], frozen_at=time.time()), indent=2), encoding="utf-8")
-    configure_env(config, google_key())
+    configure_env(config, provider_key(config))
     from backend.conversation.agent import create_model_client
     ledger = Ledger(config)
     results = read_jsonl(OUT / "results.jsonl")
@@ -475,20 +471,23 @@ def command_report(config, cases):
         mean_completion_tokens=round(sum(t.get("completion_tokens", 0) for t in tokens) / len(tokens)) if tokens else None,
         latency_p50_s=latencies[len(latencies) // 2] if latencies else None,
         latency_p95_s=latencies[int(len(latencies) * 0.95) - 1] if len(latencies) >= 20 else None,
-        safety_cap_usd=config["safety_cap_usd"], openrouter_calls=0)
+        safety_cap_usd=config["safety_cap_usd"], openrouter_calls=len({e["id"] for e in read_jsonl(OUT / "ledger.jsonl")}) if config["provider"] == "openrouter" else 0)
     (OUT / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps(summary, indent=2, ensure_ascii=False))
 
 
 def main():
+    global OUT, CONFIG
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("command", choices=["selfcheck", "probe", "run", "report"])
     parser.add_argument("--only", nargs="*", default=None)
+    parser.add_argument("--config", type=Path, default=CONFIG)
     parser.add_argument("--cohort", default="v2", help="reports/agent_acceptance/<cohort>; v1 is archived")
     parser.add_argument("--cases", default=str(CASES))
     args = parser.parse_args()
-    global OUT
     OUT = ROOT / "reports/agent_acceptance" / args.cohort
+    CONFIG = args.config.resolve()
+    FROZEN_FILES.append(str(CONFIG.relative_to(ROOT)))
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     cases = json.loads(Path(args.cases).read_text(encoding="utf-8"))
     if args.command == "selfcheck":

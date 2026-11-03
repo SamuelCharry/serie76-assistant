@@ -3,6 +3,7 @@
 import argparse
 import getpass
 import json
+import os
 import re
 import secrets
 from pathlib import Path
@@ -23,9 +24,39 @@ def create_user(connection, email, name, password):
     return identifier
 
 
+# Public assessment credentials: TEST ONLY, never use these accounts in production.
+DEMO_USERS = [
+    {"email": "demo@series76.test", "name": "Test-only demo", "password": "Series76-Demo-1"},
+    {"email": "reviewer@series76.test", "name": "Test-only reviewer", "password": "Series76-Demo-2"},
+]
+
+
+def ensure_demo_users(connection):
+    """Test-only provisioning; existing identities and passwords are never changed."""
+    try:
+        accounts = json.loads(os.environ["DEMO_USERS_JSON"]) if os.environ.get("DEMO_USERS_JSON", "").strip() else DEMO_USERS
+        if not isinstance(accounts, list) or any(
+            not isinstance(a, dict) or set(a) != {"email", "name", "password"}
+            or any(not isinstance(a[k], str) for k in a) for a in accounts
+        ):
+            raise ValueError()
+    except (ValueError, TypeError):
+        raise ValueError("DEMO_USERS_JSON must be a JSON array of email/name/password objects (test only)") from None
+    # Serialise concurrent startup provisioning without resetting existing accounts.
+    connection.execute("SELECT pg_advisory_xact_lock(760003)")
+    created = 0
+    for account in accounts:
+        email = account["email"].strip().lower()
+        if not connection.execute("SELECT id FROM series76.users WHERE email=%s", (email,)).fetchone():
+            create_user(connection, email, account["name"], account["password"])
+            created += 1
+    return created
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("ensure-demo-users", help="Provision public TEST-ONLY assessment accounts")
     user = sub.add_parser("create-user")
     user.add_argument("--email", required=True)
     user.add_argument("--name", required=True)
@@ -37,7 +68,11 @@ def main():
     assign.add_argument("--confirm", action="store_true", required=True)
     args = parser.parse_args()
     local_environment()
-    if args.command == "seed-demo":
+    if args.command == "ensure-demo-users":
+        with connect() as connection:
+            created = ensure_demo_users(connection)
+        print(f"Test-only demo users: {created} created; existing accounts unchanged")
+    elif args.command == "seed-demo":
         # Refuse to overwrite credentials or silently reset existing accounts.
         args.output.parent.mkdir(parents=True, exist_ok=True)
         with args.output.open("x", encoding="utf-8") as output:

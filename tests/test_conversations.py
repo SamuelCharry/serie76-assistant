@@ -184,6 +184,17 @@ class ConversationIntegrationTests(unittest.TestCase):
             self.assertEqual(len(store.history(self.connection, sid, owner_id=self.user_id)), 2)
             self.assertEqual(client.post("/api/conversation", json={"query": "missing", "session_id": str(uuid4())}).status_code, 404)
 
+    def test_local_rate_limit_is_503_and_does_not_invoke_provider(self):
+        @contextmanager
+        def connection_fixture():
+            yield self.connection
+        fixture = RouterFixture("ask_clarification", {"field": "service"})
+        with patch("backend.conversation.api.connect", connection_fixture), patch("backend.conversation.agent.create_model_client", return_value=fixture), patch.dict(os.environ, {"AGENT_MAX_CALLS_PER_HOUR": "0"}):
+            response = TestClient(app).post("/api/conversation", json={"query": "test"})
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()["error_code"], "rate_limited_local")
+        self.assertIsNone(fixture.seen)
+
     def test_session_lock_serializes_across_connections(self):
         sid = uuid4()
         store.lock_session(self.connection, sid)

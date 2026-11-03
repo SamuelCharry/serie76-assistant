@@ -1,0 +1,19 @@
+{
+  "purpose": "OpenRouter acceptance configuration; paid run requires explicit approval.",
+  "provider": "openrouter",
+  "base_url": "https://openrouter.ai/api/v1",
+  "model": "google/gemini-3.6-flash",
+  "reasoning_effort": "low",
+  "max_tokens": 2048,
+  "tool_choice": "required",
+  "input_usd_per_million": 0.75,
+  "output_usd_per_million": 3.75,
+  "price_checked": "2026-11-03",
+  "price_source": "https://openrouter.ai/api/v1/models",
+  "safety_cap_usd": 1.0,
+  "safety_cap_basis": "Explicit USD 1.00 maximum reservation for a separately approved acceptance run.",
+  "reservation": "utf8_bytes_of_messages_and_tools + 4096 input tokens, plus max_tokens output, reserved before every call; replaced by reported usage (completion + reasoning tokens) when known",
+  "min_interval_seconds": 2,
+  "provider_failure_retries_per_scenario": 2,
+  "consecutive_provider_failures_stop": 4
+}
