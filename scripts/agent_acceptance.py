@@ -209,6 +209,9 @@ def check(expect, observed):
         failures.append("unexpected clarification")
     if "suggested_replies_count" in expect and len(observed.get("suggested_replies", [])) != expect["suggested_replies_count"]:
         failures.append("suggested reply count differs")
+    for suggestion in expect.get("suggestions_exclude", []):
+        if suggestion in observed.get("suggested_replies", []):
+            failures.append("inappropriate suggested reply: " + suggestion)
     context = trace.get("context_after") or {}
     if expect.get("cancel_cleared") and (context.get("filters") or context.get("pending_clarification")):
         failures.append("cancel retained filters or pending clarification")

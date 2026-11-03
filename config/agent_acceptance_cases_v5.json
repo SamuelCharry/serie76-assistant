@@ -1399,10 +1399,17 @@
             "no_products": true,
             "contains": [
               "No actuator",
-              "Closest published"
+              "Closest published",
+              "Closest published On/Off torque: 26500 in-lb",
+              "Closest published Modulating torque: 22550 in-lb"
             ],
             "not_contains": [
               "?"
+            ],
+            "suggestions_exclude": [
+              "Show more",
+              "Cancel",
+              "Explain On/Off service"
             ]
           }
         }
@@ -1436,10 +1443,15 @@
             "suggested_replies_count": 3,
             "no_clarification": true,
             "contains": [
-              "will not repeat"
+              "No problem. Tell me the service (On/Off or modulating) whenever you like"
             ],
             "not_contains": [
               "?"
+            ],
+            "suggestions_exclude": [
+              "Show more",
+              "Cancel",
+              "Explain On/Off service"
             ]
           }
         }
@@ -1475,6 +1487,11 @@
             "cancel_cleared": true,
             "contains": [
               "Cancelled"
+            ],
+            "suggestions_exclude": [
+              "Show more",
+              "Cancel",
+              "Explain On/Off service"
             ]
           }
         }
@@ -1512,6 +1529,11 @@
             "contains": [
               "Cancelled",
               "Series 76"
+            ],
+            "suggestions_exclude": [
+              "Show more",
+              "Cancel",
+              "Explain On/Off service"
             ]
           }
         }
@@ -1553,13 +1575,20 @@
             "contains": [
               "Cancelled",
               "No actuator",
-              "Closest published"
+              "Closest published",
+              "Closest published On/Off torque: 26500 in-lb",
+              "Closest published Modulating torque: 22550 in-lb"
             ],
             "not_contains": [
               "?"
             ],
             "context_filter_absent": [
               "min_torque_nm"
+            ],
+            "suggestions_exclude": [
+              "Show more",
+              "Cancel",
+              "Explain On/Off service"
             ]
           }
         }
@@ -1587,5 +1616,6 @@
       "scenario": "h_24v_ac",
       "reason": "SQL candidates retained; presentation now uses a differences-only comparison, pair selection or narrowing instead of full product lists."
     }
-  ]
+  ],
+  "review_note": "Before any paid v5 cohort: scoped service/frequency extrema and contextual executable suggestions added; manual 4-8 assert inappropriate controls absent, and 4/8 assert both published service maxima."
 }

@@ -8,7 +8,7 @@ from math import log2
 from .rendering import product_lines, _num, _status_text, _search_focus
 from .policy import LABELS
 
-DEFAULT_REPLIES = ["What requirements do you need?", "Explain On/Off service", "Cancel"]
+DEFAULT_REPLIES = ["Find an actuator for my requirements", "Explain Base Part Number", "Explain FLA"]
 
 
 def normalized_focus(focus):
@@ -77,21 +77,61 @@ def split_reply(field, value):
             "supply_current": lambda: f"Use {value}", "phase_count": lambda: f"Use {value} phase"}[field]()
 
 
-def replies(result):
+def replies(result, terms=None):
     choices = list(result.context.pop("reply_options", []))
+    pending = (result.clarification or {}).get("field") or result.context.get("pending_clarification")
+    cancelled = result.answer.startswith("Cancelled")
+    if pending:
+        choices += {"service": ["On/Off service", "Modulating service", "Explain On/Off service"],
+                    "frequency": ["Use 50 Hz", "Use 60 Hz"],
+                    "part_number": (result.clarification or {}).get("options", [])}.get(pending, [])
     codes = result.context.get("part_numbers") or []
     if len(codes) >= 2:
         choices += [f"Compare {a} vs {b}" for a, b in combinations(codes, 2)]
     elif codes:
         choices += [f"Show all specifications for {codes[0]}", f"What is the motor power of {codes[0]}?"]
-    if result.context.get("filters") and not result.clarification:
+    if result.context.get("pagination", {}).get("has_more") and not result.clarification:
         choices.append("Show more")
-    if result.clarification:
-        field = result.clarification["field"]
-        choices += {"service": ["On/Off service", "Modulating service"], "frequency": ["Use 50 Hz", "Use 60 Hz"],
-                    "part_number": result.clarification.get("options", []), "supply": ["Use 110 V", "Use 24 V DC"]}.get(field, [])
-    choices += DEFAULT_REPLIES
+    if pending and not cancelled:
+        choices.append("Cancel")
+    available = {term["term_key"] for term in terms} if terms is not None else {"base_part_number", "fla"}
+    choices.append(DEFAULT_REPLIES[0])
+    choices += [text for key, text in [("base_part_number", "Explain Base Part Number"), ("fla", "Explain FLA")] if key in available]
+    choices += ["Look up a complete part number", "Compare two actuators"]
+    # Controls are useful only when executable in the current SQL/pending state.
+    choices = [choice for choice in choices if not (
+        choice == "Show more" and not result.context.get("pagination", {}).get("has_more")
+        or choice == "Cancel" and (not pending or cancelled)
+        or choice == "Explain On/Off service" and pending != "service")]
     return list(dict.fromkeys(choices))[:3]
+
+
+def impossible_replies(filters, closest):
+    """Construct executable next searches from the scoped SQL extrema, not guesses."""
+    from .policy import describe
+    from backend.catalog.models import bound_operator
+    found = [row for row in closest if row["value"] is not None]
+    choices = ["Show " + found[0]["models"][0]] if found else []
+    for row in found:
+        trial = {key: value for key, value in filters.items() if key not in ("limit", "offset", "sort_by")}
+        field = row["field"]
+        default = "gte" if field.startswith("min_") else "lte"
+        op = "gte" if bound_operator(filters[field], default) in ("gt", "gte") else "lte"
+        trial[field] = dict(value=row["value"], op=op)
+        if row.get("service"):
+            trial["service"] = row["service"]
+        if row.get("frequency_hz"):
+            trial["frequency_hz"] = row["frequency_hz"]
+        choices.append("Find actuators with " + describe(trial))
+    return list(dict.fromkeys(choices))
+
+
+def decline_message(field):
+    detail = {"service": "the service (On/Off or modulating)", "frequency": "the frequency (50 or 60 Hz)"}.get(field)
+    if detail is None and field:
+        detail = "the " + LABELS.get(field, field.replace("_", " "))
+    return ("No problem. Tell me " + detail + " whenever you like, or ask about a specific part number."
+            if detail else "No problem. Share any requirements whenever you like, or ask about a specific part number.")
 
 
 def comparison(products):
@@ -172,12 +212,18 @@ def render_impossible(filters, closest):
     for row in closest:
         field = row["field"]
         others = {k: v for k, v in filters.items() if k != field}
+        label = LABELS[field].removeprefix("minimum ").removeprefix("maximum ")
+        if row.get("service"):
+            label = {"on_off": "On/Off", "modulating": "Modulating"}[row["service"]] + " " + label
+        if row.get("frequency_hz"):
+            label += " at " + str(row["frequency_hz"]) + " Hz"
+        elif row.get("frequency_scope"):
+            label += " (DC: no mains frequency)" if row["frequency_scope"] == "not_applicable" else " (frequency not specified)"
         if row["value"] is None:
-            text += "\nThe remaining constraint combination has no published model/value: " + (describe(others) or "the catalogue scope") + "."
+            text += "\nNo published " + label + " under the remaining constraint combination: " + (describe(others) or "the catalogue scope") + "."
         else:
             unit = "in-lb" if field.endswith("in_lb") else "Nm" if field.endswith("_nm") else "W" if field.endswith("_w") else "s" if field.endswith("_s") else "A" if field.endswith("_a") else "%" if "percent" in field else "/h"
-            label = LABELS[field].removeprefix("minimum ").removeprefix("maximum ")
-            text += f"\nClosest published {label}: {_num(row['value'])} {unit}, held by " + ", ".join(row["models"]) + "."
+            text += f"\nClosest published {label}: {_num(row['value'])} {unit}, held by " + ", ".join(row["models"]) + (" (shared as published)." if row.get("shared_as_published") else ".")
     if not closest:
         text += " The stated constraint combination has no model in the supplied catalogue."
     return text

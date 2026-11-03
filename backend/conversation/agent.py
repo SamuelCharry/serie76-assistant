@@ -283,7 +283,7 @@ class Turn:
     def clarify(self, field, message=None, **extra):
         text = message or QUESTIONS[field].format(labels=", ".join(t["label"] for t in self.terms))
         if self.context.get("declined_clarification") == field:
-            return AgentResult("I will not repeat the declined question. To continue, state the missing " + field + " when ready.", context=self.context)
+            return AgentResult(quality.decline_message(field), context=self.context)
         self.context["pending_clarification"] = field
         return AgentResult(text, context=self.context, clarification=dict(field=field, message=text, **extra))
 
@@ -304,6 +304,7 @@ class Turn:
 
     # --- tools -------------------------------------------------------------------------
     def lookup(self, args):
+        self.context.pop("pagination", None)
         notes, codes, missing, products, partial = [], [], [], [], []
         known = set(self.context.get("part_numbers", []))
         mentioned = {c for text in self.texts for c in policy.codes_in_text(text)}
@@ -420,6 +421,7 @@ class Turn:
             self.trace["validation"] = _safe_errors(exc)
             return self.clarify("requirements", "These requirements could not be applied together. Please restate the supply, service and limits you need.")
         result = search_actuators(self.connection, filters)
+        self.context["pagination"] = {"has_more": False}
         self.trace["data"] = result
         self.context["filters"] = merged
         if result["status"] == "needs_clarification":
@@ -432,9 +434,11 @@ class Turn:
             closest = closest_numeric(self.connection, filters)
             self.trace["data"]["closest"] = closest
             answer = quality.render_impossible(merged, closest)
+            self.context["reply_options"] = quality.impossible_replies(merged, closest)
             self.context["part_numbers"] = []
             return AgentResult(answer, context=self.context)
         answer, products, narrowing, options, focus = quality.search_presentation(result, products, merged, notes, shown)
+        self.context["pagination"] = {"has_more": bool(products) and result.get("offset", 0) + len(products) < result["total"]}
         self.context["focus"] = focus
         if narrowing:
             self.context["reply_options"] = options
@@ -476,7 +480,7 @@ class Turn:
             previous = self.context.pop("pending_clarification", None)
             self.context["declined_clarification"] = previous
             self.trace["data"] = dict(status="declined")
-            return AgentResult("Understood. I will not repeat that question. To continue, state the missing " + policy.LABELS.get(previous, previous or "requirement") + " when ready, or ask about a complete Series 76 part number.", context=self.context)
+            return AgentResult(quality.decline_message(previous), context=self.context)
         # Deterministic guard: a well-formed code in the query is looked up, never re-asked.
         if field_name == "part_number" and policy.codes_in_text(self.query):
             self.trace.setdefault("overrides", []).append("well_formed_code_lookup")
@@ -586,7 +590,7 @@ def _turn(connection, query, messages, context, *, model=None):
         result.clarification = None
     if not result.clarification:
         result.context.pop("pending_clarification", None)
-    result.suggested_replies = quality.replies(result)
+    result.suggested_replies = quality.replies(result, turn.terms)
     trace.setdefault("merged_parameters", trace.get("parameters"))
     trace["parameters"] = trace.get("merged_parameters") or trace.get("parameters") or {}
     trace["renderer"] = "clarification" if result.clarification else (trace["name"] or "none")

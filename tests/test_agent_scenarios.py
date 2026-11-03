@@ -258,7 +258,7 @@ class SearchTests(Base):
                            ("search_actuators", {"service": "on_off", "min_torque_nm": 100000, "supply_voltage_v": 110}))
         self.assertFalse(result.products)
         self.assertIn("No actuator in the supplied catalogue meets all of", result.answer)
-        self.assertIn("Closest published torque: 3000 Nm", result.answer)
+        self.assertIn("Closest published On/Off torque: 3000 Nm", result.answer)
         self.assertIsNone(result.clarification)
         self.assertNotIn("?", result.answer)
 

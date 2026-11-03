@@ -243,40 +243,63 @@ def search_actuators(connection, filters: SearchFilters, *, allow_ambiguous=Fals
 
 
 def closest_numeric(connection, filters):
-    """Published extrema for each failed bound under every other constraint (SQL)."""
+    """SQL extrema per published service/frequency scope, never a collapsed value."""
     results = []
     for name, (expression, default) in COMPARISONS.items():
         value = getattr(filters, name)
         if value is None:
             continue
-        trial = SearchFilters.model_validate(filters.model_dump(exclude={name, "sort_by"}))
-        unique, params = _matching_sql(connection, trial)
-        # Removing only this bound is diagnostic; do not silently relax other filters.
-        frequency = " AND f.frequency_hz=%s" if filters.frequency_hz else ""
-        frequency_params = [filters.frequency_hz] if frequency else []
-        expr = expression.replace("e.", "q.")
-        joins = """ LEFT JOIN series76.service_specs s ON s.entry_id=q.id AND (%s::text IS NULL OR s.service=%s)
-            LEFT JOIN series76.service_specs sh ON sh.entry_id=q.id AND sh.service='shared' AND q.shared_services_confirmed
-            LEFT JOIN series76.frequency_specs f ON f.entry_id=q.id""" + frequency
-        all_params = [*params, filters.service, filters.service, *frequency_params]
-        remaining = []
-        # Re-apply remaining measurement predicates to the SAME outer service/frequency
-        # row used for the extremum, not merely to another row of the same actuator.
-        for other, (other_expression, other_default) in COMPARISONS.items():
-            other_value = getattr(trial, other)
-            if other_value is not None:
-                remaining.append(other_expression.replace("e.", "q.") + OPERATORS[bound_operator(other_value, other_default)] + "%s")
-                all_params.append(bound_value(other_value))
-        values = "SELECT q.base_part_number," + expr + " AS value FROM (" + unique + ") q" + joins
-        if remaining:
-            values += " WHERE " + " AND ".join(remaining)
-        aggregate = "max" if bound_operator(value, default) in ("gt", "gte") else "min"
-        sql = "WITH bound_values AS (" + values + ") SELECT DISTINCT base_part_number,value FROM bound_values WHERE value=(SELECT " + aggregate + "(value) FROM bound_values) ORDER BY base_part_number"
-        found = connection.execute(sql, all_params).fetchall()
-        if found:
-            results.append(dict(field=name, value=json_numbers(found[0]["value"]), models=[r["base_part_number"] for r in found]))
-        else:
-            results.append(dict(field=name, value=None, models=[]))
+        by_service = name.startswith("min_")
+        by_frequency = expression.startswith("f.")
+        services = [filters.service]
+        if by_service and filters.service is None:
+            services = (["on_off"] if name == "min_cycles_per_hour" else ["modulating"]
+                        if name == "min_starts_per_hour" else ["on_off", "modulating"])
+        for service in services:
+            values = filters.model_dump(exclude={name, "sort_by"})
+            if by_service:
+                values["service"] = service
+            try:
+                trial = SearchFilters.model_validate(values)
+            except ValueError:
+                # A rate requirement can make the other service inapplicable.
+                continue
+            unique, params = _matching_sql(connection, trial)
+            frequency = " AND f.frequency_hz=%s" if filters.frequency_hz else ""
+            frequency_params = [filters.frequency_hz] if frequency else []
+            expr = expression.replace("e.", "q.")
+            joins = """ LEFT JOIN series76.service_specs s ON s.entry_id=q.id AND (%s::text IS NULL OR s.service=%s)
+                LEFT JOIN series76.service_specs sh ON sh.entry_id=q.id AND sh.service='shared' AND q.shared_services_confirmed
+                LEFT JOIN series76.frequency_specs f ON f.entry_id=q.id""" + frequency
+            all_params = [*params, trial.service, trial.service, *frequency_params]
+            remaining = []
+            # Re-apply the other bounds on the same measurement row used for the extremum.
+            for other, (other_expression, other_default) in COMPARISONS.items():
+                other_value = getattr(trial, other)
+                if other_value is not None:
+                    remaining.append(other_expression.replace("e.", "q.") + OPERATORS[bound_operator(other_value, other_default)] + "%s")
+                    all_params.append(bound_value(other_value))
+            scopes = "f.frequency_hz,f.frequency_scope" if by_frequency else "NULL::integer AS frequency_hz,NULL::text AS frequency_scope"
+            query = "SELECT q.base_part_number,q.layout," + expr + " AS value," + scopes + " FROM (" + unique + ") q" + joins
+            if remaining:
+                query += " WHERE " + " AND ".join(remaining)
+            aggregate = "max" if bound_operator(value, default) in ("gt", "gte") else "min"
+            sql = ("WITH bound_values AS (" + query + "), extrema AS (SELECT *," + aggregate +
+                   "(value) OVER(PARTITION BY frequency_hz,frequency_scope) AS closest FROM bound_values) "
+                   "SELECT DISTINCT base_part_number,layout,value,frequency_hz,frequency_scope FROM extrema "
+                   "WHERE value=closest ORDER BY frequency_hz NULLS LAST,frequency_scope,base_part_number")
+            found = connection.execute(sql, all_params).fetchall()
+            groups = {}
+            for row in found:
+                groups.setdefault((row["frequency_hz"], row["frequency_scope"]), []).append(row)
+            if not groups:
+                results.append(dict(field=name, value=None, models=[], service=service if by_service else None,
+                                    frequency_hz=filters.frequency_hz if by_frequency else None, frequency_scope=None))
+            for (hz, scope), rows in groups.items():
+                results.append(dict(field=name, value=json_numbers(rows[0]["value"]),
+                                    models=sorted({row["base_part_number"] for row in rows}),
+                                    service=service if by_service else None, frequency_hz=hz, frequency_scope=scope,
+                                    shared_as_published=all(row["layout"] == "shared" for row in rows)))
     return results
 
 
