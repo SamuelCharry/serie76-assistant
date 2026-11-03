@@ -36,6 +36,7 @@ CONFIG = ROOT / "config/agent_acceptance.json"
 CASES = ROOT / "config/agent_acceptance_cases.json"
 FROZEN_FILES = [ "config/agent_acceptance_cases.json", "scripts/agent_acceptance.py",
                 "backend/conversation/quality.py", "backend/conversation/store.py",
+                "backend/conversation/tool_wire.py",
                 "backend/catalog/migrations/004_message_presentation.sql",
                 "backend/conversation/agent.py", "backend/conversation/policy.py", "backend/conversation/rendering.py",
                 "backend/conversation/api.py", "backend/app/contracts.py", "backend/catalog/models.py",

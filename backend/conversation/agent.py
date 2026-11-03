@@ -27,7 +27,7 @@ from pydantic import create_model as pydantic_model
 from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import get_actuator, search_actuators
-from . import policy, quality
+from . import policy, quality, tool_wire
 from .rendering import render_lookup, render_search, render_terms, supplies_text
 
 Focus = Literal["overview", "motor_power", "torque", "operating_time", "fla", "lra", "duty", "rates", "certification"]
@@ -103,7 +103,9 @@ Tools:
   If you map informal wording to a value (e.g. "stop at any point" -> modulating), add an
   assumption quoting the user's exact words; the user will see it.
   Torque may be given in Nm (min_torque_nm) or in-lb (min_torque_in_lb); never convert.
-  Numeric bounds use {value,op}, op=gt|gte|lt|lte. Copy the user's value unchanged.
+  Numeric limits go in bounds: [{field:"min_torque_in_lb",value:1000,op:"gt"}].
+  Each field occurs once; op=gt|gte|lt|lte. Copy the user's value unchanged.
+  Omit unknown fields; do not send null. Empty focus/bounds lists add no constraint.
   More than/over/mayor a/más de => gt; below/menos de => lt;
   at least/al menos => gte; up to/hasta => lte. Never replace a strict bound with an inclusive one.
   sort_by is an ordered list: fastest, lowest_power, highest_torque, lowest_current.
@@ -186,13 +188,16 @@ METHODS = {"get_actuator": "lookup", "search_actuators": "search", "explain_term
 def declarations(models, turn=None):
     """LangChain Tools. The model sees their schemas; when a turn is given, invoking a Tool
     runs the server-side implementation (canonicalisation, grounding, merge, SQL, rendering)."""
+    term_keys = models["explain_terms"].model_json_schema()["properties"]["term_keys"]["items"]["enum"]
+    wire = tool_wire.schemas(term_keys)
     def make(name, schema):
         def run(**kwargs):
             if turn is None:
                 raise RuntimeError("Declaration-only tool")
             # LangChain passes validated Python objects; the policy works on JSON-mode values.
-            return getattr(turn, METHODS[name])(schema.model_validate(kwargs).model_dump(mode="json"))
-        return StructuredTool.from_function(func=run, name=name, description=DESCRIPTIONS[name], args_schema=schema)
+            args = tool_wire.canonical_arguments(name, kwargs)
+            return getattr(turn, METHODS[name])(schema.model_validate(args).model_dump(mode="json"))
+        return StructuredTool.from_function(func=run, name=name, description=DESCRIPTIONS[name], args_schema=wire[name])
 
     return [make(name, schema) for name, schema in models.items()]
 
@@ -573,11 +578,14 @@ def _turn(connection, query, messages, context, *, model=None):
     else:
         name, raw = calls[0]["name"], calls[0].get("args") or {}
         schema = models[name]
-        trace.update(name=name, raw_parameters={k: raw[k] for k in raw if k in schema.model_fields})
+        trace.update(name=name, raw_parameters={k: raw[k] for k in raw if k in schema.model_fields or (name == "search_actuators" and k == "bounds")})
         try:
-            args = schema.model_validate(raw).model_dump(mode="json")
+            args = schema.model_validate(tool_wire.canonical_arguments(name, raw)).model_dump(mode="json")
         except ValidationError as exc:
             trace.update(validation=["schema:" + e for e in _safe_errors(exc)])
+            result = turn.clarify("requirements", "I could not apply that request. Please restate the part number or the supply, service and limits you need.")
+        except (ValueError, TypeError):
+            trace.update(validation=["schema:wire_arguments"])
             result = turn.clarify("requirements", "I could not apply that request. Please restate the part number or the supply, service and limits you need.")
         else:
             trace["parameters"] = args
