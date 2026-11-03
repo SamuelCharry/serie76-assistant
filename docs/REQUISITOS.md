@@ -4,8 +4,8 @@ Fuente: docs/assessment-en.pdf, seis páginas. Las casillas representan cumplimi
 
 ## Entorno y entrega
 
-- [ ] E01. Un único repositorio GitHub con todo el backend y la app (p. 2, 5-6). Existe repositorio LOCAL inicial; publicación pendiente.
-- [ ] E02. Entorno local Python para desarrollar y ejecutar backend (p. 2).
+- [ ] E01. Un único repositorio GitHub con todo el backend y la app (p. 2, 5-6). Repositorio inicial publicado y clonado; código completo pendiente.
+- [x] E02. Entorno local Python aislado creado y dependencias instaladas; pip check correcto (p. 2).
 - [ ] E03. Docker local para construir y ejecutar el backend contenerizado (p. 2). CLI detectada; motor apagado durante la verificación inicial.
 - [ ] E04. Android Studio o Xcode, según la plataforma (p. 2). Se elige Android/Kotlin/Compose; app pendiente.
 - [ ] E05. Entregar respondiendo al correo con el enlace GitHub dentro de una semana desde la recepción (p. 6). Verificar fecha real de recepción; no inferirla de la fecha de creación del repo.

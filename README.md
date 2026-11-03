@@ -134,4 +134,4 @@ mobile/android/README.md registra el trabajo pendiente. Las instrucciones de com
 
 Los paquetes directos tienen versiones fijadas en requirements.txt; faltan congelar dependencias transitivas e imágenes por digest para la entrega final. No se afirma reproducibilidad completa del producto todavía.
 
-Antes de enviar: completar docs/REQUISITOS.md, probar desde un entorno limpio, verificar app/DB/reinicio, seleccionar modelos y documentar costos. El repositorio comienza localmente; la creación del remoto GitHub y el envío del enlace permanecen pendientes.
+Antes de enviar: completar docs/REQUISITOS.md, probar desde un entorno limpio, verificar app/DB/reinicio, seleccionar modelos y documentar costos. Repositorio privado publicado en https://github.com/SamuelCharry/serie76-assistant. Milestones e issues: ver docs/SEGUIMIENTO.md. El envío final y el acceso de evaluadores permanecen pendientes.
