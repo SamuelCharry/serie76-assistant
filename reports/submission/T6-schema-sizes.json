@@ -1,0 +1,38 @@
+{
+  "serialization": "ASCII JSON with compact separators, complete OpenAI tool list including names/descriptions",
+  "baseline_0152ed6": {
+    "total_bytes": 5522,
+    "per_tool_bytes": {
+      "get_actuator": 800,
+      "search_actuators": 3851,
+      "explain_terms": 515,
+      "ask_clarification": 351
+    }
+  },
+  "before": {
+    "total_bytes": 9173,
+    "per_tool_bytes": {
+      "get_actuator": 1168,
+      "search_actuators": 7062,
+      "explain_terms": 515,
+      "ask_clarification": 423
+    }
+  },
+  "after": {
+    "total_bytes": 4643,
+    "per_tool_bytes": {
+      "get_actuator": 1069,
+      "search_actuators": 2589,
+      "explain_terms": 544,
+      "ask_clarification": 436
+    }
+  },
+  "offline_limit": 5522,
+  "provider_probe": "pending coordinator; no provider request made in this task",
+  "runtime_versions": {
+    "langchain-core": "1.7.4",
+    "langchain-openai": "1.7.3",
+    "pydantic": "2.13.4"
+  },
+  "before_commit": "baf88b6"
+}

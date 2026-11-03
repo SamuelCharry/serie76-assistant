@@ -26,7 +26,7 @@ Pattern — where — why: decisions to defend in review.
 
 ### Typed tools
 
-[backend/conversation/agent.py](../../../backend/conversation/agent.py#L186) — Pydantic args_schema and StructuredTool constrain names, enums and argument sizes; malformed output cannot become arbitrary SQL.
+[backend/conversation/tool_wire.py](../../../backend/conversation/tool_wire.py) — StructuredTool advertises compact JSON Schema; code expands its bounds and validates strict canonical Pydantic models before SQL. Names, enums, argument sizes and numeric limits remain checked.
 
 ### Append-only spend ledger
 

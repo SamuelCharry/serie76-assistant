@@ -32,7 +32,9 @@ sequenceDiagram
 
 ## Herramientas tipadas
 
-Todos los modelos `args_schema` prohíben campos extra. El LLM aporta intención/argumentos, nunca SQL ni prosa técnica final.
+Los `args_schema` que recibe el proveedor son diccionarios JSON Schema compactos. El código normaliza y valida cada decisión contra modelos Pydantic estrictos antes de ejecutarla. El LLM aporta intención/argumentos, nunca SQL ni prosa técnica final.
+
+El proveedor usa `bounds=[{"field":"min_torque_in_lb","op":"gt","value":1000}]` y omite propiedades desconocidas en lugar de enviar null. El código convierte esa lista a los campos canónicos value/op descritos abajo; siguen admitidos los argumentos internos antiguos y la API de búsqueda directa. Focus contiene objetos simples con field y servicio/frecuencia opcionales, sin referencias ni uniones nullable. Las cuatro herramientas siguen juntas en una solicitud y hay una decisión de modelo por turno. [Contrato compacto](../../../backend/conversation/tool_wire.py) y [prueba offline de presupuesto](../../../tests/test_tool_schema_budget.py) impiden crecer con uniones/referencias por encima de la referencia 0152ed6; el coordinador comprobará el proveedor aparte.
 
 | Herramienta | Esquema de entrada |
 |---|---|

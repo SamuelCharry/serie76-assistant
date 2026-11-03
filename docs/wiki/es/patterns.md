@@ -26,7 +26,7 @@ Patrón — dónde — por qué: decisiones que defender en revisión.
 
 ### Herramientas tipadas
 
-[backend/conversation/agent.py](../../../backend/conversation/agent.py#L186) — Pydantic args_schema y StructuredTool restringen nombres, enums y tamaños; salida malformada no se convierte en SQL arbitrario.
+[backend/conversation/tool_wire.py](../../../backend/conversation/tool_wire.py) — StructuredTool anuncia JSON Schema compacto; el código expande sus límites y valida modelos canónicos Pydantic estrictos antes de SQL. Conserva controles de nombres, enums, tamaños y límites numéricos.
 
 ### Ledger de gasto append-only
 

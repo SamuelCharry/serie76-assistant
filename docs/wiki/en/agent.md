@@ -32,7 +32,9 @@ sequenceDiagram
 
 ## Typed tools
 
-All `args_schema` models forbid extra fields. The LLM supplies intent/arguments, never SQL or final technical prose.
+Provider-facing `args_schema` values are compact JSON Schema dictionaries. Code normalises and validates every decision against strict Pydantic models before execution. The LLM supplies intent/arguments, never SQL or final technical prose.
+
+The provider uses `bounds=[{"field":"min_torque_in_lb","op":"gt","value":1000}]` for numeric limits and omits unknown properties instead of sending null. Code expands these into the canonical value/op fields described below; legacy internal arguments and the direct search API remain accepted. Focus uses plain object items with field and optional service/frequency, without schema references or nullable unions. All four tools are still bound in one request and only one model decision runs per turn. [Wire contract](../../../backend/conversation/tool_wire.py) and [offline schema budget test](../../../tests/test_tool_schema_budget.py) prevent union/reference growth beyond the 0152ed6 baseline; provider probing remains a separate coordinator check.
 
 | Tool | Input schema |
 |---|---|
