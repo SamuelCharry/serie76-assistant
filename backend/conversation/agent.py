@@ -91,8 +91,9 @@ Tools:
 - get_actuator: explicit Base Part Numbers, or follow-ups about previously selected codes
   ("it", "that one", "how much power does it draw?"). Copy codes exactly as the user wrote
   them; never complete, shorten or invent a code. At most TWO models in a comparison. For 3-4 candidates code offers pairs.
-  focus is a list of {field, service?, frequency_hz?}; use overview only for all specs.
-  Example torque On/Off + speed at 60Hz: [{field:torque,service:on_off},{field:operating_time,frequency_hz:60}].
+  focus is a list of field names; use overview only for all specs.
+  Use focus_service for torque and focus_frequency_hz for operating_time/fla/lra.
+  Example: focus=["torque","operating_time"], focus_service="on_off", focus_frequency_hz=60.
   Empty focus reuses persisted focus. Answers and suggested replies are English-only; understand Spanish input.
 - search_actuators: recommend actuators for requirements. Put ONLY requirements the user
   stated. For a follow-up that changes or adds requirements set refine=true and send ONLY
@@ -100,8 +101,8 @@ Tools:
   more=true. A new, unrelated request uses refine=false.
   Pass requirements literally even if they look contradictory (e.g. DC with 60 Hz): the
   server detects contradictions and asks the user.
-  If you map informal wording to a value (e.g. "stop at any point" -> modulating), add an
-  assumption quoting the user's exact words; the user will see it.
+  If you map informal wording to a value (e.g. "stop at any point" -> modulating), send
+  assumptions mapping field names to exact user phrases, e.g. {service:"stop at any point"}; the user sees it.
   Torque may be given in Nm (min_torque_nm) or in-lb (min_torque_in_lb); never convert.
   Numeric limits go in bounds: [{field:"min_torque_in_lb",value:1000,op:"gt"}].
   Each field occurs once; op=gt|gte|lt|lte. Copy the user's value unchanged.
@@ -115,7 +116,7 @@ Tools:
   Follow-up suggested replies such as Use 110 V refine=true, only the changed filter.
   cancel_previous=true when a request begins with cancel/cancelar/olvídalo and then asks a new question.
 - explain_terms: definitions of catalogue terms from the glossary below (S4, FLA, LRA...).
-  get_actuator and search_actuators also accept explain_terms for combined questions.
+  get_actuator and search_actuators accept explain_terms as comma-separated glossary keys for combined questions.
 - ask_clarification: a required detail is missing or the reference is ambiguous.
   Bare cancel/cancelar/olvídalo => field=cancel; bare no after a clarification => decline.
   Both run no catalogue tool and never repeat a declined question.
@@ -578,7 +579,7 @@ def _turn(connection, query, messages, context, *, model=None):
     else:
         name, raw = calls[0]["name"], calls[0].get("args") or {}
         schema = models[name]
-        trace.update(name=name, raw_parameters={k: raw[k] for k in raw if k in schema.model_fields or (name == "search_actuators" and k == "bounds")})
+        trace.update(name=name, raw_parameters={k: raw[k] for k in raw if k in schema.model_fields or (name == "search_actuators" and k == "bounds") or (name == "get_actuator" and k in ("focus_frequency_hz", "focus_service"))})
         try:
             args = schema.model_validate(tool_wire.canonical_arguments(name, raw)).model_dump(mode="json")
         except ValidationError as exc:
