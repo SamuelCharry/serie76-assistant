@@ -6,7 +6,7 @@ Repositorio para el assessment de Konecto. **Etapa actual:** OCR y PostgreSQL ve
 
 **Android:** [compilación, ejecución, URL, debug y arquitectura](docs/ANDROID.md). Kotlin/Compose, login nativo, chat e historial aislado por usuario; diseño claro/oscuro aprobado, sin Firebase ni voz. [Autenticación, cuentas de prueba y migración](docs/AUTH.md). Hay pruebas de UI en emulador y persistencia HTTP con interpretación controlada. Eso no equivale a validar un modelo real. Evidencia: [reports/mobile](reports/mobile).
 
-El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver reports/pipeline/RESULTADOS.md y reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL y consultas técnicas ya están verificados; agente y Android siguen pendientes. Ver docs/POSTGRES.md.
+El pipeline PDF → OCR local → reconstrucción/limpieza → validación → CSV/JSON está implementado y verificado. La salida real está en data/extracted/series76; procede del OCR, sin leer manual/reference/reviewed. Comparación posterior: 68/68 códigos, 869/869 cifras, 4/4 N/A, 5/5 marcas y 272/272 campos de contexto. Las 941 comprobaciones primarias coinciden. Ver reports/pipeline/RESULTADOS.md y reports/pipeline/verified/summary.json. La referencia manual solo evalúa. PostgreSQL y consultas técnicas ya están verificados; la aceptaci?n final OpenRouter sigue pendiente. Ver docs/POSTGRES.md.
 
 **Salida del pipeline:** [tablas HTML](data/extracted/series76/catalog.html), [CSV](data/extracted/series76/catalog.csv), [JSON](data/extracted/series76/catalog.json). [Resultados y límites](reports/pipeline/RESULTADOS.md).
 
@@ -24,15 +24,33 @@ Acepta archivos o directorios. Usa RapidOCR/PP-OCRv5 local; no requiere Tesserac
 
 ## PostgreSQL y API técnica
 
-Con Docker Desktop activo y una contraseña local propia en .env:
+Con Docker Desktop activo, desde un checkout limpio:
 
 ```powershell
-docker compose up -d --build db backend
-docker compose exec -T backend python -m backend.catalog.cli migrate
-docker compose exec -T backend python -m backend.catalog.cli load data/extracted/series76
+Copy-Item .env.example .env  # Solo si no existe; no sobrescribir configuraci?n local.
+docker compose up --build -d
+curl.exe http://127.0.0.1:8000/ready
 ```
 
-Si .env no existe, copiar .env.example y reemplazar POSTGRES_PASSWORD; no sobrescribir configuración existente. No se requiere OpenRouter. PostgreSQL: 127.0.0.1:5432; backend: 127.0.0.1:8000. Puertos configurables.
+El entrypoint migra, carga el cat?logo, carga el glosario y provisiona usuarios de
+prueba de forma idempotente antes de arrancar Uvicorn. Los datos est?n montados en
+solo lectura; el volumen PostgreSQL se conserva. `/ready` 200 verifica cat?logo y
+glosario, no disponibilidad del LLM. No ejecutar `docker compose down -v`.
+
+**Cuentas p?blicas SOLO DE PRUEBA**, precargadas para el evaluador:
+
+| Email | Contrase?a de prueba |
+|---|---|
+| demo@series76.test | Series76-Demo-1 |
+| reviewer@series76.test | Series76-Demo-2 |
+
+Login Android o `POST /api/auth/login` con JSON `email` y `password`. No usar estas
+cuentas en producci?n. `python -m backend.auth.cli ensure-demo-users` omite usuarios
+existentes y nunca restablece sus contrase?as (tampoco si est?n desactivados).
+`DEMO_USERS_JSON` permite sustituir la lista por objetos `email`, `name`, `password`;
+`[]` desactiva la provisi?n y un valor vac?o usa las cuentas de prueba anteriores.
+No publicar overrides privados. `seed-demo` conserva contrase?as aleatorias para
+aprovisionamiento privado expl?cito.
 
 - [OpenAPI](http://127.0.0.1:8000/docs), GET /health y GET /ready.
 - GET /api/actuators/{part_number}: código completo incluido /A.
@@ -174,8 +192,8 @@ GET /api/sessions y GET /api/sessions/{id}/messages permiten listar y reabrir hi
 |---|---|
 | POSTGRES_DB / POSTGRES_USER / POSTGRES_PASSWORD | Base local en Compose. Usar contraseña local propia. |
 | API_PORT | Puerto local publicado, por defecto 8000. |
-| OPENROUTER_API_KEY | Futuro agente, nunca versionar una clave real. |
-| OPENROUTER_BASE_URL | Endpoint OpenRouter del agente futuro. |
+| OPENROUTER_API_KEY | Agente conversacional; nunca versionar una clave real. |
+| OPENROUTER_BASE_URL | Endpoint OpenAI-compatible del agente. |
 | OPENROUTER_CHAT_MODEL | ID configurable. El candidato es google/gemini-3.6-flash, aceptado con el endpoint de Google; falta validarlo en OpenRouter. |
 | AGENT_MAX_TOKENS / AGENT_REASONING_EFFORT | 2048 / low, como en la evaluación. La llamada solo emite una tool call (36 tokens de salida de media). |
 | AGENT_TOOL_CHOICE | `required` por defecto. Está documentado en OpenRouter y verificado en Google. |
@@ -203,8 +221,8 @@ Notas de implementación:
 - FastAPI persiste conversaciones y snapshots en PostgreSQL; herramientas y resultados se recuperan aparte para debug.
 - Android implementa conversaciones, chat con fichas/tabla y debug mediante source sets debug/release separados.
 - OCR: comparar Tesseract, EasyOCR y PP-OCR/RapidOCR localmente, sin gasto de OpenRouter. Ver notebooks, configuración seleccionada y métricas en el laboratorio. La selección no equivale a validar todas las cifras ni las notas.
-- Comparación Google completada; candidato recomendado3.6 Flash, con validación OpenRouter pendiente. LangChain y adaptador estándar Chat Completions están implementados; pruebas con interpretación controlada, no con un LLM real. Dependencias adicionales en requirements-conversation.lock.txt.
-- Login y voz excluidos del primer alcance por ser opcionales.
+- Comparación Google completada; candidato recomendado3.6 Flash, con validación OpenRouter pendiente. LangChain y adaptador estándar Chat Completions están implementados; pruebas con interpretación controlada, no con un LLM real. Dependencias de ejecuci?n en requirements.lock.txt.
+- Login implementado; voz pendiente.
 
 ## App y configuración del asistente
 
@@ -214,6 +232,32 @@ mobile/android contiene el proyecto Android compilable. [docs/ANDROID.md](docs/A
 
 ## Reproducibilidad y entrega
 
-Los paquetes directos figuran en requirements.txt y el backend usa requirements-backend.lock.txt. Python/PostgreSQL están fijados por digest; OCR conserva su lock independiente. No se afirma reproducibilidad completa del producto todavía.
+Los paquetes directos figuran en requirements.txt y el backend usa requirements.lock.txt. Python/PostgreSQL están fijados por digest; OCR conserva su lock independiente. No se afirma reproducibilidad completa del producto todavía.
 
 Antes de enviar: completar docs/REQUISITOS.md, probar desde un entorno limpio, verificar app/DB/reinicio, seleccionar modelos y documentar costos. Repositorio privado publicado en https://github.com/SamuelCharry/serie76-assistant. Milestones e issues: ver docs/SEGUIMIENTO.md. El envío final y el acceso de evaluadores permanecen pendientes.
+
+### Dependencias y comprobaci?n gratuita de OpenRouter
+
+Backend: `pip install -r requirements.lock.txt` (directas en requirements.txt).
+Pruebas: `pip install -r requirements-dev.txt`; OCR: requirements-ingest.txt y
+requirements-ingest.lock.txt, independientes. Los locks de experimentos son hist?ricos.
+
+`python scripts/check_openrouter.py --models-only` consulta ?nicamente el cat?logo
+p?blico y comprueba tools/tool_choice y precios. Sin ese flag, si existe una clave
+en el entorno del proceso, tambi?n consulta GET /api/v1/key; nunca hace inferencia
+ni carga claves de .env. OPENROUTER_CHAT_MODEL selecciona el modelo comprobado.
+
+El cliente env?a `provider.require_parameters=true` solo al host openrouter.ai;
+OPENROUTER_REQUIRE_PARAMETERS=false permite desactivarlo. Esto exige soporte de
+todos los par?metros de la petici?n, seg?n la [documentaci?n de routing](https://openrouter.ai/docs/guides/routing/provider-selection).
+AGENT_MAX_CALLS_PER_HOUR=120 limita intentos en una ventana m?vil por proceso;
+503/error_code=rate_limited_local permite reintentar despu?s. Reinicios borran la
+cuenta y m?ltiples procesos multiplican el l?mite: no es un tope monetario global.
+
+La configuraci?n config/agent_acceptance_openrouter.json fija el candidato y un
+cap de USD 1.00. scripts/agent_acceptance.py acepta --config y toma la clave del
+entorno: OPENROUTER_API_KEY para OpenRouter, GOOGLE_API_KEY para Google.
+Su ejecuci?n pagada sigue pendiente de aprobaci?n expl?cita; no se ha ejecutado.
+
+.claude/ documenta Claude Code como coordinador y .codex/ a Codex como implementador
+mediante Orca; no contienen configuraci?n global ni credenciales privadas.

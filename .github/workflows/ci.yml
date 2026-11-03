@@ -1,0 +1,44 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: series76
+          POSTGRES_USER: series76
+          POSTGRES_PASSWORD: ci-test-only
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U series76 -d series76"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      PGHOST: 127.0.0.1
+      PGPORT: '5432'
+      PGDATABASE: series76
+      PGUSER: series76
+      PGPASSWORD: ci-test-only
+      SERIES76_TEST_DB: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-dev.txt
+      - run: python -m backend.catalog.cli migrate
+      - run: python -m backend.catalog.cli load data/extracted/series76
+      - run: python -m backend.catalog.cli load-context
+      - run: python -m unittest discover -s tests
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - run: chmod +x gradlew && ./gradlew testDebugUnitTest
+        working-directory: mobile/android

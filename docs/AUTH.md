@@ -27,22 +27,20 @@ sequenceDiagram
 Desde la raíz, con `.env` local existente y Docker activo:
 
 ```powershell
-docker compose build backend
-docker compose up -d db backend
-docker compose exec -T backend python -m backend.catalog.cli migrate
+docker compose up --build -d
 ```
 
 La migración aditiva `003_auth.sql` conserva los datos existentes. El runner ordena por nombre completo y verifica checksums; no editar migraciones ya aplicadas ni borrar volúmenes. La migración de contexto desarrollada en paralelo tiene otro nombre completo y no forma parte del cambio de autenticación.
 
-Para crear dos usuarios de prueba desde el entorno Python local con las dependencias backend/conversación instaladas:
+El arranque provisiona cuentas p?blicas **SOLO DE PRUEBA** para el evaluador;
+[credenciales y DEMO_USERS_JSON en README](../README.md#postgresql-y-api-t?cnica).
+El comando `python -m backend.auth.cli ensure-demo-users` tambi?n puede ejecutarse
+manualmente. Omite identidades existentes y nunca restablece contrase?as.
+`DEMO_USERS_JSON=[]` desactiva nuevas cuentas de prueba; no elimina las existentes.
 
-```powershell
-python -m venv .venv-chat
-./.venv-chat/Scripts/python.exe -m pip install -r requirements-backend.lock.txt -r requirements-conversation.lock.txt
-./.venv-chat/Scripts/python.exe -m backend.auth.cli seed-demo
-```
-
-Crea `demo.1@example.test` / Demo 1 y `demo.2@example.test` / Demo 2. Las contraseñas aleatorias se guardan únicamente en `.cache/auth-demo-credentials.json`, ignorado por Git. Abrir ese archivo local para consultar las credenciales; no copiarlo a reportes, issues o repositorios. Cada instalación limpia genera sus propias contraseñas. El comando rechaza sobrescribir el archivo o reiniciar cuentas existentes. No hay contraseña universal embebida en el APK ni en el servidor.
+Para aprovisionamiento privado expl?cito, `python -m backend.auth.cli seed-demo`
+conserva la generaci?n aleatoria y el archivo privado ignorado por Git. No copiar
+credenciales privadas a reportes, issues o repositorios.
 
 Cuenta propia, desde CLI local interactiva:
 

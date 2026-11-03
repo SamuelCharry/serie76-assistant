@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m unittest *)",
+      "Bash(docker compose build *)",
+      "Bash(docker compose up *)",
+      "Bash(docker compose ps *)",
+      "Bash(docker compose exec *)",
+      "Bash(./gradlew testDebugUnitTest*)",
+      "Bash(gradlew.bat testDebugUnitTest*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(.cache/**)",
+      "Bash(docker compose down*)"
+    ]
+  }
+}
