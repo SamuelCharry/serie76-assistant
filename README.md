@@ -1,5 +1,7 @@
 # Series 76 Technical Assistant
 
+Continuación en otro agente: [carpeta de contexto](contexto/00_EMPEZAR_AQUI.md).
+
 Repositorio inicial para el assessment de Konecto. **Etapa actual: preparar y validar OCR.**
 
 Implementado: estructura del proyecto, endpoint de salud FastAPI, esquemas mínimos del contrato, configuración Docker/PostgreSQL y ensayo de renderizado/OCR local. Pendiente: extracción tabular validada, ingestión en PostgreSQL, agente LangChain, conversaciones persistentes y aplicación Android.
