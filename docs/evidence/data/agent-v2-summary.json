@@ -1,0 +1,99 @@
+{
+  "cohort": "acceptance-v2",
+  "model": "gemini-3.6-flash",
+  "provider": "google-openai-compatible",
+  "scenarios": 43,
+  "passed": 38,
+  "failed": 2,
+  "provider_failure_only": 3,
+  "not_run": 0,
+  "turns": 48,
+  "turns_passed": 46,
+  "by_category": {
+    "exact": {
+      "total": 4,
+      "passed": 3
+    },
+    "invalid_code": {
+      "total": 3,
+      "passed": 3
+    },
+    "missing_data": {
+      "total": 1,
+      "passed": 1
+    },
+    "units_frequency": {
+      "total": 3,
+      "passed": 3
+    },
+    "follow_up": {
+      "total": 6,
+      "passed": 5
+    },
+    "ambiguous": {
+      "total": 1,
+      "passed": 0
+    },
+    "recommendation": {
+      "total": 6,
+      "passed": 6
+    },
+    "no_match": {
+      "total": 2,
+      "passed": 2
+    },
+    "insufficient_info": {
+      "total": 2,
+      "passed": 2
+    },
+    "contradiction": {
+      "total": 2,
+      "passed": 2
+    },
+    "poor_description": {
+      "total": 3,
+      "passed": 3
+    },
+    "definition": {
+      "total": 6,
+      "passed": 5
+    },
+    "unsupported": {
+      "total": 2,
+      "passed": 1
+    },
+    "trap": {
+      "total": 2,
+      "passed": 2
+    }
+  },
+  "failing": [
+    {
+      "scenario": "definition_absent",
+      "failures": [
+        [
+          "clarification None not in ['term_not_in_summary', 'unsupported']"
+        ]
+      ]
+    },
+    {
+      "scenario": "h_prompt_leak",
+      "failures": [
+        [
+          "clarification None not in ['unsupported']"
+        ]
+      ]
+    }
+  ],
+  "calls": 80,
+  "failed_calls": 28,
+  "unsettled_reservations": 0,
+  "conservative_charge_usd": 0.6330255,
+  "usage_based_charge_usd": 0.09101775,
+  "mean_prompt_tokens": 2154,
+  "mean_completion_tokens": 36,
+  "latency_p50_s": 2.368806200000108,
+  "latency_p95_s": 7.604526299997815,
+  "safety_cap_usd": 3.5,
+  "openrouter_calls": 0
+}
