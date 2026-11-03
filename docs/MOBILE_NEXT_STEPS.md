@@ -11,10 +11,10 @@ Base visual aprobada y publicada en `design/android-editorial-v3`: `6e82513`, co
 Consultados el 3 de noviembre de 2026:
 
 - [#5 Android nativo](https://github.com/SamuelCharry/serie76-assistant/issues/5): abierto. La descripción inicial aún dice que no hay proyecto compilable; necesita reconciliarse con la evidencia actual.
-- [#7 Login y voz](https://github.com/SamuelCharry/serie76-assistant/issues/7): abierto; opcionales sin implementar.
+- [#7 Login y voz](https://github.com/SamuelCharry/serie76-assistant/issues/7): abierto; la descripción remota aún no refleja el login implementado. Voz sigue pendiente.
 - [#6 Documentación y reproducibilidad](https://github.com/SamuelCharry/serie76-assistant/issues/6): abierto.
 
-Esta iteración no modificó issues remotos. No cerrar capacidades integrales a partir de capturas o fixtures. La lista de aceptación sigue en `REQUISITOS.md`.
+Los issues remotos no se modificaron: la revisión automática de aprobación rechazó su actualización con «blocked by policy». El estado implementado y su evidencia están en AUTH.md y reports/mobile/auth-v7. No cerrar capacidades integrales a partir de capturas o fixtures. La lista de aceptación sigue en `REQUISITOS.md`.
 
 ## Dependencia pendiente
 

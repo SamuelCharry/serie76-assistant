@@ -37,3 +37,5 @@ Para LiveAuthTest, emulador con backend accesible por10.0.2.2:8000 y app sin ses
 No se probó interpretación real con OpenRouter ni se gastó presupuesto del modelo. Las pruebas controladas de creación/continuación con SQL no sustituyen esa aceptación. Tampoco certifican hardware físico, despliegue HTTPS público, rendimiento a gran escala ni voz. El catálogo y OCR conservan su validación anterior; los cambios paralelos de agente/glosario tienen evidencia independiente.
 
 Las cuentas demo se conservan para uso local y no contienen conversaciones de verificación después de la limpieza. El historial anterior permanece sin dueño. Los archivos de credenciales no se versionan. No se trasladaron datos de usuario a una cuenta por deducción.
+
+La app quedó abierta en login en el emulador. El intento de reconciliar las listas de los issues5/7 no se ejecutó: revisión automática de aprobación rechazó la acción con «blocked by policy». No se modificaron issues ni se enviaron comentarios; las condiciones verificadas se registran en estos documentos.
