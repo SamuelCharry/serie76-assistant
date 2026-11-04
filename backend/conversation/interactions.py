@@ -65,6 +65,8 @@ def questions(facets, fields):
         if field not in prompts or len(rows) <= 1:
             continue
         universe = set().union(*(set(row.get('codes', [])) for row in rows))
+        if universe and all(set(row.get('codes', [])) == universe for row in rows):
+            continue
         if field not in ('service', 'frequency_hz') and universe and all(row['n'] > 0.85 * len(universe) for row in rows):
             continue
         ranked.append(field)
