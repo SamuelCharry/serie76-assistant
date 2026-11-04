@@ -23,6 +23,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.focus.FocusRequester
@@ -85,7 +91,9 @@ fun SeriesApp(viewModel: AppViewModel) {
             if (debug) DeveloperScreen(state, viewModel::back, viewModel::debugMessage)
             else ChatScreen(state, viewModel::showConversations, viewModel::draft, viewModel::send,
                 { viewModel.loadHistory() }, { viewModel.loadHistory(older = true) },
-                viewModel::reconcile, viewModel::debug, viewModel::newConversation)
+                viewModel::reconcile, viewModel::debug, viewModel::newConversation,
+                viewModel::chooseAnswer, viewModel::editAnswer, viewModel::submitAnswers,
+                viewModel::cancelQuestion, viewModel::activateComposer, viewModel::removeFilter)
         }
     }
 }
@@ -146,7 +154,9 @@ fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) ->
 
 @Composable
 fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, onSend: () -> Unit,
-               onReload: () -> Unit, onOlder: () -> Unit, onReconcile: () -> Unit, onDebug: () -> Unit, onNew: () -> Unit = {}) {
+               onReload: () -> Unit, onOlder: () -> Unit, onReconcile: () -> Unit, onDebug: () -> Unit, onNew: () -> Unit = {},
+               onChoose: (String) -> Unit = {}, onEditAnswer: (Int) -> Unit = {}, onSubmitAnswers: () -> Unit = {},
+               onCancelQuestion: () -> Unit = {}, onActivateComposer: () -> Unit = {}, onRemoveFilter: (ActiveFilter) -> Unit = {}) {
     val listState = rememberLazyListState()
     val focus = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
@@ -166,6 +176,7 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 navigationIcon = { IconButton(onClick = onBack) { Icon(MenuLines, "Open conversation history") } },
                 actions = { IconButton(onClick = onNew, enabled = !state.sending) { Icon(EditLines, "New conversation") } })
+            ActiveFilterTags(state.activeFilters, state.canSend, onRemoveFilter)
             }
         },
         bottomBar = {
@@ -174,12 +185,21 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
                     state.sendError?.let { ErrorPanel(it, if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile) }
                     if (state.needsReconcile && state.sendError == null) ErrorPanel("A previous request may have completed. Check saved messages before sending again.",
                         if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile)
-                    Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(24.dp),
+                    state.question?.let { QuestionCard(it, state.canSend, onChoose, onEditAnswer, onSubmitAnswers, onCancelQuestion,
+                        Modifier.weight(1f, fill = false)) }
+                    Surface(modifier = Modifier.alpha(if (state.question != null && !state.composerActive) 0.5f else 1f)
+                        .pointerInput(onActivateComposer) {
+                            awaitEachGesture {
+                                awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                                onActivateComposer()
+                            }
+                        }, color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(24.dp),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
                         Row(Modifier.fillMaxWidth().padding(start = 20.dp, end = 10.dp, top = 16.dp, bottom = 10.dp),
                             verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             BasicTextField(value = state.draft, onValueChange = onDraft, minLines = 2, maxLines = 5,
-                                modifier = Modifier.weight(1f).focusRequester(focus).semantics { contentDescription = "Message" },
+                                modifier = Modifier.weight(1f).focusRequester(focus).onFocusChanged { if (it.isFocused) onActivateComposer() }
+                                    .semantics { contentDescription = "Message" },
                                 textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
                                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimaryContainer), enabled = !state.sending,
                                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send), keyboardActions = KeyboardActions(onSend = { onSend() }),
@@ -201,7 +221,7 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
     ) { insets ->
         Box(Modifier.fillMaxSize().padding(insets)) {
           if (state.messages.isEmpty() && !state.sending && !state.historyLoading && state.historyError == null && !keyboardVisible) {
-              HelloGreeting(Modifier.align(Alignment.Center))
+              HelloGreeting(Modifier.align(Alignment.Center).padding(horizontal = 24.dp), LocalAccount.current?.user?.name)
           }
           LazyColumn(Modifier.fillMaxSize(), state = listState,
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
@@ -210,9 +230,9 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
             state.historyError?.let { item { ErrorPanel(it, "Try again", onReload) } }
             items(state.messages, key = Message::id) { message ->
                 MessageContent(message)
-                if (message.role == "assistant" && message.id == state.messages.lastOrNull { it.role == "assistant" }?.id) {
-                    SuggestedReplyChips(message.suggestedReplies,
-                        enabled = !state.sending && !state.needsReconcile && !state.historyLoading) { reply ->
+                if (message.role == "assistant" && message.id == state.messages.lastOrNull()?.id) {
+                    SuggestedReplyChips(visibleSuggestions(message, state.draft, state.suggestionsDismissed || state.sending),
+                        enabled = state.canSend) { reply ->
                         onDraft(reply)
                         onSend()
                     }
@@ -241,43 +261,11 @@ fun MessageContent(message: Message) {
             }
         } else {
             Text("Assistant", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(message.content, style = MaterialTheme.typography.bodyLarge)
+            Text(message.displayText(), style = MaterialTheme.typography.bodyLarge)
         }
         if (message.comparison != null) DifferenceComparisonCard(message.comparison)
         else if (message.products.size == 1) ProductCard(message.products.first())
         else if (message.products.isNotEmpty()) ComparisonTable(message.products)
-    }
-}
-
-@Composable
-fun SuggestedReplyChips(replies: List<String>, enabled: Boolean, onReply: (String) -> Unit) {
-    FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        replies.take(3).forEach { reply ->
-            SuggestionChip(onClick = { onReply(reply) }, enabled = enabled, label = { Text(reply) })
-        }
-    }
-}
-
-@Composable
-fun DifferenceComparisonCard(comparison: DifferenceComparison) {
-    OutlinedCard(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
-        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Field", Modifier.weight(1f), fontWeight = FontWeight.Bold)
-                comparison.models.forEach { Text(it, Modifier.weight(1f), style = MaterialTheme.typography.labelMedium) }
-            }
-            comparison.rows.forEach { row ->
-                HorizontalDivider()
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(row.label, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                    Text(row.a, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall,
-                        fontWeight = if (row.better == "a") FontWeight.Bold else FontWeight.Normal)
-                    Text(row.b, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall,
-                        fontWeight = if (row.better == "b") FontWeight.Bold else FontWeight.Normal)
-                }
-            }
-            Text("${comparison.identicalFieldsHidden} identical fields hidden", style = MaterialTheme.typography.labelSmall)
-        }
     }
 }
 

@@ -44,7 +44,8 @@ internal fun motionEnabled(): Boolean {
 }
 
 @Composable
-fun HelloGreeting(modifier: Modifier = Modifier) {
+fun HelloGreeting(modifier: Modifier = Modifier, name: String? = null) {
+    val label = greeting(name)
     val enabled = motionEnabled()
     val reveal = remember { Animatable(if (enabled) 0f else 1f) }
     LaunchedEffect(enabled) {
@@ -55,12 +56,12 @@ fun HelloGreeting(modifier: Modifier = Modifier) {
         listOf(Color(0xFFE3D6F1), Color(0xFFCDB9E1), Color(0xFFBAA5D6), Color(0xFFCDB9E1), Color(0xFFE3D6F1))
     else listOf(Color(0xFF62546F), Color(0xFF736181), Color(0xFF7D6B8D), Color(0xFF736181), Color(0xFF62546F))
     Text(buildAnnotatedString {
-        "Hello".forEachIndexed { index, letter ->
-            val amount = ((reveal.value * 7f - index) / 3f).coerceIn(0f, 1f)
-            withStyle(SpanStyle(color = tones[index].copy(alpha = 0.35f + 0.65f * amount),
+        label.forEachIndexed { index, letter ->
+            val amount = ((reveal.value * (label.length + 2f) - index) / 3f).coerceIn(0f, 1f)
+            withStyle(SpanStyle(color = tones[index % tones.size].copy(alpha = 0.35f + 0.65f * amount),
                 baselineShift = BaselineShift((1f - amount) * 0.1f))) { append(letter) }
         }
-    }, modifier.clearAndSetSemantics { text = AnnotatedString("Hello"); heading() },
+    }, modifier.clearAndSetSemantics { text = AnnotatedString(label); heading() },
         style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Medium),
         textAlign = TextAlign.Center)
 }

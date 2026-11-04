@@ -15,7 +15,7 @@ class QualityContractTest {
           ]}}""")
         assertEquals(listOf("Compare A vs B", "Show more", "Cancel"), response.suggestedReplies)
         assertEquals("1.20 A", response.comparison!!.rows.first().a)
-        assertEquals("a", response.comparison!!.rows.first().better)
+        assertEquals(0, response.comparison!!.rows.first().better)
         assertNull(response.comparison!!.rows.last().better)
         assertEquals(7, response.comparison!!.identicalFieldsHidden)
     }
@@ -33,8 +33,8 @@ class QualityContractTest {
         assertEquals(2, message.comparison!!.models.size)
     }
 
-    @Test(expected = IllegalArgumentException::class)
-    fun `comparison rejects more than two models`() {
-        DifferenceComparison(listOf("A", "B", "C"), emptyList())
+    @Test
+    fun `comparison now accepts more than two models`() {
+        assertEquals(3, DifferenceComparison(listOf("A", "B", "C"), emptyList(), layout = "cards").models.size)
     }
 }

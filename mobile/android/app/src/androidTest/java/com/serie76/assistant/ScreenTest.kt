@@ -61,7 +61,7 @@ class ScreenTest {
                 session.copy(id = "third", title = "24 V power requirements", preview = "Look up published data for a low-voltage application.")))
             override suspend fun messages(sessionId: String, before: Long?) = MessagesPage(sessionId, session.title,
                 listOf(Message("saved-user", "user", "Look up 761A00-11300000/A"), Message("saved-answer", "assistant", "Saved response", listOf(product))))
-            override suspend fun send(query: String, sessionId: String?) = ConversationResponse("test-session", "Published data", "answer")
+            override suspend fun send(query: String, sessionId: String?, answers: Map<String, String>, removeFilters: List<String>) = ConversationResponse("test-session", "Published data", "answer")
         }
         compose.setContent { SeriesTheme(darkOverride = false) { SeriesApp(androidx.lifecycle.viewmodel.compose.viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST") override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T = AppViewModel(repo, SavedStateHandle()) as T

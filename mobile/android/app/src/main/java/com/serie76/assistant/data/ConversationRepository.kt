@@ -9,6 +9,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.ConnectionPool
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.http.Body
@@ -22,7 +23,8 @@ val wireJson = Json { ignoreUnknownKeys = true; explicitNulls = false }
 interface ConversationRepository {
     suspend fun sessions(offset: Int = 0): SessionsPage
     suspend fun messages(sessionId: String, before: Long? = null): MessagesPage
-    suspend fun send(query: String, sessionId: String?): ConversationResponse
+    suspend fun send(query: String, sessionId: String?, answers: Map<String, String> = emptyMap(),
+                     removeFilters: List<String> = emptyList()): ConversationResponse
 }
 
 interface ConversationApi {
@@ -35,12 +37,14 @@ interface ConversationApi {
 class ApiConversationRepository(private val api: ConversationApi) : ConversationRepository {
     override suspend fun sessions(offset: Int) = api.sessions(offset)
     override suspend fun messages(sessionId: String, before: Long?) = api.messages(sessionId, before)
-    override suspend fun send(query: String, sessionId: String?) = api.conversation(ConversationRequest(query, sessionId))
+    override suspend fun send(query: String, sessionId: String?, answers: Map<String, String>, removeFilters: List<String>) =
+        api.conversation(ConversationRequest(query, sessionId, answers, removeFilters))
 }
 
 fun createRetrofit(url: String, bearer: () -> String? = { null }, expired: (String) -> Unit = {}): Retrofit = Retrofit.Builder()
     .baseUrl(url)
     .client(OkHttpClient.Builder()
+        .connectionPool(ConnectionPool(5, 30, TimeUnit.SECONDS))
         .followRedirects(false)
         .followSslRedirects(false)
         .addInterceptor { chain ->
