@@ -36,9 +36,9 @@ class V5RegressionTests(Base):
         result = self.turn("Busco un actuador para exteriores que sea muy rápido y no consuma mucha energía.",
                            ("search_actuators", {"enclosure": "weatherproof", "sort_by": ["fastest", "lowest_power"], "refine": False}))
         self.assertNotIn("min_torque_nm", result.context["filters"])
-        self.assertEqual(result.clarification["field"], "supply_voltage_v")
-        self.assertEqual([p["base_part_number"] for p in result.products], ["761A00-11300000/A", "761A00-11320000/A", "762A00-11300000/A"])
-        self.assertIn("Operating time", result.answer)
+        self.assertEqual(result.clarification["field"], "enclosure")
+        self.assertEqual(result.products, [])
+        self.assertIn("Fastest operating time", result.answer)
         self.assertIn("Motor power", result.answer)
 
     def test_informal_service_with_explicit_torque_keeps_both_requirements(self):

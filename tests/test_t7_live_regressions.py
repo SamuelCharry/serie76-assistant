@@ -119,5 +119,6 @@ class RecordedFailureTests(Base):
         self.assertEqual(result.comparison['models'], [A, B])
         self.assertEqual([t['term_key'] for t in result.terms], ['fla', 'lra', 'duty_cycle'])
         self.assertIn('LRA at 60 Hz: 1.4 A', result.answer)
-        self.assertIn('Not answered: IP67', result.answer)
+        self.assertIn("The document doesn't define that term.", result.answer)
+        self.assertNotIn('IP67', result.answer)
         self.assertEqual(result.tool_calls[0]['model']['decision_calls'], 1)

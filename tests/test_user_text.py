@@ -1,6 +1,7 @@
 """Guard public prose against internal protocol and unsupported ratings."""
 import re
 import unittest
+from scripts.check_public_text import response_text_issues
 
 
 FORBIDDEN = re.compile(
@@ -46,3 +47,10 @@ class PublicTextTests(unittest.TestCase):
         for mutation in ('Not applied', 'min_torque_nm', 'get_actuator', 'IP67', '{service}', 'explosionproof'):
             with self.subTest(mutation=mutation), self.assertRaises(AssertionError):
                 assert_public_text_clean({'answer': mutation})
+
+    def test_acceptance_scanner_rejects_mutated_public_fields(self):
+        for field in ('answer', 'lead'):
+            for mutation in ('Not applied', 'min_torque_nm'):
+                with self.subTest(field=field, mutation=mutation):
+                    self.assertTrue(response_text_issues({field: mutation}))
+        self.assertTrue(response_text_issues({'recommendation': {'items': [{'reason': 'min_torque_nm'}]}}))

@@ -206,9 +206,9 @@ def argument_matches(field, got, expected, queries=()):
 
 
 def check(expect, observed, queries=()):
-    from scripts.check_public_text import public_text_issues
+    from scripts.check_public_text import response_text_issues
     from backend.catalog.repository import COMPARISONS
-    failures = public_text_issues(observed["answer"], observed.get("comparison"), observed.get("suggested_replies", []))
+    failures = response_text_issues(observed)
     trace = observed["trace"]
     params = trace.get("parameters") or {}
     if "tool" in expect and trace.get("name") != expect["tool"]:
@@ -245,6 +245,15 @@ def check(expect, observed, queries=()):
         failures.append("comparison models differ")
     if expect.get("no_products") and codes:
         failures.append(f"unexpected products {codes[:3]}")
+    recommendation = observed.get('recommendation') or {}
+    if 'recommendation_total' in expect and recommendation.get('total') != expect['recommendation_total']:
+        failures.append('recommendation total differs')
+    if expect.get('recommendation_ranked_by') and not recommendation.get('ranked_by'):
+        failures.append('ranking explanation missing')
+    if 'debug_llm_called' in expect and observed.get('debug', {}).get('llm_called') != expect['debug_llm_called']:
+        failures.append('debug model-call flag differs')
+    if 'interaction_count_at_least' in expect and len((observed.get('interaction') or {}).get('questions', [])) < expect['interaction_count_at_least']:
+        failures.append('too few simultaneous questions')
     if "candidates_include" in expect:
         if "recorded_candidate_failures" in observed:
             # Older recordings omitted SQL candidates. Preserve the original
@@ -328,7 +337,7 @@ def run_scenario(scenario, model_factory):
             with patch("backend.conversation.agent.create_model_client", lambda: model_factory(scenario, index)):
                 started = time.perf_counter()
                 body = {"query": turn["query"]} | ({"session_id": session} if session else {})
-                body.update({k: turn[k] for k in ('answers', 'remove_filters') if k in turn})
+                body.update({k: turn[k] for k in ('answers', 'remove_filters', 'action') if k in turn})
                 response = client.post("/api/conversation", json=body)
             elapsed = time.perf_counter() - started
             if response.status_code == 503:
@@ -344,7 +353,7 @@ def run_scenario(scenario, model_factory):
                             clarification=payload["clarification"], assumptions=payload["assumptions"], trace=trace,
                             suggested_replies=payload["suggested_replies"], comparison=payload["comparison"],
                             candidates=[p["base_part_number"] for p in debug.get("data", {}).get("products", [])] or debug.get("data", {}).get("candidates", []))
-            observed.update({k: payload[k] for k in ('lead', 'interaction', 'suggestions', 'active_filters')})
+            observed.update({k: payload[k] for k in ('lead', 'interaction', 'suggestions', 'active_filters', 'recommendation', 'debug')})
             observed['candidate_total'] = debug.get('data', {}).get('total')
             if debug.get('name') == 'search_actuators' and observed['candidate_total'] is not None:
                 from backend.catalog.models import SearchFilters
@@ -359,8 +368,9 @@ def run_scenario(scenario, model_factory):
                               terms=[t["term_key"] for t in payload["terms"]], assumptions=payload["assumptions"], trace=trace,
                               suggested_replies=payload["suggested_replies"], comparison=payload["comparison"],
                               candidates=observed["candidates"]))
-            turns[-1].update({k: observed.get(k) for k in ('lead', 'interaction', 'suggestions', 'active_filters', 'candidate_total', 'eligible_codes')})
+            turns[-1].update({k: observed.get(k) for k in ('lead', 'interaction', 'suggestions', 'active_filters', 'recommendation', 'debug', 'candidate_total', 'eligible_codes')})
             turns[-1]['product_snapshots'] = payload['products']
+            turns[-1]['response'] = payload
     return dict(status="passed" if all(t["passed"] for t in turns) else "failed", turns=turns)
 
 
@@ -491,7 +501,8 @@ def manifest(cases_path=CASES):
 def command_selfcheck(cases, evidence_path=None):
     bad = []
     evidence = []
-    selected = {'EC05','EC10','EC15','EC20','EC25','EC30','EC35','EC40','h_compare_three','h4_hello','t6_manual_04'}
+    selected = {'EC05','EC10','EC15','EC20','EC25','EC30','EC35','EC40','h_compare_three','h4_hello','t6_manual_04',
+                'T8_recommendation','T8_fast_compare','T8_mining'}
     for scenario in cases["scenarios"]:
         result = run_scenario(scenario, lambda s, i: IdealModel(s['turns'][i].get('scripted_decision') or IDEAL[s["id"]][i]))
         print(scenario["id"], result["status"], *[t["failures"] for t in result["turns"] if t["failures"]])

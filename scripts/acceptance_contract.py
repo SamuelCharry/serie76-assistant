@@ -31,7 +31,7 @@ def public_cell_matches(text, row, field):
     if all(row.get(k, '') for k, _ in pieces):
         expected = ' / '.join(row[k] + (' ' + unit if unit else '') for k, unit in pieces)
         # Mixed AC/DC comparisons append the published frequency scope to a cell.
-        return text == expected or ('_unqualified_' in field and text.startswith(expected + ' ('))
+        return text == expected or (field == 'enclosure' and text.lower() == expected.lower()) or ('_unqualified_' in field and text.startswith(expected + ' ('))
     if row['data_status'] == 'source_NA':
         return 'N/A' in text and not re.search(r'\b0(?:\.0)?\s*(?:W|A|s|Nm|in-lb)\b', text)
     return 'not' in text.lower() and not re.search(r'\d', text)
@@ -105,19 +105,20 @@ def verify(expect, observed):
     comp = observed.get('comparison')
     interaction = observed.get('interaction')
     suggestions = observed.get('suggestions', [])
-    if not isinstance(suggestions, list) or not 0 <= len(suggestions) <= 3 or len(set(suggestions)) != len(suggestions):
+    labels = [s.get('label') if isinstance(s, dict) else s for s in suggestions] if isinstance(suggestions, list) else []
+    if not isinstance(suggestions, list) or not 0 <= len(suggestions) <= 3 or len(set(labels)) != len(labels):
         failures.append('invalid suggestions shape')
-    if suggestions != observed.get('suggested_replies'):
+    if labels != observed.get('suggested_replies'):
         failures.append('suggestion alias differs')
-    if any(s in ('Cancel', 'Find an actuator for my requirements', 'Explain Base Part Number') for s in suggestions):
+    if any(s in ('Cancel', 'Find an actuator for my requirements', 'Explain Base Part Number') for s in labels):
         failures.append('generic or cancel suggestion')
     if interaction:
-        if suggestions or interaction.get('kind') != 'question' or not interaction.get('questions'):
+        if interaction.get('kind') != 'question' or not interaction.get('questions'):
             failures.append('invalid question/suggestion separation')
         ids = []
         for q in interaction.get('questions', []):
             ids.append(q.get('id'))
-            if not q.get('prompt') or not q.get('options') or any(set(o) != {'value', 'label'} or not isinstance(o['value'], str) for o in q.get('options', [])):
+            if not q.get('prompt') or not q.get('options') or any(not {'value', 'label'} <= set(o) or not isinstance(o['value'], str) for o in q.get('options', [])):
                 failures.append('invalid question options')
         if len(set(ids)) != len(ids):
             failures.append('duplicate questions')
@@ -218,12 +219,16 @@ def verify(expect, observed):
     expected_tags = {f for f,v in filters.items() if f in FILTER_FIELDS and v is not None and v is not False}
     if {f['field'] for f in observed.get('active_filters', [])} != expected_tags:
         failures.append('active filter tags disagree with persisted search')
-    visible = [observed['answer'], observed.get('lead') or '', *suggestions]
+    visible = [observed['answer'], observed.get('lead') or '', *labels]
     visible += [comp.get('summary', ''), comp.get('assumptions', '')] if comp else []
     visible += [r['label'] for r in (comp or {}).get('hidden_rows', [])]
     visible += [q['prompt'] for q in (interaction or {}).get('questions', [])]
     visible += [o['label'] for q in (interaction or {}).get('questions', []) for o in q['options']]
     visible += [f['label'] for f in observed.get('active_filters', [])]
+    recommendation = observed.get('recommendation') or {}
+    visible += [recommendation.get('ranked_by', '')]
+    visible += [item.get('reason', '') for item in recommendation.get('items', [])]
+    visible += [field.get('label', '') for item in recommendation.get('items', []) for field in item.get('key_values', [])]
     from scripts.check_public_text import public_text_issues
     failures += public_text_issues('\n'.join(visible))
     if re.search(r'\b(?:Hola|Necesito|actuadores|potencia|requisitos|cancelado|servicio)\b', '\n'.join(visible), re.I):

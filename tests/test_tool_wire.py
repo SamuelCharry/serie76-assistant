@@ -25,7 +25,7 @@ class CompactToolExecutionTests(Base):
         self.assertEqual(trace["parameters"]["min_torque_in_lb"], {"op": "gt", "value": "1000"})
         self.assertEqual(trace["raw_parameters"]["bounds"][0]["op"], "gt")
         self.assertIn("> 1000 in-lb", result.answer)
-        self.assertEqual(len(result.suggested_replies), 1)
+        self.assertEqual(result.suggested_replies[0], 'Compare top 2')
 
     def test_plain_focus_wire_matches_legacy_canonical_focus(self):
         call = ("get_actuator", {"part_numbers": ["761A00-11300000/A"],
@@ -72,7 +72,7 @@ class CompactToolExecutionTests(Base):
                 model.model_validate(tool_wire.canonical_arguments("search_actuators", args))
         result = self.turn("I need to control how much a valve opens, it should stop at any point, 110 V. Explain FLA and LRA.",
                            ("search_actuators", {"service": "modulating", "supply_voltage_v": 110, **raw}))
-        self.assertIn("Interpretation: 'stop at any point' read as modulating service", result.answer)
+        self.assertIn("Interpretation: 'stop at any point' read as Modulating service", result.answer)
         self.assertEqual({term["term_key"] for term in result.terms}, {"fla", "lra"})
 
     def test_wire_and_canonical_inputs_share_one_tool_decision_and_policy_path(self):

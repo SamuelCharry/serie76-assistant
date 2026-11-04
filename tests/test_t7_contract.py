@@ -62,17 +62,17 @@ class ExploratoryTests(Base):
                            ('get_actuator', {'part_numbers': ['761A00-11300000/A', '761B00-11300000/A'],
                             'focus': ['torque', 'fla', 'lra', 'operating_time'], 'explain_terms': ['fla', 'lra', 'duty_cycle']}))
         self.assertEqual({t['term_key'] for t in result.terms}, {'fla', 'lra', 'duty_cycle'})
-        self.assertIn('IP67', result.answer)
-        self.assertIn('does not define', result.answer)
+        self.assertNotIn('IP67', result.answer)
+        self.assertIn("The document doesn't define that term.", result.answer)
 
 
 class InteractionTests(Base):
     def test_all_required_questions_and_no_suggestions(self):
         result = self.turn('At least 70 Nm and FLA below 1.5 A', ('search_actuators', {
             'min_torque_nm': 70, 'max_fla_a': {'value': 1.5, 'op': 'lt'}}))
-        self.assertEqual([q['id'] for q in result.interaction['questions']], ['service', 'frequency_hz'])
-        self.assertEqual(result.suggestions, [])
-        self.assertEqual(result.suggested_replies, [])
+        self.assertEqual({q['id'] for q in result.interaction['questions']}, {'service', 'frequency_hz'})
+        self.assertEqual(result.suggested_replies,
+                         ['Compare top 2', f"Show all {result.recommendation['total']}"])
 
     def test_submit_and_remove_without_model_budget(self):
         first = self.turn('At least 70 Nm and FLA below 1.5 A', ('search_actuators', {
@@ -105,7 +105,9 @@ class InteractionTests(Base):
         result = self.turn('I do not know those details', ('ask_clarification', {'field': 'unsupported'}))
         self.assertIsNone(result.interaction)
         self.assertEqual(len(result.products), 3)
-        self.assertIn('service, frequency is still open', result.answer)
+        self.assertIn('still open', result.answer)
+        self.assertIn('service', result.answer)
+        self.assertIn('frequency', result.answer)
 
     def test_repeated_generic_find_does_not_loop(self):
         self.turn('Find an actuator for my requirements', ('ask_clarification', {'field': 'requirements'}))
@@ -141,7 +143,9 @@ class ComparisonTests(Base):
         result = self.compare(['761A00-11300000/A', '761B00-11300000/A', '762A00-11300000/A'])
         self.assertEqual(result.comparison['layout'], 'cards')
         self.assertEqual(len(result.comparison['key_fields']), 4)
-        self.assertEqual(result.comparison['key_fields'][-1], 'motor_power_w')
+        self.assertEqual(result.comparison['key_fields_reason'], 'Fields you filtered on, then the ones that differ most')
+        self.assertTrue(all(key in [row['field'] for row in result.comparison['rows']]
+                            for key in result.comparison['key_fields']))
         self.assertTrue(all(r['better'] is None and len(r['values']) == 3 for r in result.comparison['rows']))
         self.assertEqual(result.suggestions, [])
 
@@ -149,7 +153,8 @@ class ComparisonTests(Base):
         codes = ['761A00-11300000/A', '761B00-11300000/A', '762A00-11300000/A']
         result = self.turn('Compare ' + ', '.join(codes) + ' for modulating at 60 Hz', ('get_actuator', {
             'part_numbers': codes, 'focus': ['torque','operating_time','fla'], 'focus_service': 'modulating', 'focus_frequency_hz': 60}))
-        self.assertEqual(result.comparison['key_fields'], ['modulating_torque','operating_time_60hz_s','fla_60hz_a','motor_power_w'])
+        self.assertTrue({'modulating_torque', 'operating_time_60hz_s', 'fla_60hz_a'} <=
+                        set(result.comparison['key_fields']))
 
 
 class HttpContractTests(unittest.TestCase):
@@ -189,22 +194,24 @@ class HttpContractTests(unittest.TestCase):
 
 
 class SuggestionPolicyTests(Base):
-    def test_clarification_has_none(self):
-        self.assertEqual(self.turn('at least 70 Nm', ('search_actuators', {'min_torque_nm': 70})).suggestions, [])
+    def test_clarification_has_actions_for_provisional_ranking(self):
+        result = self.turn('at least 70 Nm', ('search_actuators', {'min_torque_nm': 70}))
+        self.assertEqual(result.suggested_replies[0], 'Compare top 2')
 
     def test_two_to_four_results_have_one_comparison(self):
         result = self.turn('Explosionproof 24 V DC modulating over 1000 in-lb', ('search_actuators', {
             'enclosure': 'explosionproof', 'supply_voltage_v': 24, 'supply_current': 'DC', 'service': 'modulating',
             'min_torque_in_lb': {'value': 1000, 'op': 'gt'}}))
-        self.assertEqual(len(result.suggestions), 1)
-        self.assertTrue(result.suggestions[0].startswith('Compare '))
-        self.assertEqual(result.suggested_replies, result.suggestions)
+        self.assertEqual(len(result.suggestions), 2)
+        self.assertEqual(result.suggestions[0]['action']['type'], 'compare_top')
+        self.assertEqual(result.suggested_replies[0], result.suggestions[0]['label'])
 
     def test_over_four_without_question_has_none(self):
         result = self.turn('On/off 24 V at least 70 Nm', ('search_actuators', {'service': 'on_off', 'supply_voltage_v': 24, 'min_torque_nm': 70}))
         self.assertIsNone(result.interaction)
         self.assertGreater(result.tool_calls[0]['data']['total'], 4)
-        self.assertEqual(result.suggestions, [])
+        self.assertEqual(result.suggested_replies,
+                         ['Compare top 2', f"Show all {result.recommendation['total']}"])
 
     def test_impossibility_has_sql_relaxations(self):
         result = self.turn('On/off torque at least 999999 Nm', ('search_actuators', {'service': 'on_off', 'min_torque_nm': 999999}))

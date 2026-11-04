@@ -136,7 +136,8 @@ class ConversationIntegrationTests(unittest.TestCase):
         self.assertFalse(empty.products)
         self.assertEqual(empty.context["part_numbers"], [])
         found = self.run_tool("search_actuators", {"service": "on_off", "min_torque_nm": 70, "supply_voltage_v": 24})
-        self.assertEqual(found.products, [])  # five matches require narrowing, not listing
+        self.assertEqual(len(found.products), 3)
+        self.assertEqual(found.recommendation['total'], 5)
         self.assertEqual(found.tool_calls[0]["data"]["total"], 5)
         self.assertIsNone(found.interaction)  # T7: no invented options when SQL has no splitting facet.
         self.assertEqual(found.tool_calls[0]["parameters"]["min_torque_nm"], "70")

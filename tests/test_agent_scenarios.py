@@ -83,6 +83,7 @@ class Base(unittest.TestCase):
         self.assertEqual(public_text_issues(result.answer, result.comparison, result.suggested_replies), [])
         assert_public_text_clean({"answer": result.answer, "lead": result.lead,
                                   "interaction": result.interaction, "comparison": result.comparison,
+                                  "recommendation": result.recommendation,
                                   "suggested_replies": result.suggested_replies,
                                   "suggestions": result.suggestions})
         self.history += [dict(role="user", content=query), dict(role="assistant", content=result.answer)]
@@ -236,8 +237,9 @@ class SearchTests(Base):
         result = self.turn("On/Off, 110 V, at least 70 Nm",
                            ("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "min_torque_nm": 70}))
         self.assertIn("21 actuators meet: On/Off service, 110 V, torque ≥ 70 Nm", result.answer)
-        self.assertEqual(result.products, [])
-        self.assertEqual(result.answer.count("?"), 1)
+        self.assertEqual(len(result.products), 3)
+        self.assertGreaterEqual(result.answer.count("?"), 1)
+        self.assertEqual(result.recommendation['total'], 21)
         self.assertEqual(result.clarification["field"], "enclosure")
         self.assertNotIn("Modulating torque", result.answer)  # only the requested service is summarised
 
@@ -301,11 +303,11 @@ class SearchTests(Base):
         self.turn("On/Off, 110 V, at least 70 Nm", ("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "min_torque_nm": 70}))
         more = self.turn("more", ("search_actuators", {"more": True}))
         self.assertEqual(more.context["filters"]["offset"], 5)
-        self.assertEqual(more.products, [])  # broad unsorted sets now ask one SQL-derived split
+        self.assertEqual(len(more.products), 3)
         changed = self.turn("what about modulating?", ("search_actuators", {"refine": True, "service": "modulating"}))
         self.assertIn("19 actuators meet: Modulating service, 110 V, torque ≥ 70 Nm", changed.answer)
         self.assertEqual(changed.context["filters"]["offset"], 0)
-        self.assertEqual(changed.products, [])
+        self.assertEqual(len(changed.products), 3)
         trace = changed.tool_calls[0]
         self.assertEqual(trace["raw_parameters"], {"refine": True, "service": "modulating"})
         self.assertEqual(trace["parameters"]["min_torque_nm"], "70")
@@ -321,19 +323,19 @@ class SearchTests(Base):
 
     def test_poor_description_without_supply_asks_to_narrow(self):
         result = self.turn("an on/off actuator", ("search_actuators", {"service": "on_off"}))
-        self.assertEqual(result.products, [])
-        self.assertEqual(result.answer.count("?"), 1)
-        self.assertEqual(len(result.suggested_replies), 0)
+        self.assertEqual(len(result.products), 3)
+        self.assertGreaterEqual(len(result.interaction['questions']), 2)
+        self.assertEqual(result.suggested_replies, ['Compare top 2', 'Show all 59'])
 
     def test_search_without_any_requirement_never_lists_the_catalogue(self):
         result = self.turn("Tell me a joke about valves", ("search_actuators", {"limit": 1}))
-        self.assertIn(result.clarification["field"], ("requirements", "service"))
+        self.assertIn(result.clarification["field"], ("requirements", "service", "supply_voltage_v"))
         self.assertFalse(result.products)
         self.assertIn("empty_search_clarified", result.tool_calls[0]["overrides"])
 
     def test_vague_application_clarifies(self):
         result = self.turn("something for my plant", ("ask_clarification", {"field": "requirements"}))
-        self.assertIn(result.clarification["field"], ("requirements", "service"))
+        self.assertIn(result.clarification["field"], ("requirements", "service", "supply_voltage_v"))
         self.assertFalse(result.products)
 
 

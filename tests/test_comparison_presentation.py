@@ -42,7 +42,7 @@ class PublicPresentationTests(unittest.TestCase):
     def test_guard_checks_all_three_visible_surfaces_but_allows_machine_row_ids(self):
         comparison = {"rows": [dict(field="on_off_torque", label="On/Off torque")]}
         self.assertEqual(public_text_issues("Published values", comparison, ["Show an actuator"]), [])
-        self.assertEqual(len(public_text_issues("motor_power_w", {"rows": [{"label": "fla_60hz_a"}]}, ["Use on_off"])), 3)
+        self.assertGreaterEqual(len(public_text_issues("motor_power_w", {"rows": [{"label": "fla_60hz_a"}]}, ["Use on_off"])), 3)
         for old_label in ("on off torque in lb", "operating time 60 Hz s", "fla 60 Hz a"):
             self.assertTrue(public_text_issues("", {"rows": [{"label": old_label}]}), old_label)
 

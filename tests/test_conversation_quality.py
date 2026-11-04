@@ -41,17 +41,18 @@ class ManualQualityTests(Base):
         self.assertEqual(len(result.products), 3)
         self.assertIn("> 1000 in-lb", result.answer)
         self.assertTrue(all(p["measurements"]["modulating_torque_in_lb"] > 1000 for p in result.products))
-        self.assert_replies(result, 1)
+        self.assert_replies(result, 2)
 
     def test_03_preference_ranking(self):
         result = self.turn(QUERIES[2], ("search_actuators", {
             "enclosure": "weatherproof", "sort_by": ["fastest", "lowest_power"]}))
-        self.assertEqual(len(result.products), 3)
-        self.assertIn("Operating time", result.answer)
+        self.assertEqual(result.products, [])
+        self.assertEqual(result.interaction['questions'][0]['id'], 'enclosure')
+        self.assertIn("operating time", result.answer.lower())
         self.assertIn("Motor power", result.answer)
         self.assertNotIn("torque:", result.answer)
         self.assertEqual(result.answer.count("?"), 1)
-        self.assert_replies(result)
+        self.assert_replies(result, 2)
 
     def impossible(self, query, cancel=False):
         result = self.turn(query, ("search_actuators", {
