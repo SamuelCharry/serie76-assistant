@@ -60,6 +60,8 @@ def colloquial_requirements(query):
         result['service'] = 'modulating'
     if re.search(r'\b(outside|exteriores?|intemperie)\b|\boutdoors\b.*\bnot hazardous\b', text):
         result['enclosure'] = 'weatherproof'
+    if re.search(r'\bnot (?:a )?classified area\b', text):
+        result['enclosure'] = 'weatherproof'
     if re.search(r'\b(?:[13])[-\s]*(?:phase|phases|fases)\b', text):
         result['phase_count'] = int(re.search(r'\b([13])[-\s]*(?:phase|phases|fases)\b', text).group(1))
     if re.search(r'\b(?:classified as hazardous|hazardous area|area is hazardous)\b', text):

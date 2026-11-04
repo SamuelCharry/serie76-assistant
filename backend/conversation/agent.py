@@ -837,7 +837,7 @@ class Turn:
             facets['supply_voltage_v'] = [r for r in facets['supply_voltage_v'] if r['value'] in choices]
             if facets['supply_voltage_v']:
                 return self.question_result(['supply_voltage_v'], facets)
-        scenario = re.search(r'\b(hazardous|flammable|gas(?:es)?|mining|mine shaft|methane|coal|refinery|petrochemical|explosive|outdoor|rain|exteriores|intemperie)\b', self.query, re.I)
+        scenario = re.search(r'\b(hazardous|flammable|gas(?:es)?|mining|mine shaft|methane|coal|refinery|petrochemical|explosive|outdoor|rain|exteriores|intemperie|combustible dust|grain silo|flour|coal dust|offshore platform)\b', self.query, re.I)
         if not scenario and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS) and not merged.get('sort_by'):
             # Never "recommend" the whole catalogue: a search needs at least one stated requirement.
             self.trace.setdefault("overrides", []).append("empty_search_clarified")
@@ -884,7 +884,7 @@ class Turn:
             by = sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque')
             all_rows = search_actuators(self.connection, SearchFilters.model_validate(dict(merged, limit=100, offset=0)),
                                         allow_ambiguous=True)['products']
-            preview_enclosure = 'weatherproof' if re.search(r'\b(outdoor|rain|exteriores|intemperie)\b', self.query, re.I) else 'explosionproof'
+            preview_enclosure = 'weatherproof' if re.search(r'\b(outdoor|rain|exteriores|intemperie|offshore platform)\b', self.query, re.I) else 'explosionproof'
             self.context['proposed_enclosure'] = preview_enclosure
             all_rows = [row for row in all_rows if row['enclosure'] == preview_enclosure]
             rec = ranking.recommendation(all_rows, merged, by)
@@ -974,6 +974,10 @@ class Turn:
                     voltage = merged.get('supply_voltage_v')
                     if voltage is not None and len(values) == 1:
                         alternatives_text.append(f'{voltage} V models are only {values[0]} under the other requirements in this catalogue.')
+                    elif merged.get('phase_count') == 3 and len(values) == 1:
+                        alternatives_text.append(f'All 3-phase models are {values[0]} in this catalogue.')
+                    elif len(values) == 1:
+                        alternatives_text.append(f'Only {values[0]} models meet the other requirements.')
                     choices.append(f'{values[0]} at {voltage} V' if voltage is not None else values[0])
                 if 'supply_voltage_v' in categorical:
                     values = sorted({row['supply_voltage_v'] for row in categorical['supply_voltage_v']})
@@ -984,12 +988,13 @@ class Turn:
                     choices.append(f'{str(enclosure).capitalize()} at {voltages}' if enclosure else voltages)
                 answer = 'No actuator meets ' + policy.describe(merged) + '. ' + ' '.join(alternatives_text)
                 self.context['reply_options'] = choices
-                for rows in categorical.values():
+                for relaxed, rows in categorical.items():
                     for product in rows:
                         code = product['base_part_number']
                         if code not in {item['part_number'] for item in nearest}:
+                            dropped = 'Explosionproof' if relaxed == 'enclosure' and merged.get('enclosure') == 'explosionproof' else policy.LABELS.get(relaxed, relaxed)
                             nearest.append(ranking.item(product, {k: v for k, v in merged.items() if k not in categorical},
-                                                        'Nearest alternative under a relaxed requirement'))
+                                                        f'If you can drop {dropped}: {str(product[relaxed]).capitalize()} alternative'))
                         if len(nearest) >= 2:
                             break
                     if len(nearest) >= 2:
@@ -1008,6 +1013,7 @@ class Turn:
                     break
             rec = dict(ranked_by=ranking.ranked_by(merged, by), total=0, shown=len(nearest), items=nearest)
             self.context['last_ranked_list'] = []
+            self.context['zero_result_options'] = self.context.get('reply_options', [])
             if notes:
                 answer += '\n' + '\n'.join(dict.fromkeys(notes))
             return AgentResult(answer, context=self.context, recommendation=rec,
@@ -1268,6 +1274,16 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             return finish(turn, turn.lookup(dict(part_numbers=codes, focus=['motor_power'], explain_terms=[])))
     import re
     bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
+    if (action is None and not answers and not remove_filters and
+            bare_query in ('so what can i do', 'what can i do', 'any alternatives') and
+            turn.context.get('zero_result_options')):
+        options = turn.context['zero_result_options']
+        turn.trace = dict(name='zero_result_options', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, AgentResult('To keep the stated requirements, there is no exact model. '
+                                        + 'Available relaxations: ' + '; '.join(options) + '.',
+                                        context=turn.context))
     compared_codes = turn.context.get('last_comparison_models') or []
     if (action is None and not answers and not remove_filters and
             re.search(r'\b(which|highest|lowest|faster|quicker|stronger|more|less)\b', bare_query) and
