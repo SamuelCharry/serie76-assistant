@@ -795,7 +795,7 @@ class Turn:
         self.context["focus"] = focus
         question = None
         if result.get('facets') and result['total'] > 4 and not unscoped_superlative:
-            fields = list(result['facets'])
+            fields = [field for field in result['facets'] if merged.get(field) is None]
             from backend.catalog.repository import question_facets
             question = self.question_result(fields, question_facets(self.connection, filters, fields))
             if question.interaction:
@@ -809,6 +809,9 @@ class Turn:
                 narrowing = question.interaction['questions'][0]['id']
             else:
                 narrowing = None
+                answer = f"{result['total']} actuators meet: {policy.describe(merged)}. Here are the leading published models."
+                if notes:
+                    answer += '\n' + '\n'.join(notes)
         elif narrowing:
             if narrowing == 'requirements':
                 narrowing = None

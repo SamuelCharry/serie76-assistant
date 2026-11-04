@@ -1,6 +1,6 @@
 """Stable ranking of hydrated catalogue rows; missing measurements always sort last."""
 from decimal import Decimal
-from backend.catalog.models import bound_value, bound_operator
+from backend.catalog.models import bound_value, bound_operator, bounds
 from .rendering import _num
 
 
@@ -31,10 +31,15 @@ def measurement(product, stem, filters):
     if stem == 'torque':
         threshold = filters.get('min_torque_nm') if unit == 'nm' else filters.get('min_torque_in_lb')
         if threshold is not None:
-            minimum = Decimal(str(bound_value(threshold)))
-            strict = bound_operator(threshold, 'gte') == 'gt'
-            found = [value for value in found if value > minimum or (not strict and value == minimum)]
+            found = [value for value in found if _inside_bounds(value, threshold)]
     return min(found) if found else None
+
+
+def _inside_bounds(value, constraint):
+    checks = {'gt': lambda x, y: x > y, 'gte': lambda x, y: x >= y,
+              'lt': lambda x, y: x < y, 'lte': lambda x, y: x <= y}
+    return all(checks[bound_operator(item, 'gte')](value, Decimal(str(bound_value(item))))
+               for item in bounds(constraint))
 
 
 def qualifying_torques(product, filters):
@@ -45,13 +50,11 @@ def qualifying_torques(product, filters):
     keys = ([f'{service}_torque_{unit}', f'shared_torque_{unit}'] if service else
             [f'on_off_torque_{unit}', f'modulating_torque_{unit}', f'shared_torque_{unit}'])
     threshold = filters.get('min_torque_nm') if unit == 'nm' else filters.get('min_torque_in_lb')
-    minimum = Decimal(str(bound_value(threshold))) if threshold is not None else None
-    strict = bound_operator(threshold, 'gte') == 'gt' if threshold is not None else False
     labels = {'on_off': 'On/Off torque', 'modulating': 'Modulating torque', 'shared': 'Shared torque'}
     result = []
     for key in keys:
         value = values.get(key)
-        if value is None or minimum is not None and (value < minimum or strict and value == minimum):
+        if value is None or threshold is not None and not _inside_bounds(value, threshold):
             continue
         result.append((labels[key.split('_torque_')[0]], value))
     return result
@@ -68,6 +71,20 @@ def operating_time_used(product, filters):
     key, value = min(found, key=lambda pair: pair[1])
     label = ('Operating time at ' + key.split('_')[2].removesuffix('hz') + ' Hz'
              if 'unqualified' not in key else 'Operating time')
+    return label, value
+
+
+def fla_used(product, filters):
+    values = product['measurements']
+    hz = filters.get('frequency_hz')
+    keys = ([f'fla_{hz}hz_a'] if hz else ['fla_50hz_a', 'fla_60hz_a', 'fla_unqualified_a'])
+    found = [(key, values[key]) for key in keys if values.get(key) is not None]
+    if not found:
+        return None
+    key, value = min(found, key=lambda pair: pair[1])
+    label = ('FLA ' + key.split('_')[1].removesuffix('hz') + ' Hz' if 'unqualified' not in key
+             else 'FLA (DC, no mains frequency)' if any(f.get('frequency_scope') == 'not_applicable'
+                  for f in product.get('frequencies', [])) else 'FLA (frequency unspecified)')
     return label, value
 
 
@@ -115,12 +132,12 @@ def ranked_by(filters, by='closest_torque'):
 
 def item(product, filters, reason=None):
     torques = qualifying_torques(product, filters)
-    fla = measurement(product, 'fla', filters)
+    fla = fla_used(product, filters)
     parts = []
     for label, torque in torques:
         parts.append(f'{label} {_num(torque)} {torque_unit(filters)}')
     if fla is not None:
-        parts.append(f'FLA {_num(fla)} A')
+        parts.append(f'{fla[0]} {_num(fla[1])} A')
     key_values = []
     for label, torque in torques:
         key_values.append(dict(label=label, value=f'{_num(torque)} {torque_unit(filters)}'))
@@ -131,7 +148,7 @@ def item(product, filters, reason=None):
             parts.insert(0, f'{label} {_num(value)} s')
             key_values.insert(0, dict(label=label, value=f'{_num(value)} s'))
     if fla is not None:
-        key_values.append(dict(label='FLA', value=f'{_num(fla)} A'))
+        key_values.append(dict(label=fla[0], value=f'{_num(fla[1])} A'))
     return dict(part_number=product['base_part_number'], reason=reason or '; '.join(parts) or 'Published catalogue model',
                 key_values=key_values)
 

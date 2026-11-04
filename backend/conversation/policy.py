@@ -46,12 +46,15 @@ def colloquial_requirements(query):
     """Closed, explicit phrase map; returns only constraints stated in this turn."""
     text = query.lower()
     result, notes = {}, []
-    if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar|on/of)\b', text):
+    if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar|on/of|onoff|on off|on-off)\b', text):
         result['service'] = 'on_off'
     if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias)\b', text):
         result['service'] = 'modulating'
     if re.search(r'\b(battery|low voltage|bater[ií]a|bajo voltaje)\b', text):
         result['supply_voltage_v'] = 24
+    if re.search(r'\b(solar|battery|bater[ií]a)\b', text):
+        result['supply_current'] = 'DC'
+        notes.append('Solar or battery supply is DC; compatible AC/DC models remain eligible.')
     match = re.search(r'\b(\d+(?:[.,]\d+)?)\s*knm\b', text)
     if match:
         number = Decimal(match.group(1).replace(',', '.'))
