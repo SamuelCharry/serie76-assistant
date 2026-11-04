@@ -134,6 +134,8 @@ def main():
     v2_expect('C-TOPICJUMP-01', 2, not_contains=['Enclosure: Weatherproof vs Weatherproof vs Weatherproof'])
     v2_expect('C-CORRECTION-01', 1, contains=['763X30-11320000/A'])
     v2_expect('C-CONFIRM-01', 1, contains=['Weatherproof'])
+    v2_expect('C-SHORTREF-02', 1, contains=['762A00-11300000/A'], debug_llm_called=False)
+    v2_expect('C-SHORTREF-02', 2, contains=['Motor power', '762A00-11300000/A'], debug_llm_called=False)
     v2_by_id['heldout_v2_Q4-03']['turns'][1]['scripted_decision'] = ['get_actuator',
         {'reference_kind': 'focused', 'equivalent_voltage_v': 220}]
     v2_by_id['heldout_v2_Q2-02']['turns'][0]['scripted_decision'] = ['search_actuators', {}]

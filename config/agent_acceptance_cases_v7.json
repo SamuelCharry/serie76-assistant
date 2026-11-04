@@ -9174,7 +9174,11 @@
               "not published in this table layout",
               "0 identical fields hidden",
               "I cannot place orders"
-            ]
+            ],
+            "contains": [
+              "762A00-11300000/A"
+            ],
+            "debug_llm_called": false
           }
         },
         {
@@ -9193,7 +9197,12 @@
               "not published in this table layout",
               "0 identical fields hidden",
               "I cannot place orders"
-            ]
+            ],
+            "contains": [
+              "Motor power",
+              "762A00-11300000/A"
+            ],
+            "debug_llm_called": false
           }
         }
       ]

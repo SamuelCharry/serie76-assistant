@@ -1151,6 +1151,22 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             return finish(turn, turn.lookup(dict(part_numbers=codes, focus=['motor_power'], explain_terms=[])))
     import re
     bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
+    compared_codes = turn.context.get('last_comparison_models') or []
+    if action is None and not answers and not remove_filters and len(compared_codes) >= 2 and bare_query in ('the faster one', 'the stronger one'):
+        metric = 'operating_time' if 'faster' in bare_query else 'torque'
+        turn.trace = dict(name='get_actuator', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, turn.lookup(dict(part_numbers=[], reference_kind='compared_winner',
+                                           reference_metric=metric,
+                                           reference_direction='lower' if metric == 'operating_time' else 'higher',
+                                           focus=[metric], explain_terms=[])))
+    if action is None and not answers and not remove_filters and turn.context.get('focused_model') and bare_query in ('its power', 'its motor power'):
+        code = turn.context['focused_model']
+        turn.trace = dict(name='get_actuator', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, turn.lookup(dict(part_numbers=[code], focus=['motor_power'], explain_terms=[])))
     if action is None and not answers and not remove_filters and bare_query in ('thanks', 'thank you', 'gracias'):
         turn.trace = dict(name='courtesy', parameters={}, raw_parameters={}, validation=['ok'],
                           context_before=context_before,
@@ -1470,7 +1486,7 @@ def finish(turn, result):
             result.clarification = result.interaction = None
         else:
             result.answer = limitation + '\n' + result.answer
-    if policy.purchase_request(turn.query) and not result.answer.startswith('My pick:'):
+    if policy.purchase_request(turn.query) and re.search(r'\b(buy|order|purchase)\b', turn.query, re.I) and not result.answer.startswith('My pick:'):
         result.answer = 'The catalogue cannot process orders or confirm delivery. I can provide its published specifications.\n' + result.answer
         if result.products or result.comparison:
             result.lead = 'The catalogue cannot process orders or confirm delivery; the cards show published specifications.'
