@@ -6,7 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.serie76.assistant.data.*
 import java.util.UUID
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -36,6 +39,7 @@ data class AppState(
     val questionError: String? = null,
     val deleteCandidate: Session? = null,
     val pendingDelete: Session? = null,
+    val committingDeleteIds: Set<String> = emptySet(),
     val deleteNotice: String? = null,
 ) {
     val activeFilters: List<ActiveFilter> get() = messages.lastOrNull { it.role == "assistant" }?.activeFilters.orEmpty()
@@ -45,7 +49,8 @@ data class AppState(
 private fun pendingQuestion(message: Message?): QuestionStepper? = message?.takeIf { it.role == "assistant" }
     ?.interaction?.takeIf { it.kind == "question" && it.questions.isNotEmpty() }?.let { QuestionStepper(it.questions) }
 
-class AppViewModel(private val repository: ConversationRepository, private val saved: SavedStateHandle) : ViewModel() {
+class AppViewModel(private val repository: ConversationRepository, private val saved: SavedStateHandle,
+                   private val deleteCommitScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)) : ViewModel() {
     private val mutable = MutableStateFlow(AppState(
         screen = saved["screen"] ?: "chat", sessionId = saved["sessionId"], draft = saved["draft"] ?: "",
         // A process may have died after the server committed a request. Reconcile before resend.
@@ -72,7 +77,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
                 val offset = if (more) state.value.sessions.size else 0
                 val page = repository.sessions(offset)
                 mutable.update { it.copy(sessions = (if (more) it.sessions + page.sessions else page.sessions).distinctBy(Session::id)
-                    .filterNot { session -> session.id == it.pendingDelete?.id },
+                    .filterNot { session -> session.id == it.pendingDelete?.id || session.id in it.committingDeleteIds },
                     sessionsHaveMore = page.sessions.size == page.limit, sessionsLoading = false) }
             } catch (error: CancellationException) { throw error }
             catch (error: Exception) { mutable.update { it.copy(sessionsLoading = false, sessionsError = failureMessage(error)) } }
@@ -88,7 +93,8 @@ class AppViewModel(private val repository: ConversationRepository, private val s
         saved["screen"] = "chat"
         saved["inFlight"] = false
         mutable.update { AppState(screen = "chat", sessions = it.sessions, sessionsHaveMore = it.sessionsHaveMore,
-            pendingDelete = it.pendingDelete, deleteNotice = it.deleteNotice) }
+            pendingDelete = it.pendingDelete, committingDeleteIds = it.committingDeleteIds,
+            deleteNotice = it.deleteNotice) }
     }
 
     fun open(session: Session) {
@@ -153,18 +159,31 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     fun cancelDelete() { mutable.update { it.copy(deleteCandidate = null) } }
     fun confirmDelete() {
         val session = state.value.deleteCandidate ?: return
-        deleteJob?.cancel()
+        commitPendingDelete()
         mutable.update { it.copy(sessions = it.sessions.filterNot { item -> item.id == session.id },
             deleteCandidate = null, pendingDelete = session, deleteNotice = "Conversation deleted") }
         if (state.value.sessionId == session.id) newConversation()
         deleteJob = viewModelScope.launch {
             delay(5000)
+            commitPendingDelete()
+        }
+    }
+    private fun commitPendingDelete() {
+        val session = state.value.pendingDelete ?: return
+        deleteJob?.cancel()
+        deleteJob = null
+        mutable.update { it.copy(pendingDelete = null, committingDeleteIds = it.committingDeleteIds + session.id,
+            deleteNotice = null) }
+        // This scope outlives ViewModel.clear(), so a confirmed deletion is not lost with the screen.
+        deleteCommitScope.launch {
             try {
                 repository.deleteSession(session.id)
-                mutable.update { it.copy(pendingDelete = null, deleteNotice = null) }
+                mutable.update { it.copy(committingDeleteIds = it.committingDeleteIds - session.id) }
             } catch (error: CancellationException) { throw error }
-            catch (error: Exception) { mutable.update { it.copy(sessions = (it.sessions + session).distinctBy(Session::id),
-                pendingDelete = null, deleteNotice = failureMessage(error)) } }
+            catch (error: Exception) { mutable.update { it.copy(
+                sessions = (it.sessions + session).distinctBy(Session::id),
+                committingDeleteIds = it.committingDeleteIds - session.id,
+                deleteNotice = failureMessage(error), sessionsError = failureMessage(error)) } }
         }
     }
     fun undoDelete() {
@@ -173,6 +192,11 @@ class AppViewModel(private val repository: ConversationRepository, private val s
             pendingDelete = null, deleteNotice = null) }
     }
     fun clearDeleteNotice() { mutable.update { it.copy(deleteNotice = null) } }
+
+    override fun onCleared() {
+        commitPendingDelete()
+        super.onCleared()
+    }
 
     fun loadHistory(sessionId: String? = state.value.sessionId, older: Boolean = false) {
         val targetId = sessionId ?: return

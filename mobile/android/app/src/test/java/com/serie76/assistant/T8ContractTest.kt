@@ -1,6 +1,7 @@
 package com.serie76.assistant
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModelStore
 import com.serie76.assistant.data.*
 import com.serie76.assistant.ui.*
 import kotlinx.coroutines.Dispatchers
@@ -74,7 +75,7 @@ class T8ContractTest {
 
     @Test fun `delete waits five seconds and undo prevents HTTP DELETE`() = runTest(dispatcher) {
         val repo = FakeRepository()
-        val vm = AppViewModel(repo, SavedStateHandle())
+        val vm = AppViewModel(repo, SavedStateHandle(), this)
         runCurrent()
         vm.open(repo.session); runCurrent()
         vm.requestDelete(repo.session); vm.confirmDelete()
@@ -93,12 +94,62 @@ class T8ContractTest {
     @Test fun `delete API failure restores the conversation`() = runTest(dispatcher) {
         val repo = FakeRepository()
         repo.deleteFailure = true
-        val vm = AppViewModel(repo, SavedStateHandle())
+        val vm = AppViewModel(repo, SavedStateHandle(), this)
         runCurrent()
         vm.requestDelete(repo.session); vm.confirmDelete()
         advanceTimeBy(5000); runCurrent()
         assertEquals(repo.session, vm.state.value.sessions.single())
         assertNotNull(vm.state.value.deleteNotice)
+    }
+
+    @Test fun `second deletion commits first immediately and undo restores only second`() = runTest(dispatcher) {
+        val repo = FakeRepository()
+        val second = Session("second", "Second", "2026-11-04T00:01:00Z")
+        repo.allSessions += second
+        val vm = AppViewModel(repo, SavedStateHandle(), this)
+        runCurrent()
+        vm.requestDelete(repo.session); vm.confirmDelete()
+        vm.requestDelete(second); vm.confirmDelete()
+        runCurrent()
+        assertEquals(listOf("s"), repo.deleted)
+        assertEquals("second", vm.state.value.pendingDelete?.id)
+        vm.undoDelete()
+        advanceTimeBy(5000); runCurrent()
+        assertEquals(listOf("s"), repo.deleted)
+        assertEquals(listOf("second"), vm.state.value.sessions.map { it.id })
+        vm.refreshSessions(); runCurrent()
+        assertEquals(listOf("second"), vm.state.value.sessions.map { it.id })
+    }
+
+    @Test fun `clearing ViewModel commits a pending deletion`() = runTest(dispatcher) {
+        val repo = FakeRepository()
+        val vm = AppViewModel(repo, SavedStateHandle(), this)
+        val store = ViewModelStore()
+        store.put("chat", vm)
+        runCurrent()
+        vm.requestDelete(repo.session); vm.confirmDelete()
+        store.clear()
+        runCurrent()
+        assertEquals(listOf("s"), repo.deleted)
+        advanceTimeBy(5000); runCurrent()
+        assertEquals(listOf("s"), repo.deleted)
+    }
+
+    @Test fun `failed earlier deletion restores its row while second undo remains available`() = runTest(dispatcher) {
+        val repo = FakeRepository()
+        val second = Session("second", "Second", "2026-11-04T00:01:00Z")
+        repo.allSessions += second
+        repo.deleteFailure = true
+        val vm = AppViewModel(repo, SavedStateHandle(), this)
+        runCurrent()
+        vm.requestDelete(repo.session); vm.confirmDelete()
+        vm.requestDelete(second); vm.confirmDelete()
+        runCurrent()
+        assertEquals(listOf("s"), vm.state.value.sessions.map { it.id })
+        assertEquals("second", vm.state.value.pendingDelete?.id)
+        vm.undoDelete()
+        assertEquals(setOf("s", "second"), vm.state.value.sessions.map { it.id }.toSet())
+        assertTrue(repo.deleted.isEmpty())
     }
 
     @Test fun `empty combination returns to review with inline detail`() = runTest(dispatcher) {
@@ -117,10 +168,11 @@ class T8ContractTest {
 
     private class FakeRepository : ConversationRepository {
         val session = Session("s", "Saved", "2026-11-04T00:00:00Z")
+        val allSessions = mutableListOf(session)
         val deleted = mutableListOf<String>()
         var failure: Exception? = null
         var deleteFailure = false
-        override suspend fun sessions(offset: Int) = SessionsPage(listOf(session))
+        override suspend fun sessions(offset: Int) = SessionsPage(allSessions.filterNot { it.id in deleted })
         override suspend fun messages(sessionId: String, before: Long?) = MessagesPage("s", "Saved", listOf(
             Message("m", "assistant", "Choose", interaction = Interaction(questions = listOf(
                 Question("voltage", "Which voltage?", listOf(QuestionOption("110", "110 V", 21))))))))
