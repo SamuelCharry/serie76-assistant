@@ -522,7 +522,11 @@ def command_selfcheck(cases, evidence_path=None):
                 'heldout_v3_R1-02', 'heldout_v3_R1-03', 'heldout_v3_R5-01', 'heldout_v3_R5-05',
                 'heldout_v3_R6-01', 'heldout_v3_R6-02', 'heldout_v3_R6-03',
                 'heldout_v3_D-FRUSTRATION-01', 'heldout_v3_D-TOPICJUMP-01',
-                'heldout_v3_D-IMPOSSIBLE-01', 'heldout_v3_D-CONFIRM-01'}
+                'heldout_v3_D-IMPOSSIBLE-01', 'heldout_v3_D-CONFIRM-01',
+                'heldout_v4_S1-05', 'heldout_v4_S1-06', 'heldout_v4_S2-06',
+                'heldout_v4_S3-01', 'heldout_v4_S5-04', 'heldout_v4_S6-02',
+                'heldout_v4_E-SHORTREF-01', 'heldout_v4_E-IMPOSSIBLE-01',
+                'heldout_v4_E-CONFIRM-01'}
     for scenario in cases["scenarios"]:
         result = run_scenario(scenario, lambda s, i: IdealModel(s['turns'][i].get('scripted_decision') or IDEAL[s["id"]][i]))
         print(scenario["id"], result["status"], *[t["failures"] for t in result["turns"] if t["failures"]])
