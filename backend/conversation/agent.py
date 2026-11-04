@@ -218,7 +218,7 @@ def schemas(term_keys):
 
 DESCRIPTIONS = {
     "get_actuator": "Look up complete Base Part Numbers (up to four). For prior models use flat reference_kind=shown_position with 1-based reference_index, last_shown, focused, or compared_winner with reference_metric/direction/frequency. For a same-frame voltage or enclosure equivalent of the focused model, set equivalent_voltage_v or equivalent_enclosure. For the last ranked list use from_results_items='1,3' for comparisons, or list_results=true. Use focus=overview for full specs; include comma-separated explain_terms for combined facts/definitions.",
-    "search_actuators": "Find ALL stated requirements and numeric limits. New requests use refine=false; follow-ups use refine=true or more/remove. To choose one, explain the choice or show the next page, set intent=pick, explain_pick or next_page. Unknown data never passes a threshold.",
+    "search_actuators": "Find ALL stated requirements, including every numeric limit. New independent requests use refine=false; follow-ups use refine=true or more/remove. To choose one, explain the choice or show the next page, set intent=pick, explain_pick or next_page. Unknown data never passes a threshold.",
     "explain_terms": "Quote only glossary definitions; absent terms use ask_clarification term_not_in_summary, not a related definition.",
     "ask_clarification": "Ask for missing data/disambiguation, or mark unsupported requests such as jokes and terms absent from the glossary. If prior results exist and the user wants a pick, explanation or next page, set intent=pick, explain_pick or next_page rather than repeating a question.",
 }
