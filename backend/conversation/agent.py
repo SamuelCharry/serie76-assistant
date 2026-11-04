@@ -61,6 +61,7 @@ class AgentResult:
     suggestions: list = field(default_factory=list)
     active_filters: list = field(default_factory=list)
     recommendation: dict | None = None
+    debug: dict = field(default_factory=dict)
 
 
 class FocusSpec(BaseModel):
@@ -362,6 +363,7 @@ def _safe_errors(exc):
 
 class Turn:
     def __init__(self, connection, query, messages, context):
+        self.started = time.perf_counter()
         self.connection, self.query, self.messages = connection, query, messages
         from copy import deepcopy
         self.context = deepcopy(context or {})
@@ -790,6 +792,21 @@ def trace_arguments(name, raw, models):
     return {k: v for k, v in raw.items() if k in allowed}
 
 
+def fast_path_codes(query):
+    """Only closed, complete code-only lookup and comparison commands qualify."""
+    import re
+    code = r'[A-Z0-9]{6}-[A-Z0-9]{8}/A'
+    matches = re.findall(code, query)
+    if not 1 <= len(matches) <= 4 or any(not policy.CODE_RE.fullmatch(c) for c in matches):
+        return None
+    masked = re.sub(code, '#', query.strip())
+    if len(matches) >= 2 and re.fullmatch(r'(?i:compare)\s+#(?:\s*(?i:vs|and|,)\s*#){1,3}[.!?]?', masked):
+        return matches
+    if len(matches) == 1 and re.fullmatch(r'(?i:show|look up|lookup|get|specs for|specifications for)\s+#(?:\s+specs)?[.!?]?', masked):
+        return matches
+    return None
+
+
 def run_agent(connection, query, messages, context, *, model=None, answers=None, remove_filters=None, user_name=None, action=None):
     # One LangSmith trace per turn (parent run) when explicitly enabled; nothing is sent otherwise.
     with tracing_context(enabled=tracing_enabled()):
@@ -808,6 +825,14 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     turn = Turn(connection, query, messages, context)
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
+    if model is None and action is None and not answers and not remove_filters:
+        codes = fast_path_codes(query)
+        if codes and all(get_actuator(connection, code) for code in codes):
+            turn.trace = dict(name='get_actuator', raw_parameters={'part_numbers': codes},
+                              parameters={'part_numbers': codes}, validation=['ok'], context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            result = turn.lookup(dict(part_numbers=codes, focus=['overview'], explain_terms=[]))
+            return finish(turn, result)
     if action is not None:
         if answers or remove_filters or not isinstance(action, dict) or set(action) != {'type', 'args'}:
             raise InvalidInteraction('invalid_action', 'Choose one supported action.')
@@ -986,6 +1011,10 @@ def finish(turn, result):
     if not trace.get("data"):
         trace["data"] = dict(status="needs_clarification", clarification=result.clarification) if result.clarification else {}
     result.tool_calls = [trace]
+    model_meta = trace.get('model') or {}
+    result.debug = dict(latency_ms=round((time.perf_counter() - turn.started) * 1000),
+                        attempts=len(model_meta.get('attempts') or []),
+                        llm_called=bool(model_meta.get('decision_calls')))
     result.active_filters = interactions.active_filters(result.context)
     result.suggestions = quality.replies(result, turn.terms)
     if result.recommendation and result.recommendation['total'] > 0:

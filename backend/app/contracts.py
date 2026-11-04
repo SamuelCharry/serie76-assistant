@@ -33,3 +33,4 @@ class ConversationResponse(BaseModel):
     suggestions: list[str | dict] = Field(default_factory=list)
     active_filters: list[dict] = Field(default_factory=list)
     recommendation: dict | None = None
+    debug: dict = Field(default_factory=dict)

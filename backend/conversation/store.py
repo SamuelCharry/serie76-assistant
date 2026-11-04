@@ -82,7 +82,7 @@ def append_turn(connection, session_id, query, result, *, new=False, owner_id=No
     ):
         connection.execute(
             """INSERT INTO series76.messages
-            (id,session_id,role,content,products,tool_calls,context,suggested_replies,comparison,lead,interaction,active_filters,suggestions,recommendation)
+            (id,session_id,role,content,products,tool_calls,context,suggested_replies,comparison,lead,interaction,active_filters,suggestions,recommendation,debug)
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
             (identifier, session_id, role, content, Jsonb(products), Jsonb(traces), Jsonb(context),
              Jsonb(getattr(result, "suggested_replies", []) if role == "assistant" else []),
@@ -91,7 +91,8 @@ def append_turn(connection, session_id, query, result, *, new=False, owner_id=No
              Jsonb(getattr(result, "interaction", None) if role == "assistant" else None),
              Jsonb(getattr(result, "active_filters", []) if role == "assistant" else []),
              Jsonb(getattr(result, "suggestions", []) if role == "assistant" else []),
-             Jsonb(getattr(result, "recommendation", None) if role == "assistant" else None)),
+             Jsonb(getattr(result, "recommendation", None) if role == "assistant" else None),
+             Jsonb(getattr(result, "debug", {}) if role == "assistant" else {})),
         )
     connection.execute(
         "UPDATE series76.conversations SET updated_at=clock_timestamp() WHERE id=%s", (session_id,)
@@ -101,7 +102,7 @@ def append_turn(connection, session_id, query, result, *, new=False, owner_id=No
 
 def debug_for_message(connection, message_id: UUID, owner_id=None):
     return connection.execute(
-        """SELECT id AS message_id,session_id,tool_calls FROM series76.messages
+        """SELECT id AS message_id,session_id,tool_calls,debug FROM series76.messages
         WHERE id=%s AND role='assistant'
         AND EXISTS(SELECT 1 FROM series76.conversations c WHERE c.id=session_id AND c.owner_id IS NOT DISTINCT FROM %s::uuid)""", (message_id, owner_id)
     ).fetchone()

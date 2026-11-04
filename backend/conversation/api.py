@@ -73,7 +73,7 @@ def conversation(request: ConversationRequest, user=Depends(require_user)):
                                     suggested_replies=result.suggested_replies, comparison=result.comparison,
                                     lead=result.lead, interaction=result.interaction,
                                     suggestions=result.suggestions, active_filters=result.active_filters,
-                                    recommendation=result.recommendation)
+                                    recommendation=result.recommendation, debug=result.debug)
     except InvalidInteraction as exc:
         return JSONResponse(status_code=422, content={"detail": str(exc), "error_code": exc.code})
     except store.MissingSession:
