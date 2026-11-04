@@ -22,6 +22,18 @@ NUMERIC_FIELDS = ("supply_voltage_v", "frequency_hz", "min_torque_nm", "min_torq
 CATEGORICAL_FIELDS = ("enclosure", "supply_current", "phase_count", "service", "csa_required")
 FILTER_FIELDS = CATEGORICAL_FIELDS + NUMERIC_FIELDS
 
+
+def sort_grounded(sort_key, query):
+    """Ignore a model-supplied ranking preference the user never requested."""
+    text = query.lower()
+    patterns = {
+        'fastest': r'\b(?:fast(?:est)?|quick(?:est)?|speed|r[aá]pid[oa])\b',
+        'lowest_power': r'\b(?:low(?:est)?|least|less|minimum|menos)\b.*\b(?:power|energy|electricity|consumption|potencia|energ[ií]a)\b|\b(?:consum\w*|gasta)\b',
+        'highest_torque': r'\bstrongest\b|\b(?:highest|biggest|most|maximum|m[aá]ximo|mayor)\b.*\b(?:torque|par|strength)\b',
+        'lowest_current': r'\b(?:low(?:est)?|least|less|minimum|menos)\b.*\b(?:current|fla|amps?|corriente)\b|\b(?:corriente|current|fla)\b.*\b(?:low(?:est)?|least|less|minimum|menos)\b',
+    }
+    return bool(re.search(patterns.get(sort_key, r'(?!)'), text))
+
 # Deterministic evidence that a categorical value was expressed by the user. Anything
 # else needs an explicit assumption (shown to the user) quoting the user's own words.
 LEXICON = {

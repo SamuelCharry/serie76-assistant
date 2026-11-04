@@ -24,7 +24,10 @@ class HazardTests(Base):
         self.assertEqual(first.recommendation['total'], 0)
         self.assertIn('3-phase', first.answer)
         self.assertIn('Weatherproof', first.answer)
-        self.assertTrue(all('If you can drop Explosionproof' in item['reason']
-                            for item in first.recommendation['items']))
+        self.assertIn('drop Explosionproof', first.answer)
+        self.assertIn('drop 3-phase', first.answer)
+        reasons = [item['reason'] for item in first.recommendation['items']]
+        self.assertTrue(any('If you can drop Explosionproof' in reason for reason in reasons))
+        self.assertTrue(any('If you can drop 3-phase' in reason for reason in reasons))
         follow = self.turn('so what can I do?', ('search_actuators', {}))
         self.assertEqual(follow.context['filters']['phase_count'], 3)

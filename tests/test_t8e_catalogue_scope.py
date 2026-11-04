@@ -10,6 +10,16 @@ class CatalogueScopeTests(Base):
         self.assertIn('220 V', result.answer)
         self.assertNotIn('What would you like to check?', result.answer)
 
+    def test_enclosures_services_and_total_come_from_sql(self):
+        enclosures = self.turn('what enclosures do you have?', ('ask_clarification', {'field': 'requirements'}))
+        self.assertIn('Explosionproof (30 models)', enclosures.answer)
+        self.assertIn('Weatherproof (34 models)', enclosures.answer)
+        services = self.turn('what services are available?', ('ask_clarification', {'field': 'requirements'}))
+        self.assertIn('On/Off', services.answer)
+        self.assertIn('Modulating', services.answer)
+        count = self.turn('how many models are in the catalogue?', ('ask_clarification', {'field': 'requirements'}))
+        self.assertIn('64 models', count.answer)
+
     def test_unpublished_topic_uses_clean_noun_phrase(self):
         cases = [
             ('how long does 762A00-11320000/A last before maintenance?', 'maintenance interval'),

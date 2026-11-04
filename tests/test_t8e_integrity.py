@@ -19,6 +19,13 @@ class IntegrityTests(Base):
         self.assertIn('at or below 100 Nm', result.recommendation['ranked_by'])
         self.assertEqual(result.recommendation['items'][0]['part_number'], '761B00-11320000/A')
 
+    def test_unstated_sort_preference_is_ignored(self):
+        result = self.turn('Torque no more than 100 Nm, weatherproof, 220 V',
+                           ('search_actuators', {'enclosure': 'weatherproof', 'supply_voltage_v': 220,
+                                                 'sort_by': ['lowest_current']}))
+        self.assertEqual(result.recommendation['items'][0]['part_number'], '761B00-11320000/A')
+        self.assertIn('at or below 100 Nm', result.recommendation['ranked_by'])
+
     def test_short_mod_keeps_service_for_pick(self):
         first = self.turn('110 mod 200nm', ('search_actuators', {'supply_voltage_v': 110, 'min_torque_nm': 200}))
         self.assertEqual(first.context['filters']['service'], 'modulating')

@@ -829,8 +829,9 @@ class Turn:
         if same_performance:
             notes.append('Assumption: "same performance" retains the numeric thresholds and applies them to the requested service.')
             assumptions.append(dict(field='service', user_phrase='same performance'))
-        if args.get("sort_by"):
-            merged["sort_by"] = args["sort_by"]
+        requested_sort = [key for key in args.get('sort_by', []) if policy.sort_grounded(key, self.query)]
+        if requested_sort:
+            merged['sort_by'] = requested_sort
         if merged.get("sort_by"):
             merged["limit"] = 3
         if dropped:
@@ -927,7 +928,8 @@ class Turn:
             self.trace["validation"] = _safe_errors(exc)
             return self.clarify("requirements", "These requirements could not be applied together. Please restate the supply, service and limits you need.")
         unscoped_superlative = bool(merged.get('sort_by')) and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS)
-        result = search_actuators(self.connection, filters, allow_ambiguous=unscoped_superlative)
+        result = search_actuators(self.connection, filters, allow_ambiguous=(
+            unscoped_superlative or bool(re.search(r'\bshow all\b', self.query, re.I))))
         invalid_rows = [p['base_part_number'] for p in result['products'] if not integrity.satisfies(p, filters)]
         if invalid_rows:
             rerun = search_actuators(self.connection, SearchFilters.model_validate(
@@ -973,7 +975,7 @@ class Turn:
             self.context["part_numbers"] = []
             nearest = []
             categorical = {}
-            for relaxed in ('enclosure', 'supply_voltage_v'):
+            for relaxed in ('enclosure', 'supply_voltage_v', 'phase_count'):
                 if merged.get(relaxed) is None:
                     continue
                 trial = {k: v for k, v in merged.items() if k != relaxed}
@@ -981,6 +983,8 @@ class Turn:
                     self.connection, SearchFilters.model_validate(dict(trial, limit=100, offset=0)),
                     allow_ambiguous=True)['products']
                 alternatives = [row for row in alternatives if row.get(relaxed) != merged[relaxed]]
+                if relaxed == 'phase_count':
+                    alternatives.sort(key=lambda row: (row.get('phase_count') is None, row['base_part_number']))
                 if alternatives:
                     categorical[relaxed] = alternatives
             if categorical:
@@ -992,7 +996,8 @@ class Turn:
                     if voltage is not None and len(values) == 1:
                         alternatives_text.append(f'{voltage} V models are only {values[0]} under the other requirements in this catalogue.')
                     elif merged.get('phase_count') == 3 and len(values) == 1:
-                        alternatives_text.append(f'All 3-phase models are {values[0]} in this catalogue.')
+                        alternatives_text.append(f'All 3-phase models are {values[0]} in this catalogue. '
+                                                 f'If you can drop Explosionproof, {values[0]} 3-phase models are available.')
                     elif len(values) == 1:
                         alternatives_text.append(f'Only {values[0]} models meet the other requirements.')
                     choices.append(f'{values[0]} at {voltage} V' if voltage is not None else values[0])
@@ -1003,13 +1008,20 @@ class Turn:
                     alternatives_text.append(f'{str(enclosure).capitalize()} models are available at {voltages} under the other requirements.' if enclosure else
                                              f'Other models are available at {voltages} under the other requirements.')
                     choices.append(f'{str(enclosure).capitalize()} at {voltages}' if enclosure else voltages)
+                if 'phase_count' in categorical:
+                    alternatives_text.append('If you can drop 3-phase, Explosionproof 1-phase models are available.'
+                                             if merged.get('enclosure') == 'explosionproof' else
+                                             'Other phase-count models are available under the remaining requirements.')
+                    choices.append('Explosionproof 1-phase' if merged.get('enclosure') == 'explosionproof' else 'Other phase count')
                 answer = 'No actuator meets ' + policy.describe(merged) + '. ' + ' '.join(alternatives_text)
                 self.context['reply_options'] = choices
                 for relaxed, rows in categorical.items():
-                    for product in rows:
+                    for product in rows[:1]:
                         code = product['base_part_number']
                         if code not in {item['part_number'] for item in nearest}:
-                            dropped = 'Explosionproof' if relaxed == 'enclosure' and merged.get('enclosure') == 'explosionproof' else policy.LABELS.get(relaxed, relaxed)
+                            dropped = ('Explosionproof' if relaxed == 'enclosure' and merged.get('enclosure') == 'explosionproof' else
+                                       f"{merged[relaxed]}-phase" if relaxed == 'phase_count' else
+                                       policy.LABELS.get(relaxed, relaxed))
                             nearest.append(ranking.item(product, {k: v for k, v in merged.items() if k not in categorical},
                                                         f'If you can drop {dropped}: {str(product[relaxed]).capitalize()} alternative'))
                         if len(nearest) >= 2:
@@ -1379,7 +1391,12 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         enclosure = ('explosionproof' if re.search(r'\b(hazardous|explosive|flammable|classified)\b', bare_query)
                      else 'weatherproof' if re.search(r'\b(outdoor|outside|rain|weather)\b', bare_query) else None)
         if enclosure:
-            rows = [get_actuator(connection, code) for code in turn.context['last_comparison_models']]
+            compared_order = turn.context['last_comparison_models']
+            if 'other way round' in bare_query:
+                compared_order = list(reversed(compared_order))
+                turn.context['last_comparison_models'] = compared_order
+                turn.context['on_screen'] = compared_order[:]
+            rows = [get_actuator(connection, code) for code in compared_order]
             matching = [row for row in rows if row and row['enclosure'] == enclosure]
             if len(matching) == 1:
                 code = matching[0]['base_part_number']

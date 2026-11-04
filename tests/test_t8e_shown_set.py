@@ -21,6 +21,14 @@ class ShownSetTests(Base):
         self.assertIn('Explosionproof', result.answer)
         self.assertNotIn('Comparing ', result.answer)
 
+    def test_reverse_reference_with_condition_uses_reversed_screen(self):
+        first = self.turn('compare 761A00-11300000/A and 761X30-11300000/A',
+                          ('get_actuator', {'part_numbers': ['761A00-11300000/A', '761X30-11300000/A']}))
+        result = self.turn('the other way round, which is better for a hazardous room?',
+                           ('ask_clarification', {'field': 'requirements'}))
+        self.assertEqual(result.context['on_screen'], list(reversed(first.comparison['models'])))
+        self.assertIn('761X30-11300000/A', result.answer)
+
     def test_metric_winner_becomes_that_one(self):
         self.turn('compare 761Y30-11300000/A and 762Y30-11300000/A',
                   ('get_actuator', {'part_numbers': ['761Y30-11300000/A', '762Y30-11300000/A']}))

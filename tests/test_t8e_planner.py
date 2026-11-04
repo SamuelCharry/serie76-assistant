@@ -63,6 +63,12 @@ class PlannerScenarioTests(Base):
         self.assertIsNone(result.interaction)
         self.assertIn('torque', result.answer.lower())
 
+    def test_show_all_overrides_missing_service_question(self):
+        result = self.turn('show all models with at least 70 Nm',
+                           ('search_actuators', {'min_torque_nm': 70}))
+        self.assertIsNone(result.interaction)
+        self.assertEqual(len(result.context['on_screen']), result.recommendation['total'])
+
     def test_superlative_search_returns_one_verdict(self):
         result = self.turn('cual gasta menos corriente de los de 24v?',
                            ('search_actuators', {'supply_voltage_v': 24, 'sort_by': ['lowest_current']}))
