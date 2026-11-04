@@ -45,7 +45,7 @@ En el entorno backend activado:
 
 ```sh
 python scripts/verify_catalog_db.py
-python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v4.json
+python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v6.json --config config/agent_acceptance_v6.json
 ```
 
 OCR utiliza otro entorno: sigue la [preparación de ingestión](ingestion.md#reejecutar) y ejecuta con ese entorno OCR activo:
@@ -65,6 +65,28 @@ Android (Windows; en macOS/Linux sustituye el wrapper .bat por `sh mobile/androi
 
 La instrumentación exige emulador activo. El helper live-auth excluido necesita cuentas de prueba explícitas; ver [`verify_android_auth.py`](../../../scripts/verify_android_auth.py). [`verify_mobile_backend.py`](../../../scripts/verify_mobile_backend.py) prueba HTTP/reinicio controlado; ninguno acredita comprensión del modelo real. Conserva volumen DB. El selfcheck valida expectativas, no calidad del modelo.
 
+## Aceptación offline T7 / v6
+
+[Casos v6](../../../config/agent_acceptance_cases_v6.json) conserva los 63 escenarios v5 y añade los 40 EC de la [especificación de casos límite](../../evaluation/edge-case-suite.es.md). Los archivos históricos v5 no cambian; v6 registra cambios aprobados de presentación y políticas exploratorias. Las expectativas usan el CSV validado; las decisiones controladas no entran al prompt del modelo real.
+
+[Evidencia backend](../../../reports/submission/T7-backend.md): 202 pruebas Python, 2 omisiones de módulos opcionales OCR/geometría; 103/103 escenarios selfcheck; seis mutaciones; reconstrucción sin claves y `/ready` 200. [Evidencia Android](../../../reports/submission/T7-android.md): 40 pruebas JVM y APK debug compilado, sin aceptación visual en dispositivo. Son resultados registrados por los workers, no una afirmación de que esta edición documental repitió esas suites.
+
+Con PostgreSQL activo y el entorno Python backend preparado:
+
+```sh
+python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v6.json --config config/agent_acceptance_v6.json
+python -m unittest discover -s tests -p test_acceptance_v6.py -v
+python scripts/check_tool_schemas.py
+```
+
+El oráculo CSV independiente comprueba valores, N/A, ámbitos, candidatos completos, unidades/ganadores y contrato público. Las mutaciones primero aceptan un resultado válido y después exigen fallo ante `gt → gte`, N/A → cero, unidad incorrecta, requisito eliminado, código sustituido (aunque tenga igual valor numérico) y pérdida del límite superior. Prueban detección de esos fallos concretos; no detección universal ni comprensión del modelo. [Evaluador](../../../scripts/acceptance_contract.py), [mutaciones](../../../tests/test_acceptance_v6.py), [ejemplos capturados](../../../reports/submission/T7-scenarios.json).
+
+Antes de una cohorte real, ejecutar el control offline del esquema; solo con autorización explícita de gasto ejecutar el preflight real de una llamada. Congelar código/casos/catálogo/configuración, contar cada intento de transporte en el ledger y separar fallo de proveedor de fallo semántico. El tope USD 1,00 de v6 no autoriza gastar. Los retries productivos tienen plazo compartido; el preflight de esquema nunca reintenta.
+
+**Marcador del coordinador — selfcheck no determina este resultado:**
+
+v6 real-model result: pending coordinator run
+
 ## Evidencia de modelo real
 
 [Cohortes v1–v4](../../evidence/agent_acceptance.md), cliente A+ de producción sobre API Google compatible con OpenAI, cero llamadas OpenRouter:
@@ -78,7 +100,7 @@ La instrumentación exige emulador activo. El helper live-auth excluido necesita
 
 Las cohortes se solapan: no sumarlas como muestras independientes. La corrección del límite estricto v4 no se revalidó con modelo real; cuatro casos quedaron sin evaluar por proveedor. La selección inicial Google nativa usó otro corpus congelado y la [comparación histórica](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/model_eval). Sugirió Gemini 3.6 Flash por fidelidad técnica cualitativa; no valida disponibilidad, precio ni routing actuales.
 
-Método: congelar hashes de corpus/código/configuración/catálogo antes de inferencia; excluir expectativas del prompt; evaluar herramienta/argumentos, filtros extra, hechos SQL y aclaraciones autorizadas. Separar tokens, latencia y fallos de proveedor. Reservar presupuesto antes de llamadas, conservar reserva si falta uso, usar un controlador y no reintentar automáticamente. Restaurar experimentos archivados en otro checkout para reproducir; inferencia pagada exige aprobación. La [comparación A–E](../../evidence/architecture_comparison.md) es inconclusa, no un ranking.
+Método: congelar hashes de corpus/código/configuración/catálogo antes de inferencia; excluir expectativas del prompt; evaluar herramienta/argumentos, filtros extra, hechos SQL y aclaraciones autorizadas. Separar tokens, latencia y fallos de proveedor. Reservar presupuesto antes de llamadas, conservar reserva si falta uso y usar un controlador. La configuración histórica no es la política de retries de transporte T7. Restaurar experimentos archivados en otro checkout para reproducir; inferencia pagada exige aprobación. La [comparación A–E](../../evidence/architecture_comparison.md) es inconclusa, no un ranking.
 
 ## CI
 

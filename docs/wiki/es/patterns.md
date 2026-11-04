@@ -48,6 +48,16 @@ El [motor archivado](https://github.com/SamuelCharry/serie76-assistant/blob/arch
 
 A+ logró [50/55 en v4 con 4 fallos solo de proveedor](../../evidence/agent_acceptance.md), mediante Google. A–E fue inconcluso: un agente es decisión de ingeniería, no superioridad medida. Reconsideraría varios ante flujos realmente distintos o un corpus grande que exija recuperación especializada; aceptación OpenRouter pendiente.
 
+### Interacción estructurada y presentación determinista
+
+[interactions.py](../../../backend/conversation/interactions.py) valida IDs/opciones pendientes y filtros removibles. Submit ya está estructurado: otra interpretación añadiría latencia y riesgo de cambiar la elección. El código lo aplica y repite SQL. [quality.py](../../../backend/conversation/quality.py) calcula ganadores, filas ocultas y sugerencias opcionales; Android presenta esos campos sin pedir al LLM que los juzgue. La migración 005 conserva los campos nuevos como snapshots y mantiene mensajes antiguos legibles.
+
+### Reintentos acotados y vida de conexiones
+
+[agent.py](../../../backend/conversation/agent.py) usa retry LangChain solo ante fallos transitorios, conservando una decisión completada por turno de lenguaje y cero para saludos/envíos estructurados. Predeterminados: `OPENROUTER_FALLBACK_MODEL` vacío, `AGENT_TIMEOUT_S=45`, `AGENT_TURN_DEADLINE_S=60`, `AGENT_RETRY_MIN_REMAINING_S=10`. Cada intento cuenta para `AGENT_MAX_CALLS_PER_HOUR=120`; sin retry 4xx ni del SDK. Ver [configuración](operations.md#referencia-de-configuración).
+
+El pool Android expira a 30 s, antes del keep-alive Uvicorn de 75 s, para evitar reutilizar sockets cerrados por el antiguo timeout de 5 s. Los retries POST automáticos siguen desactivados: una escritura con timeout pudo haberse confirmado. [Diagnóstico y límites de evidencia](operations.md#falla-el-primer-toque-tras-inactividad).
+
 ## Dónde está en el código
 
 - [backend/auth/api.py](../../../backend/auth/api.py#L24)

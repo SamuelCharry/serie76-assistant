@@ -125,10 +125,12 @@ Las pruebas usan PostgreSQL de Compose en `127.0.0.1:5432` (o POSTGRES_PORT): `l
 | Ingestión PDF + PostgreSQL | Sí | [941/941 controles primarios](docs/evidence/ocr.md), [SQL](docs/evidence/postgres.md) | Diseños nuevos |
 | FastAPI + herramientas LangChain | Sí | [Cohortes Google A+](docs/evidence/agent_acceptance.md), pruebas locales SQL/programadas | Aceptación OpenRouter |
 | Multi-turno + historial persistente | Sí | HTTP/reinicio con interpretación controlada | Continuación OpenRouter tras reinicio |
-| Códigos inválidos, N/A, ambigüedad, sin resultados | Sí | Pruebas T6 offline y cohortes Google acotadas | Calidad v5 con LLM real y casos con fallo proveedor |
-| Android historial/chat/debug + estados | Sí | [Evidencia Android](docs/evidence/mobile.md) | Android → LLM real → SQL → Android |
+| Códigos inválidos, N/A, ambigüedad, sin resultados | Sí | [T7: 103/103 escenarios v6 controlados](reports/submission/T7-backend.md), cohortes Google históricas | v6 con modelo real y aceptación OpenRouter |
+| Android historial/chat/debug + estados | Sí | [T7: 40 pruebas JVM + APK debug](reports/submission/T7-android.md) | Revisión en dispositivo y Android → LLM real → SQL → Android |
 | Login opcional + aislamiento | Sí | Pruebas auth y recorridos controlados | HTTPS público/dispositivo físico |
 | Docker, configuración, docs y asistente | Sí | [T1](reports/submission/T1.md), [T2](reports/submission/T2.md), [T3](reports/submission/T3.md) | Reproducción final del evaluador |
+| T7 preguntas/Submit, filtros removibles, sugerencias, comparaciones, saludo | Sí | [202 pruebas Python; 2 omisiones opcionales](reports/submission/T7-backend.md), [estados/contrato Android](reports/submission/T7-android.md) | v6 con modelo real e integración app/backend completa |
+| T7 retry/fallback acotados y keep-alive | Sí | [Deadline/transporte locales](reports/submission/T7-backend.md), [regresión del pool](reports/submission/T7-android.md) | Fallos con proveedor real |
 | Voz opcional | No | No | No implementada |
 
 [Wiki map](docs/wiki/es/index.md) · [Architecture](docs/wiki/es/agent.md) · [Original brief](docs/assessment-en.pdf) · [Defensa de entrevista](docs/wiki/es/defensa-entrevista.md)

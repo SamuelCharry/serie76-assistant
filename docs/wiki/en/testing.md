@@ -45,7 +45,7 @@ In the activated backend environment:
 
 ```sh
 python scripts/verify_catalog_db.py
-python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v4.json
+python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v6.json --config config/agent_acceptance_v6.json
 ```
 
 OCR uses a second environment: follow [ingestion setup](ingestion.md#rerun), then run these commands with that OCR environment active:
@@ -65,6 +65,28 @@ Android (Windows; on macOS/Linux substitute `sh mobile/android/gradlew` for the 
 
 Instrumented tests require a running emulator. The excluded live-auth helper needs its own explicit test-account setup; see [`verify_android_auth.py`](../../../scripts/verify_android_auth.py). [`verify_mobile_backend.py`](../../../scripts/verify_mobile_backend.py) exercises controlled HTTP/restart paths; neither establishes real-model understanding. Preserve the DB volume. An offline selfcheck validates expectations, not model quality.
 
+## T7 / v6 offline acceptance
+
+[v6 cases](../../../config/agent_acceptance_cases_v6.json) retain all 63 v5 scenarios and add the 40 EC scenarios from the [edge-case specification](../../evaluation/edge-case-suite.es.md). Historical v5 files remain unchanged; v6 records approved presentation changes and exploratory policies. Expectations use the validated CSV; scripted decisions stay out of real-model prompts.
+
+[Backend evidence](../../../reports/submission/T7-backend.md): 202 Python tests, 2 optional OCR/geometry module skips; 103/103 selfcheck scenarios; six mutation checks; keyless rebuild and `/ready` 200. [Android evidence](../../../reports/submission/T7-android.md): 40 JVM tests and debug APK build, not device visual acceptance. These are recorded worker results, not a claim that this documentation edit reran the suites.
+
+With PostgreSQL running and the backend Python environment active:
+
+```sh
+python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v6.json --config config/agent_acceptance_v6.json
+python -m unittest discover -s tests -p test_acceptance_v6.py -v
+python scripts/check_tool_schemas.py
+```
+
+The independent CSV oracle checks values, N/A, scopes, full candidate sets, units/winners and public interaction shape. Corruption tests first accept a valid result, then require failure for `gt → gte`, N/A → zero, wrong unit, dropped requirement, substituted code (even with the same numeric value), and a dropped upper range bound. This tests whether the scorer catches these specific faults; it does not prove universal detection or real-model comprehension. [Scorer](../../../scripts/acceptance_contract.py), [mutations](../../../tests/test_acceptance_v6.py), [captured examples](../../../reports/submission/T7-scenarios.json).
+
+Before a live cohort, run the offline schema gate below; only with explicit paid-call authorization run the one-call live preflight. Freeze code/cases/catalogue/config, count every transport attempt in the ledger, and keep provider failure separate from semantic failure. The USD 1.00 v6 configuration cap is not permission to spend. Production retries are bounded by the shared deadline; the schema preflight itself never retries.
+
+**Coordinator placeholder — do not infer a result from selfcheck:**
+
+v6 real-model result: pending coordinator run
+
 ## Real-model evidence
 
 [Agent cohorts v1–v4](../../evidence/agent_acceptance.md), production A+ client through Google OpenAI-compatible API, zero OpenRouter calls:
@@ -78,7 +100,7 @@ Instrumented tests require a running emulator. The excluded live-auth helper nee
 
 Cohorts overlap: never add them as independent samples. v4 strict power-limit correction is not rechecked with a real model; four provider-error cases remained unevaluated. Initial native-Google model selection used a separate frozen development corpus and historical [model comparison](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/model_eval). It suggested Gemini 3.6 Flash on qualitative technical fidelity; it does not validate availability, pricing or routing today.
 
-Method: freeze corpus/code/config/catalogue hashes before inference; keep expected arguments out of prompts; score tool/arguments, extra filters, SQL facts and authorized clarifications. Record token usage, latency and provider errors independently. Reserve budget before calls, retain reservations for unknown usage, use one controller, no automatic retries. Restore archived experiments in a separate checkout for reproduction; paid runs require explicit approval. The [A–E comparison](../../evidence/architecture_comparison.md) is inconclusive, not a ranking.
+Method: freeze corpus/code/config/catalogue hashes before inference; keep expected arguments out of prompts; score tool/arguments, extra filters, SQL facts and authorized clarifications. Record token usage, latency and provider errors independently. Reserve budget before calls, retain reservations for unknown usage, use one controller. Historical cohort settings are not the T7 transport retry policy. Restore archived experiments in a separate checkout for reproduction; paid runs require explicit approval. The [A–E comparison](../../evidence/architecture_comparison.md) is inconclusive, not a ranking.
 
 ## CI
 

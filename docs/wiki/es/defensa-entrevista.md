@@ -75,9 +75,9 @@ Prueba: [docs/adr/0001-arquitectura-agente.md](../../../docs/adr/0001-arquitectu
 
 ## 12. ¿Qué pasa cuando el proveedor devuelve 503?
 
-El backend responde 503 y revierte todo el turno. Android muestra exactamente “The assistant is not configured on the server.” si `error_code=not_configured`; para cualquier otro 503 muestra “The assistant is temporarily unavailable. Please try again.”
+Un 503 del proveedor permite retry acotado y fallback opcional dentro del plazo compartido de 60 s. Si falla la decisión, el backend responde 503 y revierte todo el turno. Android muestra exactamente “The assistant is not configured on the server.” si `error_code=not_configured`; para cualquier otro 503 muestra “The assistant is temporarily unavailable. Please try again.”
 
-Los códigos del backend son `not_configured`, `timeout`, `rate_limited`, `budget_exhausted`, `provider_unreachable`, `provider_error` y `rate_limited_local` (guarda por proceso). Un 503 por DB/capacidad puede no llevar `error_code`. Un timeout del cliente no prueba cancelación: revisar historial antes de reenviar.
+Los códigos del backend son `not_configured`, `timeout`, `turn_deadline`, `rate_limited`, `budget_exhausted`, `provider_unreachable`, `provider_error` y `rate_limited_local` (guarda por proceso). Un 503 por DB/capacidad puede no llevar `error_code`. Un timeout del cliente no prueba cancelación: revisar historial antes de reenviar.
 
 Prueba: [mensajes Android](../../../mobile/android/app/src/main/java/com/serie76/assistant/data/ConversationRepository.kt#L61), [códigos del proveedor](../../../backend/conversation/agent.py#L249), [guarda local](../../../backend/conversation/agent.py#L209) y [rollback/API](../../../backend/conversation/api.py#L76).
 
@@ -137,13 +137,13 @@ Prueba: [backend/conversation/api.py](../../../backend/conversation/api.py#L18).
 
 ## 22. ¿Cuál es una debilidad técnica concreta?
 
-Los umbrales estrictos ya se admiten: below 5 W usa lt y mayor a/over usa gt; al menos/hasta son inclusivos. Se verificaron offline con decisiones programadas, SQL y pruebas de frontera; la comprobación v5 con LLM real queda pendiente del coordinador. Sigue siendo una debilidad que presencia de un número no prueba su asignación al campo semántico correcto.
+Los umbrales estrictos ya se admiten: below 5 W usa lt y mayor a/over usa gt; al menos/hasta son inclusivos. Se verificaron offline con decisiones programadas, SQL y pruebas de frontera; la comprobación v6 con LLM real queda pendiente del coordinador. Sigue siendo una debilidad que presencia de un número no prueba su asignación al campo semántico correcto.
 
 Prueba: [regresiones T6](../../../tests/test_conversation_quality.py), [SQL de filtros](../../../backend/catalog/repository.py) y [evidencia T6](../../../reports/submission/T6.md).
 
 ## 23. ¿Qué harías con más tiempo o menos presupuesto?
 
-Primero cerraría aceptación OpenRouter acotada y el recorrido Android real; luego desigualdades estrictas y casos con error de proveedor. Con menos presupuesto priorizaría controles offline y un corpus congelado pequeño antes de gastar.
+Primero cerraría aceptación OpenRouter acotada y el recorrido Android real; después ampliaría casos reservados y resiliencia con proveedor real; las desigualdades estrictas ya tienen cobertura offline. Con menos presupuesto priorizaría controles offline y un corpus congelado pequeño antes de gastar.
 
 Prueba: [docs/evidence/agent_acceptance.md](../../../docs/evidence/agent_acceptance.md#L1).
 
@@ -152,6 +152,30 @@ Prueba: [docs/evidence/agent_acceptance.md](../../../docs/evidence/agent_accepta
 No: PostgreSQL conserva mensajes y snapshots. Activar otra importación no reescribe productos previos. No se debe borrar el volumen para reiniciar ni para imponer contraseñas demo.
 
 Prueba: [backend/conversation/store.py](../../../backend/conversation/store.py#L70).
+
+## 25. ¿Por qué Submit no llama al LLM?
+
+La app ya envía IDs y valores exactos de opciones pendientes. El código valida, fusiona filtros y repite SQL; reinterpretarlos gastaría una llamada y podría alterar la elección. Eliminar una etiqueta sigue la misma ruta. [Prueba HTTP sin reserva de modelo](../../../tests/test_t7_contract.py), [capturas](../../../reports/submission/T7-interactions.json).
+
+## 26. ¿Por qué el agente no decide las flechas?
+
+Una flecha afirma una relación entre datos publicados: se calcula comparando números, unidades y ámbito. `better` es un índice o null; empate/N/A no tiene ganador. El resumen cuenta campos sin ponderar, no declara el mejor actuador global. Tres/cuatro modelos usan tarjetas sin flechas. [Reglas y ejemplo SQL](agent.md#comparación-y-lead).
+
+## 27. ¿Por qué 0–3 sugerencias en vez de siempre tres?
+
+Rellenar tres chips mezclaba datos necesarios con navegación genérica. Una pregunta lleva sus propias opciones; hechos, definiciones y comparaciones no necesitan sugerencias. Una búsqueda de 2–4 modelos propone un par útil; una imposibilidad ofrece relajaciones SQL. Cero es una respuesta válida. [Política completa](agent.md#sugerencias-opcionales).
+
+## 28. ¿Por qué acotar retry con un plazo total?
+
+Dos timeouts de 45 s podrían completar el servidor después de que Android abandone a 75 s. El plazo compartido de 60 s limita cada intento al tiempo restante y omite otro si quedan menos de 10 s; fallback comparte ese límite. Solo se reintentan 503/timeout/conexión, nunca 4xx, y cada intento real cuenta. [Prueba de servidor local lento](../../../tests/test_t7_resilience.py).
+
+## 29. ¿Qué prueban la suite límite y las corrupciones?
+
+Los 103 escenarios son 63 históricos más 40 EC con expectativas fijadas contra el CSV. Selfcheck prueba el flujo determinista; las seis corrupciones exigen que el evaluador rechace operador, N/A, unidad, requisito, código y extremo de intervalo alterados después de aceptar el original. Esto demuestra detección de esos fallos, no todos los fallos posibles ni comprensión del modelo. [Pruebas v6](testing.md#aceptación-offline-t7--v6).
+
+## 30. ¿Qué no permite afirmar T7 todavía?
+
+Las 202 pruebas Python (2 omisiones OCR), 103 escenarios y 40 pruebas JVM no equivalen a aceptación con LLM real, ajuste visual en dispositivo, disponibilidad del proveedor o carga masiva. El catálogo tampoco publica precios, no identifica una instalación física y la app no compra ni promete entregas. [Evidencia backend](../../../reports/submission/T7-backend.md), [Android](../../../reports/submission/T7-android.md).
 
 ## Límites conocidos
 

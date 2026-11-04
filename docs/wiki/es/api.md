@@ -17,7 +17,7 @@ Todas las rutas `/api/*`, excepto login, requieren `Authorization: Bearer <TOKEN
 | POST `/api/auth/logout` | Revoca token actual; 204 sin cuerpo |
 | GET `/api/actuators/{part_number}` | Código completo con `/A`; producto con measurements, field_status, services, frequencies, certification, notes, provenance, evidence, occurrences |
 | POST `/api/actuators/search` | JSON SearchFilters → `{status,total,limit,offset,products}` o needs_clarification con fields |
-| POST `/api/conversation` | `{query,session_id?}` → `{session_id,answer,message_id,products,clarification,terms,assumptions,suggested_replies,comparison}` |
+| POST `/api/conversation` | `{query,session_id?,answers?,remove_filters?}` → `{session_id,answer,message_id,products,lead,interaction,suggestions,suggested_replies,active_filters,comparison,clarification,terms,assumptions}` |
 | GET `/api/sessions?limit=50&offset=0` | `{sessions:[{id,title,created_at,updated_at,preview}],limit,offset}`; limit 1..100, offset 0..1000000 |
 | GET `/api/sessions/{session_id}/messages?limit=100&before=SEQUENCE` | `{session_id,title,messages,has_more,next_before}`; página cronológica, limit 1..100; before opcional >=1 |
 | GET `/api/messages/{message_id}/debug` | `{message_id,session_id,tool_calls}`; propietario, DEV_DEBUG=true, fuera de OpenAPI |
@@ -52,17 +52,13 @@ curl.exe -i http://localhost:8000/api/conversation -H "Authorization: Bearer TOK
 Remove-Item login.json, query.json
 ```
 
-Con token válido y sin modelo configurado, conversation devuelve HTTP 503:
+Con token válido y sin modelo configurado, un turno que necesita interpretación devuelve HTTP 503; saludos y envíos estructurados válidos no necesitan modelo:
 
 ```json
 {"detail":"Conversation service unavailable. Check backend configuration and try again.","error_code":"not_configured"}
 ```
 
-Forma de éxito (UUID ilustrativos, no respuesta capturada):
-
-```json
-{"session_id":"<UUID>","answer":"<rendered SQL answer>","message_id":"<UUID>","products":[],"clarification":null,"terms":[],"assumptions":[]}
-```
+Ver abajo los campos aditivos y una respuesta T7 capturada.
 
 ## Contrato de búsqueda
 
@@ -70,31 +66,122 @@ Los campos y enumeraciones coinciden con los [filtros del agente](agent.md#herra
 
 ## Modelo de errores
 
-`detail` puede ser texto o lista de validación. Solo los fallos de modelo llevan error_code; los demás no prometen ese campo.
+`detail` puede ser texto o lista de validación. Los fallos de modelo y validación de interacción T7 llevan error_code; los demás no prometen ese campo.
 
 | HTTP | error_code | Significado | Presentación Android |
 |---|---|---|---|
 | 401 | ausente | Token ausente/caducado/inválido; login incorrecto | Sesión caducada / fallo login; limpia pantallas protegidas |
 | 404 | ausente | Conversación inexistente/ajena o debug desactivado | No encontrada; volver y actualizar |
 | 409 | ausente | Sesión procesándose | Recargar antes de reenviar |
+| 422 | invalid_answers / invalid_filter | Respuestas/eliminaciones estructuradas inválidas | Revisar preguntas/filtros actuales |
 | 422 | ausente | Request, UUID, código o filtros inválidos | Revisar mensaje/solicitud |
 | 429 | ausente | Límite de login; Retry-After | Esperar antes de reintentar |
 | 503 | not_configured | Falta clave/modelo o proveedor 401/403 | Assistant is not configured on the server |
-| 503 | timeout, rate_limited, budget_exhausted, provider_unreachable, provider_error | Timeout, 429, 402, conexión u otro fallo del proveedor | Asistente temporalmente no disponible |
+| 503 | timeout, turn_deadline, rate_limited, budget_exhausted, provider_unreachable, provider_error | Timeout, 429, 402, conexión u otro fallo del proveedor | Asistente temporalmente no disponible |
 | 503 | rate_limited_local | Guarda horaria por proceso agotada | Asistente temporalmente no disponible |
 | 503 | ausente | DB no disponible, capacidad de cuatro turnos llena u otro servicio | Asistente temporalmente no disponible (login tiene estado propio) |
 | sin HTTP | ausente | Fallo de red/conexión | No conecta al backend; revisar dirección |
 
 
-## Ampliaciones de respuesta T6
+## Contrato conversacional T7
 
-Respuestas, mensajes fijos y sugerencias son solo en inglés; se admite entrada española. Cada respuesta conversacional nueva exitosa incluye `suggested_replies` (exactamente 3 mensajes breves, distintos y generados por código) y `comparison` nullable. El historial público incluye ambos. La migración aditiva 004 deja [] y comparación null en mensajes antiguos; el cliente admite esos valores.
+La solicitud aditiva es `{session_id?,query,answers?,remove_filters?}`. `answers` asocia IDs pendientes con textos exactos de opción; `remove_filters` enumera filtros activos. Los valores por defecto son `{}` y `[]`. El código aplica cambios y repite SQL sin LLM; `query` conserva el mensaje legible del usuario. Respuestas desconocidas/no coincidentes devuelven 422 `invalid_answers`; filtros inactivos/inválidos, 422 `invalid_filter`, incluidos tipos malformados. El rechazo no persiste mensajes.
 
-`comparison` contiene `models` (dos códigos completos), `rows` con `{field,label,a,b,better}` e `identical_fields_hidden`. Solo muestra diferencias; a/b son textos formateados desde SQL y better es a, b o null, solo si la dirección es inequívoca. Answer sigue en texto plano sin tablas Markdown. Pulsar un chip envía su texto exacto; la tarjeta Android tiene tres columnas con ajuste de línea y sin scroll horizontal.
+La respuesta conserva `session_id`, `message_id`, `answer` completo en texto plano, `products`, `clarification`, `terms` y `assumptions`, y añade:
 
-Mostrar `label`, nunca el identificador interno `field`. El torque agrupa unidades en una fila: `On/Off torque`, con `700 in-lb / 80 Nm` frente a `880 in-lb / 100 Nm`. Cada par idéntico cuenta como un campo oculto. Las etiquetas explicitan la frecuencia: `Operating time at 60 Hz` y `FLA at 60 Hz`; N/A conserva su etiqueta. No se marca ganador si las columnas publicadas discrepan en dirección.
+| Campo | Contrato |
+|---|---|
+| `lead` | Una frase para producto/comparación; null en otro caso |
+| `interaction` | Null o `{kind:"question",questions:[{id,prompt,options:[{value,label}]}]}` |
+| `suggestions` | 0–3 mensajes opcionales ejecutables; vacía con interacción |
+| `suggested_replies` | Alias obsoleto con la misma lista |
+| `active_filters` | Etiquetas removibles `{field,label}`; [] sin búsqueda activa |
+| `comparison` | Null o tabla/tarjetas con models, summary, assumptions, rows, hidden_rows y key_fields |
 
-La búsqueda directa acepta umbrales `{value,op}` con gt/gte/lt/lte; los escalares antiguos siguen inclusivos. `sort_by` es lista ordenada fastest/lowest_power/highest_torque/lowest_current. El agente aplica [conteo/aclaración/valor cercano](agent.md#política-conversacional-t6); `/api/actuators/search` mantiene paginación de catálogo.
+Con dos modelos las filas son `{field,label,values:[A,B],better:0|1|null}`; `rows` contiene diferencias y `hidden_rows` los iguales. Tres/cuatro modelos usan tarjetas, cuatro `key_fields`, un valor por modelo, `better:null` y ninguna fila oculta/flecha. Mostrar etiquetas y textos SQL, nunca IDs internos. Ver [fila real y preferencias](agent.md#comparación-y-lead).
+
+Extracto capturado (IDs omitidos; respuesta completa en [T7-interactions.json](../../../reports/submission/T7-interactions.json)):
+
+```json
+{
+  "answer": "Which service? Which frequency?",
+  "lead": null,
+  "products": [],
+  "interaction": {
+    "kind": "question",
+    "questions": [
+      {
+        "id": "service",
+        "prompt": "Which service?",
+        "options": [
+          {
+            "value": "on_off",
+            "label": "On/Off"
+          },
+          {
+            "value": "modulating",
+            "label": "Modulating"
+          }
+        ]
+      },
+      {
+        "id": "frequency_hz",
+        "prompt": "Which frequency?",
+        "options": [
+          {
+            "value": "50",
+            "label": "50 Hz"
+          },
+          {
+            "value": "60",
+            "label": "60 Hz"
+          }
+        ]
+      }
+    ]
+  },
+  "suggestions": [],
+  "suggested_replies": [],
+  "active_filters": [
+    {
+      "field": "min_torque_nm",
+      "label": "torque >= 70 Nm"
+    },
+    {
+      "field": "max_fla_a",
+      "label": "FLA < 1.5 A"
+    }
+  ],
+  "comparison": null
+}
+```
+
+### Enviar respuestas y eliminar un filtro
+
+Estas peticiones usan la pregunta servicio/frecuencia y los filtros capturados arriba. Reemplaza SESSION_ID por la conversación pendiente y TOKEN localmente; no reutilices UUIDs de la evidencia, cuyas transacciones se revirtieron. Envía respuestas y después elimina el torque aún activo:
+
+```sh
+curl -sS http://localhost:8000/api/conversation -H 'Authorization: Bearer TOKEN' -H 'Content-Type: application/json' -d '{"session_id":"SESSION_ID","query":"On/Off · 60 Hz","answers":{"service":"on_off","frequency_hz":"60"}}'
+curl -sS http://localhost:8000/api/conversation -H 'Authorization: Bearer TOKEN' -H 'Content-Type: application/json' -d '{"session_id":"SESSION_ID","query":"Remove torque","remove_filters":["min_torque_nm"]}'
+```
+
+En Windows PowerShell usa archivos; el escape Unicode conserva el resumen exacto:
+
+```powershell
+'{"session_id":"SESSION_ID","query":"On/Off \u00b7 60 Hz","answers":{"service":"on_off","frequency_hz":"60"}}' | Set-Content -Encoding ascii answers.json
+curl.exe -sS http://localhost:8000/api/conversation -H "Authorization: Bearer TOKEN" -H "Content-Type: application/json" --data-binary "@answers.json"
+'{"session_id":"SESSION_ID","query":"Remove torque","remove_filters":["min_torque_nm"]}' | Set-Content -Encoding ascii remove.json
+curl.exe -sS http://localhost:8000/api/conversation -H "Authorization: Bearer TOKEN" -H "Content-Type: application/json" --data-binary "@remove.json"
+Remove-Item answers.json, remove.json
+```
+
+El Submit registrado conservó torque/FLA, agregó On/Off/60 Hz y preguntó carcasa; la eliminación posterior mantuvo servicio, frecuencia y FLA. Ambas pruebas prohibían reservar una llamada al modelo.
+
+### Historial y compatibilidad
+
+El historial del asistente persiste lead, interaction, ambas listas de sugerencias, active_filters y comparison junto a `id`/`content`. La migración aditiva 005 deja null/[] en campos nuevos de filas antiguas; no inventa historial. El cliente usa `suggestions` explícita y solo recurre a `suggested_replies` si falta. Android también lee comparaciones antiguas con `a`/`b`, ganador textual y contador oculto; sin lead muestra answer/content. `answer` sigue completo para curl/API.
+
+La búsqueda directa admite límites `{value,op}` y pares inferior/superior; los escalares antiguos siguen inclusivos. `sort_by` y los ámbitos siguen la [política del agente](agent.md#política-conversacional-t7). Esta ruta conserva paginación.
 
 ## Dónde está en el código
 

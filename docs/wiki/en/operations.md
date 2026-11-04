@@ -20,10 +20,13 @@ Defaults below come from [.env.example](../../../.env.example) and [Compose](../
 | `OPENROUTER_API_KEY` | _empty_ | Private model credential; empty disables conversation interpretation. |
 | `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` | OpenAI-compatible chat endpoint; production default is OpenRouter. |
 | `OPENROUTER_CHAT_MODEL` | _empty_ | Explicit tool-calling model ID; no automatic model selection. |
+| `OPENROUTER_FALLBACK_MODEL` | _empty_ | Optional fallback model on the same endpoint/key; empty disables it. Transient failures only. |
+| `AGENT_TURN_DEADLINE_S` | `60` | Shared deadline for primary attempts and fallback, below Android's 70/75 s timeouts. |
+| `AGENT_RETRY_MIN_REMAINING_S` | `10` | Minimum remaining seconds to start an attempt; otherwise record deadline_skipped without a reservation. |
 | `AGENT_MAX_TOKENS` | `2048` | Maximum generated tokens per decision. |
 | `AGENT_REASONING_EFFORT` | `low` | Provider reasoning effort; empty omits parameter. |
 | `AGENT_TOOL_CHOICE` | `required` | Tool choice for bind_tools; empty lets provider decide. |
-| `AGENT_TIMEOUT_S` | `45` | Model client timeout in seconds; max_retries=0. |
+| `AGENT_TIMEOUT_S` | `45` | Per-attempt ceiling, reduced to remaining deadline; SDK max_retries=0, LangChain owns bounded retry. |
 | `AGENT_TEMPERATURE` | _empty_ | Empty means provider sampling default. |
 | `LANGSMITH_TRACING` | `false` | Opt-in external tracing; also requires key. |
 | `LANGSMITH_API_KEY` | _empty_ | Private tracing credential; never sent to Android. |
@@ -93,6 +96,12 @@ Check the API error table: provider timeout/quota/budget/unreachable, local call
 ### Login fails after restart
 
 Existing demo passwords are never reset. Use existing credentials or explicit account administration; do not delete the volume to force the published TEST ONLY password.
+
+### First tap fails after idle
+
+The T7 connection mismatch was a pooled OkHttp socket outliving Uvicorn's former 5 s keep-alive. Update/rebuild both backend and APK: client pool expiry is now 30 s and server keep-alive 75 s. Confirm the backend uses `--timeout-keep-alive 75`; do not enable POST retries to mask the error. On uncertain delivery, reload history before resending. [Local regression and its limits](android.md#first-tap-connection-failure).
+
+For slow provider responses, distinguish keep-alive from the 60 s decision deadline. Only 503/timeout/connection failures may retry (two attempts per model); no 4xx. Optional fallback shares the deadline and every real attempt consumes the process cap. `turn_deadline` / `deadline_skipped` means no time remained for another safe attempt; blindly increasing timeouts can outlast the app's call timeout. See [agent](agent.md#retry-fallback-and-deadline).
 
 ### Android cannot connect
 

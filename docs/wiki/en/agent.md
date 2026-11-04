@@ -88,40 +88,115 @@ This trace establishes stored tool execution, not a real-provider acceptance res
 
 ## T7 conversation policy
 
-### Focus and thresholds
+### Focus, filters and ranking
 
-`focus=[{"field":"torque","service":"on_off"},{"field":"operating_time","frequency_hz":60}]` renders only On/Off torque and the 60 Hz operating time, including focused product measurements. Focus is persisted for follow-ups. `overview` requests all fields. Legacy scalar focus is accepted for existing clients.
+`focus` selects fields and their service/frequency scope; omitted focus reuses context and `overview` requests all fields. Bounds use `gt|gte|lt|lte`, preserve the stated number and unit, and allow a lower and upper bound on the same field. Legacy scalar bounds remain inclusive. SQL owns comparisons; an unknown or N/A value cannot satisfy a numeric threshold.
 
-Magnitude filters accept `{value,op}` with `gt|gte|lt|lte`. “More than”, “over”, “mayor a”, “más de” are strict gt; “below”/“menos de” are lt; “at least”/“al menos” are gte; “up to”/“hasta” are lte. SQL operators come from an allowlist; the original number is not adjusted. Legacy scalar bounds remain inclusive. Summaries print the actual operator.
+`sort_by` orders fastest, lowest_power, highest_torque or lowest_current preferences. Ranked results show up to three candidates; without frequency, ranking uses the lowest published value and says so. Motor power is not total energy consumption. Unsorted sets above four report their SQL count and ask an available splitting facet; without a filterable facet, no invented question/options are added. Zero matches produce scoped SQL extrema and relaxation choices, never an inferior model labelled as compliant.
 
-### Ranking and result size
+### Questions and code-only submissions
 
-`sort_by` is ordered: fastest (operating time ascending), lowest_power (motor power ascending), highest_torque or lowest_current (FLA ascending). Requested service/frequency scopes are retained; without frequency, ranking uses the lowest published value and explicitly labels that choice. Unknown values sort last; explicit N/A entries are excluded from recommendations. Motor power is a proxy for the stated preference, not total energy use. Sorted results show the top 3 and ranking fields plus one narrowing question.
+A question means the assistant needs information; a suggestion is an optional next action. `interaction.questions` collects all currently required fields in order, with options from SQL facets under the current filters. Android collects choices locally, shows a review, and sends them only on Submit. This captured interaction asks for both service and frequency:
 
-Without sorting, more than 4 matches show the SQL count and one question; no products are listed. The split attribute maximises entropy across current SQL supply/enclosure/phase facets. Its options become suggested messages. Two to four matches get a brief list with a distinguishing value and comparison pairs; one match gets a focused answer. Zero matches never ask for service/frequency: diagnostics remove each numeric bound in turn and calculate SQL min/max and all tied models under the remaining constraints. An empty remaining combination is reported explicitly; no invented nearest product is substituted.
+```json
+{
+  "kind": "question",
+  "questions": [
+    {
+      "id": "service",
+      "prompt": "Which service?",
+      "options": [
+        {
+          "value": "on_off",
+          "label": "On/Off"
+        },
+        {
+          "value": "modulating",
+          "label": "Modulating"
+        }
+      ]
+    },
+    {
+      "id": "frequency_hz",
+      "prompt": "Which frequency?",
+      "options": [
+        {
+          "value": "50",
+          "label": "50 Hz"
+        },
+        {
+          "value": "60",
+          "label": "60 Hz"
+        }
+      ]
+    }
+  ]
+}
+```
 
-### Questions, submissions, cancellation and suggestions
+Source: `two_questions` in [T7 HTTP evidence](../../../reports/submission/T7-interactions.json). Submitted option strings must exactly match pending IDs/values. `answers` and `remove_filters` are request fields outside the LLM schemas: code validates them, merges/removes filters and reruns SQL without a model call or a `reserve_agent_call` reservation. The readable `query` is stored as the user message. Invalid answers/removals return 422; see [API](api.md#t7-conversation-contract).
 
-Questions are `interaction={kind:"question",questions:[{id,prompt,options:[{value,label}]}]}`. All required service/frequency fields are collected together in priority order; every option is a published SQL facet under the active candidate constraints. A broad request asks for service, voltage and current type. A search with more than four matches may ask one additional SQL split; without a filterable split it reports the count without inventing options.
+`active_filters` persists removable search tags. Declining or repeating an unresolved question shows up to three current candidates and names the open requirement. Cancel clears pending information, filters and focus. A normal language turn retains one completed LLM tool decision; structured submissions and greeting-only turns need zero. A failed transport attempt is not a second completed decision.
 
-`answers` and `remove_filters` are additive request fields, outside the LLM schemas. Submitted strings must exactly match a pending field and option; removals must name active filters, otherwise HTTP 422 `invalid_answers`/`invalid_filter`. Code validates and merges them, re-runs SQL and stores the readable `query` without a model call or budget reservation. Active filters are persisted removable tags. A decline or a repeated unresolved question shows up to three candidates with a note identifying the open requirements. Cancel clears filters, focus and pending state.
+### Optional suggestions
 
-Suggestions are optional (0?3), with `suggested_replies` retained as an identical deprecated alias. Questions have no suggestions. A search returning two to four matches offers one comparison pair with the most differing published fields (ties retain SQL order); impossible searches offer SQL-derived relaxations. Single facts, definitions, comparisons, greetings, cancellations and unsupported requests have none. Generic navigation and Cancel are never suggestions.
+| Result/state | Suggestions |
+|---|---|
+| Pending question | 0; the question carries its options |
+| Search with 2–4 results and no question | 1 comparison of the pair with the most differing fields; ties keep SQL order |
+| More than 4 results, no pending question | 0 |
+| Impossible requirements | 0–3 executable SQL-derived relaxations/lookup choices |
+| One factual answer, definition, comparison, greeting, unsupported request or cancellation | 0 |
 
-Two-model comparisons use `layout:"table"`, a code-computed summary, explicit preference assumptions, differing `rows`, identical `hidden_rows`, and integer `better` indices or null. More torque/cycles is preferred; less time/current/motor power is preferred. This is an unweighted field count, not an overall suitability rating. Three or four models use `layout:"cards"`, no winners, and four key fields: torque, operating time, FLA, motor power, retaining explicit service/frequency scopes. A one-sentence `lead` accompanies cards/comparisons; `answer` remains the complete plain-text response for API clients. Migration 005 adds lead, interaction, suggestions and active-filter snapshots; historical rows default to null/empty lists.
+`suggestions` and deprecated `suggested_replies` carry the same list. Never pad with generic navigation, the action just performed or Cancel.
 
-Greeting-only input is handled by code with the authenticated user's first name (or `Hello.`), no inference and no suggestions. Ranges support two bounds on one field; decimal comma 1,5 means 1.5. Alternative voltages produce a SQL-backed question. "Same performance" after changing service retains numeric limits and states that assumption. Price/weighted-price selection and ordering explicitly report catalogue/application limits; conflicting label/invoice codes cannot establish the installed identity. Combined catalogue/glossary requests render supported parts and explicitly identify absent terms such as IP67.
+### Comparisons and lead
 
-### Transport resilience
+Two models use `layout:"table"`: `summary` counts wins without weighting; `assumptions` states the preference directions; differing fields are in `rows` and identical fields in `hidden_rows`. `better` is a zero-based model index computed by plain numeric comparison in code, not by the agent. More torque/cycles and less time/current/motor power are preferred; ties, N/A and fields without an agreed direction have null. Conflicting dual-unit directions have no winner. The count is not an overall suitability score.
 
-LangChain `.with_retry(stop_after_attempt=2)` retries only 503, timeout and connection failures; `.with_fallbacks` is enabled only by `OPENROUTER_FALLBACK_MODEL`, on the same endpoint. The SDK's own retries remain disabled. Each actual attempt reserves the process-local cap and is recorded in trace metadata; failed-turn exceptions retain safe attempt metadata without persisting half a conversation.
+Real row from `compare_two` in [T7 HTTP evidence](../../../reports/submission/T7-interactions.json):
 
-`AGENT_TURN_DEADLINE_S=60` is shared by primary retries and fallback. Each attempt has `min(AGENT_TIMEOUT_S, remaining)` timeout; when less than `AGENT_RETRY_MIN_REMAINING_S=10` remains, the attempt is recorded as `deadline_skipped` and does not reserve a call. This default stays below Android's 70-second read/75-second call timeout. Uvicorn keep-alive is 75 seconds. These transport behaviors are tested against local fakes, including a delayed local HTTP server; live provider resilience remains unverified.
+```json
+{
+  "field": "on_off_torque",
+  "label": "On/Off torque",
+  "values": [
+    "700 in-lb / 80 Nm",
+    "880 in-lb / 100 Nm"
+  ],
+  "better": 1
+}
+```
 
-Impossibility extrema retain their published scope: when service is unknown, On/Off and Modulating bounds are calculated and labelled separately; a known service reports only its own bound. Operating time, FLA and LRA extrema are separated by published frequency (or explicitly unspecified/not applicable); a requested frequency restricts that diagnostic. SQL-verified ties and shared-as-published notes are preserved.
+Three or four models use `layout:"cards"`, `better:null`, no arrows and four code-selected `key_fields`: torque, operating time, FLA and motor power, retaining the requested scopes. The captured three-model keys are `on_off_torque`, `operating_time_50hz_s`, `fla_50hz_a`, `motor_power_w`.
+
+Products/comparisons get a one-sentence `lead` for the app; `answer` remains the full plain-text result for API clients. The app falls back to `answer` for old messages without a lead.
+
+### Greeting and edge policies
+
+Greeting-only input (including punctuation-tolerant English/Spanish greetings) is handled by code, with the authenticated first name or `Hello.` and no suggestions. Captured response:
+
+> Hello, Samuel. I can look up Series 76 actuators, find models for your requirements, compare models or explain catalogue terms.
+
+The following approved behaviors are exercised in [T7 EC evidence](../../../reports/submission/T7-scenarios.json), using the [40-case specification](../../evaluation/edge-case-suite.es.md):
+
+| Case | Policy |
+|---|---|
+| EC05 | Label/invoice disagreement cannot identify the installed actuator; check the nameplate and compare the catalogue models. |
+| EC10 | A 70–100 Nm inclusive range retains both `gte 70` and `lte 100` on the torque field. |
+| EC15 | Decimal comma `1,5` means `1.5`, never `15`. |
+| EC20 | “Same performance” after changing service keeps numeric thresholds and states that assumption. |
+| EC25 | `110 V or 220 V` asks with both published options; it does not AND them or silently choose one. |
+| EC30 | No catalogue prices or agreed price-weighted overall score; offer published technical comparisons. |
+| EC35 | No ordering or delivery confirmation; offer catalogue specifications. |
+| EC40 | Render the supported facts/comparison and FLA/LRA/S4 definitions in one decision; explicitly state that the supplied summary does not define IP67. |
+
+### Retry, fallback and deadline
+
+LangChain `.with_retry(stop_after_attempt=2)` retries only 503, timeout and connection errors; never 4xx. An optional `OPENROUTER_FALLBACK_MODEL` uses `.with_fallbacks` on the same endpoint. SDK retries stay disabled. Every actual attempt reserves the local call cap and is recorded; failed turns preserve safe attempt metadata without persisting half a conversation.
+
+The shared `AGENT_TURN_DEADLINE_S=60` covers primary retries and fallback. Each attempt uses `min(AGENT_TIMEOUT_S=45, remaining)`; less than `AGENT_RETRY_MIN_REMAINING_S=10` remaining records `deadline_skipped` without reserving a call. Defaults stay below Android's 70 s read/75 s call timeout. Keep-alive is separate: client pool 30 s, Uvicorn 75 s. [Operations](operations.md) documents configuration and the first-tap failure.
 
 ## Known limits
 
-The lexical policy and numeric grounding remain bounded: occurrence of a number does not prove correct semantic assignment. T6 focus, strict thresholds, ranking, cancellation and comparison are verified offline with scripted decisions and SQL; the coordinator’s real-LLM v5 check is pending. Only 12 recent messages (truncated to 2000 chars each) plus persisted context are supplied. OpenRouter and full Android-to-real-LLM acceptance remain pending.
-
-Provider focus is a flat list of field names, with optional focus_service for torque and focus_frequency_hz for operating time/FLA/LRA. Code expands these into the persisted per-field canonical focus. Combined explain_terms uses comma-separated glossary keys; assumptions maps filter names to verbatim user phrases. Bounds remain field/op/value records. Numeric ranges and list/string limits are checked by canonical Pydantic validation, not advertised to the provider. Run the [schema preflight](operations.md#tool-schema-preflight-before-any-cohort) before any paid cohort.
+T7 is verified with scripted decisions, real SQL and local HTTP/transport tests; [testing](testing.md) separates real-model acceptance. Numeric occurrence does not prove semantic assignment. Only 12 recent messages (up to 2000 characters each) and persisted context reach the model. Offline checks do not establish provider availability, arbitrary-language correctness, device layout or production load behavior.

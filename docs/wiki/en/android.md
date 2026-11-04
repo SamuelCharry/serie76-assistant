@@ -16,11 +16,29 @@ flowchart LR
 
 ## Screens and state
 
-Login validates the saved token through `/me` before showing private history. Chat displays Hello on an empty session, product cards/comparison rows, a composer and loading/error feedback. The drawer lists the current user’s conversations with pagination, New chat, account/Sign out and Light/Dark/System appearance. Developer debug is a separate debug-only surface; release substitutes an inert implementation.
+Login validates the saved token through `/me` before showing private history. Chat displays a personalized Hello on an empty session, product cards/comparison rows, a composer and loading/error feedback. The drawer lists the current user’s conversations with pagination, New chat, account/Sign out and Light/Dark/System appearance. Developer debug is a separate debug-only surface; release substitutes an inert implementation.
 
 ViewModels own requests and StateFlow; constructor injection isolates Retrofit DTOs from presentation. Product decimal JSON values are kept as decimal text for display rather than converted through Double. The authenticated profile comes from the server; the old editable local profile is historical. Appearance preferences persist locally. No Firebase or voice.
 
 Loading prevents duplicate sends and session changes mid-turn. A failed send preserves the draft and requires history reload before retry; if no session_id was received, inspect the list. Rotation retains ViewModels. After process death, the encrypted token is revalidated and history reopened from the server; draft/open-session restoration is not guaranteed. Logout failure keeps the session available for revocation retry. A late 401 from an old token cannot sign out a new account.
+
+## T7 questions, suggestions and comparisons
+
+The pinned QUESTION card above the composer shows the prompt, full-width radio choices and step count. Choices advance locally through all questions; review lists every answer and lets the user edit it. Submit sends exact option values in `answers` plus a readable summary; no request is made while selecting. Cancel clears the card and sends `Cancel` without partial answers. The composer is dimmed while a question is open but remains typable after touch/focus; sending free text drops local selections.
+
+Optional suggestions are quiet dashed chips under the latest assistant message, labelled `✦ Suggestions · optional`. They disappear while typing/sending or while an interaction is present; there may be zero. Removable active-filter tags sit below the app bar and send `remove_filters` with a readable query. The backend, not the app, validates options and filters.
+
+Two-model comparisons show a summary, muted assumptions, a three-column table, and expandable identical rows. A bold value and orange arrow display the server's numeric `better` index. Three/four-model comparisons instead show one card per model with four server-selected fields in a 2×2 grid and no arrows. `lead` replaces full `answer` only when products/comparison are rendered; legacy messages fall back to answer. The app preserves decimal strings and source notes.
+
+The empty chat greets the authenticated account's first name: `Hello, Samuel` for the recorded Samuel example, or `Hello` when absent. Greeting-only messages also receive the backend's personalized sentence; see [captured HTTP examples](../../../reports/submission/T7-interactions.json). The existing visual identity and greeting animation remain.
+
+## First-tap connection failure
+
+T7 addresses the first tap after idle failing when OkHttp reused a pooled connection that Uvicorn had closed after its former 5 s keep-alive. The client now expires pooled connections after 30 s, below the server's 75 s (`--timeout-keep-alive 75`). Rebuild both sides when updating; changing only the app leaves the old server mismatch.
+
+Automatic POST/connection retries remain off (`retryOnConnectionFailure(false)`), to avoid replaying a conversation write. Read timeout is 70 s and total call timeout 75 s; the provider decision deadline defaults to 60 s. After an uncertain network failure, reload history before resending.
+
+[Android T7 evidence](../../../reports/submission/T7-android.md): 40 JVM tests passed and the debug APK built. The pool regression uses production Retrofit/OkHttp with MockWebServer, confirms initial pooling and 30 s expiry, then a successful fresh POST without retries. This covers a local closed-socket scenario; it does not replay the deployed 5 s timeout or prove pixel fit/emulator acceptance. Backend contract examples are real SQL; Android comparison fixtures are synthetic, not catalogue evidence.
 
 ## Authentication
 

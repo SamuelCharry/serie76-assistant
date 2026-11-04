@@ -20,10 +20,13 @@ Los valores provienen de [.env.example](../../../.env.example) y [Compose](../..
 | `OPENROUTER_API_KEY` | _vacío_ | Credencial privada de modelo; vacía desactiva interpretación. |
 | `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` | Endpoint chat compatible OpenAI; predeterminado OpenRouter. |
 | `OPENROUTER_CHAT_MODEL` | _vacío_ | ID explícito de modelo con herramientas; sin selección automática. |
+| `OPENROUTER_FALLBACK_MODEL` | _vacío_ | Modelo alternativo opcional en el mismo endpoint/clave; vacío lo desactiva. Solo fallos transitorios. |
+| `AGENT_TURN_DEADLINE_S` | `60` | Plazo compartido entre intentos primarios y fallback, menor que los 70/75 s de Android. |
+| `AGENT_RETRY_MIN_REMAINING_S` | `10` | Margen mínimo para iniciar intento; si falta, registra deadline_skipped sin reserva. |
 | `AGENT_MAX_TOKENS` | `2048` | Máximo de tokens generados por decisión. |
 | `AGENT_REASONING_EFFORT` | `low` | Esfuerzo de razonamiento; vacío omite parámetro. |
 | `AGENT_TOOL_CHOICE` | `required` | Tool choice de bind_tools; vacío deja decidir al proveedor. |
-| `AGENT_TIMEOUT_S` | `45` | Timeout del modelo en segundos; max_retries=0. |
+| `AGENT_TIMEOUT_S` | `45` | Máximo por intento, reducido al plazo restante; SDK max_retries=0, LangChain controla retry acotado. |
 | `AGENT_TEMPERATURE` | _vacío_ | Vacío usa muestreo predeterminado del proveedor. |
 | `LANGSMITH_TRACING` | `false` | Trazas externas opt-in; requiere también clave. |
 | `LANGSMITH_API_KEY` | _vacío_ | Credencial privada de trazas; nunca va a Android. |
@@ -93,6 +96,12 @@ Consulta tabla de errores: timeout/cuota/saldo/red, guarda local o capacidad. No
 ### Login falla tras reinicio
 
 El arranque nunca restablece contraseñas demo. Usa credenciales existentes o administración explícita; no borres volumen para imponer contraseña pública.
+
+### Falla el primer toque tras inactividad
+
+El desajuste T7 era un socket del pool OkHttp que sobrevivía al antiguo keep-alive de 5 s de Uvicorn. Actualizar/reconstruir backend y APK: el pool cliente expira ahora a 30 s y el servidor a 75 s. Confirmar `--timeout-keep-alive 75`; no activar retries POST para ocultar el fallo. Si no se sabe si llegó el envío, recargar historial antes de repetir. [Regresión local y límites](android.md#fallo-del-primer-toque-por-conexión).
+
+Ante respuestas lentas del proveedor, distinguir keep-alive del plazo de decisión de 60 s. Solo 503/timeout/conexión pueden reintentarse (dos intentos por modelo); nunca 4xx. El fallback opcional comparte plazo y cada intento real consume cuota local. `turn_deadline` / `deadline_skipped` indica que no quedaba margen para otro intento; subir timeouts sin control puede exceder el timeout de la app. Ver [agente](agent.md#retry-fallback-y-plazo-total).
 
 ### Android no conecta
 

@@ -51,7 +51,7 @@ Ante `DC + 60 Hz`, pregunta qué requisito conservar y mantiene las restriccione
 
 Los códigos normalizan mayúsculas/espacios/guion omitido, nunca completan `/A` ni sufijos supuestos. Los parciales reciben candidatos por prefijo; los completos inexistentes se informan como no encontrados. Deben figurar en conversación o contexto. Los filtros no expresados se descartan y nombran; los supuestos citan palabras reales y se muestran. La fundamentación numérica comprueba presencia del número, no semántica completa; todavía puede asignarse al campo equivocado.
 
-SQL compara columnas publicadas con filtros AND, alcance por servicio/frecuencia y estados de ausencia. Lo desconocido no cumple umbrales. Las plantillas redactan filas y citas literales; ningún segundo modelo escribe la respuesta. Una invocación al proveedor por turno, sin reintentos. Una llamada de catálogo más `explain_terms` en la misma respuesta se puede fusionar en una ejecución; otras formas inválidas producen aclaración.
+SQL compara columnas publicadas con filtros AND, alcance por servicio/frecuencia y estados de ausencia. Lo desconocido no cumple umbrales. Las plantillas redactan filas y citas literales; ningún segundo modelo escribe la respuesta. Una decisión de modelo completada por turno; los fallos transitorios pueden reintentarse dentro del plazo compartido descrito abajo. Una llamada de catálogo más `explain_terms` en la misma respuesta se puede fusionar en una ejecución; otras formas inválidas producen aclaración.
 
 ## Controles y trazas
 
@@ -86,32 +86,117 @@ Acredita ejecución almacenada, no aceptación con proveedor real. [Pruebas y co
 - [backend/conversation/policy.py](../../../backend/conversation/policy.py#L85)
 - [backend/conversation/rendering.py](../../../backend/conversation/rendering.py#L1)
 
-## Política conversacional T6
+## Política conversacional T7
 
-### Focus y umbrales
+### Focus, filtros y ranking
 
-`focus=[{"field":"torque","service":"on_off"},{"field":"operating_time","frequency_hz":60}]` muestra solo torque On/Off y tiempo a 60 Hz, también en los productos estructurados. Focus persiste para seguimientos; `overview` pide todos los campos. Se acepta el focus escalar antiguo por compatibilidad.
+`focus` selecciona campos y ámbito de servicio/frecuencia; al omitirlo reutiliza contexto y `overview` pide todos los campos. Los límites usan `gt|gte|lt|lte`, conservan cifra y unidad, y admiten cota inferior y superior en el mismo campo. Los escalares antiguos siguen inclusivos. SQL controla las comparaciones; un dato desconocido o N/A no satisface un umbral numérico.
 
-Los filtros de magnitud aceptan `{value,op}` con `gt|gte|lt|lte`. “More than”, “over”, “mayor a”, “más de” son gt estricto; “below”/“menos de”, lt; “at least”/“al menos”, gte; “up to”/“hasta”, lte. Los operadores SQL vienen de una lista permitida; no se altera la cifra. Los filtros escalares antiguos siguen siendo inclusivos. El resumen imprime el operador aplicado.
+`sort_by` ordena preferencias fastest, lowest_power, highest_torque o lowest_current. Muestra hasta tres candidatos ordenados; sin frecuencia usa el menor valor publicado y lo explica. Potencia de motor no equivale a consumo energético total. Más de cuatro resultados sin orden muestran conteo SQL y preguntan por una faceta que los separe; sin faceta filtrable no inventan pregunta/opciones. Cero coincidencias produce extremos SQL por ámbito y opciones de relajación, nunca un modelo inferior presentado como válido.
 
-### Ranking y tamaño del resultado
+### Preguntas y envíos resueltos por código
 
-`sort_by` tiene orden: fastest (tiempo ascendente), lowest_power (potencia ascendente), highest_torque o lowest_current (FLA ascendente). Conserva servicio/frecuencia pedidos; sin frecuencia usa el menor valor publicado y lo aclara. Datos desconocidos quedan al final; N/A explícito se excluye de recomendaciones. Potencia de motor aproxima la preferencia expresada, no consumo total. Con orden muestra los 3 primeros y sus campos de ranking, más una pregunta para acotar.
+Una pregunta pide información necesaria; una sugerencia propone una acción opcional. `interaction.questions` reúne todos los campos actualmente requeridos, ordenados y con opciones de facetas SQL bajo los filtros actuales. Android recoge respuestas localmente, muestra revisión y solo envía al pulsar Submit. Esta interacción capturada pide servicio y frecuencia juntos:
 
-Sin orden, más de 4 coincidencias muestran conteo SQL y una pregunta, sin productos. El atributo maximiza entropía de las facetas SQL actuales de alimentación/carcasa/fases; sus opciones generan sugerencias. Entre 2 y 4 hay lista breve con un valor distintivo y pares para comparar; con 1, respuesta enfocada. Con 0 no pregunta servicio/frecuencia: retira cada umbral por turno y calcula min/max SQL y todos los modelos empatados bajo los demás requisitos. Si tampoco existe la combinación restante, lo indica; no inventa un sustituto cercano.
+```json
+{
+  "kind": "question",
+  "questions": [
+    {
+      "id": "service",
+      "prompt": "Which service?",
+      "options": [
+        {
+          "value": "on_off",
+          "label": "On/Off"
+        },
+        {
+          "value": "modulating",
+          "label": "Modulating"
+        }
+      ]
+    },
+    {
+      "id": "frequency_hz",
+      "prompt": "Which frequency?",
+      "options": [
+        {
+          "value": "50",
+          "label": "50 Hz"
+        },
+        {
+          "value": "60",
+          "label": "60 Hz"
+        }
+      ]
+    }
+  ]
+}
+```
 
-### Cancelación, comparación y sugerencias
+Fuente: `two_questions` en [evidencia HTTP T7](../../../reports/submission/T7-interactions.json). Los textos enviados deben coincidir exactamente con IDs/valores pendientes. `answers` y `remove_filters` son campos de la solicitud, fuera de los esquemas LLM: el código valida, fusiona/elimina filtros y repite SQL sin llamar al modelo ni reservar `reserve_agent_call`. Guarda el `query` legible como mensaje del usuario. Respuestas/eliminaciones inválidas devuelven 422; ver [API](api.md#contrato-conversacional-t7).
 
-`ask_clarification` acepta cancel/decline. Un no aislado tras pregunta pendiente la rechaza sin repetirla. Cancel limpia pregunta, filtros y focus, sin consulta/búsqueda de catálogo. `cancel_previous=true` permite cancelar y después buscar o pedir algo fuera de alcance. Una guarda reconoce cancelación/rechazo aislados aunque el modelo proponga otra herramienta; se conserva una decisión LLM por turno.
+`active_filters` conserva etiquetas removibles de búsqueda. Rechazar o repetir una pregunta sin resolver muestra hasta tres candidatos y nombra el requisito abierto. Cancel limpia información pendiente, filtros y focus. Un turno normal de lenguaje conserva una decisión LLM completada; envíos estructurados y saludos puros necesitan cero. Un intento de transporte fallido no es otra decisión completada.
 
-Se comparan máximo dos códigos verificados en SQL. `comparison={models,rows,identical_fields_hidden}` solo incluye diferencias; cada fila tiene field, label, a, b y better=a|b|null. Solo se marca mejor con más torque o menos tiempo/corriente/potencia. Se cuentan campos idénticos ocultos; con 3–4 candidatos ofrece pares. `answer` sigue siendo texto plano sin tablas Markdown.
+### Sugerencias opcionales
 
-Cada turno nuevo exitoso tiene exactamente 3 `suggested_replies` distintas en inglés, construidas por código desde opciones/códigos SQL y mensajes fijos admitidos. Show more exige otra página real mostrable; Cancel requiere información pendiente y se omite inmediatamente tras cancelar. Explain On/Off service solo se ofrece ante una pregunta pendiente de servicio. Tras imposibilidad propone el modelo cercano SQL y búsquedas relajadas con ámbito explícito; al rechazar una pregunta usa una frase natural que solo nombra el campo realmente pendiente. Ambos campos persisten en snapshots con migración aditiva 004; los mensajes antiguos conservan lectura con [] y comparación null. Android muestra chips bajo el último mensaje asistente (desactivados durante carga/reconciliación) y tarjeta de diferencias de tres columnas, valor mejor en negrita, sin scroll horizontal.
+| Resultado/estado | Sugerencias |
+|---|---|
+| Pregunta pendiente | 0; las opciones pertenecen a la pregunta |
+| Búsqueda con 2–4 resultados y sin pregunta | 1 comparación del par con más campos distintos; empates conservan orden SQL |
+| Más de 4 resultados sin pregunta pendiente | 0 |
+| Requisitos imposibles | 0–3 relajaciones/consultas ejecutables derivadas de SQL |
+| Dato único, definición, comparación, saludo, fuera de alcance o cancelación | 0 |
 
-Las cotas de imposibilidad conservan su ámbito publicado: sin servicio, On/Off y Modulating se calculan y etiquetan por separado; con servicio conocido solo se muestra su cota. Tiempo, FLA y LRA se separan por frecuencia publicada (o explícitamente no especificada/no aplicable); una frecuencia pedida restringe el diagnóstico. Se conservan empates SQL y notas de datos compartidos publicados.
+`suggestions` y el alias obsoleto `suggested_replies` llevan la misma lista. No se rellena con navegación genérica, la acción recién realizada ni Cancel.
+
+### Comparación y lead
+
+Dos modelos usan `layout:"table"`: `summary` cuenta campos ganados sin ponderación; `assumptions` declara preferencias; las diferencias están en `rows` y los campos idénticos en `hidden_rows`. `better` es el índice del modelo desde cero, calculado por comparación numérica simple en código, no por el agente. Se prefiere más torque/ciclos y menos tiempo/corriente/potencia; empates, N/A y campos sin dirección acordada quedan null. Si las unidades publicadas discrepan en dirección, no hay ganador. El conteo no mide idoneidad global.
+
+Fila real de `compare_two` en [evidencia HTTP T7](../../../reports/submission/T7-interactions.json):
+
+```json
+{
+  "field": "on_off_torque",
+  "label": "On/Off torque",
+  "values": [
+    "700 in-lb / 80 Nm",
+    "880 in-lb / 100 Nm"
+  ],
+  "better": 1
+}
+```
+
+Tres o cuatro modelos usan `layout:"cards"`, `better:null`, sin flechas y cuatro `key_fields` elegidos por código: torque, tiempo, FLA y potencia, conservando los ámbitos pedidos. Las claves capturadas para tres modelos son `on_off_torque`, `operating_time_50hz_s`, `fla_50hz_a`, `motor_power_w`.
+
+Productos/comparaciones reciben un `lead` de una frase para la app; `answer` conserva la respuesta completa en texto plano para clientes API. La app usa `answer` cuando un mensaje antiguo no tiene lead.
+
+### Saludo y políticas de casos límite
+
+El código resuelve saludos puros en inglés/español, tolerando puntuación, con el primer nombre autenticado o `Hello.` y sin sugerencias. Respuesta capturada:
+
+> Hello, Samuel. I can look up Series 76 actuators, find models for your requirements, compare models or explain catalogue terms.
+
+Estas políticas aprobadas se ejercitan en [evidencia EC T7](../../../reports/submission/T7-scenarios.json), siguiendo la [especificación de 40 casos](../../evaluation/edge-case-suite.es.md):
+
+| Caso | Política |
+|---|---|
+| EC05 | Etiqueta y factura contradictorias no identifican el actuador instalado; revisar placa y comparar modelos del catálogo. |
+| EC10 | El intervalo inclusivo 70–100 Nm conserva `gte 70` y `lte 100` en torque. |
+| EC15 | La coma decimal `1,5` significa `1.5`, nunca `15`. |
+| EC20 | “Same performance” al cambiar servicio conserva umbrales numéricos y declara el supuesto. |
+| EC25 | `110 V or 220 V` pregunta con ambas opciones publicadas; no aplica AND ni elige una en silencio. |
+| EC30 | No hay precios ni puntuación global ponderada por precio acordada; ofrece comparación técnica publicada. |
+| EC35 | No compra ni confirma entrega; ofrece especificaciones del catálogo. |
+| EC40 | Resuelve datos/comparación admitidos y definiciones FLA/LRA/S4 en una decisión; declara que el resumen no define IP67. |
+
+### Retry, fallback y plazo total
+
+LangChain `.with_retry(stop_after_attempt=2)` reintenta solo 503, timeout y errores de conexión; nunca 4xx. `OPENROUTER_FALLBACK_MODEL` habilita opcionalmente `.with_fallbacks` en el mismo endpoint. Los retries propios del SDK permanecen apagados. Cada intento real reserva cuota local y queda registrado; los fallos conservan metadatos seguros sin persistir medio turno.
+
+`AGENT_TURN_DEADLINE_S=60` es compartido por reintentos y fallback. Cada intento usa `min(AGENT_TIMEOUT_S=45, tiempo restante)`; con menos de `AGENT_RETRY_MIN_REMAINING_S=10` registra `deadline_skipped` sin reservar llamada. Los valores predeterminados quedan bajo los 70 s de lectura/75 s totales de Android. Keep-alive es independiente: pool cliente 30 s, Uvicorn 75 s. [Operación](operations.md) explica configuración y fallo del primer toque.
 
 ## Límites conocidos
 
-El léxico y la fundamentación siguen acotados: que una cifra aparezca no demuestra asignación semántica correcta. Focus, umbrales estrictos, ranking, cancelación y comparación T6 se verificaron offline con decisiones programadas y SQL; el coordinador aún debe ejecutar v5 con LLM real. Se envían 12 mensajes recientes (2000 caracteres por mensaje) más contexto persistido. OpenRouter y aceptación integral Android con LLM real siguen pendientes.
-
-El foco del proveedor es una lista plana de campos, con focus_service opcional para torque y focus_frequency_hz para tiempo/FLA/LRA. El código lo expande al foco canónico persistido por campo. explain_terms combinado usa claves del glosario separadas por comas; assumptions mapea filtros a frases literales del usuario. Los límites siguen como registros field/op/value. Pydantic valida rangos numéricos y límites de listas/texto después de la llamada; no se anuncian al proveedor. Ejecutar el [preflight de esquemas](operations.md#preflight-del-esquema-antes-de-cualquier-cohorte) antes de cualquier cohorte de pago.
+T7 se verificó con decisiones controladas, SQL real y HTTP/transporte locales; [pruebas](testing.md) separa la aceptación con modelo real. Presencia numérica no prueba asignación semántica. Solo llegan al modelo 12 mensajes recientes (hasta 2000 caracteres cada uno) y contexto persistido. Los controles offline no acreditan disponibilidad del proveedor, lenguaje arbitrario, diseño en dispositivo ni carga productiva.
