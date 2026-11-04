@@ -26,6 +26,15 @@ def obj(properties, required=()):
     return result
 
 
+def term_list(value):
+    """The compact field is comma-separated text; legacy/internal calls use lists."""
+    if isinstance(value, str):
+        return [key.strip() for key in value.split(',') if key.strip()]
+    if isinstance(value, list) and all(isinstance(key, str) for key in value):
+        return value
+    raise ValueError('Invalid term list')
+
+
 def schemas(term_keys):
     terms = array(enum(term_keys))
     bound = obj({"field": enum(COMPARISONS), "op": enum(["gt", "gte", "lt", "lte"]),
@@ -74,7 +83,7 @@ def canonical_arguments(name, raw):
                               **({"frequency_hz": frequency} if frequency is not None and f in ("operating_time", "fla", "lra") else {}),
                               **({"service": service} if service is not None and f == "torque" else {})} for f in focus]
     if name in ("get_actuator", "search_actuators") and isinstance(args.get("explain_terms"), str):
-        args["explain_terms"] = [key.strip() for key in args["explain_terms"].split(",") if key.strip()]
+        args["explain_terms"] = term_list(args["explain_terms"])
     if name == "search_actuators" and isinstance(args.get("assumptions"), dict):
         args["assumptions"] = [{"field": key, "user_phrase": phrase} for key, phrase in args["assumptions"].items()]
     if name == "search_actuators" and "bounds" in args:

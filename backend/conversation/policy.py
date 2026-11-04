@@ -26,7 +26,8 @@ FILTER_FIELDS = CATEGORICAL_FIELDS + NUMERIC_FIELDS
 # else needs an explicit assumption (shown to the user) quoting the user's own words.
 LEXICON = {
     ("service", "on_off"): ("on/off", "on_off", "on-off", "on off", "open/close", "open-close", "open or close",
-                            "fully open", "fully closed", "two-position", "two position", "isolation", "todo/nada", "todo o nada"),
+                            "fully open", "fully closed", "two-position", "two position", "isolation", "todo/nada", "todo o nada",
+                            "abrir completo o cerrar completo", "abrir completamente o cerrar completamente"),
     ("service", "modulating"): ("modulat", "positioning", "throttl", "proportional", "intermediate position", "modulante"),
     ("enclosure", "explosionproof"): ("explosion", "hazardous", "atex", "iecex", "flammable", "class i", "zone 1", "antiexplos"),
     ("enclosure", "weatherproof"): ("weatherproof", "weather proof", "weather-proof", "outdoor", "rain", "intemperie", "exteriores"),
@@ -68,6 +69,28 @@ def codes_in_text(text):
         if code and code not in found:
             found.append(code)
     return found
+
+
+def grounded_lookup_codes(raw_codes, query):
+    """Repair a model-only truncation from a unique full code in this query, never SQL.
+
+    A prefix actually written by the user stays incomplete, even if another full code
+    shares it. Unmatched/ambiguous model prefixes also keep the clarification path.
+    """
+    explicit = codes_in_text(query)
+    chosen, repaired = [], []
+    for raw in raw_codes:
+        code, prefix = canonical_code(raw)
+        value = raw
+        if code is None and prefix:
+            written = re.search(r'(?<![A-Z0-9/\-])' + re.escape(prefix) + r'(?![A-Z0-9/\-])', query, re.I)
+            matches = [c for c in explicit if c.startswith(prefix)]
+            if not written and len(matches) == 1:
+                value = matches[0]
+                repaired.append(raw)
+        if value not in chosen:
+            chosen.append(value)
+    return chosen, repaired
 
 
 def numbers_in(texts):
@@ -230,6 +253,36 @@ def term_is_relevant(query, term):
     """The question must share vocabulary with the term (label, aliases, key or definition)."""
     vocabulary = _vocabulary(" ".join([term["label"], term["term_key"].replace("_", " "), " ".join(term["aliases"]), term["definition"]]))
     return bool(_vocabulary(query) & vocabulary)
+
+
+def term_is_named(query, term):
+    """Direct glossary identity, not overlap with generic words in a definition."""
+    names = [term['term_key'], term['term_key'].replace('_', ' '), term['label'], *term['aliases']]
+    return any(re.search(r'(?<!\w)' + re.escape(name) + r'(?!\w)', query, re.I) for name in names)
+
+
+def normalized_term_keys(keys, query, terms):
+    """Resolve supplied glossary aliases and deduplicate; unknown ratings stay explicit.
+
+    If an absent rating is asked, do not substitute a related term unless the user
+    also named that term. Other unrecognised keys are retained for schema rejection.
+    """
+    aliases = {name.casefold(): t['term_key'] for t in terms
+               for name in [t['term_key'], t['label'], *t['aliases']]}
+    index = {t['term_key']: t for t in terms}
+    unknown = {t.casefold() for t in terms_not_in_glossary(query, terms)}
+    chosen = []
+    for raw in keys:
+        if not isinstance(raw, str):
+            raise ValueError('Invalid term key')
+        key = aliases.get(raw.casefold(), raw)
+        if raw.casefold() in unknown:
+            continue
+        if unknown and key in index and not term_is_named(query, index[key]):
+            continue
+        if key not in chosen:
+            chosen.append(key)
+    return chosen
 
 
 def terms_not_in_glossary(query, terms):

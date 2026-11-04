@@ -150,7 +150,7 @@ class GlossaryTests(Base):
 
     def test_term_outside_the_summary(self):
         result = self.turn("What is IP67?", ("ask_clarification", {"field": "term_not_in_summary"}))
-        self.assertIn("does not define that term", result.answer)
+        self.assertIn("does not define 'IP67'", result.answer)  # Name the actual unsupported rating.
         self.assertIn("Duty Cycle (S4%)", result.answer)
 
     def test_combined_definition_and_lookup_in_one_call(self):

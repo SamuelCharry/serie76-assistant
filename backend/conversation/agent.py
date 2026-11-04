@@ -99,6 +99,11 @@ Tools:
   focus is a list of field names; use overview only for all specs.
   Use focus_service for torque and focus_frequency_hz for operating_time/fla/lra.
   Example: focus=["torque","operating_time"], focus_service="on_off", focus_frequency_hz=60.
+  For FLA at 60 Hz AND its definition, use focus=["fla"], focus_frequency_hz=60,
+  explain_terms="fla" in this same get_actuator call; do not call explain_terms separately.
+  Multi-part lookup/comparison plus definitions stays one call: include every requested focus
+  and explain_terms="fla,lra,duty_cycle" for FLA/LRA/S4; omit unknown terms such as IP67.
+  Code reports unsupported terms explicitly while answering the supported parts.
   Empty focus reuses persisted focus. Answers and suggested replies are English-only; understand Spanish input.
 - search_actuators: recommend actuators for requirements. Put ONLY requirements the user
   stated. For a follow-up that changes or adds requirements set refine=true and send ONLY
@@ -118,6 +123,8 @@ Tools:
   retain other requirements and ask supply. Same performance after a service change retains numeric limits.
   Extract EVERY explicit numeric requirement, also when service is expressed informally:
   "fully open or fully close, 110 V, at least 50 Nm" includes min_torque_nm=50, op=gte.
+  "abrir completo o cerrar completo" means on_off; retain voltage/torque and quote that
+  phrase in assumptions.service, just as for informal English open/close wording.
   Omit unknown fields; do not send null. Empty focus/bounds lists add no constraint.
   More than/over/mayor a/más de => gt; below/menos de => lt;
   at least/al menos => gte; up to/hasta => lte. Never replace a strict bound with an inclusive one.
@@ -133,10 +140,14 @@ Tools:
   Bare cancel/cancelar/olvídalo => field=cancel; bare no after a clarification => decline.
   Cancel runs no catalogue tool; decline shows up to three current SQL candidates and names the open requirements.
   Several previous products and "it" -> which_product. Unrelated request -> unsupported.
+  Jokes, stories and other non-catalogue requests remain unsupported even when they mention
+  valves or actuators; "Tell me a joke about valves" is NOT an empty actuator search.
   A singular "its/it/that one" after two models, without a current explicit code, must
   ask which_product; never resend both codes as a comparison to resolve that ambiguity.
   A term, rating or standard that is NOT in the glossary (e.g. an IP or NEMA rating) ->
   term_not_in_summary, even when a related glossary term exists.
+  Do not substitute weatherproof for an IP67 definition. For a supported combined lookup,
+  retain the supported lookup and glossary keys instead of discarding the whole request.
 
 Never assume voltage, frequency, phases, service, enclosure, certification or thresholds the
 user did not express. A vague application without specifications needs a clarification.
@@ -190,10 +201,10 @@ def schemas(term_keys):
 
 
 DESCRIPTIONS = {
-    "get_actuator": "Look up complete Base Part Numbers (up to four) in the electrical catalogue.",
+    "get_actuator": "Look up complete Base Part Numbers (up to four); include focus and comma-separated explain_terms for combined facts/definitions in one call.",
     "search_actuators": "Find actuators for ALL stated requirements, including every numeric limit. New independent requests use refine=false; explicit follow-ups use refine=true or more/remove. Unknown data never passes a threshold.",
-    "explain_terms": "Quote glossary definitions of catalogue terms.",
-    "ask_clarification": "Ask for a missing requirement, part number or disambiguation.",
+    "explain_terms": "Quote only glossary definitions; absent terms use ask_clarification term_not_in_summary, not a related definition.",
+    "ask_clarification": "Ask for missing data/disambiguation, or mark unsupported requests such as jokes and terms absent from the glossary.",
 }
 
 
@@ -418,7 +429,10 @@ class Turn:
             self.trace.setdefault("overrides", []).append("ambiguous_singular_reference")
             return self.clarify("which_product")
         mentioned = {c for text in self.texts for c in policy.codes_in_text(text)}
-        for raw in args["part_numbers"]:
+        grounded_codes, repaired = policy.grounded_lookup_codes(args["part_numbers"], self.query)
+        if repaired:
+            self.trace.setdefault("overrides", []).append("model_prefix_replaced_from_explicit_code")
+        for raw in grounded_codes:
             code, note = policy.canonical_code(raw)
             if code is None:
                 partial.append(note or str(raw))
@@ -486,9 +500,9 @@ class Turn:
         if args.get("explain_terms"):
             text, terms = self.explained(args["explain_terms"])
             answer += ("\n\n" + text) if text else ""
-            unknown = policy.terms_not_in_glossary(self.query, self.terms)
-            if unknown:
-                answer += '\nNot answered: ' + ', '.join(unknown) + '; the supplied Series 76 summary does not define these terms.'
+        unknown = policy.terms_not_in_glossary(self.query, self.terms)
+        if unknown:
+            answer += '\nNot answered: ' + ', '.join(unknown) + '; the supplied Series 76 summary does not define these terms.'
         if products:
             self.context["part_numbers"] = [p["base_part_number"] for p in products]
         return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared, lead=quality.comparison_lead(compared) if compared else None)
@@ -613,6 +627,13 @@ class Turn:
 
     def ask(self, args):
         field_name = args["field"]
+        if field_name == 'term_not_in_summary':
+            unknown = policy.terms_not_in_glossary(self.query, self.terms)
+            if unknown:
+                self.trace['validation'] = ['term_not_in_glossary:' + ','.join(unknown)]
+                names = ', '.join(f"'{u}'" for u in unknown)
+                return self.clarify(field_name, f'The supplied Series 76 summary does not define {names}. I can explain: '
+                                    + ', '.join(t['label'] for t in self.terms) + '.')
         if field_name == "cancel":
             self.context.clear()
             self.trace["data"] = dict(status="cancelled")
@@ -659,6 +680,18 @@ def public_product(product):
 def _usage(response):
     usage = getattr(response, "usage_metadata", None) or {}
     return {k: usage.get(k) for k in ("input_tokens", "output_tokens", "total_tokens") if k in usage}
+
+
+def trace_arguments(name, raw, models):
+    """Preserve declared arguments only; never echo arbitrary model-supplied fields."""
+    if name not in models or not isinstance(raw, dict):
+        return {}
+    allowed = set(models[name].model_fields)
+    if name == 'search_actuators':
+        allowed.add('bounds')
+    elif name == 'get_actuator':
+        allowed.update(('focus_frequency_hz', 'focus_service'))
+    return {k: v for k, v in raw.items() if k in allowed}
 
 
 def run_agent(connection, query, messages, context, *, model=None, answers=None, remove_filters=None, user_name=None):
@@ -710,13 +743,20 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     meta = dict(model=getattr(response, "response_metadata", {}).get("model_name") or os.environ.get("OPENROUTER_CHAT_MODEL"),
                 latency_ms=round((time.perf_counter() - started) * 1000), usage=_usage(response), attempts=attempts, decision_calls=1)
     calls = list(getattr(response, "tool_calls", None) or [])
+    model_calls = [dict(name=c['name'], args=trace_arguments(c['name'], c.get('args'), models))
+                   for c in calls if c.get('name') in models]
     # Tolerate the one harmless multi-call shape: a catalogue call plus explain_terms.
     if len(calls) == 2 and {c.get("name") for c in calls} & {"explain_terms"} and \
             {c.get("name") for c in calls} - {"explain_terms"} <= {"get_actuator", "search_actuators"} and \
             len({c.get("name") for c in calls}) == 2:
         main = next(c for c in calls if c["name"] != "explain_terms")
         extra = next(c for c in calls if c["name"] == "explain_terms").get("args", {}).get("term_keys", [])
-        calls = [dict(main, args=dict(main.get("args", {}), explain_terms=list(main.get("args", {}).get("explain_terms", [])) + list(extra)))]
+        try:
+            merged = tool_wire.term_list(main.get("args", {}).get("explain_terms", [])) + tool_wire.term_list(extra)
+        except ValueError:
+            pass  # Invalid multi-call arguments follow the existing rejection path.
+        else:
+            calls = [dict(main, args=dict(main.get("args", {}), explain_terms=merged))]
     import re
     bare = re.sub(r"[.!?]+$", "", query.strip().lower())
     cancellation = bool(re.match(r"^(?:actually,?\s*)?(?:cancel(?:ar)?(?: that)?|olvídalo|olvidalo)\b", bare))
@@ -730,7 +770,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     if cancel_previous:
         turn.context.clear()
     trace = dict(name=None, parameters={}, data={}, raw_parameters={}, validation=["ok"],
-                 context_before=context_before, model=meta)
+                 context_before=context_before, model=meta, model_calls=model_calls)
     turn.trace = trace
     if len(calls) != 1 or calls[0].get("name") not in models:
         trace.update(name="invalid_model_output", validation=[f"invalid_model_output:{len(calls)}_calls"])
@@ -738,9 +778,20 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     else:
         name, raw = calls[0]["name"], calls[0].get("args") or {}
         schema = models[name]
-        trace.update(name=name, raw_parameters={k: raw[k] for k in raw if k in schema.model_fields or (name == "search_actuators" and k == "bounds") or (name == "get_actuator" and k in ("focus_frequency_hz", "focus_service"))})
+        trace.update(name=name, raw_parameters=trace_arguments(name, raw, models))
         try:
-            args = schema.model_validate(tool_wire.canonical_arguments(name, raw)).model_dump(mode="json")
+            canonical = tool_wire.canonical_arguments(name, raw)
+            term_field = 'term_keys' if name == 'explain_terms' else 'explain_terms'
+            if term_field in canonical:
+                keys = policy.normalized_term_keys(tool_wire.term_list(canonical[term_field]), query, turn.terms)
+                if keys != canonical[term_field]:
+                    trace.setdefault('overrides', []).append('glossary_keys_normalized')
+                canonical[term_field] = keys
+                if name == 'explain_terms' and not keys and policy.terms_not_in_glossary(query, turn.terms):
+                    name, canonical = 'ask_clarification', dict(field='term_not_in_summary')
+                    schema = models[name]
+                    trace['name'] = name
+            args = schema.model_validate(canonical).model_dump(mode="json")
         except ValidationError as exc:
             trace.update(validation=["schema:" + e for e in _safe_errors(exc)])
             result = turn.clarify("requirements", "I could not apply that request. Please restate the part number or the supply, service and limits you need.")
