@@ -122,6 +122,7 @@ def main():
     v2_expect('Q4-03', 1, contains=['761B00-11320000/A'])
     v2_expect('Q5-06', 0, contains=['kNm ='])
     v2_expect('Q5-05', 0, contains=["Interpreted 'explsionproof' as Explosionproof."])
+    v2_expect('Q5-04', 1, contains=['My pick:'])
     v2_expect('Q6-01', 0, contains=['does not publish delivery times'], no_products=True)
     v2_expect('Q6-02', 0, contains=['does not specify underwater use'], no_products=True)
     v2_expect('Q6-03', 0, contains=["I'm the Series 76 catalogue assistant"])
@@ -142,6 +143,8 @@ def main():
     v2_by_id['heldout_v2_Q2-03']['turns'][0]['scripted_decision'] = ['search_actuators', {}]
     v2_by_id['heldout_v2_Q5-05']['turns'][0]['scripted_decision'] = ['search_actuators',
         {'phase_count': 3}]
+    v2_by_id['heldout_v2_Q5-04']['turns'][1]['scripted_decision'] = [
+        'ask_clarification', {'field': 'requirements', 'intent': 'pick'}]
     v2_by_id['heldout_v2_C-CORRECTION-01']['turns'][1]['scripted_decision'] = ['get_actuator',
         {'reference_kind': 'focused', 'equivalent_enclosure': 'explosionproof'}]
     for case_id, index, intent in [('C-FRUSTRATION-01', 1, 'pick'),

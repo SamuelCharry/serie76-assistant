@@ -8521,16 +8521,10 @@
         {
           "query": "cual me recomiendas?",
           "scripted_decision": [
-            "get_actuator",
+            "ask_clarification",
             {
-              "part_numbers": [
-                "763A00-11330C00/A",
-                "763A00-11320000/A",
-                "763Y30-11320000/A"
-              ],
-              "focus": [
-                "overview"
-              ]
+              "field": "requirements",
+              "intent": "pick"
             }
           ],
           "expect": {
@@ -8541,6 +8535,9 @@
               "not published in this table layout",
               "0 identical fields hidden",
               "I cannot place orders"
+            ],
+            "contains": [
+              "My pick:"
             ]
           }
         }
