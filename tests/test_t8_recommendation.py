@@ -31,3 +31,26 @@ class RecommendationTests(Base):
                            ('search_actuators', {'service': 'on_off', 'min_torque_in_lb': {'value': 1000, 'op': 'gt'}}))
         self.assertIn('1000 in-lb', result.recommendation['ranked_by'])
         self.assertIn('in-lb', result.recommendation['items'][0]['reason'])
+
+    def test_unscoped_minimum_shows_only_qualifying_service_torque(self):
+        result = self.turn('At least 100 Nm', ('search_actuators', {'min_torque_nm': 100}))
+        for entry in result.recommendation['items']:
+            torque = [v for v in entry['key_values'] if 'torque' in v['label'].lower()]
+            self.assertTrue(torque)
+            self.assertTrue(all(float(v['value'].split()[0]) >= 100 for v in torque))
+            self.assertTrue(all(v['label'] != 'Torque' for v in torque))
+            self.assertNotIn('70 Nm torque', entry['reason'])
+
+    def test_fastest_reason_names_time_and_frequency(self):
+        result = self.turn('Fastest 60 Hz on/off at 110 V',
+                           ('search_actuators', {'service': 'on_off', 'frequency_hz': 60,
+                                                 'supply_voltage_v': 110, 'sort_by': ['fastest']}))
+        for entry in result.recommendation['items']:
+            self.assertIn('Operating time at 60 Hz', entry['reason'])
+            self.assertTrue(any(v['label'] == 'Operating time at 60 Hz' for v in entry['key_values']))
+
+    def test_comparison_rows_are_visible_differences(self):
+        result = self.turn('Compare 761X30-11370000/A vs 761X30-11380000/A',
+                           ('get_actuator', {'part_numbers': ['761X30-11370000/A', '761X30-11380000/A'],
+                                             'focus': ['overview']}))
+        self.assertTrue(all(len(set(row['values'])) > 1 for row in result.comparison['rows']))

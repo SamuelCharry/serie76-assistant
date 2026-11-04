@@ -175,7 +175,7 @@ def comparison(products, focus=None, filters=None):
         if not any(value is not None or status == 'source_NA' for values in cells for value, status in values):
             continue
         row = dict(field=field, label=label, values=[display(p, components) for p in products], better=None)
-        if len(products) == 2 and cells[0] == cells[1]:
+        if len(products) == 2 and row['values'][0] == row['values'][1]:
             hidden.append(row)
             continue
         if len(products) == 2 and preference:
