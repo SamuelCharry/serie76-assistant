@@ -131,6 +131,8 @@ def verify(expect, observed):
         failures.append('suggestions count differs')
     if 'comparison_layout' in expect and (comp or {}).get('layout') != expect['comparison_layout']:
         failures.append('comparison layout differs')
+    if expect.get('no_comparison') and comp is not None:
+        failures.append('unexpected comparison')
     if expect.get('lead_required') and not observed.get('lead'):
         failures.append('lead missing')
     if expect.get('assumption_required') and not observed.get('assumptions'):

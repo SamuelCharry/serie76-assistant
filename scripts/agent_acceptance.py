@@ -339,7 +339,7 @@ def run_scenario(scenario, model_factory):
             session = payload["session_id"]
             debug = store.debug_for_message(connection, payload["message_id"], user)["tool_calls"][0]
             trace = {k: debug.get(k) for k in ("name", "parameters", "raw_parameters", "validation", "renderer",
-                                                 "overrides", "context_before", "context_after", "model")}
+                                                 "overrides", "context_before", "context_after", "model", "model_calls")}
             observed = dict(answer=payload["answer"], products=payload["products"], terms=payload["terms"],
                             clarification=payload["clarification"], assumptions=payload["assumptions"], trace=trace,
                             suggested_replies=payload["suggested_replies"], comparison=payload["comparison"],

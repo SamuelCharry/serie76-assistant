@@ -1850,15 +1850,14 @@
             }
           ],
           "expect": {
-            "tool": "ask_clarification",
             "contract_v6": true,
-            "args": {
-              "field": "which_product"
-            },
             "suggestions_count": 0,
             "clarification": [
               "which_product"
-            ]
+            ],
+            "no_products": true,
+            "no_comparison": true,
+            "interaction_ids": []
           }
         }
       ]
@@ -3343,14 +3342,15 @@
           "expect": {
             "tool": "ask_clarification",
             "contract_v6": true,
-            "args": {
-              "field": "requirements"
-            },
             "suggestions_count": 0,
             "contains": [
               "no prices",
               "weighted"
-            ]
+            ],
+            "no_products": true,
+            "no_comparison": true,
+            "no_clarification": true,
+            "interaction_ids": []
           }
         }
       ]

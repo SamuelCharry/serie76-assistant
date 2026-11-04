@@ -210,6 +210,15 @@ def build():
                     expected['clarification'] = [args['field']]
             else:
                 expected.update(terms=args['term_keys'], suggestions_count=0)
+            if n == 4 and index == 1:
+                # EC04 specifies the public ambiguity guard, not the selected tool.
+                expected.pop('tool')
+                expected.pop('args')
+                expected.update(no_products=True, no_comparison=True, interaction_ids=[])
+            if n == 30:
+                # EC30 permits a limitation: unsupported and requirements both render it.
+                expected.pop('args')
+                expected.update(no_products=True, no_comparison=True, no_clarification=True, interaction_ids=[])
             scenario['turns'].append(dict(query=query, scripted_decision=call, expect=expected))
         cases['scenarios'].append(scenario)
     assert len(cases['scenarios']) == 103
