@@ -48,10 +48,15 @@ def colloquial_requirements(query):
     result, notes = {}, []
     if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar|on/of|onoff|on off|on-off)\b', text):
         result['service'] = 'on_off'
-    if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias|control the flow precisely)\b', text):
+    if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open)\b', text):
         result['service'] = 'modulating'
-    if re.search(r'\b(outside|exterior|intemperie)\b|\boutdoors\b.*\bnot hazardous\b', text):
+    if re.search(r'\b(outside|exteriores?|intemperie)\b|\boutdoors\b.*\bnot hazardous\b', text):
         result['enclosure'] = 'weatherproof'
+    if re.search(r'\b(?:[13])[-\s]*(?:phase|phases|fases)\b', text):
+        result['phase_count'] = int(re.search(r'\b([13])[-\s]*(?:phase|phases|fases)\b', text).group(1))
+    if re.search(r'\b(?:classified as hazardous|hazardous area|area is hazardous)\b', text):
+        result['enclosure'] = 'explosionproof'
+        notes.append('Interpreted the explicit hazardous-area requirement as Explosionproof.')
     if re.search(r'\b(battery|low voltage|bater[ií]a|bajo voltaje)\b', text):
         result['supply_voltage_v'] = 24
     if re.search(r'\b(solar|battery|bater[ií]a)\b', text):

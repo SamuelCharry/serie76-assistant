@@ -801,7 +801,7 @@ class Turn:
             facets['supply_voltage_v'] = [r for r in facets['supply_voltage_v'] if r['value'] in choices]
             if facets['supply_voltage_v']:
                 return self.question_result(['supply_voltage_v'], facets)
-        scenario = re.search(r'\b(hazardous|flammable|gas(?:es)?|mining|refinery|petrochemical|explosive|outdoor|rain|exteriores|intemperie)\b', self.query, re.I)
+        scenario = re.search(r'\b(hazardous|flammable|gas(?:es)?|mining|mine shaft|methane|coal|refinery|petrochemical|explosive|outdoor|rain|exteriores|intemperie)\b', self.query, re.I)
         if not scenario and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS) and not merged.get('sort_by'):
             # Never "recommend" the whole catalogue: a search needs at least one stated requirement.
             self.trace.setdefault("overrides", []).append("empty_search_clarified")
