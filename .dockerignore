@@ -5,6 +5,7 @@
 .venv-chat
 .venv-model-eval
 .cache
+backups
 reports
 .env
 .env.*
