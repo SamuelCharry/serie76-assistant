@@ -28,7 +28,9 @@ def focus_keys(product, focus):
                 if not service or key.startswith(service + "_") or key.startswith("shared_"):
                     keys.add(key)
             elif field in ("operating_time", "fla", "lra") and key.startswith(field + "_"):
-                if not hz or f"_{hz}hz_" in key:
+                dc_unqualified = "_unqualified_" in key and any(
+                    f.get("frequency_scope") == "not_applicable" for f in product.get("frequencies", []))
+                if not hz or f"_{hz}hz_" in key or dc_unqualified:
                     keys.add(key)
             elif field == "motor_power" and key == "motor_power_w":
                 keys.add(key)

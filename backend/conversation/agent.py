@@ -99,6 +99,9 @@ Tools:
   stated. For a follow-up that changes or adds requirements set refine=true and send ONLY
   the changed/added fields; list dropped requirements in remove. For "more/next" set
   more=true. A new, unrelated request uses refine=false.
+  A standalone new request (e.g. "Busco un actuador para exteriores que sea muy rápido
+  y no consuma mucha energía") starts fresh with refine=false, even if a clarification
+  is pending. Only an explicit addition/change or answer to that question reuses filters.
   Pass requirements literally even if they look contradictory (e.g. DC with 60 Hz): the
   server detects contradictions and asks the user.
   If you map informal wording to a value (e.g. "stop at any point" -> modulating), send
@@ -106,6 +109,8 @@ Tools:
   Torque may be given in Nm (min_torque_nm) or in-lb (min_torque_in_lb); never convert.
   Numeric limits go in bounds: [{field:"min_torque_in_lb",value:1000,op:"gt"}].
   Each field occurs once; op=gt|gte|lt|lte. Copy the user's value unchanged.
+  Extract EVERY explicit numeric requirement, also when service is expressed informally:
+  "fully open or fully close, 110 V, at least 50 Nm" includes min_torque_nm=50, op=gte.
   Omit unknown fields; do not send null. Empty focus/bounds lists add no constraint.
   More than/over/mayor a/más de => gt; below/menos de => lt;
   at least/al menos => gte; up to/hasta => lte. Never replace a strict bound with an inclusive one.
@@ -121,6 +126,8 @@ Tools:
   Bare cancel/cancelar/olvídalo => field=cancel; bare no after a clarification => decline.
   Both run no catalogue tool and never repeat a declined question.
   Several previous products and "it" -> which_product. Unrelated request -> unsupported.
+  A singular "its/it/that one" after two models, without a current explicit code, must
+  ask which_product; never resend both codes as a comparison to resolve that ambiguity.
   A term, rating or standard that is NOT in the glossary (e.g. an IP or NEMA rating) ->
   term_not_in_summary, even when a related glossary term exists.
 
@@ -313,6 +320,11 @@ class Turn:
         self.context.pop("pagination", None)
         notes, codes, missing, products, partial = [], [], [], [], []
         known = set(self.context.get("part_numbers", []))
+        import re
+        if (len(known) > 1 and not policy.codes_in_text(self.query)
+                and re.search(r"\b(?:its|it|that one|this one)\b", self.query.lower())):
+            self.trace.setdefault("overrides", []).append("ambiguous_singular_reference")
+            return self.clarify("which_product")
         mentioned = {c for text in self.texts for c in policy.codes_in_text(text)}
         for raw in args["part_numbers"]:
             code, note = policy.canonical_code(raw)
