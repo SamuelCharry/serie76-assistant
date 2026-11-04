@@ -179,7 +179,7 @@ def comparison(products, focus=None, filters=None):
             if any(status == 'not_in_layout' for value, status in values):
                 missing_models.add(products[index]['base_part_number'])
         row = dict(field=field, label=label, values=[display(p, components) for p in products], better=None)
-        if len(products) == 2 and row['values'][0] == row['values'][1]:
+        if len(products) >= 2 and len(set(row['values'])) == 1:
             hidden.append(row)
             continue
         if len(products) == 2 and preference:

@@ -43,6 +43,11 @@ def schemas(term_keys):
     boolean = {"type": "boolean"}
     return {
         "get_actuator": obj({"part_numbers": array({"type": "string"}),
+                             "reference_kind": enum(["none", "shown_position", "last_shown", "focused", "compared_winner"]),
+                             "reference_index": {"type": "integer"},
+                             "reference_metric": enum(["operating_time", "fla", "lra", "motor_power", "torque"]),
+                             "reference_direction": enum(["lower", "higher"]),
+                             "reference_frequency_hz": {"type": "integer", "enum": [50, 60]},
                              "from_results_top": {"type": "integer"},
                              "from_results_items": {"type": "string"},
                              "list_results": boolean,

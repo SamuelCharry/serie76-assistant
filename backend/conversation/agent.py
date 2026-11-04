@@ -107,6 +107,8 @@ Tools:
   and explain_terms="fla,lra,duty_cycle" for FLA/LRA/S4; omit unknown terms such as IP67.
   Code reports unsupported terms explicitly while answering the supported parts.
   Empty focus reuses persisted focus. Answers and suggested replies are English-only; understand Spanish input.
+  For a reference to a prior shown or compared model, use reference_kind/reference_index/metric/direction/frequency;
+  "specs" or "full specs" after a focused answer means focus=["overview"].
 - search_actuators: recommend actuators for requirements. Put ONLY requirements the user
   stated. For a follow-up that changes or adds requirements set refine=true and send ONLY
   the changed/added fields; list dropped requirements in remove. For "more/next" set
@@ -168,6 +170,11 @@ def schemas(term_keys):
 
     class LookupInput(Strict):
         part_numbers: Annotated[list[Annotated[str, Field(max_length=40)]], Field(max_length=4)] = []
+        reference_kind: Literal['none', 'shown_position', 'last_shown', 'focused', 'compared_winner'] = 'none'
+        reference_index: int = 0
+        reference_metric: Literal['operating_time', 'fla', 'lra', 'motor_power', 'torque'] = 'operating_time'
+        reference_direction: Literal['lower', 'higher'] = 'lower'
+        reference_frequency_hz: Literal[50, 60] | None = None
         from_results_top: int = 0
         from_results_items: str = ''
         list_results: bool = False
@@ -206,7 +213,7 @@ def schemas(term_keys):
 
 
 DESCRIPTIONS = {
-    "get_actuator": "Look up complete Base Part Numbers (up to four). For the last ranked list, use from_results_top=2 for the best two, from_results_items='1,2' for positions, or list_results=true for 'which ones'. Include focus and comma-separated explain_terms for combined facts/definitions in one call.",
+    "get_actuator": "Look up complete Base Part Numbers (up to four). For prior models use flat reference_kind=shown_position with 1-based reference_index, last_shown, focused, or compared_winner with reference_metric/direction/frequency. For the last ranked list use from_results_items='1,3' for comparisons, or list_results=true. Use focus=overview for full specs; include comma-separated explain_terms for combined facts/definitions.",
     "search_actuators": "Find actuators for ALL stated requirements, including every numeric limit. New independent requests use refine=false; explicit follow-ups use refine=true or more/remove. Unknown data never passes a threshold.",
     "explain_terms": "Quote only glossary definitions; absent terms use ask_clarification term_not_in_summary, not a related definition.",
     "ask_clarification": "Ask for missing data/disambiguation, or mark unsupported requests such as jokes and terms absent from the glossary.",
@@ -443,7 +450,34 @@ class Turn:
             return AgentResult(f'{len(ranked)} ranked models. Ranked by {by}.\n' + '\n'.join(ranked),
                                context=self.context, lead='Ranked by ' + by + '.')
         selected = []
-        if args.get('from_results_top'):
+        reference = args.get('reference_kind', 'none')
+        if reference != 'none':
+            shown = self.context.get('last_shown_list') or []
+            compared = self.context.get('last_comparison_models') or []
+            if reference == 'shown_position' and 1 <= args.get('reference_index', 0) <= len(shown):
+                selected = [shown[args['reference_index'] - 1]]
+            elif reference == 'last_shown' and shown:
+                selected = [shown[-1]]
+            elif reference == 'focused' and self.context.get('focused_model'):
+                selected = [self.context['focused_model']]
+            elif reference == 'compared_winner' and len(compared) >= 2:
+                metric = args.get('reference_metric', 'operating_time')
+                direction = args.get('reference_direction', 'lower')
+                scope = dict(self.context.get('filters') or {})
+                if args.get('reference_frequency_hz'):
+                    scope['frequency_hz'] = args['reference_frequency_hz']
+                rows = [get_actuator(self.connection, code) for code in compared]
+                values = [(p['measurements'].get('motor_power_w') if metric == 'motor_power' else
+                           ranking.measurement(p, metric, scope)) for p in rows]
+                available = [(index, value) for index, value in enumerate(values) if value is not None]
+                if available:
+                    target = (min if direction == 'lower' else max)(value for _, value in available)
+                    winners = [compared[index] for index, value in available if value == target]
+                    if len(winners) == 1:
+                        selected = winners
+            if not selected:
+                return self.clarify('which_product', 'Which shown model do you mean?', options=compared or shown[:4])
+        elif args.get('from_results_top'):
             n = args['from_results_top']
             if not ranked or not 1 <= n <= 4:
                 return self.clarify('which_product')
@@ -464,7 +498,7 @@ class Turn:
         elif not args['part_numbers']:
             return self.clarify('part_number')
         import re
-        if (len(known) > 1 and not policy.codes_in_text(self.query)
+        if (not selected and len(known) > 1 and not policy.codes_in_text(self.query)
                 and re.search(r"\b(?:its|it|that one|this one)\b", self.query.lower())):
             self.trace.setdefault("overrides", []).append("ambiguous_singular_reference")
             return self.clarify("which_product")
@@ -519,12 +553,6 @@ class Turn:
         self.context["focus"] = focus
         public = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in products]
         comparison_focus = focus
-        if len(public) > 2:
-            service = next((f['service'] for f in focus if f.get('service')), self.context.get('filters', {}).get('service'))
-            frequency = next((f['frequency_hz'] for f in focus if f.get('frequency_hz')), self.context.get('filters', {}).get('frequency_hz'))
-            comparison_focus = [dict(field='torque', **({'service': service} if service else {})),
-                                dict(field='operating_time', **({'frequency_hz': frequency} if frequency else {})),
-                                dict(field='fla', **({'frequency_hz': frequency} if frequency else {})), dict(field='motor_power')]
         compared = quality.comparison(public, comparison_focus, self.context.get('filters')) if len(public) >= 2 else None
         if compared:
             self.context['last_comparison_models'] = compared['models']
@@ -560,6 +588,8 @@ class Turn:
             answer += "\nThe document doesn't define that term."
         if products:
             self.context["part_numbers"] = [p["base_part_number"] for p in products]
+            if len(products) == 1:
+                self.context['focused_model'] = products[0]['base_part_number']
         lead = quality.comparison_lead(compared) if compared else None
         if compared and len(compared['models']) == 2:
             import re
@@ -973,6 +1003,12 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             return finish(turn, turn.lookup(dict(part_numbers=codes, focus=['motor_power'], explain_terms=[])))
     import re
     bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
+    if action is None and not answers and not remove_filters and bare_query in ('specs', 'full specs') and turn.context.get('focused_model'):
+        code = turn.context['focused_model']
+        turn.trace = dict(name='get_actuator', parameters={'part_numbers': [code]}, raw_parameters={},
+                          validation=['ok'], context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, turn.lookup(dict(part_numbers=[code], focus=['overview'], explain_terms=[])))
     if action is None and not answers and not remove_filters:
         limitation = None
         if re.search(r'\b(asterisk|footnote|\*)\b', bare_query):

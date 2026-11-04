@@ -173,8 +173,8 @@ def verify(expect, observed):
             failures.append('comparison summary/assumptions missing')
         if comp.get('layout') != ('table' if len(models) == 2 else 'cards'):
             failures.append('wrong comparison layout')
-        if len(models) > 2 and (len(comp.get('key_fields', [])) != 4 or comp.get('hidden_rows') != []):
-            failures.append('cards require four key fields and no hidden rows')
+        if len(models) > 2 and len(comp.get('key_fields', [])) != 4:
+            failures.append('cards require four key fields')
         all_rows = comp.get('rows', []) + comp.get('hidden_rows', [])
         fields = [r.get('field') for r in all_rows]
         if len(set(fields)) != len(fields) or any(f not in fields for f in comp.get('key_fields', [])):
