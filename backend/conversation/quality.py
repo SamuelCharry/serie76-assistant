@@ -241,6 +241,10 @@ def search_presentation(raw, products, filters, notes, assumptions):
     focus = ranking_focus(sort_by, filters) if sort_by else [dict(field=_search_focus(filters), **({"service": filters["service"]} if filters.get("service") else {}))]
     if not sort_by and filters.get("frequency_hz") and focus[0]["field"] in ("operating_time", "fla", "lra"):
         focus[0]["frequency_hz"] = filters["frequency_hz"]
+    if not products and total:
+        message = ("That's the only model that meets these requirements. Relax one requirement to see alternatives."
+                   if total == 1 else 'There are no more models under these requirements. Relax one requirement to see alternatives.')
+        return message, [], None, [], focus
     if sort_by:
         labels = {"fastest": "shortest operating time", "lowest_power": "lowest motor power", "highest_torque": "highest torque", "lowest_current": "lowest FLA"}
         text = f"{total} actuators match {criteria}. Top {len(products)} ranked by " + ", then ".join(labels[key] for key in sort_by) + "."

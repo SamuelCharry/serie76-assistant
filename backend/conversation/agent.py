@@ -1003,7 +1003,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
                               context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
             return finish(turn, AgentResult(limitation, context=turn.context))
-    if action is None and not answers and not remove_filters and bare_query in ('next', 'more', 'show all') and turn.context.get('last_ranked_list'):
+    if action is None and not answers and not remove_filters and bare_query in ('next', 'more', 'others', 'show all') and turn.context.get('last_ranked_list'):
         codes = turn.context['last_ranked_list']
         start = 0 if bare_query == 'show all' else turn.context.get('last_shown_offset', 3)
         selected = codes if bare_query == 'show all' else codes[start:start + 3]
@@ -1012,8 +1012,11 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         rows = [get_actuator(connection, code) for code in selected]
         turn.trace = dict(name='ranked_page', parameters={}, raw_parameters={}, validation=['ok'],
                           context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
-        answer = ('No more ranked models.' if not selected else
+        answer = ("That's the only model that meets these requirements. Relax one requirement to see alternatives."
+                  if not selected and len(codes) == 1 else 'No more ranked models.' if not selected else
                   f"Showing {start + 1}–{start + len(selected)} of {len(codes)} ranked models.\n" + '\n'.join(selected))
+        if not selected:
+            turn.context['reply_options'] = ['Relax one requirement']
         return finish(turn, AgentResult(answer, [public_product(row) for row in rows if row], context=turn.context))
     if action is None and not answers and not remove_filters and bare_query in ('that one', 'this one', 'the other one'):
         shown = turn.context.get('last_shown_list') or []

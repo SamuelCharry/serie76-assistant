@@ -4,6 +4,24 @@ from test_agent_scenarios import Base, Raising, Scripted
 
 
 class CohortTests(Base):
+    def test_exhausted_one_result_search_never_indexes_empty_page(self):
+        from backend.conversation import quality
+        answer, products, field, options, focus = quality.search_presentation(
+            {'total': 1, 'facets': {}}, [], {'service': 'on_off', 'offset': 1}, [], [])
+        self.assertEqual(products, [])
+        self.assertIn('only model', answer)
+
+    def test_others_after_one_result_is_not_a_500(self):
+        first = self.turn('on/off 200 Nm',
+                          ('search_actuators', {'service': 'on_off', 'min_torque_nm': 200}))
+        from backend.conversation.agent import run_agent
+        single = run_agent(self.connection, '24 V explosionproof', self.history, first.context,
+                           answers={'supply_voltage_v': '24', 'enclosure': 'explosionproof'})
+        self.assertEqual(single.recommendation['total'], 1)
+        more = run_agent(self.connection, 'others?', self.history, single.context,
+                         model=Raising(AssertionError('LLM must not run')))
+        self.assertIn("That's the only model", more.answer)
+
     def local(self, query):
         return run_agent(self.connection, query, self.history, self.context,
                          model=Raising(AssertionError('LLM must not run')))
