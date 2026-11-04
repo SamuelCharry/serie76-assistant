@@ -580,6 +580,7 @@ class Turn:
             self.trace["validation"] = _safe_errors(exc)
             return self.clarify("requirements", "These requirements could not be applied together. Please restate the supply, service and limits you need.")
         result = search_actuators(self.connection, filters)
+        self.context['rank_by'] = 'closest_torque'
         self.context["pagination"] = {"has_more": False}
         self.trace["data"] = result
         self.context["filters"] = merged
@@ -757,11 +758,11 @@ def trace_arguments(name, raw, models):
     return {k: v for k, v in raw.items() if k in allowed}
 
 
-def run_agent(connection, query, messages, context, *, model=None, answers=None, remove_filters=None, user_name=None):
+def run_agent(connection, query, messages, context, *, model=None, answers=None, remove_filters=None, user_name=None, action=None):
     # One LangSmith trace per turn (parent run) when explicitly enabled; nothing is sent otherwise.
     with tracing_context(enabled=tracing_enabled()):
         return _turn(connection, query, messages, context, model=model, answers=answers,
-                     remove_filters=remove_filters, user_name=user_name)
+                     remove_filters=remove_filters, user_name=user_name, action=action)
 
 
 @traceable(name="serie76_turn", run_type="chain",
@@ -771,10 +772,54 @@ def run_agent(connection, query, messages, context, *, model=None, answers=None,
                                            "products": [p["base_part_number"] for p in result.products],
                                            "tool": result.tool_calls[0].get("name") if result.tool_calls else None,
                                            "validation": result.tool_calls[0].get("validation") if result.tool_calls else None})
-def _turn(connection, query, messages, context, *, model=None, answers=None, remove_filters=None, user_name=None):
+def _turn(connection, query, messages, context, *, model=None, answers=None, remove_filters=None, user_name=None, action=None):
     turn = Turn(connection, query, messages, context)
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
+    if action is not None:
+        if answers or remove_filters or not isinstance(action, dict) or set(action) != {'type', 'args'}:
+            raise InvalidInteraction('invalid_action', 'Choose one supported action.')
+        kind, params = action['type'], action['args']
+        if not isinstance(params, dict) or kind not in ('compare_top', 'show_all', 'rank_by'):
+            raise InvalidInteraction('invalid_action', 'Choose one supported action.')
+        codes = turn.context.get('last_ranked_list') or []
+        if not codes:
+            raise InvalidInteraction('no_results_to_act_on', 'Find catalogue models before using this action.')
+        filters = turn.context.get('filters') or {}
+        turn.trace = dict(name='ranked_action', raw_parameters=action, parameters=action, validation=['ok'],
+                          context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        if kind == 'compare_top':
+            n = params.get('n', 2)
+            if set(params) - {'n'} or not isinstance(n, int) or isinstance(n, bool) or not 2 <= n <= 4 or n > len(codes):
+                raise InvalidInteraction('invalid_action', 'Choose two to four ranked models to compare.')
+            turn.trace['name'] = 'get_actuator'
+            turn.context['part_numbers'] = codes[:n]
+            result = turn.lookup(dict(part_numbers=codes[:n], focus=['overview'], explain_terms=[]))
+            by_text = ranking.ranked_by(filters, turn.context.get('rank_by', 'closest_torque'))
+            result.answer = 'Ranked by ' + by_text + '.\n' + result.answer
+            result.lead = 'Ranked by ' + by_text + '. ' + (result.lead or '')
+        elif kind == 'rank_by':
+            by = params.get('by')
+            if set(params) != {'by'} or by not in ranking.LABELS:
+                raise InvalidInteraction('invalid_action', 'Choose a supported ranking.')
+            rows = [get_actuator(connection, code) for code in codes]
+            ordered = ranking.rank([p for p in rows if p], filters, by)
+            turn.context['last_ranked_list'] = [p['base_part_number'] for p in ordered]
+            turn.context['rank_by'] = by
+            rec = ranking.recommendation(ordered, filters, by)
+            result = AgentResult('Ranked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
+                item['part_number'] + ': ' + item['reason'] for item in rec['items']),
+                context=turn.context, recommendation=rec, lead='Ranked by ' + rec['ranked_by'] + '.')
+        else:
+            if params:
+                raise InvalidInteraction('invalid_action', 'Show all takes no options.')
+            rows = [get_actuator(connection, code) for code in codes]
+            public = [public_product(p) for p in rows if p]
+            by_text = ranking.ranked_by(filters, turn.context.get('rank_by', 'closest_torque'))
+            result = AgentResult('Ranked by ' + by_text + '.\n' + '\n'.join(codes),
+                                 products=public, context=turn.context,
+                                 lead='Ranked by ' + by_text + '.')
+        return finish(turn, result)
     if answers or remove_filters:
         turn.context, notes = interactions.apply_submission(turn.context, answers or {}, remove_filters or [])
         turn.trace = dict(name='search_actuators', raw_parameters={}, parameters={}, validation=['ok'],

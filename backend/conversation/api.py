@@ -64,7 +64,7 @@ def conversation(request: ConversationRequest, user=Depends(require_user)):
                 history = store.history(connection, session_id, 12, internal=True, owner_id=user["id"])
                 context = store.recent_context(connection, session_id, user["id"])
                 result = run_agent(connection, request.query, history, context, answers=request.answers,
-                                   remove_filters=request.remove_filters, user_name=user.get("name"))
+                                   remove_filters=request.remove_filters, user_name=user.get("name"), action=request.action)
                 message_id = store.append_turn(connection, session_id, request.query, result, new=request.session_id is None, owner_id=user["id"])
         return ConversationResponse(session_id=session_id, answer=result.answer,
                                     message_id=message_id, products=result.products,

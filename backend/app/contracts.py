@@ -8,6 +8,7 @@ class ConversationRequest(BaseModel):
     query: str = Field(min_length=1, max_length=4000)
     answers: dict[str, str] = Field(default_factory=dict)
     remove_filters: list[str] = Field(default_factory=list, max_length=20)
+    action: dict | None = None
 
     @field_validator("query")
     @classmethod
