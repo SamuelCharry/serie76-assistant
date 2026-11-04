@@ -432,6 +432,10 @@ class Turn:
         grounded_codes, repaired = policy.grounded_lookup_codes(args["part_numbers"], self.query)
         if repaired:
             self.trace.setdefault("overrides", []).append("model_prefix_replaced_from_explicit_code")
+            for mention in policy.CODE_IN_TEXT.findall(self.query):
+                explicit_code, note = policy.canonical_code(mention)
+                if note and explicit_code in grounded_codes and note not in notes:
+                    notes.append(note)
         for raw in grounded_codes:
             code, note = policy.canonical_code(raw)
             if code is None:
@@ -654,9 +658,11 @@ class Turn:
             self.context.setdefault('filters', {})
             filters = SearchFilters.model_validate(self.context['filters'])
             return self.question_result(fields, question_facets(self.connection, filters, fields))
-        # Deterministic guard: a well-formed code in the query is looked up, never re-asked.
-        if field_name == "part_number" and policy.codes_in_text(self.query):
-            self.trace.setdefault("overrides", []).append("well_formed_code_lookup")
+        # Unsupported commerce still permits the named product's catalogue facts;
+        # finish() states the limitation without an additional model decision.
+        purchase = field_name == 'unsupported' and policy.purchase_request(self.query)
+        if (field_name == "part_number" or purchase) and policy.codes_in_text(self.query):
+            self.trace.setdefault("overrides", []).append("purchase_catalogue_lookup" if purchase else "well_formed_code_lookup")
             self.trace["name"] = "get_actuator"
             return self.lookup(dict(part_numbers=policy.codes_in_text(self.query)[:4], focus="overview", explain_terms=[]))
         self.trace["data"] = dict(status="needs_clarification", field=field_name)
@@ -826,7 +832,7 @@ def finish(turn, result):
             result.clarification = result.interaction = None
         else:
             result.answer = limitation + '\n' + result.answer
-    if re.search(r'\b(buy|purchase|order|delivery|comprar|compra)\b', turn.query, re.I):
+    if policy.purchase_request(turn.query):
         result.answer = 'I cannot place orders or confirm delivery. I can provide published catalogue specifications.\n' + result.answer
         if result.products or result.comparison:
             result.lead = 'I cannot place orders or confirm delivery; the cards show published catalogue specifications.'

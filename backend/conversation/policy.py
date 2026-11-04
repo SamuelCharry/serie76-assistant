@@ -13,7 +13,7 @@ from decimal import Decimal, InvalidOperation
 from backend.catalog.models import bound_value, bound_operator, bounds
 
 CODE_RE = re.compile(r"^[A-Z0-9]{6}-[A-Z0-9]{8}/A$")
-CODE_IN_TEXT = re.compile(r"\b[A-Za-z0-9]{6}-?[A-Za-z0-9]{8}/[Aa]\b")
+CODE_IN_TEXT = re.compile(r"\b[A-Za-z0-9]{6}-?[A-Za-z0-9]{8}/?[Aa]\b")
 PARTIAL_RE = re.compile(r"^[A-Z0-9][A-Z0-9\-/]{2,16}$")
 
 NUMERIC_FIELDS = ("supply_voltage_v", "frequency_hz", "min_torque_nm", "min_torque_in_lb",
@@ -55,7 +55,7 @@ def canonical_code(raw):
     text = re.sub(r"\s+", "", str(raw)).upper()
     if CODE_RE.fullmatch(text):
         return text, None if text == str(raw).strip() else f"Interpreted '{raw}' as {text}."
-    compact = re.fullmatch(r"([A-Z0-9]{6})([A-Z0-9]{8})/A", text)
+    compact = re.fullmatch(r"([A-Z0-9]{6})-?([A-Z0-9]{8})/?A", text)
     if compact:
         code = f"{compact.group(1)}-{compact.group(2)}/A"
         return code, f"Interpreted '{raw}' as {code}."
@@ -78,19 +78,28 @@ def grounded_lookup_codes(raw_codes, query):
     shares it. Unmatched/ambiguous model prefixes also keep the clarification path.
     """
     explicit = codes_in_text(query)
+    def characters(value):
+        return re.sub(r'[-/\s]', '', value).upper()
+    written_tokens = {characters(token) for token in re.findall(r'\b[A-Za-z0-9][A-Za-z0-9/-]*', query)}
     chosen, repaired = [], []
     for raw in raw_codes:
         code, prefix = canonical_code(raw)
         value = raw
         if code is None and prefix:
-            written = re.search(r'(?<![A-Z0-9/\-])' + re.escape(prefix) + r'(?![A-Z0-9/\-])', query, re.I)
-            matches = [c for c in explicit if c.startswith(prefix)]
+            # Compare identity characters, not presentation punctuation. The complete
+            # user code must still contain its explicit A suffix; no DB completion.
+            written = characters(prefix) in written_tokens
+            matches = [c for c in explicit if characters(c).startswith(characters(prefix))]
             if not written and len(matches) == 1:
                 value = matches[0]
                 repaired.append(raw)
         if value not in chosen:
             chosen.append(value)
     return chosen, repaired
+
+
+def purchase_request(query):
+    return bool(re.search(r'\b(buy|purchase|order|delivery|comprar|compra)\b', query, re.I))
 
 
 def numbers_in(texts):
