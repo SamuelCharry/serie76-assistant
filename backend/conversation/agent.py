@@ -1100,6 +1100,24 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         return finish(turn, turn.lookup(dict(part_numbers=[code], focus=['overview'], explain_terms=[])))
     if action is None and not answers and not remove_filters:
         limitation = None
+        if re.search(r'\b(are you chatgpt|are you an ai)\b', bare_query):
+            limitation = "I'm the Series 76 catalogue assistant. I can help compare published models."
+        if limitation is None and re.search(r'\b(delivery|lead time|ship(?:ping)?)\b', bare_query):
+            limitation = 'The catalogue does not publish delivery times. I can show the published model specifications.'
+        if limitation is None and re.search(r'\b(warranty|guarantee)\b', bare_query):
+            limitation = 'The catalogue does not publish warranty terms. I can show the published model specifications.'
+        if limitation is None and re.search(r'\b(underwater|submer(?:ge|sion|sible))\b', bare_query):
+            limitation = 'The catalogue does not specify underwater use. I can show its published enclosure description.'
+        if limitation is None and re.search(r'\bseries\s+(?!76\b)\d+\b', bare_query):
+            limitation = 'I only cover the Series 76 catalogue. I can help find a Series 76 model.'
+        if limitation is None and re.search(r'\bpretend\b.*\b(?:has|is|at)\s+\d+(?:\.\d+)?\s*nm\b', bare_query):
+            named = policy.codes_in_text(query)
+            product = get_actuator(connection, named[0]) if len(named) == 1 else None
+            if product:
+                torques = ranking.qualifying_torques(product, {'service': 'on_off'})
+                published = (f'{torques[0][1]} Nm On/Off' if torques else 'no published On/Off torque')
+                limitation = (f'The catalogue lists {named[0]} at {published}; I can\'t use other values. '
+                              'I can find models that meet your actual torque requirement.')
         if re.search(r'\b(asterisk|footnote|\*)\b', bare_query):
             codes = policy.codes_in_text(query) or turn.context.get('part_numbers') or []
             if len(codes) == 1:
