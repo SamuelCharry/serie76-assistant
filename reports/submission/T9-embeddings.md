@@ -1,5 +1,56 @@
 # T9: embeddings for interpretation
 
+## Review repair (current behavior)
+
+The independent review and the coordinator's v8 A/B findings supersede the original
+fallback-only design. Retrieval is **additive**: deterministic service/hazard evidence,
+canonical enclosure values and clause-level negations run with embeddings both ON and
+OFF. Similar examples remain prompt data. Suggestions can only fill fields left unset
+by deterministic parsing, grounded tool arguments and carried refinement filters.
+
+- Enclosure normalization handles `explosion-proof`, `explosion proof`, `weather-proof`
+  and `weather proof` before suggestions; a safe-area suggestion cannot replace a
+  stated Explosionproof requirement.
+- Suffix negations and no-preference clauses do not count as affirmative service.
+  `on/off service does not matter` and `doesn't matter` remove service and retain the
+  independent 110 V clause; `not modulating, just on/off` retains affirmative On/Off.
+- `open and close`, `mod`, `que module`, `abrir y cerrar`, `regulating` and wood-dust
+  hazard evidence remain available when the classifier abstains. Explicit negations
+  such as `nothing flammable` / `no flammable atmosphere` prevent the hazard preview,
+  including a follow-up rejecting an earlier Explosionproof preview. An uncertain
+  chlorine/office request does not acquire an Explosionproof-only preview.
+- Migration `008_example_bank_versions.sql` adds active status, dataset version and an
+  immutable dataset manifest. Incremental reloads union all historical source IDs;
+  conflicts deactivate a row. Explicit authoritative replacements deactivate missing
+  or conflicting examples while retaining vectors and all historical provenance.
+- Startup constructs the cached embedding client without inference. A lock prevents
+  duplicate concurrent initialization. A single monotonic **1.5 s** retrieval budget
+  covers cold initialization, budget reservation, embedding and both SQL searches.
+  Late embedding results are discarded; four bounded worker slots prevent an unbounded
+  backlog, and SQL stays on the caller's connection with the remaining statement timeout
+  inside a rollback-only savepoint. Expired work cannot start a provider request after
+  initialization or budget waiting, and cannot proceed to SQL. A request already sent
+  before expiry may finish remotely, but its late result is ignored and is not retried.
+
+Each of the five review findings was reproduced by a failing test before its repair.
+The additive regression includes all **446 v7 scenarios / 745 turns**: full agent
+filter preservation with classifier abstention (ON/OFF), plus normalizer property
+checks with opposing semantic suggestions. These are offline checks, not a new live
+chat A/B score. The coordinator's reported 61% ON / 63% OFF score is pre-repair evidence;
+no improved live score is claimed.
+
+The existing Google bank was reconciled as authoritative version
+`v7-14e7fbf25214744f`, using the v7 file SHA256 prefix. **649 examples remain active,
+100 anchors retained, 0 texts embedded, USD 0 additional inference cost** in this repair.
+Initial T9 paid-call evidence below is historical and was not rerun.
+
+Review completion snapshot: users **5**, conversations **623**, messages **2204**,
+catalogue entries **68**; the historical pre-review counts below are not the current
+conversation counts. The rebuilt backend has `EMBEDDINGS_ENABLED=true` and
+`OPENROUTER_EMBEDDING_MODEL=gemini-embedding-2`; `/ready` returned **HTTP 200** after
+startup initialization. No mobile files were modified and no push was performed.
+
+
 ## Approved specification and slices
 
 The dispatched T9-B1 specification authorizes optional semantic examples and concept
@@ -19,7 +70,7 @@ No chat inference, OpenRouter inference, mobile edits, pushes, secret output or 
 deletion are authorized. Tests use unittest and the approved `local_environment()`
 connection mapping. Each slice is verified and committed separately.
 
-## Database checkpoint
+## Initial T9 database checkpoint (historical)
 
 Backup: ignored `backups/t9-before.dump`, SHA256
 `e6924174edbf5d3f6c2c9c1494b1de4dbe5f8018d14903933d5007fe36d953f7`.
@@ -29,7 +80,7 @@ The initial pg17 tag used glibc 2.36, whereas the volume was created with 2.41.
 Before the embedding load, switched to the coordinator-approved `pg17-trixie` digest in
 Compose and CI. Container `ldd` confirms 2.41; database, postgres and template1
 collation versions match their actual versions. All original data counts still match.
-Final data counts still match: users **5**, conversations **540**, messages **1924**,
+At original T9 completion, data counts still matched: users **5**, conversations **540**, messages **1924**,
 entries **68**; all 14 preexisting data tables were checked. The migration registry
 has one additional row. No volume was deleted and no existing password was changed.
 
@@ -44,7 +95,7 @@ The final image is
 shared by Compose and CI.
 
 `backend/conversation/embeddings.py` uses LangChain `OpenAIEmbeddings`, the configured
-endpoint/key, `dimensions=768`, a **1.5 s provider timeout** and **zero retries**.
+endpoint/key, `dimensions=768`, a **1.5 s total retrieval deadline** and **zero retries**; provider and SQL timeouts use the remaining budget.
 Each actual provider request reserves through `reserve_agent_call`; failures count.
 This existing rolling-hour guard is per process and resets on restart, not a billing
 account cap. Loader batches use a 30 s timeout, outside the turn path, with zero retries.
@@ -60,8 +111,8 @@ and previews only Explosionproof candidates. Accepted safe-area and service conc
 can supply those categorical requirements. `out_of_scope_property` is diagnostic;
 the existing catalogue-scope rules still own unsupported-property responses.
 
-Missing configuration, disabled flag, empty anchor bank, provider failure or SQL
-failure retains the legacy normalizer. Optional SQL runs inside a savepoint so a
+The deterministic normalizer always runs. Missing configuration, disabled flag, empty
+anchor bank, provider failure or SQL failure simply omits semantic additions. Optional SQL runs inside a savepoint so a
 failed retrieval does not poison the surrounding conversation transaction.
 Every result's debug includes `retrieval.examples` (IDs/similarities),
 `retrieval.concepts` and `retrieval.embedding_ms`; deterministic routes report empty
@@ -83,7 +134,18 @@ evaluation must supply exclusions or a fresh cohort. The smoke evidence here is
 calibration, **not** held-out acceptance.
 
 The batched loader checks existing keys before embedding, serializes concurrent
-loaders with an advisory lock, and inserts transactionally. A second dry run found
+loaders with an advisory lock, and inserts transactionally. Incremental mode unions
+source IDs and never reactivates a previously retired row merely because its old
+label reappears. Conflicting incremental labels deactivate the row.
+
+To intentionally replace the authoritative example set, pass both
+`--replace-dataset --dataset-version <immutable-version-id>`. The version fingerprints
+the complete labeled payload and source associations; reusing it with different data
+is rejected before inference. Rows absent or ambiguous in that version become inactive,
+not deleted, and retrieval excludes them. A later explicit authoritative version can
+reactivate an existing vector without re-embedding. Historical source IDs are never
+removed, even when replacing the active interpretation. Retain a new version ID for
+an intentional change, and do not present a subset as the full authoritative dataset. A second dry run found
 **0 texts pending / 0 estimated cost**; the DB test also reruns loading with an
 embedder that fails if called and verifies no call occurs. A failed load rolls back;
 already incurred provider charges are not refunded, so inspect a failed load before
@@ -130,35 +192,35 @@ than reported as a 1.5 s end-to-end guarantee.
 Removed **17 physical phrase-list lines** from the main agent/policy path: 15 lines
 of service/enclosure lexicons, colloquial patterns and the broad hazard regex, plus
 two repeated weather-location expressions in the agent. The compatibility expressions
-are isolated in the 32-line `context_fallback.py`, used when semantic retrieval is
-disabled/unavailable and by deterministic routes that deliberately do not embed.
+were isolated in `context_fallback.py`; the review repair now runs that deterministic
+evidence on every turn, including when retrieval is enabled. The module name is retained
+for compatibility, but it is no longer gated by embedding availability.
 Explicit labels and negation checks remain in policy. New paraphrases belong in
 anchors rather than additional scenario regexes.
 
-This is not a net line-count reduction: agent.py changed **2166 -> 2185**, policy.py
-**500 -> 537**, because integration, explicit-value precedence and negation handling
-add code. No existing test was changed or disabled. The old behavior remains the
-flag-off contract; the added tests cover the enabled path separately.
+The initial T9 change was not a net line-count reduction (agent.py **2166 -> 2185**,
+policy.py **500 -> 537**). The review adds correctness and deadline guards rather than
+claiming a reduction in code size. No existing test was changed or disabled. The additive property tests now explicitly compare both modes as described above.
 
 ## Verification and runtime
 
 | Gate | Result |
 | --- | --- |
-| Full Python suite, local PostgreSQL | **453 tests, OK; 2 existing optional skips** |
-| New embedding/retrieval/normalizer tests | **24 tests, all passed**, deterministic hashed fake or scripted chat |
-| v7 scripted selfcheck | **446 scenarios, 0 failures**, [evidence](T9-scenarios.json) |
+| Full Python suite, local PostgreSQL | **469 tests, OK; 2 existing optional skips** |
+| New embedding/retrieval/normalizer tests | **40 embedding/review tests, all passed**, deterministic hashed fake, scripted chat, event-controlled deadlines and real local SQL |
+| v7 scripted selfcheck | **446 scenarios, 0 failures**, [review evidence](T9-review-scenarios.json) |
 | Public text scanner tests | **3 passed**; scanner also runs across scripted responses |
 | Offline tool schema | bytes=5487, enum_values=107, arrays=6, depth=7, forbidden_nodes=0, numeric_ranges=0; unchanged |
 | Backup, migration, collation, existing counts | Verified locally, as recorded above |
 | Rebuilt Google backend | `EMBEDDINGS_ENABLED=true`, model `gemini-embedding-2`; `/ready` **HTTP 200** |
-| Runtime retrieval in rebuilt container | One real embedding request, available=true, hazard accepted |
+| Runtime retrieval in rebuilt container | Initial T9 live smoke retained; review rebuild uses startup-only initialization and no inference |
 
 Commands used (PowerShell, from the repository):
 
 ```powershell
 $env:SERIES76_TEST_DB='1'; $env:EMBEDDINGS_ENABLED='false'
 .venv-model-eval/Scripts/python.exe -m unittest discover -s tests
-.venv-model-eval/Scripts/python.exe scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --evidence reports/submission/T9-scenarios.json
+.venv-model-eval/Scripts/python.exe scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --evidence reports/submission/T9-review-scenarios.json
 .venv-model-eval/Scripts/python.exe -m unittest discover -s tests -p test_user_text.py
 .venv-model-eval/Scripts/python.exe scripts/check_tool_schemas.py
 ```
@@ -211,3 +273,14 @@ chat quality remain pending. `.env.example` contains placeholders only.
 - `07b7c48`: guarded client, bank/anchor loader and offline tests.
 - `47df34f`: exclude database backups from Docker build context.
 - `27f421c`: retrieval, concept suggestions, negation precedence and CI gates.
+
+Review commits:
+
+- `1b46e75`: canonical enclosures, clause-scoped preferences, additive interpretation
+  and complete v7 ON/OFF filter-preservation regressions.
+- `c6291de`: versioned provenance, retired examples, startup warmup,
+  concurrent initialization guard and one retrieval deadline.
+
+Remote CI and a new live chat A/B evaluation remain pending; the local offline gates
+and runtime configuration/readiness checks are complete. The repaired behavior has
+not been assigned a new live acceptance score.
