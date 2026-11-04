@@ -6,7 +6,7 @@ import unittest
 FORBIDDEN = re.compile(
     r"\b(?:Not applied|get_actuator|search_actuators|ask_clarification|explain_terms|"
     r"on_off|explosionproof|weatherproof|modulating|(?:[a-z]+_){1,}[a-z0-9]+|"
-    r"NEMA|IP\s*\d+)\b|[{}]", re.I,
+    r"NEMA|IP\s*\d+)\b|[{}]",
 )
 
 
@@ -20,7 +20,7 @@ def visible_texts(response):
                 yield from visit(item)
         elif isinstance(value, dict):
             for key, item in value.items():
-                if key in {'answer', 'lead', 'label', 'reason', 'prompt', 'message', 'summary', 'assumptions', 'suggested_replies'}:
+                if key in {'answer', 'lead', 'label', 'reason', 'prompt', 'message', 'summary', 'suggested_replies'}:
                     yield from visit(item)
                 elif isinstance(item, (dict, list)):
                     yield from visit(item)

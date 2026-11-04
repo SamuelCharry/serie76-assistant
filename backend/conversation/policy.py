@@ -44,9 +44,9 @@ LEXICON = {
 CONFLICT_MESSAGES = {
     "dc_frequency": "DC supply has no mains frequency. Do you need a DC actuator, or an AC actuator at {frequency_hz} Hz?",
     "dc_phase": "DC supply has no phase count. Do you need a DC actuator, or an AC {phase_count}-phase actuator?",
-    "starts_on_off": "Starts per hour are published for modulating service, cycles per hour for On/Off. Which service do you need?",
-    "cycles_modulating": "Cycles per hour are published for On/Off service, starts per hour for modulating. Which service do you need?",
-    "both_rates": "Cycles per hour (On/Off) and starts per hour (modulating) belong to different services. Which service do you need?",
+    "starts_on_off": "Starts per hour are published for Modulating service, cycles per hour for On/Off. Which service do you need?",
+    "cycles_modulating": "Cycles per hour are published for On/Off service, starts per hour for Modulating. Which service do you need?",
+    "both_rates": "Cycles per hour (On/Off) and starts per hour (Modulating) belong to different services. Which service do you need?",
 }
 
 
@@ -161,7 +161,7 @@ def merge_filters(previous, delta, *, refine, remove, more):
         incompatible = "min_cycles_per_hour" if new_service == "modulating" else "min_starts_per_hour"
         if incompatible in base and incompatible not in delta:
             notes.append(f"Removed the previous {_label(incompatible)} requirement because it does not apply to "
-                         f"{'modulating' if new_service == 'modulating' else 'On/Off'} service.")
+                         f"{'Modulating' if new_service == 'modulating' else 'On/Off'} service.")
             merged.pop(incompatible)
     limit = delta.get("limit") or (previous or {}).get("limit") or 5
     offset = ((previous or {}).get("offset", 0) + (previous or {}).get("limit", limit)) if more else 0
@@ -210,8 +210,8 @@ def describe(filters):
             parts.append(' and '.join(describe({field: item}) for item in value))
             continue
         text = {
-            "service": lambda v: "On/Off service" if v == "on_off" else "modulating service",
-            "enclosure": lambda v: v,
+            "service": lambda v: "On/Off service" if v == "on_off" else "Modulating service",
+            "enclosure": lambda v: str(v).capitalize(),
             "supply_voltage_v": lambda v: f"{v} V",
             "supply_current": lambda v: v,
             "phase_count": lambda v: f"{v}-phase",

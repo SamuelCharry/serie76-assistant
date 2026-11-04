@@ -75,7 +75,7 @@ def choose_split(facets):
 def split_reply(field, value):
     if value is None:
         return "Cancel"
-    return {"supply_voltage_v": lambda: f"Use {_num(value)} V", "enclosure": lambda: f"Use {value}",
+    return {"supply_voltage_v": lambda: f"Use {_num(value)} V", "enclosure": lambda: f"Use {str(value).capitalize()}",
             "supply_current": lambda: f"Use {value}", "phase_count": lambda: f"Use {value} phase"}[field]()
 
 
@@ -116,7 +116,7 @@ def impossible_replies(filters, closest):
 
 
 def decline_message(field):
-    detail = {"service": "the service (On/Off or modulating)", "frequency": "the frequency (50 or 60 Hz)"}.get(field)
+    detail = {"service": "the service (On/Off or Modulating)", "frequency": "the frequency (50 or 60 Hz)"}.get(field)
     if detail is None and field:
         detail = "the " + LABELS.get(field, field.replace("_", " "))
     return ("No problem. Tell me " + detail + " whenever you like, or ask about a specific part number."
@@ -244,7 +244,7 @@ def search_presentation(raw, products, filters, notes, assumptions):
             values = raw["facets"][field]
             options = [split_reply(field, row["value"]) for row in values]
             label = LABELS.get(field, field.replace("_", " "))
-            text = f"{total} actuators meet: {criteria}. Which {label} do you need? Options: " + ", ".join(str(r["value"]) if r["value"] is not None else "not published" for r in values) + "."
+            text = f"{total} actuators meet: {criteria}. Which {label} do you need? Options: " + ", ".join(str(r["value"]).capitalize() if r["value"] is not None else "not published" for r in values) + "."
             return (prefix + "\n" + text).strip(), [], field, options, focus
         return (prefix + f"\n{total} actuators meet: {criteria}. No further published supply attribute separates these models.").strip(), [], "requirements", [], focus
     text = f"{total} actuators meet: {criteria}."

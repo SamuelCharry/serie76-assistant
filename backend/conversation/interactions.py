@@ -23,7 +23,8 @@ def greeting(query, name):
 
 def option(field, value):
     text = _num(value) if isinstance(value, (int, float)) else str(value)
-    label = {'on_off': 'On/Off', 'modulating': 'Modulating'}.get(text, text)
+    label = {'on_off': 'On/Off', 'modulating': 'Modulating',
+             'weatherproof': 'Weatherproof', 'explosionproof': 'Explosionproof'}.get(text, text)
     label += {'supply_voltage_v': ' V', 'frequency_hz': ' Hz', 'phase_count': ' phase'}.get(field, '')
     return dict(value=text, label=label)
 

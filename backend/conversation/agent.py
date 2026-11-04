@@ -80,12 +80,12 @@ class Assumption(Strict):
 
 QUESTIONS = {
     "part_number": "Please provide the complete Base Part Number, for example 761A00-11300000/A.",
-    "service": "Is the actuator for On/Off or modulating service?",
+    "service": "Is the actuator for On/Off or Modulating service?",
     "frequency": "Should the published electrical values be compared at 50 Hz or 60 Hz?",
     "supply": "Which power supply is available (voltage, AC or DC, and phases)?",
     "requirements": "Which power supply, service and performance requirements should the actuator meet?",
     "which_product": "Which of the previously listed actuators do you mean? Please give its complete part number.",
-    "term_not_in_summary": "The supplied Series 76 summary does not define that term. I can explain: {labels}.",
+    "term_not_in_summary": "The document doesn't define that term.",
     "unsupported": "I can look up Series 76 catalogue data, find actuators that meet technical requirements, or explain catalogue terms. What would you like to check?",
 }
 
@@ -506,7 +506,7 @@ class Turn:
             answer += ("\n\n" + text) if text else ""
         unknown = policy.terms_not_in_glossary(self.query, self.terms)
         if unknown:
-            answer += '\nNot answered: ' + ', '.join(unknown) + '; the supplied Series 76 summary does not define these terms.'
+            answer += "\nThe document doesn't define that term."
         if products:
             self.context["part_numbers"] = [p["base_part_number"] for p in products]
         return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared, lead=quality.comparison_lead(compared) if compared else None)
@@ -614,21 +614,23 @@ class Turn:
                            interaction=question.interaction if narrowing else None)
 
     def explain(self, args):
-        text, terms = self.explained(args["term_keys"])
         unknown = policy.terms_not_in_glossary(self.query, self.terms)
+        if unknown:
+            self.trace["validation"] = ["term_not_in_glossary:" + ",".join(unknown)]
+            return self.clarify("term_not_in_summary", "The document doesn't define that term.")
+        text, terms = self.explained(args["term_keys"])
         if not terms:
             self.trace["data"] = dict(status="needs_clarification", terms_requested=args["term_keys"])
             if unknown:
                 self.trace["validation"] = ["term_not_in_glossary:" + ",".join(unknown)]
                 names = ", ".join(f"'{u}'" for u in unknown)
-                return self.clarify("term_not_in_summary", f"The supplied Series 76 summary does not define {names}. I can explain: "
-                                    + ", ".join(t["label"] for t in self.terms) + ".")
+                return self.clarify("term_not_in_summary", "The document doesn't define that term.")
             return self.clarify("unsupported")
         if unknown:
             # Deterministic honesty: never let a neighbouring definition pass for the asked term.
             self.trace["validation"] = ["term_not_in_glossary:" + ",".join(unknown)]
             names = ", ".join(f"'{u}'" for u in unknown)
-            text = f"The supplied Series 76 summary does not define {names}. Related definitions it does contain:\n\n" + text
+            text = "The document doesn't define that term.\n\n" + text
         self.trace["data"] = dict(status="ok", terms=terms)
         return AgentResult(text, context=self.context, terms=terms)
 
@@ -639,8 +641,7 @@ class Turn:
             if unknown:
                 self.trace['validation'] = ['term_not_in_glossary:' + ','.join(unknown)]
                 names = ', '.join(f"'{u}'" for u in unknown)
-                return self.clarify(field_name, f'The supplied Series 76 summary does not define {names}. I can explain: '
-                                    + ', '.join(t['label'] for t in self.terms) + '.')
+                return self.clarify(field_name, "The document doesn't define that term.")
         if field_name == "cancel":
             self.context.clear()
             self.trace["data"] = dict(status="cancelled")

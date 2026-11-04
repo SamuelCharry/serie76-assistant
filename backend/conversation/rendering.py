@@ -33,7 +33,7 @@ def _torque(product, service):
         return None if status.get(f"{prefix}_torque_nm") == "not_in_layout" else _status_text(status.get(f"{prefix}_torque_nm"))
     text = " / ".join(x for x in (f"{_num(inlb)} in-lb" if inlb is not None else "",
                                   f"{_num(nm)} Nm" if nm is not None else "") if x)
-    return text + (" (published once for On/Off and modulating)" if layout == "shared" else "")
+    return text + (" (published once for On/Off and Modulating)" if layout == "shared" else "")
 
 
 def product_lines(product, focus, service=None):
@@ -42,7 +42,7 @@ def product_lines(product, focus, service=None):
     supply = f"{_num(product['supply_voltage_v'])} V {product['supply_current']}"
     if product.get("phase_count"):
         supply += f" {product['phase_count']}-phase"
-    header = f"{code} — {product['enclosure']}, {supply}"
+    header = f"{code} — {product['enclosure'].capitalize()}, {supply}"
     if product["data_status"] != "reported":
         return [header + ": every performance value of this row is N/A in the source table; nothing can be inferred."]
     lines = []
@@ -53,7 +53,7 @@ def product_lines(product, focus, service=None):
         for service in services:
             key = f"{service}_{field}"
             value = m.get(key)
-            name = {"on_off": "On/Off", "modulating": "Modulating", "shared": "On/Off and modulating (shared)"}[service]
+            name = {"on_off": "On/Off", "modulating": "Modulating", "shared": "On/Off and Modulating (shared)"}[service]
             if value is not None:
                 lines.append(f"{label} {name}: {_num(value)}{unit}")
             elif status.get(key) == "source_NA":

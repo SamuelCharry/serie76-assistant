@@ -24,6 +24,7 @@ from backend.catalog.db import connect, readiness
 from backend.conversation import store
 from backend.conversation.agent import AgentUnavailable, run_agent
 from scripts.check_public_text import public_text_issues
+from test_user_text import assert_public_text_clean
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = os.environ.get("SERIES76_TEST_DB") == "1"
@@ -80,6 +81,10 @@ class Base(unittest.TestCase):
     def turn(self, query, *calls):
         result = run_agent(self.connection, query, self.history, self.context, model=Scripted(*calls))
         self.assertEqual(public_text_issues(result.answer, result.comparison, result.suggested_replies), [])
+        assert_public_text_clean({"answer": result.answer, "lead": result.lead,
+                                  "interaction": result.interaction, "comparison": result.comparison,
+                                  "suggested_replies": result.suggested_replies,
+                                  "suggestions": result.suggestions})
         self.history += [dict(role="user", content=query), dict(role="assistant", content=result.answer)]
         self.context = result.context
         return result
@@ -125,7 +130,7 @@ class GlossaryTests(Base):
 
     def test_neighbouring_definition_never_passes_for_an_absent_term(self):
         result = self.turn("What does IP67 mean?", ("explain_terms", {"term_keys": ["weatherproof"]}))
-        self.assertTrue(result.answer.startswith("The supplied Series 76 summary does not define 'IP67'."))
+        self.assertEqual(result.answer, "The document doesn't define that term.")
         self.assertEqual(result.tool_calls[0]["validation"], ["term_not_in_glossary:IP67"])
         self.assertEqual(result.clarification["field"], "term_not_in_summary")
         self.assertFalse(result.terms)  # the unrelated weatherproof definition is not quoted
@@ -139,8 +144,8 @@ class GlossaryTests(Base):
 
     def test_related_and_unknown_terms_together(self):
         result = self.turn("Is IP67 better than weatherproof?", ("explain_terms", {"term_keys": ["weatherproof"]}))
-        self.assertTrue(result.answer.startswith("The supplied Series 76 summary does not define 'IP67'. Related definitions"))
-        self.assertEqual(result.terms[0]["term_key"], "weatherproof")
+        self.assertTrue(result.answer.startswith("The document doesn't define that term."))
+        self.assertEqual(result.terms, [])
 
     def test_paraphrased_definitions_are_kept(self):
         for query, key in (("What is meant by locked rotor?", "lra"), ("How fast does it turn a full quarter turn?", "operating_speed"),
@@ -150,8 +155,8 @@ class GlossaryTests(Base):
 
     def test_term_outside_the_summary(self):
         result = self.turn("What is IP67?", ("ask_clarification", {"field": "term_not_in_summary"}))
-        self.assertIn("does not define 'IP67'", result.answer)  # Name the actual unsupported rating.
-        self.assertIn("Duty Cycle (S4%)", result.answer)
+        self.assertEqual(result.answer, "The document doesn't define that term.")
+        self.assertEqual(result.suggested_replies, [])
 
     def test_combined_definition_and_lookup_in_one_call(self):
         result = self.turn("What is FLA and what is the FLA of 761A00-11300000/A?",
@@ -215,7 +220,7 @@ class LookupTests(Base):
 
     def test_shared_layout_is_labelled_as_published_once(self):
         result = self.turn("torque of 763A00-11330C00/A", ("get_actuator", {"part_numbers": ["763A00-11330C00/A"], "focus": "torque"}))
-        self.assertIn("2650 in-lb / 300 Nm (published once for On/Off and modulating)", result.answer)
+        self.assertIn("2650 in-lb / 300 Nm (published once for On/Off and Modulating)", result.answer)
 
     def test_follow_up_power_question_without_repeating_code(self):
         self.turn("Show 761A00-11300000/A", ("get_actuator", {"part_numbers": ["761A00-11300000/A"]}))
@@ -245,7 +250,7 @@ class SearchTests(Base):
         result = self.turn("strong on/off actuator", ("search_actuators", {"service": "on_off", "min_torque_nm": 70}))
         self.assertEqual(result.tool_calls[0]["validation"], ["ungrounded:min_torque_nm"])
         self.assertNotIn("min_torque_nm", self.context["filters"])
-        self.assertIn("Not applied because it was not stated in the conversation: torque ≥ 70 Nm", result.answer)
+        self.assertIn("I left out an unstated requirement.", result.answer)
         self.assertIn("59 actuators meet: On/Off service.", result.answer)
 
     def test_only_ungrounded_values_means_asking(self):
@@ -298,7 +303,7 @@ class SearchTests(Base):
         self.assertEqual(more.context["filters"]["offset"], 5)
         self.assertEqual(more.products, [])  # broad unsorted sets now ask one SQL-derived split
         changed = self.turn("what about modulating?", ("search_actuators", {"refine": True, "service": "modulating"}))
-        self.assertIn("19 actuators meet: modulating service, 110 V, torque ≥ 70 Nm", changed.answer)
+        self.assertIn("19 actuators meet: Modulating service, 110 V, torque ≥ 70 Nm", changed.answer)
         self.assertEqual(changed.context["filters"]["offset"], 0)
         self.assertEqual(changed.products, [])
         trace = changed.tool_calls[0]
@@ -311,7 +316,7 @@ class SearchTests(Base):
         query = "I need to control how much a valve opens, it should stop at any point, 110 V"
         result = self.turn(query, ("search_actuators", {"service": "modulating", "supply_voltage_v": 110,
                                                         "assumptions": [{"field": "service", "user_phrase": "stop at any point"}]}))
-        self.assertIn("Interpretation: 'stop at any point' read as modulating service", result.answer)
+        self.assertIn("Interpretation: 'stop at any point' read as Modulating service", result.answer)
         self.assertEqual(result.assumptions[0]["value"], "modulating")
 
     def test_poor_description_without_supply_asks_to_narrow(self):
