@@ -201,11 +201,10 @@ class LookupTests(Base):
         self.assertIn("is not in the supplied", result.answer)
         self.assertEqual(result.tool_calls[0]["overrides"], ["well_formed_code_lookup"])
 
-    def test_partial_or_missing_suffix_gets_candidates_but_no_choice(self):
+    def test_unique_missing_suffix_is_interpreted(self):
         result = self.turn("specs of 761A00-11300000", ("get_actuator", {"part_numbers": ["761A00-11300000"]}))
-        self.assertFalse(result.products)
-        self.assertEqual(result.clarification["options"], ["761A00-11300000/A"])
-        self.assertIn("Which one do you mean?", result.answer)
+        self.assertEqual([p['base_part_number'] for p in result.products], ["761A00-11300000/A"])
+        self.assertIn("Interpreted 761A00-11300000 as 761A00-11300000/A", result.answer)
 
     def test_invented_code_is_rejected(self):
         result = self.turn("the cheapest one", ("get_actuator", {"part_numbers": ["761A00-11300000/A"]}))
@@ -230,7 +229,7 @@ class LookupTests(Base):
         result = run_agent(self.connection, "and how much power does it draw?", self.history, self.context, model=model)
         self.assertIn("Motor power: 15 W", result.answer)
         self.assertIn("does not publish total electrical consumption", result.answer)
-        self.assertIn("761A00-11300000/A", model.seen[1].content)  # persisted context reached the model
+        self.assertFalse(result.debug['llm_called'])
 
 
 class SearchTests(Base):

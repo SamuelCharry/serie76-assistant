@@ -239,6 +239,35 @@ def question_facets(connection, filters, fields):
     return result
 
 
+def torque_band_facets(connection, filters):
+    """SQL counts for meaningful published minimum-torque choices."""
+    unique, params = _matching_sql(connection, filters)
+    service = filters.service
+    scope = ("AND s.service IN (%s,'shared')" if service else "")
+    args = [*params, service] if service else params
+    values = [row['torque_nm'] for row in connection.execute(
+        "SELECT DISTINCT s.torque_nm FROM (" + unique + ") q "
+        "JOIN series76.service_specs s ON s.entry_id=q.id WHERE s.torque_nm IS NOT NULL "
+        + scope + " ORDER BY s.torque_nm", args).fetchall()]
+    if len(values) < 3:
+        return []
+    total = connection.execute("SELECT count(*) AS n FROM (" + unique + ") q", params).fetchone()['n']
+    choices = []
+    for position in (0.25, 0.5, 0.75):
+        value = values[round((len(values) - 1) * position)]
+        if any(row['value'] == value for row in choices):
+            continue
+        rows = connection.execute(
+            "SELECT DISTINCT q.base_part_number FROM (" + unique + ") q "
+            "JOIN series76.service_specs s ON s.entry_id=q.id "
+            "WHERE s.torque_nm >= %s " + scope + " ORDER BY q.base_part_number",
+            [*params, value, *([service] if service else [])]).fetchall()
+        codes = [row['base_part_number'] for row in rows]
+        if 0 < len(codes) <= 0.85 * total:
+            choices.append(dict(value=json_numbers(value), n=len(codes), codes=codes))
+    return choices
+
+
 def search_actuators(connection, filters: SearchFilters, *, allow_ambiguous=False):
     unique, params = _matching_sql(connection, filters)
     total = connection.execute("SELECT count(*) AS total FROM (" + unique + ") q", params).fetchone()["total"]

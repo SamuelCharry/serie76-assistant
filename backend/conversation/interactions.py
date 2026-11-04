@@ -25,7 +25,8 @@ def option(field, value):
     text = _num(value) if isinstance(value, (int, float)) else str(value)
     label = {'on_off': 'On/Off', 'modulating': 'Modulating',
              'weatherproof': 'Weatherproof', 'explosionproof': 'Explosionproof'}.get(text, text)
-    label += {'supply_voltage_v': ' V', 'frequency_hz': ' Hz', 'phase_count': ' phase'}.get(field, '')
+    label += {'supply_voltage_v': ' V', 'frequency_hz': ' Hz', 'phase_count': ' phase',
+              'min_torque_nm': ' Nm or more'}.get(field, '')
     return dict(value=text, label=label)
 
 
@@ -58,14 +59,15 @@ def free_text_answer(query, pending):
 def questions(facets, fields):
     prompts = {'service': 'Which service?', 'frequency_hz': 'Which frequency?',
                'supply_voltage_v': 'Which supply voltage?', 'supply_current': 'Which current type?',
-               'phase_count': 'How many phases?', 'enclosure': 'Which enclosure?'}
+               'phase_count': 'How many phases?', 'enclosure': 'Which enclosure?',
+               'min_torque_nm': 'What minimum torque do you need?'}
     ranked = []
     for field in fields:
         rows = facets.get(field, [])
         if field not in prompts or len(rows) <= 1:
             continue
         universe = set().union(*(set(row.get('codes', [])) for row in rows))
-        if universe and all(set(row.get('codes', [])) == universe for row in rows):
+        if field != 'frequency_hz' and universe and all(set(row.get('codes', [])) == universe for row in rows):
             continue
         if field not in ('service', 'frequency_hz') and universe and all(row['n'] > 0.85 * len(universe) for row in rows):
             continue
@@ -92,7 +94,8 @@ def questions(facets, fields):
 
 def question_summary(items):
     names = {'service': 'service', 'frequency_hz': 'frequency', 'supply_voltage_v': 'supply voltage',
-             'supply_current': 'current type', 'phase_count': 'number of phases', 'enclosure': 'enclosure'}
+             'supply_current': 'current type', 'phase_count': 'number of phases', 'enclosure': 'enclosure',
+             'min_torque_nm': 'minimum torque'}
     labels = [names[q['id']] for q in items]
     if not labels:
         return 'Tell me which requirement matters next.'

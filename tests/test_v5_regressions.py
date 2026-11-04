@@ -36,7 +36,7 @@ class V5RegressionTests(Base):
         result = self.turn("Busco un actuador para exteriores que sea muy rápido y no consuma mucha energía.",
                            ("search_actuators", {"enclosure": "weatherproof", "sort_by": ["fastest", "lowest_power"], "refine": False}))
         self.assertNotIn("min_torque_nm", result.context["filters"])
-        self.assertEqual(result.clarification["field"], "enclosure")
+        self.assertEqual(result.clarification["field"], "supply_voltage_v")
         self.assertEqual(result.products, [])
         self.assertIn("Ranked by fastest operating time", result.answer)
         self.assertIn("Motor power", result.answer)

@@ -47,11 +47,11 @@ class ManualQualityTests(Base):
         result = self.turn(QUERIES[2], ("search_actuators", {
             "enclosure": "weatherproof", "sort_by": ["fastest", "lowest_power"]}))
         self.assertEqual(result.products, [])
-        self.assertEqual(result.interaction['questions'][0]['id'], 'enclosure')
+        self.assertEqual(result.interaction['questions'][0]['id'], 'supply_voltage_v')
         self.assertIn("operating time", result.answer.lower())
         self.assertIn("Motor power", result.answer)
         self.assertNotIn("torque:", result.answer)
-        self.assertEqual(result.answer.count("?"), 1)
+        self.assertEqual(result.answer.count("?"), 0)
         self.assert_replies(result, 2)
 
     def impossible(self, query, cancel=False):

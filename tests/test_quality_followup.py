@@ -90,7 +90,7 @@ class QualityFollowupTests(Base):
 
     def test_decline_names_only_the_actually_pending_field(self):
         service = self.manual(5)
-        self.assertIn("when you know service", service.answer)
+        self.assertIn("Without service", service.answer)
         self.assertEqual(len(service.products), 3)
         self.context = {"pending_clarification": "frequency"}
         frequency = self.turn("no", ("ask_clarification", {"field": "decline"}))

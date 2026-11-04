@@ -786,7 +786,9 @@ class Turn:
             return signalled
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
         inferred, interpretation_notes = policy.colloquial_requirements(self.query)
-        delta.update(inferred)
+        for field, value in inferred.items():
+            if field not in delta or field not in ('min_torque_nm', 'min_torque_in_lb'):
+                delta[field] = value
         if delta.get("csa_required") is False:
             delta.pop("csa_required")
         bad = policy.invalid_assumptions(args.get("assumptions", []), self.texts)
@@ -1041,6 +1043,18 @@ class Turn:
             else:
                 from backend.catalog.repository import question_facets
                 question = self.question_result([narrowing], question_facets(self.connection, filters, [narrowing]))
+        if (not (question and question.interaction) and result['total'] > 4
+                and merged.get('min_torque_nm') is None and merged.get('min_torque_in_lb') is None
+                and all(merged.get(field) is not None for field in ('service', 'supply_voltage_v', 'enclosure'))
+                and not merged.get('sort_by')):
+            from backend.catalog.repository import torque_band_facets
+            bands = torque_band_facets(self.connection, filters)
+            if bands:
+                question = self.question_result(['min_torque_nm'], {'min_torque_nm': bands})
+                if question.interaction:
+                    answer = (f"{result['total']} actuators meet: {policy.describe(merged)}. "
+                              + interactions.question_summary(question.interaction['questions']))
+                    narrowing = 'min_torque_nm'
         terms = []
         if args.get("explain_terms"):
             text, terms = self.explained(args["explain_terms"])
@@ -1063,8 +1077,9 @@ class Turn:
                     answer += '\n' + '\n'.join(dict.fromkeys(notes))
             answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
-            products = [quality.focused_product(public_product(p) | {'frequencies': p.get('frequencies', [])}, focus)
-                        for p in ranking.rank(all_rows, merged, by)[:3]]
+            products = ([] if merged.get('sort_by') else
+                        [quality.focused_product(public_product(p) | {'frequencies': p.get('frequencies', [])}, focus)
+                         for p in ranking.rank(all_rows, merged, by)[:3]])
         else:
             answer += '\nRanked by ' + rec['ranked_by'] + '.'
         if 'lowest_power' in (merged.get('sort_by') or []):
@@ -1262,7 +1277,10 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                                   data={'status': 'metric_verdict'}, validation=['ok'],
                                   context_before=context_before,
                                   model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
-                return finish(turn, AgentResult(verdict, context=turn.context, lead=verdict))
+                chosen_product = get_actuator(connection, winner) if winner else None
+                return finish(turn, AgentResult(verdict,
+                                                [public_product(chosen_product)] if chosen_product else [],
+                                                context=turn.context, lead=verdict))
     if action is None and not answers and not remove_filters and len(compared_codes) >= 2 and bare_query in ('the faster one', 'the stronger one'):
         metric = 'operating_time' if 'faster' in bare_query else 'torque'
         turn.trace = dict(name='get_actuator', parameters={}, raw_parameters={}, validation=['ok'],

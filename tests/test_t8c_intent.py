@@ -32,4 +32,4 @@ class IntentTests(Base):
                   ('search_actuators', {'service': 'on_off', 'min_torque_nm': 70}))
         result = self.turn('I cannot tell yet', ('ask_clarification', {'field': 'decline'}))
         self.assertNotIn('The requirement for', result.answer)
-        self.assertIn('Current matches', result.answer)
+        self.assertIn('best matches', result.answer)
