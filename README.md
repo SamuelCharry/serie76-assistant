@@ -62,7 +62,7 @@ With a valid token and no model key/model set, expect **HTTP 503**:
 {"detail":"Conversation service unavailable. Check backend configuration and try again.","error_code":"not_configured"}
 ```
 
-To enable interpretation after explicit inference authorization, set `OPENROUTER_API_KEY=<private-key>` and `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash` in your ignored .env, then `docker compose up -d backend`. The model was evaluated through Google's OpenAI-compatible endpoint; OpenRouter acceptance is **pending**. One tool decision per turn, SQL values and template answers; no embeddings. [Design/trade-offs](docs/wiki/en/patterns.md), [model evidence](docs/wiki/en/testing.md). Send the returned session_id on follow-ups. [Complete API](docs/wiki/en/api.md).
+To enable interpretation after explicit inference authorization, set `OPENROUTER_API_KEY=<private-key>` and `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash` in your ignored .env, then `docker compose up -d backend`. The model was evaluated through Google's OpenAI-compatible endpoint; OpenRouter acceptance is **pending**. One tool decision per turn, SQL values and template answers. Optional [interpretation embeddings](reports/submission/T9-embeddings.md) retrieve examples and suggest concepts; they never supply catalogue values. [Design/trade-offs](docs/wiki/en/patterns.md), [model evidence](docs/wiki/en/testing.md). Send the returned session_id on follow-ups. [Complete API](docs/wiki/en/api.md).
 
 ## Android
 
