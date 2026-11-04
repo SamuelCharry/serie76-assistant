@@ -48,6 +48,9 @@ def main():
     by_id['EC30']['turns'][0]['expect'].update(tool='document_limitation',
         contains=["doesn't publish prices", 'weighted'])
     by_id['EC21']['turns'][0]['expect']['contains'] = ['Tell me what it must do:']
+    by_id['EC27']['turns'][0]['expect'].update(tool='catalogue_superlative')
+    by_id['EC27']['turns'][0]['expect'].pop('args', None)
+    by_id['EC27']['turns'][0]['expect'].pop('only_filters', None)
     by_id['t6_manual_01']['turns'][1]['expect']['contains'] = ['On/Off torque', 'Operating time at 60 Hz: 17 s']
     for case_id in ('t6_manual_05', 'EC24'):
         by_id[case_id]['turns'][1]['expect']['contains'] = ['best matches so far']
@@ -276,6 +279,21 @@ def main():
               not_contains=['24 V'])
     v6_expect('G-CONFIRM-02', 1, active_filters_include=['enclosure'])
     cases['scenarios'].extend(heldout_v6['scenarios'])
+    heldout_v7 = json.loads((CONFIG / 'agent_acceptance_heldout_v7.json').read_text(encoding='utf-8'))
+    v7_by_id = {s['id']: s for s in heldout_v7['scenarios']}
+    def v7_expect(case_id, turn_index=0, **expected):
+        v7_by_id['heldout_v7_' + case_id]['turns'][turn_index]['expect'].update(expected)
+    v7_expect('V1-04', 1, contains=['difference', '7 s'])
+    v7_expect('V1-05', contains=['7', '4', 'without published values'])
+    v7_expect('V1-06', active_filters_include=['min_torque_nm'])
+    v7_expect('V2-01', active_filters_include=['min_torque_nm'])
+    v7_expect('V2-05', interaction_ids=[])
+    v7_expect('V4-04', 1, active_filters_include=['enclosure'])
+    v7_expect('V5-04', active_filters_include=['min_torque_nm'])
+    v7_expect('V5-05', interaction_ids=[])
+    v7_expect('H-SHORTREF-01', 1, comparison_layout='table')
+    v7_expect('V6-05', contains=['manufacturer'], no_products=True)
+    cases['scenarios'].extend(heldout_v7['scenarios'])
     (CONFIG / 'agent_acceptance_cases_v7.json').write_text(json.dumps(cases, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     print({'v6_cases': len(by_id), 'v7_cases': len(cases['scenarios'])})
 
