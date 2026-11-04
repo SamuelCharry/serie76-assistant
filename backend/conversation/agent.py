@@ -961,6 +961,13 @@ class Turn:
         if result['total'] > 4:
             if unscoped_superlative:
                 answer = f"All {result['total']} catalogue models are ranked by their published values."
+                from backend.catalog.repository import active_import
+                unavailable = self.connection.execute(
+                    "SELECT count(DISTINCT base_part_number) AS n FROM series76.entries "
+                    "WHERE import_id=%s AND data_status='source_NA'", (active_import(self.connection),)
+                ).fetchone()['n']
+                if unavailable:
+                    answer += f' {unavailable} catalogue rows marked N/A have no published values and are excluded.'
             answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
             products = [quality.focused_product(public_product(p) | {'frequencies': p.get('frequencies', [])}, focus)
