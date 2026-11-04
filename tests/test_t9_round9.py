@@ -31,6 +31,37 @@ class NumericEvidenceTests(unittest.TestCase):
 
 
 class RoundNineScenarios(Base):
+    def test_cycles_difference_after_comparison(self):
+        self.turn('Compare 762B00-11300000/A and 762Y30-11300000/A',
+                  ('get_actuator', {'part_numbers': ['762B00-11300000/A', '762Y30-11300000/A']}))
+        result = self.turn("what's the difference in cycles per hour?", None)
+        for value in ('21 cycles/h', '100 cycles/h', 'difference 79 cycles/h'):
+            self.assertIn(value, result.answer)
+
+    def test_offer_instead_repeats_relaxations_without_model(self):
+        self.turn('explosionproof 3-phase on/off', ('search_actuators', {}))
+        result = self.turn('what can you offer instead?', None)
+        self.assertIn('Weatherproof', result.answer)
+        self.assertIn('Explosionproof 1-phase', result.answer)
+        self.assertIn('relax', result.answer.lower())
+        self.assertFalse(result.tool_calls[0]['model']['llm_called'])
+
+    def test_voltage_sibling_preserves_single_field(self):
+        self.turn('duty of 763X30-11300000/A',
+                  ('get_actuator', {'part_numbers': ['763X30-11300000/A'], 'focus': ['duty']}))
+        result = self.turn('sorry, I meant the 220 V one', None)
+        self.assertIn('763X30-11320000/A', result.answer)
+        self.assertIn('40%', result.answer)
+        self.assertNotIn('torque', result.answer.lower())
+        self.assertNotIn('763X30-11300000/A', result.answer)
+        self.assertIsNone(result.comparison)
+
+    def test_feedback_output_is_one_sentence_limitation(self):
+        result = self.turn('does 765A00-11320000/A have a position feedback output?', None)
+        self.assertIn("doesn't publish position feedback output", result.answer)
+        self.assertEqual(result.answer.count('.'), 1)
+        self.assertFalse(result.products)
+
     def test_safe_correction_runs_without_model(self):
         self.turn('Explosionproof on/off 220 V', ('search_actuators', {}))
         result = self.turn('actually the area is safe, no gas', None)

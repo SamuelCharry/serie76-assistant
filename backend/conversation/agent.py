@@ -1497,7 +1497,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                 turn.trace = dict(name='get_actuator', parameters={'part_numbers': [code]},
                                   raw_parameters={}, validation=['ok'], context_before=context_before,
                                   model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
-                return finish(turn, turn.lookup(dict(part_numbers=[code], focus=['overview'], explain_terms=[])))
+                return finish(turn, turn.lookup(dict(part_numbers=[code],
+                    focus=turn.context.get('focus') or ['overview'], explain_terms=[])))
         if (not codes and (turn.context.get('focused_model') or len(prior_codes) == 1) and
                 re.search(r'\b3[-\s]*phase\s+version\b', query, re.I)):
             source = turn.context.get('focused_model') or prior_codes[0]
@@ -1622,10 +1623,13 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                               model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
             named = policy.codes_in_text(query)
             qualifier = f' for {named[0]}' if len(named) == 1 else ''
-            return finish(turn, AgentResult(f"The catalogue doesn't publish {topic}{qualifier}. "
-                                            'I can compare its published electrical fields.', context=turn.context))
+            answer = f"The catalogue doesn't publish {topic}{qualifier}."
+            if topic != 'position feedback output':
+                answer += ' I can compare its published electrical fields.'
+            return finish(turn, AgentResult(answer, context=turn.context))
     if (action is None and not answers and not remove_filters and
-            bare_query in ('so what can i do', 'what can i do', 'any alternatives', "what's closest", 'what is closest') and
+            bare_query in ('so what can i do', 'what can i do', 'any alternatives', "what's closest", 'what is closest',
+                           'what can you offer instead') and
             turn.context.get('zero_result_options')):
         options = turn.context['zero_result_options']
         turn.trace = dict(name='zero_result_options', parameters={}, raw_parameters={}, validation=['ok'],
@@ -1704,7 +1708,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                               model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
             return finish(turn, AgentResult(answer, context=turn.context, lead=answer))
     if (action is None and not answers and not remove_filters and
-            answer_planner.plan(query).shape == 'verdict' and not policy.codes_in_text(query)):
+            (answer_planner.plan(query).shape == 'verdict' or re.search(r'\bdifference\b', bare_query))
+            and not policy.codes_in_text(query)):
         use_ranked = bool(re.search(r'\b(results?|ranked|list|them|those|among)\b', bare_query))
         codes = ((turn.context.get('last_ranked_list') or compared_codes) if use_ranked else
                  compared_codes or turn.context.get('last_ranked_list') or turn.context.get('on_screen')) or []

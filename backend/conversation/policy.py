@@ -230,6 +230,7 @@ CATALOGUE_ATTRIBUTE_WORDS = frozenset({
 })
 
 UNPUBLISHED_TOPICS = (
+    (r'\b(?:position feedback(?: output)?|feedback output)\b', 'position feedback output'),
     (r'\b(?:operating temperature|temperature range|ambient temperature)\b', 'operating temperature range'),
     (r'\b(?:install|installation|mount(?:ing)?)\b', 'installation instructions'),
     (r'\b(?:noise|quietest|sound level|decibels?)\b', 'noise levels'),
