@@ -32,7 +32,6 @@ data class AppState(
     val sending: Boolean = false,
     val sendError: String? = null,
     val needsReconcile: Boolean = false,
-    val debugMessageId: String? = null,
     val question: QuestionStepper? = null,
     val composerActive: Boolean = false,
     val suggestionsDismissed: Boolean = false,
@@ -52,16 +51,30 @@ private fun pendingQuestion(message: Message?): QuestionStepper? = message?.take
 class AppViewModel(private val repository: ConversationRepository, private val saved: SavedStateHandle,
                    private val deleteCommitScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)) : ViewModel() {
     private val mutable = MutableStateFlow(AppState(
-        screen = saved["screen"] ?: "chat", sessionId = saved["sessionId"], draft = saved["draft"] ?: "",
+        screen = saved.get<String>("screen")?.takeIf { it == "sessions" } ?: "chat", sessionId = saved["sessionId"], draft = saved["draft"] ?: "",
         // A process may have died after the server committed a request. Reconcile before resend.
         needsReconcile = saved["inFlight"] ?: false,
-        debugMessageId = saved["debugMessageId"],
     ))
     val state = mutable.asStateFlow()
     private var historyJob: Job? = null
     private var sessionsJob: Job? = null
     private var threadGeneration = 0
     private var deleteJob: Job? = null
+    private var voiceCancellation: (() -> Unit)? = null
+
+    /** The composed screen owns the recognizer; navigation cancels it before mutating the draft. */
+    fun bindVoiceInput(cancel: () -> Unit): () -> Unit {
+        voiceCancellation?.invoke()
+        voiceCancellation = cancel
+        return {
+            if (voiceCancellation === cancel) {
+                cancel()
+                voiceCancellation = null
+            }
+        }
+    }
+
+    fun cancelVoiceInput() { voiceCancellation?.invoke() }
 
     init {
         refreshSessions()
@@ -86,6 +99,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
 
     fun newConversation() {
         if (state.value.sending) return
+        cancelVoiceInput()
         historyJob?.cancel()
         threadGeneration++
         saved["sessionId"] = null
@@ -99,6 +113,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
 
     fun open(session: Session) {
         if (state.value.sending) return
+        cancelVoiceInput()
         threadGeneration++
         saved["sessionId"] = session.id
         saved["screen"] = "chat"
@@ -110,17 +125,11 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     }
 
     fun back() {
-        if (state.value.screen == "debug") {
-            saved["screen"] = "chat"
-            mutable.update { it.copy(screen = "chat") }
-        } else {
-            saved["screen"] = "sessions"
-            mutable.update { it.copy(screen = "sessions") }
-            refreshSessions()
-        }
+        showConversations()
     }
 
     fun showConversations() {
+        cancelVoiceInput()
         saved["screen"] = "sessions"
         mutable.update { it.copy(screen = "sessions") }
         refreshSessions()
@@ -194,6 +203,8 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     fun clearDeleteNotice() { mutable.update { it.copy(deleteNotice = null) } }
 
     override fun onCleared() {
+        cancelVoiceInput()
+        voiceCancellation = null
         commitPendingDelete()
         super.onCleared()
     }
@@ -267,13 +278,4 @@ class AppViewModel(private val repository: ConversationRepository, private val s
         if (id != null) loadHistory(id) else back()
     }
 
-    fun debug() {
-        saved["screen"] = "debug"
-        mutable.update { it.copy(screen = "debug") }
-    }
-
-    fun debugMessage(id: String) {
-        saved["debugMessageId"] = id
-        mutable.update { it.copy(debugMessageId = id) }
-    }
 }

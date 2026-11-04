@@ -19,7 +19,10 @@ import androidx.compose.ui.unit.dp
 import com.serie76.assistant.data.Account
 import retrofit2.Retrofit
 
-data class AccountControls(val user: Account, val busy: Boolean, val error: String?, val logout: () -> Unit)
+data class AccountControls(val user: Account, val busy: Boolean, val error: String?, val logout: () -> Unit) {
+    /** Stop capture at the sign-out gesture, even if the logout request later fails or stalls. */
+    fun withVoiceCancellation(cancel: () -> Unit) = copy(logout = { cancel(); logout() })
+}
 val LocalAccount = staticCompositionLocalOf<AccountControls?> { null }
 val LocalAuthenticatedApi = staticCompositionLocalOf<Retrofit?> { null }
 
