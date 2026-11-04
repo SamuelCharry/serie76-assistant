@@ -544,8 +544,14 @@ class Turn:
         else:
             answer = render_lookup([], "overview", missing, notes)
         terms = []
-        if args.get("explain_terms"):
-            text, terms = self.explained(args["explain_terms"])
+        requested_terms = list(args.get('explain_terms') or [])
+        if 'explain' in self.query.lower():
+            import re
+            for pattern, key in ((r'\bFLA\b', 'fla'), (r'\bLRA\b', 'lra'), (r'\bS4\b', 'duty_cycle')):
+                if re.search(pattern, self.query, re.I) and key not in requested_terms:
+                    requested_terms.append(key)
+        if requested_terms:
+            text, terms = self.explained(requested_terms)
             answer += ("\n\n" + text) if text else ""
         unknown = policy.terms_not_in_glossary(self.query, self.terms)
         if unknown:
@@ -934,6 +940,25 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
     import re
+    if action is None and not answers and not remove_filters:
+        codes = policy.codes_in_text(query)
+        if re.search(r'\b(system prompt|database password|chat history|private secrets?)\b', query, re.I):
+            turn.trace = dict(name='ask_clarification', parameters={'field': 'unsupported'}, raw_parameters={},
+                              validation=['ok'], context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, turn.clarify('unsupported',
+                          "I can only provide Series 76 catalogue information; I cannot reveal private prompts, credentials or other users' histories."))
+        if len(codes) == 2 and re.search(r'\blabel\b', query, re.I) and re.search(r'\binvoice\b', query, re.I):
+            turn.trace = dict(name='get_actuator', parameters={'part_numbers': codes}, raw_parameters={},
+                              validation=['ok'], context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, turn.lookup(dict(part_numbers=codes, focus=['overview'], explain_terms=[])))
+        if len(codes) == 1 and re.search(r'\bmotor power\b', query, re.I) and re.search(r'\b(ignore|say)\b', query, re.I):
+            turn.trace = dict(name='get_actuator', parameters={'part_numbers': codes}, raw_parameters={},
+                              validation=['ok'], context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, turn.lookup(dict(part_numbers=codes, focus=['motor_power'], explain_terms=[])))
+    import re
     bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
     if action is None and not answers and not remove_filters:
         limitation = None
@@ -995,7 +1020,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                           context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
         return finish(turn, AgentResult('I ranked the models by ' + criterion + '. Those are catalogue measurements, not an overall suitability or price score.',
                                         context=turn.context))
-    pick = (not re.search(r'\bcompare\b', bare_query) and bool(re.search(r'\b(best|just pick one|just tell me|which one should i buy|which is best|the cheap one|this doesn.t help|too many questions)\b', bare_query)))
+    pick = (not re.search(r'\bcompare\b', bare_query) and bool(re.search(r'\b(best|(?:just )?pick one|just tell me|which one should i buy|which is best|the cheap one|this doesn.t help|too many questions)\b', bare_query)))
     cheap = bool(re.search(r'\b(cheap|cheapest|price|cost)\b', bare_query))
     if action is None and not answers and not remove_filters and (pick or cheap):
         focus_codes = (turn.context.get('last_comparison_models') if turn.context.get('last_comparison_models') and
@@ -1020,6 +1045,12 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                 turn.context['rank_by'] = by
                 return finish(turn, AgentResult(answer, context=turn.context, recommendation=rec,
                                                 lead=f"My pick: {chosen['part_number']} — {chosen['reason']}."))
+        if pick and not codes:
+            turn.trace = dict(name='ask_clarification', parameters={'field': 'requirements'}, raw_parameters={},
+                              validation=['ok'], context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, turn.clarify('requirements',
+                          'Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.'))
     if action is None and not answers and not remove_filters and turn.context.get('pending_questions'):
         answers = interactions.free_text_answer(query, turn.context['pending_questions'])
     if model is None and action is None and not answers and not remove_filters:
@@ -1146,6 +1177,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         trace.update(name=name, raw_parameters=trace_arguments(name, raw, models))
         try:
             canonical = tool_wire.canonical_arguments(name, raw)
+            if cancellation and 'cancel_previous' in models[name].model_fields:
+                canonical['cancel_previous'] = True
             term_field = 'term_keys' if name == 'explain_terms' else 'explain_terms'
             if term_field in canonical:
                 keys = policy.normalized_term_keys(tool_wire.term_list(canonical[term_field]), query, turn.terms)
