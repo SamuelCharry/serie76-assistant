@@ -848,11 +848,14 @@ class Turn:
             self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
             self.context['last_shown_offset'] = len(rec['items'])
             question.recommendation = rec
-            question.answer = prompt + '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
+            preview_label = preview_enclosure.capitalize()
+            question.answer = (prompt + '\nPreview only: ' + preview_label +
+                               ' models; confirm the enclosure before applying it.\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
+            )
             if 'lowest_power' in (merged.get('sort_by') or []):
                 question.answer += '\nMotor power is the published rated motor power, not total electrical consumption.'
-            question.lead = 'Ranked by ' + rec['ranked_by'] + '.'
+            question.lead = 'Preview only: ' + preview_label + ' models. Ranked by ' + rec['ranked_by'] + '.'
             question.clarification['message'] = prompt
             self.trace['data'] = dict(status='enclosure_confirmation', options=question.interaction['questions'][0]['options'])
             return question
