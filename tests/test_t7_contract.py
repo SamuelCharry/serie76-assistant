@@ -99,6 +99,26 @@ class InteractionTests(Base):
         self.assertIsNone(result.interaction)
         self.assertIn('still open', result.answer)
 
+    def test_unrelated_free_text_does_not_repeat_pending_questions(self):
+        first = self.turn('at least 70 Nm and FLA below 1.5 A', ('search_actuators', {
+            'min_torque_nm': 70, 'max_fla_a': {'value': 1.5, 'op': 'lt'}}))
+        result = self.turn('I do not know those details', ('ask_clarification', {'field': 'unsupported'}))
+        self.assertIsNone(result.interaction)
+        self.assertEqual(len(result.products), 3)
+        self.assertIn('service, frequency is still open', result.answer)
+
+    def test_repeated_generic_find_does_not_loop(self):
+        self.turn('Find an actuator for my requirements', ('ask_clarification', {'field': 'requirements'}))
+        result = self.turn('Find an actuator for my requirements', ('ask_clarification', {'field': 'requirements'}))
+        self.assertIsNone(result.interaction)
+        self.assertEqual(len(result.products), 3)
+
+    def test_broader_clarification_cannot_repeat_an_unresolved_field(self):
+        self.turn('at least 70 Nm', ('search_actuators', {'min_torque_nm':70}))
+        result = self.turn('I cannot tell you the details', ('ask_clarification', {'field':'requirements'}))
+        self.assertIsNone(result.interaction)
+        self.assertEqual(len(result.products), 3)
+
 
 class ComparisonTests(Base):
     def compare(self, codes):
@@ -124,6 +144,12 @@ class ComparisonTests(Base):
         self.assertEqual(result.comparison['key_fields'][-1], 'motor_power_w')
         self.assertTrue(all(r['better'] is None and len(r['values']) == 3 for r in result.comparison['rows']))
         self.assertEqual(result.suggestions, [])
+
+    def test_three_models_key_fields_retain_explicit_service_and_frequency(self):
+        codes = ['761A00-11300000/A', '761B00-11300000/A', '762A00-11300000/A']
+        result = self.turn('Compare ' + ', '.join(codes) + ' for modulating at 60 Hz', ('get_actuator', {
+            'part_numbers': codes, 'focus': ['torque','operating_time','fla'], 'focus_service': 'modulating', 'focus_frequency_hz': 60}))
+        self.assertEqual(result.comparison['key_fields'], ['modulating_torque','operating_time_60hz_s','fla_60hz_a','motor_power_w'])
 
 
 class HttpContractTests(unittest.TestCase):

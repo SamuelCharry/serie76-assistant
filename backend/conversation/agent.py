@@ -131,7 +131,7 @@ Tools:
   get_actuator and search_actuators accept explain_terms as comma-separated glossary keys for combined questions.
 - ask_clarification: a required detail is missing or the reference is ambiguous.
   Bare cancel/cancelar/olvídalo => field=cancel; bare no after a clarification => decline.
-  Both run no catalogue tool and never repeat a declined question.
+  Cancel runs no catalogue tool; decline shows up to three current SQL candidates and names the open requirements.
   Several previous products and "it" -> which_product. Unrelated request -> unsupported.
   A singular "its/it/that one" after two models, without a current explicit code, must
   ask which_product; never resend both codes as a comparison to resolve that ambiguity.
@@ -460,7 +460,14 @@ class Turn:
         focus = quality.normalized_focus(args.get("focus") or self.context.get("focus") or ["overview"])
         self.context["focus"] = focus
         public = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in products]
-        compared = quality.comparison(public, focus if len(public) == 2 else ["overview"]) if len(public) >= 2 else None
+        comparison_focus = focus
+        if len(public) > 2:
+            service = next((f['service'] for f in focus if f.get('service')), self.context.get('filters', {}).get('service'))
+            frequency = next((f['frequency_hz'] for f in focus if f.get('frequency_hz')), self.context.get('filters', {}).get('frequency_hz'))
+            comparison_focus = [dict(field='torque', **({'service': service} if service else {})),
+                                dict(field='operating_time', **({'frequency_hz': frequency} if frequency else {})),
+                                dict(field='fla', **({'frequency_hz': frequency} if frequency else {})), dict(field='motor_power')]
+        compared = quality.comparison(public, comparison_focus) if len(public) >= 2 else None
         if compared:
             answer = "Comparing " + " vs ".join(compared["models"]) + ". " + str(len(compared["hidden_rows"])) + " identical fields hidden.\n"
             answer += "\n".join(row["label"] + ": " + " vs ".join(row["values"]) for row in compared["rows"])
@@ -753,7 +760,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     new_questions = result.context.get('pending_questions', [])
     if old_questions and new_questions and result.clarification and not cancel_previous:
         old_ids = [q['id'] for q in old_questions]
-        if old_ids == [q['id'] for q in new_questions] and context_before.get('filters') == result.context.get('filters'):
+        if set(old_ids) & {q['id'] for q in new_questions} and context_before.get('filters') == result.context.get('filters'):
             result = turn.unresolved(old_ids)
     return finish(turn, result)
 
@@ -770,6 +777,8 @@ def finish(turn, result):
             result.answer = limitation + '\n' + result.answer
     if re.search(r'\b(buy|purchase|order|delivery|comprar|compra)\b', turn.query, re.I):
         result.answer = 'I cannot place orders or confirm delivery. I can provide published catalogue specifications.\n' + result.answer
+        if result.products or result.comparison:
+            result.lead = 'I cannot place orders or confirm delivery; the cards show published catalogue specifications.'
     if re.search(r'\binvoice\b', turn.query, re.I) and re.search(r'\b(label|installed|nameplate)\b', turn.query, re.I):
         result.answer = 'The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\n' + result.answer
         result.lead = 'Check the physical nameplate to identify the installed actuator; the catalogue comparison cannot establish that.'
