@@ -91,7 +91,7 @@ def main():
         {'id': 'T8_mining', 'category': 't8', 'turns': [
             turn('actuator for a mining site, 220 V',
                  ['search_actuators', {'supply_voltage_v': 220, 'enclosure': 'explosionproof'}],
-                 tool='search_actuators', interaction_count_at_least=1)]},
+                 tool='search_actuators', active_filters_include=['enclosure', 'supply_voltage_v'])]},
         {'id': 'T8_joke', 'category': 't8', 'turns': [
             turn('Tell me a joke', ['ask_clarification', {'field': 'unsupported'}], tool='ask_clarification')]},
         {'id': 'T8_zero', 'category': 't8', 'turns': [
@@ -113,13 +113,13 @@ def main():
     require('B-SHORTREF-01', 1, tool='ranked_reference')
     require('B-SHORTREF-01', 2, tool='ranked_reference')
     require('P6-01', contains=["doesn't publish prices"], no_products=True)
-    require('P1-03', lead_contains=['764A00-11300000/A', 'faster at 60 Hz: 30 s'])
+    require('P1-03', lead_contains=['764A00-11300000/A 30 s', '765A00-11300000/A 88 s'])
     cases['scenarios'].extend(heldout['scenarios'])
     heldout_v2 = json.loads((CONFIG / 'agent_acceptance_heldout_v2.json').read_text(encoding='utf-8'))
     v2_by_id = {s['id']: s for s in heldout_v2['scenarios']}
     def v2_expect(case_id, turn_index=0, **expected):
         v2_by_id['heldout_v2_' + case_id]['turns'][turn_index]['expect'].update(expected)
-    v2_expect('Q1-03', lead_contains=['763B00-11300000/A', 'draws more current at 60 Hz: 4.8 A'])
+    v2_expect('Q1-03', lead_contains=['763B00-11300000/A 4.8 A', '763X30-11300000/A 2.3 A'])
     v2_expect('Q1-08', not_contains=['Motor power: 180 W vs 180 W vs 180 W'])
     v2_expect('Q2-01', 1, contains=['My pick:'])
     v2_expect('Q2-02', 0, interaction_ids=['enclosure'])
@@ -253,6 +253,29 @@ def main():
             item['expect']['not_contains'].extend(['was unclear in your request',
                                                    'no frequency in source'])
     cases['scenarios'].extend(heldout_v5['scenarios'])
+    heldout_v6 = json.loads((CONFIG / 'agent_acceptance_heldout_v6.json').read_text(encoding='utf-8'))
+    v6_by_id = {s['id']: s for s in heldout_v6['scenarios']}
+    def v6_expect(case_id, turn_index=0, **expected):
+        v6_by_id['heldout_v6_' + case_id]['turns'][turn_index]['expect'].update(expected)
+    v6_expect('U1-04', 1, contains=['1.3 A', '1 A', 'difference 0.3 A'],
+              not_contains=['Which of the previously listed'])
+    v6_expect('U2-01', active_filters_include=['service'])
+    v6_expect('U2-02', interaction_ids=['enclosure'])
+    v6_expect('U2-03', active_filters_include=['service'])
+    v6_expect('U2-04', contains=['service life'], no_products=True)
+    v6_expect('U2-05', contains=['65', '9000', 'On/Off', 'Modulating'])
+    v6_expect('U2-06', recommendation_total=0, recommendation_ranked_by=True)
+    v6_expect('G-REPHRASE-01', interaction_ids=['min_torque_nm'], no_products=True)
+    v6_expect('G-TOPICJUMP-01', 2, contains=['operating time'], not_contains=['Comparing '])
+    v6_expect('G-SHORTREF-02', 1, contains=['765Y30-11320000/A 3000 Nm',
+                                           '765X30-11320000/A 2000 Nm'])
+    v6_expect('G-IMPOSSIBLE-01', 1, contains=['Drop 3-phase', 'Drop DC'])
+    v6_expect('G-CORRECTION-01', 1, contains=['On/Off cycles per hour'],
+              not_contains=['On/Off torque'])
+    v6_expect('G-CONFIRM-01', active_filters_include=['supply_voltage_v'],
+              not_contains=['24 V'])
+    v6_expect('G-CONFIRM-02', 1, active_filters_include=['enclosure'])
+    cases['scenarios'].extend(heldout_v6['scenarios'])
     (CONFIG / 'agent_acceptance_cases_v7.json').write_text(json.dumps(cases, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     print({'v6_cases': len(by_id), 'v7_cases': len(cases['scenarios'])})
 
