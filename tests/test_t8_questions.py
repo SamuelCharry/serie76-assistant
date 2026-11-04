@@ -12,13 +12,30 @@ class MultiQuestionTests(Base):
         self.assertTrue(all(all(isinstance(o["count"], int) and o["count"] > 0
                                 for o in q["options"]) for q in questions))
         self.assertEqual(len({q["id"] for q in questions}), len(questions))
+        self.assertEqual([q['id'] for q in questions], ['supply_voltage_v', 'enclosure'])
+
+    def test_redundant_partition_is_removed_but_cross_cutting_field_remains(self):
+        from backend.conversation.interactions import questions
+        facets = {
+            'supply_voltage_v': [{'value': 110, 'n': 2, 'codes': ['A', 'B']},
+                                 {'value': 220, 'n': 2, 'codes': ['C', 'D']}],
+            'supply_current': [{'value': 'AC', 'n': 2, 'codes': ['A', 'B']},
+                               {'value': 'DC', 'n': 2, 'codes': ['C', 'D']}],
+            'enclosure': [{'value': 'weatherproof', 'n': 2, 'codes': ['A', 'C']},
+                          {'value': 'explosionproof', 'n': 2, 'codes': ['B', 'D']}],
+            'phase_count': [{'value': 1, 'n': 4, 'codes': ['A', 'B', 'C', 'D']}],
+        }
+        self.assertEqual([q['id'] for q in questions(facets, list(facets))],
+                         ['supply_voltage_v', 'enclosure'])
 
     def test_empty_combination_is_rejected_atomically(self):
         first = self.turn("I need an on/off actuator with at least 70 Nm",
                           ("search_actuators", {"service": "on_off", "min_torque_nm": 70}))
-        options = {q["id"]: [o["value"] for o in q["options"]] for q in first.interaction["questions"]}
-        if not {"supply_voltage_v", "supply_current"} <= options.keys():
-            self.skipTest("No cross-facet empty combination in current catalogue")
+        from backend.catalog.repository import question_facets
+        from backend.catalog.models import SearchFilters
+        from backend.conversation.interactions import questions
+        facets = question_facets(self.connection, SearchFilters.model_validate(self.context['filters']), ['supply_current'])
+        self.context['pending_questions'] += questions(facets, ['supply_current'])
         before = dict(self.context)
         with self.assertRaises(InvalidInteraction) as raised:
             run_agent(self.connection, "Submit", self.history, self.context,

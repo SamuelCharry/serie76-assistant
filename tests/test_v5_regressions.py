@@ -38,7 +38,7 @@ class V5RegressionTests(Base):
         self.assertNotIn("min_torque_nm", result.context["filters"])
         self.assertEqual(result.clarification["field"], "enclosure")
         self.assertEqual(result.products, [])
-        self.assertIn("Fastest operating time", result.answer)
+        self.assertIn("Ranked by fastest operating time", result.answer)
         self.assertIn("Motor power", result.answer)
 
     def test_informal_service_with_explicit_torque_keeps_both_requirements(self):

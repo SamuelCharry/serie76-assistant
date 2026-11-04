@@ -18,7 +18,7 @@ class ActionTests(Base):
         self.ranked()
         ranked = run_agent(self.connection, "Rank by fastest", self.history, self.context,
                            action={"type": "rank_by", "args": {"by": "fastest"}})
-        self.assertIn("Fastest operating time", ranked.answer)
+        self.assertIn("Ranked by fastest operating time", ranked.answer)
         shown = run_agent(self.connection, "Show all", self.history, ranked.context,
                           action={"type": "show_all", "args": {}})
         self.assertEqual(len(shown.context["last_ranked_list"]), len(self.context["last_ranked_list"]))

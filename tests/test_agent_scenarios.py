@@ -238,7 +238,7 @@ class SearchTests(Base):
                            ("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "min_torque_nm": 70}))
         self.assertIn("21 actuators meet: On/Off service, 110 V, torque ≥ 70 Nm", result.answer)
         self.assertEqual(len(result.products), 3)
-        self.assertGreaterEqual(result.answer.count("?"), 1)
+        self.assertIn('To narrow it down: enclosure.', result.answer)
         self.assertEqual(result.recommendation['total'], 21)
         self.assertEqual(result.clarification["field"], "enclosure")
         self.assertNotIn("Modulating torque", result.answer)  # only the requested service is summarised

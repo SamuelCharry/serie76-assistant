@@ -17,7 +17,7 @@ Estado: implementado y verificado con decisiones de modelo **scripted**, Postgre
 
 ## Pruebas
 
-- Suite Python completa con `SERIES76_TEST_DB=1`: **237 pruebas, OK, 2 omitidas** por módulos OCR/geometría opcionales.
+- Suite Python completa con `SERIES76_TEST_DB=1`: **239 pruebas, OK, 2 omitidas** por módulos OCR/geometría opcionales.
 - `agent_acceptance.py selfcheck` v7: **115/115 escenarios**, sin inferencia externa. Incluye frases originales, ruta rápida, acciones, cero resultados y mutaciones del scanner.
 - Corrupciones v6: **6/6**. Scanner unitario: **3/3**; también corre sobre cada respuesta del selfcheck y de los escenarios scripted.
 - `check_tool_schemas.py` offline: antes `arrays=6, bytes=4131, depth=7, enum_values=83, required=3, forbidden_nodes=0, numeric_ranges=0`; después `arrays=6, bytes=4360, depth=7, enum_values=83, required=2, forbidden_nodes=0, numeric_ranges=0`. No hay arrays de objetos en `get_actuator`.
@@ -33,14 +33,13 @@ Los tres cuerpos HTTP **completos y sin modificar** están en [T8-three-response
 
 ```json
 {
-  "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. Which supply voltage? Which enclosure? Which current type?\nRanked by Closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: 70 Nm torque; FLA 5 A\n761X30-11320000/A: 80 Nm torque; FLA 0.6 A\n761A00-11320000/A: 80 Nm torque; FLA 0.7 A",
+  "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: 70 Nm torque; FLA 5 A\n761X30-11320000/A: 80 Nm torque; FLA 0.6 A\n761A00-11320000/A: 80 Nm torque; FLA 0.7 A",
   "interaction": {"kind": "question", "questions": [
     {"id": "supply_voltage_v", "prompt": "Which supply voltage?", "options": [{"value": "24", "label": "24 V", "count": 5}, {"value": "110", "label": "110 V", "count": 21}, {"value": "220", "label": "220 V", "count": 33}]},
-    {"id": "enclosure", "prompt": "Which enclosure?", "options": [{"value": "explosionproof", "label": "Explosionproof", "count": 25}, {"value": "weatherproof", "label": "Weatherproof", "count": 34}]},
-    {"id": "supply_current", "prompt": "Which current type?", "options": [{"value": "AC", "label": "AC", "count": 54}, {"value": "AC/DC", "label": "AC/DC", "count": 5}]}
+    {"id": "enclosure", "prompt": "Which enclosure?", "options": [{"value": "explosionproof", "label": "Explosionproof", "count": 25}, {"value": "weatherproof", "label": "Weatherproof", "count": 34}]}
   ]},
-  "recommendation": {"ranked_by": "Closest torque at or above 70 Nm, then lowest FLA", "total": 59, "shown": 3},
-  "debug": {"latency_ms": 133, "attempts": 1, "llm_called": true}
+  "recommendation": {"ranked_by": "closest torque at or above 70 Nm, then lowest FLA", "total": 59, "shown": 3},
+  "debug": {"latency_ms": 261, "attempts": 1, "llm_called": true}
 }
 ```
 
@@ -48,14 +47,14 @@ Los tres cuerpos HTTP **completos y sin modificar** están en [T8-three-response
 
 ```json
 {
-  "answer": "10 actuators meet: Explosionproof, On/Off service, 110 V, torque ≥ 70 Nm. Here are the leading published models.\nRanked by Closest torque at or above 70 Nm, then lowest FLA.\n761X30-11300000/A: 80 Nm torque; FLA 1.1 A\n761Y30-11300000/A: 100 Nm torque; FLA 1.1 A\n762X30-11300000/A: 150 Nm torque; FLA 1.9 A",
-  "recommendation": {"ranked_by": "Closest torque at or above 70 Nm, then lowest FLA", "total": 10, "shown": 3, "items": [
+  "answer": "10 actuators meet: Explosionproof, On/Off service, 110 V, torque ≥ 70 Nm. Here are the leading published models.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11300000/A: 80 Nm torque; FLA 1.1 A\n761Y30-11300000/A: 100 Nm torque; FLA 1.1 A\n762X30-11300000/A: 150 Nm torque; FLA 1.9 A",
+  "recommendation": {"ranked_by": "closest torque at or above 70 Nm, then lowest FLA", "total": 10, "shown": 3, "items": [
     {"part_number": "761X30-11300000/A", "reason": "80 Nm torque; FLA 1.1 A", "key_values": [{"label": "On/Off torque", "value": "80 Nm"}, {"label": "FLA", "value": "1.1 A"}]},
     {"part_number": "761Y30-11300000/A", "reason": "100 Nm torque; FLA 1.1 A", "key_values": [{"label": "On/Off torque", "value": "100 Nm"}, {"label": "FLA", "value": "1.1 A"}]},
     {"part_number": "762X30-11300000/A", "reason": "150 Nm torque; FLA 1.9 A", "key_values": [{"label": "On/Off torque", "value": "150 Nm"}, {"label": "FLA", "value": "1.9 A"}]}
   ]},
   "suggested_replies": ["Compare top 2", "Show all 10"],
-  "debug": {"latency_ms": 82, "attempts": 0, "llm_called": false}
+  "debug": {"latency_ms": 78, "attempts": 0, "llm_called": false}
 }
 ```
 
@@ -65,8 +64,14 @@ Los tres cuerpos HTTP **completos y sin modificar** están en [T8-three-response
 {
   "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
   "comparison": {"layout": "table", "models": ["761A00-11300000/A", "761B00-11300000/A"], "summary": "761A00-11300000/A wins 5 of 7 differing fields with an agreed direction; 761B00-11300000/A wins 2. This is an unweighted field count, not an overall suitability rating."},
-  "debug": {"latency_ms": 64, "attempts": 0, "llm_called": false}
+  "debug": {"latency_ms": 61, "attempts": 0, "llm_called": false}
 }
 ```
 
 La latencia de estos tres turnos corresponde a pruebas locales con decisiones scripted; no mide el proveedor real ni el emulador.
+
+## Revisión de naturalidad
+
+La selección de preguntas ahora compara los conjuntos de códigos obtenidos de SQL: omite una pregunta cuando sus opciones no separan candidatos adicionales y omite campos con una sola alternativa que cubre todos los resultados. La primera interacción de 59 candidatos pide voltaje y gabinete; la partición AC/AC-DC ya queda determinada por el voltaje. Servicio y frecuencia conservan su pregunta cuando definen cómo interpretar los datos técnicos, aunque las filas coincidan.
+
+El texto de respuesta resume los temas pendientes en una oración y el criterio de ordenamiento usa minúscula después de «Ranked by» en la respuesta, el encabezado y `recommendation.ranked_by`. Las dos correcciones tuvieron pruebas que fallaron antes de la implementación. Verificación final: 239 pruebas Python aprobadas (2 omitidas), selfcheck v7 115/115, scanner 3/3 y esquema offline sin nodos prohibidos ni rangos numéricos.

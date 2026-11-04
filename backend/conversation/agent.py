@@ -391,7 +391,7 @@ class Turn:
         self.context['pending_questions'] = questions
         first = questions[0]['id'] if questions else (fields[0] if fields else 'requirements')
         legacy = 'frequency' if first == 'frequency_hz' else first
-        prompt = message or ' '.join(q['prompt'] for q in questions) or QUESTIONS.get(legacy, QUESTIONS['requirements'])
+        prompt = message or interactions.question_summary(questions)
         result = self.clarify(legacy, prompt)
         result.interaction = dict(kind='question', questions=questions) if questions else None
         return result
@@ -713,14 +713,15 @@ class Turn:
         question = None
         if result.get('facets') and result['total'] > 4:
             fields = list(result['facets'])
-            question = self.question_result(fields, result['facets'])
+            from backend.catalog.repository import question_facets
+            question = self.question_result(fields, question_facets(self.connection, filters, fields))
             if question.interaction:
-                prompts = ' '.join(q['prompt'] for q in question.interaction['questions'])
+                summary = interactions.question_summary(question.interaction['questions'])
                 prefix = '\n'.join(notes)
                 if shown:
                     prefix += '\nInterpretation: ' + '; '.join(
                         f"'{a['user_phrase']}' read as {policy.describe({a['field']: a['value']})}" for a in shown) + '.'
-                answer = (prefix + '\n' + f"{result['total']} actuators meet: {policy.describe(merged)}. {prompts}").strip()
+                answer = (prefix + '\n' + f"{result['total']} actuators meet: {policy.describe(merged)}. {summary}").strip()
                 narrowing = question.interaction['questions'][0]['id']
             else:
                 narrowing = None

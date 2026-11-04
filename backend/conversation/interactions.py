@@ -34,9 +34,34 @@ def questions(facets, fields):
                'supply_voltage_v': 'Which supply voltage?', 'supply_current': 'Which current type?',
                'phase_count': 'How many phases?', 'enclosure': 'Which enclosure?'}
     ranked = [f for f in fields if f in prompts and len(facets.get(f, [])) > 1]
-    ranked.sort(key=lambda f: (max(r['n'] for r in facets[f]), f))
+    ranked.sort(key=lambda f: max(r['n'] for r in facets[f]))
+    selected = []
+    for field in ranked:
+        current = facets[field]
+        # Service and frequency establish the measurement scope. Their values
+        # are not inferred from a coincidentally equal candidate set.
+        if field not in ('service', 'frequency_hz') and selected and all('codes' in row for previous in selected for row in facets[previous]) and all('codes' in row for row in current):
+            earlier = [set(row['codes']) for previous in selected for row in facets[previous]]
+            choices = [set(row['codes']) for row in current]
+            universe = set().union(*earlier, *choices)
+            atoms = {}
+            for code in universe:
+                atoms.setdefault(tuple(code in group for group in earlier), set()).add(code)
+            if all(all(atom <= choice or atom.isdisjoint(choice) for atom in atoms.values()) for choice in choices):
+                continue
+        selected.append(field)
     return [dict(id=f, prompt=prompts[f],
-                 options=[dict(option(f, r['value']), count=r['n']) for r in facets[f]]) for f in ranked]
+                 options=[dict(option(f, r['value']), count=r['n']) for r in facets[f]]) for f in selected]
+
+
+def question_summary(items):
+    names = {'service': 'service', 'frequency_hz': 'frequency', 'supply_voltage_v': 'supply voltage',
+             'supply_current': 'current type', 'phase_count': 'number of phases', 'enclosure': 'enclosure'}
+    labels = [names[q['id']] for q in items]
+    if not labels:
+        return 'Tell me which requirement matters next.'
+    joined = labels[0] if len(labels) == 1 else ', '.join(labels[:-1]) + ' and ' + labels[-1]
+    return 'To narrow it down: ' + joined + '.'
 
 
 def apply_submission(context, answers, remove_filters):

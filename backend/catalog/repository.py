@@ -223,10 +223,18 @@ def question_facets(connection, filters, fields):
                 trial = SearchFilters.model_validate(filters.model_dump() | {name: value})
             except ValueError:
                 continue
-            sql, args = _matching_sql(connection, trial)
-            n = connection.execute('SELECT count(*) AS n FROM (' + sql + ') q', args).fetchone()['n']
-            if n:
-                feasible.append(dict(value=json_numbers(value), n=n))
+            if name in ('supply_voltage_v', 'supply_current', 'phase_count', 'enclosure'):
+                # Exact published values form a partition. A filter for AC can also
+                # match an AC/DC row, but the displayed AC option means published AC.
+                codes = [r['base_part_number'] for r in connection.execute(
+                    f'SELECT base_part_number FROM ({unique}) q WHERE {name}=%s ORDER BY base_part_number',
+                    [*params, value]).fetchall()]
+            else:
+                sql, args = _matching_sql(connection, trial)
+                codes = [r['base_part_number'] for r in connection.execute(
+                    'SELECT base_part_number FROM (' + sql + ') q ORDER BY base_part_number', args).fetchall()]
+            if codes:
+                feasible.append(dict(value=json_numbers(value), n=len(codes), codes=codes))
         result[name] = feasible
     return result
 

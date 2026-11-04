@@ -1,8 +1,8 @@
 {
   "multi_question": {
-    "session_id": "c8689db5-adb4-4571-b00b-fb8d652606ca",
-    "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. Which supply voltage? Which enclosure? Which current type?\nRanked by Closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: 70 Nm torque; FLA 5 A\n761X30-11320000/A: 80 Nm torque; FLA 0.6 A\n761A00-11320000/A: 80 Nm torque; FLA 0.7 A",
-    "message_id": "aacc7269-b758-46fb-927b-389e8662352e",
+    "session_id": "896427d7-6e98-475f-b461-a6e88db8edc4",
+    "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: 70 Nm torque; FLA 5 A\n761X30-11320000/A: 80 Nm torque; FLA 0.6 A\n761A00-11320000/A: 80 Nm torque; FLA 0.7 A",
+    "message_id": "b79830ff-6d05-4a76-adac-a6f05d7841f0",
     "products": [
       {
         "base_part_number": "761X30-11380000/A",
@@ -336,7 +336,7 @@
     ],
     "clarification": {
       "field": "supply_voltage_v",
-      "message": "59 actuators meet: On/Off service, torque ≥ 70 Nm. Which supply voltage? Which enclosure? Which current type?\nRanked by Closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: 70 Nm torque; FLA 5 A\n761X30-11320000/A: 80 Nm torque; FLA 0.6 A\n761A00-11320000/A: 80 Nm torque; FLA 0.7 A",
+      "message": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: 70 Nm torque; FLA 5 A\n761X30-11320000/A: 80 Nm torque; FLA 0.6 A\n761A00-11320000/A: 80 Nm torque; FLA 0.7 A",
       "options": [
         "Use 24 V",
         "Use 110 V",
@@ -350,7 +350,7 @@
       "Show all 59"
     ],
     "comparison": null,
-    "lead": "Ranked by Closest torque at or above 70 Nm, then lowest FLA.",
+    "lead": "Ranked by closest torque at or above 70 Nm, then lowest FLA.",
     "interaction": {
       "kind": "question",
       "questions": [
@@ -390,22 +390,6 @@
               "count": 34
             }
           ]
-        },
-        {
-          "id": "supply_current",
-          "prompt": "Which current type?",
-          "options": [
-            {
-              "value": "AC",
-              "label": "AC",
-              "count": 54
-            },
-            {
-              "value": "AC/DC",
-              "label": "AC/DC",
-              "count": 5
-            }
-          ]
         }
       ]
     },
@@ -438,7 +422,7 @@
       }
     ],
     "recommendation": {
-      "ranked_by": "Closest torque at or above 70 Nm, then lowest FLA",
+      "ranked_by": "closest torque at or above 70 Nm, then lowest FLA",
       "total": 59,
       "shown": 3,
       "items": [
@@ -487,15 +471,15 @@
       ]
     },
     "debug": {
-      "latency_ms": 133,
+      "latency_ms": 261,
       "attempts": 1,
       "llm_called": true
     }
   },
   "recommendation_110v_explosionproof": {
-    "session_id": "c8689db5-adb4-4571-b00b-fb8d652606ca",
-    "answer": "10 actuators meet: Explosionproof, On/Off service, 110 V, torque ≥ 70 Nm. Here are the leading published models.\nRanked by Closest torque at or above 70 Nm, then lowest FLA.\n761X30-11300000/A: 80 Nm torque; FLA 1.1 A\n761Y30-11300000/A: 100 Nm torque; FLA 1.1 A\n762X30-11300000/A: 150 Nm torque; FLA 1.9 A",
-    "message_id": "1fcedd33-e701-4f2b-aeca-0671a59019e1",
+    "session_id": "896427d7-6e98-475f-b461-a6e88db8edc4",
+    "answer": "10 actuators meet: Explosionproof, On/Off service, 110 V, torque ≥ 70 Nm. Here are the leading published models.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11300000/A: 80 Nm torque; FLA 1.1 A\n761Y30-11300000/A: 100 Nm torque; FLA 1.1 A\n762X30-11300000/A: 150 Nm torque; FLA 1.9 A",
+    "message_id": "16e12fa3-eaee-46cf-a69d-56abe8c10614",
     "products": [
       {
         "base_part_number": "761X30-11300000/A",
@@ -863,7 +847,7 @@
       "Show all 10"
     ],
     "comparison": null,
-    "lead": "Ranked by Closest torque at or above 70 Nm, then lowest FLA.",
+    "lead": "Ranked by closest torque at or above 70 Nm, then lowest FLA.",
     "interaction": null,
     "suggestions": [
       {
@@ -902,7 +886,7 @@
       }
     ],
     "recommendation": {
-      "ranked_by": "Closest torque at or above 70 Nm, then lowest FLA",
+      "ranked_by": "closest torque at or above 70 Nm, then lowest FLA",
       "total": 10,
       "shown": 3,
       "items": [
@@ -951,15 +935,15 @@
       ]
     },
     "debug": {
-      "latency_ms": 82,
+      "latency_ms": 78,
       "attempts": 0,
       "llm_called": false
     }
   },
   "fast_path_compare": {
-    "session_id": "43300f67-a83e-40eb-b3fe-8c710b8c586b",
+    "session_id": "a038eeb3-2795-4a2b-beff-a84ad75774be",
     "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
-    "message_id": "a7fdec98-c0d0-4d28-a39f-22718d77f862",
+    "message_id": "a61ee23c-af32-41a2-813f-a2e101fe0628",
     "products": [],
     "clarification": null,
     "terms": [],
@@ -1139,7 +1123,7 @@
     "active_filters": [],
     "recommendation": null,
     "debug": {
-      "latency_ms": 64,
+      "latency_ms": 61,
       "attempts": 0,
       "llm_called": false
     }

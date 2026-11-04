@@ -4,9 +4,9 @@ from .rendering import _num
 
 
 LABELS = {
-    'closest_torque': 'Closest torque', 'lowest_fla': 'Lowest FLA',
-    'fastest': 'Fastest operating time', 'most_torque': 'Most torque',
-    'lowest_power': 'Lowest motor power',
+    'closest_torque': 'closest torque', 'lowest_fla': 'lowest FLA',
+    'fastest': 'fastest operating time', 'most_torque': 'most torque',
+    'lowest_power': 'lowest motor power',
 }
 
 
@@ -65,8 +65,8 @@ def ranked_by(filters, by='closest_torque'):
     if minimum is None:
         minimum = filters.get('min_torque_in_lb')
     if minimum is not None:
-        return f'Closest torque at or above {_num(bound_value(minimum))} {torque_unit(filters)}, then lowest FLA'
-    return 'Lowest FLA, then shortest operating time'
+        return f'closest torque at or above {_num(bound_value(minimum))} {torque_unit(filters)}, then lowest FLA'
+    return 'lowest FLA, then shortest operating time'
 
 
 def item(product, filters, reason=None):

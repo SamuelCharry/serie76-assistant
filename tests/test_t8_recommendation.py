@@ -7,7 +7,7 @@ class RecommendationTests(Base):
         first = self.turn("I need an on/off actuator with at least 70 Nm",
                           ("search_actuators", {"service": "on_off", "min_torque_nm": 70}))
         self.assertEqual(first.recommendation["shown"], 3)
-        self.assertIn("Closest torque", first.answer)
+        self.assertIn("Ranked by closest torque", first.answer)
         self.assertEqual(len(first.context["last_ranked_list"]), first.recommendation["total"])
         from backend.conversation.agent import run_agent
         second = run_agent(self.connection, "Submit", self.history, self.context,
@@ -16,7 +16,7 @@ class RecommendationTests(Base):
         self.assertEqual(second.recommendation["shown"], 3)
         self.assertEqual(second.recommendation["items"][0]["part_number"],
                          second.context["last_ranked_list"][0])
-        self.assertIn("Closest torque", second.lead)
+        self.assertIn("Ranked by closest torque", second.lead)
 
     def test_no_match_has_nearest_with_failed_requirement(self):
         result = self.turn("On/off, 110 V, at least 100000 Nm",
