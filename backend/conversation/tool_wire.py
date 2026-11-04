@@ -79,13 +79,21 @@ def canonical_arguments(name, raw):
         args["assumptions"] = [{"field": key, "user_phrase": phrase} for key, phrase in args["assumptions"].items()]
     if name == "search_actuators" and "bounds" in args:
         bounds = args.pop("bounds")
-        if not isinstance(bounds, list) or len(bounds) > len(COMPARISONS):
+        if not isinstance(bounds, list) or len(bounds) > 2 * len(COMPARISONS):
             raise ValueError("Invalid bounds list")
+        seen = set(args)
         for bound in bounds:
             if not isinstance(bound, dict) or set(bound) != {"field", "op", "value"}:
                 raise ValueError("Invalid bound shape")
             field = bound["field"]
-            if not isinstance(field, str) or field not in COMPARISONS or field in args:
+            if not isinstance(field, str) or field not in COMPARISONS or field in seen:
                 raise ValueError("Unknown or duplicate bound field")
-            args[field] = {"value": bound["value"], "op": bound["op"]}
+            item = {"value": bound["value"], "op": bound["op"]}
+            if field in args:
+                previous = args[field]
+                if isinstance(previous, list) or (previous['op'] in ('gt', 'gte')) == (item['op'] in ('gt', 'gte')):
+                    raise ValueError('A field allows only one lower and one upper bound')
+                args[field] = [previous, item]
+            else:
+                args[field] = item
     return args

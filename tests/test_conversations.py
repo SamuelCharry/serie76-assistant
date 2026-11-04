@@ -76,7 +76,7 @@ class RequestTests(unittest.TestCase):
                 local_environment()
                 with connect() as connection:
                     result = run_agent(connection, "Need torque", [], {})
-            self.assertIn("On/Off", result.answer)
+            self.assertIn("On/Off", [o["label"] for o in result.interaction["questions"][0]["options"]])
             self.assertEqual(received[0]["tool_choice"], "required")
             self.assertEqual(len(received), 1)
         finally:
@@ -138,7 +138,7 @@ class ConversationIntegrationTests(unittest.TestCase):
         found = self.run_tool("search_actuators", {"service": "on_off", "min_torque_nm": 70, "supply_voltage_v": 24})
         self.assertEqual(found.products, [])  # five matches require narrowing, not listing
         self.assertEqual(found.tool_calls[0]["data"]["total"], 5)
-        self.assertIsNotNone(found.clarification)
+        self.assertIsNone(found.interaction)  # T7: no invented options when SQL has no splitting facet.
         self.assertEqual(found.tool_calls[0]["parameters"]["min_torque_nm"], "70")
 
     def test_saved_context_and_snapshots_round_trip(self):
@@ -161,7 +161,7 @@ class ConversationIntegrationTests(unittest.TestCase):
             yield self.connection
 
         fixture = RouterFixture("get_actuator", {"part_numbers": ["761A00-11300000/A"]})
-        def agent(connection, query, history, context):
+        def agent(connection, query, history, context, **kwargs):
             return run_agent(connection, query, history, context, model=fixture)
 
         with patch("backend.conversation.api.connect", connection_fixture), patch("backend.conversation.api.run_agent", side_effect=agent):

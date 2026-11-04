@@ -25,7 +25,7 @@ class CompactToolExecutionTests(Base):
         self.assertEqual(trace["parameters"]["min_torque_in_lb"], {"op": "gt", "value": "1000"})
         self.assertEqual(trace["raw_parameters"]["bounds"][0]["op"], "gt")
         self.assertIn("> 1000 in-lb", result.answer)
-        self.assertEqual(len(result.suggested_replies), 3)
+        self.assertEqual(len(result.suggested_replies), 1)
 
     def test_plain_focus_wire_matches_legacy_canonical_focus(self):
         call = ("get_actuator", {"part_numbers": ["761A00-11300000/A"],

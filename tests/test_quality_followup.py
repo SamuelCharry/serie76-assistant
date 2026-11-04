@@ -74,8 +74,8 @@ class QualityFollowupTests(Base):
             with self.subTest(turn=number):
                 self.history, self.context = [], {}
                 result = self.manual(number)
-                self.assertEqual(len(result.suggested_replies), 3)
-                self.assertEqual(len(set(result.suggested_replies)), 3)
+                self.assertEqual(len(result.suggested_replies), 3 if number in (4, 8) else 0)
+                self.assertEqual(len(set(result.suggested_replies)), 3 if number in (4, 8) else 0)
                 for forbidden in ("Show more", "Cancel", "Explain On/Off service"):
                     self.assertNotIn(forbidden, result.suggested_replies)
                 context, history = deepcopy(self.context), deepcopy(self.history)
@@ -90,7 +90,8 @@ class QualityFollowupTests(Base):
 
     def test_decline_names_only_the_actually_pending_field(self):
         service = self.manual(5)
-        self.assertEqual(service.answer, "No problem. Tell me the service (On/Off or modulating) whenever you like, or ask about a specific part number.")
+        self.assertIn("requirement for service is still open", service.answer)
+        self.assertEqual(len(service.products), 3)
         self.context = {"pending_clarification": "frequency"}
         frequency = self.turn("no", ("ask_clarification", {"field": "decline"}))
         self.assertNotIn("service", frequency.answer)
@@ -101,8 +102,8 @@ class QualityFollowupTests(Base):
         self.assertNotIn("Show more", replies(result))
         self.assertNotIn("Cancel", replies(result))
         result.context["pagination"]["has_more"] = True
-        self.assertIn("Show more", replies(result))
+        self.assertEqual(replies(result), [])
         pending = AgentResult("Service?", context={"pending_clarification": "service"}, clarification={"field": "service"})
-        self.assertIn("Explain On/Off service", replies(pending))
+        self.assertEqual(replies(pending), [])
         cancelled = AgentResult("Cancelled the previous request. Frequency?", context={"pending_clarification": "frequency"}, clarification={"field": "frequency"})
         self.assertNotIn("Cancel", replies(cancelled))

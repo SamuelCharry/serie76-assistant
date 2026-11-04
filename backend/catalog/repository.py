@@ -5,7 +5,7 @@ from __future__ import annotations
 from decimal import Decimal
 
 from .loader import FREQUENCY_FIELDS, NUMERIC_FIELDS, SERVICE_FIELDS
-from .models import SearchFilters, validate_part_number, bound_value, bound_operator
+from .models import SearchFilters, validate_part_number, bound_value, bound_operator, bounds
 
 BASE_SELECT = """SELECT e.*, t.source_table, t.source_page, t.title, t.layout,
     t.notes, t.header, t.page_metadata, t.shared_services_confirmed,
@@ -178,20 +178,57 @@ def _matching_sql(connection, filters):
         frequency_params.append(filters.frequency_hz)
     for name, (expression, default) in COMPARISONS.items():
         value = getattr(filters, name)
-        if value is not None:
-            condition = expression + OPERATORS[bound_operator(value, default)] + "%s"
+        for item in bounds(value):
+            if item is None:
+                continue
+            condition = expression + OPERATORS[bound_operator(item, default)] + "%s"
             if expression.startswith("f."):
                 frequency_conditions.append(condition)
-                frequency_params.append(bound_value(value))
+                frequency_params.append(bound_value(item))
             else:
                 conditions.append(condition)
-                params.append(bound_value(value))
+                params.append(bound_value(item))
     if frequency_conditions:
         conditions.append("EXISTS(SELECT 1 FROM series76.frequency_specs f WHERE f.entry_id=e.id AND " + " AND ".join(frequency_conditions) + ")")
         params += frequency_params
     base = BASE_SELECT + joins + " WHERE " + " AND ".join(conditions)
     unique = "SELECT DISTINCT ON (base_part_number) * FROM (" + base + ") q ORDER BY base_part_number,source_page,source_table,source_row"
     return unique, params
+
+
+def question_facets(connection, filters, fields):
+    """Published, feasible option values under the current candidate constraints."""
+    unique, params = _matching_sql(connection, filters)
+    result = {}
+    for name in fields:
+        if name == "service":
+            rows = connection.execute("SELECT DISTINCT s.service AS value FROM (" + unique + ") q "
+                "JOIN series76.service_specs s ON s.entry_id=q.id ORDER BY value", params).fetchall()
+            values = {r['value'] for r in rows}
+            if 'shared' in values:
+                values.update(('on_off', 'modulating'))
+            values = sorted(values & {'on_off', 'modulating'}, reverse=True)
+        elif name == "frequency_hz":
+            rows = connection.execute("SELECT DISTINCT f.frequency_hz AS value FROM (" + unique + ") q "
+                "JOIN series76.frequency_specs f ON f.entry_id=q.id WHERE f.frequency_hz IS NOT NULL ORDER BY value", params).fetchall()
+            values = [r['value'] for r in rows]
+        elif name in ('supply_voltage_v', 'supply_current', 'phase_count', 'enclosure'):
+            rows = connection.execute(f"SELECT DISTINCT {name} AS value FROM (" + unique + f") q WHERE {name} IS NOT NULL ORDER BY value", params).fetchall()
+            values = [r['value'] for r in rows]
+        else:
+            continue
+        feasible = []
+        for value in values:
+            try:
+                trial = SearchFilters.model_validate(filters.model_dump() | {name: value})
+            except ValueError:
+                continue
+            sql, args = _matching_sql(connection, trial)
+            n = connection.execute('SELECT count(*) AS n FROM (' + sql + ') q', args).fetchone()['n']
+            if n:
+                feasible.append(dict(value=json_numbers(value), n=n))
+        result[name] = feasible
+    return result
 
 
 def search_actuators(connection, filters: SearchFilters, *, allow_ambiguous=False):
@@ -209,7 +246,8 @@ def search_actuators(connection, filters: SearchFilters, *, allow_ambiguous=Fals
             if ambiguous:
                 fields.append("frequency_hz")
     if fields:
-        return dict(status="needs_clarification", fields=fields, message="Specify service or frequency for matching candidates.", products=[], total=total)
+        return dict(status="needs_clarification", fields=fields, message="Specify service or frequency for matching candidates.",
+                    products=[], total=total, facets=question_facets(connection, filters, fields))
     # Explicit preferences use published extrema when no frequency/service was requested.
     orders = []
     rank_params = []
@@ -276,9 +314,10 @@ def closest_numeric(connection, filters):
             # Re-apply the other bounds on the same measurement row used for the extremum.
             for other, (other_expression, other_default) in COMPARISONS.items():
                 other_value = getattr(trial, other)
-                if other_value is not None:
-                    remaining.append(other_expression.replace("e.", "q.") + OPERATORS[bound_operator(other_value, other_default)] + "%s")
-                    all_params.append(bound_value(other_value))
+                for item in bounds(other_value):
+                    if item is not None:
+                        remaining.append(other_expression.replace("e.", "q.") + OPERATORS[bound_operator(item, other_default)] + "%s")
+                        all_params.append(bound_value(item))
             scopes = "f.frequency_hz,f.frequency_scope" if by_frequency else "NULL::integer AS frequency_hz,NULL::text AS frequency_scope"
             query = "SELECT q.base_part_number,q.layout," + expr + " AS value," + scopes + " FROM (" + unique + ") q" + joins
             if remaining:

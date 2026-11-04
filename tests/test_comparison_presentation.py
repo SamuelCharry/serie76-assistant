@@ -19,13 +19,13 @@ class PublicPresentationTests(unittest.TestCase):
         b = self.product("B")
         comparison = quality.comparison([a, b])
         self.assertEqual(comparison["rows"], [])
-        self.assertEqual(comparison["identical_fields_hidden"], 5)  # four dimensions + one torque
+        self.assertEqual(len(comparison["hidden_rows"]), 5)  # four dimensions + one torque
 
     def test_merged_units_and_unambiguous_better_value(self):
         a, b = self.product(), self.product("B")
         b["measurements"] = {"on_off_torque_in_lb": 880, "on_off_torque_nm": 100}
         row, = quality.comparison([a, b])["rows"]
-        self.assertEqual(row, dict(field="on_off_torque", label="On/Off torque", a="700 in-lb / 80 Nm", b="880 in-lb / 100 Nm", better="b"))
+        self.assertEqual(row, dict(field="on_off_torque", label="On/Off torque", values=["700 in-lb / 80 Nm", "880 in-lb / 100 Nm"], better=1))
         # Do not choose a winner if published dual-unit columns disagree in direction.
         b["measurements"]["on_off_torque_nm"] = 70
         self.assertIsNone(quality.comparison([a, b])["rows"][0]["better"])
@@ -35,8 +35,8 @@ class PublicPresentationTests(unittest.TestCase):
         a["measurements"] = dict.fromkeys(a["measurements"])
         a["field_status"] = dict.fromkeys(a["measurements"], "source_NA")
         comparison = quality.comparison([a, b])
-        self.assertIn("N/A in the source table", comparison["rows"][0]["a"])
-        self.assertNotIn("source_NA", comparison["rows"][0]["a"])
+        self.assertIn("N/A in the source table", comparison["rows"][0]["values"][0])
+        self.assertNotIn("source_NA", comparison["rows"][0]["values"][0])
         self.assertEqual(public_text_issues("", comparison), [])
 
     def test_guard_checks_all_three_visible_surfaces_but_allows_machine_row_ids(self):
@@ -61,7 +61,7 @@ class ComparisonSqlTests(Base):
         self.assertIn("Operating time at 60 Hz: 17 s vs 19 s", result.answer)
         self.assertIn("FLA at 60 Hz: 1.2 A vs 1.3 A", result.answer)
         self.assertEqual(sum(r["label"] == "On/Off torque" for r in result.comparison["rows"]), 1)
-        self.assertTrue(all(r["a"] != r["b"] for r in result.comparison["rows"]))
+        self.assertTrue(all(r["values"][0] != r["values"][1] for r in result.comparison["rows"]))
 
     def test_interpretation_rules_are_in_the_single_production_model_request(self):
         class Once(Scripted):

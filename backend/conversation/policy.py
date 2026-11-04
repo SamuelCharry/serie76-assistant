@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import re
 from decimal import Decimal, InvalidOperation
-from backend.catalog.models import bound_value, bound_operator
+from backend.catalog.models import bound_value, bound_operator, bounds
 
 CODE_RE = re.compile(r"^[A-Z0-9]{6}-[A-Z0-9]{8}/A$")
 CODE_IN_TEXT = re.compile(r"\b[A-Za-z0-9]{6}-?[A-Za-z0-9]{8}/[Aa]\b")
@@ -74,7 +74,7 @@ def numbers_in(texts):
     values = set()
     for text in texts:
         for token in re.findall(r"\d+(?:[.,]\d+)*", text or ""):
-            for candidate in {token.replace(",", ""), token.replace(",", ".")}:
+            for candidate in [token.replace(",", "") if re.fullmatch(r"\d{1,3}(?:,\d{3})+(?:\.\d+)?", token) else token.replace(",", ".")]:
                 try:
                     values.add(Decimal(candidate))
                 except InvalidOperation:
@@ -92,7 +92,7 @@ def grounding_errors(delta, assumptions, texts):
         if value is None or field in assumed:
             continue
         if field in NUMERIC_FIELDS:
-            if Decimal(str(bound_value(value))) not in numbers:
+            if any(Decimal(str(bound_value(item))) not in numbers for item in bounds(value)):
                 errors.append(field)
         elif field in CATEGORICAL_FIELDS:
             if field == "csa_required" and value is False:
@@ -173,6 +173,9 @@ def describe(filters):
     for field in FILTER_FIELDS:
         value = filters.get(field)
         if value is None or (field == "csa_required" and not value):
+            continue
+        if isinstance(value, list):
+            parts.append(' and '.join(describe({field: item}) for item in value))
             continue
         text = {
             "service": lambda v: "On/Off service" if v == "on_off" else "modulating service",

@@ -19,9 +19,9 @@ QUERIES = [
 
 
 class ManualQualityTests(Base):
-    def assert_replies(self, result):
-        self.assertEqual(len(result.suggested_replies), 3)
-        self.assertEqual(len(set(result.suggested_replies)), 3)
+    def assert_replies(self, result, count=0):
+        self.assertEqual(len(result.suggested_replies), count)
+        self.assertEqual(len(set(result.suggested_replies)), count)
         self.assertTrue(all(isinstance(s, str) and s.strip() for s in result.suggested_replies))
 
     def test_01_multi_focus_60hz(self):
@@ -41,7 +41,7 @@ class ManualQualityTests(Base):
         self.assertEqual(len(result.products), 3)
         self.assertIn("> 1000 in-lb", result.answer)
         self.assertTrue(all(p["measurements"]["modulating_torque_in_lb"] > 1000 for p in result.products))
-        self.assert_replies(result)
+        self.assert_replies(result, 1)
 
     def test_03_preference_ranking(self):
         result = self.turn(QUERIES[2], ("search_actuators", {
@@ -62,7 +62,7 @@ class ManualQualityTests(Base):
         self.assertIn("No actuator", result.answer)
         self.assertIn("Closest published", result.answer)
         self.assertNotIn("?", result.answer)
-        self.assert_replies(result)
+        self.assert_replies(result, 3)
         return result
 
     def test_04_impossible_before_clarification(self):
@@ -120,9 +120,9 @@ class ManualQualityTests(Base):
         result = self.turn("Compare 761A00-11300000/A vs 761B00-11300000/A", ("get_actuator", {
             "part_numbers": ["761A00-11300000/A", "761B00-11300000/A"]}))
         self.assertEqual(len(result.comparison["models"]), 2)
-        self.assertGreater(result.comparison["identical_fields_hidden"], 0)
-        self.assertTrue(all(row["a"] != row["b"] for row in result.comparison["rows"]))
-        self.assertTrue(all(row["better"] in (None, "a", "b") for row in result.comparison["rows"]))
+        self.assertGreater(len(result.comparison["hidden_rows"]), 0)
+        self.assertTrue(all(row["values"][0] != row["values"][1] for row in result.comparison["rows"]))
+        self.assertTrue(all(row["better"] in (None, 0, 1) for row in result.comparison["rows"]))
         self.assertNotIn("|", result.answer)
         sid = uuid4()
         store.append_turn(self.connection, sid, "Compare", result, new=True)
@@ -133,9 +133,9 @@ class ManualQualityTests(Base):
     def test_three_candidates_offer_sql_verified_pairs(self):
         result = self.turn("Compare 761A00-11300000/A, 761B00-11300000/A and 762A00-11300000/A", ("get_actuator", {
             "part_numbers": ["761A00-11300000/A", "761B00-11300000/A", "762A00-11300000/A"]}))
-        self.assertIsNone(result.comparison)
+        self.assertEqual(result.comparison["layout"], "cards")
         self.assertEqual(result.products, [])
-        self.assertTrue(all(reply.startswith("Compare ") for reply in result.suggested_replies))
+        self.assertEqual(result.suggested_replies, [])
 
     def test_ranked_sql_order_and_persisted_focus_followup(self):
         actual = search_actuators(self.connection, SearchFilters(enclosure="weatherproof", sort_by=["fastest", "lowest_power"], limit=3))

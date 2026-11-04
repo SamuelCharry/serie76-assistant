@@ -30,11 +30,19 @@ class NumericBound(BaseModel):
         return value
 
 
+def bounds(value):
+    return value if isinstance(value, list) else [value]
+
+
 def bound_value(value):
+    if isinstance(value, list):
+        return bound_value(value[0])
     return value.value if isinstance(value, NumericBound) else value.get("value") if isinstance(value, dict) else value
 
 
 def bound_operator(value, default):
+    if isinstance(value, list):
+        return bound_operator(value[0], default)
     return value.op if isinstance(value, NumericBound) else value.get("op", default) if isinstance(value, dict) else default
 
 
@@ -51,18 +59,18 @@ class SearchFilters(BaseModel):
     phase_count: Literal[1, 3] | None = None
     service: Literal["on_off", "modulating"] | None = None
     frequency_hz: Literal[50, 60] | None = None
-    min_torque_nm: NonNegative | NumericBound | None = None
+    min_torque_nm: NonNegative | NumericBound | Annotated[list[NumericBound], Field(min_length=2, max_length=2)] | None = None
     # Published in-lb column, compared directly: no unit conversion by model or code.
-    min_torque_in_lb: NonNegative | NumericBound | None = None
+    min_torque_in_lb: NonNegative | NumericBound | Annotated[list[NumericBound], Field(min_length=2, max_length=2)] | None = None
     min_duty_s4_percent: (
-        Annotated[Decimal, Field(ge=0, le=100, allow_inf_nan=False)] | NumericBound | None
+        Annotated[Decimal, Field(ge=0, le=100, allow_inf_nan=False)] | NumericBound | Annotated[list[NumericBound], Field(min_length=2, max_length=2)] | None
     ) = None
-    min_cycles_per_hour: Annotated[int, Field(ge=0, le=2147483647)] | NumericBound | None = None
-    min_starts_per_hour: Annotated[int, Field(ge=0, le=2147483647)] | NumericBound | None = None
-    max_operating_time_s: NonNegative | NumericBound | None = None
-    max_fla_a: NonNegative | NumericBound | None = None
-    max_lra_a: NonNegative | NumericBound | None = None
-    max_motor_power_w: NonNegative | NumericBound | None = None
+    min_cycles_per_hour: Annotated[int, Field(ge=0, le=2147483647)] | NumericBound | Annotated[list[NumericBound], Field(min_length=2, max_length=2)] | None = None
+    min_starts_per_hour: Annotated[int, Field(ge=0, le=2147483647)] | NumericBound | Annotated[list[NumericBound], Field(min_length=2, max_length=2)] | None = None
+    max_operating_time_s: NonNegative | NumericBound | Annotated[list[NumericBound], Field(min_length=2, max_length=2)] | None = None
+    max_fla_a: NonNegative | NumericBound | Annotated[list[NumericBound], Field(min_length=2, max_length=2)] | None = None
+    max_lra_a: NonNegative | NumericBound | Annotated[list[NumericBound], Field(min_length=2, max_length=2)] | None = None
+    max_motor_power_w: NonNegative | NumericBound | Annotated[list[NumericBound], Field(min_length=2, max_length=2)] | None = None
     sort_by: Annotated[list[SortKey], Field(max_length=4)] = []
     csa_required: bool = False
     limit: Annotated[int, Field(ge=1, le=100)] = 20
@@ -90,11 +98,18 @@ class SearchFilters(BaseModel):
                 raise ValueError(
                     "Filter precision cannot be represented losslessly in the response"
                 )
-        for name in ("min_cycles_per_hour", "min_starts_per_hour", "min_duty_s4_percent"):
-            value = bound_value(getattr(self, name))
-            if value is not None and (value > (100 if name == "min_duty_s4_percent" else 2147483647)
-                                      or (name != "min_duty_s4_percent" and value != int(value))):
-                raise ValueError("Invalid percentage or integer rate bound")
+        for name, value in self.__dict__.items():
+            if isinstance(value, list) and value and isinstance(value[0], NumericBound):
+                lower = [v for v in value if v.op in ('gt', 'gte')]
+                upper = [v for v in value if v.op in ('lt', 'lte')]
+                if len(lower) != 1 or len(upper) != 1 or lower[0].value > upper[0].value:
+                    raise ValueError('A range requires one lower and one upper bound')
+            if name in ('min_cycles_per_hour', 'min_starts_per_hour', 'min_duty_s4_percent'):
+                for item in bounds(value):
+                    number = bound_value(item)
+                    if number is not None and (number > (100 if name == 'min_duty_s4_percent' else 2147483647)
+                                              or (name != 'min_duty_s4_percent' and number != int(number))):
+                        raise ValueError('Invalid percentage or integer rate bound')
         if len(set(self.sort_by)) != len(self.sort_by):
             raise ValueError("Duplicate sort key")
         if self.supply_current == "DC" and (self.frequency_hz or self.phase_count):

@@ -27,7 +27,8 @@ from pydantic import create_model as pydantic_model
 from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import get_actuator, search_actuators
-from . import policy, quality, tool_wire
+from . import policy, quality, tool_wire, interactions
+from .interactions import InvalidInteraction
 from .rendering import render_lookup, render_search, render_terms, supplies_text
 
 Focus = Literal["overview", "motor_power", "torque", "operating_time", "fla", "lra", "duty", "rates", "certification"]
@@ -55,6 +56,10 @@ class AgentResult:
     assumptions: list = field(default_factory=list)
     suggested_replies: list = field(default_factory=list)
     comparison: dict | None = None
+    lead: str | None = None
+    interaction: dict | None = None
+    suggestions: list = field(default_factory=list)
+    active_filters: list = field(default_factory=list)
 
 
 class FocusSpec(BaseModel):
@@ -90,7 +95,7 @@ You never answer in text: the server renders every answer from the catalogue dat
 Tools:
 - get_actuator: explicit Base Part Numbers, or follow-ups about previously selected codes
   ("it", "that one", "how much power does it draw?"). Copy codes exactly as the user wrote
-  them; never complete, shorten or invent a code. At most TWO models in a comparison. For 3-4 candidates code offers pairs.
+  them; never complete, shorten or invent a code. Compare up to four models; code renders a two-model table or three/four-model cards.
   focus is a list of field names; use overview only for all specs.
   Use focus_service for torque and focus_frequency_hz for operating_time/fla/lra.
   Example: focus=["torque","operating_time"], focus_service="on_off", focus_frequency_hz=60.
@@ -108,7 +113,9 @@ Tools:
   assumptions mapping field names to exact user phrases, e.g. {service:"stop at any point"}; the user sees it.
   Torque may be given in Nm (min_torque_nm) or in-lb (min_torque_in_lb); never convert.
   Numeric limits go in bounds: [{field:"min_torque_in_lb",value:1000,op:"gt"}].
-  Each field occurs once; op=gt|gte|lt|lte. Copy the user's value unchanged.
+  A field can have a lower and upper bound for a range; op=gt|gte|lt|lte. Copy values unchanged.
+  Decimal comma 1,5 means 1.5, never 15. For 110 V or 220 V do not silently choose one;
+  retain other requirements and ask supply. Same performance after a service change retains numeric limits.
   Extract EVERY explicit numeric requirement, also when service is expressed informally:
   "fully open or fully close, 110 V, at least 50 Nm" includes min_torque_nm=50, op=gte.
   Omit unknown fields; do not send null. Empty focus/bounds lists add no constraint.
@@ -234,9 +241,9 @@ def reserve_agent_call():
         _call_times.append(now)
 
 
-def create_model_client():
+def create_model_client(model_name=None):
     key = os.environ.get("OPENROUTER_API_KEY", "").strip()
-    model = os.environ.get("OPENROUTER_CHAT_MODEL", "").strip()
+    model = model_name or os.environ.get("OPENROUTER_CHAT_MODEL", "").strip()
     if not key or not model:
         raise AgentUnavailable("not_configured")
     from langchain_openai import ChatOpenAI
@@ -257,6 +264,57 @@ def create_model_client():
 
 
 create_model = create_model_client  # Backwards-compatible name.
+
+
+class TransientProviderError(Exception):
+    def __init__(self, code):
+        self.code = code
+        super().__init__(code)
+
+
+def invoke_decision(client, tools, chat, *, fallback=True):
+    """Retry failed transport attempts, never a completed decision or a 4xx."""
+    import openai
+    from langchain_core.runnables import RunnableLambda
+    attempts = []
+
+    def wrapped(get_client, label):
+        router = None
+
+        def attempt(messages):
+            nonlocal router
+            reserve_agent_call()
+            entry = dict(attempt=len(attempts) + 1, model=label, status='started')
+            attempts.append(entry)
+            try:
+                if router is None:
+                    router = get_client().bind_tools(tools, tool_choice=os.environ.get('AGENT_TOOL_CHOICE', 'required') or None)
+                response = router.invoke(messages, config={'run_name': 'llm_decision'})
+                entry['status'] = 'ok'
+                return response
+            except Exception as exc:
+                entry['status'] = provider_error_code(exc)
+                if (isinstance(exc, (openai.APITimeoutError, openai.APIConnectionError, TimeoutError, ConnectionError))
+                        or isinstance(exc, openai.APIStatusError) and exc.status_code == 503):
+                    raise TransientProviderError(entry['status']) from None
+                raise
+
+        return RunnableLambda(attempt).with_retry(stop_after_attempt=2,
+            retry_if_exception_type=(TransientProviderError,), wait_exponential_jitter=False)
+
+    primary = wrapped(lambda: client, os.environ.get('OPENROUTER_CHAT_MODEL', 'primary'))
+    fallback_model = os.environ.get('OPENROUTER_FALLBACK_MODEL', '').strip()
+    if fallback and fallback_model:
+        primary = primary.with_fallbacks([wrapped(lambda: create_model_client(fallback_model), fallback_model)],
+                                         exceptions_to_handle=(TransientProviderError,))
+    try:
+        return primary.invoke(chat), attempts
+    except AgentUnavailable:
+        raise
+    except Exception as exc:
+        failure = AgentUnavailable(exc.code if isinstance(exc, TransientProviderError) else provider_error_code(exc))
+        failure.attempts = attempts
+        raise failure from None
 
 
 def provider_error_code(exc):
@@ -280,7 +338,8 @@ def _safe_errors(exc):
 class Turn:
     def __init__(self, connection, query, messages, context):
         self.connection, self.query, self.messages = connection, query, messages
-        self.context = dict(context or {})
+        from copy import deepcopy
+        self.context = deepcopy(context or {})
         self.terms = list_terms(connection)
         self.term_index = {t["term_key"]: t for t in self.terms}
         self.texts = [m["content"] for m in messages] + [query]
@@ -299,6 +358,29 @@ class Turn:
             return AgentResult(quality.decline_message(field), context=self.context)
         self.context["pending_clarification"] = field
         return AgentResult(text, context=self.context, clarification=dict(field=field, message=text, **extra))
+
+    def question_result(self, fields, facets, message=None):
+        questions = interactions.questions(facets, fields)
+        self.context['pending_questions'] = questions
+        first = fields[0] if fields else 'requirements'
+        legacy = 'frequency' if first == 'frequency_hz' else first
+        result = self.clarify(legacy, message or ' '.join(q['prompt'] for q in questions))
+        result.interaction = dict(kind='question', questions=questions) if questions else None
+        return result
+
+    def unresolved(self, fields):
+        """Show a bounded candidate list, explicitly retaining unresolved scopes."""
+        filters = SearchFilters.model_validate(dict(self.context.get('filters', {}), limit=3, offset=0))
+        raw = search_actuators(self.connection, filters, allow_ambiguous=True)
+        self.trace['data'] = raw
+        products = [public_product(p) | {'frequencies': p.get('frequencies', [])} for p in raw['products']]
+        labels = ', '.join(policy.LABELS.get(f, f.replace('_', ' ')) for f in fields)
+        answer = 'The requirement for ' + labels + ' is still open. These are the top ' + str(len(products)) + ' candidates under the current filters; unresolved scopes are not assumed.'
+        answer += '\n\n' + '\n\n'.join(quality.render_focused(p, ['overview']) for p in products)
+        self.context.pop('pending_questions', None)
+        self.context.pop('pending_clarification', None)
+        self.context['part_numbers'] = [p['base_part_number'] for p in products]
+        return AgentResult(answer, products, context=self.context)
 
     def relevant(self, keys):
         # A definition is quoted only if the question shares vocabulary with that term.
@@ -363,21 +445,20 @@ class Turn:
                     JOIN series76.catalog_state c ON c.active_import_id=e.import_id
                     WHERE left(e.base_part_number,6)=%s ORDER BY 1 LIMIT 3""", (code[:6],)).fetchall()
                 missing.append((code, [r["base_part_number"] for r in family]))
-        if len(products) > 2:
-            self.trace["data"] = dict(status="choose_pair", candidates=[p["base_part_number"] for p in products])
-            self.context["part_numbers"] = [p["base_part_number"] for p in products]
-            return self.clarify("which_product", "Choose two models to compare; I compare differences between at most two models.")
         self.trace["data"] = dict(status="ok", products=products, missing=[m[0] for m in missing])
         self.trace["merged_parameters"] = dict(args, part_numbers=codes)
         focus = quality.normalized_focus(args.get("focus") or self.context.get("focus") or ["overview"])
         self.context["focus"] = focus
         public = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in products]
-        compared = quality.comparison(public) if len(public) == 2 else None
+        compared = quality.comparison(public, focus if len(public) == 2 else ["overview"]) if len(public) >= 2 else None
         if compared:
-            answer = "Comparing " + " vs ".join(compared["models"]) + ". " + str(compared["identical_fields_hidden"]) + " identical fields hidden.\n"
-            answer += "\n".join(row["label"] + ": " + row["a"] + " vs " + row["b"] for row in compared["rows"])
+            answer = "Comparing " + " vs ".join(compared["models"]) + ". " + str(len(compared["hidden_rows"])) + " identical fields hidden.\n"
+            answer += "\n".join(row["label"] + ": " + " vs ".join(row["values"]) for row in compared["rows"])
             if not compared["rows"]:
                 answer += "No published differences in comparable fields."
+            if args.get('explain_terms'):
+                # A combined factual request includes equal values too (e.g. identical LRA).
+                answer += '\n' + '\n'.join(row['label'] + ': ' + ' vs '.join(row['values']) for row in compared['hidden_rows'])
         elif public:
             answer = "\n".join(notes) + "\n" + "\n\n".join(quality.render_focused(p, focus) for p in public)
             if len(focus) == 1 and focus[0]["field"] == "motor_power":
@@ -388,17 +469,20 @@ class Turn:
         if args.get("explain_terms"):
             text, terms = self.explained(args["explain_terms"])
             answer += ("\n\n" + text) if text else ""
+            unknown = policy.terms_not_in_glossary(self.query, self.terms)
+            if unknown:
+                answer += '\nNot answered: ' + ', '.join(unknown) + '; the supplied Series 76 summary does not define these terms.'
         if products:
             self.context["part_numbers"] = [p["base_part_number"] for p in products]
-        return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared)
+        return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared, lead=quality.comparison_lead(compared) if compared else None)
 
-    def search(self, args):
+    def search(self, args, *, trusted=False):
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
         if delta.get("csa_required") is False:
             delta.pop("csa_required")
         bad = policy.invalid_assumptions(args.get("assumptions", []), self.texts)
         assumptions = [a for a in args.get("assumptions", []) if a not in bad]
-        ungrounded = policy.grounding_errors(delta, assumptions, self.texts)
+        ungrounded = [] if trusted else policy.grounding_errors(delta, assumptions, self.texts)
         dropped = []
         if bad or ungrounded:
             # A value the user never expressed is NOT applied (it would be an invented
@@ -409,7 +493,12 @@ class Turn:
             if not delta and not args["refine"] and not args["more"] and not args["remove"]:
                 return self.clarify("requirements")
         previous = self.context.get("filters") or {}
+        import re
+        same_performance = re.search(r'\bsame performance\b', self.query, re.I) and args.get('refine') and delta.get('service')
         merged, notes = policy.merge_filters(previous, delta, refine=args["refine"], remove=args["remove"], more=args["more"])
+        if same_performance:
+            notes.append('Assumption: "same performance" retains the numeric thresholds and applies them to the requested service.')
+            assumptions.append(dict(field='service', user_phrase='same performance'))
         if args.get("sort_by"):
             merged["sort_by"] = args["sort_by"]
         if merged.get("sort_by"):
@@ -421,10 +510,23 @@ class Turn:
         if merged.get("sort_by"):
             merged["limit"] = 3
         self.trace["merged_parameters"] = merged
-        if not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS):
+        alternatives = re.search(r'(\d+(?:[.,]\d+)?)\s*V?\s+(?:or|o)\s+(\d+(?:[.,]\d+)?)\s*V\b', self.query, re.I)
+        if alternatives and not trusted:
+            from backend.catalog.repository import question_facets
+            merged.pop('supply_voltage_v', None)
+            self.context['filters'] = merged
+            facets = question_facets(self.connection, SearchFilters.model_validate(merged), ['supply_voltage_v'])
+            choices = {float(v.replace(',', '.')) for v in alternatives.groups()}
+            facets['supply_voltage_v'] = [r for r in facets['supply_voltage_v'] if r['value'] in choices]
+            if facets['supply_voltage_v']:
+                return self.question_result(['supply_voltage_v'], facets)
+        if not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS) and not merged.get('sort_by'):
             # Never "recommend" the whole catalogue: a search needs at least one stated requirement.
             self.trace.setdefault("overrides", []).append("empty_search_clarified")
-            return self.clarify("requirements")
+            self.context['filters'] = merged
+            from backend.catalog.repository import question_facets
+            fields = ['service', 'supply_voltage_v', 'supply_current']
+            return self.question_result(fields, question_facets(self.connection, SearchFilters(), fields))
         found = policy.conflicts(merged)
         if found:
             kind, fields = found[0]
@@ -443,8 +545,7 @@ class Turn:
         self.trace["data"] = result
         self.context["filters"] = merged
         if result["status"] == "needs_clarification":
-            field_name = "service" if "service" in result["fields"] else "frequency"
-            return self.clarify(field_name, QUESTIONS[field_name], fields=result["fields"])
+            return self.question_result(result['fields'], result['facets'])
         shown = [dict(a, value=merged.get(a["field"])) for a in assumptions]
         products = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in result["products"]]
         if not result["total"]:
@@ -459,15 +560,20 @@ class Turn:
         self.context["pagination"] = {"has_more": bool(products) and result.get("offset", 0) + len(products) < result["total"]}
         self.context["focus"] = focus
         if narrowing:
-            self.context["reply_options"] = options
-            self.context["pending_clarification"] = narrowing
+            from backend.catalog.repository import question_facets
+            if narrowing in ('requirements',):
+                narrowing = None
+                answer = answer.rsplit('\nWhich ', 1)[0]
+            else:
+                question = self.question_result([narrowing], question_facets(self.connection, filters, [narrowing]))
         terms = []
         if args.get("explain_terms"):
             text, terms = self.explained(args["explain_terms"])
             answer += ("\n\n" + text) if text else ""
         self.context["part_numbers"] = [p["base_part_number"] for p in products]
         return AgentResult(answer, products, context=self.context, terms=terms, assumptions=shown,
-                           clarification=dict(field=narrowing, message=answer, options=options) if narrowing else None)
+                           clarification=dict(field=narrowing, message=answer, options=options) if narrowing else None,
+                           interaction=question.interaction if narrowing else None)
 
     def explain(self, args):
         text, terms = self.explained(args["term_keys"])
@@ -495,10 +601,21 @@ class Turn:
             self.trace["data"] = dict(status="cancelled")
             return AgentResult("Cancelled. I can look up Series 76 actuators, find models for requirements, compare two models or explain catalogue terms.", context=self.context)
         if field_name == "decline":
+            fields = [q['id'] for q in self.context.get('pending_questions', [])]
+            if fields:
+                return self.unresolved(fields)
             previous = self.context.pop("pending_clarification", None)
             self.context["declined_clarification"] = previous
             self.trace["data"] = dict(status="declined")
             return AgentResult(quality.decline_message(previous), context=self.context)
+        if field_name in ('requirements', 'service', 'frequency', 'supply'):
+            from backend.catalog.repository import question_facets
+            fields = {'service': ['service'], 'frequency': ['frequency_hz'],
+                      'supply': ['supply_voltage_v', 'supply_current'],
+                      'requirements': ['service', 'supply_voltage_v', 'supply_current']}[field_name]
+            self.context.setdefault('filters', {})
+            filters = SearchFilters.model_validate(self.context['filters'])
+            return self.question_result(fields, question_facets(self.connection, filters, fields))
         # Deterministic guard: a well-formed code in the query is looked up, never re-asked.
         if field_name == "part_number" and policy.codes_in_text(self.query):
             self.trace.setdefault("overrides", []).append("well_formed_code_lookup")
@@ -527,10 +644,11 @@ def _usage(response):
     return {k: usage.get(k) for k in ("input_tokens", "output_tokens", "total_tokens") if k in usage}
 
 
-def run_agent(connection, query, messages, context, *, model=None):
+def run_agent(connection, query, messages, context, *, model=None, answers=None, remove_filters=None, user_name=None):
     # One LangSmith trace per turn (parent run) when explicitly enabled; nothing is sent otherwise.
     with tracing_context(enabled=tracing_enabled()):
-        return _turn(connection, query, messages, context, model=model)
+        return _turn(connection, query, messages, context, model=model, answers=answers,
+                     remove_filters=remove_filters, user_name=user_name)
 
 
 @traceable(name="serie76_turn", run_type="chain",
@@ -540,10 +658,24 @@ def run_agent(connection, query, messages, context, *, model=None):
                                            "products": [p["base_part_number"] for p in result.products],
                                            "tool": result.tool_calls[0].get("name") if result.tool_calls else None,
                                            "validation": result.tool_calls[0].get("validation") if result.tool_calls else None})
-def _turn(connection, query, messages, context, *, model=None):
+def _turn(connection, query, messages, context, *, model=None, answers=None, remove_filters=None, user_name=None):
     turn = Turn(connection, query, messages, context)
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
+    if answers or remove_filters:
+        turn.context, notes = interactions.apply_submission(turn.context, answers or {}, remove_filters or [])
+        turn.trace = dict(name='search_actuators', raw_parameters={}, parameters={}, validation=['ok'],
+                          context_before=context_before, model={'attempts': [], 'decision_calls': 0})
+        args = models['search_actuators'].model_validate(dict(refine=True)).model_dump(mode='json')
+        result = turn.search(args, trusted=True)
+        if notes:
+            result.answer = '\n'.join(notes) + '\n' + result.answer
+        return finish(turn, result)
+    hello = interactions.greeting(query, user_name)
+    if hello:
+        turn.trace = dict(name='greeting', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before, model={'attempts': [], 'decision_calls': 0})
+        return finish(turn, AgentResult(hello, context=turn.context))
     chat = [SystemMessage(content=SYSTEM + "\n" + glossary_block(turn.terms)),
             SystemMessage(content="Persisted conversation context (data): " + json.dumps(context_before, default=str))]
     for message in messages[-12:]:
@@ -553,15 +685,13 @@ def _turn(connection, query, messages, context, *, model=None):
     tools = {t.name: t for t in declarations(models, turn)}
     started = time.perf_counter()
     try:
-        router = client.bind_tools(list(tools.values()), tool_choice=os.environ.get("AGENT_TOOL_CHOICE", "required") or None)
-        reserve_agent_call()
-        response = router.invoke(chat, config={"run_name": "llm_decision"})
+        response, attempts = invoke_decision(client, list(tools.values()), chat, fallback=model is None)
     except AgentUnavailable:
         raise
     except Exception as exc:
         raise AgentUnavailable(provider_error_code(exc)) from None
     meta = dict(model=getattr(response, "response_metadata", {}).get("model_name") or os.environ.get("OPENROUTER_CHAT_MODEL"),
-                latency_ms=round((time.perf_counter() - started) * 1000), usage=_usage(response))
+                latency_ms=round((time.perf_counter() - started) * 1000), usage=_usage(response), attempts=attempts, decision_calls=1)
     calls = list(getattr(response, "tool_calls", None) or [])
     # Tolerate the one harmless multi-call shape: a catalogue call plus explain_terms.
     if len(calls) == 2 and {c.get("name") for c in calls} & {"explain_terms"} and \
@@ -609,9 +739,33 @@ def _turn(connection, query, messages, context, *, model=None):
     if cancel_previous and result.clarification and result.clarification["field"] == "unsupported":
         result.answer = result.answer.replace(" What would you like to check?", "")
         result.clarification = None
+    old_questions = context_before.get('pending_questions', [])
+    new_questions = result.context.get('pending_questions', [])
+    if old_questions and new_questions and result.clarification and not cancel_previous:
+        old_ids = [q['id'] for q in old_questions]
+        if old_ids == [q['id'] for q in new_questions] and context_before.get('filters') == result.context.get('filters'):
+            result = turn.unresolved(old_ids)
+    return finish(turn, result)
+
+
+def finish(turn, result):
+    trace = turn.trace
+    import re
+    if re.search(r'\b(price|prices|precio|precios)\b', turn.query, re.I):
+        limitation = 'The supplied catalogue has no prices. I cannot calculate a weighted overall score involving price; I can compare published torque, operating time, current and motor power.'
+        if not result.products and not result.comparison:
+            result.answer = limitation
+            result.clarification = result.interaction = None
+        else:
+            result.answer = limitation + '\n' + result.answer
+    if re.search(r'\b(buy|purchase|order|delivery|comprar|compra)\b', turn.query, re.I):
+        result.answer = 'I cannot place orders or confirm delivery. I can provide published catalogue specifications.\n' + result.answer
+    if re.search(r'\binvoice\b', turn.query, re.I) and re.search(r'\b(label|installed|nameplate)\b', turn.query, re.I):
+        result.answer = 'The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\n' + result.answer
+        result.lead = 'Check the physical nameplate to identify the installed actuator; the catalogue comparison cannot establish that.'
     if not result.clarification:
         result.context.pop("pending_clarification", None)
-    result.suggested_replies = quality.replies(result, turn.terms)
+        result.context.pop('pending_questions', None)
     trace.setdefault("merged_parameters", trace.get("parameters"))
     trace["parameters"] = trace.get("merged_parameters") or trace.get("parameters") or {}
     trace["renderer"] = "clarification" if result.clarification else (trace["name"] or "none")
@@ -619,4 +773,10 @@ def _turn(connection, query, messages, context, *, model=None):
     if not trace.get("data"):
         trace["data"] = dict(status="needs_clarification", clarification=result.clarification) if result.clarification else {}
     result.tool_calls = [trace]
+    result.active_filters = interactions.active_filters(result.context)
+    result.suggestions = quality.replies(result, turn.terms)
+    result.suggested_replies = list(result.suggestions)
+    if result.products and not result.lead:
+        result.lead = ('Catalogue specifications for ' + result.products[0]['base_part_number'] + '.' if len(result.products) == 1
+                       else str(len(result.products)) + ' catalogue candidates are shown under the current requirements.')
     return result

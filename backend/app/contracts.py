@@ -6,6 +6,8 @@ class ConversationRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     session_id: UUID | None = None
     query: str = Field(min_length=1, max_length=4000)
+    answers: dict[str, str] = Field(default_factory=dict)
+    remove_filters: list[str] = Field(default_factory=list, max_length=20)
 
     @field_validator("query")
     @classmethod
@@ -25,3 +27,7 @@ class ConversationResponse(BaseModel):
     assumptions: list[dict] = Field(default_factory=list)  # user wording the agent mapped to a filter
     suggested_replies: list[str] = Field(default_factory=list)
     comparison: dict | None = None
+    lead: str | None = None
+    interaction: dict | None = None
+    suggestions: list[str] = Field(default_factory=list)
+    active_filters: list[dict] = Field(default_factory=list)
