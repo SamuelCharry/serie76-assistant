@@ -523,6 +523,7 @@ class Turn:
                                 dict(field='fla', **({'frequency_hz': frequency} if frequency else {})), dict(field='motor_power')]
         compared = quality.comparison(public, comparison_focus, self.context.get('filters')) if len(public) >= 2 else None
         if compared:
+            self.context['last_comparison_models'] = compared['models']
             answer = "Comparing " + " vs ".join(compared["models"]) + ". " + str(len(compared["hidden_rows"])) + " identical fields hidden.\n"
             answer += "\n".join(row["label"] + ": " + " vs ".join(row["values"]) for row in compared["rows"])
             if not compared["rows"]:
@@ -883,6 +884,40 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     turn = Turn(connection, query, messages, context)
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
+    import re
+    bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
+    if action is None and not answers and not remove_filters and bare_query == 'why' and turn.context.get('last_ranked_list'):
+        filters = turn.context.get('filters') or {}
+        criterion = ranking.ranked_by(filters, turn.context.get('rank_by', 'closest_torque'))
+        turn.trace = dict(name='ranking_explanation', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, AgentResult('I ranked the models by ' + criterion + '. Those are catalogue measurements, not an overall suitability or price score.',
+                                        context=turn.context))
+    pick = bool(re.search(r'\b(best|just pick one|just tell me|which one should i buy|which is best|the cheap one|this doesn.t help|too many questions)\b', bare_query))
+    cheap = bool(re.search(r'\b(cheap|cheapest|price|cost)\b', bare_query))
+    if action is None and not answers and not remove_filters and (pick or cheap):
+        focus_codes = (turn.context.get('last_comparison_models') if turn.context.get('last_comparison_models') and
+                       re.search(r'\b(which is best|best|which one)\b', bare_query) else None)
+        codes = focus_codes or turn.context.get('last_ranked_list') or []
+        if codes:
+            filters = turn.context.get('filters') or {}
+            by = 'lowest_power' if cheap else turn.context.get('rank_by', 'closest_torque')
+            rows = [get_actuator(connection, code) for code in codes]
+            ordered = ranking.rank([row for row in rows if row], filters, by)
+            if ordered:
+                chosen = ranking.item(ordered[0], filters)
+                open_choices = [policy.LABELS.get(q['id'], q['id'].replace('_', ' '))
+                                for q in turn.context.get('pending_questions', [])]
+                assumption = (', '.join(open_choices) if open_choices else 'other unstated preferences')
+                answer = f"My pick: {chosen['part_number']} — {chosen['reason']}. Assumes no preference on {assumption}; tell me if that matters."
+                if cheap:
+                    answer = "The catalogue doesn't publish prices. Lowest motor power is only a proxy, not a price estimate.\n" + answer
+                rec = dict(ranked_by=ranking.ranked_by(filters, by), total=len(codes), shown=1, items=[chosen])
+                turn.trace = dict(name='ranked_pick', parameters={}, raw_parameters={}, validation=['ok'],
+                                  context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+                turn.context['rank_by'] = by
+                return finish(turn, AgentResult(answer, context=turn.context, recommendation=rec,
+                                                lead=f"My pick: {chosen['part_number']} — {chosen['reason']}."))
     if action is None and not answers and not remove_filters and turn.context.get('pending_questions'):
         answers = interactions.free_text_answer(query, turn.context['pending_questions'])
     if model is None and action is None and not answers and not remove_filters:
@@ -1047,14 +1082,14 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
 def finish(turn, result):
     trace = turn.trace
     import re
-    if re.search(r'\b(price|prices|precio|precios)\b', turn.query, re.I):
+    if re.search(r'\b(price|prices|precio|precios)\b', turn.query, re.I) and not result.answer.startswith("The catalogue doesn't publish prices."):
         limitation = 'The supplied catalogue has no prices. I cannot calculate a weighted overall score involving price; I can compare published torque, operating time, current and motor power.'
         if not result.products and not result.comparison:
             result.answer = limitation
             result.clarification = result.interaction = None
         else:
             result.answer = limitation + '\n' + result.answer
-    if policy.purchase_request(turn.query):
+    if policy.purchase_request(turn.query) and not result.answer.startswith('My pick:'):
         result.answer = 'I cannot place orders or confirm delivery. I can provide published catalogue specifications.\n' + result.answer
         if result.products or result.comparison:
             result.lead = 'I cannot place orders or confirm delivery; the cards show published catalogue specifications.'

@@ -70,3 +70,24 @@ class RecommendationTests(Base):
         self.assertEqual({o['label'] for o in question['options']}, {'Explosionproof', 'Weatherproof'})
         self.assertTrue(all(o.get('description') for o in question['options']))
         self.assertEqual(result.recommendation['items'][0]['part_number'][:4], '761X')
+
+    def test_pick_after_list_is_one_model_without_question(self):
+        self.turn('On/off at least 70 Nm', ('search_actuators', {'service': 'on_off', 'min_torque_nm': 70}))
+        from backend.conversation.agent import run_agent
+        from test_agent_scenarios import Raising
+        result = run_agent(self.connection, 'Just pick one', self.history, self.context,
+                           model=Raising(AssertionError('LLM must not run')))
+        self.assertTrue(result.answer.startswith('My pick: '))
+        self.assertEqual(len(result.recommendation['items']), 1)
+        self.assertIsNone(result.interaction)
+        self.assertFalse(result.debug['llm_called'])
+
+    def test_why_explains_current_ranking_without_table(self):
+        self.turn('On/off at least 70 Nm', ('search_actuators', {'service': 'on_off', 'min_torque_nm': 70}))
+        from backend.conversation.agent import run_agent
+        from test_agent_scenarios import Raising
+        result = run_agent(self.connection, 'Why?', self.history, self.context,
+                           model=Raising(AssertionError('LLM must not run')))
+        self.assertIn('closest torque', result.answer)
+        self.assertNotIn(' vs ', result.answer)
+        self.assertFalse(result.debug['llm_called'])
