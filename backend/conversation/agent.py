@@ -894,6 +894,28 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     context_before = dict(turn.context)
     import re
     bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
+    if action is None and not answers and not remove_filters:
+        limitation = None
+        if re.search(r'\b(asterisk|footnote|\*)\b', bare_query):
+            codes = policy.codes_in_text(query) or turn.context.get('part_numbers') or []
+            if len(codes) == 1:
+                product = get_actuator(connection, codes[0])
+                notes = [n['text'].lstrip('* ').strip() for n in (product or {}).get('notes', [])
+                         if n.get('kind') == 'footnote' and n.get('text')]
+                limitation = (f"The catalogue footnote for {codes[0]} says: {notes[0]}." if notes else
+                              "The catalogue does not explain a footnote for that model. I can show its published specifications.")
+        if limitation is None and re.search(r'\b(cost|price|prices)\b', bare_query) and not re.search(r'\b(cheapest|cheap one)\b', bare_query):
+            limitation = "The catalogue doesn't publish prices. I can compare published motor power or torque as a proxy, not a price estimate."
+        if limitation is None and re.search(r'\b(rotork|other brands?)\b', bare_query):
+            limitation = 'The catalogue covers Series 76 actuators only. I can compare its published models.'
+        if limitation is None and re.search(r'\b(ip\s*\d*|nema\s*\d*|ambient temperature|temperature rating|certification)\b', bare_query):
+            limitation = 'The catalogue does not specify that rating or condition. I can show the published enclosure description.'
+        if limitation is None and re.search(r'\b(how strong is strong enough|size (?:my|a|the) valve|valve sizing)\b', bare_query):
+            limitation = 'The catalogue does not size valves. Tell me the required torque and I can find actuators that meet it.'
+        if limitation:
+            turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, AgentResult(limitation, context=turn.context))
     if action is None and not answers and not remove_filters and bare_query in ('next', 'more', 'show all') and turn.context.get('last_ranked_list'):
         codes = turn.context['last_ranked_list']
         start = 0 if bare_query == 'show all' else turn.context.get('last_shown_offset', 3)

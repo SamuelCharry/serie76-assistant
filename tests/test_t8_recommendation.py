@@ -109,3 +109,24 @@ class RecommendationTests(Base):
         result = self.turn('no', ('ask_clarification', {'field': 'decline'}))
         self.assertNotIn('unresolved scopes are not assumed', result.answer)
         self.assertNotIn('Source:', result.answer)
+
+    def test_document_limitations_do_not_dump_specs(self):
+        from backend.conversation.agent import run_agent
+        from test_agent_scenarios import Raising
+        for query in ('how much does 761A00-11300000/A cost?',
+                      'what is the IP rating of the weatherproof models?',
+                      'Do you have Rotork actuators?'):
+            with self.subTest(query=query):
+                result = run_agent(self.connection, query, [], {},
+                                   model=Raising(AssertionError('LLM must not run')))
+                self.assertIn('catalogue', result.answer.lower())
+                self.assertNotIn('Source:', result.answer)
+                self.assertFalse(result.debug['llm_called'])
+
+    def test_asterisk_uses_stored_footnote(self):
+        from backend.conversation.agent import run_agent
+        from test_agent_scenarios import Raising
+        result = run_agent(self.connection, 'what does the asterisk on 766A00-11320000/A mean?',
+                           [], {}, model=Raising(AssertionError('LLM must not run')))
+        self.assertIn('Sizes 6 and 7 are not CSA Certified', result.answer)
+        self.assertNotIn('On/Off torque', result.answer)
