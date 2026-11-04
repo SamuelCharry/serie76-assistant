@@ -51,7 +51,7 @@ For `DC + 60 Hz`, ask which requirement is intended; retain compatible constrain
 
 Codes are canonicalised for case/spaces/missing hyphen, never completed with `/A` or a guessed suffix. Partial codes receive prefix candidates; well-formed absent codes return not found. Codes must be in the conversation or persisted context. Unstated filters are dropped and named; assumptions must quote actual user wording and are shown. Numeric grounding checks occurrence of a number in the text, not complete semantic correctness; a wrong field assignment is still possible.
 
-SQL compares published columns, with AND filters, service/frequency scope and explicit absence states. Unknown values cannot satisfy thresholds. Templates render the resulting rows and literal glossary quotes; no second model writes the answer. One provider invocation per turn, no retries. A catalogue call plus an `explain_terms` call in the same response may be merged into one execution; other invalid call shapes produce a clarification.
+SQL compares published columns, with AND filters, service/frequency scope and explicit absence states. Unknown values cannot satisfy thresholds. Templates render the resulting rows and literal glossary quotes; no second model writes the answer. One completed model decision per turn; failed 503, timeout and connection attempts may retry once per model, with an optional fallback model and a shared 60-second deadline. No 4xx is retried. A catalogue call plus an `explain_terms` call in the same response may be merged into one execution; other invalid call shapes produce a clarification.
 
 ## Runtime controls and tracing
 
@@ -86,7 +86,7 @@ This trace establishes stored tool execution, not a real-provider acceptance res
 - [backend/conversation/policy.py](../../../backend/conversation/policy.py#L85)
 - [backend/conversation/rendering.py](../../../backend/conversation/rendering.py#L1)
 
-## T6 conversation policy
+## T7 conversation policy
 
 ### Focus and thresholds
 
@@ -100,13 +100,23 @@ Magnitude filters accept `{value,op}` with `gt|gte|lt|lte`. “More than”, “
 
 Without sorting, more than 4 matches show the SQL count and one question; no products are listed. The split attribute maximises entropy across current SQL supply/enclosure/phase facets. Its options become suggested messages. Two to four matches get a brief list with a distinguishing value and comparison pairs; one match gets a focused answer. Zero matches never ask for service/frequency: diagnostics remove each numeric bound in turn and calculate SQL min/max and all tied models under the remaining constraints. An empty remaining combination is reported explicitly; no invented nearest product is substituted.
 
-### Cancel, comparison and suggested replies
+### Questions, submissions, cancellation and suggestions
 
-`ask_clarification` accepts cancel/decline. A bare no after a pending question declines it without repetition. Cancel clears pending clarification, filters and focus; it runs no catalogue lookup/search. `cancel_previous=true` also supports cancellation followed by a new search or an out-of-scope request. A deterministic guard recognises bare cancellation/decline even if the model proposes an inappropriate tool; the turn still makes only one model decision.
+Questions are `interaction={kind:"question",questions:[{id,prompt,options:[{value,label}]}]}`. All required service/frequency fields are collected together in priority order; every option is a published SQL facet under the active candidate constraints. A broad request asks for service, voltage and current type. A search with more than four matches may ask one additional SQL split; without a filterable split it reports the count without inventing options.
 
-A comparison uses at most two SQL-verified codes. `comparison={models,rows,identical_fields_hidden}` contains differences only; each row has field, label, a, b and better=a|b|null. Better is assigned only for higher torque or lower time/current/motor power. Identical values are hidden and counted; 3–4 candidates offer pairs instead. `answer` remains plain text without Markdown tables.
+`answers` and `remove_filters` are additive request fields, outside the LLM schemas. Submitted strings must exactly match a pending field and option; removals must name active filters, otherwise HTTP 422 `invalid_answers`/`invalid_filter`. Code validates and merges them, re-runs SQL and stores the readable `query` without a model call or budget reservation. Active filters are persisted removable tags. A decline or a repeated unresolved question shows up to three candidates with a note identifying the open requirements. Cancel clears filters, focus and pending state.
 
-Every new successful turn has exactly 3 distinct English `suggested_replies`, assembled in code from SQL options/codes and fixed supported messages. Show more requires a real further displayed page; Cancel requires pending information and is omitted immediately after cancellation. Explain On/Off service is offered only for a pending service question. Impossibility replies use the SQL nearest model and scoped relaxed searches; declining a question uses natural wording that names only the actual pending field. Both new fields are persisted in message snapshots by additive migration 004; older messages remain readable with [] replies and null comparison. Android shows chips on the last assistant message (disabled while loading/reconciling) and a wrapping three-column difference card with the better value bold, without horizontal scrolling.
+Suggestions are optional (0?3), with `suggested_replies` retained as an identical deprecated alias. Questions have no suggestions. A search returning two to four matches offers one comparison pair with the most differing published fields (ties retain SQL order); impossible searches offer SQL-derived relaxations. Single facts, definitions, comparisons, greetings, cancellations and unsupported requests have none. Generic navigation and Cancel are never suggestions.
+
+Two-model comparisons use `layout:"table"`, a code-computed summary, explicit preference assumptions, differing `rows`, identical `hidden_rows`, and integer `better` indices or null. More torque/cycles is preferred; less time/current/motor power is preferred. This is an unweighted field count, not an overall suitability rating. Three or four models use `layout:"cards"`, no winners, and four key fields: torque, operating time, FLA, motor power, retaining explicit service/frequency scopes. A one-sentence `lead` accompanies cards/comparisons; `answer` remains the complete plain-text response for API clients. Migration 005 adds lead, interaction, suggestions and active-filter snapshots; historical rows default to null/empty lists.
+
+Greeting-only input is handled by code with the authenticated user's first name (or `Hello.`), no inference and no suggestions. Ranges support two bounds on one field; decimal comma 1,5 means 1.5. Alternative voltages produce a SQL-backed question. "Same performance" after changing service retains numeric limits and states that assumption. Price/weighted-price selection and ordering explicitly report catalogue/application limits; conflicting label/invoice codes cannot establish the installed identity. Combined catalogue/glossary requests render supported parts and explicitly identify absent terms such as IP67.
+
+### Transport resilience
+
+LangChain `.with_retry(stop_after_attempt=2)` retries only 503, timeout and connection failures; `.with_fallbacks` is enabled only by `OPENROUTER_FALLBACK_MODEL`, on the same endpoint. The SDK's own retries remain disabled. Each actual attempt reserves the process-local cap and is recorded in trace metadata; failed-turn exceptions retain safe attempt metadata without persisting half a conversation.
+
+`AGENT_TURN_DEADLINE_S=60` is shared by primary retries and fallback. Each attempt has `min(AGENT_TIMEOUT_S, remaining)` timeout; when less than `AGENT_RETRY_MIN_REMAINING_S=10` remains, the attempt is recorded as `deadline_skipped` and does not reserve a call. This default stays below Android's 70-second read/75-second call timeout. Uvicorn keep-alive is 75 seconds. These transport behaviors are tested against local fakes, including a delayed local HTTP server; live provider resilience remains unverified.
 
 Impossibility extrema retain their published scope: when service is unknown, On/Off and Modulating bounds are calculated and labelled separately; a known service reports only its own bound. Operating time, FLA and LRA extrema are separated by published frequency (or explicitly unspecified/not applicable); a requested frequency restricts that diagnostic. SQL-verified ties and shared-as-published notes are preserved.
 
