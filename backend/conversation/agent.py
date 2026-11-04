@@ -27,7 +27,7 @@ from pydantic import create_model as pydantic_model
 from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import get_actuator, search_actuators
-from . import policy, quality, tool_wire, interactions, ranking
+from . import policy, quality, tool_wire, interactions, ranking, metrics
 from .interactions import InvalidInteraction
 from .rendering import render_lookup, render_search, render_terms, supplies_text
 
@@ -735,6 +735,12 @@ class Turn:
                         lead = f"The compared models tie for {'highest' if direction == 'higher' else 'lowest'} {label}: {best} {unit}."
                 else:
                     lead = f'The catalogue does not publish comparable {metric.upper() if metric in ("lra", "fla") else metric.replace("_", " ")} values for these models.'
+        if compared and re.search(r'\b(which|more|less|highest|lowest|faster|quicker|stronger)\b', self.query, re.I):
+            direct, winner = metrics.verdict(products, self.query, self.context.get('filters') or {})
+            if direct:
+                lead = direct
+                if winner:
+                    self.context['focused_model'] = winner
         return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared, lead=lead)
 
     def search(self, args, *, trusted=False):
@@ -1155,6 +1161,24 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     import re
     bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
     compared_codes = turn.context.get('last_comparison_models') or []
+    if (action is None and not answers and not remove_filters and
+            re.search(r'\b(which|highest|lowest|faster|quicker|stronger|more|less)\b', bare_query) and
+            re.search(r'\b(them|those|results?|among|one|models?)\b', bare_query) and
+            not policy.codes_in_text(query)):
+        use_ranked = bool(re.search(r'\b(results?|ranked|list)\b', bare_query))
+        codes = (turn.context.get('last_ranked_list') if use_ranked else
+                 compared_codes or turn.context.get('last_ranked_list')) or []
+        if len(codes) >= 2:
+            rows = [get_actuator(connection, code) for code in codes]
+            verdict, winner = metrics.verdict([row for row in rows if row], query, turn.context.get('filters') or {})
+            if verdict:
+                if winner:
+                    turn.context['focused_model'] = winner
+                turn.trace = dict(name='metric_verdict', parameters={}, raw_parameters={},
+                                  data={'status': 'metric_verdict'}, validation=['ok'],
+                                  context_before=context_before,
+                                  model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+                return finish(turn, AgentResult(verdict, context=turn.context, lead=verdict))
     if action is None and not answers and not remove_filters and len(compared_codes) >= 2 and bare_query in ('the faster one', 'the stronger one'):
         metric = 'operating_time' if 'faster' in bare_query else 'torque'
         turn.trace = dict(name='get_actuator', parameters={}, raw_parameters={}, validation=['ok'],
@@ -1503,7 +1527,7 @@ def finish(turn, result):
         result.answer = 'The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\n' + result.answer
         result.lead = 'Check the physical nameplate to identify the installed actuator; the catalogue comparison cannot establish that.'
     preserve_pending = (trace.get('data', {}).get('status') == 'ranked_list'
-                        or trace.get('data', {}).get('status') in ('ranked_pick', 'ranking_explanation', 'ranked_page')
+                        or trace.get('data', {}).get('status') in ('ranked_pick', 'ranking_explanation', 'ranked_page', 'metric_verdict')
                         or trace.get('name') == 'ranked_pick'
                         or 'ranked_reference_resolved' in trace.get('overrides', [])
                         or (trace.get('raw_parameters') or {}).get('type') in ('compare_top', 'show_all', 'rank_by'))
