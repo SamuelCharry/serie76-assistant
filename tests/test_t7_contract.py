@@ -48,7 +48,7 @@ class ExploratoryTests(Base):
     def test_purchase_does_not_claim_order(self):
         result = self.turn('Buy two units of 761A00-11300000/A and confirm delivery tomorrow.',
                            ('get_actuator', {'part_numbers': ['761A00-11300000/A']}))
-        self.assertIn('cannot place orders', result.answer)
+        self.assertIn('cannot process orders', result.answer)
         self.assertEqual(result.suggestions, [])
 
     def test_label_invoice_does_not_assert_installed_model(self):

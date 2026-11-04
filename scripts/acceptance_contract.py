@@ -34,7 +34,7 @@ def public_cell_matches(text, row, field):
         return text == expected or (field == 'enclosure' and text.lower() == expected.lower()) or ('_unqualified_' in field and text.startswith(expected + ' ('))
     if row['data_status'] == 'source_NA':
         return 'N/A' in text and not re.search(r'\b0(?:\.0)?\s*(?:W|A|s|Nm|in-lb)\b', text)
-    return 'not' in text.lower() and not re.search(r'\d', text)
+    return text == '—' or 'not' in text.lower() and not re.search(r'\d', text)
 
 
 def eligible_codes(filters):

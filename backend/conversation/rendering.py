@@ -21,7 +21,7 @@ def _frequency_label(product, qualifier):
 
 def _status_text(status):
     return {"source_NA": "N/A in the source table",
-            "not_in_layout": "not published in this table layout"}.get(status, "not available")
+            "not_in_layout": "not published for this model"}.get(status, "not available")
 
 
 def _torque(product, service):

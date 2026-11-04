@@ -237,6 +237,14 @@ def check(expect, observed, queries=()):
     for text in expect.get("not_contains", []):
         if text in observed["answer"]:
             failures.append(f"forbidden text: {text}")
+    for text in expect.get('lead_contains', []):
+        if text not in (observed.get('lead') or ''):
+            failures.append(f'missing lead text: {text}')
+    if 'interaction_option_labels' in expect:
+        labels = [option['label'] for question in (observed.get('interaction') or {}).get('questions', [])
+                  for option in question.get('options', [])]
+        if labels != expect['interaction_option_labels']:
+            failures.append(f'option labels {labels} differ')
     codes = [p["base_part_number"] for p in observed["products"]]
     for code in expect.get("products_include", []):
         if code not in codes:
@@ -502,7 +510,8 @@ def command_selfcheck(cases, evidence_path=None):
     bad = []
     evidence = []
     selected = {'EC05','EC10','EC15','EC20','EC25','EC30','EC35','EC40','h_compare_three','h4_hello','t6_manual_04',
-                'T8_recommendation','T8_fast_compare','T8_mining'}
+                'T8_recommendation','T8_fast_compare','T8_mining', 'heldout_P5-01', 'heldout_P2-03',
+                'heldout_B-FRUSTRATION-01', 'heldout_B-SHORTREF-01', 'heldout_P6-01', 'heldout_P1-03'}
     for scenario in cases["scenarios"]:
         result = run_scenario(scenario, lambda s, i: IdealModel(s['turns'][i].get('scripted_decision') or IDEAL[s["id"]][i]))
         print(scenario["id"], result["status"], *[t["failures"] for t in result["turns"] if t["failures"]])

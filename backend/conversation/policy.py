@@ -46,7 +46,7 @@ def colloquial_requirements(query):
     """Closed, explicit phrase map; returns only constraints stated in this turn."""
     text = query.lower()
     result, notes = {}, []
-    if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar)\b', text):
+    if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar|on/of)\b', text):
         result['service'] = 'on_off'
     if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias)\b', text):
         result['service'] = 'modulating'

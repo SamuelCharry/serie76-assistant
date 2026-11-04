@@ -7,7 +7,10 @@ from scripts.check_public_text import response_text_issues
 FORBIDDEN = re.compile(
     r"\b(?:Not applied|get_actuator|search_actuators|ask_clarification|explain_terms|"
     r"on_off|explosionproof|weatherproof|modulating|(?:[a-z]+_){1,}[a-z0-9]+|"
-    r"NEMA|IP\s*\d+)\b|[{}]",
+    r"NEMA|IP\s*\d+)\b|[{}]|"
+    r"I left out an unstated requirement|These are the top 3 candidates|"
+    r"unresolved scopes are not assumed|I will not pick one for you|"
+    r"not published in this table layout|\b0 identical fields hidden|I cannot place orders",
 )
 
 
@@ -44,7 +47,10 @@ class PublicTextTests(unittest.TestCase):
         assert_public_text_clean({'answer': "Assumed AC, single-phase supply. Tell me if that's wrong."})
 
     def test_mutations_fail(self):
-        for mutation in ('Not applied', 'min_torque_nm', 'get_actuator', 'IP67', '{service}', 'explosionproof'):
+        for mutation in ('Not applied', 'min_torque_nm', 'get_actuator', 'IP67', '{service}', 'explosionproof',
+                         'I left out an unstated requirement', 'These are the top 3 candidates',
+                         'I will not pick one for you', 'not published in this table layout',
+                         '0 identical fields hidden', 'I cannot place orders'):
             with self.subTest(mutation=mutation), self.assertRaises(AssertionError):
                 assert_public_text_clean({'answer': mutation})
 

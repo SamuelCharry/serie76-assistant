@@ -41,3 +41,28 @@ class CohortTests(Base):
                            ('ask_clarification', {'field': 'unsupported'}))
         self.assertTrue(result.tool_calls[0]['parameters']['cancel_previous'])
         self.assertIn('Cancelled', result.answer)
+
+    def test_yes_accepts_single_hazardous_enclosure_proposal(self):
+        first = self.turn('we have a refinery with flammable gas, need a valve motor',
+                          ('search_actuators', {}))
+        self.context = first.context
+        result = self.local('yes')
+        self.assertEqual(result.context['filters']['enclosure'], 'explosionproof')
+
+    def test_other_one_after_that_one_uses_second_shown_model(self):
+        first = self.turn('weatherproof 220 V on/off at least 300 Nm',
+                          ('search_actuators', {'enclosure': 'weatherproof', 'supply_voltage_v': 220,
+                                                'service': 'on_off', 'min_torque_nm': 300}))
+        self.context = first.context
+        that = self.local('that one')
+        self.context = that.context
+        other = self.local('the other one')
+        self.assertIn(first.context['last_shown_list'][1], other.answer)
+
+    def test_typo_on_of_keeps_on_off_service(self):
+        result = self.turn('necesito un actuador on/of para 220v con almenos 100 nm',
+                           ('search_actuators', {'service': 'on_off', 'supply_voltage_v': 220,
+                                                 'min_torque_nm': 100}))
+        self.assertEqual(result.context['filters']['service'], 'on_off')
+        self.assertTrue(all(float(v['value'].split()[0]) >= 100 for entry in result.recommendation['items']
+                            for v in entry['key_values'] if 'torque' in v['label'].lower()))

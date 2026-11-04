@@ -5,6 +5,9 @@ from backend.catalog.loader import NUMERIC_FIELDS
 SNAKE_CASE = re.compile(r"\b[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)+\b")
 INTERNAL = re.compile(r"\b(?:Not applied|get_actuator|search_actuators|ask_clarification|explain_terms|on_off|explosionproof|weatherproof|modulating)\b|[{}]")
 RATINGS = re.compile(r"\b(?:NEMA|IP\s*\d+)\b", re.I)
+STALE = re.compile(r"I left out an unstated requirement|These are the top 3 candidates|"
+                   r"unresolved scopes are not assumed|I will not pick one for you|"
+                   r"not published in this table layout|\b0 identical fields hidden|I cannot place orders")
 
 
 def public_text_issues(answer, comparison=None, suggested_replies=()):
@@ -17,6 +20,8 @@ def public_text_issues(answer, comparison=None, suggested_replies=()):
                for match in INTERNAL.finditer(text)]
     issues += [f"unsupported rating in {where}: {match.group()}" for where, text in texts
                for match in RATINGS.finditer(text)]
+    issues += [f"stale public phrase in {where}: {match.group()}" for where, text in texts
+               for match in STALE.finditer(text)]
     # Also reject the former mechanically expanded labels, e.g. "fla 60 Hz a".
     # Natural labels such as "cycles per hour" remain valid English.
     fields = [key for key in NUMERIC_FIELDS if key.endswith(("_nm", "_in_lb", "_w", "_a", "_s", "_percent"))]
@@ -38,6 +43,7 @@ def response_text_issues(response):
     interaction = response.get('interaction') or {}
     texts += [q.get('prompt', '') for q in interaction.get('questions', [])]
     texts += [o.get('label', '') for q in interaction.get('questions', []) for o in q.get('options', [])]
+    texts += [o.get('description', '') for q in interaction.get('questions', []) for o in q.get('options', [])]
     clarification = response.get('clarification') or {}
     texts.append(clarification.get('message', ''))
     comparison = response.get('comparison') or {}

@@ -532,6 +532,8 @@ class Turn:
             hidden = f" {len(compared['hidden_rows'])} identical fields hidden." if compared['hidden_rows'] else ''
             answer = "Comparing " + " vs ".join(compared["models"]) + "." + hidden + "\n"
             answer += "\n".join(row["label"] + ": " + " vs ".join(row["values"]) for row in compared["rows"])
+            for code in compared.get('missing_models', []):
+                answer += f"\nFor {code}, — means not published for this model."
             if not compared["rows"]:
                 answer += "No published differences in comparable fields."
             if args.get('explain_terms'):
@@ -675,6 +677,7 @@ class Turn:
             all_rows = search_actuators(self.connection, SearchFilters.model_validate(dict(merged, limit=100, offset=0)),
                                         allow_ambiguous=True)['products']
             preview_enclosure = 'weatherproof' if re.search(r'\b(outdoor|rain|exteriores|intemperie)\b', self.query, re.I) else 'explosionproof'
+            self.context['proposed_enclosure'] = preview_enclosure
             all_rows = [row for row in all_rows if row['enclosure'] == preview_enclosure]
             rec = ranking.recommendation(all_rows, merged, by)
             self.context['rank_by'] = by
@@ -840,9 +843,13 @@ class Turn:
                 names = ', '.join(f"'{u}'" for u in unknown)
                 return self.clarify(field_name, "The document doesn't define that term.")
         if field_name == "cancel":
+            had_pending = bool((self.trace.get('context_before') or {}).get('pending_questions') or
+                               (self.trace.get('context_before') or {}).get('pending_clarification') or
+                               (self.trace.get('context_before') or {}).get('filters'))
             self.context.clear()
             self.trace["data"] = dict(status="cancelled")
-            return AgentResult("Cancelled. I can look up Series 76 actuators, find models for requirements, compare two models or explain catalogue terms.", context=self.context)
+            message = ("Cancelled. " if had_pending else "There is no pending request. ")
+            return AgentResult(message + "I can look up Series 76 actuators, find models for requirements, compare two models or explain catalogue terms.", context=self.context)
         if field_name == "decline":
             fields = [q['id'] for q in self.context.get('pending_questions', [])]
             if fields:
@@ -940,6 +947,12 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
     import re
+    if action is None and not answers and not remove_filters and re.search(r'\bis that for on/off or modulating\b', query, re.I):
+        prior = next((m['content'] for m in reversed(messages) if m['role'] == 'assistant'), '')
+        if 'shared' in prior.lower() and 'duty' in prior.lower():
+            turn.trace = dict(name='shared_scope', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, AgentResult('It applies to both On/Off and Modulating (shared).', context=turn.context))
     if action is None and not answers and not remove_filters:
         codes = policy.codes_in_text(query)
         if re.search(r'\b(system prompt|database password|chat history|private secrets?)\b', query, re.I):
@@ -1006,10 +1019,13 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         shown = turn.context.get('last_shown_list') or []
         compared = turn.context.get('last_comparison_models') or []
         selected = (compared[1] if bare_query == 'the other one' and len(compared) == 2 else
+                    shown[1] if bare_query == 'the other one' and len(shown) >= 2 and
+                    turn.context.get('last_reference_one') == shown[0] else
                     shown[0] if bare_query != 'the other one' and shown else None)
         turn.trace = dict(name='ranked_reference', parameters={}, raw_parameters={}, validation=['ok'],
                           context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
         if selected:
+            turn.context['last_reference_one'] = selected
             turn.context['part_numbers'] = [selected]
             return finish(turn, turn.lookup(dict(part_numbers=[selected], focus=['overview'], explain_terms=[])))
         return finish(turn, turn.clarify('which_product', 'Which shown model do you mean?', options=shown[:4]))
@@ -1052,7 +1068,12 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             return finish(turn, turn.clarify('requirements',
                           'Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.'))
     if action is None and not answers and not remove_filters and turn.context.get('pending_questions'):
-        answers = interactions.free_text_answer(query, turn.context['pending_questions'])
+        if bare_query == 'yes' and turn.context.get('proposed_enclosure') and any(
+                q['id'] == 'enclosure' and any(o['value'] == turn.context['proposed_enclosure'] for o in q['options'])
+                for q in turn.context['pending_questions']):
+            answers = {'enclosure': turn.context.pop('proposed_enclosure')}
+        else:
+            answers = interactions.free_text_answer(query, turn.context['pending_questions'])
     if model is None and action is None and not answers and not remove_filters:
         codes = fast_path_codes(query)
         if codes and all(get_actuator(connection, code) for code in codes):
@@ -1200,7 +1221,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             trace["parameters"] = args
             # The LangChain Tool executes the request: validation, SQL and rendering run inside it.
             result = tools[name].invoke(args, config={"run_name": name})
-    if cancel_previous and not result.answer.startswith("Cancelled"):
+    had_pending = bool(context_before.get('pending_questions') or context_before.get('pending_clarification') or context_before.get('filters'))
+    if cancel_previous and had_pending and not result.answer.startswith("Cancelled"):
         result.answer = "Cancelled the previous request. " + result.answer
     if cancel_previous and result.clarification and result.clarification["field"] == "unsupported":
         result.answer = result.answer.replace(" What would you like to check?", "")
@@ -1225,9 +1247,9 @@ def finish(turn, result):
         else:
             result.answer = limitation + '\n' + result.answer
     if policy.purchase_request(turn.query) and not result.answer.startswith('My pick:'):
-        result.answer = 'I cannot place orders or confirm delivery. I can provide published catalogue specifications.\n' + result.answer
+        result.answer = 'The catalogue cannot process orders or confirm delivery. I can provide its published specifications.\n' + result.answer
         if result.products or result.comparison:
-            result.lead = 'I cannot place orders or confirm delivery; the cards show published catalogue specifications.'
+            result.lead = 'The catalogue cannot process orders or confirm delivery; the cards show published specifications.'
     if re.search(r'\binvoice\b', turn.query, re.I) and re.search(r'\b(label|installed|nameplate)\b', turn.query, re.I):
         result.answer = 'The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\n' + result.answer
         result.lead = 'Check the physical nameplate to identify the installed actuator; the catalogue comparison cannot establish that.'

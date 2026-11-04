@@ -38,3 +38,27 @@ class WordingTests(Base):
                                              'focus': ['operating_time'], 'focus_frequency_hz': 60}))
         self.assertIn('764A00-11300000/A is faster at 60 Hz: 30 s vs 88 s', result.lead)
         self.assertNotIn('0 identical fields hidden', result.answer)
+
+    def test_comparison_missing_note_appears_once_per_model(self):
+        result = self.turn('Compare 761X30-11370000/A vs 761X30-11380000/A',
+                           ('get_actuator', {'part_numbers': ['761X30-11370000/A', '761X30-11380000/A'],
+                                             'focus': ['overview']}))
+        self.assertNotIn('not published in this table layout', result.answer)
+        self.assertLessEqual(result.answer.count('not published for this model'), 2)
+        self.assertIn('not published for this model', result.answer)
+
+    def test_shared_duty_followup_is_one_sentence(self):
+        self.turn('Duty cycle of 763C00-11330C00/A',
+                  ('get_actuator', {'part_numbers': ['763C00-11330C00/A'], 'focus': ['duty']}))
+        from backend.conversation.agent import run_agent
+        from test_agent_scenarios import Raising
+        result = run_agent(self.connection, 'is that for on/off or modulating?', self.history, self.context,
+                           model=Raising(AssertionError('LLM must not run')))
+        self.assertEqual(result.answer, 'It applies to both On/Off and Modulating (shared).')
+
+    def test_cancel_without_pending_does_not_claim_cancellation(self):
+        from backend.conversation.agent import run_agent
+        from test_agent_scenarios import Scripted
+        result = run_agent(self.connection, 'Cancel', [], {},
+                           model=Scripted(('ask_clarification', {'field': 'cancel'})))
+        self.assertNotIn('Cancelled', result.answer)

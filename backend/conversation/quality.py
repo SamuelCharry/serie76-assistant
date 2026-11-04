@@ -156,13 +156,14 @@ def comparison(products, focus=None, filters=None):
                 values.append(_num(value) + (" " + unit if unit else ""))
             elif status == "source_NA":
                 values.append(_status_text(status) + (" (" + unit + ")" if unit else ""))
-        text = " / ".join(values) if values else _status_text(cell(product, components[0][0])[1])
+        status = cell(product, components[0][0])[1]
+        text = " / ".join(values) if values else ('—' if status == 'not_in_layout' else _status_text(status))
         if ("_unqualified_" in components[0][0]
                 and _frequency_label(a, "unqualified") != _frequency_label(b, "unqualified")):
             text += " " + _frequency_label(product, "unqualified")
         return text.capitalize() if key == 'enclosure' else text
 
-    rows, hidden = [], []
+    rows, hidden, missing_models = [], [], set()
     focus = normalized_focus(focus or ['overview'])
     keys = set().union(*(focus_keys(p, focus) for p in products))
     overview = any(f['field'] == 'overview' for f in focus)
@@ -174,6 +175,9 @@ def comparison(products, focus=None, filters=None):
         cells = [[cell(p, key) for key, _ in components] for p in products]
         if not any(value is not None or status == 'source_NA' for values in cells for value, status in values):
             continue
+        for index, values in enumerate(cells):
+            if any(status == 'not_in_layout' for value, status in values):
+                missing_models.add(products[index]['base_part_number'])
         row = dict(field=field, label=label, values=[display(p, components) for p in products], better=None)
         if len(products) == 2 and row['values'][0] == row['values'][1]:
             hidden.append(row)
@@ -211,7 +215,7 @@ def comparison(products, focus=None, filters=None):
                    + models[1] + ' wins ' + str(wins[1]) + '. This is an unweighted field count, not an overall suitability rating.')
         assumptions = 'More is better for torque and cycles; less is better for time, current and motor power.'
     return dict(layout='table' if len(products) == 2 else 'cards', models=models, summary=summary,
-                assumptions=assumptions, rows=rows, hidden_rows=hidden, key_fields=keys,
+                assumptions=assumptions, rows=rows, hidden_rows=hidden, missing_models=sorted(missing_models), key_fields=keys,
                 key_fields_reason='Fields you filtered on, then the ones that differ most' if len(products) > 2 else '')
 
 

@@ -36,7 +36,7 @@ class RecordedFailureTests(Base):
                                ('ask_clarification', {'field': 'unsupported'}))
         self.assertEqual([c.args[1] for c in lookup.call_args_list], [A])
         self.assertEqual(result.products[0]['base_part_number'], A)
-        self.assertTrue(result.answer.startswith('I cannot place orders or confirm delivery.'))
+        self.assertTrue(result.answer.startswith('The catalogue cannot process orders or confirm delivery.'))
         self.assertEqual(result.tool_calls[0]['name'], 'get_actuator')
         self.assertEqual(result.tool_calls[0]['parameters']['part_numbers'], [A])
         self.assertEqual(result.tool_calls[0]['model']['decision_calls'], 1)
@@ -68,7 +68,7 @@ class RecordedFailureTests(Base):
         self.assertEqual([c.args[1] for c in lookup.call_args_list], [A])
         self.assertEqual(result.tool_calls[0]['parameters']['part_numbers'], [A])
         self.assertEqual(result.products[0]['base_part_number'], A)
-        self.assertIn('cannot place orders', result.answer)
+        self.assertIn('cannot process orders', result.answer)
 
     def test_explicit_user_prefix_is_never_completed(self):
         for query in ('Show 761A00-11300', f'Compare {A} and 761A00-11300'):

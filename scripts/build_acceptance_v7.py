@@ -42,6 +42,15 @@ def main():
     by_id['EC21']['turns'][0]['expect'].pop('suggestions_count', None)
     by_id['EC33']['turns'][0]['expect']['contains'] = ["The document doesn't define that term."]
     by_id['EC40']['turns'][0]['expect']['contains'] = ["The document doesn't define that term.", 'LRA at 60 Hz: 1.4 A']
+    # A catalogue without prices cannot supply the old weighted-price expectation.
+    by_id['EC30']['turns'][0]['expect'].update(tool='document_limitation',
+        contains=["doesn't publish prices", 'weighted'])
+    by_id['EC21']['turns'][0]['expect']['contains'] = ['Tell me what it must do:']
+    by_id['EC34']['turns'][0]['expect'].update(clarification=['unsupported', 'decline'],
+        contains=['cannot reveal'])
+    by_id['EC35']['turns'][0]['expect']['contains'] = ['cannot process orders', 'confirm delivery']
+    # Cancellation is now enforced by code even if the provider omits the flag.
+    by_id['t6_manual_07']['turns'][1]['expect']['args'].pop('cancel_previous', None)
     base = turn('I need an on/off actuator with at least 70 Nm',
                 ['search_actuators', {'service': 'on_off', 'min_torque_nm': 70}],
                 tool='search_actuators', interaction_count_at_least=2, recommendation_ranked_by=True,
@@ -83,6 +92,19 @@ def main():
             turn('Rank by fastest', tool='ranked_action', debug_llm_called=False,
                  recommendation_ranked_by=True) | {'action': {'type': 'rank_by', 'args': {'by': 'fastest'}}}]},
     ])
+    heldout = json.loads((CONFIG / 'agent_acceptance_heldout_v1.json').read_text(encoding='utf-8'))
+    heldout_by_id = {s['id']: s for s in heldout['scenarios']}
+    def require(case_id, turn_index=0, **expect):
+        heldout_by_id['heldout_' + case_id]['turns'][turn_index]['expect'].update(expect)
+    require('P5-01', contains=['On/Off torque'], not_contains=['70 Nm torque'])
+    require('P2-03', interaction_option_labels=['Explosionproof', 'Weatherproof'])
+    require('B-FRUSTRATION-01', 1, contains=['My pick:'])
+    require('B-FRUSTRATION-01', 2, contains=['My pick:'])
+    require('B-SHORTREF-01', 1, tool='ranked_reference')
+    require('B-SHORTREF-01', 2, tool='ranked_reference')
+    require('P6-01', contains=["doesn't publish prices"], no_products=True)
+    require('P1-03', lead_contains=['is faster at 60 Hz: 30 s vs 88 s'])
+    cases['scenarios'].extend(heldout['scenarios'])
     (CONFIG / 'agent_acceptance_cases_v7.json').write_text(json.dumps(cases, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     print({'v6_cases': len(by_id), 'v7_cases': len(cases['scenarios'])})
 
