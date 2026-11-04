@@ -1051,8 +1051,9 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                 chosen = ranking.item(ordered[0], filters)
                 open_choices = [policy.LABELS.get(q['id'], q['id'].replace('_', ' '))
                                 for q in turn.context.get('pending_questions', [])]
-                assumption = (', '.join(open_choices) if open_choices else 'other unstated preferences')
-                answer = f"My pick: {chosen['part_number']} — {chosen['reason']}. Assumes no preference on {assumption}; tell me if that matters."
+                assumption = (f"Assumes no preference on {', '.join(open_choices)}; tell me if that matters."
+                              if open_choices else 'Assumes the current requirements; tell me if another constraint matters.')
+                answer = f"My pick: {chosen['part_number']} — {chosen['reason']}. {assumption}"
                 if cheap:
                     answer = "The catalogue doesn't publish prices. Lowest motor power is only a proxy, not a price estimate.\n" + answer
                 rec = dict(ranked_by=ranking.ranked_by(filters, by), total=len(codes), shown=1, items=[chosen])
@@ -1254,6 +1255,7 @@ def finish(turn, result):
         result.answer = 'The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\n' + result.answer
         result.lead = 'Check the physical nameplate to identify the installed actuator; the catalogue comparison cannot establish that.'
     preserve_pending = (trace.get('data', {}).get('status') == 'ranked_list'
+                        or trace.get('name') == 'ranked_pick'
                         or 'ranked_reference_resolved' in trace.get('overrides', [])
                         or (trace.get('raw_parameters') or {}).get('type') in ('compare_top', 'show_all', 'rank_by'))
     if not result.clarification and not preserve_pending:

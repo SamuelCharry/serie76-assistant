@@ -66,3 +66,12 @@ class CohortTests(Base):
         self.assertEqual(result.context['filters']['service'], 'on_off')
         self.assertTrue(all(float(v['value'].split()[0]) >= 100 for entry in result.recommendation['items']
                             for v in entry['key_values'] if 'torque' in v['label'].lower()))
+
+    def test_repeated_pick_keeps_open_choices_and_natural_assumption(self):
+        first = self.turn('on/off at least 70 Nm',
+                          ('search_actuators', {'service': 'on_off', 'min_torque_nm': 70}))
+        self.context = first.context
+        self.context = self.local("this doesn't help").context
+        result = self.local('just tell me which one to buy')
+        self.assertIn('supply voltage', result.answer)
+        self.assertNotIn('other unstated preferences', result.answer)
