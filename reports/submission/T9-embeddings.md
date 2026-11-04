@@ -24,4 +24,9 @@ connection mapping. Each slice is verified and committed separately.
 Backup: ignored `backups/t9-before.dump`, SHA256
 `e6924174edbf5d3f6c2c9c1494b1de4dbe5f8018d14903933d5007fe36d953f7`.
 Before: users 5, conversations 540, messages 1924, entries 68.
+All 15 existing table counts matched before migration; migration was applied twice.
+The initial pg17 tag used glibc 2.36, whereas the volume was created with 2.41.
+Before data writes, switched to the coordinator-approved `pg17-trixie` digest in
+Compose and CI. Container `ldd` confirms 2.41; database, postgres and template1
+collation versions match their actual versions. All original data counts still match.
 Implementation and final verification are in progress.
