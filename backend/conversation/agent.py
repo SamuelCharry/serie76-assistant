@@ -1627,6 +1627,16 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             if topic != 'position feedback output':
                 answer += ' I can compare its published electrical fields.'
             return finish(turn, AgentResult(answer, context=turn.context))
+        if (not policy.codes_in_text(query) and policy.hazard_signal(query)
+                and requirement_coverage.apply(query, {})[0].get('supply_voltage_v') is not None):
+            # A stated supply plus a recognized hazardous site is already enough
+            # to ask for enclosure confirmation, without a speculative tool choice.
+            turn.trace = dict(name='search_actuators', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            args = models['search_actuators'].model_validate(dict(refine=bool(
+                turn.context.get('filters') and re.match(r'^(?:and|actually|instead)\b', bare_query)))).model_dump(mode='json')
+            return finish(turn, turn.search(args, trusted=True))
     if (action is None and not answers and not remove_filters and
             bare_query in ('so what can i do', 'what can i do', 'any alternatives', "what's closest", 'what is closest',
                            'what can you offer instead') and

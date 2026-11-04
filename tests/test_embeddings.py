@@ -76,6 +76,14 @@ class EmbeddingTests(unittest.TestCase):
         with patch.dict(os.environ, OPENROUTER_EMBEDDING_MODEL='fake', EMBEDDINGS_ENABLED='true'):
             self.assertTrue(embeddings.enabled())
 
+    def test_model_configuration_enables_retrieval_by_default_in_all_entrypoints(self):
+        from pathlib import Path
+        with patch.dict(os.environ, {'OPENROUTER_EMBEDDING_MODEL': 'fake'}, clear=True):
+            self.assertTrue(embeddings.enabled())
+        self.assertIn('EMBEDDINGS_ENABLED: ${EMBEDDINGS_ENABLED:-true}',
+                      Path('docker-compose.yml').read_text())
+        self.assertIn('EMBEDDINGS_ENABLED=true', Path('.env.example').read_text())
+
     def test_threshold_and_opposite_margin(self):
         self.assertEqual(embeddings.classify({'hazard': .90, 'safe_area': .89}), set())
         self.assertEqual(embeddings.classify({'hazard': .90, 'safe_area': .30}), {'hazard'})

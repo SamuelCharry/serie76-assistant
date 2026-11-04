@@ -1,5 +1,39 @@
 # T9: embeddings for interpretation
 
+## Round 8/9 A/B results
+
+Coordinator-reported live results, before the round-nine deterministic repairs:
+
+| Round | Retrieval ON | Retrieval OFF | Integrity failures ON / OFF |
+|---|---:|---:|---:|
+| 8 | 61% | 63% | 10 / 9 |
+| 9 (41 new conversations per mode) | 73% | 71% | 6 / 7 |
+
+These are distinct cohorts, not a controlled before/after improvement estimate.
+Round-nine remaining shared failures were reproduced in the deterministic layer.
+Retrieval now defaults **ON when `OPENROUTER_EMBEDDING_MODEL` is configured**, in
+Python, Compose and `.env.example`; without a model it remains disabled. Explicit
+`EMBEDDINGS_ENABLED=false` disables it. Startup initialization makes no inference call.
+
+The round-nine repair adds reverse quantity coverage: applied numeric arguments need
+compatible unit evidence, with bare supply shorthand restricted to 24/110/220 V.
+Separate words such as `wp` cannot be autocorrected into watts. Opposite bounds merge
+into a range; a new bound replaces only its own direction. A safe-area correction
+replaces Explosionproof with Weatherproof on the deterministic path. Paint mixing,
+gasoline and diesel fuel contexts require enclosure confirmation with an Explosionproof
+preview, while merely mentioning a generator does not ask about generator operation.
+Service parsing covers `opens or shuts` and `dose steam gradually`.
+
+Comparison follow-ups calculate cycles/hour differences from both SQL values; zero
+results retain their relaxed alternatives, voltage siblings retain the requested field,
+and position feedback questions receive one sentence stating it is not published.
+[Recorded replay](../../config/agent_replay_v9.json) contains all 82 ON/OFF conversations
+(138 turns), public queries and recorded tool decisions only, with dump SHA256 hashes.
+It contains no session identifiers and is not loaded into the embedding example bank.
+The [replay test](../../tests/test_t9_replay.py) checks the repaired behaviors using
+recorded concept scores and scripted decisions, with provider access blocked.
+This repair uses **zero paid calls / USD 0** and does not claim a new live A/B score.
+
 ## Review repair (current behavior)
 
 The independent review and the coordinator's v8 A/B findings supersede the original
