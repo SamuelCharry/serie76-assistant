@@ -37,6 +37,8 @@ OUT = ROOT / "reports/agent_acceptance/v2"  # overridden by --cohort
 CONFIG = ROOT / "config/agent_acceptance.json"
 CASES = ROOT / "config/agent_acceptance_cases.json"
 FROZEN_FILES = [ "config/agent_acceptance_cases.json", "scripts/agent_acceptance.py",
+                "scripts/acceptance_contract.py", "backend/conversation/interactions.py",
+                "backend/catalog/migrations/005_message_interactions.sql",
                 "scripts/check_public_text.py",
                 "backend/conversation/quality.py", "backend/conversation/store.py",
                 "backend/conversation/tool_wire.py",
@@ -184,6 +186,9 @@ def argument_matches(field, got, expected, queries=()):
     from backend.catalog.repository import COMPARISONS
     if field not in COMPARISONS:
         return same(got, expected)
+    if isinstance(expected, list):
+        return isinstance(got, list) and len(got) == len(expected) and all(
+            argument_matches(field, a, b, queries) for a, b in zip(got, expected))
     if isinstance(expected, dict):
         if set(expected) != {"value", "op"}:
             return False
@@ -202,6 +207,7 @@ def argument_matches(field, got, expected, queries=()):
 
 def check(expect, observed, queries=()):
     from scripts.check_public_text import public_text_issues
+    from backend.catalog.repository import COMPARISONS
     failures = public_text_issues(observed["answer"], observed.get("comparison"), observed.get("suggested_replies", []))
     trace = observed["trace"]
     params = trace.get("parameters") or {}
@@ -209,7 +215,7 @@ def check(expect, observed, queries=()):
         failures.append(f"tool {trace.get('name')} != {expect['tool']}")
     for field, value in (expect.get("args") or {}).items():
         got = trace.get("raw_parameters", {}).get(field) if field == "cancel_previous" else params.get(field)
-        if isinstance(value, list):
+        if isinstance(value, list) and field not in COMPARISONS:
             if not same(got or [], value):
                 failures.append(f"{field} {got} != {value}")
         elif not argument_matches(field, got, value, queries):
@@ -267,6 +273,9 @@ def check(expect, observed, queries=()):
     for term in expect.get("terms", []):
         if term not in terms:
             failures.append(f"term {term} missing")
+    if expect.get('contract_v6'):
+        from scripts.acceptance_contract import verify
+        failures.extend(verify(expect, observed))
     return failures
 
 
@@ -299,7 +308,8 @@ def scenario_environment():
         yield connection
 
     try:
-        with patch("backend.conversation.api.connect", same_connection):
+        from collections import deque
+        with patch("backend.conversation.api.connect", same_connection), patch('backend.conversation.agent._call_times', deque()):
             yield app, connection, user
     finally:
         app.dependency_overrides.clear()
@@ -318,6 +328,7 @@ def run_scenario(scenario, model_factory):
             with patch("backend.conversation.agent.create_model_client", lambda: model_factory(scenario, index)):
                 started = time.perf_counter()
                 body = {"query": turn["query"]} | ({"session_id": session} if session else {})
+                body.update({k: turn[k] for k in ('answers', 'remove_filters') if k in turn})
                 response = client.post("/api/conversation", json=body)
             elapsed = time.perf_counter() - started
             if response.status_code == 503:
@@ -333,6 +344,14 @@ def run_scenario(scenario, model_factory):
                             clarification=payload["clarification"], assumptions=payload["assumptions"], trace=trace,
                             suggested_replies=payload["suggested_replies"], comparison=payload["comparison"],
                             candidates=[p["base_part_number"] for p in debug.get("data", {}).get("products", [])] or debug.get("data", {}).get("candidates", []))
+            observed.update({k: payload[k] for k in ('lead', 'interaction', 'suggestions', 'active_filters')})
+            observed['candidate_total'] = debug.get('data', {}).get('total')
+            if debug.get('name') == 'search_actuators' and observed['candidate_total'] is not None:
+                from backend.catalog.models import SearchFilters
+                from backend.catalog.repository import search_actuators
+                filters = (debug.get('context_after') or {}).get('filters') or {}
+                full = search_actuators(connection, SearchFilters.model_validate(dict(filters, limit=100, offset=0)), allow_ambiguous=True)
+                observed['eligible_codes'] = [p['base_part_number'] for p in full['products']]
             passed, failures = score(turn, observed, [t["query"] for t in scenario["turns"][:index + 1]])
             turns.append(dict(query=turn["query"], passed=passed, failures=failures, elapsed_s=round(elapsed, 3),
                               answer=payload["answer"], clarification=payload["clarification"],
@@ -340,6 +359,8 @@ def run_scenario(scenario, model_factory):
                               terms=[t["term_key"] for t in payload["terms"]], assumptions=payload["assumptions"], trace=trace,
                               suggested_replies=payload["suggested_replies"], comparison=payload["comparison"],
                               candidates=observed["candidates"]))
+            turns[-1].update({k: observed.get(k) for k in ('lead', 'interaction', 'suggestions', 'active_filters', 'candidate_total', 'eligible_codes')})
+            turns[-1]['product_snapshots'] = payload['products']
     return dict(status="passed" if all(t["passed"] for t in turns) else "failed", turns=turns)
 
 
@@ -467,14 +488,21 @@ def manifest(cases_path=CASES):
     return files
 
 
-def command_selfcheck(cases):
+def command_selfcheck(cases, evidence_path=None):
     bad = []
+    evidence = []
+    selected = {'EC05','EC10','EC15','EC20','EC25','EC30','EC35','EC40','h_compare_three','h4_hello','t6_manual_04'}
     for scenario in cases["scenarios"]:
-        result = run_scenario(scenario, lambda s, i: IdealModel(IDEAL[s["id"]][i]))
+        result = run_scenario(scenario, lambda s, i: IdealModel(s['turns'][i].get('scripted_decision') or IDEAL[s["id"]][i]))
         print(scenario["id"], result["status"], *[t["failures"] for t in result["turns"] if t["failures"]])
         if result["status"] != "passed":
             bad.append(scenario["id"])
-    print(json.dumps(dict(selfcheck="ok" if not bad else "failed", failing=bad)))
+        if scenario['id'] in selected or result['status'] != 'passed':
+            evidence.append(dict(scenario=scenario['id'], **result))
+    print(json.dumps(dict(selfcheck="ok" if not bad else "failed", scenarios=len(cases['scenarios']), failing=bad)))
+    if evidence_path:
+        Path(evidence_path).write_text(json.dumps(dict(mode='scripted; no model inference',
+            scenarios=len(cases['scenarios']), failing=bad, examples=evidence), ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     return 1 if bad else 0
 
 
@@ -554,7 +582,7 @@ def rescore_record(record, scenario):
         expected = scenario["turns"][index]
         if turn["query"] != expected["query"]:
             raise ValueError("Recorded query differs from case; refuse rescore")
-        observed = dict(turn, products=[{"base_part_number": code} for code in turn["products"]],
+        observed = dict(turn, products=turn.get('product_snapshots', [{"base_part_number": code} for code in turn["products"]]),
                         terms=[{"term_key": key} for key in turn["terms"]])
         if "candidates" not in turn:
             observed["recorded_candidate_failures"] = [f for f in turn["failures"] if f.startswith("SQL candidate missing: ")]
@@ -621,6 +649,7 @@ def main():
     parser.add_argument("--config", type=Path, default=CONFIG)
     parser.add_argument("--cohort", default="v2", help="reports/agent_acceptance/<cohort>; v1 is archived")
     parser.add_argument("--cases", default=str(CASES))
+    parser.add_argument('--evidence', type=Path, help='Write selected selfcheck JSON examples (no inference)')
     args = parser.parse_args()
     OUT = ROOT / "reports/agent_acceptance" / args.cohort
     CONFIG = args.config.resolve()
@@ -628,7 +657,7 @@ def main():
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     cases = json.loads(Path(args.cases).read_text(encoding="utf-8"))
     if args.command == "selfcheck":
-        return command_selfcheck(cases)
+        return command_selfcheck(cases, args.evidence)
     if args.command == "probe":
         return command_probe(config)
     if args.command == "run":
