@@ -1,0 +1,140 @@
+{
+  "cohort": "acceptance-v5-offline",
+  "model": "gemini-3.6-flash",
+  "provider": "google-openai-compatible",
+  "rescored": true,
+  "recorded_counts": {
+    "passed": 33,
+    "failed": 18,
+    "provider_failure": 12
+  },
+  "candidate_evidence_note": "Older recordings omitted SQL candidates; only those original candidate-check verdicts are retained, other checks rescored",
+  "scenarios": 63,
+  "passed": 46,
+  "failed": 5,
+  "provider_failure_only": 12,
+  "not_run": 0,
+  "turns": 66,
+  "turns_passed": 61,
+  "by_category": {
+    "exact": {
+      "total": 4,
+      "passed": 3
+    },
+    "invalid_code": {
+      "total": 3,
+      "passed": 2
+    },
+    "missing_data": {
+      "total": 1,
+      "passed": 1
+    },
+    "units_frequency": {
+      "total": 3,
+      "passed": 2
+    },
+    "follow_up": {
+      "total": 8,
+      "passed": 5
+    },
+    "ambiguous": {
+      "total": 1,
+      "passed": 0
+    },
+    "recommendation": {
+      "total": 6,
+      "passed": 5
+    },
+    "no_match": {
+      "total": 2,
+      "passed": 2
+    },
+    "insufficient_info": {
+      "total": 3,
+      "passed": 2
+    },
+    "contradiction": {
+      "total": 2,
+      "passed": 1
+    },
+    "poor_description": {
+      "total": 3,
+      "passed": 1
+    },
+    "definition": {
+      "total": 13,
+      "passed": 11
+    },
+    "unsupported": {
+      "total": 4,
+      "passed": 3
+    },
+    "trap": {
+      "total": 2,
+      "passed": 2
+    },
+    "manual_v5": {
+      "total": 8,
+      "passed": 6
+    }
+  },
+  "failing": [
+    {
+      "scenario": "dc_no_frequency",
+      "failures": [
+        [
+          "missing text: FLA (DC: no mains frequency): 5 A"
+        ]
+      ]
+    },
+    {
+      "scenario": "followup_ambiguous_it",
+      "failures": [
+        [
+          "clarification None not in ['which_product']"
+        ]
+      ]
+    },
+    {
+      "scenario": "missing_service_then_answer",
+      "failures": [
+        [
+          "min_torque_nm {'op': 'gte', 'value': '100'} != 100"
+        ]
+      ]
+    },
+    {
+      "scenario": "h_informal_onoff",
+      "failures": [
+        [
+          "min_torque_nm None != 50"
+        ]
+      ]
+    },
+    {
+      "scenario": "t6_manual_03",
+      "failures": [
+        [
+          "clarification service not in ['supply_voltage_v']",
+          "missing text: Operating time",
+          "missing text: Motor power",
+          "product 761A00-11300000/A missing",
+          "product 761A00-11320000/A missing",
+          "product 762A00-11300000/A missing",
+          "product count differs"
+        ]
+      ]
+    }
+  ],
+  "calls": 78,
+  "failed_calls": 12,
+  "unsettled_reservations": 0,
+  "conservative_charge_usd": 0.307386,
+  "usage_based_charge_usd": 0.07763475,
+  "mean_prompt_tokens": 1370,
+  "mean_completion_tokens": 40,
+  "latency_p50_s": 6.163623799999186,
+  "latency_p95_s": 22.57605440000043,
+  "safety_cap_usd": 1.0,
+  "openrouter_calls": 0
+}

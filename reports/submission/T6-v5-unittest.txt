@@ -1,0 +1,18 @@
+Command: -m unittest discover -s tests
+{"arrays": 6, "bytes": 3854, "depth": 7, "enum_values": 83, "forbidden_nodes": 0, "get_actuator_object_arrays": 0, "numeric_ranges": 0, "required": 3}
+..................................process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+.Run compression is not enabled. Please update to the latest version of LangSmith. Falling back to regular multipart ingestion.
+............process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+.process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+...............................................................process_outputs failed for run None; dropping outputs: 'NoneType' object has no attribute 'answer'
+........ss...................................
+----------------------------------------------------------------------
+Ran 156 tests in 32.503s
+
+OK (skipped=2)
+
+Exit: 0
