@@ -33,7 +33,12 @@ Los valores provienen de [.env.example](../../../.env.example) y [Compose](../..
 | `LANGSMITH_PROJECT` | `serie76-assistant` | Proyecto de trazas. |
 | `LANGSMITH_ENDPOINT` | `https://api.smith.langchain.com` | Endpoint de trazas; configurar host UE para workspace UE. |
 | `DEV_DEBUG` | `false` | Endpoint de trazas del propietario; false devuelve 404. |
-| `OPENROUTER_EMBEDDING_MODEL` | _vacío_ | Sin uso en A+ operativo; sin vectores. |
+| `OPENROUTER_EMBEDDING_MODEL` | _vacío_ | Modelo opcional; Google `gemini-embedding-2`, OpenRouter `google/gemini-embedding-2`. |
+| `EMBEDDINGS_ENABLED` | `true` | ON solo con modelo configurado; `false` fuerza OFF. |
+| `EMBEDDING_DIM` | `768` | Única dimensión admitida por esquema/cliente. |
+| `EMBEDDING_BASE_URL` | _vacío_ | Hereda `OPENROUTER_BASE_URL` si vacío. |
+| `EMBEDDING_API_KEY` | _vacío_ | Hereda `OPENROUTER_API_KEY` si vacío. |
+| `EMBEDDING_EXCLUDE_SOURCES` | _vacío_ | IDs separados por comas; excluye procedencias retenidas antes de ranking/LIMIT. |
 | `TESSERACT_CMD` | _vacío_ | Ruta OCR local histórica, no ingestión RapidOCR; no se pasa al backend. |
 | `GOOGLE_API_KEY` | _vacío_ | Solo evaluación; no se pasa al backend productivo. No autoriza gasto por sí sola. |
 | `OPENROUTER_REQUIRE_PARAMETERS` | `true` | Añade provider.require_parameters al routing openrouter.ai. |
@@ -66,6 +71,35 @@ docker compose up -d backend
 curl http://localhost:8000/ready
 ```
 El modelo se evaluó mediante el endpoint Google compatible con OpenAI; la aceptación OpenRouter está pendiente. ready=200 comprueba catálogo/glosario, no credenciales, routing ni saldo. LangSmith permanece apagado salvo tracing=true y clave; activarlo envía prompts/texto/herramientas/filas externamente. Ver [agente](agent.md).
+
+## pgvector
+
+Compose y CI fijan `pgvector/pgvector:pg17-trixie@sha256:01215e09bd4bd582d20230e025b6c971deeeffee49ceef1aae167e839cb62a7e`. La migración 007 habilita vector y crea `series76.example_bank`/`concept_anchor`; 008 añade versiones, actividad y manifiesto inmutable. Las cifras de catálogo siguen en tablas relacionales.
+
+Antes de cambiar la imagen de un volumen PG17 existente, haz backup y verifica versión real de collation/glibc. El volumen verificado se creó con glibc 2.41; el primer tag pg17 traía 2.36. Trixie conserva 2.41 y se verificaron collations y conteos tras el cambio. No borres el volumen ni cambies su contraseña para actualizar; nunca `docker compose down -v`. Una discrepancia requiere un plan de migración/reindexación, no ocultarla con un refresh de versión. [Backup y comprobaciones T9](../../../reports/submission/T9-embeddings.md).
+
+## Example bank
+
+El loader usa `config/agent_acceptance_cases_v7.json` y `config/concept_anchors.json`: 649 frases/interpretaciones únicas más 100 anclas. No almacena respuestas ni cifras publicadas como conocimiento; las cantidades presentes en una frase son requisitos de ese ejemplo, no requisitos de una nueva consulta. Conserva todos los IDs de procedencia, excluye etiquetas ambiguas/conflictivas y permite excluir fuentes retenidas. El banco incluye casos históricos v7: su replay es regresión, no aceptación retenida. [Método](testing.md#behavior-evaluation).
+
+Configura modelo/endpoint/clave en `.env`, según la tabla, y arranca Compose. Comandos desde la raíz para PowerShell y macOS/Linux; el montaje suministra config sin alterar la imagen ni el entrypoint normal:
+
+```text
+docker compose run --rm --no-deps --entrypoint python -v ./config:/app/config:ro backend scripts/load_example_bank.py --dry-run
+```
+
+Solo después de autorizar la inferencia:
+
+```text
+docker compose run --rm --no-deps --entrypoint python -v ./config:/app/config:ro backend scripts/load_example_bank.py
+docker compose up -d backend
+```
+
+La carga Google inicial estimó USD 0.004911 (aproximadamente USD 0.005), 749 textos en 24 requests; no es factura ni coste garantizado de OpenRouter. La repetición comprobada no tenía textos pendientes ni coste estimado adicional. Los vectores se separan por nombre de modelo: cambiar a `google/gemini-embedding-2` necesita una carga autorizada nueva, nunca renombrar vectores viejos. La carga es transaccional/idempotente; un fallo no devuelve cargos ya incurridos. `--replace-dataset --dataset-version VERSION` reemplaza explícitamente el conjunto completo, desactiva ausentes/conflictivos y conserva procedencia histórica; no uses un subconjunto como reemplazo completo.
+
+Sin modelo, el loader falla antes de cargar; con modelo y sin clave, `--dry-run` puede calcular pendientes con DB disponible, pero una carga nueva falla sin inferencia válida. En conversación, OFF/configuración ausente/timeout/fallo SQL omite retrieval y mantiene el parser determinista; sin chat configurado, una consulta que requiere interpretación devuelve 503. El arranque solo prepara el cliente, nunca paga embeddings; las rutas deterministas tampoco los invocan. No se carga el banco automáticamente al arrancar. [Código loader](../../../scripts/load_example_bank.py), [cliente y deadline](../../../backend/conversation/embeddings.py).
+
+**Voz/debug:** la voz se configura por permiso Android, sin clave de backend. Para trazas usa `DEV_DEBUG=true`, recrea backend y activa el gesto de siete toques; vuelve a `false` al terminar la revisión. El GET es perezoso y limitado al propietario. [Instrucciones Android](android.md#developer-debug).
 
 ## Solución de problemas
 

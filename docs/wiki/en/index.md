@@ -27,7 +27,7 @@ Arrows show data access and requests; the agent runs inside the backend process.
 - [Testing](testing.md)
 - [Operations](operations.md)
 
-Start with the [README](../../../README.md), then follow one turn: `POST /api/conversation` → model tool decision → validation → SQL → template → saved turn. Try `What is the motor power of 761A00-11300000/A?`; without model configuration the response is 503 `not_configured`.
+Start with the [README](../../../README.md), then follow one turn: `POST /api/conversation` → model tool decision → validation → SQL → template → saved turn. Try `What is the motor power of 761A00-11300000/A?`; T8 resolves this complete-code lookup without a model. Free-language interpretation without configuration returns 503 `not_configured`.
 
 Evidence: [OCR](../../evidence/ocr.md), [PostgreSQL](../../evidence/postgres.md), [agent](../../evidence/agent_acceptance.md), [Android](../../evidence/mobile.md), [comparison](../../evidence/architecture_comparison.md). The [brief](../../assessment-en.pdf) defines the requirements; [ADR 0001](../../adr/0001-arquitectura-agente.md) records the decision.
 
@@ -38,4 +38,4 @@ Evidence: [OCR](../../evidence/ocr.md), [PostgreSQL](../../evidence/postgres.md)
 
 ## Known limits
 
-OpenRouter acceptance and Android-to-real-LLM acceptance are pending. Voice is not implemented. Earlier progress checklists are historical, not current proof.
+OpenRouter acceptance and Android-to-real-LLM acceptance are pending. T8 interaction and T9 embeddings/voice/hidden debug are implemented and locally tested; actual device voice remains pending. Earlier progress checklists are historical, not current proof.

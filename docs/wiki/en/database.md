@@ -4,6 +4,8 @@
 
 The relational schema, numeric authority and concrete rows behind the tools.
 
+T9 adds `series76.example_bank`, `concept_anchor` and `example_dataset` through migrations 007/008: 768-dimensional vectors, phrasings/interpretations, provenance, active state and versioned manifests. They are not a source of technical figures. The diagram and queries below show the relational core; [glibc-compatible pgvector pin](operations.md#pgvector) and [bank loading](operations.md#example-bank).
+
 ```mermaid
 erDiagram
     documents ||--o{ imports : sources

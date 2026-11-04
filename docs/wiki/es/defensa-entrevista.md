@@ -67,9 +67,9 @@ No añade /A ni inventa sufijo. Puede mostrar candidatos por prefijo y pedir sel
 
 Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L306).
 
-## 11. ¿Por qué no pgvector?
+## 11. ¿Por qué pgvector solo para interpretación?
 
-El resumen cabe como glosario literal en contexto y las consultas numéricas son relacionales. Vectorizar añadiría embeddings, coste y otro fallo sin mejora demostrada; se reconsideraría con un corpus mayor.
+T9 usa pgvector para frases e interpretaciones, no para productos. El glosario sigue literal y las cifras salen de SQL. Retrieval añade coste y dependencia; el margen de ronda 9 es pequeño y el rango de rondas 9–10 es 68–73 % estricto, sin superioridad general demostrada. [Diseño vigente](agent.md).
 
 Prueba: [docs/adr/0001-arquitectura-agente.md](../../../docs/adr/0001-arquitectura-agente.md#L1).
 
@@ -125,9 +125,9 @@ Prueba: [mobile/android/app/src/main/java/com/serie76/assistant/data/Authenticat
 
 ## 20. ¿El debug se filtra al usuario final?
 
-La variante release excluye pantalla/cliente y acceso; backend exige DEV_DEBUG=true, autenticación y propiedad. Mantener debug público activado sería una mala operación.
+Ambas variantes tienen debug oculto por respuesta; se habilita con siete toques al nombre/email. El backend exige DEV_DEBUG=true, autenticación y propiedad: el gesto solo controla presentación.
 
-Prueba: [mobile/android/app/src/release/java/com/serie76/assistant/ui/DeveloperScreen.kt](../../../mobile/android/app/src/release/java/com/serie76/assistant/ui/DeveloperScreen.kt#L1).
+Prueba: [mobile/android/app/src/main/java/com/serie76/assistant/ui/DebugDetails.kt](../../../mobile/android/app/src/main/java/com/serie76/assistant/ui/DebugDetails.kt#L1).
 
 ## 21. ¿Qué falla con cien veces más tráfico?
 
@@ -177,6 +177,42 @@ Los 103 escenarios son 63 históricos más 40 EC con expectativas fijadas contra
 
 Las 202 pruebas Python (2 omisiones OCR), 103 escenarios y 40 pruebas JVM no equivalen a aceptación con LLM real, ajuste visual en dispositivo, disponibilidad del proveedor o carga masiva. El catálogo tampoco publica precios, no identifica una instalación física y la app no compra ni promete entregas. [Evidencia backend](../../../reports/submission/T7-backend.md), [Android](../../../reports/submission/T7-android.md).
 
+## 31. ¿Por qué embeddings de ejemplos de interpretación y no conocimiento de producto?
+
+La similitud ayuda a traducir una frase a intención; no garantiza una cifra ni su ámbito. El banco guarda frases/interpretaciones y anclas; el PDF eléctrico, SQL y plantillas conservan valores, N/A, unidades y procedencia. [Banco T9](operations.md#example-bank).
+
+## 32. ¿Por qué solo aditivo?
+
+Un vecino semántico no puede borrar “110 V” ni una negación. El parser determinista corre ON/OFF y los conceptos solo completan campos vacíos tras requisitos, argumentos fundamentados y filtros previos. Abstenerse conserva el contrato; no hay motivo para degradarlo por una similitud. [Agente](agent.md).
+
+## 33. ¿Cómo evitas fuga de evaluación?
+
+Congelo los conjuntos retenidos antes de leer respuestas; uso casos nuevos o excluyo todos sus IDs mediante `EMBEDDING_EXCLUDE_SOURCES` antes del ranking. Versiones y manifiestos guardan etiquetas y toda la procedencia. El banco incluye casos históricos v7: tras incorporarlos son regresión, no prueba inédita; el replay de ronda 9 no se carga al banco. [Método](testing.md#behavior-evaluation).
+
+## 34. ¿Por qué la imagen pgvector debía coincidir con glibc?
+
+El volumen PG17 tenía collation de glibc 2.41 y el primer tag pg17 traía 2.36. Una collation distinta puede invalidar supuestos de orden e índices. Se hizo backup y se fijó pg17-trixie por digest, verificando collation y conteos; borrar el volumen o solo refrescar la versión no resuelve esa compatibilidad. [Operaciones](operations.md#pgvector).
+
+## 35. ¿Por qué voz on-device?
+
+Evita una integración de audio, clave y coste de transcripción en nuestro servidor. El usuario revisa texto editable y decide enviarlo. Android prefiere on-device API 31+; el servicio alternativo puede usar red pese a solicitar offline. No afirmo que todos los teléfonos operen sin red. [Voz](android.md#voz-t9).
+
+## 36. ¿Por qué debug oculto por respuesta?
+
+La traza sirve para inspeccionar un resultado concreto; no debe ocupar la conversación normal ni descargarse para todo el historial. Siete toques al perfil habilitan ⓘ, que obtiene la traza perezosamente; backend valida propietario y DEV_DEBUG. Disponible también en release, sin convertir el gesto en seguridad. [Debug](android.md#developer-debug).
+
+## 37. ¿Por qué gemini-3.6-flash y no Pro?
+
+Pro ganó el primer conjunto común de 44: 28/44 frente a 21/44 de 3.6 y 25/44 de 3.8, pero tuvo p95 7.1 s y un turno de 11 s. Tras ronda 6, 3.6 obtuvo 28/43 frente a 26/43 de 3.8. Elegimos ese equilibrio observado de calidad/latencia; no afirmamos que Flash sea universalmente mejor ni que OpenRouter ya esté validado. [Modelos](testing.md#selección-de-modelos).
+
+## 38. ¿Cómo mediste calidad y por qué reportas 68–73 % estricto?
+
+Seis personas, conjuntos congelados y revisión independiente por conversación; las rondas 1–2 usaron un criterio más laxo. En ronda 9 ON pasó 30/41 y OFF 29/41; ronda 10 ON tras las reparaciones pasó 28/41. El rango honesto es 68–73 %, con todas las respuestas de rondas 9–10 bajo 10 s y p95 3.7–5.1 s. No hubo cifras de catálogo incorrectas, pero eso no compensa perder un requisito, errar el contexto de peligro o responder de más; los replays no autorizan inflar la tasa. [Tabla completa](testing.md#behavior-evaluation).
+
+## 39. ¿Qué harías después?
+
+Congelaría una cohorte nueva para medir las reparaciones sin reutilizar entrenamiento, con revisión independiente y costes/latencia separados. Cerraría aceptación OpenRouter autorizada y pruebas Android reales de voz, filtros y debug; después mediría carga, colas/cupos globales y recuperación. Mientras tanto, el ingeniero confirma filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar.
+
 ## Límites conocidos
 
-No hay aceptación OpenRouter ni Android con LLM real cerrada; no hay voz, sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.
+No hay aceptación OpenRouter ni Android con LLM real cerrada; la voz está implementada con pruebas JVM, pendiente en dispositivo; no hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.

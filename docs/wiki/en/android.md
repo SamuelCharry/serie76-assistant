@@ -16,9 +16,9 @@ flowchart LR
 
 ## Screens and state
 
-Login validates the saved token through `/me` before showing private history. Chat displays a personalized Hello on an empty session, product cards/comparison rows, a composer and loading/error feedback. The drawer lists the current user’s conversations with pagination, New chat, account/Sign out and Light/Dark/System appearance. Developer debug is a separate debug-only surface; release substitutes an inert implementation.
+Login validates the saved token through `/me` before showing private history. Chat displays a personalized Hello on an empty session, product cards/comparison rows, a composer and loading/error feedback. The drawer lists the current user’s conversations with pagination, New chat, account/Sign out and Light/Dark/System appearance. Hidden per-answer debug is available in both APK variants.
 
-ViewModels own requests and StateFlow; constructor injection isolates Retrofit DTOs from presentation. Product decimal JSON values are kept as decimal text for display rather than converted through Double. The authenticated profile comes from the server; the old editable local profile is historical. Appearance preferences persist locally. No Firebase or voice.
+ViewModels own requests and StateFlow; constructor injection isolates Retrofit DTOs from presentation. Product decimal JSON values are kept as decimal text for display rather than converted through Double. The authenticated profile comes from the server; the old editable local profile is historical. Appearance preferences persist locally. Voice input uses Android SpeechRecognizer; no Firebase.
 
 Loading prevents duplicate sends and session changes mid-turn. A failed send preserves the draft and requires history reload before retry; if no session_id was received, inspect the list. Rotation retains ViewModels. After process death, the encrypted token is revalidated and history reopened from the server; draft/open-session restoration is not guaranteed. Logout failure keeps the session available for revocation retry. A late 401 from an old token cannot sign out a new account.
 
@@ -31,6 +31,12 @@ Optional suggestions are quiet dashed chips under the latest assistant message, 
 Two-model comparisons show a summary, muted assumptions, a three-column table, and expandable identical rows. A bold value and orange arrow display the server's numeric `better` index. Three/four-model comparisons instead show one card per model with four server-selected fields in a 2×2 grid and no arrows. `lead` replaces full `answer` only when products/comparison are rendered; legacy messages fall back to answer. The app preserves decimal strings and source notes.
 
 The empty chat greets the authenticated account's first name: `Hello, Samuel` for the recorded Samuel example, or `Hello` when absent. Greeting-only messages also receive the backend's personalized sentence; see [captured HTTP examples](../../../reports/submission/T7-interactions.json). The existing visual identity and greeting animation remain.
+
+## T8 interaction
+
+One card contains all questions, option counts and optional descriptions: Back/Next, editable review, Submit and Cancel. Selection sends nothing; `422 empty_combination` restores review with the inline error. Recommendation displays `Ranked by …`, up to three server codes/reasons and `Showing 3 of N` using actual counts. Comparison cards use `key_fields` and `key_fields_reason`; the device computes no catalogue figures.
+
+Object suggestions send their label and `action`; legacy strings remain supported. Long-press a conversation and confirm to hide it with `Conversation deleted · Undo`: DELETE waits five seconds. Undo cancels only the latest pending deletion; another confirmed deletion or ViewModel disposal commits the earlier one. Failure restores the row. Pending sends display `Searching the catalog…`, then `Still working…` after eight seconds.
 
 ## First-tap connection failure
 
@@ -61,9 +67,25 @@ Open Series 76 in the emulator launcher and sign in with a [TEST ONLY account](.
 
 `assembleRelease` produces `app/build/outputs/apk/release/app-release-unsigned.apk`; installation requires local signing. Use debug for review; no signing key is committed.
 
+## T9 voice
+
+The grey 48 dp microphone sits left of Send. First use explains and requests `RECORD_AUDIO`; denial shows `Microphone permission is needed for voice input` with a settings shortcut. Tap to dictate and again to stop. Partial text replaces only the dictated suffix, preserving the previous draft. Review/edit the result and press Send: recognition never sends automatically.
+
+API 31+ prefers `createOnDeviceSpeechRecognizer` when available; otherwise `createSpeechRecognizer` uses the installed service and requests offline mode. That service may ignore the preference and use its network: offline operation is not guaranteed on every device. No audio goes to the backend or OpenRouter. Missing service shows `Voice input isn't available on this device`; no recognition shows `Didn't catch that — try again`.
+
+Listening is bounded to 60 s, with up to 15 s for final text after stopping. Typing, sending, changing conversations, opening drawer/debug, leaving/pausing or signing out cancels and releases recognition; stale callbacks are rejected. No background capture occurs.
+
 ## Developer debug
 
-Set `DEV_DEBUG=true` in local backend configuration and run `docker compose up -d backend`. Install Android debug, open the left drawer, select Developer debug and choose an assistant response. It shows tool names, validated parameters and returned data for that user only; no reasoning text. With DEV_DEBUG=false, API debug is 404; Android release excludes the screen/client and menu action.
+Set `DEV_DEBUG=true` in `.env` and run `docker compose up -d backend`. In the drawer tap the **profile name/email seven times within three seconds**; `Developer mode on` confirms the toggle. Repeat to disable. The flag persists locally and defaults off; the avatar opens the account menu separately. There is no Developer debug menu entry.
+
+Each assistant answer has **ⓘ** (`Debug details`) while developer mode is on, including reopened conversations. Its sheet lazily requests `GET /api/messages/{id}/debug`, verifies the ID and supports expandable sections, selection/copy and JSON scrolling. It shows tools, raw/validated/merged parameters, rows, latency, attempts, `llm_called`, and retrieval examples/similarities/concepts. Missing values remain `null`.
+
+The HTTP contract is `{message_id,session_id,tool_calls,debug}`. A 404 displays `Backend debug is disabled (DEV_DEBUG=false)`, although it can also mean a missing answer; other failures offer Try again. Both variants share this flow: hiding it is presentation; token, ownership and `DEV_DEBUG` enforce access.
+
+## T8/T9 verification
+
+[T8](../../../reports/submission/T8-android.md): 51 JVM tests; [reviewed T9](../../../reports/submission/T9-android.md): **74 JVM tests**, debug and unsigned release APKs. Fake recognizers verify permission, partial/final text, cancellation and late callbacks; HTTP fixtures verify persisted traces. Compiling instrumentation does not mean executing it. Pending: actual recognition services/languages, accessibility/rendering, merged backend and real-model flow.
 
 ## Where in the code
 
@@ -71,7 +93,9 @@ Set `DEV_DEBUG=true` in local backend configuration and run `docker compose up -
 - [mobile/android/app/src/main/java/com/serie76/assistant/ui/AppViewModel.kt](../../../mobile/android/app/src/main/java/com/serie76/assistant/ui/AppViewModel.kt#L1)
 - [mobile/android/app/src/main/java/com/serie76/assistant/data/ConversationRepository.kt](../../../mobile/android/app/src/main/java/com/serie76/assistant/data/ConversationRepository.kt#L1)
 - [mobile/android/app/src/main/java/com/serie76/assistant/data/Authentication.kt](../../../mobile/android/app/src/main/java/com/serie76/assistant/data/Authentication.kt#L34)
-- [mobile/android/app/src/debug/java/com/serie76/assistant/ui/DeveloperScreen.kt](../../../mobile/android/app/src/debug/java/com/serie76/assistant/ui/DeveloperScreen.kt#L1)
+- [mobile/android/app/src/main/java/com/serie76/assistant/ui/DebugDetails.kt](../../../mobile/android/app/src/main/java/com/serie76/assistant/ui/DebugDetails.kt#L1)
+
+- [VoiceInput.kt](../../../mobile/android/app/src/main/java/com/serie76/assistant/ui/VoiceInput.kt), [AndroidVoiceRecognizer.kt](../../../mobile/android/app/src/main/java/com/serie76/assistant/ui/AndroidVoiceRecognizer.kt), [VoiceController.kt](../../../mobile/android/app/src/main/java/com/serie76/assistant/ui/VoiceController.kt)
 
 ## Known limits
 

@@ -33,7 +33,12 @@ Defaults below come from [.env.example](../../../.env.example) and [Compose](../
 | `LANGSMITH_PROJECT` | `serie76-assistant` | Trace project name. |
 | `LANGSMITH_ENDPOINT` | `https://api.smith.langchain.com` | Trace service endpoint; configure EU host for an EU workspace. |
 | `DEV_DEBUG` | `false` | Owner-scoped developer trace endpoint; false returns 404. |
-| `OPENROUTER_EMBEDDING_MODEL` | _empty_ | Unused in operational A+; no vector store. |
+| `OPENROUTER_EMBEDDING_MODEL` | _empty_ | Optional model; Google `gemini-embedding-2`, OpenRouter `google/gemini-embedding-2`. |
+| `EMBEDDINGS_ENABLED` | `true` | ON only with a configured model; `false` forces OFF. |
+| `EMBEDDING_DIM` | `768` | Only dimension accepted by schema/client. |
+| `EMBEDDING_BASE_URL` | _empty_ | Inherits `OPENROUTER_BASE_URL` when empty. |
+| `EMBEDDING_API_KEY` | _empty_ | Inherits `OPENROUTER_API_KEY` when empty. |
+| `EMBEDDING_EXCLUDE_SOURCES` | _empty_ | Comma-separated held-out source IDs; excluded before ranking/LIMIT. |
 | `TESSERACT_CMD` | _empty_ | Legacy local OCR executable override, not current RapidOCR ingestion; not forwarded to backend. |
 | `GOOGLE_API_KEY` | _empty_ | Evaluation only; not forwarded to production backend. Never enables paid work by itself. |
 | `OPENROUTER_REQUIRE_PARAMETERS` | `true` | Adds provider.require_parameters for openrouter.ai routing. |
@@ -66,6 +71,35 @@ docker compose up -d backend
 curl http://localhost:8000/ready
 ```
 The model was evaluated through Google's OpenAI-compatible endpoint; OpenRouter acceptance is pending. A ready=200 response checks catalogue/glossary, not credentials, model routing or remaining balance. LangSmith remains off unless tracing=true and a key are both present; enabling it sends prompts/user text/tool data/catalogue rows externally. See [agent](agent.md).
+
+## pgvector
+
+Compose and CI pin `pgvector/pgvector:pg17-trixie@sha256:01215e09bd4bd582d20230e025b6c971deeeffee49ceef1aae167e839cb62a7e`. Migration 007 enables vector and creates `series76.example_bank`/`concept_anchor`; 008 adds versions, active state and an immutable manifest. Catalogue figures remain relational.
+
+Before changing the image for an existing PG17 volume, back it up and check actual collation/glibc versions. The verified volume was created with glibc 2.41; the initial pg17 tag carried 2.36. Trixie retains 2.41, with collations and row counts verified after the change. Do not delete the volume or change its password to upgrade; never `docker compose down -v`. A mismatch needs a migration/reindexing plan, not a version refresh that hides it. [T9 backup and checks](../../../reports/submission/T9-embeddings.md).
+
+## Example bank
+
+The loader uses `config/agent_acceptance_cases_v7.json` and `config/concept_anchors.json`: 649 unique phrasings/interpretations plus 100 anchors. It stores neither answers nor published figures as knowledge; quantities in an example are that example's requirements, not a new query's requirements. It preserves all source IDs, excludes ambiguous/conflicting labels and supports held-out source exclusion. The bank includes historical v7 cases: their replay is regression, not held-out acceptance. [Method](testing.md#behavior-evaluation).
+
+Configure model/endpoint/key in `.env` using the table and start Compose. Commands from the root for PowerShell and macOS/Linux; the mount supplies config without changing the image or normal entrypoint:
+
+```text
+docker compose run --rm --no-deps --entrypoint python -v ./config:/app/config:ro backend scripts/load_example_bank.py --dry-run
+```
+
+Only after inference authorization:
+
+```text
+docker compose run --rm --no-deps --entrypoint python -v ./config:/app/config:ro backend scripts/load_example_bank.py
+docker compose up -d backend
+```
+
+The initial Google load estimated USD 0.004911 (about USD 0.005), 749 texts in 24 requests; this is neither a receipt nor a guaranteed OpenRouter cost. A verified repeat had no pending texts or additional estimated cost. Vectors are namespaced by model ID: switching to `google/gemini-embedding-2` requires a newly authorized load, never relabel old vectors. Loading is transactional/idempotent; failure does not refund incurred charges. `--replace-dataset --dataset-version VERSION` explicitly replaces the complete set, deactivates absent/conflicting rows and retains historical provenance; do not submit a subset as a complete replacement.
+
+Without a model the loader fails before loading; with a model but no key, `--dry-run` can compute pending rows when the DB is available, but a new load cannot succeed without valid inference. In conversation, OFF/missing configuration/timeout/SQL failure omits retrieval and retains the deterministic parser; without configured chat, turns requiring interpretation return 503. Startup only prepares the client, never pays for embeddings; deterministic routes do not invoke them either. Startup does not load the bank automatically. [Loader code](../../../scripts/load_example_bank.py), [client and deadline](../../../backend/conversation/embeddings.py).
+
+**Voice/debug:** voice uses Android permission, without a backend speech key. For traces set `DEV_DEBUG=true`, recreate backend and use the seven-tap gesture; return to `false` after review. The GET is lazy and owner-scoped. [Android instructions](android.md#developer-debug).
 
 ## Troubleshooting
 

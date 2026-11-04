@@ -30,6 +30,20 @@ sequenceDiagram
     F-->>U: Respuesta pública sin traza interna
 ```
 
+## T8/T9: flujo actual
+
+El modelo interpreta una decisión por turno que requiere lenguaje; no redacta cifras ni respuestas. Saludos, Submit, retirada de filtros, acciones estructuradas y consultas cerradas de códigos completos usan rutas deterministas sin chat ni embeddings. Los intentos de transporte no equivalen a decisiones adicionales completadas.
+
+T8 reúne las preguntas distinguibles en `interaction.questions`, ordenadas por reducción de candidatos con conteos SQL. Android las presenta en una sola tarjeta con navegación, revisión, Submit y Cancel. Una combinación vacía devuelve `422 empty_combination` sin guardar turno. `recommendation` declara `ranked_by`, total, cantidad mostrada y hasta tres códigos con razones/valores SQL; una vista previa o una alternativa que relaja filtros se identifica como tal. Las acciones `compare_top`, `show_all` y `rank_by` operan sobre contexto persistido sin LLM. El borrado lógico se limita al propietario; ver [API](api.md).
+
+El [planificador](../../../backend/conversation/answer_planner.py) elige campo, ficha, veredicto, diferencia o razón; las referencias se resuelven contra `on_screen` y el foco guardado. [requirement_coverage.py](../../../backend/conversation/requirement_coverage.py) comprueba cantidades expresadas, unidades compatibles y límites, incluso tras fusionar filtros; no basta con que una cifra aparezca en el texto. [integrity.py](../../../backend/conversation/integrity.py) comprueba de nuevo que las filas cumplen filtros y evita recomendaciones inseguras ante peligro pendiente. Una cantidad sin representar bloquea la elección; una ambigua pide aclaración. Esto reduce omisiones, pero no garantiza toda interpretación semántica.
+
+### Embeddings aditivos
+
+[embeddings.py](../../../backend/conversation/embeddings.py) consulta hasta cinco ejemplos por coseno (mínimo 0.70) y anclas de conceptos en pgvector, antes de la única decisión LLM. El banco contiene frases e interpretaciones, nunca conocimiento numérico de productos. `gemini-embedding-2` usa 768 dimensiones; OpenRouter lo identifica como `google/gemini-embedding-2`. La normalización determinista siempre corre, ON y OFF: requisitos explícitos, negaciones, argumentos fundamentados y filtros previos prevalecen; las sugerencias solo llenan campos sin resolver. Peligro solicita confirmación y vista previa Explosionproof, no certifica la instalación.
+
+Sin modelo, clave, resultados o ante fallo, se conservan las rutas deterministas. El presupuesto total de retrieval es 1.5 s, cero retries, cuatro trabajos acotados y SQL con savepoint; los resultados tardíos se descartan. Una petición ya enviada puede terminar remotamente. Inicializar el cliente al arrancar no hace inferencia. La traza incluye ejemplos/similitudes, conceptos y tiempo; [debug por respuesta y voz](android.md), [carga y procedencia](operations.md#example-bank), [resultados y límites](testing.md#behavior-evaluation).
+
 ## Herramientas tipadas
 
 Los `args_schema` que recibe el proveedor son diccionarios JSON Schema compactos. El código normaliza y valida cada decisión contra modelos Pydantic estrictos antes de ejecutarla. El LLM aporta intención/argumentos, nunca SQL ni prosa técnica final.
@@ -49,7 +63,7 @@ Filtros: `enclosure` weatherproof/explosionproof; `supply_current` admite `AC`, 
 
 Ante `DC + 60 Hz`, pregunta qué requisito conservar y mantiene las restricciones compatibles. `Ahora 220 V` usa `refine=true` y solo el delta de tensión; `merge_filters` conserva el resto. `remove` retira filtros y `more` avanza la página. Cambiar servicio elimina la tasa incompatible anterior y lo explica.
 
-Los códigos normalizan mayúsculas/espacios/guion omitido, nunca completan `/A` ni sufijos supuestos. Los parciales reciben candidatos por prefijo; los completos inexistentes se informan como no encontrados. Deben figurar en conversación o contexto. Los filtros no expresados se descartan y nombran; los supuestos citan palabras reales y se muestran. La fundamentación numérica comprueba presencia del número, no semántica completa; todavía puede asignarse al campo equivocado.
+Los códigos normalizan mayúsculas/espacios/guion omitido, nunca completan `/A` ni sufijos supuestos. Los parciales reciben candidatos por prefijo; los completos inexistentes se informan como no encontrados. Deben figurar en conversación o contexto. Los filtros no expresados se descartan y nombran; los supuestos citan palabras reales y se muestran. T9 comprueba también cobertura de cantidades y unidades en ambas direcciones; todavía puede fallar la asignación semántica a un campo.
 
 SQL compara columnas publicadas con filtros AND, alcance por servicio/frecuencia y estados de ausencia. Lo desconocido no cumple umbrales. Las plantillas redactan filas y citas literales; ningún segundo modelo escribe la respuesta. Una decisión de modelo completada por turno; los fallos transitorios pueden reintentarse dentro del plazo compartido descrito abajo. Una llamada de catálogo más `explain_terms` en la misma respuesta se puede fusionar en una ejecución; otras formas inválidas producen aclaración.
 
@@ -87,6 +101,8 @@ Acredita ejecución almacenada, no aceptación con proveedor real. [Pruebas y co
 - [backend/conversation/rendering.py](../../../backend/conversation/rendering.py#L1)
 
 ## Política conversacional T7
+
+Ejemplos históricos T7: las reglas T8/T9 anteriores prevalecen para ranking, acciones y guardas.
 
 ### Focus, filtros y ranking
 

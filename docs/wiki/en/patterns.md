@@ -4,6 +4,17 @@
 
 Pattern — where — why: decisions to defend in review.
 
+### T8/T9: decisions and costs
+
+- **One decision, no generated figures.** The LLM proposes intent/arguments; SQL and templates preserve figures, units, N/A and provenance. Complete-code routes, Submit and actions invoke neither chat nor embeddings. This reduces latency/cost while requiring explicit policies and bounded schemas.
+- **Planner and final guard.** [answer_planner.py](../../../backend/conversation/answer_planner.py) chooses field/verdict; [requirement_coverage.py](../../../backend/conversation/requirement_coverage.py) and [integrity.py](../../../backend/conversation/integrity.py) check quantities, units, bounds and rows after merging. Clarification can interrupt flow, but omitting a requirement changes selection.
+- **Declared ranking.** [ranking.py](../../../backend/conversation/ranking.py) publishes criterion and tie-breakers; provisional recommendations and relaxed alternatives are labelled. Missing prices and site suitability cannot be inferred from a score.
+- **Additive-only retrieval.** [embeddings.py](../../../backend/conversation/embeddings.py) helps interpret phrases; it never provides product knowledge or replaces filters/negations. Always-on deterministic parsing, 1.5 s and zero retries bound its impact; it adds cost/dependency and gained only one conversation in round 9.
+- **One card and actions.** Local review before Submit prevents partial selections being sent; structured actions avoid reinterpreting them. Owner-scoped soft deletion hides a conversation; Undo cancels the five-second pending DELETE, not a deletion already confirmed by the server.
+- **Voice and debug.** Preferred on-device SpeechRecognizer avoids a server audio integration; fallback does not guarantee offline operation. Hidden per-answer debug exposes the selected decision without loading every trace; seven taps do not replace authentication/ownership or `DEV_DEBUG`.
+
+[Current architecture](agent.md), [contract](api.md), [Android](android.md), [method and limits](testing.md#behavior-evaluation). At 100× traffic, per-process quota/capacity, external calls and open transactions still need measurement/redesign; T9 does not establish distributed scalability.
+
 ### Repository
 
 [backend/catalog/repository.py](../../../backend/catalog/repository.py#L142) — Keeps SQL, decimal conversion and scope rules behind a deterministic interface. Android has its own repository interface for UI tests.

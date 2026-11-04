@@ -17,14 +17,23 @@ All `/api/*` routes require `Authorization: Bearer <TOKEN>` except login. Tokens
 | POST `/api/auth/logout` | Revoke current token; 204, empty body |
 | GET `/api/actuators/{part_number}` | Exact full code including `/A`; product with measurements, field_status, services, frequencies, certification, notes, provenance, evidence, occurrences |
 | POST `/api/actuators/search` | SearchFilters JSON → `{status,total,limit,offset,products}` or needs_clarification with fields |
-| POST `/api/conversation` | `{query,session_id?,answers?,remove_filters?}` → `{session_id,answer,message_id,products,lead,interaction,suggestions,suggested_replies,active_filters,comparison,clarification,terms,assumptions}` |
+| POST `/api/conversation` | `{query,session_id?,answers?,remove_filters?,action?}` → `{session_id,answer,message_id,products,lead,interaction,suggestions,suggested_replies,active_filters,comparison,clarification,terms,assumptions,recommendation,debug}` |
 | GET `/api/sessions?limit=50&offset=0` | `{sessions:[{id,title,created_at,updated_at,preview}],limit,offset}`; limit 1..100, offset 0..1000000 |
 | GET `/api/sessions/{session_id}/messages?limit=100&before=SEQUENCE` | `{session_id,title,messages,has_more,next_before}`; chronological page, limit 1..100; optional before >=1 |
-| GET `/api/messages/{message_id}/debug` | `{message_id,session_id,tool_calls}`; owner only, DEV_DEBUG=true, absent from OpenAPI |
+| DELETE `/api/sessions/{session_id}` | Owner-scoped soft deletion; 204; missing/foreign session: 404 |
+| GET `/api/messages/{message_id}/debug` | `{message_id,session_id,tool_calls,debug}`; owner only, DEV_DEBUG=true, absent from OpenAPI |
 | GET `/docs`, `/redoc`, `/openapi.json` | Framework-generated API documentation; public |
 | GET `/docs/oauth2-redirect` | Framework Swagger OAuth redirect helper; public |
 
 `query` must contain 1..4000 characters and cannot be blank; extra request fields are rejected. Omit session_id for a new conversation; supply its UUID to continue. Public messages contain id, sequence, role, content, products and created_at; no internal context or tool calls. Product cards consume `products`, not numbers parsed from answer.
+
+## T8/T9 contract
+
+`POST /api/conversation` adds `action` to `{query,session_id?,answers?,remove_filters?}`. Suggestions may be legacy strings or `{label,action}` objects; send the label as `query` and the received action without reconstructing it. `compare_top`, `show_all` and `rank_by` validate the persisted set and invoke neither chat nor embeddings. Invalid actions return 422 `invalid_action`; incompatible answers return 422 `empty_combination`, without persisting a turn.
+
+Responses add `recommendation:{ranked_by,total,shown,items}` and `debug`; options can include `count` and `description`. Comparisons include `key_fields_reason`. The planner chooses shape/fields and the guard checks quantities/filters before presenting products; the client displays server values. Migration 006 persists these fields and soft deletion; [contracts](../../../backend/app/contracts.py), [interactions](../../../backend/conversation/interactions.py).
+
+History does not embed full traces. `GET /api/messages/{id}/debug` lazily loads `{message_id,session_id,tool_calls,debug}`; `latency_ms`, `attempts`, `llm_called` and `retrieval` are nested under `debug`. Token, ownership and `DEV_DEBUG=true` are required; disabled, missing or foreign answers return 404. Android's hidden gesture is not authorization. Voice only fills the composer: there is no audio endpoint or automatic send. [Android usage](android.md).
 
 ## curl
 
@@ -58,7 +67,7 @@ With a valid token but no configured model, a turn requiring language interpreta
 {"detail":"Conversation service unavailable. Check backend configuration and try again.","error_code":"not_configured"}
 ```
 
-See the captured T7 response and additive fields below.
+The T7 examples below are historical; the T8/T9 contract above adds the current fields.
 
 ## Search contract
 
@@ -84,6 +93,8 @@ Technical fields and enums match the [agent filters](agent.md#typed-tools), plus
 
 
 ## T7 conversation contract
+
+Historical T7 captures; actions, recommendations and debug follow the T8/T9 contract above.
 
 The additive request is `{session_id?,query,answers?,remove_filters?}`. `answers` maps pending question IDs to exact option strings; `remove_filters` lists active filter names. Defaults are `{}` and `[]`. Code applies these changes and reruns SQL with no LLM call; `query` remains the readable user-history entry. An unknown/nonmatching answer returns 422 `invalid_answers`; an inactive/invalid removal returns 422 `invalid_filter`, including malformed field types. Rejected submissions persist nothing.
 

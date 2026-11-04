@@ -16,6 +16,43 @@ A scripted model returns predetermined tool calls; the real tools then execute v
 - [test_auth.py](../../../tests/test_auth.py): Hashed auth, revocation, owner isolation and Android-facing auth contract.
 - [test_submission_readiness.py](../../../tests/test_submission_readiness.py): Routing require_parameters, process call guard and idempotent demo users.
 
+## Behavior evaluation
+
+T8/T9 rounds use held-out sets frozen before reading answers, six personas and strict independent review of complete conversations. This table and the model comparison were supplied by the coordinator for this delivery; linked reports document subsequent repairs and local verification. Their scripted replays are not new provider measurements.
+
+Rounds overlap in method but not in conversations. Rounds 1–2 used a looser review and are not pooled with this table. ON/OFF compares the same cases within each round; changing rounds changes the set and does not isolate a causal code improvement. Strict review considers interpretation, requirement retention/coverage, context safety and usefulness as well as figures.
+
+| Round | Config | Strict pass |
+|---|---|---|
+| 3 | rules | 21/45 (47 %) |
+| 4 | rules | 24/45 (53 %) |
+| 5 | rules | 21/44 (48 %) |
+| 6 | rules | 28/43 (65 %) |
+| 7 | rules | 24/43 (56 %) |
+| 8 | ON / OFF | 25/41 (61 %) / 26/41 (63 %) |
+| 9 | ON / OFF | 30/41 (73 %) / 29/41 (71 %) |
+| 10 | retrieval ON, after round-9 fixes | 28/41 (68 %) |
+
+Round 9 differs by **one conversation** (73% versus 71%); round 8 favored OFF. Round 10, retrieval ON after round-nine fixes, scored **28/41 (68%)**. Observed quality on unseen held-out conversations is therefore **68–73% strict pass (rounds 9–10)**, not demonstrated causal improvement or statistical superiority for embeddings. Every response in those two rounds was under **10 s**, with **3.7–5.1 s p95**. The coordinator's review reports no wrong catalogue numbers in any round.
+
+Four failure classes remain: paraphrased or Spanish service/enclosure cues can be missed and become clarifying questions; mid-conversation retractions or added bounds are sometimes not merged; site-hazard judgment can err both ways, so the assistant asks for confirmation and always shows the enclosure; and some single-field or out-of-scope questions receive more detail than asked. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**. T9 records 6/7 ON/OFF integrity failures in round 9: integrity includes requirements/selection, not just figures. Round 10 is live evidence after the fixes; OpenRouter remains pending and offline tests do not extend that acceptance.
+
+
+### Model selection
+
+OpenAI-compatible client, measured through Google; OpenRouter is the pending submission target. On the same **44 conversations**, `gemini-3.6-flash` scored **21/44**, `gemini-3.8-flash` **25/44**, and `gemini-3.1-pro` **28/44**. Pro had **7.1 s p95**, including an **11 s** turn. After round 6, 3.6 Flash was retained: **28/43** versus 3.8 Flash's **26/43**. This is a quality/latency decision on these sets, not a universal model ranking. Embeddings use `gemini-embedding-2`; OpenRouter ID `google/gemini-embedding-2`, with live compatibility pending.
+
+### Provenance and evaluation leakage
+
+The v7 bank stores phrasings/interpretations and every source ID, never evaluated answers or catalogue figures as knowledge. Use a fresh set or `EMBEDDING_EXCLUDE_SOURCES` to exclude all held-out associations before distance ranking/LIMIT. Immutable versions/manifests prevent silent label replacement; conflicts deactivate rows and historical provenance survives. Once a failed case enters the replay/bank, it becomes regression/calibration and cannot count again as unseen acceptance. Round-nine replay retains queries/decisions and hashes and is not loaded into the bank. [T9 details](../../../reports/submission/T9-embeddings.md).
+
+### Current local evidence
+
+[T8](../../../reports/submission/T8-backend.md), [T8b](../../../reports/submission/T8b-backend.md), [T8c](../../../reports/submission/T8c-backend.md), [T8d](../../../reports/submission/T8d-backend.md), [T8e](../../../reports/submission/T8e-backend.md), [T8f](../../../reports/submission/T8f-backend.md), [T8g](../../../reports/submission/T8g-backend.md) and [T8h](../../../reports/submission/T8h-backend.md) record deterministic evolution, not pooled model acceptance.
+
+[T9 embeddings](../../../reports/submission/T9-embeddings.md): **484 Python tests, 2 optional skips; 446 scripted scenarios without failures**, 41 conversations per mode/138 total replay turns, local SQL, schema and scanner. [T8 Android](../../../reports/submission/T8-android.md): 51 JVM; [T9 Android](../../../reports/submission/T9-android.md): **74 JVM and debug/release APKs**, without device or actual voice execution. These are report results, not suites rerun by the documentation task. The following T7/v6 sections are historical; those cohorts can overlap and must not be pooled with T8/T9.
+
+
 ## Run locally
 
 Start Compose from the [README](../../../README.md); then create and activate a Python 3.12 environment from the repository root. Run only the block for your shell:

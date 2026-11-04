@@ -17,14 +17,23 @@ Todas las rutas `/api/*`, excepto login, requieren `Authorization: Bearer <TOKEN
 | POST `/api/auth/logout` | Revoca token actual; 204 sin cuerpo |
 | GET `/api/actuators/{part_number}` | Código completo con `/A`; producto con measurements, field_status, services, frequencies, certification, notes, provenance, evidence, occurrences |
 | POST `/api/actuators/search` | JSON SearchFilters → `{status,total,limit,offset,products}` o needs_clarification con fields |
-| POST `/api/conversation` | `{query,session_id?,answers?,remove_filters?}` → `{session_id,answer,message_id,products,lead,interaction,suggestions,suggested_replies,active_filters,comparison,clarification,terms,assumptions}` |
+| POST `/api/conversation` | `{query,session_id?,answers?,remove_filters?,action?}` → `{session_id,answer,message_id,products,lead,interaction,suggestions,suggested_replies,active_filters,comparison,clarification,terms,assumptions,recommendation,debug}` |
 | GET `/api/sessions?limit=50&offset=0` | `{sessions:[{id,title,created_at,updated_at,preview}],limit,offset}`; limit 1..100, offset 0..1000000 |
 | GET `/api/sessions/{session_id}/messages?limit=100&before=SEQUENCE` | `{session_id,title,messages,has_more,next_before}`; página cronológica, limit 1..100; before opcional >=1 |
-| GET `/api/messages/{message_id}/debug` | `{message_id,session_id,tool_calls}`; propietario, DEV_DEBUG=true, fuera de OpenAPI |
+| DELETE `/api/sessions/{session_id}` | Borrado lógico por propietario; 204; sesión ausente/ajena: 404 |
+| GET `/api/messages/{message_id}/debug` | `{message_id,session_id,tool_calls,debug}`; propietario, DEV_DEBUG=true, fuera de OpenAPI |
 | GET `/docs`, `/redoc`, `/openapi.json` | Documentación generada por el framework; pública |
 | GET `/docs/oauth2-redirect` | Helper público de redirección OAuth Swagger del framework |
 
 `query` tiene 1..4000 caracteres y no admite solo espacios; se rechazan campos extra. Omite session_id para una conversación nueva y envía su UUID para continuar. Los mensajes públicos contienen id, sequence, role, content, products y created_at; sin contexto interno ni herramientas. Las fichas consumen `products`, no extraen cifras de answer.
+
+## Contrato T8/T9
+
+`POST /api/conversation` añade `action` a `{query,session_id?,answers?,remove_filters?}`. Las sugerencias pueden ser cadenas heredadas u objetos `{label,action}`; envía la etiqueta como `query` y la acción recibida sin reconstruirla. `compare_top`, `show_all` y `rank_by` validan el conjunto persistido y no invocan chat/embeddings. Una acción inválida devuelve 422 `invalid_action`; respuestas incompatibles devuelven 422 `empty_combination`, sin persistir turno.
+
+La respuesta añade `recommendation:{ranked_by,total,shown,items}` y `debug`; las opciones incluyen `count` y `description` opcionales. Comparaciones incluyen `key_fields_reason`. El planificador decide forma/campos y la guarda comprueba cantidades/filtros antes de presentar productos; el cliente muestra los valores del servidor. Migración 006 persiste estos campos y la eliminación lógica; [contratos](../../../backend/app/contracts.py), [interacciones](../../../backend/conversation/interactions.py).
+
+El historial no incorpora trazas completas. `GET /api/messages/{id}/debug` las carga bajo demanda con `{message_id,session_id,tool_calls,debug}`; las métricas `latency_ms`, `attempts`, `llm_called` y `retrieval` están dentro de `debug`. Requiere token, propiedad y `DEV_DEBUG=true`; deshabilitado, inexistente o ajeno devuelve 404. El gesto oculto Android no es autorización. La voz solo rellena el compositor: no hay endpoint de audio ni envío automático. [Uso Android](android.md).
 
 ## curl
 
@@ -84,6 +93,8 @@ Los campos y enumeraciones coinciden con los [filtros del agente](agent.md#herra
 
 
 ## Contrato conversacional T7
+
+Capturas históricas T7; para acciones, recomendaciones y debug rige el contrato T8/T9 anterior.
 
 La solicitud aditiva es `{session_id?,query,answers?,remove_filters?}`. `answers` asocia IDs pendientes con textos exactos de opción; `remove_filters` enumera filtros activos. Los valores por defecto son `{}` y `[]`. El código aplica cambios y repite SQL sin LLM; `query` conserva el mensaje legible del usuario. Respuestas desconocidas/no coincidentes devuelven 422 `invalid_answers`; filtros inactivos/inválidos, 422 `invalid_filter`, incluidos tipos malformados. El rechazo no persiste mensajes.
 

@@ -4,6 +4,17 @@
 
 Patrón — dónde — por qué: decisiones que defender en revisión.
 
+### T8/T9: decisiones y costes
+
+- **Una decisión, cero cifras generadas.** El LLM propone intención/argumentos; SQL y plantillas conservan cifras, unidades, N/A y procedencia. Las rutas de códigos completos, Submit y acciones no llaman chat ni embeddings. Reduce latencia/coste, a cambio de mantener políticas explícitas y esquemas acotados.
+- **Planificador y guarda final.** [answer_planner.py](../../../backend/conversation/answer_planner.py) elige campo/veredicto; [requirement_coverage.py](../../../backend/conversation/requirement_coverage.py) y [integrity.py](../../../backend/conversation/integrity.py) comprueban cantidades, unidades, límites y filas tras la fusión. Pedir aclaración puede interrumpir el flujo, pero omitir un requisito cambia la selección.
+- **Ranking declarado.** [ranking.py](../../../backend/conversation/ranking.py) publica criterio y desempates; una recomendación provisional o alternativa relajada se etiqueta. Ni precio ausente ni idoneidad de instalación se deducen de una puntuación.
+- **Retrieval solo aditivo.** [embeddings.py](../../../backend/conversation/embeddings.py) ayuda a interpretar frases; nunca provee conocimiento de producto ni sustituye filtros/negaciones. Parser determinista ON/OFF, 1.5 s y cero retries limitan el impacto; suma coste y dependencia y solo ganó una conversación en ronda 9.
+- **Una tarjeta y acciones.** Revisión local antes de Submit evita enviar selecciones parciales; acciones estructuradas evitan reinterpretarlas. Borrado lógico por propietario permite ocultar una conversación; Undo cancela el DELETE pendiente de cinco segundos, no restaura una eliminación ya confirmada por servidor.
+- **Voz y debug.** SpeechRecognizer on-device preferido evita una integración de audio del servidor; el fallback no garantiza offline. Debug oculto por respuesta permite inspeccionar la decisión elegida sin cargar todas las trazas; siete toques no sustituyen autenticación/propiedad ni `DEV_DEBUG`.
+
+[Arquitectura vigente](agent.md), [contrato](api.md), [Android](android.md), [método y límites](testing.md#behavior-evaluation). A 100× tráfico, la cuota y capacidad por proceso, llamadas externas y transacciones abiertas siguen requiriendo medición/rediseño; T9 no prueba escalabilidad distribuida.
+
 ### Repositorio
 
 [backend/catalog/repository.py](../../../backend/catalog/repository.py#L142) — Encapsula SQL, conversión decimal y alcances en una interfaz determinista. Android tiene otra interfaz repository para pruebas de UI.

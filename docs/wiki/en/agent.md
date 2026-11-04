@@ -30,6 +30,20 @@ sequenceDiagram
     F-->>U: Public response without internal trace
 ```
 
+## T8/T9: current flow
+
+The model makes one decision on turns requiring language interpretation; it writes neither figures nor final answers. Greetings, Submit, filter removal, structured actions and closed lookups of complete codes use deterministic routes without chat or embeddings. Transport attempts are not additional completed decisions.
+
+T8 collects discriminating questions in `interaction.questions`, ordered by candidate reduction with SQL counts. Android presents one card with navigation, review, Submit and Cancel. An empty combination returns `422 empty_combination` without saving a turn. `recommendation` declares `ranked_by`, total, shown count and up to three codes with SQL reasons/values; previews and alternatives requiring relaxed filters are labelled. `compare_top`, `show_all` and `rank_by` actions use persisted context without an LLM. Soft deletion is owner-scoped; see [API](api.md).
+
+The [answer planner](../../../backend/conversation/answer_planner.py) chooses a field, specification, verdict, difference or ratio; references resolve against saved `on_screen` order and focus. [requirement_coverage.py](../../../backend/conversation/requirement_coverage.py) checks stated quantities, compatible units and bounds, including after merging filters; occurrence of a number alone is insufficient. [integrity.py](../../../backend/conversation/integrity.py) independently checks returned rows against filters and prevents unsafe recommendations while hazard context is unresolved. An uncovered quantity withholds a pick; ambiguity prompts clarification. These checks reduce omissions, but do not guarantee every semantic interpretation.
+
+### Additive embeddings
+
+[embeddings.py](../../../backend/conversation/embeddings.py) retrieves up to five cosine examples (minimum 0.70) and concept anchors from pgvector before the single LLM decision. The bank contains phrasings and interpretations, never numeric product knowledge. `gemini-embedding-2` uses 768 dimensions; its OpenRouter ID is `google/gemini-embedding-2`. Deterministic normalization always runs, ON and OFF: explicit requirements, negations, grounded arguments and carried filters win; suggestions only fill unresolved fields. Hazard context asks for confirmation with an Explosionproof preview, not site certification.
+
+Missing model, key, results or retrieval failure preserves deterministic behavior. Retrieval has a total 1.5 s budget, zero retries, four bounded workers and SQL inside a savepoint; late results are discarded. An already-sent request may still finish remotely. Startup client initialization makes no inference call. Traces include example IDs/similarities, concepts and timing; [per-answer debug and voice](android.md), [loading and provenance](operations.md#example-bank), [results and limits](testing.md#behavior-evaluation).
+
 ## Typed tools
 
 Provider-facing `args_schema` values are compact JSON Schema dictionaries. Code normalises and validates every decision against strict Pydantic models before execution. The LLM supplies intent/arguments, never SQL or final technical prose.
@@ -49,7 +63,7 @@ Filters: `enclosure` weatherproof/explosionproof; `supply_current` accepts `AC`,
 
 For `DC + 60 Hz`, ask which requirement is intended; retain compatible constraints. A follow-up `now 220 V` uses `refine=true` and only the voltage delta; `merge_filters` carries the rest. `remove` drops named constraints; `more` advances pagination. Changing service drops the incompatible old cycles/starts constraint with an explanation.
 
-Codes are canonicalised for case/spaces/missing hyphen, never completed with `/A` or a guessed suffix. Partial codes receive prefix candidates; well-formed absent codes return not found. Codes must be in the conversation or persisted context. Unstated filters are dropped and named; assumptions must quote actual user wording and are shown. Numeric grounding checks occurrence of a number in the text, not complete semantic correctness; a wrong field assignment is still possible.
+Codes are canonicalised for case/spaces/missing hyphen, never completed with `/A` or a guessed suffix. Partial codes receive prefix candidates; well-formed absent codes return not found. Codes must be in the conversation or persisted context. Unstated filters are dropped and named; assumptions must quote actual user wording and are shown. T9 also checks quantity/unit coverage in both directions; semantic field assignment can still fail.
 
 SQL compares published columns, with AND filters, service/frequency scope and explicit absence states. Unknown values cannot satisfy thresholds. Templates render the resulting rows and literal glossary quotes; no second model writes the answer. One completed model decision per turn; failed 503, timeout and connection attempts may retry once per model, with an optional fallback model and a shared 60-second deadline. No 4xx is retried. A catalogue call plus an `explain_terms` call in the same response may be merged into one execution; other invalid call shapes produce a clarification.
 
@@ -87,6 +101,8 @@ This trace establishes stored tool execution, not a real-provider acceptance res
 - [backend/conversation/rendering.py](../../../backend/conversation/rendering.py#L1)
 
 ## T7 conversation policy
+
+Historical T7 examples: the T8/T9 rules above supersede ranking, actions and guard behavior.
 
 ### Focus, filters and ranking
 

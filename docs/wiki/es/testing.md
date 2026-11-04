@@ -16,6 +16,43 @@ Un modelo programado devuelve herramientas predeterminadas; las herramientas rea
 - [test_auth.py](../../../tests/test_auth.py): Autenticación con hash, revocación, aislamiento y contrato de login.
 - [test_submission_readiness.py](../../../tests/test_submission_readiness.py): require_parameters, guarda por proceso y cuentas demo idempotentes.
 
+## Behavior evaluation
+
+Las rondas T8/T9 usan conjuntos retenidos congelados antes de leer respuestas, seis personas y revisión estricta independiente por conversación completa. La tabla y comparación de modelos fueron suministradas por el coordinador para esta entrega; los informes enlazados documentan las reparaciones y verificaciones locales posteriores. No confundir sus replays scripted con nuevas mediciones del proveedor.
+
+Las rondas se solapan en el método, pero no en las conversaciones. Rondas 1–2 usaron una revisión más laxa y no se mezclan con esta tabla. ON/OFF compara los mismos casos dentro de cada ronda; cambiar de ronda cambia el conjunto y no aísla causalmente una mejora de código. La revisión estricta considera interpretación, conservación/cobertura de requisitos, seguridad del contexto y utilidad de la respuesta, además de las cifras.
+
+| Round | Config | Strict pass |
+|---|---|---|
+| 3 | rules | 21/45 (47 %) |
+| 4 | rules | 24/45 (53 %) |
+| 5 | rules | 21/44 (48 %) |
+| 6 | rules | 28/43 (65 %) |
+| 7 | rules | 24/43 (56 %) |
+| 8 | ON / OFF | 25/41 (61 %) / 26/41 (63 %) |
+| 9 | ON / OFF | 30/41 (73 %) / 29/41 (71 %) |
+| 10 | retrieval ON, after round-9 fixes | 28/41 (68 %) |
+
+Ronda 9 deja una diferencia de **una conversación** (73 % frente a 71 %); ronda 8 favoreció OFF. Ronda 10, con retrieval ON después de las reparaciones de ronda 9, obtuvo **28/41 (68 %)**. Por tanto, la calidad observada en conversaciones inéditas retenidas es **68–73 % estricto (rondas 9–10)**, no una mejora causal demostrada ni superioridad estadística de embeddings. Todas las respuestas de esas dos rondas estuvieron bajo **10 s**, con **p95 3.7–5.1 s**. Según la revisión del coordinador, no hubo cifras de catálogo incorrectas en ninguna ronda.
+
+Persisten cuatro clases de fallo: señales parafraseadas o españolas de servicio/cerramiento omitidas que se convierten en aclaraciones; retractaciones o límites añadidos a mitad de conversación que a veces no se fusionan; juicio de peligro con errores en ambos sentidos, por lo que se solicita confirmación y siempre se muestra el cerramiento; y exceso de detalle ante preguntas de un campo o fuera de alcance. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**. El informe T9 registra 6/7 fallos de integridad ON/OFF en ronda 9: integridad incluye requisitos/selección, no solo cifras. La ronda 10 es evidencia en vivo posterior a las reparaciones; OpenRouter sigue pendiente y las pruebas offline no amplían esa aceptación.
+
+
+### Selección de modelos
+
+Cliente compatible OpenAI, medido a través de Google; OpenRouter es el destino de entrega pendiente. En las mismas **44 conversaciones**, `gemini-3.6-flash` obtuvo **21/44**, `gemini-3.8-flash` **25/44** y `gemini-3.1-pro` **28/44**. Pro tuvo **p95 7.1 s**, incluido un turno de **11 s**. Después de ronda 6 se mantuvo 3.6 Flash: **28/43** frente a **26/43** de 3.8 Flash. Es una decisión calidad/latencia en estos conjuntos, no un ranking universal. Embeddings usan `gemini-embedding-2`; ID de OpenRouter `google/gemini-embedding-2`, con compatibilidad en vivo pendiente.
+
+### Procedencia y fuga de evaluación
+
+El banco v7 guarda frases/interpretaciones y todos los IDs de origen, nunca las respuestas evaluadas ni cifras del catálogo como conocimiento. Usa un conjunto nuevo o `EMBEDDING_EXCLUDE_SOURCES` para excluir todas las asociaciones de casos retenidos antes de distancia/LIMIT. Las versiones/manifiestos inmutables impiden sustituir silenciosamente etiquetas; los conflictos se desactivan y la procedencia histórica se conserva. Al incorporar un caso fallido al replay/banco, pasa a ser regresión/calibración: no vuelve a contarse como aceptación inédita. El replay de ronda 9 conserva consultas/decisiones y hashes, no está cargado en el banco. [Detalle T9](../../../reports/submission/T9-embeddings.md).
+
+### Evidencia local vigente
+
+[T8](../../../reports/submission/T8-backend.md), [T8b](../../../reports/submission/T8b-backend.md), [T8c](../../../reports/submission/T8c-backend.md), [T8d](../../../reports/submission/T8d-backend.md), [T8e](../../../reports/submission/T8e-backend.md), [T8f](../../../reports/submission/T8f-backend.md), [T8g](../../../reports/submission/T8g-backend.md) y [T8h](../../../reports/submission/T8h-backend.md) documentan la evolución determinista, no una aprobación acumulada del modelo.
+
+[T9 embeddings](../../../reports/submission/T9-embeddings.md): **484 pruebas Python, 2 omisiones opcionales; 446 escenarios scripted sin fallos**, replay de 41 conversaciones por modo/138 turnos totales, SQL local, esquema y scanner. [T8 Android](../../../reports/submission/T8-android.md): 51 JVM; [T9 Android](../../../reports/submission/T9-android.md): **74 JVM y APK debug/release**, sin dispositivo ni voz real. Son resultados de esos informes, no suites reejecutadas por la tarea documental. Las secciones T7/v6 siguientes son históricas; sus cohortes sí pueden solaparse y no se suman a T8/T9.
+
+
 ## Ejecutar localmente
 
 Inicia Compose desde el [README](../../../README.es.md); crea y activa un entorno Python 3.12 desde la raíz. Ejecuta solo el bloque de tu shell:
