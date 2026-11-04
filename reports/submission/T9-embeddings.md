@@ -27,7 +27,7 @@ Service parsing covers `opens or shuts` and `dose steam gradually`.
 Comparison follow-ups calculate cycles/hour differences from both SQL values; zero
 results retain their relaxed alternatives, voltage siblings retain the requested field,
 and position feedback questions receive one sentence stating it is not published.
-[Recorded replay](../../config/agent_replay_v9.json) contains all 82 ON/OFF conversations
+[Recorded replay](../../config/agent_replay_v9.json) contains all 82 ON/OFF conversation executions (41 per mode)
 (138 turns), public queries and recorded tool decisions only, with dump SHA256 hashes.
 It contains no session identifiers and is not loaded into the embedding example bank.
 The [replay test](../../tests/test_t9_replay.py) checks the repaired behaviors using
@@ -42,6 +42,11 @@ and new 400 Nm ceiling together, as required by the new opposite-bound rule. No 
 was disabled. Existing failing regressions also required retaining plural `In-Lbs`,
 thousands separators and Spanish strict comparisons in the quantity parser, and allowing
 explicit removal of a carried voltage before the grounding check can reject a repeated value.
+
+Round-nine runtime snapshot after rebuilding: **5 users, 705 conversations, 2480 messages,
+68 catalogue entries**, unchanged across the rebuild. `/ready` returned **HTTP 200**;
+Google `gemini-embedding-2` and `EMBEDDINGS_ENABLED=true` were verified inside the
+container, and its four changed conversation modules match the checkout SHA256 hashes.
 
 ## Review repair (current behavior)
 
@@ -251,21 +256,22 @@ compare both modes as described above.
 
 | Gate | Result |
 | --- | --- |
-| Full Python suite, local PostgreSQL | **469 tests, OK; 2 existing optional skips** |
-| New embedding/retrieval/normalizer tests | **40 embedding/review tests, all passed**, deterministic hashed fake, scripted chat, event-controlled deadlines and real local SQL |
-| v7 scripted selfcheck | **446 scenarios, 0 failures**, [review evidence](T9-review-scenarios.json) |
+| Full Python suite, local PostgreSQL | **484 tests, OK; 2 existing optional skips; Python runner exit 0** |
+| New embedding/retrieval/normalizer tests | **41 embedding/review tests plus 14 round-nine tests, all passed**; deterministic fake, recorded/scripted chat, deadlines and real local SQL |
+| v7 scripted selfcheck | **446 scenarios, 0 failures**, [round-nine evidence](T9-r9-scenarios.json) |
+| Round-nine recorded replay | **41 conversations per mode / 138 turns total**, repaired-behavior assertions pass in both modes |
 | Public text scanner tests | **3 passed**; scanner also runs across scripted responses |
 | Offline tool schema | bytes=5487, enum_values=107, arrays=6, depth=7, forbidden_nodes=0, numeric_ranges=0; unchanged |
 | Backup, migration, collation, existing counts | Verified locally, as recorded above |
 | Rebuilt Google backend | `EMBEDDINGS_ENABLED=true`, model `gemini-embedding-2`; `/ready` **HTTP 200** |
-| Runtime retrieval in rebuilt container | Initial T9 live smoke retained; review rebuild uses startup-only initialization and no inference |
+| Runtime retrieval in rebuilt container | Initial T9 live smoke retained; round-nine rebuild uses startup-only initialization and no inference |
 
 Commands used (PowerShell, from the repository):
 
 ```powershell
 $env:SERIES76_TEST_DB='1'; $env:EMBEDDINGS_ENABLED='false'
 .venv-model-eval/Scripts/python.exe -m unittest discover -s tests
-.venv-model-eval/Scripts/python.exe scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --evidence reports/submission/T9-review-scenarios.json
+.venv-model-eval/Scripts/python.exe scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --evidence reports/submission/T9-r9-scenarios.json
 .venv-model-eval/Scripts/python.exe -m unittest discover -s tests -p test_user_text.py
 .venv-model-eval/Scripts/python.exe scripts/check_tool_schemas.py
 ```
@@ -325,6 +331,14 @@ Review commits:
   and complete v7 ON/OFF filter-preservation regressions.
 - `c6291de`: versioned provenance, retired examples, startup warmup,
   concurrent initialization guard and one retrieval deadline.
+
+Round-nine commits:
+
+- `8a3e889`: compatible numeric-unit evidence and opposite-bound preservation.
+- `d0ea42a`: safe-area correction, site hazard handling and service paraphrases.
+- `e68ce28`: computed differences, relaxed alternatives and focused sibling lookups.
+- `6a7af2a`: configured retrieval defaults and recorded ON/OFF replay.
+- `cb95103`: legacy quantity formats, explicit removals and documented test updates.
 
 Remote CI and a new live chat A/B evaluation remain pending; the local offline gates
 and runtime configuration/readiness checks are complete. The repaired behavior has
