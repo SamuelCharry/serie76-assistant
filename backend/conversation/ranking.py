@@ -83,10 +83,11 @@ def fla_used(product, filters):
     if not found:
         return None
     key, value = min(found, key=lambda pair: pair[1])
-    label = ('FLA ' + key.split('_')[1].removesuffix('hz') + ' Hz' if 'unqualified' not in key
-             else 'FLA (DC, no mains frequency)' if any(f.get('frequency_scope') == 'not_applicable'
-                  for f in product.get('frequencies', [])) else 'FLA (frequency unspecified)')
-    return label, value
+    if 'unqualified' not in key:
+        return 'FLA ' + key.split('_')[1].removesuffix('hz') + ' Hz', value, ''
+    if any(f.get('frequency_scope') == 'not_applicable' for f in product.get('frequencies', [])):
+        return 'FLA (DC)', value, ''
+    return 'FLA', value, ' (no frequency in source)'
 
 
 def rank(products, filters, by='closest_torque'):
@@ -137,10 +138,17 @@ def item(product, filters, reason=None):
     torques = qualifying_torques(product, filters)
     fla = fla_used(product, filters)
     parts = []
-    for label, torque in torques:
-        parts.append(f'{label} {_num(torque)} {torque_unit(filters)}')
+    qualifying = (filters.get('min_torque_nm') if filters.get('min_torque_nm') is not None
+                  else filters.get('min_torque_in_lb'))
+    if qualifying is not None and not filters.get('service') and len(torques) > 1:
+        torques = sorted(torques, key=lambda pair: pair[1])
+    for index, (label, torque) in enumerate(torques):
+        suffix = (' (same torque for On/Off and Modulating)' if label == 'Shared torque' else
+                  f' (closest to {_num(bound_value(qualifying))} {torque_unit(filters)})'
+                  if index == 0 and qualifying is not None and not filters.get('service') and len(torques) > 1 else '')
+        parts.append(f'{label} {_num(torque)} {torque_unit(filters)}{suffix}')
     if fla is not None:
-        parts.append(f'{fla[0]} {_num(fla[1])} A')
+        parts.append(f'{fla[0]} {_num(fla[1])} A{fla[2]}')
     key_values = []
     if filters.get('rank_by') == 'lowest_lra':
         hz = filters.get('frequency_hz')
@@ -158,7 +166,7 @@ def item(product, filters, reason=None):
             parts.insert(0, f'{label} {_num(value)} s')
             key_values.insert(0, dict(label=label, value=f'{_num(value)} s'))
     if fla is not None:
-        key_values.append(dict(label=fla[0], value=f'{_num(fla[1])} A'))
+        key_values.append(dict(label=fla[0], value=f'{_num(fla[1])} A{fla[2]}'))
     return dict(part_number=product['base_part_number'], reason=reason or '; '.join(parts) or 'Published catalogue model',
                 key_values=key_values)
 
