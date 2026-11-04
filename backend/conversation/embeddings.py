@@ -3,6 +3,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from functools import lru_cache
+from concurrent.futures import ThreadPoolExecutor
+from contextvars import ContextVar
+from threading import BoundedSemaphore, Event, Lock
 import json
 import math
 import os
@@ -15,6 +18,22 @@ OPPOSITES = dict(hazard='safe_area', safe_area='hazard', on_off='modulating', mo
 # Hazard only requests confirmation; applying a filter needs a wider margin.
 MARGINS = dict(hazard=.015, safe_area=.08, on_off=.08, modulating=.08)
 MIN_SIMILARITY = .70
+RETRIEVAL_TIMEOUT_S = 1.5
+_deadline = ContextVar('embedding_deadline', default=None)
+_cancelled = ContextVar('embedding_cancelled', default=None)
+_client_lock = Lock()
+_workers = ThreadPoolExecutor(max_workers=4, thread_name_prefix='embedding')
+_slots = BoundedSemaphore(4)
+
+
+def remaining(deadline):
+    cancelled = _cancelled.get()
+    if cancelled is not None and cancelled.is_set():
+        raise TimeoutError('Retrieval was abandoned')
+    seconds = deadline - time.monotonic()
+    if seconds <= 0:
+        raise TimeoutError('Retrieval deadline exceeded')
+    return seconds
 
 
 def enabled():
@@ -33,10 +52,29 @@ def _client(model, base_url, key, dim, timeout):
 
 
 def client(timeout=1.5):
-    return _client(os.environ['OPENROUTER_EMBEDDING_MODEL'],
+    deadline = _deadline.get()
+    # lru_cache alone allows concurrent duplicate construction on a cold miss.
+    if not _client_lock.acquire(timeout=remaining(deadline) if deadline else -1):
+        raise TimeoutError('Client initialization deadline exceeded')
+    try:
+        if deadline:
+            remaining(deadline)
+        return _client(os.environ['OPENROUTER_EMBEDDING_MODEL'],
                    os.getenv('EMBEDDING_BASE_URL') or os.getenv('OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1'),
                    os.getenv('EMBEDDING_API_KEY') or os.environ['OPENROUTER_API_KEY'],
                    int(os.getenv('EMBEDDING_DIM', '768')), timeout)
+    finally:
+        _client_lock.release()
+
+
+def warmup():
+    """Construct/cache the SDK client at startup. This never calls inference."""
+    if enabled():
+        try:
+            client()
+        except Exception:
+            return False  # Optional retrieval remains fail-open; never log secret payloads.
+    return True
 
 
 def embed_documents(texts, *, timeout=1.5):
@@ -45,9 +83,13 @@ def embed_documents(texts, *, timeout=1.5):
     result = []
     embedder = client(timeout)
     for start in range(0, len(texts), 64):
+        deadline = _deadline.get()
+        request_options = {'timeout': min(timeout, remaining(deadline))} if deadline else {}
         reserve_agent_call()
+        if deadline:
+            request_options['timeout'] = min(timeout, remaining(deadline))
         batch = texts[start:start + 64]
-        vectors = embedder.embed_documents(batch)
+        vectors = embedder.embed_documents(batch, **request_options)
         if len(vectors) != len(batch):
             raise ValueError('Incomplete embedding batch')
         for vector in vectors:
@@ -58,6 +100,25 @@ def embed_documents(texts, *, timeout=1.5):
 
 def embed_query(text):
     return embed_documents([text])[0]
+
+
+def _bounded_embedding(query, deadline, cancelled):
+    token = _deadline.set(deadline)
+    cancel_token = _cancelled.set(cancelled)
+    try:
+        remaining(deadline)
+        return embed_query(query)
+    finally:
+        _deadline.reset(token)
+        _cancelled.reset(cancel_token)
+
+
+def _execute(connection, sql, parameters, deadline):
+    # Each SELECT consumes the same remaining budget, not a fresh SQL timeout.
+    milliseconds = max(1, int(remaining(deadline) * 1000))
+    connection.execute(f'SET LOCAL statement_timeout = {milliseconds}')
+    remaining(deadline)
+    return connection.execute(sql, parameters)
 
 
 def vector_literal(vector):
@@ -98,27 +159,42 @@ def retrieve(connection, query, *, exclude_sources=()):
     result = Retrieval()
     if not enabled():
         return result
-    started = time.perf_counter()
+    started = time.monotonic()
+    deadline = started + RETRIEVAL_TIMEOUT_S
+    cancelled = Event()
     try:
-        vector = vector_literal(embed_query(query))
-        result.embedding_ms = round((time.perf_counter() - started) * 1000, 2)
+        # Do not queue unbounded work when providers or initialization are slow.
+        if not _slots.acquire(blocking=False):
+            return result
+        try:
+            future = _workers.submit(_bounded_embedding, query, deadline, cancelled)
+        except Exception:
+            _slots.release()
+            raise
+        future.add_done_callback(lambda _: _slots.release())
+        vector = vector_literal(future.result(timeout=remaining(deadline)))
+        remaining(deadline)
+        result.embedding_ms = round((time.monotonic() - started) * 1000, 2)
         model = os.environ['OPENROUTER_EMBEDDING_MODEL']
         excluded = sorted(set(exclude_sources) | set(filter(None, os.getenv('EMBEDDING_EXCLUDE_SOURCES', '').split(','))))
         # Savepoint keeps an optional SQL failure from poisoning the turn transaction.
-        with connection.transaction():
-            examples = list(connection.execute('''SELECT id, text, interpretation,
+        with connection.transaction(force_rollback=True):
+            examples = list(_execute(connection, '''SELECT id, text, interpretation,
                 1 - (embedding <=> %s::vector) AS similarity FROM series76.example_bank
-                WHERE model=%s AND NOT (source::jsonb ?| %s::text[])
+                WHERE model=%s AND active AND NOT (source::jsonb ?| %s::text[])
                 AND 1 - (embedding <=> %s::vector) >= %s
                 ORDER BY embedding <=> %s::vector, id LIMIT 5''',
-                (vector, model, excluded, vector, MIN_SIMILARITY, vector)))
-            concepts = {r['concept']: float(r['similarity']) for r in connection.execute('''
+                (vector, model, excluded, vector, MIN_SIMILARITY, vector), deadline))
+            concepts = {r['concept']: float(r['similarity']) for r in _execute(connection, '''
                 SELECT concept, max(1 - (embedding <=> %s::vector)) AS similarity
-                FROM series76.concept_anchor WHERE model=%s GROUP BY concept''', (vector, model))}
+                FROM series76.concept_anchor WHERE model=%s GROUP BY concept''', (vector, model), deadline)}
+            remaining(deadline)
+        remaining(deadline)
         result.examples, result.concepts = examples, concepts
         result.accepted = classify(concepts)
         result.available = bool(concepts)
     except Exception:
+        cancelled.set()
         # Provider exceptions can contain request bodies/credentials. Never log them.
-        result = Retrieval(embedding_ms=round((time.perf_counter() - started) * 1000, 2))
+        result = Retrieval(embedding_ms=round((time.monotonic() - started) * 1000, 2))
     return result

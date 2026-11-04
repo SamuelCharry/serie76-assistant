@@ -145,6 +145,49 @@ class EmbeddingDatabaseTests(unittest.TestCase):
         self.assertEqual(heldout.examples[0]['text'], 'valve gas plant')
         self.assertIn('hazard', result.accepted)
 
+    def test_subset_reload_preserves_heldout_source_association(self):
+        original = [dict(text='valve gas', interpretation={'tool': 'search_actuators', 'args': {}},
+                         sources=['training', 'heldout'])]
+        loader.load(self.connection, original, {'hazard': ['valve gas']}, self.fake.model, self.fake.embed_documents)
+        subset = [dict(original[0], sources=['training'])]
+        loader.load(self.connection, subset, {}, self.fake.model, lambda _: self.fail('unexpected embedding'))
+        with patch.dict(os.environ, EMBEDDINGS_ENABLED='true', OPENROUTER_EMBEDDING_MODEL=self.fake.model):
+            with patch.object(embeddings, 'embed_query', self.fake.embed_query):
+                result = embeddings.retrieve(self.connection, 'valve gas', exclude_sources=['heldout'])
+        self.assertEqual(result.examples, [])
+
+    def test_authoritative_version_retires_conflicting_and_withdrawn_examples(self):
+        cases = {'scenarios': [dict(id='original', turns=[dict(query='valve gas',
+                  scripted_decision=['search_actuators', {'service': 'on_off'}])])]}
+        original = loader.examples_from_cases(cases)
+        withdrawn = dict(text='withdrawn text', interpretation={'tool': 'search_actuators', 'args': {}}, sources=['withdrawn'])
+        loader.load(self.connection, original + [withdrawn], {'hazard': ['valve gas']}, self.fake.model,
+                    self.fake.embed_documents, dataset_version='v1', authoritative=True)
+        cases['scenarios'].append(dict(id='conflicting', turns=[dict(query='valve gas',
+                  scripted_decision=['search_actuators', {'service': 'modulating'}])]))
+        loader.load(self.connection, loader.examples_from_cases(cases), {}, self.fake.model,
+                    lambda _: self.fail('unexpected embedding'), dataset_version='v2', authoritative=True,
+                    provenance=loader.source_associations(cases))
+        rows = list(self.connection.execute('SELECT text,source,active FROM series76.example_bank WHERE model=%s', (self.fake.model,)))
+        self.assertEqual(len(rows), 2)
+        self.assertFalse(any(r['active'] for r in rows))
+        import json
+        sources = json.loads(next(r['source'] for r in rows if r['text'] == 'valve gas'))
+        self.assertEqual(set(sources), {'original', 'conflicting'})
+        with patch.dict(os.environ, EMBEDDINGS_ENABLED='true', OPENROUTER_EMBEDDING_MODEL=self.fake.model):
+            with patch.object(embeddings, 'embed_query', self.fake.embed_query):
+                self.assertEqual(embeddings.retrieve(self.connection, 'valve gas').examples, [])
+
+    def test_authoritative_versions_are_required_and_immutable(self):
+        row = dict(text='gas', interpretation={'tool': 'search_actuators', 'args': {}}, sources=['a'])
+        with self.assertRaises(ValueError):
+            loader.load(self.connection, [row], {}, self.fake.model, self.fake.embed_documents, authoritative=True)
+        loader.load(self.connection, [row], {}, self.fake.model, self.fake.embed_documents,
+                    authoritative=True, dataset_version='immutable')
+        with self.assertRaises(ValueError):
+            loader.load(self.connection, [], {}, self.fake.model, lambda _: self.fail('unexpected embedding'),
+                        authoritative=True, dataset_version='immutable')
+
     def test_sql_failure_preserves_outer_transaction(self):
         with patch.dict(os.environ, EMBEDDINGS_ENABLED='true', OPENROUTER_EMBEDDING_MODEL=self.fake.model):
             with patch.object(embeddings, 'embed_query', self.fake.embed_query):
@@ -161,6 +204,31 @@ class EmbeddingDatabaseTests(unittest.TestCase):
             with patch.object(embeddings, 'embed_query', self.fake.embed_query):
                 result = embeddings.retrieve(self.connection, 'new wording')
         self.assertFalse(result.available)
+
+    def test_sql_uses_remaining_deadline_and_restores_caller_timeout(self):
+        import time
+        connection = self.connection
+        before = connection.execute('SHOW statement_timeout').fetchone()['statement_timeout']
+        class DelayedConnection:
+            def transaction(self, **kwargs):
+                return connection.transaction(**kwargs)
+            def execute(self, sql, params=None):
+                if 'SELECT id, text, interpretation' in sql:
+                    connection.execute('SELECT pg_sleep(.25)')
+                return connection.execute(sql, params)
+        def embed(text):
+            time.sleep(.06)
+            return self.fake.embed_query(text)
+        with patch.dict(os.environ, EMBEDDINGS_ENABLED='true', OPENROUTER_EMBEDDING_MODEL=self.fake.model), \
+             patch.object(embeddings, 'RETRIEVAL_TIMEOUT_S', .15), \
+             patch.object(embeddings, 'embed_query', side_effect=embed):
+            start = time.monotonic()
+            result = embeddings.retrieve(DelayedConnection(), 'gas')
+            elapsed = time.monotonic() - start
+        self.assertFalse(result.available)
+        self.assertLess(elapsed, .3)
+        self.assertEqual(connection.execute('SHOW statement_timeout').fetchone()['statement_timeout'], before)
+        self.assertEqual(connection.execute('SELECT 1 AS n').fetchone()['n'], 1)
 
 
 if __name__ == '__main__':

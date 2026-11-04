@@ -1,6 +1,8 @@
 """Catalogue and persistent conversation API; live interpretation needs model configuration."""
 
 import psycopg
+import asyncio
+from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -10,8 +12,16 @@ from backend.conversation.api import router as conversation_router
 from backend.catalog.db import connect, readiness
 from backend.catalog.models import SearchFilters, validate_part_number
 from backend.catalog.repository import get_actuator, search_actuators
+from backend.conversation import embeddings
+
+
+@asynccontextmanager
+async def lifespan(app):
+    await asyncio.to_thread(embeddings.warmup)
+    yield
 
 app = FastAPI(
+    lifespan=lifespan,
     title="Series 76 Assistant",
     version="0.3.0",
     description="PostgreSQL catalogue and persistent conversations. Configure OpenRouter to enable language interpretation.",

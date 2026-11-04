@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import os
@@ -17,6 +18,17 @@ from backend.catalog.db import connect
 from backend.conversation import embeddings
 
 TOOLS = {'get_actuator', 'search_actuators', 'explain_terms', 'ask_clarification'}
+
+
+def source_associations(cases):
+    """Include ambiguous/withdrawn labels too: provenance is never a training verdict."""
+    associations = {}
+    for scenario in cases['scenarios']:
+        for turn in scenario['turns']:
+            text = turn.get('query', '').strip()
+            if text:
+                associations.setdefault(text, set()).add(scenario['id'])
+    return {text: sorted(sources) for text, sources in associations.items()}
 
 
 def examples_from_cases(cases):
@@ -52,13 +64,32 @@ def pending(connection, examples, anchors, model):
              for phrase in dict.fromkeys(phrases) if (concept, phrase) not in known])
 
 
-def load(connection, examples, anchors, model, embed=embeddings.embed_documents, *, batch_size=32):
+def load(connection, examples, anchors, model, embed=embeddings.embed_documents, *, batch_size=32,
+         dataset_version=None, authoritative=False, provenance=None):
     if not 1 <= batch_size <= 64:
         raise ValueError('Batch size must be 1..64')
+    if authoritative and not dataset_version or dataset_version and not authoritative:
+        raise ValueError('Authoritative replacement requires an explicit dataset version')
+    examples = [dict(row, sources=sorted(set(row['sources']))) for row in examples]
+    provenance = {text: set(sources) for text, sources in (provenance or {}).items()}
+    for row in examples:
+        provenance.setdefault(row['text'], set()).update(row['sources'])
+    provenance = {text: sorted(sources) for text, sources in provenance.items()}
+    fingerprint = hashlib.sha256(json.dumps(dict(
+        examples=sorted(examples, key=lambda row: row['text']), provenance=provenance),
+        sort_keys=True, ensure_ascii=False).encode()).hexdigest()
     count = 0
     # Serializes loaders so concurrent runs cannot pay twice for the same text.
     with connection.transaction():
         connection.execute('SELECT pg_advisory_xact_lock(760009)')
+        if authoritative:
+            prior = connection.execute('SELECT fingerprint FROM series76.example_dataset WHERE model=%s AND version=%s',
+                                       (model, dataset_version)).fetchone()
+            if prior and prior['fingerprint'] != fingerprint:
+                raise ValueError('Dataset version already identifies a different authoritative payload')
+            connection.execute('''INSERT INTO series76.example_dataset(model,version,fingerprint)
+                VALUES (%s,%s,%s) ON CONFLICT DO NOTHING''', (model, dataset_version, fingerprint))
+            connection.execute('UPDATE series76.example_bank SET active=false WHERE model=%s', (model,))
         missing = pending(connection, examples, anchors, model)
         for start in range(0, len(missing), batch_size):
             batch = missing[start:start + batch_size]
@@ -77,11 +108,25 @@ def load(connection, examples, anchors, model, embed=embeddings.embed_documents,
                         (concept,phrase,model,embedding) VALUES (%s,%s,%s,%s::vector)
                         ON CONFLICT(concept,phrase,model) DO NOTHING''', (row['concept'], row['text'], model, literal))
                 count += 1
-        # Keep source exclusions accurate when the same labeled text gains a scenario.
-        for row in examples:
-            connection.execute('''UPDATE series76.example_bank SET source=%s,interpretation=%s
-                WHERE text=%s AND model=%s''',
-                (json.dumps(sorted(row['sources'])), Jsonb(row['interpretation']), row['text'], model))
+        existing = {r['text']: r for r in connection.execute(
+            'SELECT text,source,interpretation FROM series76.example_bank WHERE model=%s', (model,))}
+        incoming = {row['text']: row for row in examples}
+        for text, sources in provenance.items():
+            if text not in existing:
+                continue
+            # Durable union: a subset reload cannot erase a held-out association.
+            union = sorted(set(json.loads(existing[text]['source'])) | set(sources))
+            connection.execute('UPDATE series76.example_bank SET source=%s WHERE text=%s AND model=%s',
+                               (json.dumps(union), text, model))
+            if text not in incoming:
+                connection.execute('UPDATE series76.example_bank SET active=false WHERE text=%s AND model=%s', (text, model))
+        for text, row in incoming.items():
+            if authoritative:
+                connection.execute('''UPDATE series76.example_bank SET interpretation=%s,active=true,dataset_version=%s
+                    WHERE text=%s AND model=%s''', (Jsonb(row['interpretation']), dataset_version, text, model))
+            elif existing[text]['interpretation'] != row['interpretation']:
+                # Conflicting incremental labels must not silently overwrite a training decision.
+                connection.execute('UPDATE series76.example_bank SET active=false WHERE text=%s AND model=%s', (text, model))
     return count
 
 
@@ -92,8 +137,13 @@ def main():
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--batch-size', type=int, default=32)
     parser.add_argument('--usd-per-million-tokens', type=float, default=.20)
+    parser.add_argument('--replace-dataset', action='store_true', help='Reconcile the complete authoritative dataset; deactivate omitted/ambiguous examples')
+    parser.add_argument('--dataset-version', help='Immutable identifier required with --replace-dataset')
     args = parser.parse_args()
-    examples = examples_from_cases(json.loads(args.cases.read_text(encoding='utf-8')))
+    if bool(args.dataset_version) != args.replace_dataset:
+        parser.error('--replace-dataset and --dataset-version must be supplied together')
+    cases = json.loads(args.cases.read_text(encoding='utf-8'))
+    examples = examples_from_cases(cases)
     anchors = json.loads(args.anchors.read_text(encoding='utf-8'))
     model = os.getenv('OPENROUTER_EMBEDDING_MODEL', '')
     if not model:
@@ -112,7 +162,9 @@ def main():
             return 0
         try:
             count = load(connection, examples, anchors, model,
-                         lambda texts: embeddings.embed_documents(texts, timeout=30), batch_size=args.batch_size)
+                         lambda texts: embeddings.embed_documents(texts, timeout=30), batch_size=args.batch_size,
+                         authoritative=args.replace_dataset, dataset_version=args.dataset_version,
+                         provenance=source_associations(cases))
         except Exception as exc:
             # Never output provider exception payloads.
             print(json.dumps(dict(status='failed', error_type=type(exc).__name__)), file=sys.stderr)
