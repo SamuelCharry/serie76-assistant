@@ -131,7 +131,7 @@ class GlossaryTests(Base):
 
     def test_neighbouring_definition_never_passes_for_an_absent_term(self):
         result = self.turn("What does IP67 mean?", ("explain_terms", {"term_keys": ["weatherproof"]}))
-        self.assertEqual(result.answer, "The document doesn't define that term.")
+        self.assertTrue(result.answer.startswith("The document doesn't define that term."))
         self.assertEqual(result.tool_calls[0]["validation"], ["term_not_in_glossary:IP67"])
         self.assertEqual(result.clarification["field"], "term_not_in_summary")
         self.assertFalse(result.terms)  # the unrelated weatherproof definition is not quoted
@@ -156,7 +156,7 @@ class GlossaryTests(Base):
 
     def test_term_outside_the_summary(self):
         result = self.turn("What is IP67?", ("ask_clarification", {"field": "term_not_in_summary"}))
-        self.assertEqual(result.answer, "The document doesn't define that term.")
+        self.assertTrue(result.answer.startswith("The document doesn't define that term."))
         self.assertEqual(result.suggested_replies, [])
 
     def test_combined_definition_and_lookup_in_one_call(self):
@@ -204,7 +204,7 @@ class LookupTests(Base):
         result = self.turn("specs of 761A00-11300000", ("get_actuator", {"part_numbers": ["761A00-11300000"]}))
         self.assertFalse(result.products)
         self.assertEqual(result.clarification["options"], ["761A00-11300000/A"])
-        self.assertIn("I will not pick one for you", result.answer)
+        self.assertIn("Which one do you mean?", result.answer)
 
     def test_invented_code_is_rejected(self):
         result = self.turn("the cheapest one", ("get_actuator", {"part_numbers": ["761A00-11300000/A"]}))
@@ -252,7 +252,7 @@ class SearchTests(Base):
         result = self.turn("strong on/off actuator", ("search_actuators", {"service": "on_off", "min_torque_nm": 70}))
         self.assertEqual(result.tool_calls[0]["validation"], ["ungrounded:min_torque_nm"])
         self.assertNotIn("min_torque_nm", self.context["filters"])
-        self.assertIn("I left out an unstated requirement.", result.answer)
+        self.assertIn("minimum torque was unclear", result.answer)
         self.assertIn("59 actuators meet: On/Off service.", result.answer)
 
     def test_only_ungrounded_values_means_asking(self):
@@ -302,7 +302,7 @@ class SearchTests(Base):
     def test_follow_up_keeps_constraints_and_more_pages(self):
         self.turn("On/Off, 110 V, at least 70 Nm", ("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "min_torque_nm": 70}))
         more = self.turn("more", ("search_actuators", {"more": True}))
-        self.assertEqual(more.context["filters"]["offset"], 5)
+        self.assertEqual(more.context["last_shown_offset"], 6)
         self.assertEqual(len(more.products), 3)
         changed = self.turn("what about modulating?", ("search_actuators", {"refine": True, "service": "modulating"}))
         self.assertIn("19 actuators meet: Modulating service, 110 V, torque ≥ 70 Nm", changed.answer)

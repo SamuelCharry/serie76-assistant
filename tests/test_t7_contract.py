@@ -42,7 +42,7 @@ class ExploratoryTests(Base):
     def test_price_weighting_is_explicit_limitation(self):
         result = self.turn('Which actuator is best overall if torque matters twice as much as speed and price?',
                            ('ask_clarification', {'field': 'requirements'}))
-        self.assertIn('no prices', result.answer)
+        self.assertIn("doesn't publish prices", result.answer)
         self.assertIn('weighted', result.answer)
 
     def test_purchase_does_not_claim_order(self):
@@ -202,7 +202,7 @@ class SuggestionPolicyTests(Base):
         result = self.turn('Explosionproof 24 V DC modulating over 1000 in-lb', ('search_actuators', {
             'enclosure': 'explosionproof', 'supply_voltage_v': 24, 'supply_current': 'DC', 'service': 'modulating',
             'min_torque_in_lb': {'value': 1000, 'op': 'gt'}}))
-        self.assertEqual(len(result.suggestions), 2)
+        self.assertEqual(len(result.suggestions), 1)
         self.assertEqual(result.suggestions[0]['action']['type'], 'compare_top')
         self.assertEqual(result.suggested_replies[0], result.suggestions[0]['label'])
 

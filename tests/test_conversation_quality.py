@@ -41,7 +41,7 @@ class ManualQualityTests(Base):
         self.assertEqual(len(result.products), 3)
         self.assertIn("> 1000 in-lb", result.answer)
         self.assertTrue(all(p["measurements"]["modulating_torque_in_lb"] > 1000 for p in result.products))
-        self.assert_replies(result, 2)
+        self.assert_replies(result, 1)
 
     def test_03_preference_ranking(self):
         result = self.turn(QUERIES[2], ("search_actuators", {

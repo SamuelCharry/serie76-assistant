@@ -400,10 +400,13 @@ class Turn:
         """Show concise ranked candidates while leaving unanswered choices open."""
         filters = self.context.get('filters') or {}
         codes = self.context.get('last_ranked_list') or []
+        if not codes:
+            scoped = SearchFilters.model_validate(dict(filters, limit=3, offset=0))
+            codes = [p['base_part_number'] for p in search_actuators(self.connection, scoped, allow_ambiguous=True)['products']]
         rows = [get_actuator(self.connection, code) for code in codes[:3]]
         products = [public_product(p) for p in rows if p]
         labels = ', '.join(policy.LABELS.get(f, f.replace('_', ' ')) for f in fields)
-        answer = 'The choice of ' + labels + ' is still open. Leading matches:\n'
+        answer = 'The requirement for ' + labels + ' is still open. Leading matches:\n'
         answer += '\n'.join(item['part_number'] + ': ' + item['reason'] for item in
                             [ranking.item(p, filters) for p in rows if p])
         self.context.pop('pending_questions', None)
@@ -704,6 +707,8 @@ class Turn:
             self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
             self.context['last_shown_offset'] = len(rec['items'])
             question.recommendation = rec
+            question.answer = f"{result['total']} actuators meet: {policy.describe(merged)}." + (
+                '\n' + question.answer if question.interaction else '')
             question.answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
             if 'lowest_power' in (merged.get('sort_by') or []):
@@ -760,7 +765,8 @@ class Turn:
                 if shown:
                     prefix += '\nInterpretation: ' + '; '.join(
                         f"'{a['user_phrase']}' read as {policy.describe({a['field']: a['value']})}" for a in shown) + '.'
-                answer = (prefix + '\n' + f"{result['total']} actuators meet: {policy.describe(merged)}. {summary}").strip()
+                answer = (f"{result['total']} actuators meet: {policy.describe(merged)}. {summary}" +
+                          ('\n' + prefix.strip() if prefix.strip() else '')).strip()
                 narrowing = question.interaction['questions'][0]['id']
             else:
                 narrowing = None
@@ -777,7 +783,7 @@ class Turn:
             answer += ("\n\n" + text) if text else ""
         if result['total'] > 4:
             if unscoped_superlative:
-                answer = f"All {result['total']} catalogue models were considered."
+                answer = f"{result['total']} actuators meet: the full catalogue scope."
             answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
             products = [quality.focused_product(public_product(p) | {'frequencies': p.get('frequencies', [])}, focus)
@@ -787,6 +793,12 @@ class Turn:
         if 'lowest_power' in (merged.get('sort_by') or []):
             answer += '\nMotor power is the published rated motor power, not total electrical consumption.'
         self.context["part_numbers"] = [p["base_part_number"] for p in products]
+        if not answer.startswith(f"{result['total']} actuators meet:"):
+            marker = f"{result['total']} actuators meet:"
+            if marker in answer:
+                before, after = answer.split(marker, 1)
+                first, _, rest = after.partition('\n')
+                answer = marker + first + ('\n' + before.strip() if before.strip() else '') + ('\n' + rest if rest else '')
         return AgentResult(answer, products, context=self.context, terms=terms, assumptions=shown,
                            clarification=dict(field=narrowing, message=answer, options=options) if narrowing else None,
                            interaction=question.interaction if narrowing and not unscoped_superlative else None, recommendation=rec,
@@ -834,6 +846,8 @@ class Turn:
             self.trace["data"] = dict(status="declined")
             return AgentResult(quality.decline_message(previous), context=self.context)
         if field_name in ('requirements', 'service', 'frequency', 'supply'):
+            if field_name == 'requirements' and self.context.get('pending_questions'):
+                return self.unresolved([q['id'] for q in self.context['pending_questions']])
             from backend.catalog.repository import question_facets
             fields = {'service': ['service'], 'frequency': ['frequency_hz'],
                       'supply': ['supply_voltage_v', 'supply_current'],
@@ -932,11 +946,19 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                 limitation = (f"The catalogue footnote for {codes[0]} says: {notes[0]}." if notes else
                               "The catalogue does not explain a footnote for that model. I can show its published specifications.")
         if limitation is None and re.search(r'\b(cost|price|prices)\b', bare_query) and not re.search(r'\b(cheapest|cheap one)\b', bare_query):
-            limitation = "The catalogue doesn't publish prices. I can compare published motor power or torque as a proxy, not a price estimate."
+            limitation = "The catalogue doesn't publish prices. A weighted price score is unavailable; I can compare published motor power or torque as a proxy only."
         if limitation is None and re.search(r'\b(rotork|other brands?)\b', bare_query):
             limitation = 'The catalogue covers Series 76 actuators only. I can compare its published models.'
-        if limitation is None and not policy.codes_in_text(query) and re.search(r'\b(ip\s*\d*|nema\s*\d*|ambient temperature|temperature rating|certification)\b', bare_query):
-            limitation = "The document doesn't define that term. I can show the published enclosure description."
+        unknown_rating = bool(re.search(r'\b(ip\s*\d*|nema\s*\d*)\b', bare_query))
+        if limitation is None and not policy.codes_in_text(query) and unknown_rating:
+            unknown = policy.terms_not_in_glossary(query, turn.terms)
+            turn.trace = dict(name='ask_clarification', parameters={'field': 'term_not_in_summary'}, raw_parameters={},
+                              validation=['term_not_in_glossary:' + ','.join(unknown)] if unknown else ['ok'], context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, turn.clarify('term_not_in_summary',
+                          "The document doesn't define that term. I can show the published enclosure description."))
+        if limitation is None and not policy.codes_in_text(query) and re.search(r'\b(ambient temperature|temperature rating|certification)\b', bare_query):
+            limitation = 'The catalogue does not specify that condition. I can show the published enclosure description.'
         if limitation is None and re.search(r'\b(how strong is strong enough|size (?:my|a|the) valve|valve sizing)\b', bare_query):
             limitation = 'The catalogue does not size valves. Tell me the required torque and I can find actuators that meet it.'
         if limitation:

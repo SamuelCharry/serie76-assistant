@@ -3,6 +3,11 @@ from test_agent_scenarios import Base
 
 
 class WordingTests(Base):
+    def test_search_with_interpretation_starts_with_count(self):
+        result = self.turn('Open and close at least 1.5 kNm',
+                           ('search_actuators', {'min_torque_nm': 1500}))
+        self.assertTrue(result.answer.startswith('15 actuators meet:'), result.answer)
+
     def test_lowest_fla_criterion_is_not_repeated(self):
         result = self.turn('On/off 110 V, least current',
                            ('search_actuators', {'service': 'on_off', 'supply_voltage_v': 110,

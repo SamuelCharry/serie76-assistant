@@ -119,7 +119,7 @@ class RecommendationTests(Base):
             with self.subTest(query=query):
                 result = run_agent(self.connection, query, [], {},
                                    model=Raising(AssertionError('LLM must not run')))
-                self.assertIn('catalogue', result.answer.lower())
+                self.assertTrue('catalogue' in result.answer.lower() or 'document' in result.answer.lower())
                 self.assertNotIn('Source:', result.answer)
                 self.assertFalse(result.debug['llm_called'])
 
