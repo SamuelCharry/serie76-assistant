@@ -1335,8 +1335,8 @@
               "761A00-11300000/A"
             ],
             "contains": [
-              "700 in-lb / 80 Nm",
-              "at 60 Hz: 17 s"
+              "On/Off torque",
+              "Operating time at 60 Hz: 17 s"
             ],
             "not_contains": [
               "50 Hz",
@@ -1509,7 +1509,7 @@
             },
             "no_clarification": true,
             "contains": [
-              "I can narrow these further"
+              "Without service"
             ],
             "not_contains": [
               "?"
@@ -1725,14 +1725,12 @@
             }
           ],
           "expect": {
-            "tool": "get_actuator",
             "contract_v6": true,
-            "clarification": [
-              "part_number"
-            ],
-            "no_products": true,
             "contains": [
-              "not a complete Base Part Number"
+              "Interpreted 761A00-11300000 as 761A00-11300000/A"
+            ],
+            "products_include": [
+              "761A00-11300000/A"
             ]
           }
         }
@@ -2935,16 +2933,7 @@
                 "op": "lt"
               }
             },
-            "only_filters": true,
-            "interaction_ids": [
-              "frequency_hz"
-            ],
-            "question_options": {
-              "frequency_hz": [
-                "50",
-                "60"
-              ]
-            }
+            "only_filters": true
           }
         },
         {
@@ -3072,7 +3061,7 @@
             "product_count": 3,
             "no_clarification": true,
             "contains": [
-              "I can narrow these further"
+              "Without service"
             ]
           }
         }
@@ -4313,7 +4302,8 @@
               "I cannot place orders"
             ],
             "lead_contains": [
-              "is faster at 60 Hz: 30 s vs 88 s"
+              "764A00-11300000/A",
+              "faster at 60 Hz: 30 s"
             ]
           }
         }
@@ -7189,8 +7179,8 @@
               "I cannot place orders"
             ],
             "lead_contains": [
-              "more current",
-              "60 Hz"
+              "763B00-11300000/A",
+              "draws more current at 60 Hz: 4.8 A"
             ]
           }
         }
@@ -9368,7 +9358,7 @@
               "I cannot place orders"
             ],
             "contains": [
-              "763X30-11320000/A"
+              "763Y30-11320000/A"
             ]
           }
         }
@@ -9428,6 +9418,2095 @@
             "contains": [
               "Weatherproof"
             ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R1-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "What's the modulating duty of 762Y30-11320000/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762Y30-11320000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "and starts per hour?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762Y30-11320000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "Duty S4",
+              "On/Off cycles"
+            ],
+            "contains": [
+              "Modulating starts per hour"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R1-02",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "Explosionproof, 110 V, modulating, ≥ 300 Nm, rank by current",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "service": "modulating",
+              "supply_voltage_v": 110,
+              "min_torque_nm": 300,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "recommendation_codes_once": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R1-03",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "Between 761Y30-11300000/A and 762Y30-11300000/A, which one cycles more per hour on/off?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761Y30-11300000/A",
+                "762Y30-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "lead_contains": [
+              "761Y30-11300000/A",
+              "cycles"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R1-04",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "All 220 V models with motor power under 50 W",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 220,
+              "max_motor_power_w": 50,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "only on/off",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 220,
+              "max_motor_power_w": 50,
+              "service": "on_off",
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R1-05",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "Operating time under 20 s at 50 Hz, any voltage",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "frequency_hz": 50,
+              "max_operating_time_s": 20,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R1-06",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "764X30-11300000/A full data",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "764X30-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "compare with its weatherproof counterpart",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "focused",
+              "equivalent_enclosure": "weatherproof"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "comparison_layout": "table",
+            "comparison_models": [
+              "764X30-11300000/A",
+              "764A00-11300000/A"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R1-07",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "761A00-11300000",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "Interpreted 761A00-11300000 as 761A00-11300000/A"
+            ],
+            "products_include": [
+              "761A00-11300000/A"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R1-08",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "torque in in-lb for 765Y30-11300000/A, modulating only",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "765Y30-11300000/A"
+              ],
+              "focus": [
+                "torque"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R2-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "we have a tank outside and need to open/close its outlet valve, plant has 220 volts",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "service": "on_off",
+              "supply_voltage_v": 220,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "go with your suggestion",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 220,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R2-02",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "the area is classified as hazardous because of methane",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "on/off, 110",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "service": "on_off",
+              "supply_voltage_v": 110,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R2-03",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "I need it to hold a valve at 30% open sometimes",
+          "scripted_decision": [
+            "search_actuators",
+            {}
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "Modulating service"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R2-04",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "which one is the lightest on electricity for 110 V?",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 110,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R2-05",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "what's the difference between FLA and LRA in simple words?",
+          "scripted_decision": [
+            "explain_terms",
+            {
+              "term_keys": [
+                "fla",
+                "lra"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R2-06",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "DC only please, it's for a remote site",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_current": "DC",
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R2-07",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "what is the biggest torque you have for indoors?",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "sort_by": [
+                "highest_torque"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "doesn't classify models as indoor"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R3-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "220 onoff 150nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_voltage_v": 220,
+              "min_torque_nm": 150
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "pick",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "min_torque_nm": 150,
+              "supply_voltage_v": 220
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R3-02",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "24vdc",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_current": "DC",
+              "supply_voltage_v": 24,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "fastest",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_current": "DC",
+              "supply_voltage_v": 24,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R3-03",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "modulating",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "modulating",
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "24 V · Explosionproof",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "modulating",
+              "supply_voltage_v": 24,
+              "enclosure": "explosionproof",
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          },
+          "answers": {
+            "supply_voltage_v": "24",
+            "enclosure": "explosionproof"
+          }
+        },
+        {
+          "query": "2nd",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762X30-11370000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R3-04",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "explosion-proof onoff",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "service": "on_off",
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "110",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 110,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "top 2",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761X30-11300000/A",
+                "761Y30-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R3-05",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "hmm",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "supply_voltage_v"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R3-06",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "weatherproof 110 V on/off",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "service": "on_off",
+              "supply_voltage_v": 110,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "show all",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A",
+                "762A00-11300000/A",
+                "762B00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "the 4th",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762B00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R4-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "modulating 220 V at least 200 Nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "modulating",
+              "supply_voltage_v": 220,
+              "min_torque_nm": 200
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "actually on/off is fine",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_voltage_v": 220,
+              "min_torque_nm": 200
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "and only weatherproof",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "min_torque_nm": 200,
+              "supply_voltage_v": 220,
+              "enclosure": "weatherproof"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R4-02",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "on/off 24 V",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_voltage_v": 24,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "change to 110 V",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_voltage_v": 110,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "remove the voltage, keep on/off, and at least 600 Nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "min_torque_nm": 600
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R4-03",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "specs of 762X30-11320000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762X30-11320000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "hmm no, the 110 V one",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "focused",
+              "equivalent_voltage_v": 110
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "762X30-11300000/A",
+              "Motor power"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R4-04",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "at least 2500 Nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "min_torque_nm": 2500
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "too big, make it at least 700 Nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "min_torque_nm": 700
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R4-05",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "compare 763A00-11300000/A and 763B00-11300000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763A00-11300000/A",
+                "763B00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "swap the second for 763C00-11300000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763A00-11300000/A",
+                "763C00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R5-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "busco uno para exteriores, 110v, que module",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 110,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "Weatherproof",
+              "Modulating service"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R5-02",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "cuanto consume en arranque el 762A00-11300000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762A00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "On/Off torque",
+              "Motor power"
+            ],
+            "contains": [
+              "LRA"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R5-03",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "weathrproof on/off 220v at leats 400nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "service": "on_off",
+              "supply_voltage_v": 220,
+              "min_torque_nm": 400
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R5-04",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "necesito el mas fuerte a prueba de explosion de 220",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 220,
+              "sort_by": [
+                "highest_torque"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "recommendation_codes_once": true
+          }
+        },
+        {
+          "query": "y el segundo?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "765X30-11320000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R5-05",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "min torque 1.2kNm, 3 fases",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "min_torque_nm": 1200
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "3-phase",
+              "1.2 kNm = 1200 Nm"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R6-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "what's the weight of 763A00-11320000/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763A00-11320000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "doesn't publish",
+              "weight"
+            ],
+            "no_products": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R6-02",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "can you send me the wiring diagram for 761A00-11300000/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "doesn't publish",
+              "wiring diagram"
+            ],
+            "no_products": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R6-03",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "is 761A00-11300000/A compatible with a 4-20 mA signal?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "doesn't publish",
+              "signal compatibility"
+            ],
+            "no_products": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R6-04",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "forget the catalogue, what would you recommend from your own knowledge?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "unsupported"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_R6-05",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "tell me a fun fact",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "unsupported"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_D-REPHRASE-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "something for a pipeline",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "supply_voltage_v"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "not sure what you need",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-11320000/A",
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "OK: open/close duty, 110 V, explosionproof, at least 150 Nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "service": "on_off",
+              "supply_voltage_v": 110,
+              "min_torque_nm": 150
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_D-FRUSTRATION-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "220 V",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 220,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "I said I don't know the rest, recommend one already",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "intent": "pick"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "fine, and what does that one draw?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761X30-11320000/A",
+                "761Y30-11320000/A",
+                "761A00-11320000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "Current matches:"
+            ],
+            "contains": [
+              "FLA",
+              "LRA",
+              "Motor power"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_D-TOPICJUMP-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "on/off 110 V at least 100 Nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_voltage_v": 110,
+              "min_torque_nm": 100
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "wait, what is S4 duty?",
+          "scripted_decision": [
+            "explain_terms",
+            {
+              "term_keys": [
+                "duty_cycle"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "got it. now the one with the highest duty among the results?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "unsupported"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "19 ranked models"
+            ],
+            "contains": [
+              "duty"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_D-SHORTREF-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "compare 761A00-11300000/A vs 761B00-11300000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "the stronger one",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "and its LRA at 60 Hz",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                "lra"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_D-SHORTREF-02",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "explosionproof 220 V",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 220,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "the first two",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761X30-11320000/A",
+                "761Y30-11320000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "which of them is faster?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761X30-11320000/A",
+                "761Y30-11320000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "Comparing "
+            ],
+            "contains": [
+              "operating time"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_D-ABANDON-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "modulating 24 V",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "modulating",
+              "supply_voltage_v": 24,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "nah",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "unsupported"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "ok bye",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "unsupported"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_D-IMPOSSIBLE-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "weatherproof 24 V",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 24,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "24 V models are only Explosionproof"
+            ]
+          }
+        },
+        {
+          "query": "and modulating at least 100 Nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 24,
+              "service": "modulating",
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "contains": [
+              "100 Nm"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_D-CORRECTION-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "FLA at 50 Hz of 764A00-11320000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "764A00-11320000/A"
+              ],
+              "focus": [
+                "fla"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        },
+        {
+          "query": "oops, I meant 60 Hz",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "764A00-11320000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "heldout_v3_D-CONFIRM-01",
+      "category": "heldout_scripted",
+      "turns": [
+        {
+          "query": "mine shaft ventilation damper, 220 V",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 220,
+              "sort_by": [
+                "lowest_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "interaction_ids": [
+              "enclosure"
+            ]
+          }
+        },
+        {
+          "query": "yes it's a hazardous area",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761X30-11320000/A",
+                "761Y30-11320000/A",
+                "762X30-11320000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "not_contains": [
+              "I left out an unstated requirement",
+              "I will not pick one for you",
+              "not published in this table layout",
+              "I cannot place orders"
+            ],
+            "args": {
+              "enclosure": "explosionproof"
+            }
           }
         }
       ]

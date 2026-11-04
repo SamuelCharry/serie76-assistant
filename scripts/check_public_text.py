@@ -9,7 +9,8 @@ STALE = re.compile(r"I left out an unstated requirement|These are the top 3 cand
                    r"unresolved scopes are not assumed|I will not pick one for you|"
                    r"not published in this table layout|\b0 identical fields hidden|I cannot place orders|"
                    r"The requirement for|I could not apply that request|"
-                   r"Ranking uses the lowest published value across frequencies|full catalogue scope")
+                   r"Ranking uses the lowest published value across frequencies|full catalogue scope|"
+                   r"I can narrow these further when you know")
 
 
 def public_text_issues(answer, comparison=None, suggested_replies=()):

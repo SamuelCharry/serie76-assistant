@@ -33,7 +33,7 @@ def main():
         for item in by_id[case_id]['turns']:
             item['expect'].pop('suggested_replies_count', None)
     for case_id in ('t6_manual_05', 'EC24'):
-        by_id[case_id]['turns'][1]['expect']['contains'] = ['I can narrow these further']
+        by_id[case_id]['turns'][1]['expect']['contains'] = ['best matches']
     for key in ('contains', 'products_include', 'product_count', 'clarification'):
         by_id['t6_manual_03']['turns'][1]['expect'].pop(key, None)
     by_id['t6_manual_03']['turns'][1]['expect']['args'].pop('enclosure', None)
@@ -48,6 +48,14 @@ def main():
     by_id['EC30']['turns'][0]['expect'].update(tool='document_limitation',
         contains=["doesn't publish prices", 'weighted'])
     by_id['EC21']['turns'][0]['expect']['contains'] = ['Tell me what it must do:']
+    by_id['t6_manual_01']['turns'][1]['expect']['contains'] = ['On/Off torque', 'Operating time at 60 Hz: 17 s']
+    for case_id in ('t6_manual_05', 'EC24'):
+        by_id[case_id]['turns'][1]['expect']['contains'] = ['Without service']
+    by_id['EC02']['turns'][0]['expect'] = {'contract_v6': True, 'contains': ['Interpreted 761A00-11300000 as 761A00-11300000/A'],
+        'products_include': ['761A00-11300000/A']}
+    for item in by_id['EC22']['turns']:
+        item['expect'].pop('interaction_ids', None)
+        item['expect'].pop('question_options', None)
     by_id['EC34']['turns'][0]['expect'].update(clarification=['unsupported', 'decline'],
         contains=['cannot reveal'])
     by_id['EC35']['turns'][0]['expect']['contains'] = ['cannot process orders', 'confirm delivery']
@@ -105,13 +113,13 @@ def main():
     require('B-SHORTREF-01', 1, tool='ranked_reference')
     require('B-SHORTREF-01', 2, tool='ranked_reference')
     require('P6-01', contains=["doesn't publish prices"], no_products=True)
-    require('P1-03', lead_contains=['is faster at 60 Hz: 30 s vs 88 s'])
+    require('P1-03', lead_contains=['764A00-11300000/A', 'faster at 60 Hz: 30 s'])
     cases['scenarios'].extend(heldout['scenarios'])
     heldout_v2 = json.loads((CONFIG / 'agent_acceptance_heldout_v2.json').read_text(encoding='utf-8'))
     v2_by_id = {s['id']: s for s in heldout_v2['scenarios']}
     def v2_expect(case_id, turn_index=0, **expected):
         v2_by_id['heldout_v2_' + case_id]['turns'][turn_index]['expect'].update(expected)
-    v2_expect('Q1-03', lead_contains=['more current', '60 Hz'])
+    v2_expect('Q1-03', lead_contains=['763B00-11300000/A', 'draws more current at 60 Hz: 4.8 A'])
     v2_expect('Q1-08', not_contains=['Motor power: 180 W vs 180 W vs 180 W'])
     v2_expect('Q2-01', 1, contains=['My pick:'])
     v2_expect('Q2-02', 0, interaction_ids=['enclosure'])
@@ -133,7 +141,7 @@ def main():
     v2_expect('C-FRUSTRATION-01', 2, contains=['ranked the models by'])
     v2_expect('C-FRUSTRATION-02', 1, contains=['My pick:'])
     v2_expect('C-TOPICJUMP-01', 2, not_contains=['Enclosure: Weatherproof vs Weatherproof vs Weatherproof'])
-    v2_expect('C-CORRECTION-01', 1, contains=['763X30-11320000/A'])
+    v2_expect('C-CORRECTION-01', 1, contains=['763Y30-11320000/A'])
     v2_expect('C-CONFIRM-01', 1, contains=['Weatherproof'])
     v2_expect('C-SHORTREF-02', 1, contains=['762A00-11300000/A'], debug_llm_called=False)
     v2_expect('C-SHORTREF-02', 2, contains=['Motor power', '762A00-11300000/A'], debug_llm_called=False)
@@ -153,6 +161,47 @@ def main():
         v2_by_id['heldout_v2_' + case_id]['turns'][index]['scripted_decision'] = [
             'ask_clarification', {'field': 'requirements', 'intent': intent}]
     cases['scenarios'].extend(heldout_v2['scenarios'])
+    heldout_v3 = json.loads((CONFIG / 'agent_acceptance_heldout_v3.json').read_text(encoding='utf-8'))
+    v3_by_id = {s['id']: s for s in heldout_v3['scenarios']}
+    def v3_expect(case_id, turn_index=0, **expected):
+        v3_by_id['heldout_v3_' + case_id]['turns'][turn_index]['expect'].update(expected)
+    for case_id in ('R1-02', 'R5-04'):
+        v3_expect(case_id, recommendation_codes_once=True)
+    v3_expect('R1-03', lead_contains=['761Y30-11300000/A', 'cycles'])
+    v3_expect('R1-01', 1, contains=['Modulating starts per hour'], not_contains=['Duty S4', 'On/Off cycles'])
+    v3_expect('R5-02', contains=['LRA'], not_contains=['On/Off torque', 'Motor power'])
+    v3_expect('R2-03', contains=['Modulating service'])
+    v3_expect('R5-01', contains=['Weatherproof', 'Modulating service'])
+    v3_expect('R5-05', contains=['3-phase', '1.2 kNm = 1200 Nm'])
+    v3_expect('R2-07', contains=["doesn't classify models as indoor"])
+    for case_id, noun in [('R6-01', 'weight'), ('R6-02', 'wiring diagram'),
+                          ('R6-03', 'signal compatibility')]:
+        v3_expect(case_id, contains=["doesn't publish", noun], no_products=True)
+    v3_expect('R1-06', 1, comparison_layout='table', comparison_models=['764X30-11300000/A', '764A00-11300000/A'])
+    v3_expect('R4-03', 1, contains=['762X30-11300000/A', 'Motor power'])
+    v3_expect('R1-07', contains=['Interpreted 761A00-11300000 as 761A00-11300000/A'],
+              products_include=['761A00-11300000/A'])
+    v3_expect('D-FRUSTRATION-01', 2, contains=['FLA', 'LRA', 'Motor power'], not_contains=['Current matches:'])
+    v3_expect('D-TOPICJUMP-01', 2, contains=['duty'], not_contains=['19 ranked models'])
+    v3_expect('D-SHORTREF-02', 2, contains=['operating time'], not_contains=['Comparing '])
+    v3_expect('D-IMPOSSIBLE-01', 0, contains=['24 V models are only Explosionproof'])
+    v3_expect('D-IMPOSSIBLE-01', 1, contains=['100 Nm'])
+    v3_expect('D-CONFIRM-01', 0, interaction_ids=['enclosure'])
+    v3_expect('D-CONFIRM-01', 1, args={'enclosure': 'explosionproof'})
+    v3_by_id['heldout_v3_R2-03']['turns'][0]['scripted_decision'] = ['search_actuators', {}]
+    v3_by_id['heldout_v3_R1-06']['turns'][1]['scripted_decision'] = ['get_actuator',
+        {'reference_kind': 'focused', 'equivalent_enclosure': 'weatherproof'}]
+    v3_by_id['heldout_v3_R4-03']['turns'][1]['scripted_decision'] = ['get_actuator',
+        {'reference_kind': 'focused', 'equivalent_voltage_v': 110}]
+    v3_by_id['heldout_v3_R1-07']['turns'][0]['scripted_decision'] = ['get_actuator',
+        {'part_numbers': ['761A00-11300000']}]
+    v3_by_id['heldout_v3_D-FRUSTRATION-01']['turns'][1]['scripted_decision'] = [
+        'ask_clarification', {'field': 'requirements', 'intent': 'pick'}]
+    for scenario in heldout_v3['scenarios']:
+        for item in scenario['turns']:
+            item['expect']['not_contains'] = [phrase for phrase in item['expect']['not_contains']
+                                               if phrase != '0 identical fields hidden']
+    cases['scenarios'].extend(heldout_v3['scenarios'])
     (CONFIG / 'agent_acceptance_cases_v7.json').write_text(json.dumps(cases, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     print({'v6_cases': len(by_id), 'v7_cases': len(cases['scenarios'])})
 

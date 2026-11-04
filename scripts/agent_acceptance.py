@@ -254,6 +254,11 @@ def check(expect, observed, queries=()):
     if expect.get("no_products") and codes:
         failures.append(f"unexpected products {codes[:3]}")
     recommendation = observed.get('recommendation') or {}
+    if expect.get('recommendation_codes_once'):
+        for item in recommendation.get('items', []):
+            code = item['part_number']
+            if observed['answer'].count(code) != 1:
+                failures.append('ranked code repeated or absent in answer: ' + code)
     if 'recommendation_total' in expect and recommendation.get('total') != expect['recommendation_total']:
         failures.append('recommendation total differs')
     if expect.get('recommendation_ranked_by') and not recommendation.get('ranked_by'):
@@ -513,7 +518,11 @@ def command_selfcheck(cases, evidence_path=None):
                 'T8_recommendation','T8_fast_compare','T8_mining', 'heldout_P5-01', 'heldout_P2-03',
                 'heldout_B-FRUSTRATION-01', 'heldout_B-SHORTREF-01', 'heldout_P6-01', 'heldout_P1-03',
                 'heldout_v2_Q1-03', 'heldout_v2_Q3-04', 'heldout_v2_Q4-03', 'heldout_v2_Q5-05',
-                'heldout_v2_C-FRUSTRATION-01', 'heldout_v2_C-SHORTREF-02', 'heldout_v2_Q6-01'}
+                'heldout_v2_C-FRUSTRATION-01', 'heldout_v2_C-SHORTREF-02', 'heldout_v2_Q6-01',
+                'heldout_v3_R1-02', 'heldout_v3_R1-03', 'heldout_v3_R5-01', 'heldout_v3_R5-05',
+                'heldout_v3_R6-01', 'heldout_v3_R6-02', 'heldout_v3_R6-03',
+                'heldout_v3_D-FRUSTRATION-01', 'heldout_v3_D-TOPICJUMP-01',
+                'heldout_v3_D-IMPOSSIBLE-01', 'heldout_v3_D-CONFIRM-01'}
     for scenario in cases["scenarios"]:
         result = run_scenario(scenario, lambda s, i: IdealModel(s['turns'][i].get('scripted_decision') or IDEAL[s["id"]][i]))
         print(scenario["id"], result["status"], *[t["failures"] for t in result["turns"] if t["failures"]])
