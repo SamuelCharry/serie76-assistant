@@ -7,6 +7,20 @@ from .policy import colloquial_requirements
 
 def answer(connection, query):
     text = query.lower()
+    if re.search(r'\btorque range\b.*\b(?:catalogue|series 76)\b|\b(?:catalogue|series 76)\b.*\btorque range\b', text):
+        rows = connection.execute(
+            "SELECT s.service,min(s.torque_nm) AS low,max(s.torque_nm) AS high "
+            "FROM series76.service_specs s JOIN series76.entries e ON e.id=s.entry_id "
+            "WHERE e.import_id=%s AND e.data_status='reported' AND s.torque_nm IS NOT NULL "
+            "GROUP BY s.service", (active_import(connection),)).fetchall()
+        by_service = {row['service']: row for row in rows}
+        low = min(row['low'] for row in rows)
+        high = max(row['high'] for row in rows)
+        def span(name):
+            relevant = [by_service[key] for key in (name, 'shared') if key in by_service]
+            return f"{min(row['low'] for row in relevant):g}–{max(row['high'] for row in relevant):g} Nm"
+        return (f"The catalogue covers {low:g}–{high:g} Nm: "
+                f"On/Off {span('on_off')}, Modulating {span('modulating')}.")
     if re.search(r'\b(?:what|which|available|have|list|show)\b.*\b(?:voltages?|supply voltages?)\b', text):
         rows = connection.execute(
             "SELECT supply_voltage_v AS value,count(DISTINCT base_part_number) AS n "

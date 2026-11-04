@@ -66,9 +66,9 @@ def colloquial_requirements(query):
                     f"The catalogue doesn't classify models as {name}; showing models by published fields.")
             if note not in notes:
                 notes.append(note)
-    if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar|on/of|onoff|on off|on-off)\b', text):
+    if re.search(r'\b(open and close|open and shut|open/shut|open or shut|open or close|fully open|abrir y cerrar|on/of|onoff|on off|on-off)\b', text):
         result['service'] = 'on_off'
-    if re.search(r'\b(stop halfway|intermediate positions?|position anywhere|any position|regulat(?:e|ing)|regule|regular caudal|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open|hold at \d+\s*%\s*open|mod(?=\s|\d))\b', text):
+    if re.search(r'\b(stop halfway|intermediate positions?|partial positions?|set to partial|mixing positions?|position anywhere|any position|regulat(?:e|ing)|regule|regular caudal|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open|hold at \d+\s*%\s*open|mod(?=\s|\d))\b', text):
         result['service'] = 'modulating'
     if re.search(r'\b(outside|exteriores?|intemperie)\b|\boutdoors\b.*\bnot hazardous\b', text):
         result['enclosure'] = 'weatherproof'
@@ -78,6 +78,8 @@ def colloquial_requirements(query):
         result['enclosure'] = 'weatherproof'
     if re.search(r'\bxp\b', text):
         result['enclosure'] = 'explosionproof'
+    if re.search(r'\bwp\b', text):
+        result['enclosure'] = 'weatherproof'
     if re.search(r'\b(?:[13])[-\s]*(?:phase|phases|fases)\b', text):
         result['phase_count'] = int(re.search(r'\b([13])[-\s]*(?:phase|phases|fases)\b', text).group(1))
     if re.search(r'\b(?:classified as hazardous|hazardous area|area is hazardous)\b', text):
@@ -88,6 +90,10 @@ def colloquial_requirements(query):
     if re.search(r'\b(solar|battery|bater[ií]a)\b', text):
         result['supply_current'] = 'DC'
         notes.append('Solar or battery supply is DC; compatible AC/DC models remain eligible.')
+    if re.search(r'\bbattery (?:room|storage)\b', text):
+        result.pop('supply_voltage_v', None)
+        result.pop('supply_current', None)
+        notes = [note for note in notes if not note.startswith('Solar or battery supply')]
     match = re.search(r'\b(\d+(?:[.,]\d+)?)\s*knm\b', text)
     if match:
         number = Decimal(match.group(1).replace(',', '.'))
@@ -122,8 +128,8 @@ def colloquial_requirements(query):
     return result, notes
 
 
-HAZARD_RE = re.compile(r'\b(?:flammable|combustible|explosive|solvent|fumes?|vapou?rs?|hydrogen|methane|gas|dust|atex|iecex|classified (?:zone|area)|hazardous|zone\s*(?:0|1|2|21|22)|class\s*(?:i|ii)\s*div\s*[12]|refinery|petrochemical|mine|mining|distillery|spirits area)\b', re.I)
-NONHAZARD_RE = re.compile(r'\b(?:not hazardous|not a (?:classified|hazardous) (?:area|zone)|safe area)\b', re.I)
+HAZARD_RE = re.compile(r'\b(?:flammable|combustible|explosive|solvent|fumes?|vapou?rs?|propane|butane|lpg|natural gas|methane|hydrogen|ammonia|acetylene|gas|dust|atex|iecex|classified (?:zone|area)|hazardous|zone\s*(?:0|1|2|21|22)|class\s*(?:i|ii)\s*div\s*[12]|refinery|petrochemical|mine|mining|distillery|spirits area)\b', re.I)
+NONHAZARD_RE = re.compile(r'\b(?:not hazardous|not a (?:classified|hazardous) (?:area|zone)|outside (?:the )?(?:classified|hazardous) (?:area|zone)|safe area)\b', re.I)
 
 
 def nonhazard_signal(text):
@@ -146,7 +152,7 @@ UNPUBLISHED_TOPICS = (
     (r'\b(?:install|installation|mount(?:ing)?)\b', 'installation instructions'),
     (r'\b(?:noise|quietest|sound level|decibels?)\b', 'noise levels'),
     (r'\b(?:maintenance|service interval|before servicing)\b', 'maintenance interval'),
-    (r'\b(?:service life|lifespan|how long .* last)\b', 'service life'),
+    (r'\b(?:service life|lifespan|how long .* last|lasts? longest)\b', 'service life'),
     (r'\b(?:efficien(?:cy|t)|efficient)\b', 'efficiency'),
     (r'\bip\s*rating\b', 'IP rating'),
     (r'\bweight\b', 'weight'),

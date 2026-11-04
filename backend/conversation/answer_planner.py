@@ -13,7 +13,7 @@ METRICS = (
     ('duty', r'\b(?:duty|s4)\b'),
     ('cycles', r'\b(?:cycles?|ciclos?)\b'),
     ('starts', r'\b(?:starts?|arranques?)\b'),
-    ('operating_time', r'\b(?:faster|fastest|quicker|speed|operating time|tiempo|velocidad)\b'),
+    ('operating_time', r'\b(?:faster|fastest|quicker|quickest|speed|operating time|tiempo|velocidad)\b'),
     ('torque', r'\b(?:stronger|strongest|torque|par)\b'),
 )
 VERDICT = re.compile(r'\b(?:which|who|most|least|lowest|highest|faster|fastest|quicker|stronger|better|more|less|cu[aá]l|menos|mayor|mejor|m[aá]s)\b', re.I)

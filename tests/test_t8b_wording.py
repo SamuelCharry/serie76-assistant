@@ -36,7 +36,7 @@ class WordingTests(Base):
         result = self.turn('764A00-11300000/A vs 765A00-11300000/A — which is faster at 60 Hz?',
                            ('get_actuator', {'part_numbers': ['764A00-11300000/A', '765A00-11300000/A'],
                                              'focus': ['operating_time'], 'focus_frequency_hz': 60}))
-        self.assertIn('764A00-11300000/A is faster at 60 Hz: 30 s vs 88 s', result.lead)
+        self.assertIn('764A00-11300000/A 30 s vs 765A00-11300000/A 88 s', result.lead)
         self.assertNotIn('0 identical fields hidden', result.answer)
 
     def test_comparison_missing_note_appears_once_per_model(self):

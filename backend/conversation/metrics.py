@@ -92,7 +92,8 @@ def verdict(products, query, filters):
         first, second = order
         pair_unit = 's' if hz and metric == 'operating_time' else first[2]
         other_unit = 's' if hz and metric == 'operating_time' else second[2]
-        compared = f'{_num(first[1])} {pair_unit} vs {_num(second[1])} {other_unit}'
+        compared = (f'{first[0]} {_num(first[1])} {pair_unit} vs '
+                    f'{second[0]} {_num(second[1])} {other_unit}')
         phrase = ('is faster' if metric == 'operating_time' and direction == 'lower' else
                   'draws more current' if metric == 'fla' and direction == 'higher' else
                   'has lower LRA' if metric == 'lra' and direction == 'lower' else

@@ -289,7 +289,7 @@ class SearchTests(Base):
         result = self.turn("24 V DC at 60 Hz", ("search_actuators", {"supply_voltage_v": 24, "supply_current": "DC", "frequency_hz": 60}))
         self.assertEqual(result.clarification["conflict"]["kind"], "dc_frequency")
         self.assertIn("DC supply has no mains frequency", result.answer)
-        self.assertEqual(self.context["filters"]["supply_voltage_v"], "24")  # non-contradictory part kept pending
+        self.assertEqual(int(self.context["filters"]["supply_voltage_v"]), 24)  # non-contradictory part kept pending
         follow = self.turn("DC then, modulating", ("search_actuators", {"refine": True, "supply_current": "DC", "service": "modulating"}))
         self.assertIn("actuators meet", follow.answer)
         self.assertNotIn("frequency_hz", self.context["filters"])
