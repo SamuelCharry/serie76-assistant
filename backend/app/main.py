@@ -32,6 +32,11 @@ async def private_api_responses(request, call_next):
 @app.exception_handler(RequestValidationError)
 async def validation_error(request, exc):
     # Never reflect passwords, bearer tokens or whole request bodies in errors.
+    if request.url.path == '/api/conversation':
+        fields = {e['loc'][1] for e in exc.errors() if len(e['loc']) > 1 and e['loc'][0] == 'body'}
+        if 'answers' in fields or 'remove_filters' in fields:
+            return JSONResponse(status_code=422, content={'detail': 'Invalid interaction submission.',
+                'error_code': 'invalid_answers' if 'answers' in fields else 'invalid_filter'})
     return JSONResponse(status_code=422, content={"detail": [
         {"loc": list(e["loc"]), "msg": e["msg"], "type": e["type"]} for e in exc.errors()
     ]})

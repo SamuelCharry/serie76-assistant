@@ -167,7 +167,10 @@ class HttpContractTests(unittest.TestCase):
             self.assertEqual(len(first['interaction']['questions']), 2)
             with patch('backend.conversation.agent.reserve_agent_call', side_effect=AssertionError('model call')):
                 for payload, code in [({'answers': {'service': 'invented'}}, 'invalid_answers'),
+                                      ({'answers': {'service': 1}}, 'invalid_answers'),
+                                      ({'answers': []}, 'invalid_answers'),
                                       ({'answers': {'enclosure': 'weatherproof'}}, 'invalid_answers'),
+                                      ({'remove_filters': [1]}, 'invalid_filter'),
                                       ({'remove_filters': ['no-such-filter']}, 'invalid_filter')]:
                     response = client.post('/api/conversation', json={'session_id': sid, 'query': 'invalid', **payload})
                     self.assertEqual(response.status_code, 422)
