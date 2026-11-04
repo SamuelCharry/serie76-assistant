@@ -27,3 +27,11 @@ class ComparisonTests(Base):
                                                               '761B00-11300000/A'], 'focus': ['fla']}))
         self.assertIn('more current', result.lead)
         self.assertIn('60 Hz', result.lead)
+
+    def test_three_compared_models_metric_question_leads_with_model(self):
+        result = self.turn('Which of 763B00-11300000/A, 763X30-11300000/A, and 763Y30-11300000/A has the lowest LRA at 60 Hz?',
+                           ('get_actuator', {'part_numbers': ['763B00-11300000/A',
+                                                              '763X30-11300000/A',
+                                                              '763Y30-11300000/A']}))
+        self.assertIn('LRA at 60 Hz', result.lead)
+        self.assertIn(' A', result.lead)

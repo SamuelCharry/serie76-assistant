@@ -7,7 +7,7 @@ from .rendering import _num
 LABELS = {
     'closest_torque': 'closest torque', 'lowest_fla': 'lowest FLA',
     'fastest': 'fastest operating time', 'most_torque': 'most torque',
-    'lowest_power': 'lowest motor power',
+    'lowest_power': 'lowest motor power', 'lowest_lra': 'lowest LRA',
 }
 
 
@@ -24,9 +24,10 @@ def measurement(product, stem, filters):
                 [f'on_off_torque_{unit}', f'modulating_torque_{unit}', f'shared_torque_{unit}'])
     else:
         frequency = filters.get('frequency_hz')
-        keys = ([f'{stem}_{frequency}hz_{"a" if stem == "fla" else "s"}'] if frequency else
-                [f'{stem}_{hz}hz_{"a" if stem == "fla" else "s"}' for hz in (50, 60)] +
-                [f'{stem}_unqualified_{"a" if stem == "fla" else "s"}'])
+        unit = 'a' if stem in ('fla', 'lra') else 's'
+        keys = ([f'{stem}_{frequency}hz_{unit}'] if frequency else
+                [f'{stem}_{hz}hz_{unit}' for hz in (50, 60)] +
+                [f'{stem}_unqualified_{unit}'])
     found = [values[k] for k in keys if values.get(k) is not None]
     if stem == 'torque':
         threshold = filters.get('min_torque_nm') if unit == 'nm' else filters.get('min_torque_in_lb')
@@ -103,6 +104,8 @@ def rank(products, filters, by='closest_torque'):
         speed = measurement(product, 'operating_time', filters)
         if by == 'lowest_fla':
             primary = missing(fla)
+        elif by == 'lowest_lra':
+            primary = missing(measurement(product, 'lra', filters))
         elif by == 'fastest':
             primary = missing(speed)
         elif by == 'most_torque':
@@ -119,7 +122,7 @@ def rank(products, filters, by='closest_torque'):
 def ranked_by(filters, by='closest_torque'):
     if by != 'closest_torque':
         tie_breaks = ([] if by == 'fastest' else ['shortest operating time'])
-        if by != 'lowest_fla':
+        if by not in ('lowest_fla', 'lowest_lra'):
             tie_breaks.insert(0, 'lowest FLA')
         return ', then '.join(dict.fromkeys([LABELS[by], *tie_breaks]))
     minimum = filters.get('min_torque_nm')
@@ -139,6 +142,13 @@ def item(product, filters, reason=None):
     if fla is not None:
         parts.append(f'{fla[0]} {_num(fla[1])} A')
     key_values = []
+    if filters.get('rank_by') == 'lowest_lra':
+        hz = filters.get('frequency_hz')
+        lra = measurement(product, 'lra', filters)
+        if lra is not None:
+            label = f'LRA at {hz} Hz' if hz else 'Lowest published LRA'
+            parts.insert(0, f'{label} {_num(lra)} A')
+            key_values.insert(0, dict(label=label, value=f'{_num(lra)} A'))
     for label, torque in torques:
         key_values.append(dict(label=label, value=f'{_num(torque)} {torque_unit(filters)}'))
     if filters.get('sort_by', [None])[0] == 'fastest':
@@ -156,4 +166,4 @@ def item(product, filters, reason=None):
 def recommendation(products, filters, by='closest_torque', *, total=None):
     ordered = rank(products, filters, by)
     return dict(ranked_by=ranked_by(filters, by), total=len(ordered) if total is None else total,
-                shown=min(3, len(ordered)), items=[item(p, filters) for p in ordered[:3]])
+                shown=min(3, len(ordered)), items=[item(p, dict(filters, rank_by=by)) for p in ordered[:3]])

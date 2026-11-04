@@ -218,7 +218,7 @@ def schemas(term_keys):
 
 DESCRIPTIONS = {
     "get_actuator": "Look up complete Base Part Numbers (up to four). For prior models use flat reference_kind=shown_position with 1-based reference_index, last_shown, focused, or compared_winner with reference_metric/direction/frequency. For a same-frame voltage or enclosure equivalent of the focused model, set equivalent_voltage_v or equivalent_enclosure. For the last ranked list use from_results_items='1,3' for comparisons, or list_results=true. Use focus=overview for full specs; include comma-separated explain_terms for combined facts/definitions.",
-    "search_actuators": "Find actuators for ALL stated requirements, including every numeric limit. New independent requests use refine=false; explicit follow-ups use refine=true or more/remove. For a follow-up asking to choose one, explain the choice or show the next page, set intent=pick, explain_pick or next_page. Unknown data never passes a threshold.",
+    "search_actuators": "Find ALL stated requirements and numeric limits. New requests use refine=false; follow-ups use refine=true or more/remove. To choose one, explain the choice or show the next page, set intent=pick, explain_pick or next_page. Unknown data never passes a threshold.",
     "explain_terms": "Quote only glossary definitions; absent terms use ask_clarification term_not_in_summary, not a related definition.",
     "ask_clarification": "Ask for missing data/disambiguation, or mark unsupported requests such as jokes and terms absent from the glossary. If prior results exist and the user wants a pick, explanation or next page, set intent=pick, explain_pick or next_page rather than repeating a question.",
 }
@@ -635,6 +635,18 @@ class Turn:
         comparison_focus = ['overview']
         compared = quality.comparison(public, comparison_focus, self.context.get('filters')) if len(public) >= 2 else None
         if compared:
+            if len(public) > 2 and any(spec['field'] != 'overview' for spec in focus):
+                explicit = []
+                for spec in focus:
+                    stem = spec['field']
+                    if stem == 'torque' and spec.get('service'):
+                        stem = spec['service'] + '_torque'
+                    elif stem in ('operating_time', 'fla', 'lra') and spec.get('frequency_hz'):
+                        stem += '_' + str(spec['frequency_hz']) + 'hz'
+                    match = next((row['field'] for row in compared['rows'] if row['field'].startswith(stem)), None)
+                    if match and match not in explicit:
+                        explicit.append(match)
+                compared['key_fields'] = (explicit + [key for key in compared['key_fields'] if key not in explicit])[:4]
             self.context['last_comparison_models'] = compared['models']
             self.context['last_shown_list'] = compared['models']
             hidden = f" {len(compared['hidden_rows'])} identical fields hidden." if compared['hidden_rows'] else ''
@@ -693,6 +705,36 @@ class Turn:
                                  ('more ' if direction == 'higher' else 'lower ') +
                                  ('current' if metric == 'fla' else metric.upper() if metric == 'lra' else 'motor power'))
                     lead = f"{compared['models'][winner]} is {adjective}" + (f" at {hz.group(1)} Hz" if hz else '') + ': ' + ' vs '.join(row['values']) + '.'
+        elif compared and len(compared['models']) > 2:
+            import re
+            words = self.query.lower()
+            metric = ('lra' if re.search(r'\blra|starting current\b', words) else
+                      'fla' if re.search(r'\bfla|current\b', words) else
+                      'motor_power' if re.search(r'\bmotor power|electricity\b', words) else
+                      'operating_time' if re.search(r'\bfaster|speed|time\b', words) else
+                      'torque' if re.search(r'\bstronger|torque\b', words) else None)
+            if metric:
+                hz = re.search(r'\b(50|60)\s*hz\b', words)
+                scope = dict(self.context.get('filters') or {})
+                if hz:
+                    scope['frequency_hz'] = int(hz.group(1))
+                direction = 'higher' if re.search(r'\b(more|higher|highest|most|stronger)\b', words) else 'lower'
+                values = [(p['measurements'].get('motor_power_w') if metric == 'motor_power' else
+                           ranking.measurement(p, metric, scope)) for p in products]
+                available = [(i, v) for i, v in enumerate(values) if v is not None]
+                if available:
+                    best = (max if direction == 'higher' else min)(v for _, v in available)
+                    winners = [i for i, v in available if v == best]
+                    unit = 'A' if metric in ('lra', 'fla') else 'W' if metric == 'motor_power' else 's' if metric == 'operating_time' else 'Nm'
+                    label = {'lra': 'LRA', 'fla': 'FLA', 'motor_power': 'motor power',
+                             'operating_time': 'operating time', 'torque': 'torque'}[metric]
+                    if len(winners) == 1:
+                        lead = f"{compared['models'][winners[0]]} has the {'highest' if direction == 'higher' else 'lowest'} {label}" + (
+                            f' at {hz.group(1)} Hz' if hz else '') + f': {best} {unit}.'
+                    else:
+                        lead = f"The compared models tie for {'highest' if direction == 'higher' else 'lowest'} {label}: {best} {unit}."
+                else:
+                    lead = f'The catalogue does not publish comparable {metric.upper() if metric in ("lra", "fla") else metric.replace("_", " ")} values for these models.'
         return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared, lead=lead)
 
     def search(self, args, *, trusted=False):
@@ -916,7 +958,7 @@ class Turn:
             answer += ("\n\n" + text) if text else ""
         if result['total'] > 4:
             if unscoped_superlative:
-                answer = f"{result['total']} actuators meet: the full catalogue scope."
+                answer = f"All {result['total']} catalogue models are ranked by their published values."
             answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
             products = [quality.focused_product(public_product(p) | {'frequencies': p.get('frequencies', [])}, focus)
@@ -1123,7 +1165,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         limitation = None
         if re.search(r'\b(are you chatgpt|are you an ai)\b', bare_query):
             limitation = "I'm the Series 76 catalogue assistant. I can help compare published models."
-        if limitation is None and re.search(r'\b(delivery|lead time|ship(?:ping)?)\b', bare_query):
+        if limitation is None and not policy.purchase_request(query) and re.search(r'\b(delivery|lead time|ship(?:ping)?)\b', bare_query):
             limitation = 'The catalogue does not publish delivery times. I can show the published model specifications.'
         if limitation is None and re.search(r'\b(warranty|guarantee)\b', bare_query):
             limitation = 'The catalogue does not publish warranty terms. I can show the published model specifications.'
@@ -1279,7 +1321,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             result.lead = 'Ranked by ' + by_text + '. ' + (result.lead or '')
         elif kind == 'rank_by':
             by = params.get('by')
-            if set(params) != {'by'} or by not in ('closest_torque', 'lowest_fla', 'fastest', 'most_torque'):
+            if set(params) != {'by'} or by not in ('closest_torque', 'lowest_fla', 'lowest_lra', 'fastest', 'most_torque'):
                 raise InvalidInteraction('invalid_action', 'Choose a supported ranking.')
             rows = [get_actuator(connection, code) for code in codes]
             ordered = ranking.rank([p for p in rows if p], filters, by)
@@ -1386,10 +1428,10 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             args = schema.model_validate(canonical).model_dump(mode="json")
         except ValidationError as exc:
             trace.update(validation=["schema:" + e for e in _safe_errors(exc)])
-            result = turn.clarify("requirements", "I could not apply that request. Please restate the part number or the supply, service and limits you need.")
+            result = turn.clarify("requirements", "Please restate the part number or the supply, service and limits you need.")
         except (ValueError, TypeError):
             trace.update(validation=["schema:wire_arguments"])
-            result = turn.clarify("requirements", "I could not apply that request. Please restate the part number or the supply, service and limits you need.")
+            result = turn.clarify("requirements", "Please restate the part number or the supply, service and limits you need.")
         else:
             trace["parameters"] = args
             # The LangChain Tool executes the request: validation, SQL and rendering run inside it.
