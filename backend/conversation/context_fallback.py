@@ -4,7 +4,8 @@ Keep this bounded: new paraphrases belong in concept anchors, not more regexes.
 """
 import re
 
-HAZARD_RE = re.compile(r'\b(?:flammable|combustible|explosive|solvent|fumes?|vapou?rs?|propane|butane|lpg|natural gas|methane|hydrogen|ammonia|acetylene|gas|dust|atex|iecex|classified (?:zone|area)|hazardous|zone\s*(?:0|1|2|21|22)|class\s*(?:i|ii)\s*div\s*[12]|refinery|petrochemical|mine|mining|distillery|spirits area|paint mixing|gasolina|petrol|gasoline|diesel|fuel tank)\b', re.I)
+SITE_CONTEXT_RE = re.compile(r'\b(?:paint mixing|gasolina|petrol|gasoline|diesel|fuel tank)\b', re.I)
+HAZARD_RE = re.compile(r'\b(?:flammable|combustible|explosive|solvent|fumes?|vapou?rs?|propane|butane|lpg|natural gas|methane|hydrogen|ammonia|acetylene|gas|dust|atex|iecex|classified (?:zone|area)|hazardous|zone\s*(?:0|1|2|21|22)|class\s*(?:i|ii)\s*div\s*[12]|refinery|petrochemical|mine|mining|distillery|spirits area)\b|' + SITE_CONTEXT_RE.pattern, re.I)
 
 def colloquial(text):
     result = {}

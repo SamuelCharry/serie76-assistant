@@ -34,6 +34,15 @@ The [replay test](../../tests/test_t9_replay.py) checks the repaired behaviors u
 recorded concept scores and scripted decisions, with provider access blocked.
 This repair uses **zero paid calls / USD 0** and does not claim a new live A/B score.
 
+Existing-test changes are limited to two documented contract updates:
+`test_conversations.py` now supplies the physical units in its synthetic user request
+instead of relying on bare numeric values in JSON; its SQL/result assertions are unchanged.
+`test_upper_bound_correction_keeps_other_filters` now expects the existing 400 Nm floor
+and new 400 Nm ceiling together, as required by the new opposite-bound rule. No test
+was disabled. Existing failing regressions also required retaining plural `In-Lbs`,
+thousands separators and Spanish strict comparisons in the quantity parser, and allowing
+explicit removal of a carried voltage before the grounding check can reject a repeated value.
+
 ## Review repair (current behavior)
 
 The independent review and the coordinator's v8 A/B findings supersede the original
@@ -234,7 +243,9 @@ anchors rather than additional scenario regexes.
 
 The initial T9 change was not a net line-count reduction (agent.py **2166 -> 2185**,
 policy.py **500 -> 537**). The review adds correctness and deadline guards rather than
-claiming a reduction in code size. No existing test was changed or disabled. The additive property tests now explicitly compare both modes as described above.
+claiming a reduction in code size. That review changed no existing test; the later
+round-nine contract updates are documented above. The additive property tests explicitly
+compare both modes as described above.
 
 ## Verification and runtime
 

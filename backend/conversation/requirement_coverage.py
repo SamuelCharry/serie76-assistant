@@ -4,8 +4,8 @@ from __future__ import annotations
 from decimal import Decimal
 import re
 
-NUMBER = r'\d+(?:[.,]\d+)?'
-UNIT = r'k\s*n\s*-?\s*m|n\s*-?\s*m|m\s*n|in\s*-?\s*lb|volts?|v|hz|seconds?|sec|s|amps?|a|watts?|w|%'
+NUMBER = r'(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:[.,]\d+)?)'
+UNIT = r'k\s*n\s*-?\s*m|n\s*-?\s*m|m\s*n|in\s*-?\s*lbs?|volts?|v|hz|seconds?|sec|s|amps?|a|watts?|w|%'
 RANGE = re.compile(rf'(?<![\w-])(?:between\s+)?({NUMBER})\s*(?:to|and|–|-)\s*({NUMBER})\s*({UNIT})(?![a-z])', re.I)
 SINGLE = re.compile(rf'(?<![\w-])({NUMBER})\s*({UNIT})(?![a-z])', re.I)
 POSSIBLE_UNIT = re.compile(rf'(?<![\w-])({NUMBER})\s*([a-z]{{1,8}})(?![\w/-])', re.I)
@@ -24,13 +24,14 @@ def _distance_one(left, right):
 
 
 def _number(raw):
-    value = Decimal(raw.replace(',', '.'))
+    value = Decimal(raw.replace(',', '') if re.fullmatch(r'\d{1,3}(?:,\d{3})+(?:\.\d+)?', raw)
+                    else raw.replace(',', '.'))
     return int(value) if value == int(value) else float(value)
 
 
 def _unit(raw):
     normalized = re.sub(r'[\s-]', '', raw.lower())
-    return {'nm': 'nm', 'mn': 'nm', 'knm': 'knm', 'inlb': 'in_lb',
+    return {'nm': 'nm', 'mn': 'nm', 'knm': 'knm', 'inlb': 'in_lb', 'inlbs': 'in_lb',
             'v': 'v', 'volt': 'v', 'volts': 'v', 'hz': 'hz',
             's': 's', 'sec': 's', 'second': 's', 'seconds': 's',
             'a': 'a', 'amp': 'a', 'amps': 'a',
@@ -68,7 +69,7 @@ def _field(unit, nearby, context=None):
 def _operator(prefix, field):
     if re.search(r'\b(?:no more than|at most|up to|max(?:imum)?|below|under|less than|menor\s+a|menor\s+que)\b|≤', prefix):
         return 'lt' if re.search(r'\b(?:below|under|less than|menor\s+a|menor\s+que)\b', prefix) else 'lte'
-    if re.search(r'\b(?:more than|above|over)\b', prefix):
+    if re.search(r'\b(?:more than|above|over|mayor\s+(?:a|que))\b', prefix):
         return 'gt'
     return 'gte' if field.startswith('min_') else 'lte'
 

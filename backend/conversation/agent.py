@@ -870,7 +870,8 @@ class Turn:
             # voltage into watts or license another numeric field without units.
             ungrounded = list(dict.fromkeys(ungrounded + requirement_coverage.unsupported(
                 self.query, {k: v for k, v in delta.items()
-                             if v != (self.context.get('filters') or {}).get(k)
+                             if k not in policy.removed_fields(self.query)
+                             and str(v) != str((self.context.get('filters') or {}).get(k))
                              and not (k == 'supply_voltage_v' and v == inferred.get(k) == 24)})))
         dropped = []
         if bad or ungrounded:
@@ -1627,7 +1628,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             if topic != 'position feedback output':
                 answer += ' I can compare its published electrical fields.'
             return finish(turn, AgentResult(answer, context=turn.context))
-        if (not policy.codes_in_text(query) and policy.hazard_signal(query)
+        from .context_fallback import SITE_CONTEXT_RE
+        if (not policy.codes_in_text(query) and SITE_CONTEXT_RE.search(query) and policy.hazard_signal(query)
                 and requirement_coverage.apply(query, {})[0].get('supply_voltage_v') is not None):
             # A stated supply plus a recognized hazardous site is already enough
             # to ask for enclosure confirmation, without a speculative tool choice.

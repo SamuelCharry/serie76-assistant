@@ -106,7 +106,10 @@ class ConversationIntegrationTests(unittest.TestCase):
 
     def run_tool(self, name, args, context=None):
         # The scripted decision must be grounded in the user's words, as a real model's must be.
-        return run_agent(self.connection, "technical query " + json.dumps(args), [], context or {}, model=RouterFixture(name, args))
+        # R9 requires physical units, not merely numeric tokens in a JSON fixture.
+        from backend.conversation.policy import describe
+        return run_agent(self.connection, "technical query " + json.dumps(args) + ' ' + describe(args),
+                         [], context or {}, model=RouterFixture(name, args))
 
     def test_exact_lookup_and_focus_use_published_numbers(self):
         result = self.run_tool("get_actuator", {"part_numbers": ["761A00-11300000/A"], "focus": "motor_power"})
