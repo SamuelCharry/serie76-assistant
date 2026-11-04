@@ -3,6 +3,7 @@ import random
 import unittest
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import search_actuators
+from backend.catalog.repository import get_actuator
 from backend.conversation import policy
 from test_agent_scenarios import Base
 
@@ -45,3 +46,17 @@ class IntegrityTests(Base):
             result = search_actuators(self.connection, scope, allow_ambiguous=True)
             for product in result['products']:
                 self.assertTrue(satisfies(product, scope), product['base_part_number'])
+
+    def test_random_presented_models_obey_stated_upper_bounds(self):
+        from backend.conversation.integrity import satisfies
+        random.seed(7601)
+        for _ in range(12):
+            threshold = random.randrange(100, 1201, 100)
+            voltage = random.choice((110, 220))
+            result = self.turn(f'On/Off, {voltage} V, torque at most {threshold} Nm',
+                               ('search_actuators', {'service': 'on_off', 'supply_voltage_v': voltage}))
+            filters = SearchFilters.model_validate(result.context['filters'])
+            codes = [p['base_part_number'] for p in result.products]
+            codes += [item['part_number'] for item in (result.recommendation or {}).get('items', [])]
+            for code in set(codes):
+                self.assertTrue(satisfies(get_actuator(self.connection, code), filters), code)

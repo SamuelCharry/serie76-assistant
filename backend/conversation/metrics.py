@@ -1,27 +1,15 @@
 """Metric intent and winner rendering over published SQL product rows."""
 import re
 
-from . import ranking
+from . import ranking, answer_planner
 from .rendering import _num
 
 
 def intent(query):
-    text = query.lower()
-    metric = ('lra' if re.search(r'\b(lra|starting current|inrush|arranque)\b', text) else
-              'motor_power' if re.search(r'\b(power|electricity|consumption|potencia)\b', text) else
-              'fla' if re.search(r'\b(fla|draws?|current|corriente)\b', text) else
-              'duty' if re.search(r'\b(duty|s4)\b', text) else
-              'cycles' if re.search(r'\b(cycles?|ciclos?)\b', text) else
-              'starts' if re.search(r'\b(starts?|arranques?)\b', text) else
-              'operating_time' if re.search(r'\b(faster|fastest|quicker|speed|operating time|tiempo)\b', text) else
-              'torque' if re.search(r'\b(stronger|strongest|torque|par)\b', text) else None)
-    if metric is None:
+    planned = answer_planner.plan(query)
+    if not planned.metrics:
         return None
-    direction = 'higher' if re.search(r'\b(more|higher|highest|most|stronger|strongest|mas|más|mayor)\b', text) else 'lower'
-    hz = re.search(r'\b(50|60)\s*hz\b', text)
-    service = ('on_off' if re.search(r'\b(on\s*/?\s*off|open.close)\b', text) else
-               'modulating' if re.search(r'\bmodulat', text) else None)
-    return metric, direction, int(hz.group(1)) if hz else None, service
+    return planned.metrics[0], planned.direction, planned.frequency_hz, planned.service
 
 
 def value(product, metric, filters):
@@ -59,7 +47,20 @@ def verdict(products, query, filters):
     if metric == 'torque' and scope.get('service') is None:
         scope['service'] = 'on_off'
     if metric == 'duty' and scope.get('service') is None:
-        return 'Which service duty matters, On/Off or Modulating?', None
+        service_values = [(p['measurements'].get('on_off_duty_s4_percent'),
+                           p['measurements'].get('modulating_duty_s4_percent'),
+                           p['measurements'].get('shared_duty_s4_percent')) for p in products]
+        if len(set(service_values)) == 1 and all(value is not None for value in service_values[0][:2]):
+            on_off, modulating, _ = service_values[0]
+            subject = 'Both' if len(products) == 2 else 'All compared models'
+            return f'{subject} have the same duty: On/Off {_num(on_off)}% and Modulating {_num(modulating)}%.', None
+        if all((p['measurements'].get('on_off_duty_s4_percent') ==
+                p['measurements'].get('modulating_duty_s4_percent') and
+                p['measurements'].get('on_off_duty_s4_percent') is not None) or
+               p['measurements'].get('shared_duty_s4_percent') is not None for p in products):
+            scope['service'] = 'on_off'
+        else:
+            return 'Which service duty matters, On/Off or Modulating?', None
     measured = [(p, *value(p, metric, scope)) for p in products]
     available = [(p, v, unit) for p, v, unit in measured if v is not None]
     label = {'lra': 'LRA', 'fla': 'FLA', 'motor_power': 'motor power', 'duty': 'duty S4',

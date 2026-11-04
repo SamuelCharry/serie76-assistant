@@ -133,7 +133,7 @@ class RecommendationTests(Base):
 
     def test_empty_request_has_natural_prompt_and_two_real_splits(self):
         result = self.turn('?', ('search_actuators', {}))
-        self.assertIn('Tell me what it must do:', result.answer)
+        self.assertIn('supply voltage and enclosure', result.answer)
         self.assertLessEqual(len(result.interaction['questions']), 2)
         self.assertNotIn('59/59', result.answer)
 

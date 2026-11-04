@@ -112,6 +112,25 @@ CATALOGUE_ATTRIBUTE_WORDS = frozenset({
     'enclosure', 'weatherproof', 'explosionproof', 'csa', 'certification',
 })
 
+UNPUBLISHED_TOPICS = (
+    (r'\b(?:maintenance|service interval|before servicing)\b', 'maintenance interval'),
+    (r'\b(?:service life|lifespan|how long .* last)\b', 'service life'),
+    (r'\b(?:efficien(?:cy|t)|efficient)\b', 'efficiency'),
+    (r'\bip\s*rating\b', 'IP rating'),
+    (r'\bweight\b', 'weight'),
+    (r'\b(?:cad|drawing|blueprint)\b', 'CAD drawing'),
+    (r'\b(?:wiring|wire diagram)\b', 'wiring diagram'),
+    (r'\b(?:4\s*[-–]\s*20\s*ma|control.signal|signal compatibility)\b', 'signal compatibility'),
+    (r'\b(?:generator|genset)\b', 'generator operation'),
+)
+
+
+def unpublished_topic(query):
+    for pattern, noun in UNPUBLISHED_TOPICS:
+        if re.search(pattern, query, re.I):
+            return noun
+    return None
+
 
 def unsupported_lookup_attribute(query, code, terms):
     """Extract a named attribute of one code; unknown attributes cannot trigger a spec dump."""
@@ -134,9 +153,7 @@ def unsupported_lookup_attribute(query, code, terms):
                       for word in re.findall(r'[a-z]+', name.lower())}
     if words & (CATALOGUE_ATTRIBUTE_WORDS | glossary_names):
         return None
-    if 'compatible with' in text.lower() and re.search(r'\bsignal\b', attribute):
-        return 'signal compatibility'
-    return attribute[:80]
+    return unpublished_topic(attribute) or '__unknown__'
 
 
 def _edit_distance(left, right):

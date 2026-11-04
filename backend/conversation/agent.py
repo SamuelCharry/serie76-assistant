@@ -27,7 +27,7 @@ from pydantic import create_model as pydantic_model
 from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import get_actuator, search_actuators
-from . import policy, quality, tool_wire, interactions, ranking, metrics, integrity
+from . import policy, quality, tool_wire, interactions, ranking, metrics, integrity, answer_planner, catalogue_answers
 from .interactions import InvalidInteraction
 from .rendering import render_lookup, render_search, render_terms, supplies_text
 
@@ -485,7 +485,10 @@ class Turn:
                           if len(ranked) == 1 else 'No more ranked models.')
                 return AgentResult(answer, context=self.context)
             rows = [get_actuator(self.connection, code) for code in selected]
-            return AgentResult(f"Showing {start + 1}–{start + len(selected)} of {len(ranked)} ranked models.\n" + '\n'.join(selected),
+            return AgentResult(f"Showing {start + 1}–{start + len(selected)} of {len(ranked)} ranked models.\n" + '\n'.join(
+                                   ranking.item(row, self.context.get('filters') or {})['part_number'] + ': ' +
+                                   ranking.item(row, self.context.get('filters') or {})['reason']
+                                   for row in rows if row),
                                [public_product(row) for row in rows if row], context=self.context)
         return None
 
@@ -563,7 +566,8 @@ class Turn:
             if len(codes) == 1:
                 target_codes = [selected[0], codes[0]] if 'compare' in self.query.lower() else codes
                 self.context['part_numbers'] = target_codes
-                return self.lookup(dict(part_numbers=target_codes, focus=['overview'],
+                carry_focus = (self.context.get('focus') or ['overview']) if len(target_codes) == 1 else ['overview']
+                return self.lookup(dict(part_numbers=target_codes, focus=carry_focus,
                                         explain_terms=[], _trusted_equivalent=True))
             label = ('enclosure' if target_enclosure else 'voltage')
             return AgentResult(f'Published {label} equivalents for {selected[0]}: ' + ', '.join(codes) + '.',
@@ -653,20 +657,24 @@ class Turn:
         self.trace["data"] = dict(status="ok", products=products, missing=[m[0] for m in missing])
         self.trace["merged_parameters"] = dict(args, part_numbers=codes)
         focus = quality.normalized_focus(args.get("focus") or self.context.get("focus") or ["overview"])
-        if len(products) == 1 and not re.search(r'\b(full|all|complete)\s+(?:specs?|data|details?)\b|\b(?:specs?|overview)\b', self.query, re.I):
-            requested = metrics.intent(self.query)
-            named = set(re.findall(r'\b(?:fla|lra|power|torque|duty|cycles?|starts?|speed|time|arranque|velocidad|operaci[oó]n)\b',
-                                   self.query, re.I))
-            if requested and len(named) == 1:
-                metric, _, hz, service = requested
+        planned = answer_planner.plan(self.query)
+        if len(products) == 1 and planned.shape == 'ratio':
+            self.context['focused_model'] = products[0]['base_part_number']
+            answer = answer_planner.ratio(products[0], planned.frequency_hz)
+            return AgentResult(answer, context=self.context, lead=answer)
+        if (len(products) == 1 and planned.shape in ('fields', 'verdict') and
+                (not args.get('focus') or all(spec['field'] == 'overview' for spec in focus))):
+            focus = []
+            for metric in planned.metrics:
                 field = 'rates' if metric in ('cycles', 'starts') else metric
-                scope = service or ('modulating' if metric == 'starts' else 'on_off' if metric == 'cycles' else None)
+                scope = planned.service or ('modulating' if metric == 'starts' else 'on_off' if metric == 'cycles' else None)
                 spec = dict(field=field)
                 if scope and field in ('rates', 'torque', 'duty'):
                     spec['service'] = scope
-                if hz and field in ('operating_time', 'fla', 'lra'):
-                    spec['frequency_hz'] = hz
-                focus = [spec]
+                if planned.frequency_hz and field in ('operating_time', 'fla', 'lra'):
+                    spec['frequency_hz'] = planned.frequency_hz
+                if spec not in focus:
+                    focus.append(spec)
         self.context["focus"] = focus
         public = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in products]
         comparison_focus = ['overview']
@@ -698,7 +706,7 @@ class Turn:
                 answer += '\n' + '\n'.join(row['label'] + ': ' + ' vs '.join(row['values']) for row in compared['hidden_rows'])
         elif public:
             answer = "\n".join(notes) + "\n" + "\n\n".join(quality.render_focused(p, focus) for p in public)
-            if len(focus) == 1 and focus[0]["field"] == "motor_power":
+            if any(spec['field'] == 'motor_power' for spec in focus):
                 answer += "\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption."
         else:
             answer = render_lookup([], "overview", missing, notes)
@@ -778,7 +786,16 @@ class Turn:
                 lead = direct
                 if winner:
                     self.context['focused_model'] = winner
-        return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared, lead=lead)
+        display_products = [] if compared else [quality.focused_product(p, focus) for p in public]
+        if compared and planned.shape == 'verdict':
+            direct, winner = metrics.verdict(products, self.query, self.context.get('filters') or {})
+            if direct:
+                answer = lead = direct
+                compared = None
+                display_products = []
+                if winner:
+                    self.context['focused_model'] = winner
+        return AgentResult(answer.strip(), display_products, context=self.context, terms=terms, comparison=compared, lead=lead)
 
     def search(self, args, *, trusted=False):
         signalled = self.contextual_intent(args.get('intent', 'none'))
@@ -845,7 +862,7 @@ class Turn:
             from backend.catalog.repository import question_facets
             fields = ['supply_voltage_v', 'enclosure']
             result = self.question_result(fields, question_facets(self.connection, SearchFilters(), fields))
-            result.answer = 'Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.'
+            result.answer = 'Tell me the supply voltage and enclosure you need to narrow the catalogue.'
             return result
         found = policy.conflicts(merged)
         if found:
@@ -1021,6 +1038,35 @@ class Turn:
         all_filters = SearchFilters.model_validate(dict(merged, limit=100, offset=0))
         all_rows = search_actuators(self.connection, all_filters, allow_ambiguous=True)['products']
         all_rows = [p for p in all_rows if integrity.satisfies(p, filters)]
+        planned_search = answer_planner.plan(self.query)
+        if planned_search.shape == 'verdict' and len(planned_search.metrics) == 1 and len(all_rows) >= 2:
+            verdict, winner = metrics.verdict(all_rows, self.query, merged)
+            if verdict:
+                self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
+                self.context['on_screen'] = policy.codes_in_text(verdict)
+                if winner:
+                    self.context['focused_model'] = winner
+                self.context.pop('pending_questions', None)
+                winners = set(policy.codes_in_text(verdict))
+                items = [ranking.item(row, merged) for row in all_rows
+                         if row['base_part_number'] in winners][:3]
+                rec = dict(ranked_by=ranking.ranked_by(merged, by), total=result['total'],
+                           shown=len(items), items=items)
+                return AgentResult(verdict, context=self.context, lead=verdict, recommendation=rec)
+        if re.search(r'\bshow all\b', self.query, re.I) and all_rows:
+            ordered = ranking.rank(all_rows, merged, by)
+            items = [ranking.item(row, merged) for row in ordered]
+            ranked_by = ranking.ranked_by(merged, by)
+            self.context['last_ranked_list'] = [row['base_part_number'] for row in ordered]
+            self.context['last_shown_list'] = self.context['last_ranked_list'][:]
+            self.context['last_shown_offset'] = len(ordered)
+            self.context.pop('pending_questions', None)
+            answer = (f"{len(ordered)} actuators meet: {policy.describe(merged)}.\nRanked by {ranked_by}.\n" +
+                      '\n'.join(item['part_number'] + ': ' + item['reason'] for item in items))
+            return AgentResult(answer, context=self.context,
+                               recommendation=dict(ranked_by=ranked_by, total=len(ordered),
+                                                   shown=len(items), items=items),
+                               lead='Ranked by ' + ranked_by + '.')
         rec = ranking.recommendation(all_rows, merged, by, total=result['total'])
         self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
         self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
@@ -1274,6 +1320,35 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             return finish(turn, turn.lookup(dict(part_numbers=codes, focus=['motor_power'], explain_terms=[])))
     import re
     bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
+    if action is None and not answers and not remove_filters:
+        if bare_query in ('what', 'what was that', 'what do you mean') and turn.context.get('pending_questions'):
+            pending = turn.context['pending_questions'][0]
+            labels = ', '.join(o['label'] for o in pending['options'])
+            answer = pending['prompt'] + (' Options: ' + labels + '.' if labels else '')
+            turn.trace = dict(name='restate_question', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, AgentResult(answer, context=turn.context))
+        catalogue_answer = catalogue_answers.answer(connection, query)
+        if catalogue_answer:
+            turn.trace = dict(name='catalogue_answer', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, AgentResult(catalogue_answer, context=turn.context))
+        if (re.search(r'\b(?:series 76|this catalogue)\b.*\b(?:or|vs|versus|compared? (?:with|to))\b', bare_query)
+                and not policy.codes_in_text(query)) or re.search(r'\b(?:bray|rotork|other brands?)\b', bare_query):
+            turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, AgentResult('I only cover the Series 76 catalogue. I can compare its published models.',
+                                            context=turn.context))
+        topic = policy.unpublished_topic(query)
+        if topic and not policy.codes_in_text(query) and not re.search(r'\b(?:IP\s*\d+|NEMA\s*\d+)\b', query, re.I):
+            turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, AgentResult(f'The catalogue does not publish {topic}. '
+                                            'I can compare its published electrical fields.', context=turn.context))
     if (action is None and not answers and not remove_filters and
             bare_query in ('so what can i do', 'what can i do', 'any alternatives') and
             turn.context.get('zero_result_options')):
@@ -1284,14 +1359,43 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         return finish(turn, AgentResult('To keep the stated requirements, there is no exact model. '
                                         + 'Available relaxations: ' + '; '.join(options) + '.',
                                         context=turn.context))
+    top = re.fullmatch(r'compare (?:the )?top ([1-4])', bare_query)
+    if action is None and not answers and not remove_filters and top and turn.context.get('last_ranked_list'):
+        n = int(top.group(1))
+        turn.trace = dict(name='get_actuator', parameters={'from_results_top': n}, raw_parameters={},
+                          validation=['ok'], context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, turn.lookup(dict(part_numbers=[], from_results_top=n,
+                                           focus=['overview'], explain_terms=[])))
+    if (action is None and not answers and not remove_filters and
+            bare_query in ('show me that one', 'show that one') and turn.context.get('focused_model')):
+        turn.trace = dict(name='get_actuator', parameters={'reference_kind': 'focused'}, raw_parameters={},
+                          validation=['ok'], context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, turn.lookup(dict(part_numbers=[], reference_kind='focused',
+                                           focus=['overview'], explain_terms=[])))
+    if (action is None and not answers and not remove_filters and
+            re.search(r'\bbetter for\b', bare_query) and turn.context.get('last_comparison_models')):
+        enclosure = ('explosionproof' if re.search(r'\b(hazardous|explosive|flammable|classified)\b', bare_query)
+                     else 'weatherproof' if re.search(r'\b(outdoor|outside|rain|weather)\b', bare_query) else None)
+        if enclosure:
+            rows = [get_actuator(connection, code) for code in turn.context['last_comparison_models']]
+            matching = [row for row in rows if row and row['enclosure'] == enclosure]
+            if len(matching) == 1:
+                code = matching[0]['base_part_number']
+                turn.context['focused_model'] = code
+                turn.trace = dict(name='condition_verdict', parameters={}, raw_parameters={},
+                                  validation=['ok'], context_before=context_before,
+                                  model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+                return finish(turn, AgentResult(f'{code} is the {enclosure.capitalize()} model in this comparison. '
+                                                'Confirm the site classification before selecting an enclosure.',
+                                                context=turn.context))
     compared_codes = turn.context.get('last_comparison_models') or []
     if (action is None and not answers and not remove_filters and
-            re.search(r'\b(which|highest|lowest|faster|quicker|stronger|more|less)\b', bare_query) and
-            re.search(r'\b(them|those|results?|among|one|models?)\b', bare_query) and
-            not policy.codes_in_text(query)):
+            answer_planner.plan(query).shape == 'verdict' and not policy.codes_in_text(query)):
         use_ranked = bool(re.search(r'\b(results?|ranked|list)\b', bare_query))
         codes = (turn.context.get('last_ranked_list') if use_ranked else
-                 compared_codes or turn.context.get('last_ranked_list')) or []
+                 compared_codes or turn.context.get('on_screen') or turn.context.get('last_ranked_list')) or []
         if len(codes) >= 2:
             rows = [get_actuator(connection, code) for code in codes]
             verdict, winner = metrics.verdict([row for row in rows if row], query, turn.context.get('filters') or {})
@@ -1306,6 +1410,13 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                 return finish(turn, AgentResult(verdict,
                                                 [public_product(chosen_product)] if chosen_product else [],
                                                 context=turn.context, lead=verdict))
+    if (action is None and not answers and not remove_filters and bare_query == 'the other way round'
+            and len(compared_codes) >= 2):
+        turn.trace = dict(name='get_actuator', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, turn.lookup(dict(part_numbers=list(reversed(compared_codes)),
+                                           focus=['overview'], explain_terms=[])))
     if action is None and not answers and not remove_filters and len(compared_codes) >= 2 and bare_query in ('the faster one', 'the stronger one'):
         metric = 'operating_time' if 'faster' in bare_query else 'torque'
         turn.trace = dict(name='get_actuator', parameters={}, raw_parameters={}, validation=['ok'],
@@ -1398,8 +1509,9 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         if limitation is None and len(named_codes) == 1:
             attribute = policy.unsupported_lookup_attribute(query, named_codes[0], turn.terms)
             if attribute:
-                limitation = (f"The catalogue doesn't publish {attribute} for {named_codes[0]}. "
-                              "I can show its published specifications.")
+                limitation = ((f"The catalogue doesn't publish {attribute} for {named_codes[0]}. "
+                               "I can show its published specifications.") if attribute != '__unknown__' else
+                              "That isn't published in the Series 76 catalogue. I can show its published specifications.")
         if limitation:
             turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
                               context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
@@ -1415,7 +1527,10 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                           context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
         answer = ("That's the only model that meets these requirements. Relax one requirement to see alternatives."
                   if not selected and len(codes) == 1 else 'No more ranked models.' if not selected else
-                  f"Showing {start + 1}–{start + len(selected)} of {len(codes)} ranked models.\n" + '\n'.join(selected))
+                  f"Showing {start + 1}–{start + len(selected)} of {len(codes)} ranked models.\n" + '\n'.join(
+                      item['part_number'] + ': ' + item['reason']
+                      for row in rows if row
+                      for item in [ranking.item(row, turn.context.get('filters') or {})]))
         if not selected:
             turn.context['reply_options'] = ['Relax one requirement']
         return finish(turn, AgentResult(answer, [public_product(row) for row in rows if row], context=turn.context))
@@ -1680,6 +1795,12 @@ def finish(turn, result):
     trace["context_after"] = result.context
     if not trace.get("data"):
         trace["data"] = dict(status="needs_clarification", clarification=result.clarification) if result.clarification else {}
+    if result.comparison:
+        result.context['on_screen'] = result.comparison['models']
+    elif result.recommendation and result.recommendation.get('items'):
+        result.context['on_screen'] = [item['part_number'] for item in result.recommendation['items']]
+    elif result.products:
+        result.context['on_screen'] = [p['base_part_number'] for p in result.products]
     result.tool_calls = [trace]
     model_meta = trace.get('model') or {}
     result.debug = dict(latency_ms=round((time.perf_counter() - turn.started) * 1000),
@@ -1691,7 +1812,7 @@ def finish(turn, result):
         total = result.recommendation['total']
         result.suggestions = ([dict(label='Compare them' if total == 2 else 'Compare top 2',
                                     action=dict(type='compare_top', args=dict(n=2)))] if total >= 2 else [])
-        if total > 3:
+        if total > 3 and not re.search(r'\bshow all\b', turn.query, re.I):
             result.suggestions.append(dict(label=f'Show all {total}', action=dict(type='show_all', args={})))
     result.suggested_replies = [s['label'] if isinstance(s, dict) else s for s in result.suggestions]
     if result.products and not result.lead:
