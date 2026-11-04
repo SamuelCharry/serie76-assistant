@@ -51,6 +51,7 @@ class ShownSetTests(Base):
         first = self.turn('compare 762X30-11300000/A and 762Y30-11300000/A',
                           ('get_actuator', {'part_numbers': ['762X30-11300000/A', '762Y30-11300000/A']}))
         duty = self.turn('which has better duty?', ('ask_clarification', {'field': 'requirements'}))
-        self.assertIn('Both', duty.answer)
+        self.assertIn('On/Off:', duty.answer)
+        self.assertIn('Modulating:', duty.answer)
         reverse = self.turn('the other way round', ('ask_clarification', {'field': 'requirements'}))
         self.assertEqual(reverse.comparison['models'], list(reversed(first.comparison['models'])))

@@ -68,12 +68,16 @@ def colloquial_requirements(query):
                 notes.append(note)
     if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar|on/of|onoff|on off|on-off)\b', text):
         result['service'] = 'on_off'
-    if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open|mod(?=\s|\d))\b', text):
+    if re.search(r'\b(stop halfway|intermediate positions?|position anywhere|any position|regulat(?:e|ing)|regule|regular caudal|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open|hold at \d+\s*%\s*open|mod(?=\s|\d))\b', text):
         result['service'] = 'modulating'
     if re.search(r'\b(outside|exteriores?|intemperie)\b|\boutdoors\b.*\bnot hazardous\b', text):
         result['enclosure'] = 'weatherproof'
     if re.search(r'\bnot (?:a )?classified area\b', text):
         result['enclosure'] = 'weatherproof'
+    if nonhazard_signal(text):
+        result['enclosure'] = 'weatherproof'
+    if re.search(r'\bxp\b', text):
+        result['enclosure'] = 'explosionproof'
     if re.search(r'\b(?:[13])[-\s]*(?:phase|phases|fases)\b', text):
         result['phase_count'] = int(re.search(r'\b([13])[-\s]*(?:phase|phases|fases)\b', text).group(1))
     if re.search(r'\b(?:classified as hazardous|hazardous area|area is hazardous)\b', text):
@@ -94,11 +98,12 @@ def colloquial_requirements(query):
     if match:
         number = Decimal(match.group(1).replace(',', '.'))
         result['min_torque_nm'] = int(number) if number == int(number) else float(number)
-    upper = re.search(r'(?:\b(?:torque|par)\s+)?(no more than|at most|up to|max(?:imum)?|≤|below|under|hasta|m[aá]ximo)\s*(\d+(?:[.,]\d+)?)\s*nm\b', text)
+    upper = re.search(r'(?:\b|(?<=\s))(no more than|at most|up to|max(?:imum)?|below|under|less than|hasta|m[aá]ximo|como m[aá]ximo|≤)\s*(?:(?:torque|par)\s+)?(\d+(?:[.,]\d+)?)\s*nm\b|\b(?:torque|par)\s+(no more than|at most|up to|max(?:imum)?|below|under|less than|hasta|m[aá]ximo|como m[aá]ximo|≤)\s*(\d+(?:[.,]\d+)?)\s*nm\b', text)
     if upper:
-        number = Decimal(upper.group(2).replace(',', '.'))
+        operator = upper.group(1) or upper.group(3)
+        number = Decimal((upper.group(2) or upper.group(4)).replace(',', '.'))
         result['min_torque_nm'] = {'value': int(number) if number == int(number) else float(number),
-                                   'op': 'lt' if upper.group(1) in ('below', 'under') else 'lte'}
+                                   'op': 'lt' if operator in ('below', 'under', 'less than') else 'lte'}
     if re.search(r'\b(?:a prueba de explosi[oó]n)\b', text):
         result['enclosure'] = 'explosionproof'
     match = re.search(r'\b(?:toque|torque|par)\s*m[ií]nimo\s*(?:de\s*)?(\d+(?:[.,]\d+)?)\s*nm\b', text)
@@ -117,6 +122,18 @@ def colloquial_requirements(query):
     return result, notes
 
 
+HAZARD_RE = re.compile(r'\b(?:flammable|combustible|explosive|solvent|fumes?|vapou?rs?|hydrogen|methane|gas|dust|atex|iecex|classified (?:zone|area)|hazardous|zone\s*(?:0|1|2|21|22)|class\s*(?:i|ii)\s*div\s*[12]|refinery|petrochemical|mine|mining|distillery|spirits area)\b', re.I)
+NONHAZARD_RE = re.compile(r'\b(?:not hazardous|not a (?:classified|hazardous) (?:area|zone)|safe area)\b', re.I)
+
+
+def nonhazard_signal(text):
+    return bool(NONHAZARD_RE.search(text))
+
+
+def hazard_signal(text):
+    return bool(HAZARD_RE.search(text)) and not nonhazard_signal(text)
+
+
 CATALOGUE_ATTRIBUTE_WORDS = frozenset({
     'spec', 'specs', 'specification', 'specifications', 'data', 'detail', 'details',
     'torque', 'duty', 'cycle', 'cycles', 'starts', 'hour', 'time', 'speed', 'fast',
@@ -125,6 +142,9 @@ CATALOGUE_ATTRIBUTE_WORDS = frozenset({
 })
 
 UNPUBLISHED_TOPICS = (
+    (r'\b(?:operating temperature|temperature range|ambient temperature)\b', 'operating temperature range'),
+    (r'\b(?:install|installation|mount(?:ing)?)\b', 'installation instructions'),
+    (r'\b(?:noise|quietest|sound level|decibels?)\b', 'noise levels'),
     (r'\b(?:maintenance|service interval|before servicing)\b', 'maintenance interval'),
     (r'\b(?:service life|lifespan|how long .* last)\b', 'service life'),
     (r'\b(?:efficien(?:cy|t)|efficient)\b', 'efficiency'),

@@ -9,7 +9,7 @@ class LabelTests(Base):
         dc = get_actuator(self.connection, '761X30-11370000/A')
         unqualified = get_actuator(self.connection, '761X30-11380000/A')
         self.assertIn('FLA (DC) 5 A', ranking.item(dc, {})['reason'])
-        self.assertIn('FLA 5 A (no frequency in source)', ranking.item(unqualified, {})['reason'])
+        self.assertIn('FLA 5 A', ranking.item(unqualified, {})['reason'])
 
     def test_closest_qualifying_service_is_named(self):
         product = get_actuator(self.connection, '765B00-11300000/A')

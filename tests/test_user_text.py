@@ -13,7 +13,8 @@ FORBIDDEN = re.compile(
     r"not published in this table layout|\b0 identical fields hidden|I cannot place orders|"
     r"The requirement for|I could not apply that request|"
     r"Ranking uses the lowest published value across frequencies|full catalogue scope|"
-    r"I can narrow these further when you know",
+    r"I can narrow these further when you know|was unclear in your request|"
+    r"no frequency in source|Without supply voltage, enclosure, these are",
 )
 
 
@@ -56,7 +57,9 @@ class PublicTextTests(unittest.TestCase):
                          '0 identical fields hidden', 'I cannot place orders',
                          'The requirement for', 'I could not apply that request',
                          'Ranking uses the lowest published value across frequencies',
-                         'full catalogue scope', 'I can narrow these further when you know'):
+                         'full catalogue scope', 'I can narrow these further when you know',
+                         'was unclear in your request', 'no frequency in source',
+                         'Without supply voltage, enclosure, these are'):
             with self.subTest(mutation=mutation), self.assertRaises(AssertionError):
                 assert_public_text_clean({'answer': mutation})
 

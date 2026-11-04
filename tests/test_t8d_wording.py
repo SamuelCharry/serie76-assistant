@@ -14,5 +14,5 @@ class WordingTests(Base):
     def test_unresolved_uses_open_choice_sentence(self):
         self.turn('I need at least 70 Nm', ('search_actuators', {'min_torque_nm': 70}))
         result = self.turn('no', ('ask_clarification', {'field': 'decline'}))
-        self.assertIn('Without service', result.answer)
+        self.assertIn('narrow them by service', result.answer)
         self.assertNotIn('I can narrow these further', result.answer)

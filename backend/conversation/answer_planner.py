@@ -42,6 +42,8 @@ def plan(query):
                'modulating' if re.search(r'\bmodulat', text) else None)
     if re.search(r'\b(?:lra\s*/\s*fla|fla\s*/\s*lra|lra\s+to\s+fla)\s+ratio\b|\bratio\b.*\b(?:lra|fla)\b', text):
         return Plan('ratio', ('lra', 'fla'), frequency, service)
+    if re.search(r'\b(?:difference|how much (?:higher|lower|more|less))\b', text) and re.search(r'\blra\b', text) and re.search(r'\bfla\b', text):
+        return Plan('difference', ('lra', 'fla'), frequency, service)
     found = tuple(name for name, pattern in METRICS if re.search(pattern, text))
     direction = 'higher' if re.search(r'\b(?:more|higher|highest|most|stronger|strongest|mayor|m[aá]s)\b', text) else 'lower'
     verdict_text = re.sub(r'\b(?:at least|at most|more than|less than|no more than|mayor (?:a|que)|menor (?:a|que))\b', '', text)
@@ -65,3 +67,14 @@ def ratio(product, frequency_hz):
             return f'{code} LRA/FLA at {hz} Hz: {_num(lra)} A / {_num(fla)} A = {rounded} (unitless).'
     return ('The catalogue does not publish comparable LRA and FLA at the same frequency '
             f'for {product["base_part_number"]}.')
+
+
+def difference(product, frequency_hz):
+    values = product['measurements']
+    for hz in ([frequency_hz] if frequency_hz else [50, 60]):
+        fla, lra = values.get(f'fla_{hz}hz_a'), values.get(f'lra_{hz}hz_a')
+        if fla is not None and lra is not None:
+            delta = abs(Decimal(str(lra)) - Decimal(str(fla)))
+            return (f'{product["base_part_number"]}: LRA {_num(lra)} A and FLA {_num(fla)} A '
+                    f'at {hz} Hz differ by {_num(delta)} A.')
+    return f'The catalogue does not publish comparable LRA and FLA for {product["base_part_number"]}.'

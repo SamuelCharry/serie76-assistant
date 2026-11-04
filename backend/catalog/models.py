@@ -57,7 +57,7 @@ class SearchFilters(BaseModel):
     ) = None
     supply_current: Literal["AC", "DC", "AC/DC"] | None = None
     phase_count: Literal[1, 3] | None = None
-    service: Literal["on_off", "modulating"] | None = None
+    service: Literal["on_off", "modulating"] | None = Field(default=None, description="On/Off means fully open or closed. Modulating means regulate or throttle flow, hold an intermediate opening, position anywhere between 0 and 90 degrees, or stop at any position; Spanish regule/regular caudal is Modulating.")
     frequency_hz: Literal[50, 60] | None = None
     min_torque_nm: NonNegative | NumericBound | Annotated[list[NumericBound], Field(min_length=2, max_length=2)] | None = None
     # Published in-lb column, compared directly: no unit conversion by model or code.

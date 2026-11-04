@@ -92,7 +92,7 @@ def fla_used(product, filters):
         return 'FLA ' + key.split('_')[1].removesuffix('hz') + ' Hz', value, ''
     if any(f.get('frequency_scope') == 'not_applicable' for f in product.get('frequencies', [])):
         return 'FLA (DC)', value, ''
-    return 'FLA', value, ' (no frequency in source)'
+    return 'FLA', value, ''
 
 
 def rank(products, filters, by='closest_torque'):

@@ -47,6 +47,17 @@ def verdict(products, query, filters):
     if metric == 'torque' and scope.get('service') is None:
         scope['service'] = 'on_off'
     if metric == 'duty' and scope.get('service') is None:
+        answers = []
+        for service_name, display in (('on_off', 'On/Off'), ('modulating', 'Modulating')):
+            scoped = dict(scope, service=service_name)
+            measured_duty = [(p, *value(p, 'duty', scoped)) for p in products]
+            available_duty = [(p, amount) for p, amount, _ in measured_duty if amount is not None]
+            if available_duty:
+                highest = (max if direction == 'higher' else min)(amount for _, amount in available_duty)
+                winners_duty = [p['base_part_number'] for p, amount in available_duty if amount == highest]
+                answers.append(f'{display}: {", ".join(winners_duty)} at {_num(highest)}% duty S4')
+        if answers:
+            return '; '.join(answers) + '.', None
         service_values = [(p['measurements'].get('on_off_duty_s4_percent'),
                            p['measurements'].get('modulating_duty_s4_percent'),
                            p['measurements'].get('shared_duty_s4_percent')) for p in products]
@@ -73,8 +84,8 @@ def verdict(products, query, filters):
     unit = winners[0][1]
     frequency = f' at {hz} Hz' if hz and metric in ('lra', 'fla', 'operating_time') else ''
     if len(winners) == len(available):
-        subject = 'Both' if len(winners) == 2 else 'All ' + str(len(winners))
-        return f'{subject} have {_num(best)} {unit.strip()}{frequency} for {label}.', None
+        codes = ', '.join(p['base_part_number'] for p, _ in winners)
+        return f'{codes} tie at {_num(best)} {unit.strip()}{frequency} for {label}.', None
     codes = ', '.join(p['base_part_number'] for p, _ in winners)
     if len(products) == 2 and len(available) == 2 and len(winners) == 1:
         order = [(p['base_part_number'], v, u) for p, v, u in available]

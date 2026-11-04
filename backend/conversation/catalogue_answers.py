@@ -2,6 +2,7 @@
 import re
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import active_import, search_actuators
+from .policy import colloquial_requirements
 
 
 def answer(connection, query):
@@ -24,6 +25,20 @@ def answer(connection, query):
                   for service, label in [('on_off', 'On/Off'), ('modulating', 'Modulating')]]
         return 'Published services: ' + ', '.join(f'{label} ({count} models)' for label, count in counts) + '.'
     if re.search(r'\bhow many\b.*\b(?:models?|actuators?)\b', text):
+        stated, _ = colloquial_requirements(query)
+        voltage = re.search(r'\b(24|110|220)\s*(?:v|volts?)\b', text)
+        if voltage:
+            stated['supply_voltage_v'] = int(voltage.group(1))
+        if stated:
+            count = search_actuators(connection, SearchFilters.model_validate(dict(stated, limit=1)),
+                                     allow_ambiguous=True)['total']
+            scope = ', '.join(f'{value} V' if field == 'supply_voltage_v' else
+                              'Explosionproof' if value == 'explosionproof' else
+                              'Weatherproof' if value == 'weatherproof' else
+                              'On/Off' if value == 'on_off' else
+                              'Modulating' if value == 'modulating' else str(value)
+                              for field, value in stated.items())
+            return f'The catalogue has {count} models at {scope}.'
         count = connection.execute(
             "SELECT count(DISTINCT base_part_number) AS n FROM series76.entries "
             "WHERE import_id=%s AND data_status='reported'", (active_import(connection),)).fetchone()['n']

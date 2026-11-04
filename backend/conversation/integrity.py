@@ -13,6 +13,11 @@ FREQUENCY_FIELDS = {
 }
 
 
+def hazard_recommendation_safe(items, *, hazard):
+    """No weatherproof recommendation or pick may survive a hazard signal."""
+    return not hazard or all(item.get('enclosure') == 'explosionproof' for item in items)
+
+
 def _passes(value, requirement, default):
     if value is None:
         return False

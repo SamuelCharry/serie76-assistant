@@ -252,7 +252,7 @@ class SearchTests(Base):
         result = self.turn("strong on/off actuator", ("search_actuators", {"service": "on_off", "min_torque_nm": 70}))
         self.assertEqual(result.tool_calls[0]["validation"], ["ungrounded:min_torque_nm"])
         self.assertNotIn("min_torque_nm", self.context["filters"])
-        self.assertIn("minimum torque was unclear", result.answer)
+        self.assertIn("Please confirm minimum torque", result.answer)
         self.assertIn("59 actuators meet: On/Off service.", result.answer)
 
     def test_only_ungrounded_values_means_asking(self):
