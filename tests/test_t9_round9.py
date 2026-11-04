@@ -31,6 +31,36 @@ class NumericEvidenceTests(unittest.TestCase):
 
 
 class RoundNineScenarios(Base):
+    def test_safe_correction_runs_without_model(self):
+        self.turn('Explosionproof on/off 220 V', ('search_actuators', {}))
+        result = self.turn('actually the area is safe, no gas', None)
+        self.assertEqual(result.context['filters'].get('enclosure'), 'weatherproof')
+        self.assertFalse(result.context.get('hazard_signal'))
+        self.assertFalse(result.tool_calls[0]['model'].get('llm_called', True))
+
+    def test_fuel_and_paint_context_requires_hazard_confirmation(self):
+        for query in ['paint mixing room, modulating, 110 V',
+                      'deposito de gasolina, on/off 220 V',
+                      'valve beside a diesel generator fuel tank, 110 V, open/close']:
+            with self.subTest(query=query):
+                self.history, self.context = [], {}
+                result = self.turn(query, ('search_actuators', {}))
+                self.assertTrue(result.context.get('hazard_signal'))
+                self.assertEqual(result.context.get('proposed_enclosure'), 'explosionproof')
+                self.assertIn('enclosure', [q['id'] for q in result.interaction['questions']])
+                self.assertTrue(all(item['part_number'][3] in 'XY' for item in result.recommendation['items']))
+
+    def test_generator_question_remains_a_limitation(self):
+        result = self.turn('Can it operate from a diesel generator?', None)
+        self.assertIn('generator operation', result.answer)
+
+    def test_deterministic_service_paraphrases(self):
+        for query, service in [('it just opens or shuts, 220 V', 'on_off'),
+                               ('dose steam gradually, 220 V', 'modulating')]:
+            self.history, self.context = [], {}
+            result = self.turn(query, ('search_actuators', {}))
+            self.assertEqual(result.context['filters'].get('service'), service)
+
     def test_no_invented_power_from_220_wp(self):
         result = self.turn('onoff 220 wp 500nm', ('search_actuators', {
             'supply_voltage_v': 220, 'max_motor_power_w': 220, 'min_torque_nm': 500}))

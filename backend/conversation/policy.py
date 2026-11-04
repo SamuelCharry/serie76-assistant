@@ -133,7 +133,7 @@ def colloquial_requirements(query, semantic=None):
     return result, notes
 
 
-NONHAZARD_RE = re.compile(r'\b(?:not hazardous|not a (?:classified|hazardous) (?:area|zone)|outside (?:the )?(?:classified|hazardous) (?:area|zone)|(?:safe|normal) area)\b', re.I)
+NONHAZARD_RE = re.compile(r'\b(?:not hazardous|not a (?:classified|hazardous) (?:area|zone)|outside (?:the )?(?:classified|hazardous) (?:area|zone)|(?:safe|normal) area|area is safe|no gas)\b', re.I)
 
 
 def nonhazard_signal(text):
@@ -245,9 +245,17 @@ UNPUBLISHED_TOPICS = (
 )
 
 
-def unpublished_topic(query):
+def unpublished_topic(query, *, asked_only=False):
     for pattern, noun in UNPUBLISHED_TOPICS:
-        if re.search(pattern, query, re.I):
+        match = re.search(pattern, query, re.I)
+        if match:
+            if asked_only:
+                prefix = query[:match.start()]
+                # Site context is not a request for an unsupported capability.
+                if not re.search(r'\b(?:what|how|does|do|can|could|is|are|which|tell|show|give|send)\b', prefix, re.I):
+                    continue
+                if re.search(r'\b(?:beside|near|next to|inside|located at)\b', prefix, re.I):
+                    continue
             return noun
     return None
 

@@ -1445,6 +1445,13 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
     import re
+    if (action is None and not answers and not remove_filters and turn.context.get('filters')
+            and policy.nonhazard_signal(query)):
+        turn.trace = dict(name='search_actuators', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        args = models['search_actuators'].model_validate(dict(refine=True)).model_dump(mode='json')
+        return finish(turn, turn.search(args, trusted=True))
     if action is None and not answers and not remove_filters and re.search(r'\bis that for on/off or modulating\b', query, re.I):
         prior = next((m['content'] for m in reversed(messages) if m['role'] == 'assistant'), '')
         if 'shared' in prior.lower() and 'duty' in prior.lower():
@@ -1608,7 +1615,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                               model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
             return finish(turn, AgentResult('I only cover the Series 76 catalogue. I can compare its published models.',
                                             context=turn.context))
-        topic = policy.unpublished_topic(query)
+        topic = policy.unpublished_topic(query, asked_only=True)
         if topic and not re.search(r'\b(?:IP\s*\d+|NEMA\s*\d+)\b', query, re.I):
             turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
                               context_before=context_before,
