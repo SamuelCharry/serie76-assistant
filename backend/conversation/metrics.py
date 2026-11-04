@@ -31,6 +31,12 @@ def value(product, metric, filters):
     if metric == 'operating_time':
         used = ranking.operating_time_used(product, filters)
         return (used[1], 's' + used[0].removeprefix('Operating time')) if used else (None, 's')
+    if metric in ('fla', 'lra') and not filters.get('frequency_hz'):
+        options = [(values.get(f'{metric}_{hz}hz_a'), hz) for hz in (50, 60)]
+        published = [(amount, hz) for amount, hz in options if amount is not None]
+        if published:
+            amount, hz = min(published)
+            return amount, f'A at {hz} Hz'
     return ranking.measurement(product, metric, filters), 'A' if metric in ('fla', 'lra') else 'Nm'
 
 

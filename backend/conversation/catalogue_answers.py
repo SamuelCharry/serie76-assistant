@@ -39,6 +39,14 @@ def answer(connection, query):
                   for service, label in [('on_off', 'On/Off'), ('modulating', 'Modulating')]]
         return 'Published services: ' + ', '.join(f'{label} ({count} models)' for label, count in counts) + '.'
     if re.search(r'\bhow many\b.*\b(?:models?|actuators?)\b', text):
+        if re.search(r'\b3[-\s]*phase\b', text):
+            rows = connection.execute(
+                "SELECT data_status,count(DISTINCT base_part_number) AS n FROM series76.entries "
+                "WHERE import_id=%s AND phase_count=3 GROUP BY data_status",
+                (active_import(connection),)).fetchall()
+            counts = {row['data_status']: row['n'] for row in rows}
+            return (f"The catalogue lists {counts.get('reported', 0)} three-phase models with published data; "
+                    f"{counts.get('source_NA', 0)} more listed without published values.")
         stated, _ = colloquial_requirements(query)
         voltage = re.search(r'\b(24|110|220)\s*(?:v|volts?)\b', text)
         if voltage:

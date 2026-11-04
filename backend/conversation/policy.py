@@ -125,11 +125,13 @@ def colloquial_requirements(query):
             result[field] = value
             if token != ranked[0][1]:
                 notes.append(f"Interpreted '{token}' as {display}.")
+    if nonhazard_signal(text):
+        result['enclosure'] = 'weatherproof'
     return result, notes
 
 
 HAZARD_RE = re.compile(r'\b(?:flammable|combustible|explosive|solvent|fumes?|vapou?rs?|propane|butane|lpg|natural gas|methane|hydrogen|ammonia|acetylene|gas|dust|atex|iecex|classified (?:zone|area)|hazardous|zone\s*(?:0|1|2|21|22)|class\s*(?:i|ii)\s*div\s*[12]|refinery|petrochemical|mine|mining|distillery|spirits area)\b', re.I)
-NONHAZARD_RE = re.compile(r'\b(?:not hazardous|not a (?:classified|hazardous) (?:area|zone)|outside (?:the )?(?:classified|hazardous) (?:area|zone)|safe area)\b', re.I)
+NONHAZARD_RE = re.compile(r'\b(?:not hazardous|not a (?:classified|hazardous) (?:area|zone)|outside (?:the )?(?:classified|hazardous) (?:area|zone)|(?:safe|normal) area)\b', re.I)
 
 
 def nonhazard_signal(text):
@@ -138,6 +140,36 @@ def nonhazard_signal(text):
 
 def hazard_signal(text):
     return bool(HAZARD_RE.search(text)) and not nonhazard_signal(text)
+
+
+REMOVE_WORDS = {
+    'enclosure': r'enclosure|explosionproof|weatherproof|hazardous|classified',
+    'supply_voltage_v': r'voltage|volts?|\d+\s*v\b',
+    'service': r'service|on\s*/?\s*off|modulating',
+    'phase_count': r'phases?|fases?',
+    'frequency_hz': r'frequency|hz',
+    'min_torque_nm': r'torque|\bnm\b',
+    'min_torque_in_lb': r'torque|in\s*-?\s*lb',
+    'max_fla_a': r'fla|full.load current',
+    'max_lra_a': r'lra|locked.rotor current',
+    'max_motor_power_w': r'motor power|wattage',
+}
+
+
+def removed_fields(query, pending_questions=()):
+    """Map an explicit negation to filter keys, independent of model output."""
+    text = query.lower()
+    text = re.sub(r'\b(?:no more than|not more than|no less than)\b', 'bound', text)
+    removed = set()
+    for field, words in REMOVE_WORDS.items():
+        if re.search(r'\b(?:forget|drop|remove|no|not|any)\b(?:\W+\w+){0,3}?\W+(?:' + words + r')\b', text) or \
+                re.search(r'\b(?:' + words + r')\b.{0,20}\b(?:doesn.t matter|don.t care|any(?:thing)?)\b', text):
+            removed.add(field)
+    if re.search(r'\b(?:doesn.t matter|don.t care)\b', text) and not removed and pending_questions:
+        removed.add(pending_questions[0]['id'])
+    if nonhazard_signal(text):
+        removed.add('enclosure')
+    return removed
 
 
 CATALOGUE_ATTRIBUTE_WORDS = frozenset({

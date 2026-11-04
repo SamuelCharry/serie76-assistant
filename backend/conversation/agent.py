@@ -27,7 +27,7 @@ from pydantic import create_model as pydantic_model
 from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import get_actuator, search_actuators
-from . import policy, quality, tool_wire, interactions, ranking, metrics, integrity, answer_planner, catalogue_answers
+from . import policy, quality, tool_wire, interactions, ranking, metrics, integrity, answer_planner, catalogue_answers, requirement_coverage
 from .interactions import InvalidInteraction
 from .rendering import render_lookup, render_search, render_terms, supplies_text
 
@@ -825,6 +825,17 @@ class Turn:
         for field, value in inferred.items():
             if field not in delta or field not in ('min_torque_nm', 'min_torque_in_lb') or isinstance(value, dict):
                 delta[field] = value
+        written, coverage_issues = requirement_coverage.apply(
+            self.query, {}, dict(self.context.get('filters') or {}, **delta))
+        for field, claim in written.items():
+            if field not in delta or requirement_coverage.missing({field: claim}, {field: delta[field]}):
+                delta[field] = claim
+        interpretation_notes.extend(issue for issue in coverage_issues if issue.startswith('Modulating service'))
+        undisclosed = [issue for issue in coverage_issues
+                       if 'both stated' not in issue and not issue.startswith('Modulating service')]
+        if undisclosed:
+            self.trace['validation'] = ['unrepresented_quantity']
+            return self.clarify('requirements', ' '.join(undisclosed))
         if delta.get('min_torque_nm') is not None or delta.get('min_torque_in_lb') is not None:
             self.context.pop('big_valve_pending', None)
         if re.search(r'\b(?:battery room|battery storage)\b', self.query, re.I) and not re.search(r'\b(?:dc|ac)\b', self.query, re.I):
@@ -834,7 +845,7 @@ class Turn:
         bad = policy.invalid_assumptions(args.get("assumptions", []), self.texts)
         assumptions = [a for a in args.get("assumptions", []) if a not in bad]
         ungrounded = [] if trusted else [field for field in policy.grounding_errors(delta, assumptions, self.texts)
-                                         if field not in inferred and not
+                                         if field not in inferred and field not in written and not
                                          (field == 'enclosure' and delta.get(field) == 'explosionproof'
                                           and policy.hazard_signal(self.query))]
         dropped = []
@@ -848,11 +859,28 @@ class Turn:
                 return self.clarify("requirements")
         previous = self.context.get("filters") or {}
         import re
+        removals = set(args['remove']) | policy.removed_fields(
+            self.query, self.context.get('pending_questions') or [])
+        negated = bool(removals)
+        if 'enclosure' in removals and delta.get('enclosure') == 'weatherproof' and policy.nonhazard_signal(self.query):
+            removals.remove('enclosure')
+        if policy.removed_fields(self.query) and 'enclosure' in policy.removed_fields(self.query):
+            self.context.pop('hazard_signal', None)
         same_performance = re.search(r'\bsame performance\b', self.query, re.I) and args.get('refine') and delta.get('service')
         change_only = bool(previous and re.match(r'^\s*(?:and |actually |make (?:that|it) |no wait[, ]*|instead\b)',
                                                  self.query, re.I))
-        merged, notes = policy.merge_filters(previous, delta, refine=args["refine"] or change_only,
-                                             remove=args["remove"], more=args["more"])
+        merged, notes = policy.merge_filters(previous, delta, refine=args["refine"] or change_only or negated,
+                                             remove=sorted(removals), more=args["more"])
+        carried = dict(self.context.get('quantity_requirements', {})) if args['refine'] or change_only or args['more'] or negated else {}
+        carried.update(written)
+        for field in removals:
+            carried.pop(field, None)
+        missing_quantities = requirement_coverage.missing(carried, merged)
+        if missing_quantities:
+            self.trace['validation'] = ['unrepresented_quantity:' + field for field in missing_quantities]
+            return self.clarify('requirements',
+                                'I could not apply every stated quantity. Please restate the missing limit.')
+        self.context['quantity_requirements'] = carried
         notes[:0] = interpretation_notes
         if same_performance:
             notes.append('Assumption: "same performance" retains the numeric thresholds and applies them to the requested service.')
@@ -916,6 +944,8 @@ class Turn:
             kind, fields = found[0]
             # Keep the non-contradictory requirements pending for the next turn.
             self.context["filters"] = {k: v for k, v in merged.items() if k not in fields}
+            for field in fields:
+                self.context.get('quantity_requirements', {}).pop(field, None)
             self.trace["validation"] = ["conflict:" + kind]
             message = policy.CONFLICT_MESSAGES[kind].format(**{k: merged.get(k) for k in ("frequency_hz", "phase_count")})
             if kind == 'dc_phase':
@@ -1110,6 +1140,7 @@ class Turn:
                        shown=len(nearest), items=nearest)
             self.context['last_ranked_list'] = []
             self.context['zero_result_options'] = self.context.get('reply_options', [])
+            self.context['zero_result_nearest'] = nearest
             if notes:
                 answer += '\n' + '\n'.join(dict.fromkeys(notes))
             return AgentResult(answer, context=self.context, recommendation=rec,
@@ -1461,6 +1492,38 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     import re
     bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
     if (action is None and not answers and not remove_filters and
+            re.search(r'\bnearest one\b', bare_query) and turn.context.get('zero_result_nearest')):
+        item = turn.context['zero_result_nearest'][0]
+        answer = (f"Nearest published alternative: {item['part_number']} — {item['reason']}. "
+                  'This relaxes one stated requirement; confirm that change before selecting it.')
+        turn.context['focused_model'] = item['part_number']
+        turn.trace = dict(name='nearest_alternative', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, AgentResult(answer, context=turn.context, lead=answer))
+    if action is None and not answers and not remove_filters:
+        corrected_codes = policy.codes_in_text(query)
+        corrected_hz = re.search(r'\b(50|60)\s*hz\b', query, re.I)
+        prior_focus = turn.context.get('focus') or []
+        field_focus = [spec['field'] if isinstance(spec, dict) else spec for spec in prior_focus]
+        if (len(corrected_codes) == 1 and corrected_hz and len(field_focus) == 1 and
+                field_focus[0] in ('fla', 'lra', 'operating_time') and
+                re.search(r'\b(?:sorry|actually|instead|for)\b', bare_query)):
+            turn.trace = dict(name='get_actuator', parameters={'part_numbers': corrected_codes}, raw_parameters={},
+                              validation=['ok'], context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, turn.lookup(dict(part_numbers=corrected_codes,
+                                                 focus=[field_focus[0]],
+                                                 focus_frequency_hz=int(corrected_hz.group(1)),
+                                                 explain_terms=[])))
+    if (action is None and not answers and not remove_filters and bare_query in ('drop it', 'cancel', 'never mind')
+            and (turn.context.get('pending_questions') or turn.context.get('filters'))):
+        turn.context.clear()
+        turn.trace = dict(name='ask_clarification', parameters={'field': 'cancel'}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, AgentResult('Cancelled the previous request. Tell me what you need next.', context=turn.context))
+    if (action is None and not answers and not remove_filters and
             turn.context.get('big_valve_pending') and len(bare_query.split()) <= 2 and
             not re.search(r'\b\d+\s*(?:nm|in.lb)\b', bare_query)):
         turn.trace = dict(name='ask_clarification', parameters={'field': 'requirements'},
@@ -1469,7 +1532,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         return finish(turn, turn.clarify('requirements',
                       'I need the valve torque in Nm before I can recommend a model for its size.'))
     if action is None and not answers and not remove_filters:
-        if bare_query in ('what', 'what was that', 'what do you mean') and turn.context.get('pending_questions'):
+        if bare_query in ('what', 'what was that', 'what do you mean', "i don't follow", "i don't understand") and turn.context.get('pending_questions'):
             pending = turn.context['pending_questions'][0]
             labels = ', '.join(o['label'] for o in pending['options'])
             answer = pending['prompt'] + (' Options: ' + labels + '.' if labels else '')
@@ -1483,6 +1546,29 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                               context_before=context_before,
                               model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
             return finish(turn, AgentResult(catalogue_answer, context=turn.context))
+        if re.search(r'\bwho\s+(?:makes|manufactures|is the manufacturer of)\b', bare_query):
+            turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, AgentResult("The catalogue doesn't name the manufacturer. I can show its published model specifications.", context=turn.context))
+        if (re.search(r'\b(?:smallest|biggest|lowest|highest|least|most|strongest)\b', bare_query)
+            and re.search(r'\b(?:actuator|power|torque|electricity)\b', bare_query)
+            and not re.search(r'\b(?:at least|at most|no more than|\d+\s*(?:nm|knm|v|hz|w))\b', bare_query)
+            and not re.search(r'\b(?:indoors?|outdoors?|inside|outside)\b', bare_query)
+                and not (turn.context.get('filters') or {})):
+            metric = 'motor_power' if re.search(r'\b(?:power|electricity)\b', bare_query) else 'torque'
+            direction = 'highest' if re.search(r'\b(?:biggest|highest|most|strongest)\b', bare_query) else 'lowest'
+            all_rows = search_actuators(connection, SearchFilters(limit=100), allow_ambiguous=True)['products']
+            answer, winner = metrics.verdict(all_rows, f'Which model has the {direction} {metric.replace("_", " ")}?', {})
+            if answer:
+                if re.search(r'\b(?:energy|electricity|consum)\w*\b', bare_query):
+                    answer = 'Motor power is not total electrical consumption. ' + answer
+                turn.trace = dict(name='catalogue_superlative', parameters={}, raw_parameters={}, validation=['ok'],
+                                  context_before=context_before,
+                                  model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+                if winner:
+                    turn.context['focused_model'] = winner
+                return finish(turn, AgentResult(answer, context=turn.context, lead=answer))
         if (re.search(r'\b(?:series 76|this catalogue)\b.*\b(?:or|vs|versus|compared? (?:with|to))\b', bare_query)
                 and not policy.codes_in_text(query)) or re.search(r'\b(?:bray|rotork|other brands?)\b', bare_query):
             turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
@@ -1517,6 +1603,13 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                           model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
         return finish(turn, AgentResult('There is no exact DC 3-phase model. Closest alternatives: '
                                         + '; '.join(options) + '.', context=turn.context))
+    if (action is None and not answers and not remove_filters and bare_query == 'compare all'
+            and 2 <= len(turn.context.get('on_screen') or []) <= 4):
+        codes = turn.context['on_screen']
+        turn.trace = dict(name='get_actuator', parameters={'part_numbers': codes}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, turn.lookup(dict(part_numbers=codes, focus=['overview'], explain_terms=[])))
     top = re.fullmatch(r'compare (?:the )?top ([1-4])', bare_query)
     if action is None and not answers and not remove_filters and top and turn.context.get('last_ranked_list'):
         n = int(top.group(1))
@@ -1573,11 +1666,34 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             return finish(turn, AgentResult(answer, context=turn.context, lead=answer))
     if (action is None and not answers and not remove_filters and
             answer_planner.plan(query).shape == 'verdict' and not policy.codes_in_text(query)):
-        use_ranked = bool(re.search(r'\b(results?|ranked|list)\b', bare_query))
-        codes = (turn.context.get('last_ranked_list') if use_ranked else
-                 compared_codes or turn.context.get('on_screen') or turn.context.get('last_ranked_list')) or []
+        use_ranked = bool(re.search(r'\b(results?|ranked|list|them|those|among)\b', bare_query))
+        codes = ((turn.context.get('last_ranked_list') or compared_codes) if use_ranked else
+                 compared_codes or turn.context.get('last_ranked_list') or turn.context.get('on_screen')) or []
         if len(codes) >= 2:
             rows = [get_actuator(connection, code) for code in codes]
+            difference_requested = bool(re.search(r'\b(?:how much|difference)\b', bare_query))
+            if difference_requested and len(rows) == 2:
+                from decimal import Decimal
+                from .rendering import _num
+                spec = metrics.intent(query)
+                if spec:
+                    metric_name, _, hz, service = spec
+                    scoped = dict(turn.context.get('filters') or {})
+                    if hz:
+                        scoped['frequency_hz'] = hz
+                    if service:
+                        scoped['service'] = service
+                    measured = [metrics.value(row, metric_name, scoped) for row in rows if row]
+                    if len(measured) == 2 and all(value is not None for value, _ in measured):
+                        first, second = measured
+                        amount = abs(Decimal(str(first[0])) - Decimal(str(second[0])))
+                        unit = first[1]
+                        answer = (f'{codes[0]} {_num(first[0])} {unit} vs {codes[1]} '
+                                  f'{_num(second[0])} {second[1]}; difference {_num(amount)} {unit}.')
+                        turn.trace = dict(name='metric_difference', parameters={}, raw_parameters={}, validation=['ok'],
+                                          context_before=context_before,
+                                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+                        return finish(turn, AgentResult(answer, context=turn.context, lead=answer))
             verdict, winner = metrics.verdict([row for row in rows if row], query, turn.context.get('filters') or {})
             if verdict:
                 if winner:
@@ -1622,7 +1738,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         return finish(turn, turn.lookup(dict(part_numbers=[], reference_kind='focused',
                                            focus=['fla', 'lra', 'motor_power'],
                                            explain_terms=[])))
-    if action is None and not answers and not remove_filters and bare_query in ('thanks', 'thank you', 'gracias'):
+    if action is None and not answers and not remove_filters and re.search(r'\b(?:thanks|thank you|gracias)\b', bare_query):
         turn.trace = dict(name='courtesy', parameters={}, raw_parameters={}, validation=['ok'],
                           context_before=context_before,
                           model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
@@ -1728,7 +1844,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             turn.context['part_numbers'] = [selected]
             return finish(turn, turn.lookup(dict(part_numbers=[selected], focus=['overview'], explain_terms=[])))
         return finish(turn, turn.clarify('which_product', 'Which shown model do you mean?', options=shown[:4]))
-    if action is None and not answers and not remove_filters and bare_query == 'why' and turn.context.get('last_ranked_list'):
+    if action is None and not answers and not remove_filters and re.fullmatch(r'why(?: that| this| your pick| that one)?', bare_query) and turn.context.get('last_ranked_list'):
         filters = turn.context.get('filters') or {}
         criterion = ranking.ranked_by(filters, turn.context.get('rank_by', 'closest_torque'))
         turn.trace = dict(name='ranking_explanation', parameters={}, raw_parameters={}, validation=['ok'],
@@ -1951,6 +2067,39 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
 def finish(turn, result):
     trace = turn.trace
     import re
+    result.answer = result.answer.replace('0 identical fields hidden', '').replace('  ', ' ').strip()
+    if trace.get('name') == 'ranked_pick' and result.recommendation:
+        stated, issues = requirement_coverage.apply(turn.query, {})
+        missing = requirement_coverage.missing(stated, result.context.get('filters') or {})
+        if missing or issues:
+            result.answer = ('I could not apply every stated quantity to this pick. '
+                             'Please restate the requirement so I can filter the catalogue first.')
+            result.lead = result.answer
+            result.recommendation = None
+            result.products = []
+    if result.recommendation and not (result.context.get('filters') or {}).get('enclosure'):
+        enclosure_note = ('Enclosure not specified: Weatherproof is for general areas; '
+                          'choose Explosionproof for hazardous areas.')
+        for item in result.recommendation.get('items', []):
+            code = item['part_number']
+            row = get_actuator(turn.connection, code)
+            if not row:
+                continue
+            label = row['enclosure'].capitalize()
+            if not any(value['label'] == 'Enclosure' for value in item.get('key_values', [])):
+                item.setdefault('key_values', []).append({'label': 'Enclosure', 'value': label})
+            if label not in item['reason']:
+                old_reason = item['reason']
+                item['reason'] = label + '; ' + old_reason
+                result.answer = result.answer.replace(code + ': ' + old_reason,
+                                                      code + ': ' + item['reason'])
+                result.answer = result.answer.replace(code + ' — ' + old_reason,
+                                                      code + ' — ' + item['reason'])
+                if result.lead:
+                    result.lead = result.lead.replace(code + ' — ' + old_reason,
+                                                      code + ' — ' + item['reason'])
+        if enclosure_note not in result.answer:
+            result.answer = result.answer.rstrip() + '\n' + enclosure_note
     if result.recommendation and result.recommendation.get('total', 0) > 0 and turn.context.get('hazard_signal'):
         shown = [get_actuator(turn.connection, item['part_number']) for item in result.recommendation['items']]
         if not integrity.hazard_recommendation_safe([row for row in shown if row], hazard=True):
