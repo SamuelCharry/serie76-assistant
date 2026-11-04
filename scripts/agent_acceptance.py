@@ -19,6 +19,8 @@ import argparse
 import hashlib
 import json
 import os
+import re
+from copy import deepcopy
 import sys
 import time
 from contextlib import contextmanager
@@ -161,7 +163,43 @@ def same(a, b):
         return a == b
 
 
-def check(expect, observed):
+def numeric_equal(a, b):
+    if isinstance(a, bool) or isinstance(b, bool):
+        return False
+    try:
+        a, b = Decimal(str(a)), Decimal(str(b))
+        return a.is_finite() and b.is_finite() and a == b
+    except Exception:
+        return False
+
+
+def argument_matches(field, got, expected, queries=()):
+    """Only numeric bound fields bridge scalar/bound representations; never drop op.
+
+    Old scalar expectations may accept a gte bound only when the case's current or
+    preceding query explicitly says at least/minimum for that same value.
+    Other operators require explicit {value, op} expectations.
+    """
+    from backend.catalog.repository import COMPARISONS
+    if field not in COMPARISONS:
+        return same(got, expected)
+    if isinstance(expected, dict):
+        if set(expected) != {"value", "op"}:
+            return False
+        if not isinstance(got, dict):
+            # Legacy scalar inputs have the repository's inclusive default only.
+            got = {"value": got, "op": "gte" if field.startswith("min_") else "lte"}
+        return (set(got) == {"value", "op"} and expected["op"] in {"gt", "gte", "lt", "lte"}
+                and got["op"] == expected["op"] and numeric_equal(got["value"], expected["value"]))
+    if isinstance(got, dict):
+        stated_minimum = any(numeric_equal(m, expected) for q in queries for m in re.findall(
+            r"(?:at least|minimum(?: of)?)\s+(\d+(?:\.\d+)?)", q.lower()))
+        return (field.startswith("min_") and stated_minimum and set(got) == {"value", "op"}
+                and got["op"] == "gte" and numeric_equal(got["value"], expected))
+    return same(got, expected)
+
+
+def check(expect, observed, queries=()):
     failures = []
     trace = observed["trace"]
     params = trace.get("parameters") or {}
@@ -172,7 +210,7 @@ def check(expect, observed):
         if isinstance(value, list):
             if not same(got or [], value):
                 failures.append(f"{field} {got} != {value}")
-        elif not same(got, value):
+        elif not argument_matches(field, got, value, queries):
             failures.append(f"{field} {got} != {value}")
     if expect.get("only_filters"):
         from backend.conversation.policy import FILTER_FIELDS
@@ -200,10 +238,14 @@ def check(expect, observed):
     if expect.get("no_products") and codes:
         failures.append(f"unexpected products {codes[:3]}")
     if "candidates_include" in expect:
-        candidates = observed.get("candidates", [])
-        for code in expect["candidates_include"]:
-            if code not in candidates:
-                failures.append("SQL candidate missing: " + code)
+        if "recorded_candidate_failures" in observed:
+            # Older recordings omitted SQL candidates. Preserve the original
+            # candidate-only verdict; do not invent evidence or query today's DB.
+            failures.extend(observed["recorded_candidate_failures"])
+        else:
+            for code in expect["candidates_include"]:
+                if code not in observed.get("candidates", []):
+                    failures.append("SQL candidate missing: " + code)
     if "product_count" in expect and len(codes) != expect["product_count"]:
         failures.append("product count differs")
     if expect.get("no_clarification") and clarification is not None:
@@ -226,9 +268,9 @@ def check(expect, observed):
     return failures
 
 
-def score(turn, observed):
+def score(turn, observed, queries=None):
     options = turn.get("expect_any") or [turn["expect"]]
-    results = [check(o, observed) for o in options]
+    results = [check(o, observed, queries or [turn["query"]]) for o in options]
     best = min(results, key=len)
     return not best, best
 
@@ -289,12 +331,13 @@ def run_scenario(scenario, model_factory):
                             clarification=payload["clarification"], assumptions=payload["assumptions"], trace=trace,
                             suggested_replies=payload["suggested_replies"], comparison=payload["comparison"],
                             candidates=[p["base_part_number"] for p in debug.get("data", {}).get("products", [])] or debug.get("data", {}).get("candidates", []))
-            passed, failures = score(turn, observed)
+            passed, failures = score(turn, observed, [t["query"] for t in scenario["turns"][:index + 1]])
             turns.append(dict(query=turn["query"], passed=passed, failures=failures, elapsed_s=round(elapsed, 3),
                               answer=payload["answer"], clarification=payload["clarification"],
                               products=[p["base_part_number"] for p in payload["products"]],
                               terms=[t["term_key"] for t in payload["terms"]], assumptions=payload["assumptions"], trace=trace,
-                              suggested_replies=payload["suggested_replies"], comparison=payload["comparison"]))
+                              suggested_replies=payload["suggested_replies"], comparison=payload["comparison"],
+                              candidates=observed["candidates"]))
     return dict(status="passed" if all(t["passed"] for t in turns) else "failed", turns=turns)
 
 
@@ -355,7 +398,7 @@ IDEAL = {
     "h_duty_threshold": [("search_actuators", {"service": "modulating", "min_duty_s4_percent": 50})],
     "h_definition_speed": [("explain_terms", {"term_keys": ["operating_speed"]})],
     "h_definition_nema": [("ask_clarification", {"field": "term_not_in_summary"})],
-    "h_followup_frequency": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "max_fla_a": 1.5}),
+    "h_followup_frequency": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "max_fla_a": {"value": 1.5, "op": "lt"}}),
                              ("search_actuators", {"refine": True, "frequency_hz": 60})],
     "h_followup_second": [("get_actuator", {"part_numbers": ["761A00-11300000/A", "761B00-11300000/A"]}),
                           ("get_actuator", {"part_numbers": ["761B00-11300000/A"], "focus": "motor_power"})],
@@ -502,6 +545,25 @@ def command_run(config, cases, only, cases_path=CASES):
     print(json.dumps(dict(spent_conservative_usd=round(ledger.spent(), 6))))
 
 
+def rescore_record(record, scenario):
+    """Score recorded observations, not rerendered answers; never mutate evidence."""
+    result = deepcopy(record)
+    for index, turn in enumerate(result.get("turns", [])):
+        expected = scenario["turns"][index]
+        if turn["query"] != expected["query"]:
+            raise ValueError("Recorded query differs from case; refuse rescore")
+        observed = dict(turn, products=[{"base_part_number": code} for code in turn["products"]],
+                        terms=[{"term_key": key} for key in turn["terms"]])
+        if "candidates" not in turn:
+            observed["recorded_candidate_failures"] = [f for f in turn["failures"] if f.startswith("SQL candidate missing: ")]
+        turn["passed"], turn["failures"] = score(expected, observed, [t["query"] for t in scenario["turns"][:index + 1]])
+    if result["status"] in ("passed", "failed"):
+        if len(result["turns"]) != len(scenario["turns"]):
+            raise ValueError("Incomplete non-provider record; refuse rescore")
+        result["status"] = "passed" if all(t["passed"] for t in result["turns"]) else "failed"
+    return result
+
+
 def command_report(config, cases):
     results = read_jsonl(OUT / "results.jsonl")
     ledger = read_jsonl(OUT / "ledger.jsonl")
@@ -509,6 +571,9 @@ def command_report(config, cases):
     for r in results:
         if r["status"] != "provider_failure" or r["scenario"] not in final:
             final[r["scenario"]] = r
+    recorded_counts = {status: sum(r["status"] == status for r in final.values()) for status in ("passed", "failed", "provider_failure")}
+    definitions = {s["id"]: s for s in cases["scenarios"]}
+    final = {name: rescore_record(record, definitions[name]) for name, record in final.items()}
     categories = {}
     for s in cases["scenarios"]:
         r = final.get(s["id"])
@@ -523,6 +588,8 @@ def command_report(config, cases):
     latencies = sorted(e["latency_s"] for e in ledger if e["state"] == "settled")
     summary = dict(
         cohort=cases["version"], model=config["model"], provider=config["provider"],
+        rescored=True, recorded_counts=recorded_counts,
+        candidate_evidence_note="Older recordings omitted SQL candidates; only those original candidate-check verdicts are retained, other checks rescored",
         scenarios=len(cases["scenarios"]), passed=sum(r["status"] == "passed" for r in final.values()),
         failed=sum(r["status"] == "failed" for r in final.values()),
         provider_failure_only=sum(r["status"] == "provider_failure" for r in final.values()),

@@ -280,7 +280,10 @@
             "args": {
               "service": "on_off",
               "supply_voltage_v": 110,
-              "min_torque_nm": 100
+              "min_torque_nm": {
+                "value": 100,
+                "op": "gte"
+              }
             },
             "only_filters": true
           }
@@ -842,7 +845,10 @@
             "args": {
               "service": "on_off",
               "supply_voltage_v": 110,
-              "max_fla_a": 1.5,
+              "max_fla_a": {
+                "value": 1.5,
+                "op": "lt"
+              },
               "frequency_hz": 60
             },
             "only_filters": true,
