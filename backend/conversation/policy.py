@@ -37,12 +37,10 @@ def sort_grounded(sort_key, query):
 # Deterministic evidence that a categorical value was expressed by the user. Anything
 # else needs an explicit assumption (shown to the user) quoting the user's own words.
 LEXICON = {
-    ("service", "on_off"): ("on/off", "on_off", "on-off", "on off", "open/close", "open-close", "open or close",
-                            "fully open", "fully closed", "two-position", "two position", "isolation", "todo/nada", "todo o nada",
-                            "abrir completo o cerrar completo", "abrir completamente o cerrar completamente"),
-    ("service", "modulating"): ("modulat", "positioning", "throttl", "proportional", "intermediate position", "modulante"),
-    ("enclosure", "explosionproof"): ("explosion", "hazardous", "atex", "iecex", "flammable", "class i", "zone 1", "antiexplos"),
-    ("enclosure", "weatherproof"): ("weatherproof", "weather proof", "weather-proof", "outdoor", "rain", "intemperie", "exteriores"),
+    ("service", "on_off"): ("on/off", "on_off", "on-off", "on off"),
+    ("service", "modulating"): ("modulating", "modulation", "modulante"),
+    ("enclosure", "explosionproof"): ("explosionproof", "explosion proof", "explosion-proof", "antiexplos"),
+    ("enclosure", "weatherproof"): ("weatherproof", "weather proof", "weather-proof"),
     ("supply_current", "DC"): ("dc", "direct current", "corriente continua", "battery"),
     # Phases exist only for AC supplies (DC has none), so stated phases ground AC.
     ("supply_current", "AC"): ("ac", "alternating", "alterna", "mains", "hz", "single phase", "single-phase",
@@ -54,8 +52,8 @@ LEXICON = {
 }
 
 
-def colloquial_requirements(query):
-    """Closed, explicit phrase map; returns only constraints stated in this turn."""
+def colloquial_requirements(query, semantic=None):
+    """Explicit constraints plus optional semantic suggestions; None preserves fallback."""
     text = query.lower()
     result, notes = {}, []
     for phrase, name in (('indoors', 'indoor'), ('indoor', 'indoor'),
@@ -66,14 +64,20 @@ def colloquial_requirements(query):
                     f"The catalogue doesn't classify models as {name}; showing models by published fields.")
             if note not in notes:
                 notes.append(note)
-    if re.search(r'\b(open and close|open and shut|open/shut|open or shut|open or close|fully open|abrir y cerrar|on/of|onoff|on off|on-off)\b', text):
-        result['service'] = 'on_off'
-    if re.search(r'\b(stop halfway|intermediate positions?|partial positions?|set to partial|mixing positions?|position anywhere|any position|regulat(?:e|ing)|regule|regular caudal|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open|hold at \d+\s*%\s*open|mod(?=\s|\d))\b', text):
-        result['service'] = 'modulating'
-    if re.search(r'\b(outside|exteriores?|intemperie)\b|\boutdoors\b.*\bnot hazardous\b', text):
-        result['enclosure'] = 'weatherproof'
-    if re.search(r'\bnot (?:a )?classified area\b', text):
-        result['enclosure'] = 'weatherproof'
+    if semantic is None:
+        from .context_fallback import colloquial
+        result.update(colloquial(text))
+    else:
+        explicit = explicit_context_values(text)
+        removed = removed_fields(text)
+        for concept in ('on_off', 'modulating'):
+            if concept in semantic and 'service' not in explicit and 'service' not in removed:
+                result['service'] = concept
+                notes.append('Interpreted the requested operation as ' + ('On/Off' if concept == 'on_off' else 'Modulating') + '.')
+        if 'safe_area' in semantic and 'enclosure' not in explicit and 'enclosure' not in removed:
+            result['enclosure'] = 'weatherproof'
+            notes.append('Interpreted the site as a nonhazardous area; please confirm if that is incorrect.')
+        result.update(explicit)
     if nonhazard_signal(text):
         result['enclosure'] = 'weatherproof'
     if re.search(r'\bxp\b', text):
@@ -130,7 +134,6 @@ def colloquial_requirements(query):
     return result, notes
 
 
-HAZARD_RE = re.compile(r'\b(?:flammable|combustible|explosive|solvent|fumes?|vapou?rs?|propane|butane|lpg|natural gas|methane|hydrogen|ammonia|acetylene|gas|dust|atex|iecex|classified (?:zone|area)|hazardous|zone\s*(?:0|1|2|21|22)|class\s*(?:i|ii)\s*div\s*[12]|refinery|petrochemical|mine|mining|distillery|spirits area)\b', re.I)
 NONHAZARD_RE = re.compile(r'\b(?:not hazardous|not a (?:classified|hazardous) (?:area|zone)|outside (?:the )?(?:classified|hazardous) (?:area|zone)|(?:safe|normal) area)\b', re.I)
 
 
@@ -138,8 +141,39 @@ def nonhazard_signal(text):
     return bool(NONHAZARD_RE.search(text))
 
 
-def hazard_signal(text):
-    return bool(HAZARD_RE.search(text)) and not nonhazard_signal(text)
+def explicit_context_values(text):
+    values = {}
+    patterns = [('service', 'on_off', r'\bon[ /_-]*off\b'),
+                ('service', 'modulating', r'\b(?:modulating|modulation|modulante)\b'),
+                ('enclosure', 'weatherproof', r'\bweatherproof\b'),
+                ('enclosure', 'explosionproof', r'\bexplosionproof\b')]
+    for clause in re.split(r'[,;.!?]|\bbut\b', text, flags=re.I):
+        for field, value, pattern in patterns:
+            for match in re.finditer(pattern, clause, re.I):
+                prefix = clause[:match.start()]
+                if not re.search(r'\b(?:no|not|sin|forget|drop|remove|any)\s+(?:\w+\s+){0,2}$', prefix, re.I):
+                    values[field] = value
+    return values
+
+
+def hazard_signal(text, semantic=None):
+    if nonhazard_signal(text):
+        return False
+    if semantic is not None:
+        if re.search(r'\b(?:no|not|without|sin)\s+(?:\w+\s+){0,2}(?:flammable|explosive|hazardous|inflamables?|explosiv[oa]s?)\b', text, re.I):
+            return False
+        if 'enclosure' in removed_fields(text):
+            return False
+        return 'hazard' in semantic or bool(re.search(r'\b(?:hazardous|explosive|flammable)\b', text, re.I))
+    from .context_fallback import HAZARD_RE
+    return bool(HAZARD_RE.search(text))
+
+
+def weather_exposure(text, semantic=None):
+    if semantic is not None:
+        return 'safe_area' in semantic
+    from .context_fallback import weather_exposure as fallback
+    return fallback(text)
 
 
 REMOVE_WORDS = {
@@ -310,7 +344,7 @@ def numbers_in(texts):
     return values
 
 
-def grounding_errors(delta, assumptions, texts):
+def grounding_errors(delta, assumptions, texts, semantic=None):
     """Fields whose value is not traceable to the conversation or to a quoted assumption."""
     corpus = " ".join(texts).lower()
     numbers = numbers_in(texts)
@@ -326,6 +360,9 @@ def grounding_errors(delta, assumptions, texts):
             if field == "csa_required" and value is False:
                 continue
             words = LEXICON.get((field, value), ())
+            if semantic is None and field in ('service', 'enclosure'):
+                from .context_fallback import CONTEXT_LEXICON
+                words = CONTEXT_LEXICON.get((field, value), words)
             if not any(_has_word(corpus, w) for w in words):
                 errors.append(field)
     return errors

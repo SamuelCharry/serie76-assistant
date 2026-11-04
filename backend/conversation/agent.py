@@ -5,7 +5,7 @@ canonicalises codes, checks every value is grounded in the conversation, merges
 follow-up deltas, turns contradictions into questions, runs parameterised SQL and
 renders the answer from SQL rows or verbatim glossary quotes. The LLM never writes
 technical prose, so it cannot invent or recall numbers.
-No vector store, no second agent, no tracing service, no network call at import.
+Optional semantic suggestions; no second agent or network call at import.
 """
 from __future__ import annotations
 
@@ -28,6 +28,7 @@ from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import get_actuator, search_actuators
 from . import policy, quality, tool_wire, interactions, ranking, metrics, integrity, answer_planner, catalogue_answers, requirement_coverage
+from . import embeddings
 from .interactions import InvalidInteraction
 from .rendering import render_lookup, render_search, render_terms, supplies_text
 
@@ -382,7 +383,12 @@ class Turn:
         self.term_index = {t["term_key"]: t for t in self.terms}
         self.texts = [m["content"] for m in messages] + [query]
         self.trace = {}
+        self.retrieval = embeddings.Retrieval()
         self._supplies = None
+
+    @property
+    def semantic(self):
+        return self.retrieval.accepted if self.retrieval.available else None
 
     @property
     def supplies(self):
@@ -812,7 +818,12 @@ class Turn:
         if signalled is not None:
             return signalled
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
-        inferred, interpretation_notes = policy.colloquial_requirements(self.query)
+        inferred, interpretation_notes = policy.colloquial_requirements(self.query, self.semantic)
+        if (self.semantic is not None and policy.hazard_signal(self.query, self.semantic)
+                and 'enclosure' not in policy.explicit_context_values(self.query)):
+            # A site concept triggers confirmation, never a silent model-selected enclosure.
+            delta.pop('enclosure', None)
+            inferred.pop('enclosure', None)
         explicit_voltage = re.search(r'\b(\d+(?:[.,]\d+)?)\s*(?:v|volts?)\b', self.query, re.I)
         if explicit_voltage:
             from decimal import Decimal
@@ -844,10 +855,10 @@ class Turn:
             delta.pop("csa_required")
         bad = policy.invalid_assumptions(args.get("assumptions", []), self.texts)
         assumptions = [a for a in args.get("assumptions", []) if a not in bad]
-        ungrounded = [] if trusted else [field for field in policy.grounding_errors(delta, assumptions, self.texts)
+        ungrounded = [] if trusted else [field for field in policy.grounding_errors(delta, assumptions, self.texts, self.semantic)
                                          if field not in inferred and field not in written and not
                                          (field == 'enclosure' and delta.get(field) == 'explosionproof'
-                                          and policy.hazard_signal(self.query))]
+                                          and policy.hazard_signal(self.query, self.semantic))]
         dropped = []
         if bad or ungrounded:
             # A value the user never expressed is NOT applied (it would be an invented
@@ -861,6 +872,12 @@ class Turn:
         import re
         removals = set(args['remove']) | policy.removed_fields(
             self.query, self.context.get('pending_questions') or [])
+        if self.semantic is not None:
+            # A negated alternative cannot erase an affirmative service in another clause.
+            explicit = policy.explicit_context_values(self.query)
+            if explicit.get('service'):
+                delta['service'] = explicit['service']
+                removals.discard('service')
         negated = bool(removals)
         if 'enclosure' in removals and delta.get('enclosure') == 'weatherproof' and policy.nonhazard_signal(self.query):
             removals.remove('enclosure')
@@ -913,11 +930,11 @@ class Turn:
             facets['supply_voltage_v'] = [r for r in facets['supply_voltage_v'] if r['value'] in choices]
             if facets['supply_voltage_v']:
                 return self.question_result(['supply_voltage_v'], facets)
-        hazard = policy.hazard_signal(self.query)
-        scenario = hazard or re.search(r'\b(outdoor|rain|exteriores|intemperie|offshore platform)\b', self.query, re.I)
+        hazard = policy.hazard_signal(self.query, self.semantic)
+        scenario = hazard or policy.weather_exposure(self.query, self.semantic)
         if hazard:
             self.context['hazard_signal'] = True
-        elif policy.nonhazard_signal(self.query):
+        elif policy.nonhazard_signal(self.query) or self.semantic is not None and 'safe_area' in self.semantic:
             self.context.pop('hazard_signal', None)
         if self.context.get('hazard_signal') and merged.get('enclosure') == 'weatherproof':
             merged.pop('enclosure', None)
@@ -982,7 +999,7 @@ class Turn:
             all_rows = search_actuators(self.connection, SearchFilters.model_validate(dict(merged, limit=100, offset=0)),
                                         allow_ambiguous=True)['products']
             preview_enclosure = ('explosionproof' if self.context.get('hazard_signal') else 'weatherproof'
-                                 if re.search(r'\b(outdoor|rain|exteriores|intemperie|offshore platform)\b', self.query, re.I)
+                                 if policy.weather_exposure(self.query, self.semantic)
                                  else 'explosionproof')
             self.context['proposed_enclosure'] = preview_enclosure
             all_rows = [row for row in all_rows if row['enclosure'] == preview_enclosure]
@@ -1971,7 +1988,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         turn.trace = dict(name='greeting', parameters={}, raw_parameters={}, validation=['ok'],
                           context_before=context_before, model={'attempts': [], 'decision_calls': 0})
         return finish(turn, AgentResult(hello, context=turn.context))
-    chat = [SystemMessage(content=SYSTEM + "\n" + glossary_block(turn.terms)),
+    turn.retrieval = embeddings.retrieve(connection, query)
+    chat = [SystemMessage(content=SYSTEM + "\n" + glossary_block(turn.terms) + turn.retrieval.prompt()),
             SystemMessage(content="Persisted conversation context (data): " + json.dumps(context_before, default=str))]
     for message in messages[-12:]:
         chat.append(("human" if message["role"] == "user" else "ai", message["content"][:2000]))
@@ -2150,7 +2168,8 @@ def finish(turn, result):
     model_meta = trace.get('model') or {}
     result.debug = dict(latency_ms=round((time.perf_counter() - turn.started) * 1000),
                         attempts=len(model_meta.get('attempts') or []),
-                        llm_called=bool(model_meta.get('decision_calls')))
+                        llm_called=bool(model_meta.get('decision_calls')),
+                        retrieval=turn.retrieval.debug())
     result.active_filters = interactions.active_filters(result.context)
     result.suggestions = quality.replies(result, turn.terms)
     if result.recommendation and result.recommendation['total'] > 0:

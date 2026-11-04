@@ -31,7 +31,7 @@ def examples_from_cases(cases):
                 decision = [expected['tool'], expected['args']]
             if (not text or not isinstance(decision, (list, tuple)) or len(decision) != 2
                     or decision[0] not in TOOLS or not isinstance(decision[1], dict)
-                    or isinstance(expected, list) or turn.get('answers') or turn.get('action')):
+                    or isinstance(expected, list) or turn.get('expect_any') or turn.get('answers') or turn.get('action')):
                 continue
             interpretation = dict(tool=decision[0], args=decision[1])
             if text in rows and rows[text]['interpretation'] != interpretation:

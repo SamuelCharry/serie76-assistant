@@ -63,6 +63,11 @@ class EmbeddingTests(unittest.TestCase):
         cases['scenarios'].append(dict(id='d', turns=[dict(query='same', scripted_decision=['search_actuators', {'service': 'modulating'}])]))
         self.assertEqual(loader.examples_from_cases(cases), [])
 
+    def test_alternative_expected_decisions_are_not_training_labels(self):
+        cases = {'scenarios': [dict(id='ambiguous', turns=[dict(query='help',
+            scripted_decision=['search_actuators', {}], expect_any=[{'tool': 'search_actuators'}, {'tool': 'ask_clarification'}])])]}
+        self.assertEqual(loader.examples_from_cases(cases), [])
+
     def test_flag_needs_model_and_respects_false(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertFalse(embeddings.enabled())
@@ -76,6 +81,16 @@ class EmbeddingTests(unittest.TestCase):
         self.assertEqual(embeddings.classify({'hazard': .90, 'safe_area': .30}), {'hazard'})
         self.assertEqual(embeddings.classify({'on_off': .9, 'modulating': .91}), set())
         self.assertEqual(embeddings.classify({'hazard': .2}), set())
+
+    def test_compound_hazard_queries_can_request_confirmation(self):
+        # Frozen Google smoke scores: adding supply values diluted both site queries.
+        self.assertIn('hazard', embeddings.classify({'hazard': .64154, 'safe_area': .61843}))
+        self.assertIn('hazard', embeddings.classify({'hazard': .66432, 'safe_area': .64683}))
+        for scores in [dict(hazard=.64345, safe_area=.63869),  # generic process actuator
+                       dict(hazard=.71088, safe_area=.69921),  # gas-free safe area
+                       dict(hazard=.73775, safe_area=.89590),  # no flammable material
+                       dict(hazard=.57474, safe_area=.52067)]:  # hot water
+            self.assertNotIn('hazard', embeddings.classify(scores))
 
     def test_bad_vectors_rejected(self):
         for vector in ([0.] * 768, [1.], [float('nan')] * 768):
@@ -140,6 +155,12 @@ class EmbeddingDatabaseTests(unittest.TestCase):
                 result = embeddings.retrieve(self.connection, 'bad')
         self.assertFalse(result.available)
         self.assertEqual(self.connection.execute('SELECT 1 AS n').fetchone()['n'], 1)
+
+    def test_unloaded_model_uses_legacy_normalizer(self):
+        with patch.dict(os.environ, EMBEDDINGS_ENABLED='true', OPENROUTER_EMBEDDING_MODEL=self.fake.model):
+            with patch.object(embeddings, 'embed_query', self.fake.embed_query):
+                result = embeddings.retrieve(self.connection, 'new wording')
+        self.assertFalse(result.available)
 
 
 if __name__ == '__main__':

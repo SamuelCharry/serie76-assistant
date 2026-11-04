@@ -9,10 +9,11 @@ import os
 import time
 
 DIM = 768
-THRESHOLDS = dict(hazard=.70, safe_area=.75, on_off=.72, modulating=.72,
+THRESHOLDS = dict(hazard=.63, safe_area=.75, on_off=.72, modulating=.72,
                   out_of_scope_property=.78)
 OPPOSITES = dict(hazard='safe_area', safe_area='hazard', on_off='modulating', modulating='on_off')
-MARGIN = .08
+# Hazard only requests confirmation; applying a filter needs a wider margin.
+MARGINS = dict(hazard=.015, safe_area=.08, on_off=.08, modulating=.08)
 MIN_SIMILARITY = .70
 
 
@@ -69,7 +70,7 @@ def classify(scores):
     return {concept for concept, threshold in THRESHOLDS.items()
             if scores.get(concept, -1) >= threshold and
             (concept not in OPPOSITES or
-             scores[concept] - scores.get(OPPOSITES[concept], -1) >= MARGIN)}
+             scores[concept] - scores.get(OPPOSITES[concept], -1) >= MARGINS[concept])}
 
 
 @dataclass
@@ -116,7 +117,7 @@ def retrieve(connection, query, *, exclude_sources=()):
                 FROM series76.concept_anchor WHERE model=%s GROUP BY concept''', (vector, model))}
         result.examples, result.concepts = examples, concepts
         result.accepted = classify(concepts)
-        result.available = True
+        result.available = bool(concepts)
     except Exception:
         # Provider exceptions can contain request bodies/credentials. Never log them.
         result = Retrieval(embedding_ms=round((time.perf_counter() - started) * 1000, 2))
