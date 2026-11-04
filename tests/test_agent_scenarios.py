@@ -23,6 +23,7 @@ from backend.catalog.context import list_terms, load_context
 from backend.catalog.db import connect, readiness
 from backend.conversation import store
 from backend.conversation.agent import AgentUnavailable, run_agent
+from scripts.check_public_text import public_text_issues
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = os.environ.get("SERIES76_TEST_DB") == "1"
@@ -74,6 +75,7 @@ class Base(unittest.TestCase):
 
     def turn(self, query, *calls):
         result = run_agent(self.connection, query, self.history, self.context, model=Scripted(*calls))
+        self.assertEqual(public_text_issues(result.answer, result.comparison, result.suggested_replies), [])
         self.history += [dict(role="user", content=query), dict(role="assistant", content=result.answer)]
         self.context = result.context
         return result
@@ -104,7 +106,7 @@ class GlossaryTests(Base):
     def test_s4_definition_is_answered_with_its_identifier(self):
         result = self.turn("What does S4 mean?", ("explain_terms", {"term_keys": ["duty_cycle"]}))
         self.assertIn("Duty Cycle (S4%): The percentage of time the actuator can be in operation", result.answer)
-        self.assertIn("[series_76_summary.pdf, p. 2]", result.answer)
+        self.assertIn("[Series 76 summary, p. 2]", result.answer)
         self.assertEqual(result.terms[0]["source"], {"document": "series_76_summary.pdf", "page": 2})
 
     def test_supply_definition_adds_catalogue_supplies_from_sql(self):
@@ -167,7 +169,7 @@ class LookupTests(Base):
         result = self.turn("Torque of 761A00-11300000/A?", ("get_actuator", {"part_numbers": ["761A00-11300000/A"], "focus": "torque"}))
         self.assertIn("On/Off torque: 700 in-lb / 80 Nm", result.answer)
         self.assertIn("Modulating torque: 580 in-lb / 65 Nm", result.answer)
-        self.assertIn("series_76_electric_data.pdf, page 1", result.answer)
+        self.assertIn("Series 76 electrical catalogue, page 1", result.answer)
         product = result.products[0]
         self.assertEqual(product["source"]["page"], 1)
         self.assertNotIn("bbox", json.dumps(product["notes"]))  # OCR internals stay out of the public payload

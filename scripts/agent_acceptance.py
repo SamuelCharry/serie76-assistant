@@ -37,6 +37,7 @@ OUT = ROOT / "reports/agent_acceptance/v2"  # overridden by --cohort
 CONFIG = ROOT / "config/agent_acceptance.json"
 CASES = ROOT / "config/agent_acceptance_cases.json"
 FROZEN_FILES = [ "config/agent_acceptance_cases.json", "scripts/agent_acceptance.py",
+                "scripts/check_public_text.py",
                 "backend/conversation/quality.py", "backend/conversation/store.py",
                 "backend/conversation/tool_wire.py",
                 "backend/catalog/migrations/004_message_presentation.sql",
@@ -200,7 +201,8 @@ def argument_matches(field, got, expected, queries=()):
 
 
 def check(expect, observed, queries=()):
-    failures = []
+    from scripts.check_public_text import public_text_issues
+    failures = public_text_issues(observed["answer"], observed.get("comparison"), observed.get("suggested_replies", []))
     trace = observed["trace"]
     params = trace.get("parameters") or {}
     if "tool" in expect and trace.get("name") != expect["tool"]:

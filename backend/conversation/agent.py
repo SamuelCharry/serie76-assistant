@@ -184,7 +184,7 @@ def schemas(term_keys):
 
 DESCRIPTIONS = {
     "get_actuator": "Look up complete Base Part Numbers (up to four) in the electrical catalogue.",
-    "search_actuators": "Find actuators meeting stated requirements; refine/more/remove for follow-ups. Unknown data never passes a threshold.",
+    "search_actuators": "Find actuators for ALL stated requirements, including every numeric limit. New independent requests use refine=false; explicit follow-ups use refine=true or more/remove. Unknown data never passes a threshold.",
     "explain_terms": "Quote glossary definitions of catalogue terms.",
     "ask_clarification": "Ask for a missing requirement, part number or disambiguation.",
 }

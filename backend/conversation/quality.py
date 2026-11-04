@@ -5,7 +5,7 @@ from copy import deepcopy
 from itertools import combinations
 from math import log2
 
-from .rendering import product_lines, _num, _status_text, _search_focus
+from .rendering import product_lines, _num, _status_text, _search_focus, _frequency_label
 from .policy import LABELS
 
 DEFAULT_REPLIES = ["Find an actuator for my requirements", "Explain Base Part Number", "Explain FLA"]
@@ -137,29 +137,60 @@ def decline_message(field):
 
 
 def comparison(products):
-    """Differences only; 'better' uses a narrow, explicit engineering direction."""
+    """Human labels, grouped published units, differences only; no unit conversion."""
     a, b = products
-    fields = ["enclosure", "supply_voltage_v", "supply_current", "phase_count"] + list(dict.fromkeys([*a["measurements"], *b["measurements"]]))
+    # (stable machine ID, visible label, published component keys/units, preference)
+    specs = [("enclosure", "Enclosure", [("enclosure", "")], None),
+             ("supply_voltage_v", "Supply voltage", [("supply_voltage_v", "V")], None),
+             ("supply_current", "Current type", [("supply_current", "")], None),
+             ("phase_count", "Phases", [("phase_count", "")], None),
+             ("motor_power_w", "Motor power", [("motor_power_w", "W")], "lower")]
+    for service, label in [("on_off", "On/Off"), ("modulating", "Modulating"), ("shared", "Shared")]:
+        specs += [(service + "_torque", label + " torque", [(service + "_torque_in_lb", "in-lb"), (service + "_torque_nm", "Nm")], "higher"),
+                  (service + "_duty_s4_percent", label + " duty S4", [(service + "_duty_s4_percent", "%")], None)]
+    specs += [("cycles_per_hour", "On/Off cycles", [("cycles_per_hour", "/h")], None),
+              ("starts_per_hour", "Modulating starts", [("starts_per_hour", "/h")], None)]
+    for qualifier in ("50hz", "60hz", "unqualified"):
+        suffixes = [_frequency_label(p, qualifier) for p in products]
+        suffix = suffixes[0] if suffixes[0] == suffixes[1] else "(frequency scope varies)"
+        for name, label, unit in [("operating_time", "Operating time", "s"), ("fla", "FLA", "A"), ("lra", "LRA", "A")]:
+            key = name + "_" + qualifier + "_" + unit.lower()
+            specs.append((key, label + " " + suffix, [(key, unit)], "lower"))
+
+    def cell(product, key):
+        value = product[key] if key in product else product["measurements"].get(key)
+        return value, product["field_status"].get(key) if value is None else None
+
+    def display(product, components):
+        values = []
+        for key, unit in components:
+            value, status = cell(product, key)
+            if value is not None:
+                values.append(_num(value) + (" " + unit if unit else ""))
+            elif status == "source_NA":
+                values.append(_status_text(status) + (" (" + unit + ")" if unit else ""))
+        text = " / ".join(values) if values else _status_text(cell(product, components[0][0])[1])
+        if ("_unqualified_" in components[0][0]
+                and _frequency_label(a, "unqualified") != _frequency_label(b, "unqualified")):
+            text += " " + _frequency_label(product, "unqualified")
+        return text
+
     rows, hidden = [], 0
-    for field in fields:
-        av = a.get(field) if field in a else a["measurements"].get(field)
-        bv = b.get(field) if field in b else b["measurements"].get(field)
-        if av is None and bv is None:
+    for field, label, components, preference in specs:
+        av = [cell(a, key) for key, _ in components]
+        bv = [cell(b, key) for key, _ in components]
+        if not any(value is not None or status == "source_NA" for value, status in av + bv):
             continue
         if av == bv:
             hidden += 1
             continue
-        unit = " in-lb" if field.endswith("in_lb") else " Nm" if field.endswith("_nm") else " W" if field.endswith("_w") else " s" if field.endswith("_s") else " A" if field.endswith("_a") else " V" if field == "supply_voltage_v" else " %" if "percent" in field else ""
-        def display(product, value):
-            return _num(value) + unit if value is not None else _status_text(product["field_status"].get(field))
         better = None
-        if isinstance(av, (int, float)) and isinstance(bv, (int, float)):
-            higher = "torque" in field
-            lower = field.startswith(("operating_time", "fla_", "lra_")) or field == "motor_power_w"
-            if higher or lower:
-                better = "a" if ((av > bv) if higher else (av < bv)) else "b"
-        label = field.replace("_", " ").replace("hz", " Hz")
-        rows.append(dict(field=field, label=label, a=display(a, av), b=display(b, bv), better=better))
+        directions = {"a" if ((x > y) if preference == "higher" else (x < y)) else "b"
+                      for (x, _), (y, _) in zip(av, bv)
+                      if preference and isinstance(x, (int, float)) and isinstance(y, (int, float)) and x != y}
+        if len(directions) == 1:
+            better = directions.pop()
+        rows.append(dict(field=field, label=label, a=display(a, components), b=display(b, components), better=better))
     return dict(models=[p["base_part_number"] for p in products], rows=rows, identical_fields_hidden=hidden)
 
 

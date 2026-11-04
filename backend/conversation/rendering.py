@@ -100,7 +100,7 @@ def product_lines(product, focus, service=None):
     if not lines:
         lines.append(f"The requested value is {_status_text('not_in_layout')}.")
     source = product.get("source", {})
-    return [header] + ["  • " + line for line in lines] + [f"  Source: series_76_electric_data.pdf, page {source.get('page')}, table {source.get('table')}."]
+    return [header] + ["  • " + line for line in lines] + [f"  Source: Series 76 electrical catalogue, page {source.get('page')}."]
 
 
 def render_lookup(products, focus, missing, notes):
@@ -180,7 +180,7 @@ CATALOG_NOTE = {
 def render_terms(terms, supplies):
     blocks = []
     for term in terms:
-        text = f"{term['label']}: {term['definition']} [{term['document']}, p. {term['page']}]"
+        text = f"{term['label']}: {term['definition']} [Series 76 summary, p. {term['page']}]"
         if term["term_key"] in CATALOG_NOTE:
             text += "\n" + CATALOG_NOTE[term["term_key"]]
         if term["term_key"].startswith("supply_"):
