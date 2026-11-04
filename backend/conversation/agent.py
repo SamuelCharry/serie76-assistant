@@ -417,7 +417,7 @@ class Turn:
         rows = [get_actuator(self.connection, code) for code in codes[:3]]
         products = [public_product(p) for p in rows if p]
         labels = ', '.join(policy.LABELS.get(f, f.replace('_', ' ')) for f in fields)
-        answer = 'I can narrow these further when you know ' + labels + '. Current matches:\n'
+        answer = 'Without ' + labels + ', these are the best matches:\n'
         answer += '\n'.join(item['part_number'] + ': ' + item['reason'] for item in
                             [ranking.item(p, filters) for p in rows if p])
         self.context.pop('pending_questions', None)
@@ -1024,6 +1024,10 @@ class Turn:
         if args.get("explain_terms"):
             text, terms = self.explained(args["explain_terms"])
             answer += ("\n\n" + text) if text else ""
+        if merged.get('sort_by') and result['total'] > 4:
+            answer = f"{result['total']} actuators meet: {policy.describe(merged)}."
+            if notes:
+                answer += '\n' + '\n'.join(dict.fromkeys(notes))
         if result['total'] > 4:
             if unscoped_superlative:
                 answer = f"All {result['total']} catalogue models are ranked by their published values."
