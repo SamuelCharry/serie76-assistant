@@ -91,3 +91,21 @@ class RecommendationTests(Base):
         self.assertIn('closest torque', result.answer)
         self.assertNotIn(' vs ', result.answer)
         self.assertFalse(result.debug['llm_called'])
+
+    def test_next_paginates_and_that_one_uses_last_shown_first(self):
+        self.turn('On/off at least 70 Nm', ('search_actuators', {'service': 'on_off', 'min_torque_nm': 70}))
+        from backend.conversation.agent import run_agent
+        from test_agent_scenarios import Raising
+        next_result = run_agent(self.connection, 'next', self.history, self.context,
+                                model=Raising(AssertionError('LLM must not run')))
+        self.assertEqual(len(next_result.products), 3)
+        self.assertEqual(next_result.products[0]['base_part_number'], self.context['last_ranked_list'][3])
+        that = run_agent(self.connection, 'that one', self.history, next_result.context,
+                         model=Raising(AssertionError('LLM must not run')))
+        self.assertIn(next_result.products[0]['base_part_number'], that.answer)
+
+    def test_unresolved_question_lists_current_candidates_without_spec_dump(self):
+        self.turn('On/off at least 70 Nm', ('search_actuators', {'service': 'on_off', 'min_torque_nm': 70}))
+        result = self.turn('no', ('ask_clarification', {'field': 'decline'}))
+        self.assertNotIn('unresolved scopes are not assumed', result.answer)
+        self.assertNotIn('Source:', result.answer)

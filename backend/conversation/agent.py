@@ -397,14 +397,15 @@ class Turn:
         return result
 
     def unresolved(self, fields):
-        """Show a bounded candidate list, explicitly retaining unresolved scopes."""
-        filters = SearchFilters.model_validate(dict(self.context.get('filters', {}), limit=3, offset=0))
-        raw = search_actuators(self.connection, filters, allow_ambiguous=True)
-        self.trace['data'] = raw
-        products = [public_product(p) | {'frequencies': p.get('frequencies', [])} for p in raw['products']]
+        """Show concise ranked candidates while leaving unanswered choices open."""
+        filters = self.context.get('filters') or {}
+        codes = self.context.get('last_ranked_list') or []
+        rows = [get_actuator(self.connection, code) for code in codes[:3]]
+        products = [public_product(p) for p in rows if p]
         labels = ', '.join(policy.LABELS.get(f, f.replace('_', ' ')) for f in fields)
-        answer = 'The requirement for ' + labels + ' is still open. These are the top ' + str(len(products)) + ' candidates under the current filters; unresolved scopes are not assumed.'
-        answer += '\n\n' + '\n\n'.join(quality.render_focused(p, ['overview']) for p in products)
+        answer = 'The choice of ' + labels + ' is still open. Leading matches:\n'
+        answer += '\n'.join(item['part_number'] + ': ' + item['reason'] for item in
+                            [ranking.item(p, filters) for p in rows if p])
         self.context.pop('pending_questions', None)
         self.context.pop('pending_clarification', None)
         self.context['part_numbers'] = [p['base_part_number'] for p in products]
@@ -495,7 +496,7 @@ class Turn:
             self.trace["data"] = dict(status="partial_part_number", prefix=prefix, candidates=options)
             if options:
                 message = (f"'{prefix}' is not a complete Base Part Number. Catalogue codes starting with it: "
-                           + ", ".join(options) + ". Which one do you mean? I will not pick one for you.")
+                           + ", ".join(options) + ". Which one do you mean?")
             else:
                 message = f"'{prefix}' is not a complete Base Part Number and no catalogue code starts with it. Please check the code, including /A."
             return self.clarify("part_number", message, options=options)
@@ -524,6 +525,7 @@ class Turn:
         compared = quality.comparison(public, comparison_focus, self.context.get('filters')) if len(public) >= 2 else None
         if compared:
             self.context['last_comparison_models'] = compared['models']
+            self.context['last_shown_list'] = compared['models']
             answer = "Comparing " + " vs ".join(compared["models"]) + ". " + str(len(compared["hidden_rows"])) + " identical fields hidden.\n"
             answer += "\n".join(row["label"] + ": " + " vs ".join(row["values"]) for row in compared["rows"])
             if not compared["rows"]:
@@ -650,6 +652,8 @@ class Turn:
             rec = ranking.recommendation(all_rows, merged, by)
             self.context['rank_by'] = by
             self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
+            self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
+            self.context['last_shown_offset'] = len(rec['items'])
             question.recommendation = rec
             question.answer = prompt + '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
@@ -678,6 +682,8 @@ class Turn:
                                         allow_ambiguous=True)['products']
             rec = ranking.recommendation(all_rows, merged, by, total=result['total'])
             self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
+            self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
+            self.context['last_shown_offset'] = len(rec['items'])
             question.recommendation = rec
             question.answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
@@ -716,6 +722,8 @@ class Turn:
         all_rows = search_actuators(self.connection, all_filters, allow_ambiguous=True)['products']
         rec = ranking.recommendation(all_rows, merged, by, total=result['total'])
         self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
+        self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
+        self.context['last_shown_offset'] = len(rec['items'])
         answer, products, narrowing, options, focus = quality.search_presentation(result, products, merged, notes, shown)
         self.context["pagination"] = {"has_more": bool(products) and result.get("offset", 0) + len(products) < result["total"]}
         self.context["focus"] = focus
@@ -886,6 +894,29 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     context_before = dict(turn.context)
     import re
     bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
+    if action is None and not answers and not remove_filters and bare_query in ('next', 'more', 'show all') and turn.context.get('last_ranked_list'):
+        codes = turn.context['last_ranked_list']
+        start = 0 if bare_query == 'show all' else turn.context.get('last_shown_offset', 3)
+        selected = codes if bare_query == 'show all' else codes[start:start + 3]
+        turn.context['last_shown_offset'] = len(codes) if bare_query == 'show all' else start + len(selected)
+        turn.context['last_shown_list'] = selected
+        rows = [get_actuator(connection, code) for code in selected]
+        turn.trace = dict(name='ranked_page', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        answer = ('No more ranked models.' if not selected else
+                  f"Showing {start + 1}–{start + len(selected)} of {len(codes)} ranked models.\n" + '\n'.join(selected))
+        return finish(turn, AgentResult(answer, [public_product(row) for row in rows if row], context=turn.context))
+    if action is None and not answers and not remove_filters and bare_query in ('that one', 'this one', 'the other one'):
+        shown = turn.context.get('last_shown_list') or []
+        compared = turn.context.get('last_comparison_models') or []
+        selected = (compared[1] if bare_query == 'the other one' and len(compared) == 2 else
+                    shown[0] if bare_query != 'the other one' and shown else None)
+        turn.trace = dict(name='ranked_reference', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        if selected:
+            turn.context['part_numbers'] = [selected]
+            return finish(turn, turn.lookup(dict(part_numbers=[selected], focus=['overview'], explain_terms=[])))
+        return finish(turn, turn.clarify('which_product', 'Which shown model do you mean?', options=shown[:4]))
     if action is None and not answers and not remove_filters and bare_query == 'why' and turn.context.get('last_ranked_list'):
         filters = turn.context.get('filters') or {}
         criterion = ranking.ranked_by(filters, turn.context.get('rank_by', 'closest_torque'))
