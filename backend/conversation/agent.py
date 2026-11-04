@@ -520,7 +520,7 @@ class Turn:
             comparison_focus = [dict(field='torque', **({'service': service} if service else {})),
                                 dict(field='operating_time', **({'frequency_hz': frequency} if frequency else {})),
                                 dict(field='fla', **({'frequency_hz': frequency} if frequency else {})), dict(field='motor_power')]
-        compared = quality.comparison(public, comparison_focus) if len(public) >= 2 else None
+        compared = quality.comparison(public, comparison_focus, self.context.get('filters')) if len(public) >= 2 else None
         if compared:
             answer = "Comparing " + " vs ".join(compared["models"]) + ". " + str(len(compared["hidden_rows"])) + " identical fields hidden.\n"
             answer += "\n".join(row["label"] + ": " + " vs ".join(row["values"]) for row in compared["rows"])

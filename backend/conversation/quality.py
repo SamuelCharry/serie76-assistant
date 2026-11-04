@@ -123,7 +123,7 @@ def decline_message(field):
             if detail else "No problem. Share any requirements whenever you like, or ask about a specific part number.")
 
 
-def comparison(products, focus=None):
+def comparison(products, focus=None, filters=None):
     """Human labels, grouped published units, differences only; no unit conversion."""
     a, b = products[:2]
     # (stable machine ID, visible label, published component keys/units, preference)
@@ -166,8 +166,10 @@ def comparison(products, focus=None):
     focus = normalized_focus(focus or ['overview'])
     keys = set().union(*(focus_keys(p, focus) for p in products))
     overview = any(f['field'] == 'overview' for f in focus)
+    filtered_public = {name for name in (filters or {}) if name in
+                       ('enclosure', 'supply_voltage_v', 'supply_current', 'phase_count')}
     for field, label, components, preference in specs:
-        if not overview and not any(key in keys for key, _ in components):
+        if not overview and field not in filtered_public and not any(key in keys for key, _ in components):
             continue
         cells = [[cell(p, key) for key, _ in components] for p in products]
         if not any(value is not None or status == 'source_NA' for values in cells for value, status in values):
@@ -187,11 +189,19 @@ def comparison(products, focus=None):
     models = [p['base_part_number'] for p in products]
     keys = []
     if len(products) > 2:
-        # Published fields only; selection follows explicit focus scopes when present.
-        for fragment in ('torque', 'operating_time', 'fla', 'motor_power'):
-            selected = next((r['field'] for r in rows if fragment in r['field']), None)
-            if selected:
-                keys.append(selected)
+        filters = filters or {}
+        requested = []
+        for name in filters:
+            target = {'min_torque_nm': 'torque', 'min_torque_in_lb': 'torque',
+                      'max_operating_time_s': 'operating_time', 'max_fla_a': 'fla',
+                      'max_lra_a': 'lra', 'max_motor_power_w': 'motor_power'}.get(name, name)
+            if target in ('service', 'frequency_hz'):
+                continue
+            matching = [r['field'] for r in rows if r['field'] == target or target in r['field']]
+            if matching and matching[0] not in requested:
+                requested.append(matching[0])
+        ordered = sorted(rows, key=lambda r: (-len(set(r['values'])), r['field']))
+        keys = (requested + [r['field'] for r in ordered if r['field'] not in requested])[:4]
         summary = 'Compare ' + str(len(products)) + ' models using the published torque, operating time, FLA and motor power.'
         assumptions = ''
     else:
@@ -201,7 +211,8 @@ def comparison(products, focus=None):
                    + models[1] + ' wins ' + str(wins[1]) + '. This is an unweighted field count, not an overall suitability rating.')
         assumptions = 'More is better for torque and cycles; less is better for time, current and motor power.'
     return dict(layout='table' if len(products) == 2 else 'cards', models=models, summary=summary,
-                assumptions=assumptions, rows=rows, hidden_rows=hidden, key_fields=keys)
+                assumptions=assumptions, rows=rows, hidden_rows=hidden, key_fields=keys,
+                key_fields_reason='Fields you filtered on, then the ones that differ most' if len(products) > 2 else '')
 
 
 def comparison_lead(compared):
