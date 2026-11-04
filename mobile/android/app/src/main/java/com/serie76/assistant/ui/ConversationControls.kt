@@ -32,8 +32,8 @@ import com.serie76.assistant.data.ActiveFilter
 
 @Composable
 fun QuestionCard(state: QuestionStepper, enabled: Boolean, onChoose: (String) -> Unit,
-                 onEdit: (Int) -> Unit, onSubmit: () -> Unit, onCancel: () -> Unit) {
-    OutlinedCard(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+                 onEdit: (Int) -> Unit, onSubmit: () -> Unit, onCancel: () -> Unit, modifier: Modifier = Modifier) {
+    OutlinedCard(modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
         Column(Modifier.padding(12.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text("QUESTION", style = MaterialTheme.typography.labelSmall, letterSpacing = 1.sp,
@@ -41,7 +41,8 @@ fun QuestionCard(state: QuestionStepper, enabled: Boolean, onChoose: (String) ->
                 Text(if (state.reviewing) "Review" else "${state.index + 1}/${state.questions.size}",
                     style = MaterialTheme.typography.labelSmall)
             }
-            Column(Modifier.heightIn(max = 240.dp).verticalScroll(rememberScrollState()).selectableGroup()) {
+            // Reserve header/actions first; scroll options when the keyboard reduces available height.
+            Column(Modifier.weight(1f, fill = false).heightIn(max = 240.dp).verticalScroll(rememberScrollState()).selectableGroup()) {
                 if (state.reviewing) {
                     state.reviewLines.forEachIndexed { index, line ->
                         Text(line, Modifier.fillMaxWidth().clickable(enabled = enabled, role = Role.Button,

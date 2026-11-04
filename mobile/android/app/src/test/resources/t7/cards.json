@@ -1,0 +1,17 @@
+{
+  "session_id": "s", "message_id": "cards", "answer": "Full plain text comparison for API clients.",
+  "lead": "Comparison ready.", "products": [], "interaction": null,
+  "suggestions": ["Show source notes"], "suggested_replies": ["Show source notes"],
+  "active_filters": [{"field": "supply_voltage_v", "label": "110 V"}],
+  "comparison": {
+    "layout": "cards", "models": ["761A00-11300000/A", "761B00-11300000/A", "761C00-11300000/A"],
+    "summary": "Synthetic fixture: compare these three models.", "assumptions": "",
+    "rows": [
+      {"field": "on_off_torque", "label": "On/Off torque", "values": ["80 Nm", "100 Nm", "150 Nm"], "better": null},
+      {"field": "motor_power_w", "label": "Motor power", "values": ["10 W", "25 W", "N/A"], "better": null},
+      {"field": "operating_time", "label": "Operating time", "values": ["12 s", "15 s", "20 s"], "better": null},
+      {"field": "cycles_per_hour", "label": "Cycles", "values": ["100 /h", "80 /h", "60 /h"], "better": null}
+    ], "hidden_rows": [],
+    "key_fields": ["on_off_torque", "motor_power_w", "operating_time", "cycles_per_hour"]
+  }
+}

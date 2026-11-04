@@ -87,6 +87,16 @@ class ConversationPresentationTest {
         assertEquals("Hello", greeting(null)); assertEquals("Hello", greeting("  "))
     }
 
+    @Test fun `fourth model card keeps its own values and single question goes straight to review`() {
+        val comparison = DifferenceComparison(listOf("A", "B", "C", "D"),
+            (1..4).map { DifferenceRow("f$it", "Field $it", values = listOf("A", "B", "C", "D$it")) },
+            layout = "cards", keyFields = listOf("f1", "f2", "f3", "f4"))
+        assertEquals(listOf("D1", "D2", "D3", "D4"), comparison.cardFields(3).map { it.second })
+        val stepper = QuestionStepper(questions.take(1)).choose("on_off")
+        assertTrue(stepper.reviewing)
+        assertEquals("On/Off", stepper.submission(null)!!.query)
+    }
+
     @Test fun `lead replaces answer only when a product or comparison is shown`() {
         val message = Message("m", "assistant", "Full answer", lead = "Short lead")
         assertEquals("Full answer", message.displayText())

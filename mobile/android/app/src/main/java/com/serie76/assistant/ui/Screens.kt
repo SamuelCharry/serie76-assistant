@@ -185,7 +185,8 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
                     state.sendError?.let { ErrorPanel(it, if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile) }
                     if (state.needsReconcile && state.sendError == null) ErrorPanel("A previous request may have completed. Check saved messages before sending again.",
                         if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile)
-                    state.question?.let { QuestionCard(it, state.canSend, onChoose, onEditAnswer, onSubmitAnswers, onCancelQuestion) }
+                    state.question?.let { QuestionCard(it, state.canSend, onChoose, onEditAnswer, onSubmitAnswers, onCancelQuestion,
+                        Modifier.weight(1f, fill = false)) }
                     Surface(modifier = Modifier.alpha(if (state.question != null && !state.composerActive) 0.5f else 1f)
                         .pointerInput(onActivateComposer) {
                             awaitEachGesture {
