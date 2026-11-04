@@ -35,7 +35,8 @@ def focus_keys(product, focus):
             elif field == "motor_power" and key == "motor_power_w":
                 keys.add(key)
             elif field == "rates" and key in ("starts_per_hour", "cycles_per_hour"):
-                keys.add(key)
+                if not service or service == 'modulating' and key == 'starts_per_hour' or service == 'on_off' and key == 'cycles_per_hour':
+                    keys.add(key)
     return keys
 
 

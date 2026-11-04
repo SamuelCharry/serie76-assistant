@@ -648,6 +648,20 @@ class Turn:
         self.trace["data"] = dict(status="ok", products=products, missing=[m[0] for m in missing])
         self.trace["merged_parameters"] = dict(args, part_numbers=codes)
         focus = quality.normalized_focus(args.get("focus") or self.context.get("focus") or ["overview"])
+        if len(products) == 1 and not re.search(r'\b(full|all|complete)\s+(?:specs?|data|details?)\b|\b(?:specs?|overview)\b', self.query, re.I):
+            requested = metrics.intent(self.query)
+            named = set(re.findall(r'\b(?:fla|lra|power|torque|duty|cycles?|starts?|speed|time|arranque)\b',
+                                   self.query, re.I))
+            if requested and len(named) == 1:
+                metric, _, hz, service = requested
+                field = 'rates' if metric in ('cycles', 'starts') else metric
+                scope = service or ('modulating' if metric == 'starts' else 'on_off' if metric == 'cycles' else None)
+                spec = dict(field=field)
+                if scope and field in ('rates', 'torque', 'duty'):
+                    spec['service'] = scope
+                if hz and field in ('operating_time', 'fla', 'lra'):
+                    spec['frequency_hz'] = hz
+                focus = [spec]
         self.context["focus"] = focus
         public = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in products]
         comparison_focus = ['overview']
