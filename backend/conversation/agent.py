@@ -606,10 +606,10 @@ class Turn:
             rows = self.connection.execute(
                 """SELECT DISTINCT e.base_part_number FROM series76.entries e
                 JOIN series76.catalog_state c ON c.active_import_id=e.import_id
-                WHERE e.base_part_number LIKE %s ESCAPE '\\' ORDER BY 1 LIMIT 6""",
+                WHERE e.base_part_number LIKE %s ESCAPE '\\' ORDER BY 1""",
                 (prefix.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%",),
             ).fetchall() if prefix else []
-            options = [r["base_part_number"] for r in rows][:5]
+            options = [r["base_part_number"] for r in rows]
             self.trace["data"] = dict(status="partial_part_number", prefix=prefix, candidates=options)
             if options:
                 message = (f"'{prefix}' is not a complete Base Part Number. Catalogue codes starting with it: "
@@ -1100,6 +1100,19 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             return finish(turn, turn.lookup(dict(part_numbers=codes, focus=['motor_power'], explain_terms=[])))
     import re
     bare_query = re.sub(r'\s+', ' ', query.strip().lower().rstrip(' .!?'))
+    if action is None and not answers and not remove_filters and bare_query in ('thanks', 'thank you', 'gracias'):
+        turn.trace = dict(name='courtesy', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, AgentResult("You're welcome. I can compare another Series 76 model if you need.",
+                                        context=turn.context))
+    if action is None and not answers and not remove_filters and bare_query in ('y', 'go', 'ok') and not turn.context.get('pending_questions'):
+        turn.trace = dict(name='ranked_pick', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        result = turn.contextual_intent('pick')
+        if result:
+            return finish(turn, result)
     if action is None and not answers and not remove_filters and bare_query in ('specs', 'full specs') and turn.context.get('focused_model'):
         code = turn.context['focused_model']
         turn.trace = dict(name='get_actuator', parameters={'part_numbers': [code]}, raw_parameters={},
@@ -1381,7 +1394,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             trace["parameters"] = args
             # The LangChain Tool executes the request: validation, SQL and rendering run inside it.
             result = tools[name].invoke(args, config={"run_name": name})
-    had_pending = bool(context_before.get('pending_questions') or context_before.get('pending_clarification') or context_before.get('filters'))
+    had_pending = bool(context_before.get('pending_questions') or context_before.get('pending_clarification'))
     if cancel_previous and had_pending and not result.answer.startswith("Cancelled"):
         result.answer = "Cancelled the previous request. " + result.answer
     if cancel_previous and result.clarification and result.clarification["field"] == "unsupported":
