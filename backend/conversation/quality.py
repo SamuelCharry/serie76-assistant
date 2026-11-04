@@ -246,7 +246,7 @@ def search_presentation(raw, products, filters, notes, assumptions):
             label = LABELS.get(field, field.replace("_", " "))
             text = f"{total} actuators meet: {criteria}. Which {label} do you need? Options: " + ", ".join(str(r["value"]).capitalize() if r["value"] is not None else "not published" for r in values) + "."
             return (prefix + "\n" + text).strip(), [], field, options, focus
-        return (prefix + f"\n{total} actuators meet: {criteria}. No further published supply attribute separates these models.").strip(), [], "requirements", [], focus
+        return (prefix + f"\n{total} actuators meet: {criteria}. Here are the leading published models.").strip(), [], None, [], focus
     text = f"{total} actuators meet: {criteria}."
     if total == 1:
         text += "\n" + render_focused(products[0], focus)

@@ -29,5 +29,6 @@ class ConversationResponse(BaseModel):
     comparison: dict | None = None
     lead: str | None = None
     interaction: dict | None = None
-    suggestions: list[str] = Field(default_factory=list)
+    suggestions: list[str | dict] = Field(default_factory=list)
     active_filters: list[dict] = Field(default_factory=list)
+    recommendation: dict | None = None

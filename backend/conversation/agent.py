@@ -27,7 +27,7 @@ from pydantic import create_model as pydantic_model
 from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import get_actuator, search_actuators
-from . import policy, quality, tool_wire, interactions
+from . import policy, quality, tool_wire, interactions, ranking
 from .interactions import InvalidInteraction
 from .rendering import render_lookup, render_search, render_terms, supplies_text
 
@@ -60,6 +60,7 @@ class AgentResult:
     interaction: dict | None = None
     suggestions: list = field(default_factory=list)
     active_filters: list = field(default_factory=list)
+    recommendation: dict | None = None
 
 
 class FocusSpec(BaseModel):
@@ -583,7 +584,16 @@ class Turn:
         self.trace["data"] = result
         self.context["filters"] = merged
         if result["status"] == "needs_clarification":
-            return self.question_result(result['fields'], result['facets'])
+            question = self.question_result(result['fields'], result['facets'])
+            all_rows = search_actuators(self.connection, SearchFilters.model_validate(dict(merged, limit=100, offset=0)),
+                                        allow_ambiguous=True)['products']
+            rec = ranking.recommendation(all_rows, merged, total=result['total'])
+            self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged)]
+            question.recommendation = rec
+            question.answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
+                item['part_number'] + ': ' + item['reason'] for item in rec['items'])
+            question.lead = 'Ranked by ' + rec['ranked_by'] + '.'
+            return question
         shown = [dict(a, value=merged.get(a["field"])) for a in assumptions]
         products = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in result["products"]]
         if not result["total"]:
@@ -593,7 +603,28 @@ class Turn:
             answer = quality.render_impossible(merged, closest)
             self.context["reply_options"] = quality.impossible_replies(merged, closest)
             self.context["part_numbers"] = []
-            return AgentResult(answer, context=self.context)
+            nearest = []
+            for row in closest:
+                for code in row.get('models', []):
+                    if code in {item['part_number'] for item in nearest}:
+                        continue
+                    product = get_actuator(self.connection, code)
+                    if product:
+                        requirement = policy.describe({row['field']: merged[row['field']]})
+                        nearest.append(ranking.item(product, merged, f'Fails {requirement}; closest published value is {row["value"]}'))
+                    if len(nearest) == 2:
+                        break
+                if len(nearest) == 2:
+                    break
+            rec = dict(ranked_by=ranking.ranked_by(merged), total=0, shown=len(nearest), items=nearest)
+            self.context['last_ranked_list'] = []
+            answer += '\nRanked by ' + rec['ranked_by'] + '.'
+            return AgentResult(answer, context=self.context, recommendation=rec,
+                               lead='No exact match. Nearest published models follow; ranked by ' + rec['ranked_by'] + '.')
+        all_filters = SearchFilters.model_validate(dict(merged, limit=100, offset=0))
+        all_rows = search_actuators(self.connection, all_filters, allow_ambiguous=True)['products']
+        rec = ranking.recommendation(all_rows, merged, total=result['total'])
+        self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged)]
         answer, products, narrowing, options, focus = quality.search_presentation(result, products, merged, notes, shown)
         self.context["pagination"] = {"has_more": bool(products) and result.get("offset", 0) + len(products) < result["total"]}
         self.context["focus"] = focus
@@ -622,10 +653,18 @@ class Turn:
         if args.get("explain_terms"):
             text, terms = self.explained(args["explain_terms"])
             answer += ("\n\n" + text) if text else ""
+        if result['total'] > 4:
+            answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
+                item['part_number'] + ': ' + item['reason'] for item in rec['items'])
+            products = [quality.focused_product(public_product(p) | {'frequencies': p.get('frequencies', [])}, focus)
+                        for p in ranking.rank(all_rows, merged)[:3]]
+        else:
+            answer += '\nRanked by ' + rec['ranked_by'] + '.'
         self.context["part_numbers"] = [p["base_part_number"] for p in products]
         return AgentResult(answer, products, context=self.context, terms=terms, assumptions=shown,
                            clarification=dict(field=narrowing, message=answer, options=options) if narrowing else None,
-                           interaction=question.interaction if narrowing else None)
+                           interaction=question.interaction if narrowing else None, recommendation=rec,
+                           lead='Ranked by ' + rec['ranked_by'] + '.')
 
     def explain(self, args):
         unknown = policy.terms_not_in_glossary(self.query, self.terms)
@@ -872,7 +911,11 @@ def finish(turn, result):
     result.tool_calls = [trace]
     result.active_filters = interactions.active_filters(result.context)
     result.suggestions = quality.replies(result, turn.terms)
-    result.suggested_replies = list(result.suggestions)
+    if result.recommendation and result.recommendation['total'] > 0:
+        total = result.recommendation['total']
+        result.suggestions = [dict(label='Compare top 2', action=dict(type='compare_top', args=dict(n=2))),
+                              dict(label=f'Show all {total}', action=dict(type='show_all', args={}))]
+    result.suggested_replies = [s['label'] if isinstance(s, dict) else s for s in result.suggestions]
     if result.products and not result.lead:
         result.lead = ('Catalogue specifications for ' + result.products[0]['base_part_number'] + '.' if len(result.products) == 1
                        else str(len(result.products)) + ' catalogue candidates are shown under the current requirements.')
