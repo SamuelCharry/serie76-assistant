@@ -83,9 +83,7 @@ El oráculo CSV independiente comprueba valores, N/A, ámbitos, candidatos compl
 
 Antes de una cohorte real, ejecutar el control offline del esquema; solo con autorización explícita de gasto ejecutar el preflight real de una llamada. Congelar código/casos/catálogo/configuración, contar cada intento de transporte en el ledger y separar fallo de proveedor de fallo semántico. El tope USD 1,00 de v6 no autoriza gastar. Los retries productivos tienen plazo compartido; el preflight de esquema nunca reintenta.
 
-**Marcador del coordinador — selfcheck no determina este resultado:**
-
-v6 real-model result: pending coordinator run
+**Resultado v6 con modelo real (coordinador, Google `gemini-3.6-flash`, 2026-11-03):** 102/103 escenarios aprobados tras las correcciones, en las cohortes `v6` (los 103: 88 aprobados, 9 fallos, 6 solo de proveedor), `v6b` (15 repeticiones tras corregir código: 10 aprobados) y `v6c` (4 repeticiones: 4 aprobados). Queda `t6_manual_03`, una diferencia de interpretación aceptada (una búsqueda nueva para exteriores después de "at least 70 Nm" se leyó como refinamiento que conserva 70 Nm y pregunta el servicio). Fallos de integridad (cifras, unidades, N/A, operadores, códigos): 0. Coste por uso: USD 0,1837 (v6 + v6b + v6c); llamadas a OpenRouter: 0. Cada repetición real usó una cohorte nueva; nunca se editaron resultados registrados. Evidencia: `reports/agent_acceptance/v6*/summary.json` (local, ignorado por git) y [T7-v6-repair.md](../../../reports/submission/T7-v6-repair.md), [T7-v6b-repair.md](../../../reports/submission/T7-v6b-repair.md).
 
 ## Evidencia de modelo real
 

@@ -83,9 +83,7 @@ The independent CSV oracle checks values, N/A, scopes, full candidate sets, unit
 
 Before a live cohort, run the offline schema gate below; only with explicit paid-call authorization run the one-call live preflight. Freeze code/cases/catalogue/config, count every transport attempt in the ledger, and keep provider failure separate from semantic failure. The USD 1.00 v6 configuration cap is not permission to spend. Production retries are bounded by the shared deadline; the schema preflight itself never retries.
 
-**Coordinator placeholder — do not infer a result from selfcheck:**
-
-v6 real-model result: pending coordinator run
+**v6 real-model result (coordinator, Google `gemini-3.6-flash`, 2026-11-03):** 102/103 scenarios passed after fixes, across cohorts `v6` (all 103: 88 passed, 9 failed, 6 provider-only), `v6b` (15 reruns after code fixes: 10 passed) and `v6c` (4 reruns: 4 passed). Remaining: `t6_manual_03`, an accepted interpretation difference (a new outdoor search after "at least 70 Nm" was read as a refinement that keeps 70 Nm and asks for the service). Integrity failures (numbers, units, N/A, operators, codes): 0. Usage-based cost: USD 0.1837 (v6 + v6b + v6c); OpenRouter calls: 0. Every live rerun used a new cohort; recorded results were never edited. Evidence: `reports/agent_acceptance/v6*/summary.json` (local, git-ignored) and [T7-v6-repair.md](../../../reports/submission/T7-v6-repair.md), [T7-v6b-repair.md](../../../reports/submission/T7-v6b-repair.md).
 
 ## Real-model evidence
 
