@@ -875,6 +875,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     turn = Turn(connection, query, messages, context)
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
+    if action is None and not answers and not remove_filters and turn.context.get('pending_questions'):
+        answers = interactions.free_text_answer(query, turn.context['pending_questions'])
     if model is None and action is None and not answers and not remove_filters:
         codes = fast_path_codes(query)
         if codes and all(get_actuator(connection, code) for code in codes):

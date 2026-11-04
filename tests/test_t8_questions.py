@@ -4,6 +4,14 @@ from backend.conversation.agent import InvalidInteraction, run_agent
 
 
 class MultiQuestionTests(Base):
+    def test_plain_voltage_answer_applies_pending_option_without_model(self):
+        self.turn('On/off at least 70 Nm', ('search_actuators', {'service': 'on_off', 'min_torque_nm': 70}))
+        from test_agent_scenarios import Raising
+        result = run_agent(self.connection, '110 volts', self.history, self.context,
+                           model=Raising(AssertionError('LLM must not run')))
+        self.assertEqual(str(result.context['filters']['supply_voltage_v']), '110')
+        self.assertFalse(result.debug['llm_called'])
+
     def test_all_distinguishing_questions_have_sql_counts(self):
         result = self.turn("I need an on/off actuator with at least 70 Nm",
                            ("search_actuators", {"service": "on_off", "min_torque_nm": 70}))

@@ -29,6 +29,32 @@ def option(field, value):
     return dict(value=text, label=label)
 
 
+def free_text_answer(query, pending):
+    """Apply only a complete, unambiguous reply to a published option."""
+    def normalized(text):
+        text = str(text).strip().lower()
+        text = re.sub(r'\bvolts?\b|\bv\b', 'v', text)
+        text = re.sub(r'\bhertz\b', 'hz', text)
+        text = re.sub(r'\bon\s*[/ -]?\s*off?\b|\bon\s+or\s+off\b', 'on/off', text)
+        return re.sub(r'\s+', ' ', text.strip(' .!?')).strip()
+    given = normalized(query)
+    options = [(question['id'], entry) for question in pending for entry in question['options']]
+    if given == 'yes' and len(options) == 1:
+        return {options[0][0]: options[0][1]['value']}
+    matches = []
+    for field, entry in options:
+        label = normalized(entry['label'])
+        value = normalized(entry['value'])
+        variants = {label, value}
+        if field == 'supply_voltage_v':
+            variants |= {value + ' v', value + ' volts', value + ' volt'}
+        if field == 'frequency_hz':
+            variants |= {value + ' hz'}
+        if given in variants:
+            matches.append((field, entry['value']))
+    return {matches[0][0]: matches[0][1]} if len(matches) == 1 else None
+
+
 def questions(facets, fields):
     prompts = {'service': 'Which service?', 'frequency_hz': 'Which frequency?',
                'supply_voltage_v': 'Which supply voltage?', 'supply_current': 'Which current type?',
