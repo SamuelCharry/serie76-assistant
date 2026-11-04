@@ -25,7 +25,7 @@ def lock_session(connection, session_id):
 
 def get_session(connection, session_id, owner_id=None):
     row = connection.execute(
-        "SELECT id,title,created_at,updated_at FROM series76.conversations WHERE id=%s AND owner_id IS NOT DISTINCT FROM %s::uuid",
+        "SELECT id,title,created_at,updated_at FROM series76.conversations WHERE id=%s AND owner_id IS NOT DISTINCT FROM %s::uuid AND deleted_at IS NULL",
         (session_id, owner_id),
     ).fetchone()
     if row is None:
@@ -33,12 +33,22 @@ def get_session(connection, session_id, owner_id=None):
     return row
 
 
+def delete_session(connection, session_id, owner_id):
+    row = connection.execute(
+        """UPDATE series76.conversations SET deleted_at=clock_timestamp()
+        WHERE id=%s AND owner_id=%s AND deleted_at IS NULL RETURNING id""",
+        (session_id, owner_id),
+    ).fetchone()
+    if row is None:
+        raise MissingSession()
+
+
 def list_sessions(connection, limit=50, offset=0, *, owner_id=None):
     return connection.execute(
         """SELECT c.id,c.title,c.created_at,c.updated_at,
         COALESCE((SELECT left(m.content,180) FROM series76.messages m
           WHERE m.session_id=c.id AND m.role='assistant' ORDER BY m.sequence DESC LIMIT 1),'') AS preview
-        FROM series76.conversations c WHERE c.owner_id IS NOT DISTINCT FROM %s::uuid
+        FROM series76.conversations c WHERE c.owner_id IS NOT DISTINCT FROM %s::uuid AND c.deleted_at IS NULL
         ORDER BY c.updated_at DESC,c.id LIMIT %s OFFSET %s""", (owner_id, limit, offset)
     ).fetchall()
 
@@ -49,7 +59,7 @@ def history(connection, session_id, limit=100, before=None, *, internal=False, o
         columns += ",context"
     rows = connection.execute(
         f"""SELECT {columns} FROM series76.messages WHERE session_id=%s
-        AND EXISTS(SELECT 1 FROM series76.conversations c WHERE c.id=session_id AND c.owner_id IS NOT DISTINCT FROM %s::uuid)
+        AND EXISTS(SELECT 1 FROM series76.conversations c WHERE c.id=session_id AND c.owner_id IS NOT DISTINCT FROM %s::uuid AND c.deleted_at IS NULL)
         AND (%s::bigint IS NULL OR sequence < %s)
         ORDER BY sequence DESC LIMIT %s""", (session_id, owner_id, before, before, limit)
     ).fetchall()
@@ -60,7 +70,7 @@ def recent_context(connection, session_id, owner_id=None):
     row = connection.execute(
         """SELECT context FROM series76.messages
         WHERE session_id=%s AND role='assistant'
-        AND EXISTS(SELECT 1 FROM series76.conversations c WHERE c.id=session_id AND c.owner_id IS NOT DISTINCT FROM %s::uuid)
+        AND EXISTS(SELECT 1 FROM series76.conversations c WHERE c.id=session_id AND c.owner_id IS NOT DISTINCT FROM %s::uuid AND c.deleted_at IS NULL)
         ORDER BY sequence DESC LIMIT 1""",
         (session_id, owner_id),
     ).fetchone()
@@ -104,5 +114,5 @@ def debug_for_message(connection, message_id: UUID, owner_id=None):
     return connection.execute(
         """SELECT id AS message_id,session_id,tool_calls,debug FROM series76.messages
         WHERE id=%s AND role='assistant'
-        AND EXISTS(SELECT 1 FROM series76.conversations c WHERE c.id=session_id AND c.owner_id IS NOT DISTINCT FROM %s::uuid)""", (message_id, owner_id)
+        AND EXISTS(SELECT 1 FROM series76.conversations c WHERE c.id=session_id AND c.owner_id IS NOT DISTINCT FROM %s::uuid AND c.deleted_at IS NULL)""", (message_id, owner_id)
     ).fetchone()

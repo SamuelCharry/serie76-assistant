@@ -47,6 +47,17 @@ def messages(session_id: UUID, limit: int = Query(100, ge=1, le=100), before: in
         raise unavailable() from None
 
 
+@router.delete("/sessions/{session_id}", status_code=204)
+def delete_session(session_id: UUID, user=Depends(require_user)):
+    try:
+        with connect() as connection:
+            store.delete_session(connection, session_id, user['id'])
+    except store.MissingSession:
+        raise HTTPException(404, "Conversation not found") from None
+    except psycopg.Error:
+        raise unavailable() from None
+
+
 @router.post("/conversation", response_model=ConversationResponse)
 def conversation(request: ConversationRequest, user=Depends(require_user)):
     if not CAPACITY.acquire(blocking=False):
