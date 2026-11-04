@@ -187,6 +187,8 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
     val focus = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
     val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+    val voice = rememberVoiceInput(state.draft, state.screen == "chat" && state.canSend, state.sessionId, onDraft)
+    val send = { voice.cancel(); onSend() }
     LaunchedEffect(state.messages.lastOrNull()?.id, state.sending) {
         if (state.messages.isNotEmpty()) listState.animateScrollToItem((listState.layoutInfo.totalItemsCount - 1).coerceAtLeast(0))
     }
@@ -214,6 +216,7 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
                     state.question?.let { QuestionCard(it, state.canSend, onChoose, onEditAnswer,
                         onNextQuestion, onPreviousQuestion, onSubmitAnswers, onCancelQuestion,
                         state.questionError, Modifier.weight(1f, fill = false)) }
+                    VoiceInputNotice(voice.state)
                     Surface(modifier = Modifier.alpha(if (state.question != null && !state.composerActive) 0.5f else 1f)
                         .pointerInput(onActivateComposer) {
                             awaitEachGesture {
@@ -224,16 +227,17 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
                         Row(Modifier.fillMaxWidth().padding(start = 20.dp, end = 10.dp, top = 16.dp, bottom = 10.dp),
                             verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            BasicTextField(value = state.draft, onValueChange = onDraft, minLines = 2, maxLines = 5,
+                            BasicTextField(value = state.draft, onValueChange = { voice.cancel(); onDraft(it) }, minLines = 2, maxLines = 5,
                                 modifier = Modifier.weight(1f).focusRequester(focus).onFocusChanged { if (it.isFocused) onActivateComposer() }
                                     .semantics { contentDescription = "Message" },
                                 textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
                                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimaryContainer), enabled = !state.sending,
-                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send), keyboardActions = KeyboardActions(onSend = { onSend() }),
+                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send), keyboardActions = KeyboardActions(onSend = { send() }),
                                 decorationBox = { field ->
-                                    Box { if (state.draft.isEmpty()) Text("Ask a question", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant); field() }
+                                    Box { if (state.draft.isEmpty()) Text(if (voice.state.active) "Listening…" else "Ask a question", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant); field() }
                                 })
-                            FilledIconButton(onClick = onSend, enabled = state.draft.isNotBlank() && !state.sending && !state.historyLoading && state.historyError == null && !state.needsReconcile,
+                            if (!state.sending) VoiceInputButton(voice)
+                            FilledIconButton(onClick = send, enabled = state.draft.isNotBlank() && !state.sending && !state.historyLoading && state.historyError == null && !state.needsReconcile,
                                 modifier = Modifier.size(48.dp).background(SoftAccent, CircleShape), colors = IconButtonDefaults.filledIconButtonColors(
                                     containerColor = Color.Transparent, contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                     disabledContainerColor = Color.Transparent,
