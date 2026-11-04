@@ -1,5 +1,7 @@
 """Scripted chat + semantic suggestions; no external inference."""
 import os
+import json
+from pathlib import Path
 from unittest.mock import patch
 
 from backend.conversation import embeddings
@@ -8,6 +10,87 @@ from test_agent_scenarios import Base, Scripted
 
 
 class SemanticTurnTests(Base):
+    def test_abstention_keeps_legacy_service_and_hazard_recognition(self):
+        for phrase, expected in [('open and close', 'on_off'), ('mod', 'modulating'),
+                                 ('que module', 'modulating'), ('abrir y cerrar', 'on_off'),
+                                 ('regulating', 'modulating')]:
+            with self.subTest(phrase=phrase):
+                self.context, self.history = {}, []
+                result = self.semantic_turn(phrase + ', 110 V', set())
+                self.assertEqual(result.context['filters'].get('service'), expected)
+        self.context, self.history = {}, []
+        result = self.semantic_turn('wood dust, 110 V', set())
+        self.assertTrue(result.context.get('hazard_signal'))
+
+    def test_uncertain_classifier_does_not_preview_explosionproof_in_safe_context(self):
+        for phrase in ['chlorine, open and close, 110 V', 'office actuator, 110 V',
+                       'clean office basement, nothing flammable around, 220 V on/off',
+                       'no flammable atmosphere, 110 V']:
+            self.context, self.history = {}, []
+            result = self.semantic_turn(phrase, set())
+            self.assertNotEqual(result.context.get('proposed_enclosure'), 'explosionproof', phrase)
+            self.assertFalse(result.context.get('hazard_signal'), phrase)
+
+    def test_no_flammable_atmosphere_rejects_previous_hazard_preview(self):
+        first = self.semantic_turn('ethanol tank farm, on/off, 110 V', {'hazard'})
+        self.assertEqual(first.context.get('proposed_enclosure'), 'explosionproof')
+        result = self.semantic_turn('no, no flammable atmosphere there', set(), {'refine': True})
+        self.assertFalse(result.context.get('hazard_signal'))
+        self.assertEqual(result.context['filters']['enclosure'], 'weatherproof')
+
+    def test_v7_normalizer_suggestions_only_fill_unstated_fields(self):
+        from backend.conversation import policy
+        cases = json.loads(Path('config/agent_acceptance_cases_v7.json').read_text(encoding='utf-8'))
+        for scenario in cases['scenarios']:
+            for turn in scenario['turns']:
+                query = turn.get('query', '')
+                before, _ = policy.colloquial_requirements(query)
+                for accepted in [set(), {'safe_area', 'modulating'}, {'hazard', 'on_off'}]:
+                    after, _ = policy.colloquial_requirements(query, accepted)
+                    self.assertEqual({k: after.get(k) for k in before}, before, (scenario['id'], query, accepted))
+
+    def test_all_v7_agent_filters_survive_enabled_classifier_abstention(self):
+        from scripts.agent_acceptance import IDEAL
+        cases = json.loads(Path('config/agent_acceptance_cases_v7.json').read_text(encoding='utf-8'))
+        with patch('backend.conversation.agent.reserve_agent_call'):
+            for scenario in cases['scenarios']:
+                states, histories = [{}, {}], [[], []]
+                for index, turn in enumerate(scenario['turns']):
+                    outputs = []
+                    for mode in (0, 1):
+                        with patch.object(embeddings, 'retrieve', return_value=embeddings.Retrieval(available=bool(mode))), \
+                             patch('backend.conversation.agent.create_model_client', side_effect=lambda:
+                                   Scripted(tuple(turn.get('scripted_decision') or IDEAL[scenario['id']][index]))):
+                            result = run_agent(self.connection, turn['query'], histories[mode], states[mode],
+                                **{k: turn[k] for k in ('answers', 'remove_filters', 'action') if k in turn})
+                        states[mode] = result.context
+                        histories[mode] += [dict(role='user', content=turn['query']), dict(role='assistant', content=result.answer)]
+                        outputs.append(result.context.get('filters', {}))
+                    self.assertEqual({k: outputs[1].get(k) for k in outputs[0]}, outputs[0],
+                                     (scenario['id'], index, turn['query']))
+
+    def test_explicit_enclosure_spellings_precede_semantic_suggestions(self):
+        for spelling, enclosure, suggestion in [
+            ('explosion-proof', 'explosionproof', 'safe_area'),
+            ('explosion proof', 'explosionproof', 'safe_area'),
+            ('weather-proof', 'weatherproof', 'safe_area'),
+            ('weather proof', 'weatherproof', 'safe_area'),
+        ]:
+            with self.subTest(spelling=spelling):
+                self.context, self.history = {}, []
+                result = self.semantic_turn(spelling + ' actuator, 110 V', {suggestion})
+                self.assertEqual(result.context['filters']['enclosure'], enclosure)
+                self.assertNotIn('Interpreted the site', result.answer)
+
+    def test_no_preference_service_is_not_affirmative(self):
+        for phrase in ["on/off service does not matter", "on/off service doesn't matter",
+                       'no preference for on/off service', "I don't care about on/off service"]:
+            with self.subTest(phrase=phrase):
+                self.context, self.history = {'filters': {'service': 'on_off'}}, []
+                result = self.semantic_turn(phrase + ', 110 V', {'on_off'}, {'service': 'on_off', 'refine': True})
+                self.assertNotIn('service', result.context['filters'])
+                self.assertEqual(result.context['filters']['supply_voltage_v'], 110)
+
     def semantic_turn(self, query, accepted, args=None):
         retrieval = embeddings.Retrieval(concepts={c: .9 for c in accepted}, accepted=set(accepted), available=True)
         with patch.object(embeddings, 'retrieve', return_value=retrieval):
@@ -30,6 +113,14 @@ class SemanticTurnTests(Base):
     def test_explicit_service_wins_over_semantic_suggestion(self):
         result = self.semantic_turn('on/off actuator, 110 V', {'modulating'}, {'service': 'modulating'})
         self.assertEqual(result.context['filters']['service'], 'on_off')
+
+    def test_grounded_service_and_carried_filters_are_not_replaced_by_suggestions(self):
+        result = self.semantic_turn('two-position actuator, 110 V', {'modulating'}, {'service': 'on_off'})
+        self.assertEqual(result.context['filters']['service'], 'on_off')
+        self.context = {'filters': {'service': 'on_off', 'enclosure': 'weatherproof', 'supply_voltage_v': 110}}
+        result = self.semantic_turn('and at least 70 Nm', {'modulating', 'hazard'}, {'refine': True, 'min_torque_nm': 70})
+        self.assertEqual(result.context['filters']['service'], 'on_off')
+        self.assertEqual(result.context['filters']['enclosure'], 'weatherproof')
 
     def test_safe_area_applies_weatherproof(self):
         result = self.semantic_turn('ordinary location, 110 V', {'safe_area'})

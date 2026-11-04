@@ -1,4 +1,4 @@
-"""Compatibility-only lexical fallback for disabled/unavailable semantic retrieval.
+"""Deterministic context evidence, always applied before semantic suggestions.
 
 Keep this bounded: new paraphrases belong in concept anchors, not more regexes.
 """
@@ -10,7 +10,7 @@ def colloquial(text):
     result = {}
     if re.search(r'\b(open and close|open and shut|open/shut|open or shut|open or close|fully open|abrir y cerrar|on/of|onoff|on off|on-off)\b', text):
         result['service'] = 'on_off'
-    if re.search(r'\b(stop halfway|intermediate positions?|partial positions?|set to partial|mixing positions?|position anywhere|any position|regulat(?:e|ing)|regule|regular caudal|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open|hold at \d+\s*%\s*open|mod(?=\s|\d))\b', text):
+    if re.search(r'\b(stop halfway|intermediate positions?|partial positions?|set to partial|mixing positions?|position anywhere|any position|regulat(?:e|ing)|regule|regular caudal|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open|hold at \d+\s*%\s*open|mod(?=\s|\d|[,;.!?]|$))\b', text):
         result['service'] = 'modulating'
     if re.search(r'\b(outside|exteriores?|intemperie)\b|\boutdoors\b.*\bnot hazardous\b', text):
         result['enclosure'] = 'weatherproof'

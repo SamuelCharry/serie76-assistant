@@ -818,12 +818,18 @@ class Turn:
         if signalled is not None:
             return signalled
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
+        if self.semantic is not None:
+            deterministic, _ = policy.colloquial_requirements(self.query)
+            valid_assumptions = [a for a in args.get('assumptions', []) if a not in
+                                 policy.invalid_assumptions(args.get('assumptions', []), self.texts)]
+            protected = set(deterministic) | (set(delta) - set(policy.grounding_errors(delta, valid_assumptions, self.texts)))
+            if (args.get('refine') or args.get('more') or policy.removed_fields(self.query)
+                    or re.match(r'^\s*(?:and |actually |make (?:that|it) |no wait[, ]*|instead\b)', self.query, re.I)):
+                protected.update(self.context.get('filters') or {})
+            blocked = ({'on_off', 'modulating'} if 'service' in protected else set()) | (
+                {'hazard', 'safe_area'} if 'enclosure' in protected else set())
+            self.retrieval.accepted = self.semantic - blocked
         inferred, interpretation_notes = policy.colloquial_requirements(self.query, self.semantic)
-        if (self.semantic is not None and policy.hazard_signal(self.query, self.semantic)
-                and 'enclosure' not in policy.explicit_context_values(self.query)):
-            # A site concept triggers confirmation, never a silent model-selected enclosure.
-            delta.pop('enclosure', None)
-            inferred.pop('enclosure', None)
         explicit_voltage = re.search(r'\b(\d+(?:[.,]\d+)?)\s*(?:v|volts?)\b', self.query, re.I)
         if explicit_voltage:
             from decimal import Decimal
@@ -1000,7 +1006,7 @@ class Turn:
                                         allow_ambiguous=True)['products']
             preview_enclosure = ('explosionproof' if self.context.get('hazard_signal') else 'weatherproof'
                                  if policy.weather_exposure(self.query, self.semantic)
-                                 else 'explosionproof')
+                                 else 'weatherproof')
             self.context['proposed_enclosure'] = preview_enclosure
             all_rows = [row for row in all_rows if row['enclosure'] == preview_enclosure]
             rec = ranking.recommendation(all_rows, merged, by)

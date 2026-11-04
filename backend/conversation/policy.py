@@ -54,7 +54,7 @@ LEXICON = {
 
 def colloquial_requirements(query, semantic=None):
     """Explicit constraints plus optional semantic suggestions; None preserves fallback."""
-    text = query.lower()
+    text = canonical_enclosures(query.lower())
     result, notes = {}, []
     for phrase, name in (('indoors', 'indoor'), ('indoor', 'indoor'),
                          ('quiet', 'quiet'), ('compact', 'compact')):
@@ -64,20 +64,8 @@ def colloquial_requirements(query, semantic=None):
                     f"The catalogue doesn't classify models as {name}; showing models by published fields.")
             if note not in notes:
                 notes.append(note)
-    if semantic is None:
-        from .context_fallback import colloquial
-        result.update(colloquial(text))
-    else:
-        explicit = explicit_context_values(text)
-        removed = removed_fields(text)
-        for concept in ('on_off', 'modulating'):
-            if concept in semantic and 'service' not in explicit and 'service' not in removed:
-                result['service'] = concept
-                notes.append('Interpreted the requested operation as ' + ('On/Off' if concept == 'on_off' else 'Modulating') + '.')
-        if 'safe_area' in semantic and 'enclosure' not in explicit and 'enclosure' not in removed:
-            result['enclosure'] = 'weatherproof'
-            notes.append('Interpreted the site as a nonhazardous area; please confirm if that is incorrect.')
-        result.update(explicit)
+    from .context_fallback import colloquial
+    result.update(colloquial(text))
     if nonhazard_signal(text):
         result['enclosure'] = 'weatherproof'
     if re.search(r'\bxp\b', text):
@@ -131,6 +119,17 @@ def colloquial_requirements(query, semantic=None):
                 notes.append(f"Interpreted '{token}' as {display}.")
     if nonhazard_signal(text):
         result['enclosure'] = 'weatherproof'
+    # Retrieval is additive: deterministic normalization and negations run first.
+    result.update(explicit_context_values(text))
+    if semantic is not None:
+        removed = removed_fields(text)
+        for concept in ('on_off', 'modulating'):
+            if concept in semantic and 'service' not in result and 'service' not in removed:
+                result['service'] = concept
+                notes.append('Interpreted the requested operation as ' + ('On/Off' if concept == 'on_off' else 'Modulating') + '.')
+        if 'safe_area' in semantic and 'enclosure' not in result and 'enclosure' not in removed:
+            result['enclosure'] = 'weatherproof'
+            notes.append('Interpreted the site as a nonhazardous area; please confirm if that is incorrect.')
     return result, notes
 
 
@@ -138,7 +137,23 @@ NONHAZARD_RE = re.compile(r'\b(?:not hazardous|not a (?:classified|hazardous) (?
 
 
 def nonhazard_signal(text):
-    return bool(NONHAZARD_RE.search(text))
+    return bool(NONHAZARD_RE.search(text) or re.search(
+        r'\b(?:no|not|nothing|without|sin)\s+(?:\w+\s+){0,2}(?:flammable|explosive|hazardous|inflamables?|explosiv[oa]s?)\b', text, re.I))
+
+
+def canonical_enclosures(text):
+    """Use the same published enclosure spellings before all context decisions."""
+    return re.sub(r'\b(explosion|weather)[\s-]*proof\b',
+                  lambda match: match.group(1).lower() + 'proof', text, flags=re.I)
+
+
+NO_PREFERENCE = re.compile(
+    r"\b(?:does\s+not\s+matter|doesn['’]t\s+matter|do\s+not\s+care|don['’]t\s+care|"
+    r"no\s+preference|not\s+(?:required|needed|necessary))\b", re.I)
+
+
+def context_clauses(text):
+    return re.split(r'[,;.!?]|\bbut\b', canonical_enclosures(text), flags=re.I)
 
 
 def explicit_context_values(text):
@@ -147,7 +162,9 @@ def explicit_context_values(text):
                 ('service', 'modulating', r'\b(?:modulating|modulation|modulante)\b'),
                 ('enclosure', 'weatherproof', r'\bweatherproof\b'),
                 ('enclosure', 'explosionproof', r'\bexplosionproof\b')]
-    for clause in re.split(r'[,;.!?]|\bbut\b', text, flags=re.I):
+    for clause in context_clauses(text):
+        if NO_PREFERENCE.search(clause):
+            continue
         for field, value, pattern in patterns:
             for match in re.finditer(pattern, clause, re.I):
                 prefix = clause[:match.start()]
@@ -159,21 +176,18 @@ def explicit_context_values(text):
 def hazard_signal(text, semantic=None):
     if nonhazard_signal(text):
         return False
-    if semantic is not None:
-        if re.search(r'\b(?:no|not|without|sin)\s+(?:\w+\s+){0,2}(?:flammable|explosive|hazardous|inflamables?|explosiv[oa]s?)\b', text, re.I):
-            return False
-        if 'enclosure' in removed_fields(text):
-            return False
-        return 'hazard' in semantic or bool(re.search(r'\b(?:hazardous|explosive|flammable)\b', text, re.I))
     from .context_fallback import HAZARD_RE
-    return bool(HAZARD_RE.search(text))
+    if HAZARD_RE.search(text):
+        return True
+    if semantic is not None and 'hazard' in semantic:
+        stated, _ = colloquial_requirements(text)
+        return 'enclosure' not in stated and 'enclosure' not in removed_fields(text)
+    return False
 
 
 def weather_exposure(text, semantic=None):
-    if semantic is not None:
-        return 'safe_area' in semantic
     from .context_fallback import weather_exposure as fallback
-    return fallback(text)
+    return fallback(text) or semantic is not None and 'safe_area' in semantic
 
 
 REMOVE_WORDS = {
@@ -195,11 +209,13 @@ def removed_fields(query, pending_questions=()):
     text = query.lower()
     text = re.sub(r'\b(?:no more than|not more than|no less than)\b', 'bound', text)
     removed = set()
-    for field, words in REMOVE_WORDS.items():
-        if re.search(r'\b(?:forget|drop|remove|no|not|any)\b(?:\W+\w+){0,3}?\W+(?:' + words + r')\b', text) or \
-                re.search(r'\b(?:' + words + r')\b.{0,20}\b(?:doesn.t matter|don.t care|any(?:thing)?)\b', text):
-            removed.add(field)
-    if re.search(r'\b(?:doesn.t matter|don.t care)\b', text) and not removed and pending_questions:
+    for clause in context_clauses(text):
+        for field, words in REMOVE_WORDS.items():
+            if re.search(r'\b(?:forget|drop|remove|no|not|any)\b(?:\W+\w+){0,3}?\W+(?:' + words + r')\b', clause) or \
+                    (NO_PREFERENCE.search(clause) and re.search(r'\b(?:' + words + r')\b', clause)) or \
+                    re.search(r'\b(?:' + words + r')\b.{0,20}\bany(?:thing)?\b', clause):
+                removed.add(field)
+    if NO_PREFERENCE.search(text) and not removed and pending_questions:
         removed.add(pending_questions[0]['id'])
     if nonhazard_signal(text):
         removed.add('enclosure')
@@ -360,7 +376,7 @@ def grounding_errors(delta, assumptions, texts, semantic=None):
             if field == "csa_required" and value is False:
                 continue
             words = LEXICON.get((field, value), ())
-            if semantic is None and field in ('service', 'enclosure'):
+            if field in ('service', 'enclosure'):
                 from .context_fallback import CONTEXT_LEXICON
                 words = CONTEXT_LEXICON.get((field, value), words)
             if not any(_has_word(corpus, w) for w in words):
