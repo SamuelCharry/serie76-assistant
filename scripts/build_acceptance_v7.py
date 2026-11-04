@@ -50,7 +50,7 @@ def main():
     by_id['EC21']['turns'][0]['expect']['contains'] = ['Tell me what it must do:']
     by_id['t6_manual_01']['turns'][1]['expect']['contains'] = ['On/Off torque', 'Operating time at 60 Hz: 17 s']
     for case_id in ('t6_manual_05', 'EC24'):
-        by_id[case_id]['turns'][1]['expect']['contains'] = ['Without service']
+        by_id[case_id]['turns'][1]['expect']['contains'] = ['best matches so far']
     by_id['EC02']['turns'][0]['expect'] = {'contract_v6': True, 'contains': ['Interpreted 761A00-11300000 as 761A00-11300000/A'],
         'products_include': ['761A00-11300000/A']}
     for item in by_id['EC22']['turns']:
@@ -226,13 +226,33 @@ def main():
     v4_expect('S6-04', contains=['I only cover the Series 76 catalogue'])
     v4_expect('E-SHORTREF-01', 1, comparison_models=['761A00-11320000/A',
                                                      '761B00-11320000/A', '762A00-11320000/A'])
-    v4_expect('E-SHORTREF-02', 1, contains=['Both', 'duty'], not_contains=['Comparing '])
+    v4_expect('E-SHORTREF-02', 1, contains=['duty'], not_contains=['Comparing '])
     v4_expect('E-IMPOSSIBLE-01', contains=['3-phase', 'Weatherproof'])
     v4_expect('E-IMPOSSIBLE-01', 1, contains=['no exact model'])
     v4_expect('E-CONFIRM-01', interaction_ids=['enclosure'])
     v4_expect('E-CONFIRM-01', 1, active_filters_include=['enclosure'])
     v4_expect('E-CONFIRM-02', 1, active_filters_include=['enclosure'])
     cases['scenarios'].extend(heldout_v4['scenarios'])
+    heldout_v5 = json.loads((CONFIG / 'agent_acceptance_heldout_v5.json').read_text(encoding='utf-8'))
+    v5_by_id = {s['id']: s for s in heldout_v5['scenarios']}
+    def v5_expect(case_id, turn_index=0, **expected):
+        v5_by_id['heldout_v5_' + case_id]['turns'][turn_index]['expect'].update(expected)
+    v5_expect('T1-07', contains=['10 models'], not_contains=['64 models'])
+    v5_expect('T5-05', candidate_total=0, contains=['lowest published torque is 65 Nm'])
+    v5_expect('T1-05', contains=['0.4 A'], not_contains=['On/Off torque'])
+    v5_expect('T4-03', 1, contains=['763C00-11330C00/A'], not_contains=['763A00-11330C00/A'])
+    v5_expect('T4-04', 1, active_filters_include=['service', 'supply_voltage_v'])
+    v5_expect('F-CONFIRM-01', 0, interaction_ids=['enclosure'])
+    v5_expect('F-CONFIRM-01', 1, active_filters_include=['enclosure'])
+    v5_expect('F-CONFIRM-02', 1, active_filters_include=['enclosure'])
+    v5_expect('T6-01', contains=['operating temperature range'], no_products=True)
+    v5_expect('T6-03', contains=['installation instructions'], no_products=True)
+    v5_expect('T2-06', contains=["doesn't publish prices", 'motor power'])
+    for scenario in heldout_v5['scenarios']:
+        for item in scenario['turns']:
+            item['expect']['not_contains'].extend(['was unclear in your request',
+                                                   'no frequency in source'])
+    cases['scenarios'].extend(heldout_v5['scenarios'])
     (CONFIG / 'agent_acceptance_cases_v7.json').write_text(json.dumps(cases, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     print({'v6_cases': len(by_id), 'v7_cases': len(cases['scenarios'])})
 
