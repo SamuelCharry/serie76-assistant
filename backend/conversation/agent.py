@@ -549,11 +549,14 @@ class Turn:
 
     def search(self, args, *, trusted=False):
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
+        inferred, interpretation_notes = policy.colloquial_requirements(self.query)
+        delta.update(inferred)
         if delta.get("csa_required") is False:
             delta.pop("csa_required")
         bad = policy.invalid_assumptions(args.get("assumptions", []), self.texts)
         assumptions = [a for a in args.get("assumptions", []) if a not in bad]
-        ungrounded = [] if trusted else policy.grounding_errors(delta, assumptions, self.texts)
+        ungrounded = [] if trusted else [field for field in policy.grounding_errors(delta, assumptions, self.texts)
+                                         if field not in inferred]
         dropped = []
         if bad or ungrounded:
             # A value the user never expressed is NOT applied (it would be an invented
@@ -567,6 +570,7 @@ class Turn:
         import re
         same_performance = re.search(r'\bsame performance\b', self.query, re.I) and args.get('refine') and delta.get('service')
         merged, notes = policy.merge_filters(previous, delta, refine=args["refine"], remove=args["remove"], more=args["more"])
+        notes[:0] = interpretation_notes
         if same_performance:
             notes.append('Assumption: "same performance" retains the numeric thresholds and applies them to the requested service.')
             assumptions.append(dict(field='service', user_phrase='same performance'))
@@ -579,7 +583,8 @@ class Turn:
             if supply.get('supply_current') == 'ac' and supply.get('phase_count') == 1:
                 notes.insert(0, "Assumed AC, single-phase supply. Tell me if that's wrong.")
             else:
-                notes.insert(0, "I left out an unstated requirement. Tell me if you need it.")
+                labels = ', '.join(policy.LABELS.get(field, field.replace('_', ' ')) for field, _ in dropped)
+                notes.insert(0, f"The {labels} was unclear in your request; please state it if it matters.")
         merged["limit"] = args.get("limit", merged["limit"]) if not args["more"] else merged["limit"]
         if merged.get("sort_by"):
             merged["limit"] = 3
@@ -594,7 +599,8 @@ class Turn:
             facets['supply_voltage_v'] = [r for r in facets['supply_voltage_v'] if r['value'] in choices]
             if facets['supply_voltage_v']:
                 return self.question_result(['supply_voltage_v'], facets)
-        if not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS) and not merged.get('sort_by'):
+        scenario = re.search(r'\b(hazardous|flammable gas(?:es)?|gas(?:es)?|mining|refinery|explosive|outdoor|rain|exteriores|intemperie)\b', self.query, re.I)
+        if not scenario and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS) and not merged.get('sort_by'):
             # Never "recommend" the whole catalogue: a search needs at least one stated requirement.
             self.trace.setdefault("overrides", []).append("empty_search_clarified")
             self.context['filters'] = merged
@@ -609,7 +615,6 @@ class Turn:
             self.trace["validation"] = ["conflict:" + kind]
             message = policy.CONFLICT_MESSAGES[kind].format(**{k: merged.get(k) for k in ("frequency_hz", "phase_count")})
             return self.clarify("requirements", message, conflict=dict(kind=kind, fields=fields))
-        scenario = re.search(r'\b(hazardous|flammable gas(?:es)?|gas(?:es)?|mining|outdoor|rain|exteriores|intemperie)\b', self.query, re.I)
         explicit_enclosure = re.search(r'\b(explosionproof|weatherproof)\b', self.query, re.I)
         if scenario and not explicit_enclosure:
             from backend.catalog.repository import question_facets
@@ -630,14 +635,17 @@ class Turn:
                 return question
             for option in question.interaction['questions'][0]['options']:
                 term = self.term_index[option['value']]
-                option['label'] = term['label'] + ': ' + term['definition']
+                option['label'] = term['label']
+                option['description'] = term['definition']
             prompt = 'Which published enclosure matches your site? ' + ' '.join(
-                option['label'] for option in question.interaction['questions'][0]['options'])
+                option['label'] + ': ' + option['description'] for option in question.interaction['questions'][0]['options'])
             sort_map = {'fastest': 'fastest', 'lowest_current': 'lowest_fla',
                         'highest_torque': 'most_torque', 'lowest_power': 'lowest_power'}
             by = sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque')
             all_rows = search_actuators(self.connection, SearchFilters.model_validate(dict(merged, limit=100, offset=0)),
                                         allow_ambiguous=True)['products']
+            preview_enclosure = 'weatherproof' if re.search(r'\b(outdoor|rain|exteriores|intemperie)\b', self.query, re.I) else 'explosionproof'
+            all_rows = [row for row in all_rows if row['enclosure'] == preview_enclosure]
             rec = ranking.recommendation(all_rows, merged, by)
             self.context['rank_by'] = by
             self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]

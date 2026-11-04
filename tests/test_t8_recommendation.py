@@ -54,3 +54,19 @@ class RecommendationTests(Base):
                            ('get_actuator', {'part_numbers': ['761X30-11370000/A', '761X30-11380000/A'],
                                              'focus': ['overview']}))
         self.assertTrue(all(len(set(row['values'])) > 1 for row in result.comparison['rows']))
+
+    def test_colloquial_service_and_knm_are_applied_without_model_guess(self):
+        result = self.turn('Open and close at least 1.5 kNm',
+                           ('search_actuators', {'min_torque_nm': 1500}))
+        self.assertEqual(result.context['filters']['service'], 'on_off')
+        self.assertEqual(float(result.context['filters']['min_torque_nm']), 1500)
+        self.assertIn('1.5 kNm = 1500 Nm', result.answer)
+
+    def test_hazardous_options_have_short_labels_and_descriptions(self):
+        result = self.turn('Refinery with flammable gas',
+                           ('search_actuators', {}))
+        question = result.interaction['questions'][0]
+        self.assertEqual(question['id'], 'enclosure')
+        self.assertEqual({o['label'] for o in question['options']}, {'Explosionproof', 'Weatherproof'})
+        self.assertTrue(all(o.get('description') for o in question['options']))
+        self.assertEqual(result.recommendation['items'][0]['part_number'][:4], '761X')

@@ -41,6 +41,30 @@ LEXICON = {
     ("csa_required", True): ("csa",),
 }
 
+
+def colloquial_requirements(query):
+    """Closed, explicit phrase map; returns only constraints stated in this turn."""
+    text = query.lower()
+    result, notes = {}, []
+    if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar)\b', text):
+        result['service'] = 'on_off'
+    if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias)\b', text):
+        result['service'] = 'modulating'
+    if re.search(r'\b(battery|low voltage|bater[ií]a|bajo voltaje)\b', text):
+        result['supply_voltage_v'] = 24
+    match = re.search(r'\b(\d+(?:[.,]\d+)?)\s*knm\b', text)
+    if match:
+        number = Decimal(match.group(1).replace(',', '.'))
+        value = number * 1000
+        result['min_torque_nm'] = int(value) if value == int(value) else value
+        notes.append(f'{match.group(1)} kNm = {value:f} Nm.'.replace('.0 Nm.', ' Nm.'))
+    if re.search(r'\b(?:a prueba de explosi[oó]n)\b', text):
+        result['enclosure'] = 'explosionproof'
+    match = re.search(r'\b(?:toque|torque|par)\s*m[ií]nimo\s*(?:de\s*)?(\d+(?:[.,]\d+)?)\s*nm\b', text)
+    if match:
+        result['min_torque_nm'] = Decimal(match.group(1).replace(',', '.'))
+    return result, notes
+
 CONFLICT_MESSAGES = {
     "dc_frequency": "DC supply has no mains frequency. Do you need a DC actuator, or an AC actuator at {frequency_hz} Hz?",
     "dc_phase": "DC supply has no phase count. Do you need a DC actuator, or an AC {phase_count}-phase actuator?",
