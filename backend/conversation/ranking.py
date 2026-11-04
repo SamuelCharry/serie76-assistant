@@ -101,7 +101,9 @@ def rank(products, filters, by='closest_torque'):
 
 def ranked_by(filters, by='closest_torque'):
     if by != 'closest_torque':
-        tie_breaks = ['lowest FLA', 'shortest operating time']
+        tie_breaks = ([] if by == 'fastest' else ['shortest operating time'])
+        if by != 'lowest_fla':
+            tie_breaks.insert(0, 'lowest FLA')
         return ', then '.join(dict.fromkeys([LABELS[by], *tie_breaks]))
     minimum = filters.get('min_torque_nm')
     if minimum is None:

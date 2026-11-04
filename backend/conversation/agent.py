@@ -526,7 +526,8 @@ class Turn:
         if compared:
             self.context['last_comparison_models'] = compared['models']
             self.context['last_shown_list'] = compared['models']
-            answer = "Comparing " + " vs ".join(compared["models"]) + ". " + str(len(compared["hidden_rows"])) + " identical fields hidden.\n"
+            hidden = f" {len(compared['hidden_rows'])} identical fields hidden." if compared['hidden_rows'] else ''
+            answer = "Comparing " + " vs ".join(compared["models"]) + "." + hidden + "\n"
             answer += "\n".join(row["label"] + ": " + " vs ".join(row["values"]) for row in compared["rows"])
             if not compared["rows"]:
                 answer += "No published differences in comparable fields."
@@ -548,7 +549,22 @@ class Turn:
             answer += "\nThe document doesn't define that term."
         if products:
             self.context["part_numbers"] = [p["base_part_number"] for p in products]
-        return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared, lead=quality.comparison_lead(compared) if compared else None)
+        lead = quality.comparison_lead(compared) if compared else None
+        if compared and len(compared['models']) == 2:
+            import re
+            request = re.search(r'\b(faster|stronger|less current|lower current)\b', self.query, re.I)
+            if request:
+                metric = ('operating_time' if request.group(1).lower() == 'faster' else
+                          'torque' if request.group(1).lower() == 'stronger' else 'fla')
+                relevant = [row for row in compared['rows'] if metric in row['field'] and row['better'] is not None]
+                hz = re.search(r'\b(50|60)\s*hz\b', self.query, re.I)
+                if hz:
+                    relevant = [row for row in relevant if hz.group(1) + 'hz' in row['field']]
+                if relevant:
+                    row = relevant[0]
+                    adjective = {'operating_time': 'faster', 'torque': 'stronger', 'fla': 'lower in current'}[metric]
+                    lead = f"{compared['models'][row['better']]} is {adjective}" + (f" at {hz.group(1)} Hz" if hz else '') + ': ' + ' vs '.join(row['values']) + '.'
+        return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared, lead=lead)
 
     def search(self, args, *, trusted=False):
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
@@ -718,15 +734,16 @@ class Turn:
                     break
             rec = dict(ranked_by=ranking.ranked_by(merged, by), total=0, shown=len(nearest), items=nearest)
             self.context['last_ranked_list'] = []
-            answer += '\nRanked by ' + rec['ranked_by'] + '.'
             return AgentResult(answer, context=self.context, recommendation=rec,
-                               lead='No exact match. Nearest published models follow; ranked by ' + rec['ranked_by'] + '.')
+                               lead='No exact match. Nearest published models follow.')
         all_filters = SearchFilters.model_validate(dict(merged, limit=100, offset=0))
         all_rows = search_actuators(self.connection, all_filters, allow_ambiguous=True)['products']
         rec = ranking.recommendation(all_rows, merged, by, total=result['total'])
         self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
         self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
         self.context['last_shown_offset'] = len(rec['items'])
+        products = [public_product(p) | {'frequencies': p.get('frequencies', [])}
+                    for p in ranking.rank(result['products'], merged, by)]
         answer, products, narrowing, options, focus = quality.search_presentation(result, products, merged, notes, shown)
         if unscoped_superlative:
             narrowing = None
@@ -918,8 +935,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             limitation = "The catalogue doesn't publish prices. I can compare published motor power or torque as a proxy, not a price estimate."
         if limitation is None and re.search(r'\b(rotork|other brands?)\b', bare_query):
             limitation = 'The catalogue covers Series 76 actuators only. I can compare its published models.'
-        if limitation is None and re.search(r'\b(ip\s*\d*|nema\s*\d*|ambient temperature|temperature rating|certification)\b', bare_query):
-            limitation = 'The catalogue does not specify that rating or condition. I can show the published enclosure description.'
+        if limitation is None and not policy.codes_in_text(query) and re.search(r'\b(ip\s*\d*|nema\s*\d*|ambient temperature|temperature rating|certification)\b', bare_query):
+            limitation = "The document doesn't define that term. I can show the published enclosure description."
         if limitation is None and re.search(r'\b(how strong is strong enough|size (?:my|a|the) valve|valve sizing)\b', bare_query):
             limitation = 'The catalogue does not size valves. Tell me the required torque and I can find actuators that meet it.'
         if limitation:
@@ -956,7 +973,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                           context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
         return finish(turn, AgentResult('I ranked the models by ' + criterion + '. Those are catalogue measurements, not an overall suitability or price score.',
                                         context=turn.context))
-    pick = bool(re.search(r'\b(best|just pick one|just tell me|which one should i buy|which is best|the cheap one|this doesn.t help|too many questions)\b', bare_query))
+    pick = (not re.search(r'\bcompare\b', bare_query) and bool(re.search(r'\b(best|just pick one|just tell me|which one should i buy|which is best|the cheap one|this doesn.t help|too many questions)\b', bare_query)))
     cheap = bool(re.search(r'\b(cheap|cheapest|price|cost)\b', bare_query))
     if action is None and not answers and not remove_filters and (pick or cheap):
         focus_codes = (turn.context.get('last_comparison_models') if turn.context.get('last_comparison_models') and
@@ -1180,8 +1197,10 @@ def finish(turn, result):
     result.suggestions = quality.replies(result, turn.terms)
     if result.recommendation and result.recommendation['total'] > 0:
         total = result.recommendation['total']
-        result.suggestions = [dict(label='Compare top 2', action=dict(type='compare_top', args=dict(n=2))),
-                              dict(label=f'Show all {total}', action=dict(type='show_all', args={}))]
+        result.suggestions = ([dict(label='Compare them' if total == 2 else 'Compare top 2',
+                                    action=dict(type='compare_top', args=dict(n=2)))] if total >= 2 else [])
+        if total > 3:
+            result.suggestions.append(dict(label=f'Show all {total}', action=dict(type='show_all', args={})))
     result.suggested_replies = [s['label'] if isinstance(s, dict) else s for s in result.suggestions]
     if result.products and not result.lead:
         result.lead = ('Catalogue specifications for ' + result.products[0]['base_part_number'] + '.' if len(result.products) == 1

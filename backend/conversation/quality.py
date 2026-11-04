@@ -266,7 +266,8 @@ def search_presentation(raw, products, filters, notes, assumptions):
             # One SQL value per row; the focus follows the user's numeric requirement.
             details = render_focused(p, focus).splitlines()
             text += "\n" + p["base_part_number"] + " — " + (details[1].strip(" •") if len(details) > 1 else p["enclosure"])
-        text += "\nChoose two models to compare their differences."
+        if total > 3:
+            text += "\nChoose two models to compare their differences."
     return (prefix + "\n" + text).strip(), [focused_product(p, focus) for p in products], None, [], focus
 
 
