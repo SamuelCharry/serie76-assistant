@@ -11,4 +11,4 @@ class GlossaryScenarioTests(Base):
         self.assertNotIn('enclosure', result.context['filters'])
         self.assertEqual(str(result.context['filters']['supply_voltage_v']), '220')
         self.assertTrue(all(':' in option['label'] and option['count'] > 0 for option in question['options']))
-        self.assertEqual(result.suggestions, [])
+        self.assertEqual(result.suggested_replies[0], 'Compare top 2')

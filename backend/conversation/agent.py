@@ -391,7 +391,8 @@ class Turn:
         self.context['pending_questions'] = questions
         first = questions[0]['id'] if questions else (fields[0] if fields else 'requirements')
         legacy = 'frequency' if first == 'frequency_hz' else first
-        result = self.clarify(legacy, message or ' '.join(q['prompt'] for q in questions))
+        prompt = message or ' '.join(q['prompt'] for q in questions) or QUESTIONS.get(legacy, QUESTIONS['requirements'])
+        result = self.clarify(legacy, prompt)
         result.interaction = dict(kind='question', questions=questions) if questions else None
         return result
 
@@ -608,7 +609,7 @@ class Turn:
             self.trace["validation"] = ["conflict:" + kind]
             message = policy.CONFLICT_MESSAGES[kind].format(**{k: merged.get(k) for k in ("frequency_hz", "phase_count")})
             return self.clarify("requirements", message, conflict=dict(kind=kind, fields=fields))
-        scenario = re.search(r'\b(hazardous|flammable gas(?:es)?|gas(?:es)?|mining|outdoor|rain)\b', self.query, re.I)
+        scenario = re.search(r'\b(hazardous|flammable gas(?:es)?|gas(?:es)?|mining|outdoor|rain|exteriores|intemperie)\b', self.query, re.I)
         explicit_enclosure = re.search(r'\b(explosionproof|weatherproof)\b', self.query, re.I)
         if scenario and not explicit_enclosure:
             from backend.catalog.repository import question_facets
@@ -616,13 +617,36 @@ class Turn:
             self.context['filters'] = merged
             self.trace['merged_parameters'] = merged
             scoped = SearchFilters.model_validate(merged)
-            question = self.question_result(['enclosure'], question_facets(self.connection, scoped, ['enclosure']))
+            facets = question_facets(self.connection, scoped, ['enclosure'])
+            question = self.question_result(['enclosure'], facets)
+            if not question.interaction and facets.get('enclosure'):
+                options = [dict(interactions.option('enclosure', row['value']), count=row['n'])
+                           for row in facets['enclosure']]
+                entry = dict(id='enclosure', prompt='Which enclosure?', options=options)
+                self.context['pending_questions'] = [entry]
+                question.interaction = dict(kind='question', questions=[entry])
+                question.clarification = dict(field='enclosure', message='Which enclosure?')
+            if not question.interaction:
+                return question
             for option in question.interaction['questions'][0]['options']:
                 term = self.term_index[option['value']]
                 option['label'] = term['label'] + ': ' + term['definition']
             prompt = 'Which published enclosure matches your site? ' + ' '.join(
                 option['label'] for option in question.interaction['questions'][0]['options'])
-            question.answer = prompt
+            sort_map = {'fastest': 'fastest', 'lowest_current': 'lowest_fla',
+                        'highest_torque': 'most_torque', 'lowest_power': 'lowest_power'}
+            by = sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque')
+            all_rows = search_actuators(self.connection, SearchFilters.model_validate(dict(merged, limit=100, offset=0)),
+                                        allow_ambiguous=True)['products']
+            rec = ranking.recommendation(all_rows, merged, by)
+            self.context['rank_by'] = by
+            self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
+            question.recommendation = rec
+            question.answer = prompt + '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
+                item['part_number'] + ': ' + item['reason'] for item in rec['items'])
+            if 'lowest_power' in (merged.get('sort_by') or []):
+                question.answer += '\nMotor power is the published rated motor power, not total electrical consumption.'
+            question.lead = 'Ranked by ' + rec['ranked_by'] + '.'
             question.clarification['message'] = prompt
             self.trace['data'] = dict(status='enclosure_confirmation', options=question.interaction['questions'][0]['options'])
             return question
@@ -632,7 +656,10 @@ class Turn:
             self.trace["validation"] = _safe_errors(exc)
             return self.clarify("requirements", "These requirements could not be applied together. Please restate the supply, service and limits you need.")
         result = search_actuators(self.connection, filters)
-        self.context['rank_by'] = 'closest_torque'
+        sort_map = {'fastest': 'fastest', 'lowest_current': 'lowest_fla',
+                    'highest_torque': 'most_torque', 'lowest_power': 'lowest_power'}
+        by = sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque')
+        self.context['rank_by'] = by
         self.context["pagination"] = {"has_more": False}
         self.trace["data"] = result
         self.context["filters"] = merged
@@ -640,11 +667,13 @@ class Turn:
             question = self.question_result(result['fields'], result['facets'])
             all_rows = search_actuators(self.connection, SearchFilters.model_validate(dict(merged, limit=100, offset=0)),
                                         allow_ambiguous=True)['products']
-            rec = ranking.recommendation(all_rows, merged, total=result['total'])
-            self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged)]
+            rec = ranking.recommendation(all_rows, merged, by, total=result['total'])
+            self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
             question.recommendation = rec
             question.answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
+            if 'lowest_power' in (merged.get('sort_by') or []):
+                question.answer += '\nMotor power is the published rated motor power, not total electrical consumption.'
             question.lead = 'Ranked by ' + rec['ranked_by'] + '.'
             return question
         shown = [dict(a, value=merged.get(a["field"])) for a in assumptions]
@@ -669,15 +698,15 @@ class Turn:
                         break
                 if len(nearest) == 2:
                     break
-            rec = dict(ranked_by=ranking.ranked_by(merged), total=0, shown=len(nearest), items=nearest)
+            rec = dict(ranked_by=ranking.ranked_by(merged, by), total=0, shown=len(nearest), items=nearest)
             self.context['last_ranked_list'] = []
             answer += '\nRanked by ' + rec['ranked_by'] + '.'
             return AgentResult(answer, context=self.context, recommendation=rec,
                                lead='No exact match. Nearest published models follow; ranked by ' + rec['ranked_by'] + '.')
         all_filters = SearchFilters.model_validate(dict(merged, limit=100, offset=0))
         all_rows = search_actuators(self.connection, all_filters, allow_ambiguous=True)['products']
-        rec = ranking.recommendation(all_rows, merged, total=result['total'])
-        self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged)]
+        rec = ranking.recommendation(all_rows, merged, by, total=result['total'])
+        self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
         answer, products, narrowing, options, focus = quality.search_presentation(result, products, merged, notes, shown)
         self.context["pagination"] = {"has_more": bool(products) and result.get("offset", 0) + len(products) < result["total"]}
         self.context["focus"] = focus
@@ -710,9 +739,11 @@ class Turn:
             answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
             products = [quality.focused_product(public_product(p) | {'frequencies': p.get('frequencies', [])}, focus)
-                        for p in ranking.rank(all_rows, merged)[:3]]
+                        for p in ranking.rank(all_rows, merged, by)[:3]]
         else:
             answer += '\nRanked by ' + rec['ranked_by'] + '.'
+        if 'lowest_power' in (merged.get('sort_by') or []):
+            answer += '\nMotor power is the published rated motor power, not total electrical consumption.'
         self.context["part_numbers"] = [p["base_part_number"] for p in products]
         return AgentResult(answer, products, context=self.context, terms=terms, assumptions=shown,
                            clarification=dict(field=narrowing, message=answer, options=options) if narrowing else None,
@@ -875,7 +906,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             result.lead = 'Ranked by ' + by_text + '. ' + (result.lead or '')
         elif kind == 'rank_by':
             by = params.get('by')
-            if set(params) != {'by'} or by not in ranking.LABELS:
+            if set(params) != {'by'} or by not in ('closest_torque', 'lowest_fla', 'fastest', 'most_torque'):
                 raise InvalidInteraction('invalid_action', 'Choose a supported ranking.')
             rows = [get_actuator(connection, code) for code in codes]
             ordered = ranking.rank([p for p in rows if p], filters, by)
@@ -1019,7 +1050,10 @@ def finish(turn, result):
     if re.search(r'\binvoice\b', turn.query, re.I) and re.search(r'\b(label|installed|nameplate)\b', turn.query, re.I):
         result.answer = 'The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\n' + result.answer
         result.lead = 'Check the physical nameplate to identify the installed actuator; the catalogue comparison cannot establish that.'
-    if not result.clarification:
+    preserve_pending = (trace.get('data', {}).get('status') == 'ranked_list'
+                        or 'ranked_reference_resolved' in trace.get('overrides', [])
+                        or (trace.get('raw_parameters') or {}).get('type') in ('compare_top', 'show_all', 'rank_by'))
+    if not result.clarification and not preserve_pending:
         result.context.pop("pending_clarification", None)
         result.context.pop('pending_questions', None)
     trace.setdefault("merged_parameters", trace.get("parameters"))

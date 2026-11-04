@@ -17,6 +17,8 @@ class RankedReferences(Base):
 
     def test_which_ones_lists_ranked_codes(self):
         self.ranked()
+        pending = self.context['pending_questions']
         result = self.turn("wich ones ?", ("get_actuator", {"list_results": True}))
         self.assertIn(self.context["last_ranked_list"][0], result.answer)
         self.assertIn(str(len(self.context["last_ranked_list"])), result.answer)
+        self.assertEqual(result.context['pending_questions'], pending)

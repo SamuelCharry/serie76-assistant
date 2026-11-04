@@ -25,3 +25,9 @@ class RecommendationTests(Base):
         self.assertEqual(result.recommendation["total"], 0)
         self.assertLessEqual(len(result.recommendation["items"]), 2)
         self.assertTrue(all("fails" in item["reason"].lower() for item in result.recommendation["items"]))
+
+    def test_inch_pound_request_ranks_published_inch_pounds(self):
+        result = self.turn('On/off over 1000 in-lb',
+                           ('search_actuators', {'service': 'on_off', 'min_torque_in_lb': {'value': 1000, 'op': 'gt'}}))
+        self.assertIn('1000 in-lb', result.recommendation['ranked_by'])
+        self.assertIn('in-lb', result.recommendation['items'][0]['reason'])
