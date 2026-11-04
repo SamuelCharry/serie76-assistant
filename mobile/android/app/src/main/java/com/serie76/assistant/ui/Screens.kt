@@ -271,9 +271,9 @@ fun DifferenceComparisonCard(comparison: DifferenceComparison) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(row.label, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
                     Text(row.a, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall,
-                        fontWeight = if (row.better == "a") FontWeight.Bold else FontWeight.Normal)
+                        fontWeight = if (row.better == 0) FontWeight.Bold else FontWeight.Normal)
                     Text(row.b, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall,
-                        fontWeight = if (row.better == "b") FontWeight.Bold else FontWeight.Normal)
+                        fontWeight = if (row.better == 1) FontWeight.Bold else FontWeight.Normal)
                 }
             }
             Text("${comparison.identicalFieldsHidden} identical fields hidden", style = MaterialTheme.typography.labelSmall)
