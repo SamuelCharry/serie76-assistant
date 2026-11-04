@@ -2,7 +2,7 @@
 
 ## Resultado comprobado
 
-El archivo crudo v2 contiene **51 conversaciones y 91 turnos** (el encargo decía 50). Se importaron todas como casos guionizados; no se hicieron llamadas pagadas ni inferencia durante esta entrega. El autoensayo v7 pasó **226/226 escenarios**. La suite Python pasó **309 pruebas, 2 omitidas**. El escáner de texto público y la comprobación offline del esquema pasaron.
+El archivo crudo v2 contiene **51 conversaciones y 91 turnos** (el encargo decía 50). Se importaron todas como casos guionizados; no se hicieron llamadas pagadas ni inferencia durante esta entrega. El autoensayo v7 pasó **226/226 escenarios**. La suite Python pasó **310 pruebas, 2 omitidas**. El escáner de texto público y la comprobación offline del esquema pasaron.
 
 La reconstrucción sin claves usó `docker compose -f docker-compose.yml -f %TEMP%/t8c-keyless-compose.yml up -d --build backend`, con un override que vacía claves y modelos y desactiva tracing. `/ready` devolvió **HTTP 200**, 68 filas y 16 términos. Dentro del contenedor, las claves de OpenRouter y LangSmith estaban ausentes y tracing estaba desactivado. Se conservó el volumen PostgreSQL.
 
@@ -21,6 +21,8 @@ La reconstrucción sin claves usó `docker compose -f docker-compose.yml -f %TEM
 | Filas N/A | `d2d36f0` | Recuento SQL de filas N/A excluidas de superlativos amplios. |
 | Descripción de tool dentro del presupuesto | `d25783c` | Se mantuvo la instrucción explícita para límites numéricos. |
 | Referencia breve y entrega | `b4a10f5` | `the faster one` y `its power?` usan el conjunto comparado; la consulta de entrega no duplica el aviso. |
+| Vista de enclosure sin confirmar | `9653522` | El subconjunto de recomendación se identifica explícitamente como vista previa. |
+| Elección en español | `34b39db` | El replay exige `My pick:` cuando el tool señala la intención de elegir. |
 
 ## Esquema del proveedor
 
