@@ -81,6 +81,40 @@ def colloquial_requirements(query):
     return result, notes
 
 
+CATALOGUE_ATTRIBUTE_WORDS = frozenset({
+    'spec', 'specs', 'specification', 'specifications', 'data', 'detail', 'details',
+    'torque', 'duty', 'cycle', 'cycles', 'starts', 'hour', 'time', 'speed', 'fast',
+    'fla', 'lra', 'current', 'power', 'voltage', 'supply', 'phase', 'frequency',
+    'enclosure', 'weatherproof', 'explosionproof', 'csa', 'certification',
+})
+
+
+def unsupported_lookup_attribute(query, code, terms):
+    """Extract a named attribute of one code; unknown attributes cannot trigger a spec dump."""
+    text = re.sub(re.escape(code), '#', query, flags=re.I).strip().rstrip('?! .')
+    patterns = (
+        r"(?:what(?:'s| is)|tell me)\s+(?:the\s+)?(.+?)\s+(?:of|for|about)\s+#",
+        r"(?:send|show|give)\s+me\s+(?:the\s+)?(.+?)\s+(?:for|of)\s+#",
+        r"is\s+#\s+compatible\s+with\s+(?:a\s+|the\s+)?(.+)",
+        r"can\s+#\s+(.+)",
+        r"does\s+#\s+(.+)",
+    )
+    match = next((found for pattern in patterns if (found := re.search(pattern, text, re.I))), None)
+    if not match:
+        return None
+    attribute = match.group(1).strip().lower()
+    if re.search(r'\b(?:full|all|complete|overview)\s+(?:specs?|data|details?)\b', attribute):
+        return None
+    words = set(re.findall(r'[a-z]+', attribute))
+    glossary_names = {word for term in terms for name in [term['label'], *term['aliases']]
+                      for word in re.findall(r'[a-z]+', name.lower())}
+    if words & (CATALOGUE_ATTRIBUTE_WORDS | glossary_names):
+        return None
+    if 'compatible with' in text.lower() and re.search(r'\bsignal\b', attribute):
+        return 'signal compatibility'
+    return attribute[:80]
+
+
 def _edit_distance(left, right):
     if abs(len(left) - len(right)) > 2:
         return 3

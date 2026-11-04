@@ -1233,6 +1233,12 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             limitation = 'The catalogue does not specify that condition. I can show the published enclosure description.'
         if limitation is None and re.search(r'\b(how strong is strong enough|size (?:my|a|the) valve|valve sizing)\b', bare_query):
             limitation = 'The catalogue does not size valves. Tell me the required torque and I can find actuators that meet it.'
+        named_codes = policy.codes_in_text(query)
+        if limitation is None and len(named_codes) == 1:
+            attribute = policy.unsupported_lookup_attribute(query, named_codes[0], turn.terms)
+            if attribute:
+                limitation = (f"The catalogue doesn't publish {attribute} for {named_codes[0]}. "
+                              "I can show its published specifications.")
         if limitation:
             turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
                               context_before=context_before, model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
