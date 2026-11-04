@@ -48,8 +48,10 @@ def colloquial_requirements(query):
     result, notes = {}, []
     if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar|on/of|onoff|on off|on-off)\b', text):
         result['service'] = 'on_off'
-    if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias)\b', text):
+    if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias|control the flow precisely)\b', text):
         result['service'] = 'modulating'
+    if re.search(r'\b(outside|exterior|intemperie)\b|\boutdoors\b.*\bnot hazardous\b', text):
+        result['enclosure'] = 'weatherproof'
     if re.search(r'\b(battery|low voltage|bater[ií]a|bajo voltaje)\b', text):
         result['supply_voltage_v'] = 24
     if re.search(r'\b(solar|battery|bater[ií]a)\b', text):
@@ -66,7 +68,29 @@ def colloquial_requirements(query):
     match = re.search(r'\b(?:toque|torque|par)\s*m[ií]nimo\s*(?:de\s*)?(\d+(?:[.,]\d+)?)\s*nm\b', text)
     if match:
         result['min_torque_nm'] = Decimal(match.group(1).replace(',', '.'))
+    labels = {'explosionproof': ('enclosure', 'explosionproof', 'Explosionproof'),
+              'weatherproof': ('enclosure', 'weatherproof', 'Weatherproof'),
+              'modulating': ('service', 'modulating', 'Modulating')}
+    for token in re.findall(r'\b[a-z]{6,}\b', text):
+        ranked = sorted(((_edit_distance(token, label), label) for label in labels))
+        if ranked[0][0] <= 2 and (len(ranked) == 1 or ranked[0][0] < ranked[1][0]):
+            field, value, display = labels[ranked[0][1]]
+            result[field] = value
+            if token != ranked[0][1]:
+                notes.append(f"Interpreted '{token}' as {display}.")
     return result, notes
+
+
+def _edit_distance(left, right):
+    if abs(len(left) - len(right)) > 2:
+        return 3
+    row = list(range(len(right) + 1))
+    for i, char in enumerate(left, 1):
+        next_row = [i]
+        for j, other in enumerate(right, 1):
+            next_row.append(min(next_row[-1] + 1, row[j] + 1, row[j - 1] + (char != other)))
+        row = next_row
+    return row[-1]
 
 CONFLICT_MESSAGES = {
     "dc_frequency": "DC supply has no mains frequency. Do you need a DC actuator, or an AC actuator at {frequency_hz} Hz?",

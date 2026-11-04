@@ -48,6 +48,8 @@ def schemas(term_keys):
                              "reference_metric": enum(["operating_time", "fla", "lra", "motor_power", "torque"]),
                              "reference_direction": enum(["lower", "higher"]),
                              "reference_frequency_hz": {"type": "integer", "enum": [50, 60]},
+                             "equivalent_voltage_v": {"type": "number"},
+                             "equivalent_enclosure": enum(["weatherproof", "explosionproof"]),
                              "from_results_top": {"type": "integer"},
                              "from_results_items": {"type": "string"},
                              "list_results": boolean,

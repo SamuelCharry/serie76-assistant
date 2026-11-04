@@ -175,6 +175,8 @@ def schemas(term_keys):
         reference_metric: Literal['operating_time', 'fla', 'lra', 'motor_power', 'torque'] = 'operating_time'
         reference_direction: Literal['lower', 'higher'] = 'lower'
         reference_frequency_hz: Literal[50, 60] | None = None
+        equivalent_voltage_v: float | None = None
+        equivalent_enclosure: Literal['weatherproof', 'explosionproof'] | None = None
         from_results_top: int = 0
         from_results_items: str = ''
         list_results: bool = False
@@ -215,7 +217,7 @@ def schemas(term_keys):
 
 
 DESCRIPTIONS = {
-    "get_actuator": "Look up complete Base Part Numbers (up to four). For prior models use flat reference_kind=shown_position with 1-based reference_index, last_shown, focused, or compared_winner with reference_metric/direction/frequency. For the last ranked list use from_results_items='1,3' for comparisons, or list_results=true. Use focus=overview for full specs; include comma-separated explain_terms for combined facts/definitions.",
+    "get_actuator": "Look up complete Base Part Numbers (up to four). For prior models use flat reference_kind=shown_position with 1-based reference_index, last_shown, focused, or compared_winner with reference_metric/direction/frequency. For a same-frame voltage or enclosure equivalent of the focused model, set equivalent_voltage_v or equivalent_enclosure. For the last ranked list use from_results_items='1,3' for comparisons, or list_results=true. Use focus=overview for full specs; include comma-separated explain_terms for combined facts/definitions.",
     "search_actuators": "Find actuators for ALL stated requirements, including every numeric limit. New independent requests use refine=false; explicit follow-ups use refine=true or more/remove. For a follow-up asking to choose one, explain the choice or show the next page, set intent=pick, explain_pick or next_page. Unknown data never passes a threshold.",
     "explain_terms": "Quote only glossary definitions; absent terms use ask_clarification term_not_in_summary, not a related definition.",
     "ask_clarification": "Ask for missing data/disambiguation, or mark unsupported requests such as jokes and terms absent from the glossary. If prior results exist and the user wants a pick, explanation or next page, set intent=pick, explain_pick or next_page rather than repeating a question.",
@@ -525,6 +527,36 @@ class Turn:
                         selected = winners
             if not selected:
                 return self.clarify('which_product', 'Which shown model do you mean?', options=compared or shown[:4])
+        if selected and (args.get('equivalent_voltage_v') is not None or args.get('equivalent_enclosure')):
+            source = get_actuator(self.connection, selected[0])
+            if not source:
+                return self.clarify('which_product')
+            target_voltage = args.get('equivalent_voltage_v') or source['supply_voltage_v']
+            target_enclosure = args.get('equivalent_enclosure')
+            constraints = {'supply_voltage_v': target_voltage, 'limit': 100}
+            if target_enclosure:
+                constraints['enclosure'] = target_enclosure
+            rows = search_actuators(self.connection, SearchFilters.model_validate(constraints),
+                                    allow_ambiguous=True)['products']
+            size = selected[0][:3]
+            if target_enclosure:
+                rows = [row for row in rows if row['base_part_number'].startswith(size)]
+                source_torque = ranking.measurement(source, 'torque', {})
+                rows.sort(key=lambda row: (abs((ranking.measurement(row, 'torque', {}) or 0) -
+                                                (source_torque or 0)), row['base_part_number']))
+                rows = rows[:4]
+            else:
+                rows = [row for row in rows if row['base_part_number'][:6] == selected[0][:6]]
+            if not rows:
+                return AgentResult('The catalogue has no published equivalent for that frame and supply. '
+                                   'I can show nearby models.', context=self.context)
+            codes = [row['base_part_number'] for row in rows]
+            self.context['last_shown_list'] = codes
+            self.context['part_numbers'] = codes
+            self.trace['data'] = dict(status='equivalent_models', products=codes)
+            label = ('enclosure' if target_enclosure else 'voltage')
+            return AgentResult(f'Published {label} equivalents for {selected[0]}: ' + ', '.join(codes) + '.',
+                               [public_product(row) for row in rows], context=self.context)
         elif args.get('from_results_top'):
             n = args['from_results_top']
             if not ranked or not 1 <= n <= 4:
@@ -710,7 +742,7 @@ class Turn:
             facets['supply_voltage_v'] = [r for r in facets['supply_voltage_v'] if r['value'] in choices]
             if facets['supply_voltage_v']:
                 return self.question_result(['supply_voltage_v'], facets)
-        scenario = re.search(r'\b(hazardous|flammable gas(?:es)?|gas(?:es)?|mining|refinery|explosive|outdoor|rain|exteriores|intemperie)\b', self.query, re.I)
+        scenario = re.search(r'\b(hazardous|flammable|gas(?:es)?|mining|refinery|petrochemical|explosive|outdoor|rain|exteriores|intemperie)\b', self.query, re.I)
         if not scenario and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS) and not merged.get('sort_by'):
             # Never "recommend" the whole catalogue: a search needs at least one stated requirement.
             self.trace.setdefault("overrides", []).append("empty_search_clarified")
@@ -729,7 +761,7 @@ class Turn:
             message = policy.CONFLICT_MESSAGES[kind].format(**{k: merged.get(k) for k in ("frequency_hz", "phase_count")})
             return self.clarify("requirements", message, conflict=dict(kind=kind, fields=fields))
         explicit_enclosure = re.search(r'\b(explosionproof|weatherproof)\b', self.query, re.I)
-        if scenario and not explicit_enclosure:
+        if scenario and not explicit_enclosure and 'enclosure' not in inferred:
             from backend.catalog.repository import question_facets
             merged.pop('enclosure', None)
             self.context['filters'] = merged
@@ -1165,7 +1197,12 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             return finish(turn, turn.clarify('requirements',
                           'Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.'))
     if action is None and not answers and not remove_filters and turn.context.get('pending_questions'):
-        if bare_query == 'yes' and turn.context.get('proposed_enclosure') and any(
+        inferred_pending, _ = policy.colloquial_requirements(query)
+        if inferred_pending.get('enclosure') and any(q['id'] == 'enclosure' and
+                any(o['value'] == inferred_pending['enclosure'] for o in q['options'])
+                for q in turn.context['pending_questions']):
+            answers = {'enclosure': inferred_pending['enclosure']}
+        elif bare_query == 'yes' and turn.context.get('proposed_enclosure') and any(
                 q['id'] == 'enclosure' and any(o['value'] == turn.context['proposed_enclosure'] for o in q['options'])
                 for q in turn.context['pending_questions']):
             answers = {'enclosure': turn.context.pop('proposed_enclosure')}
