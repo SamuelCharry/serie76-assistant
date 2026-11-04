@@ -43,8 +43,11 @@ def schemas(term_keys):
     boolean = {"type": "boolean"}
     return {
         "get_actuator": obj({"part_numbers": array({"type": "string"}),
+                             "from_results_top": {"type": "integer"},
+                             "from_results_items": {"type": "string"},
+                             "list_results": boolean,
                              "focus": array(enum(FOCUS_FIELDS)), "focus_frequency_hz": {"type": "integer", "enum": [50, 60]},
-                             "focus_service": enum(["on_off", "modulating"]), "explain_terms": {"type": "string"}, "cancel_previous": boolean}, ["part_numbers"]),
+                             "focus_service": enum(["on_off", "modulating"]), "explain_terms": {"type": "string"}, "cancel_previous": boolean}),
         "search_actuators": obj({
             "enclosure": enum(["weatherproof", "explosionproof"]),
             "supply_voltage_v": {"type": "number"},

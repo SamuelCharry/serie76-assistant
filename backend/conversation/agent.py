@@ -166,7 +166,10 @@ def schemas(term_keys):
     explain = Annotated[list[TermKey], Field(max_length=3)]
 
     class LookupInput(Strict):
-        part_numbers: Annotated[list[Annotated[str, Field(max_length=40)]], Field(min_length=1, max_length=4)]
+        part_numbers: Annotated[list[Annotated[str, Field(max_length=40)]], Field(max_length=4)] = []
+        from_results_top: int = 0
+        from_results_items: str = ''
+        list_results: bool = False
         focus: Annotated[list[FocusSpec], Field(max_length=9)] = []
         cancel_previous: bool = False
 
@@ -202,7 +205,7 @@ def schemas(term_keys):
 
 
 DESCRIPTIONS = {
-    "get_actuator": "Look up complete Base Part Numbers (up to four); include focus and comma-separated explain_terms for combined facts/definitions in one call.",
+    "get_actuator": "Look up complete Base Part Numbers (up to four). For the last ranked list, use from_results_top=2 for the best two, from_results_items='1,2' for positions, or list_results=true for 'which ones'. Include focus and comma-separated explain_terms for combined facts/definitions in one call.",
     "search_actuators": "Find actuators for ALL stated requirements, including every numeric limit. New independent requests use refine=false; explicit follow-ups use refine=true or more/remove. Unknown data never passes a threshold.",
     "explain_terms": "Quote only glossary definitions; absent terms use ask_clarification term_not_in_summary, not a related definition.",
     "ask_clarification": "Ask for missing data/disambiguation, or mark unsupported requests such as jokes and terms absent from the glossary.",
@@ -424,6 +427,35 @@ class Turn:
         self.context.pop("pagination", None)
         notes, codes, missing, products, partial = [], [], [], [], []
         known = set(self.context.get("part_numbers", []))
+        ranked = self.context.get('last_ranked_list') or []
+        if args.get('list_results'):
+            if not ranked:
+                return self.clarify('which_product')
+            self.trace['data'] = dict(status='ranked_list', count=len(ranked), part_numbers=ranked)
+            by = ranking.ranked_by(self.context.get('filters') or {}, self.context.get('rank_by', 'closest_torque'))
+            return AgentResult(f'{len(ranked)} ranked models. Ranked by {by}.\n' + '\n'.join(ranked),
+                               context=self.context, lead='Ranked by ' + by + '.')
+        selected = []
+        if args.get('from_results_top'):
+            n = args['from_results_top']
+            if not ranked or not 1 <= n <= 4:
+                return self.clarify('which_product')
+            selected = ranked[:n]
+        elif args.get('from_results_items'):
+            import re
+            positions = args['from_results_items']
+            if not ranked or not re.fullmatch(r'[1-9]\d*(?:,[1-9]\d*){0,3}', positions):
+                return self.clarify('which_product')
+            indices = [int(part) - 1 for part in positions.split(',')]
+            if len(set(indices)) != len(indices) or any(i >= len(ranked) for i in indices):
+                return self.clarify('which_product')
+            selected = [ranked[i] for i in indices]
+        if selected:
+            known.update(selected)
+            args = dict(args, part_numbers=selected)
+            self.trace.setdefault('overrides', []).append('ranked_reference_resolved')
+        elif not args['part_numbers']:
+            return self.clarify('part_number')
         import re
         if (len(known) > 1 and not policy.codes_in_text(self.query)
                 and re.search(r"\b(?:its|it|that one|this one)\b", self.query.lower())):
