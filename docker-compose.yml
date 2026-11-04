@@ -27,6 +27,8 @@ services:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
       OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
       OPENROUTER_CHAT_MODEL: ${OPENROUTER_CHAT_MODEL:-}
+      # Optional transient-error fallback, same endpoint/key; each attempt counts toward the local cap.
+      OPENROUTER_FALLBACK_MODEL: ${OPENROUTER_FALLBACK_MODEL:-}
       DEMO_USERS_JSON: ${DEMO_USERS_JSON:-}
       OPENROUTER_REQUIRE_PARAMETERS: ${OPENROUTER_REQUIRE_PARAMETERS:-true}
       AGENT_MAX_CALLS_PER_HOUR: ${AGENT_MAX_CALLS_PER_HOUR:-120}
