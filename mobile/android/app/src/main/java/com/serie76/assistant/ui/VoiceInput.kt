@@ -26,8 +26,12 @@ import kotlinx.coroutines.delay
 
 class VoiceInputControls(val state: VoiceState, val tap: () -> Unit, val cancel: () -> Unit)
 
+/** Registers cancellation and returns a disposal callback to remove that registration. */
+typealias BindVoiceInput = (() -> Unit) -> (() -> Unit)
+
 @Composable
-fun rememberVoiceInput(draft: String, enabled: Boolean, conversationId: String?, onDraft: (String) -> Unit): VoiceInputControls {
+fun rememberVoiceInput(draft: String, enabled: Boolean, conversationId: String?, onDraft: (String) -> Unit,
+                       bindVoiceInput: BindVoiceInput? = null): VoiceInputControls {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val latestDraft by rememberUpdatedState(draft)
@@ -37,6 +41,14 @@ fun rememberVoiceInput(draft: String, enabled: Boolean, conversationId: String?,
     val controller = remember(context) { VoiceController({ createVoiceRecognizer(context) }, { state = it }, { updateDraft(it) }) }
     var rationale by remember { mutableStateOf(false) }
     var startAfterPermission by remember { mutableStateOf(false) }
+    DisposableEffect(controller, bindVoiceInput) {
+        val unbind = bindVoiceInput?.invoke {
+            startAfterPermission = false
+            rationale = false
+            controller.cancel()
+        }
+        onDispose { unbind?.invoke() }
+    }
     fun startIfForeground() {
         if (latestEnabled && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
             startAfterPermission = false

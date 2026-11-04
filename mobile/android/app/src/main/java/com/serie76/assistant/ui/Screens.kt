@@ -61,6 +61,8 @@ fun SeriesApp(viewModel: AppViewModel) {
 @Composable
 private fun SeriesAppContent(viewModel: AppViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val bindVoiceInput = remember(viewModel) { viewModel::bindVoiceInput }
+    val account = LocalAccount.current?.withVoiceCancellation(viewModel::cancelVoiceInput)
     val drawer = rememberDrawerState(DrawerValue.Closed)
     val keyboard = LocalSoftwareKeyboardController.current
     val snackbar = remember { SnackbarHostState() }
@@ -86,6 +88,7 @@ private fun SeriesAppContent(viewModel: AppViewModel) {
         }
     }
     BackHandler(state.screen == "sessions" || drawer.isOpen) { viewModel.dismissConversations() }
+    CompositionLocalProvider(LocalAccount provides account) {
     Box(Modifier.fillMaxSize()) {
     ModalNavigationDrawer(
         drawerState = drawer,
@@ -105,7 +108,8 @@ private fun SeriesAppContent(viewModel: AppViewModel) {
                 viewModel::reconcile, viewModel::newConversation,
                 viewModel::chooseAnswer, viewModel::editAnswer, viewModel::submitAnswers,
                 viewModel::cancelQuestion, viewModel::activateComposer, viewModel::removeFilter,
-                viewModel::nextQuestion, viewModel::previousQuestion, viewModel::sendSuggestion)
+                viewModel::nextQuestion, viewModel::previousQuestion, viewModel::sendSuggestion,
+                bindVoiceInput = bindVoiceInput)
     }
     SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
     state.deleteCandidate?.let { session ->
@@ -113,6 +117,7 @@ private fun SeriesAppContent(viewModel: AppViewModel) {
             text = { Text("Delete ${session.title}?") },
             confirmButton = { TextButton(onClick = viewModel::confirmDelete) { Text("Delete") } },
             dismissButton = { TextButton(onClick = viewModel::cancelDelete) { Text("Cancel") } })
+    }
     }
     }
 }
@@ -177,7 +182,8 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
                onReload: () -> Unit, onOlder: () -> Unit, onReconcile: () -> Unit, onNew: () -> Unit = {},
                onChoose: (String) -> Unit = {}, onEditAnswer: (Int) -> Unit = {}, onSubmitAnswers: () -> Unit = {},
                onCancelQuestion: () -> Unit = {}, onActivateComposer: () -> Unit = {}, onRemoveFilter: (ActiveFilter) -> Unit = {},
-               onNextQuestion: () -> Unit = {}, onPreviousQuestion: () -> Unit = {}, onSuggestion: (Suggestion) -> Unit = {}) {
+               onNextQuestion: () -> Unit = {}, onPreviousQuestion: () -> Unit = {}, onSuggestion: (Suggestion) -> Unit = {},
+               bindVoiceInput: BindVoiceInput? = null) {
     val listState = rememberLazyListState()
     val focus = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
@@ -185,7 +191,8 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
     val developer = LocalDeveloperMode.current
     var debugMessageId by rememberSaveable(state.sessionId) { mutableStateOf<String?>(null) }
     LaunchedEffect(developer.enabled, state.screen) { if (!developer.enabled || state.screen != "chat") debugMessageId = null }
-    val voice = rememberVoiceInput(state.draft, state.screen == "chat" && state.canSend && debugMessageId == null, state.sessionId, onDraft)
+    val voice = rememberVoiceInput(state.draft, state.screen == "chat" && state.canSend && debugMessageId == null,
+        state.sessionId, onDraft, bindVoiceInput)
     val send = { voice.cancel(); onSend() }
     LaunchedEffect(state.messages.lastOrNull()?.id, state.sending) {
         if (state.messages.isNotEmpty()) listState.animateScrollToItem((listState.layoutInfo.totalItemsCount - 1).coerceAtLeast(0))
@@ -200,8 +207,8 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
             TopAppBar(title = { Text(if (state.messages.isEmpty() && state.sessionId == null) "" else state.title,
                     maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleLarge) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                navigationIcon = { IconButton(onClick = onBack) { Icon(MenuLines, "Open conversation history") } },
-                actions = { IconButton(onClick = onNew, enabled = !state.sending) { Icon(EditLines, "New conversation") } })
+                navigationIcon = { IconButton(onClick = { voice.cancel(); onBack() }) { Icon(MenuLines, "Open conversation history") } },
+                actions = { IconButton(onClick = { voice.cancel(); onNew() }, enabled = !state.sending) { Icon(EditLines, "New conversation") } })
             ActiveFilterTags(state.activeFilters, state.canSend, onRemoveFilter)
             }
         },

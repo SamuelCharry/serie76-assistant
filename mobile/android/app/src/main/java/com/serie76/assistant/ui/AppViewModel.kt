@@ -60,6 +60,21 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     private var sessionsJob: Job? = null
     private var threadGeneration = 0
     private var deleteJob: Job? = null
+    private var voiceCancellation: (() -> Unit)? = null
+
+    /** The composed screen owns the recognizer; navigation cancels it before mutating the draft. */
+    fun bindVoiceInput(cancel: () -> Unit): () -> Unit {
+        voiceCancellation?.invoke()
+        voiceCancellation = cancel
+        return {
+            if (voiceCancellation === cancel) {
+                cancel()
+                voiceCancellation = null
+            }
+        }
+    }
+
+    fun cancelVoiceInput() { voiceCancellation?.invoke() }
 
     init {
         refreshSessions()
@@ -84,6 +99,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
 
     fun newConversation() {
         if (state.value.sending) return
+        cancelVoiceInput()
         historyJob?.cancel()
         threadGeneration++
         saved["sessionId"] = null
@@ -97,6 +113,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
 
     fun open(session: Session) {
         if (state.value.sending) return
+        cancelVoiceInput()
         threadGeneration++
         saved["sessionId"] = session.id
         saved["screen"] = "chat"
@@ -112,6 +129,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     }
 
     fun showConversations() {
+        cancelVoiceInput()
         saved["screen"] = "sessions"
         mutable.update { it.copy(screen = "sessions") }
         refreshSessions()
@@ -185,6 +203,8 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     fun clearDeleteNotice() { mutable.update { it.copy(deleteNotice = null) } }
 
     override fun onCleared() {
+        cancelVoiceInput()
+        voiceCancellation = null
         commitPendingDelete()
         super.onCleared()
     }

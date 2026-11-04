@@ -46,7 +46,7 @@ The current history endpoint does not embed traces. The coordinator explicitly d
 
 The same instructions are published in [mobile/android/README.md](../../mobile/android/README.md). Root README/wiki updates are outside this worker's allowed scope and remain with the coordinator.
 
-## Verified locally
+## Initial verification (before the review fix below)
 
 From the repository root:
 
@@ -54,7 +54,7 @@ From the repository root:
 ./mobile/android/gradlew.bat -p mobile/android testDebugUnitTest assembleDebug assembleRelease compileDebugAndroidTestKotlin
 ```
 
-Final run: exit 0, **BUILD SUCCESSFUL in 1m 48s**. All **69 JVM tests passed, zero failures and errors**: 51 existing tests plus 10 voice tests and 8 developer-debug tests. Both debug and release APKs assembled; release remains unsigned. Instrumentation sources compile, including the adapted per-answer sheet test, but were not executed on a device.
+Initial T9 run: exit 0, **BUILD SUCCESSFUL in 1m 48s**. All **69 JVM tests passed, zero failures and errors**: 51 existing tests plus 10 voice tests and 8 developer-debug tests. Both debug and release APKs assembled; release remains unsigned. Instrumentation sources compile, including the adapted per-answer sheet test, but were not executed on a device.
 
 The voice tests use a fake recognizer and cover partial/final text, stop, cancel, stale callbacks after typing/new recognition, permission denial/revocation, unavailable service, errors, empty final results and timeout release. Debug tests cover the seven-tap toggle/reset, sliding timing window and exact boundary, icon gating by mode/role, nested and legacy metrics, raw/validated parameter mapping, retrieval, missing/null values, and the authenticated persisted-answer endpoint. Tests were first run against missing voice/debug contracts and failed, then passed after implementation. `git diff --check` passed. Static review confirmed the retained theme, secure-window flag and connection-pool policy.
 
@@ -70,3 +70,18 @@ The voice tests use a fake recognizer and cover partial/final text, stop, cancel
 - Verify current and resumed answers against the merged backend with `DEV_DEBUG=true/false`, including real retrieval traces. JVM fixtures/builds do not establish device recognition or Android-to-real-LLM acceptance.
 
 No emulator, physical device, live backend or provider was used for these checks.
+
+## Independent-review fix: cancel dictation before conversation reset
+
+The review found that New conversation could clear an unsent draft while its recognizer remained active: `sessionId` stayed `null`, so the previous disposal key did not change. A late partial or final result could therefore restore discarded text. This was a lifecycle bug, not a recognition-quality issue.
+
+The top-bar New conversation and history actions now call `voice.cancel()` before navigation. The composed voice controller also registers a cancellation callback with `AppViewModel`; `newConversation()`, `open(session)` (including reopening the same ID), opening the drawer and clearing the chat ViewModel cancel synchronously, without waiting for recomposition or a changed session ID. The registration is removed at disposal and cannot detach a newer screen's registration. The profile logout action cancels before invoking asynchronous sign-out, so a slow or failed HTTP logout does not leave audio capture running. Auth-driven chat-owner clearing also releases the recognizer.
+
+Three new fake-recognizer ViewModel tests first failed on the unfixed navigation paths: unsent null-to-null reset, same-session open and owner clearing. After the fix, five regressions pass, additionally covering cancellation before logout starts and stale binding disposal. They assert recognizer release, inactive voice state, an empty reset draft and rejection of late recognition callbacks; the null-session test also checks the saved draft. The previous 69 JVM tests still pass, for **74 tests total, zero failures or errors**.
+
+Post-review verification: `./mobile/android/gradlew.bat -p mobile/android testDebugUnitTest assembleDebug assembleRelease` exited 0 with **BUILD SUCCESSFUL in 2m 6s**. `git diff --check` passed. No device, backend or inference calls were used; the device/integration limits above still apply. The APKs below supersede the initial hashes above:
+
+| APK path from repository root | Bytes | SHA-256 |
+|---|---:|---|
+| `mobile/android/app/build/outputs/apk/debug/app-debug.apk` | 12,784,504 | `98426827f0ee35e939359306fb978330cd932aa773aac5dcea8ed6ce512d96b5` |
+| `mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk` | 2,182,633 | `ed8d1d27afb9f40899dc10cacdf04b3107b17ce28a5cc34cf522bd72b7b04d8a` |
