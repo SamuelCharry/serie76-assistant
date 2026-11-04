@@ -46,6 +46,14 @@ def colloquial_requirements(query):
     """Closed, explicit phrase map; returns only constraints stated in this turn."""
     text = query.lower()
     result, notes = {}, []
+    for phrase, name in (('indoors', 'indoor'), ('indoor', 'indoor'),
+                         ('quiet', 'quiet'), ('compact', 'compact')):
+        if re.search(r'\b' + phrase + r'\b', text):
+            note = ("The catalogue doesn't classify models as indoor; showing all enclosures."
+                    if name == 'indoor' else
+                    f"The catalogue doesn't classify models as {name}; showing models by published fields.")
+            if note not in notes:
+                notes.append(note)
     if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar|on/of|onoff|on off|on-off)\b', text):
         result['service'] = 'on_off'
     if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open)\b', text):
@@ -70,7 +78,8 @@ def colloquial_requirements(query):
         notes.append(f'{match.group(1)} kNm = {value:f} Nm.'.replace('.0 Nm.', ' Nm.'))
     match = re.search(r'\b(?:at least|minimum|min(?:imum)?\s+torque)\s*(\d+(?:[.,]\d+)?)\s*nm\b', text)
     if match:
-        result['min_torque_nm'] = Decimal(match.group(1).replace(',', '.'))
+        number = Decimal(match.group(1).replace(',', '.'))
+        result['min_torque_nm'] = int(number) if number == int(number) else float(number)
     if re.search(r'\b(?:a prueba de explosi[oó]n)\b', text):
         result['enclosure'] = 'explosionproof'
     match = re.search(r'\b(?:toque|torque|par)\s*m[ií]nimo\s*(?:de\s*)?(\d+(?:[.,]\d+)?)\s*nm\b', text)

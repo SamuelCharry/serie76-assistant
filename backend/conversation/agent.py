@@ -591,8 +591,13 @@ class Turn:
         import re
         if (not selected and not args.get('_trusted_equivalent') and len(known) > 1 and not policy.codes_in_text(self.query)
                 and re.search(r"\b(?:its|it|that one|this one)\b", self.query.lower())):
-            self.trace.setdefault("overrides", []).append("ambiguous_singular_reference")
-            return self.clarify("which_product")
+            focused = self.context.get('focused_model')
+            if not focused:
+                self.trace.setdefault("overrides", []).append("ambiguous_singular_reference")
+                return self.clarify("which_product")
+            selected = [focused]
+            args = dict(args, part_numbers=selected)
+            self.trace.setdefault('overrides', []).append('focused_reference_resolved')
         mentioned = {c for text in self.texts for c in policy.codes_in_text(text)}
         grounded_codes, repaired = policy.grounded_lookup_codes(args["part_numbers"], self.query)
         if repaired:
@@ -650,7 +655,7 @@ class Turn:
         focus = quality.normalized_focus(args.get("focus") or self.context.get("focus") or ["overview"])
         if len(products) == 1 and not re.search(r'\b(full|all|complete)\s+(?:specs?|data|details?)\b|\b(?:specs?|overview)\b', self.query, re.I):
             requested = metrics.intent(self.query)
-            named = set(re.findall(r'\b(?:fla|lra|power|torque|duty|cycles?|starts?|speed|time|arranque)\b',
+            named = set(re.findall(r'\b(?:fla|lra|power|torque|duty|cycles?|starts?|speed|time|arranque|velocidad|operaci[oó]n)\b',
                                    self.query, re.I))
             if requested and len(named) == 1:
                 metric, _, hz, service = requested
@@ -922,6 +927,8 @@ class Turn:
             question.recommendation = rec
             question.answer = f"{result['total']} actuators meet: {policy.describe(merged)}." + (
                 '\n' + question.answer if question.interaction else '')
+            if notes:
+                question.answer += '\n' + '\n'.join(dict.fromkeys(notes))
             question.answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
             if 'lowest_power' in (merged.get('sort_by') or []):
@@ -1052,6 +1059,8 @@ class Turn:
                 ).fetchone()['n']
                 if unavailable:
                     answer += f' {unavailable} catalogue rows marked N/A have no published values and are excluded.'
+                if notes:
+                    answer += '\n' + '\n'.join(dict.fromkeys(notes))
             answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
             products = [quality.focused_product(public_product(p) | {'frequencies': p.get('frequencies', [])}, focus)
