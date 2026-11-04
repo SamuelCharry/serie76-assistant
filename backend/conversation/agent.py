@@ -608,6 +608,24 @@ class Turn:
             self.trace["validation"] = ["conflict:" + kind]
             message = policy.CONFLICT_MESSAGES[kind].format(**{k: merged.get(k) for k in ("frequency_hz", "phase_count")})
             return self.clarify("requirements", message, conflict=dict(kind=kind, fields=fields))
+        scenario = re.search(r'\b(hazardous|flammable gas(?:es)?|gas(?:es)?|mining|outdoor|rain)\b', self.query, re.I)
+        explicit_enclosure = re.search(r'\b(explosionproof|weatherproof)\b', self.query, re.I)
+        if scenario and not explicit_enclosure:
+            from backend.catalog.repository import question_facets
+            merged.pop('enclosure', None)
+            self.context['filters'] = merged
+            self.trace['merged_parameters'] = merged
+            scoped = SearchFilters.model_validate(merged)
+            question = self.question_result(['enclosure'], question_facets(self.connection, scoped, ['enclosure']))
+            for option in question.interaction['questions'][0]['options']:
+                term = self.term_index[option['value']]
+                option['label'] = term['label'] + ': ' + term['definition']
+            prompt = 'Which published enclosure matches your site? ' + ' '.join(
+                option['label'] for option in question.interaction['questions'][0]['options'])
+            question.answer = prompt
+            question.clarification['message'] = prompt
+            self.trace['data'] = dict(status='enclosure_confirmation', options=question.interaction['questions'][0]['options'])
+            return question
         try:
             filters = SearchFilters.model_validate(merged)
         except ValidationError as exc:
