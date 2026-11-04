@@ -15,6 +15,11 @@ def torque_unit(filters):
     return 'in-lb' if filters.get('min_torque_in_lb') is not None and filters.get('min_torque_nm') is None else 'Nm'
 
 
+def upper_torque_only(filters):
+    constraint = filters.get('min_torque_nm') if filters.get('min_torque_nm') is not None else filters.get('min_torque_in_lb')
+    return constraint is not None and all(bound_operator(item, 'gte') in ('lt', 'lte') for item in bounds(constraint))
+
+
 def measurement(product, stem, filters):
     values = product['measurements']
     if stem == 'torque':
@@ -33,7 +38,7 @@ def measurement(product, stem, filters):
         threshold = filters.get('min_torque_nm') if unit == 'nm' else filters.get('min_torque_in_lb')
         if threshold is not None:
             found = [value for value in found if _inside_bounds(value, threshold)]
-    return min(found) if found else None
+    return (max(found) if upper_torque_only(filters) else min(found)) if found else None
 
 
 def _inside_bounds(value, constraint):
@@ -114,7 +119,8 @@ def rank(products, filters, by='closest_torque'):
         elif by == 'lowest_power':
             primary = missing(product['measurements'].get('motor_power_w'))
         else:
-            primary = missing(torque) if threshold is not None else (False, 0)
+            primary = ((torque is None, -torque if torque is not None else 0) if upper_torque_only(filters)
+                       else missing(torque)) if threshold is not None else (False, 0)
         return primary, missing(fla), missing(speed), product['base_part_number']
 
     return sorted(products, key=key)
@@ -130,7 +136,8 @@ def ranked_by(filters, by='closest_torque'):
     if minimum is None:
         minimum = filters.get('min_torque_in_lb')
     if minimum is not None:
-        return f'closest torque at or above {_num(bound_value(minimum))} {torque_unit(filters)}, then lowest FLA'
+        direction = 'below' if upper_torque_only(filters) else 'above'
+        return f'closest torque at or {direction} {_num(bound_value(minimum))} {torque_unit(filters)}, then lowest FLA'
     return 'lowest FLA, then shortest operating time'
 
 
@@ -141,7 +148,7 @@ def item(product, filters, reason=None):
     qualifying = (filters.get('min_torque_nm') if filters.get('min_torque_nm') is not None
                   else filters.get('min_torque_in_lb'))
     if qualifying is not None and not filters.get('service') and len(torques) > 1:
-        torques = sorted(torques, key=lambda pair: pair[1])
+        torques = sorted(torques, key=lambda pair: pair[1], reverse=upper_torque_only(filters))
     for index, (label, torque) in enumerate(torques):
         suffix = (' (same torque for On/Off and Modulating)' if label == 'Shared torque' else
                   f' (closest to {_num(bound_value(qualifying))} {torque_unit(filters)})'

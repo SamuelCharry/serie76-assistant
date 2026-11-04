@@ -15,6 +15,8 @@ class IntegrityTests(Base):
         self.assertEqual(set(result.context['last_ranked_list']),
                          {'761A00-11320000/A', '761B00-11320000/A'})
         self.assertEqual(result.context['filters']['min_torque_nm'], {'value': 100, 'op': 'lte'})
+        self.assertIn('at or below 100 Nm', result.recommendation['ranked_by'])
+        self.assertEqual(result.recommendation['items'][0]['part_number'], '761B00-11320000/A')
 
     def test_short_mod_keeps_service_for_pick(self):
         first = self.turn('110 mod 200nm', ('search_actuators', {'supply_voltage_v': 110, 'min_torque_nm': 200}))
