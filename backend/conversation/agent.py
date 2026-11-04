@@ -547,7 +547,10 @@ class Turn:
                 source_torque = ranking.measurement(source, 'torque', {})
                 rows.sort(key=lambda row: (abs((ranking.measurement(row, 'torque', {}) or 0) -
                                                 (source_torque or 0)), row['base_part_number']))
-                rows = rows[:4]
+                if rows:
+                    best_distance = abs((ranking.measurement(rows[0], 'torque', {}) or 0) - (source_torque or 0))
+                    rows = [row for row in rows if abs((ranking.measurement(row, 'torque', {}) or 0) -
+                                                       (source_torque or 0)) == best_distance]
             else:
                 rows = [row for row in rows if row['base_part_number'][:6] == selected[0][:6]]
             if not rows:
@@ -557,6 +560,11 @@ class Turn:
             self.context['last_shown_list'] = codes
             self.context['part_numbers'] = codes
             self.trace['data'] = dict(status='equivalent_models', products=rows)
+            if len(codes) == 1:
+                target_codes = [selected[0], codes[0]] if 'compare' in self.query.lower() else codes
+                self.context['part_numbers'] = target_codes
+                return self.lookup(dict(part_numbers=target_codes, focus=['overview'],
+                                        explain_terms=[], _trusted_equivalent=True))
             label = ('enclosure' if target_enclosure else 'voltage')
             return AgentResult(f'Published {label} equivalents for {selected[0]}: ' + ', '.join(codes) + '.',
                                [public_product(row) for row in rows], context=self.context)
@@ -581,7 +589,7 @@ class Turn:
         elif not args['part_numbers']:
             return self.clarify('part_number')
         import re
-        if (not selected and len(known) > 1 and not policy.codes_in_text(self.query)
+        if (not selected and not args.get('_trusted_equivalent') and len(known) > 1 and not policy.codes_in_text(self.query)
                 and re.search(r"\b(?:its|it|that one|this one)\b", self.query.lower())):
             self.trace.setdefault("overrides", []).append("ambiguous_singular_reference")
             return self.clarify("which_product")
@@ -613,6 +621,13 @@ class Turn:
                 (prefix.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%",),
             ).fetchall() if prefix else []
             options = [r["base_part_number"] for r in rows]
+            if (len(options) == 1 and re.fullmatch(r'[A-Z0-9]{6}-[A-Z0-9]{8}', prefix)
+                    and options[0] == prefix + '/A'):
+                code = options[0]
+                self.context['part_numbers'] = [code]
+                result = self.lookup(dict(part_numbers=[code], focus=['overview'], explain_terms=[]))
+                result.answer = f'Interpreted {prefix} as {code}.\n' + result.answer
+                return result
             self.trace["data"] = dict(status="partial_part_number", prefix=prefix, candidates=options)
             if options:
                 message = (f"'{prefix}' is not a complete Base Part Number. Catalogue codes starting with it: "

@@ -45,5 +45,5 @@ class UnderstandingTests(Base):
         result = self.turn('the explosionproof equivalent',
                            ('get_actuator', {'reference_kind': 'focused',
                                              'equivalent_enclosure': 'explosionproof'}))
-        self.assertIn('763X30-11320000/A', result.answer)
         self.assertIn('763Y30-11320000/A', result.answer)
+        self.assertEqual([p['base_part_number'] for p in result.products], ['763Y30-11320000/A'])
