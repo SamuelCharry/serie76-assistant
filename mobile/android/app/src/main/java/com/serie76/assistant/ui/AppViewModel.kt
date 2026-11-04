@@ -32,7 +32,6 @@ data class AppState(
     val sending: Boolean = false,
     val sendError: String? = null,
     val needsReconcile: Boolean = false,
-    val debugMessageId: String? = null,
     val question: QuestionStepper? = null,
     val composerActive: Boolean = false,
     val suggestionsDismissed: Boolean = false,
@@ -52,10 +51,9 @@ private fun pendingQuestion(message: Message?): QuestionStepper? = message?.take
 class AppViewModel(private val repository: ConversationRepository, private val saved: SavedStateHandle,
                    private val deleteCommitScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)) : ViewModel() {
     private val mutable = MutableStateFlow(AppState(
-        screen = saved["screen"] ?: "chat", sessionId = saved["sessionId"], draft = saved["draft"] ?: "",
+        screen = saved.get<String>("screen")?.takeIf { it == "sessions" } ?: "chat", sessionId = saved["sessionId"], draft = saved["draft"] ?: "",
         // A process may have died after the server committed a request. Reconcile before resend.
         needsReconcile = saved["inFlight"] ?: false,
-        debugMessageId = saved["debugMessageId"],
     ))
     val state = mutable.asStateFlow()
     private var historyJob: Job? = null
@@ -110,14 +108,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     }
 
     fun back() {
-        if (state.value.screen == "debug") {
-            saved["screen"] = "chat"
-            mutable.update { it.copy(screen = "chat") }
-        } else {
-            saved["screen"] = "sessions"
-            mutable.update { it.copy(screen = "sessions") }
-            refreshSessions()
-        }
+        showConversations()
     }
 
     fun showConversations() {
@@ -267,13 +258,4 @@ class AppViewModel(private val repository: ConversationRepository, private val s
         if (id != null) loadHistory(id) else back()
     }
 
-    fun debug() {
-        saved["screen"] = "debug"
-        mutable.update { it.copy(screen = "debug") }
-    }
-
-    fun debugMessage(id: String) {
-        saved["debugMessageId"] = id
-        mutable.update { it.copy(debugMessageId = id) }
-    }
 }

@@ -70,4 +70,21 @@ class VoiceInputTest {
         first.events.final("stale"); second.events.final("new")
         assertEquals("new", text)
     }
+    @Test fun `empty final keeps partial for review and reports no match`() {
+        val fake = Fake(); var text = ""
+        val voice = VoiceController({ fake }, {}, { text = it })
+        voice.start(true, ""); fake.events.partial("review"); fake.events.final("")
+        assertEquals("review", text); assertEquals(VoiceError.NO_MATCH, voice.state.error)
+    }
+    @Test fun `timeout releases a recognizer that never returns`() {
+        val fake = Fake(); val voice = VoiceController({ fake }, {}, {})
+        voice.start(true, ""); voice.stop(); voice.timeout()
+        assertTrue(fake.released); assertFalse(voice.state.active)
+        assertEquals(VoiceError.NO_MATCH, voice.state.error)
+    }
+    @Test fun `revoked permission is handled without crashing`() {
+        val voice = VoiceController({ throw SecurityException("revoked") }, {}, {})
+        voice.start(true, "")
+        assertEquals(VoiceError.PERMISSION, voice.state.error)
+    }
 }

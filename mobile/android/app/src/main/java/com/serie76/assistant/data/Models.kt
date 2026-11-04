@@ -161,14 +161,28 @@ data class Product(
 data class ProductSource(val document: String = "", val page: Int? = null, val table: String? = null)
 
 @Serializable
-data class ToolCall(val name: String, val parameters: JsonElement, val data: JsonElement)
+data class ToolCall(
+    val name: String? = null,
+    val parameters: JsonElement = JsonObject(emptyMap()),
+    val data: JsonElement = JsonObject(emptyMap()),
+    @SerialName("raw_parameters") val rawParameters: JsonElement? = null,
+    @SerialName("validated_parameters") val validatedParameters: JsonElement? = null,
+    @SerialName("merged_parameters") val mergedParameters: JsonElement? = null,
+    val validation: JsonElement? = null,
+    val model: JsonElement? = null,
+    val renderer: JsonElement? = null,
+    @SerialName("context_before") val contextBefore: JsonElement? = null,
+    @SerialName("context_after") val contextAfter: JsonElement? = null,
+)
 
 @Serializable
 data class DebugResponse(
     @SerialName("message_id") val messageId: String,
     @SerialName("session_id") val sessionId: String,
-    @SerialName("tool_calls") val toolCalls: List<ToolCall>,
+    @SerialName("tool_calls") val toolCalls: List<ToolCall> = emptyList(),
     @SerialName("latency_ms") val latencyMs: Long? = null,
     val attempts: Int? = null,
     @SerialName("llm_called") val llmCalled: Boolean? = null,
+    val debug: JsonObject = JsonObject(emptyMap()),
+    val retrieval: JsonElement? = null,
 )

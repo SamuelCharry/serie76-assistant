@@ -3,8 +3,6 @@
 package com.serie76.assistant.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.BorderStroke
@@ -48,7 +46,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.serie76.assistant.BuildConfig
 import com.serie76.assistant.data.*
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -58,6 +55,11 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SeriesApp(viewModel: AppViewModel) {
+    DeveloperModeProvider { SeriesAppContent(viewModel) }
+}
+
+@Composable
+private fun SeriesAppContent(viewModel: AppViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val drawer = rememberDrawerState(DrawerValue.Closed)
     val keyboard = LocalSoftwareKeyboardController.current
@@ -83,11 +85,10 @@ fun SeriesApp(viewModel: AppViewModel) {
             if (value == DrawerValue.Closed && latestScreen == "sessions") viewModel.dismissConversations()
         }
     }
-    BackHandler(state.screen == "debug") { viewModel.back() }
     BackHandler(state.screen == "sessions" || drawer.isOpen) { viewModel.dismissConversations() }
     Box(Modifier.fillMaxSize()) {
     ModalNavigationDrawer(
-        drawerState = drawer, gesturesEnabled = state.screen != "debug",
+        drawerState = drawer,
         scrimColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.24f),
         drawerContent = {
             ModalDrawerSheet(modifier = Modifier.fillMaxWidth(0.84f),
@@ -95,21 +96,16 @@ fun SeriesApp(viewModel: AppViewModel) {
                 drawerShape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp)) {
                 ConversationsScreen(state, viewModel::newConversation, viewModel::open,
                     { viewModel.refreshSessions() }, { viewModel.refreshSessions(more = true) },
-                    viewModel::dismissConversations, viewModel::debug, viewModel::requestDelete)
+                    viewModel::dismissConversations, viewModel::requestDelete)
             }
         }
     ) {
-        // Drawer does not replace or recreate the chat; only debug changes surface.
-        Crossfade(targetState = BuildConfig.DEBUG && state.screen == "debug",
-            animationSpec = tween(180), label = "Screen transition") { debug ->
-            if (debug) DeveloperScreen(state, viewModel::back, viewModel::debugMessage)
-            else ChatScreen(state, viewModel::showConversations, viewModel::draft, viewModel::send,
+        ChatScreen(state, viewModel::showConversations, viewModel::draft, viewModel::send,
                 { viewModel.loadHistory() }, { viewModel.loadHistory(older = true) },
-                viewModel::reconcile, viewModel::debug, viewModel::newConversation,
+                viewModel::reconcile, viewModel::newConversation,
                 viewModel::chooseAnswer, viewModel::editAnswer, viewModel::submitAnswers,
                 viewModel::cancelQuestion, viewModel::activateComposer, viewModel::removeFilter,
                 viewModel::nextQuestion, viewModel::previousQuestion, viewModel::sendSuggestion)
-        }
     }
     SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
     state.deleteCandidate?.let { session ->
@@ -123,7 +119,7 @@ fun SeriesApp(viewModel: AppViewModel) {
 
 @Composable
 fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) -> Unit,
-                        onRefresh: () -> Unit, onMore: () -> Unit, onClose: () -> Unit = {}, onDebug: () -> Unit = {},
+                        onRefresh: () -> Unit, onMore: () -> Unit, onClose: () -> Unit = {},
                         onDelete: (Session) -> Unit = {}) {
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(horizontal = 20.dp)) {
         Row(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -172,14 +168,13 @@ fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) ->
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
         ProfileMenu()
-        DeveloperEntry(onDebug)
         Spacer(Modifier.height(12.dp))
     }
 }
 
 @Composable
 fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, onSend: () -> Unit,
-               onReload: () -> Unit, onOlder: () -> Unit, onReconcile: () -> Unit, onDebug: () -> Unit, onNew: () -> Unit = {},
+               onReload: () -> Unit, onOlder: () -> Unit, onReconcile: () -> Unit, onNew: () -> Unit = {},
                onChoose: (String) -> Unit = {}, onEditAnswer: (Int) -> Unit = {}, onSubmitAnswers: () -> Unit = {},
                onCancelQuestion: () -> Unit = {}, onActivateComposer: () -> Unit = {}, onRemoveFilter: (ActiveFilter) -> Unit = {},
                onNextQuestion: () -> Unit = {}, onPreviousQuestion: () -> Unit = {}, onSuggestion: (Suggestion) -> Unit = {}) {
@@ -187,7 +182,10 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
     val focus = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
     val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
-    val voice = rememberVoiceInput(state.draft, state.screen == "chat" && state.canSend, state.sessionId, onDraft)
+    val developer = LocalDeveloperMode.current
+    var debugMessageId by rememberSaveable(state.sessionId) { mutableStateOf<String?>(null) }
+    LaunchedEffect(developer.enabled, state.screen) { if (!developer.enabled || state.screen != "chat") debugMessageId = null }
+    val voice = rememberVoiceInput(state.draft, state.screen == "chat" && state.canSend && debugMessageId == null, state.sessionId, onDraft)
     val send = { voice.cancel(); onSend() }
     LaunchedEffect(state.messages.lastOrNull()?.id, state.sending) {
         if (state.messages.isNotEmpty()) listState.animateScrollToItem((listState.layoutInfo.totalItemsCount - 1).coerceAtLeast(0))
@@ -261,6 +259,12 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
             state.historyError?.let { item { ErrorPanel(it, "Try again", onReload) } }
             items(state.messages, key = Message::id) { message ->
                 MessageContent(message)
+                if (showDebugDetails(developer.enabled, message)) {
+                    IconButton(onClick = { voice.cancel(); debugMessageId = message.id }, modifier = Modifier.size(24.dp)
+                        .semantics { contentDescription = "Debug details" }) {
+                        Text("ⓘ", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.65f), style = MaterialTheme.typography.bodySmall)
+                    }
+                }
                 if (message.role == "assistant" && message.id == state.messages.lastOrNull()?.id) {
                     SuggestedReplyChips(visibleSuggestions(message, state.draft, state.suggestionsDismissed || state.sending),
                         enabled = state.canSend, onReply = onSuggestion)
@@ -277,6 +281,9 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
           }
         }
     }
+    }
+    if (developer.enabled) state.messages.firstOrNull { it.id == debugMessageId }?.let {
+        DeveloperSheet(it, onDismiss = { debugMessageId = null })
     }
 }
 

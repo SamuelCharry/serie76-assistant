@@ -198,13 +198,18 @@ class ScreenTest {
     @Test fun developerShowsParametersAndReturnedData() {
         val parameters = buildJsonObject { putJsonArray("part_numbers") { add(product.partNumber) } }
         val returned = buildJsonObject { put("status", "ok"); put("source", "PostgreSQL test fixture") }
-        val state = AppState(screen = "debug", messages = listOf(Message("answer", "assistant", "Published catalogue data is shown below.")))
-        compose.setContent { SeriesTheme(darkOverride = false) { DeveloperScreen(state, {}, {}, { id ->
-            DebugResponse(id, "test-session", listOf(ToolCall("get_actuator", parameters, returned)))
-        }) } }
-        compose.onNodeWithText("get_actuator").assertExists()
-        compose.onNodeWithText("Parameters").assertExists()
-        compose.onNodeWithText("Returned data").assertExists()
+        val message = Message("answer", "assistant", "Published catalogue data is shown below.")
+        compose.setContent { SeriesTheme(darkOverride = false) {
+            androidx.compose.runtime.CompositionLocalProvider(LocalDeveloperMode provides DeveloperMode(true)) {
+                DeveloperSheet(message, {}, { id ->
+                    DebugResponse(id, "test-session", listOf(ToolCall("get_actuator", parameters, returned)))
+                })
+            }
+        } }
+        compose.onNodeWithText("▸ Tools called").performClick()
+        compose.onNodeWithText("[\n    \"get_actuator\"\n]").assertExists()
+        compose.onNodeWithText("▸ 1. get_actuator · Validated parameters").assertExists()
+        compose.onNodeWithText("▸ 1. get_actuator · Returned data").assertExists()
         screenshot("developer-debug")
     }
 
