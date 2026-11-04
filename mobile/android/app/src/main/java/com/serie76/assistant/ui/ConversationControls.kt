@@ -29,10 +29,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.serie76.assistant.data.ActiveFilter
+import com.serie76.assistant.data.Suggestion
 
 @Composable
 fun QuestionCard(state: QuestionStepper, enabled: Boolean, onChoose: (String) -> Unit,
-                 onEdit: (Int) -> Unit, onSubmit: () -> Unit, onCancel: () -> Unit, modifier: Modifier = Modifier) {
+                 onEdit: (Int) -> Unit, onNext: () -> Unit, onBack: () -> Unit,
+                 onSubmit: () -> Unit, onCancel: () -> Unit, error: String? = null, modifier: Modifier = Modifier) {
     OutlinedCard(modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
         Column(Modifier.padding(12.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -58,13 +60,17 @@ fun QuestionCard(state: QuestionStepper, enabled: Boolean, onChoose: (String) ->
                             role = Role.RadioButton, onClick = { onChoose(option.value) }).heightIn(min = 48.dp).padding(vertical = 4.dp),
                             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             RadioButton(selected = selected, onClick = null, enabled = enabled)
-                            Text(option.label, style = MaterialTheme.typography.bodyMedium)
+                            Text(option.label + (option.count?.let { " · $it" } ?: ""), style = MaterialTheme.typography.bodyMedium)
                         }
                     }
                 }
             }
+            if (state.reviewing && error != null) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 TextButton(onClick = onCancel, enabled = enabled) { Text("Cancel") }
+                if (state.index > 0) TextButton(onClick = onBack, enabled = enabled) { Text("Back") }
+                if (!state.reviewing) TextButton(onClick = onNext,
+                    enabled = enabled && state.current?.let { state.answers.containsKey(it.id) } == true) { Text("Next") }
                 if (state.reviewing) Button(onClick = onSubmit, enabled = enabled) { Text("Submit") }
             }
         }
@@ -85,7 +91,7 @@ fun ActiveFilterTags(filters: List<ActiveFilter>, enabled: Boolean, onRemove: (A
 }
 
 @Composable
-fun SuggestedReplyChips(replies: List<String>, enabled: Boolean, onReply: (String) -> Unit) {
+fun SuggestedReplyChips(replies: List<Suggestion>, enabled: Boolean, onReply: (Suggestion) -> Unit) {
     if (replies.isEmpty()) return
     val border = MaterialTheme.colorScheme.outline
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -104,7 +110,7 @@ fun SuggestedReplyChips(replies: List<String>, enabled: Boolean, onReply: (Strin
                             drawRoundRect(border, Offset(stroke / 2, stroke / 2), Size(size.width - stroke, size.height - stroke),
                                 CornerRadius(12.dp.toPx()), style = Stroke(stroke, pathEffect = PathEffect.dashPathEffect(floatArrayOf(4.dp.toPx(), 3.dp.toPx()))))
                         }) {
-                        Text(reply, Modifier.padding(horizontal = 12.dp, vertical = 6.dp), style = MaterialTheme.typography.labelMedium,
+                        Text(reply.label, Modifier.padding(horizontal = 12.dp, vertical = 6.dp), style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }

@@ -18,9 +18,11 @@ data class QuestionStepper(
         val question = current ?: return this
         if (question.options.none { it.value == value }) return this
         val updated = answers + (question.id to value)
-        val next = questions.indexOfFirst { it.id !in updated }.let { if (it < 0) questions.size else it }
-        return copy(index = next, answers = updated)
+        return copy(answers = answers + (question.id to value))
     }
+
+    fun next(): QuestionStepper = if (current != null && answers.containsKey(current!!.id)) copy(index = index + 1) else this
+    fun back(): QuestionStepper = if (index > 0) copy(index = index - 1) else this
 
     fun edit(step: Int): QuestionStepper = if (reviewing && step in questions.indices) copy(index = step) else this
 
@@ -34,9 +36,12 @@ fun cancelQuestionRequest(sessionId: String?) = ConversationRequest("Cancel", se
 fun removeFilterRequest(filter: ActiveFilter, sessionId: String?) =
     ConversationRequest("Remove ${filter.label}", sessionId, removeFilters = listOf(filter.field))
 
-fun visibleSuggestions(message: Message, draft: String, dismissed: Boolean): List<String> =
+fun visibleSuggestions(message: Message, draft: String, dismissed: Boolean): List<Suggestion> =
     if (message.interaction != null || draft.isNotEmpty() || dismissed) emptyList()
-    else (message.suggestions ?: message.suggestedReplies).take(3)
+    else (message.suggestions ?: message.suggestedReplies.map(::Suggestion)).take(3)
+
+fun suggestionRequest(suggestion: Suggestion, sessionId: String?) =
+    ConversationRequest(suggestion.label, sessionId, action = suggestion.action)
 
 fun Message.displayText(): String = if (comparison != null || products.isNotEmpty()) lead ?: content else content
 

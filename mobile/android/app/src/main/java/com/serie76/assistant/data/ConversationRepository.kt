@@ -14,6 +14,7 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.DELETE
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -24,7 +25,8 @@ interface ConversationRepository {
     suspend fun sessions(offset: Int = 0): SessionsPage
     suspend fun messages(sessionId: String, before: Long? = null): MessagesPage
     suspend fun send(query: String, sessionId: String?, answers: Map<String, String> = emptyMap(),
-                     removeFilters: List<String> = emptyList()): ConversationResponse
+                     removeFilters: List<String> = emptyList(), action: SuggestionAction? = null): ConversationResponse
+    suspend fun deleteSession(sessionId: String)
 }
 
 interface ConversationApi {
@@ -32,13 +34,18 @@ interface ConversationApi {
     @GET("api/sessions/{id}/messages")
     suspend fun messages(@Path("id") id: String, @Query("before") before: Long?): MessagesPage
     @POST("api/conversation") suspend fun conversation(@Body request: ConversationRequest): ConversationResponse
+    @DELETE("api/sessions/{id}") suspend fun deleteSession(@Path("id") id: String): retrofit2.Response<Unit>
 }
 
 class ApiConversationRepository(private val api: ConversationApi) : ConversationRepository {
     override suspend fun sessions(offset: Int) = api.sessions(offset)
     override suspend fun messages(sessionId: String, before: Long?) = api.messages(sessionId, before)
-    override suspend fun send(query: String, sessionId: String?, answers: Map<String, String>, removeFilters: List<String>) =
-        api.conversation(ConversationRequest(query, sessionId, answers, removeFilters))
+    override suspend fun send(query: String, sessionId: String?, answers: Map<String, String>, removeFilters: List<String>, action: SuggestionAction?) =
+        api.conversation(ConversationRequest(query, sessionId, answers, removeFilters, action))
+    override suspend fun deleteSession(sessionId: String) {
+        val response = api.deleteSession(sessionId)
+        if (!response.isSuccessful) throw HttpException(response)
+    }
 }
 
 fun createRetrofit(url: String, bearer: () -> String? = { null }, expired: (String) -> Unit = {}): Retrofit = Retrofit.Builder()
@@ -82,4 +89,14 @@ fun failureMessage(error: Throwable): String = when (error) {
     }
     is IOException -> "Cannot reach the backend. Check your connection and the backend address."
     else -> "The response could not be loaded. Please try again."
+}
+
+fun emptyCombinationMessage(error: Throwable): String? {
+    if (error !is HttpException || error.code() != 422) return null
+    return runCatching {
+        val body = error.response()?.errorBody()?.string() ?: return@runCatching null
+        val parsed = wireJson.parseToJsonElement(body).jsonObject
+        if (parsed["error_code"]?.jsonPrimitive?.contentOrNull == "empty_combination")
+            parsed["detail"]?.jsonPrimitive?.contentOrNull else null
+    }.getOrNull()
 }

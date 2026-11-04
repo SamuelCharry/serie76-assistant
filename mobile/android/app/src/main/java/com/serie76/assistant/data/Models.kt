@@ -13,6 +13,8 @@ import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.JsonTransformingSerializer
+import kotlinx.serialization.json.jsonObject
 
 @Serializable
 data class Session(
@@ -37,7 +39,8 @@ data class Message(
     val comparison: DifferenceComparison? = null,
     val lead: String? = null,
     val interaction: Interaction? = null,
-    val suggestions: List<String>? = null,
+    val suggestions: List<@Serializable(with = SuggestionSerializer::class) Suggestion>? = null,
+    val recommendation: Recommendation? = null,
     @SerialName("active_filters") val activeFilters: List<ActiveFilter> = emptyList(),
 )
 
@@ -56,6 +59,7 @@ data class ConversationRequest(
     @SerialName("session_id") val sessionId: String? = null,
     val answers: Map<String, String> = emptyMap(),
     @SerialName("remove_filters") val removeFilters: List<String> = emptyList(),
+    val action: SuggestionAction? = null,
 )
 
 @Serializable
@@ -68,7 +72,8 @@ data class ConversationResponse(
     val comparison: DifferenceComparison? = null,
     val lead: String? = null,
     val interaction: Interaction? = null,
-    val suggestions: List<String>? = null,
+    val suggestions: List<@Serializable(with = SuggestionSerializer::class) Suggestion>? = null,
+    val recommendation: Recommendation? = null,
     @SerialName("active_filters") val activeFilters: List<ActiveFilter> = emptyList(),
 )
 
@@ -79,7 +84,23 @@ data class Interaction(val kind: String = "question", val questions: List<Questi
 data class Question(val id: String, val prompt: String, val options: List<QuestionOption>)
 
 @Serializable
-data class QuestionOption(val value: String, val label: String)
+data class QuestionOption(val value: String, val label: String, val count: Int? = null)
+
+@Serializable data class SuggestionAction(val type: String, val args: JsonObject = JsonObject(emptyMap()))
+@Serializable data class Suggestion(val label: String, val action: SuggestionAction? = null)
+object SuggestionSerializer : JsonTransformingSerializer<Suggestion>(Suggestion.serializer()) {
+    override fun transformDeserialize(element: JsonElement): JsonElement =
+        if (element is JsonPrimitive) JsonObject(mapOf("label" to element)) else element
+}
+@Serializable data class RecommendationValue(val label: String, val value: String)
+@Serializable data class RecommendationItem(
+    @SerialName("part_number") val partNumber: String, val reason: String,
+    @SerialName("key_values") val keyValues: List<RecommendationValue> = emptyList(),
+)
+@Serializable data class Recommendation(
+    @SerialName("ranked_by") val rankedBy: String, val total: Int,
+    val shown: Int, val items: List<RecommendationItem> = emptyList(),
+)
 
 @Serializable
 data class ActiveFilter(val field: String, val label: String)
@@ -116,6 +137,7 @@ data class DifferenceComparison(
     val assumptions: String = "",
     @SerialName("hidden_rows") val hiddenRows: List<DifferenceRow> = emptyList(),
     @SerialName("key_fields") val keyFields: List<String> = emptyList(),
+    @SerialName("key_fields_reason") val keyFieldsReason: String = "",
 )
 
 @Serializable
@@ -145,4 +167,7 @@ data class DebugResponse(
     @SerialName("message_id") val messageId: String,
     @SerialName("session_id") val sessionId: String,
     @SerialName("tool_calls") val toolCalls: List<ToolCall>,
+    @SerialName("latency_ms") val latencyMs: Long? = null,
+    val attempts: Int? = null,
+    @SerialName("llm_called") val llmCalled: Boolean? = null,
 )

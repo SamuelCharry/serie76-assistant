@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 data class AppState(
     val screen: String = "chat",
@@ -32,6 +33,10 @@ data class AppState(
     val question: QuestionStepper? = null,
     val composerActive: Boolean = false,
     val suggestionsDismissed: Boolean = false,
+    val questionError: String? = null,
+    val deleteCandidate: Session? = null,
+    val pendingDelete: Session? = null,
+    val deleteNotice: String? = null,
 ) {
     val activeFilters: List<ActiveFilter> get() = messages.lastOrNull { it.role == "assistant" }?.activeFilters.orEmpty()
     val canSend: Boolean get() = !sending && !historyLoading && historyError == null && !needsReconcile
@@ -51,6 +56,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     private var historyJob: Job? = null
     private var sessionsJob: Job? = null
     private var threadGeneration = 0
+    private var deleteJob: Job? = null
 
     init {
         refreshSessions()
@@ -65,7 +71,8 @@ class AppViewModel(private val repository: ConversationRepository, private val s
             try {
                 val offset = if (more) state.value.sessions.size else 0
                 val page = repository.sessions(offset)
-                mutable.update { it.copy(sessions = (if (more) it.sessions + page.sessions else page.sessions).distinctBy(Session::id),
+                mutable.update { it.copy(sessions = (if (more) it.sessions + page.sessions else page.sessions).distinctBy(Session::id)
+                    .filterNot { session -> session.id == it.pendingDelete?.id },
                     sessionsHaveMore = page.sessions.size == page.limit, sessionsLoading = false) }
             } catch (error: CancellationException) { throw error }
             catch (error: Exception) { mutable.update { it.copy(sessionsLoading = false, sessionsError = failureMessage(error)) } }
@@ -80,7 +87,8 @@ class AppViewModel(private val repository: ConversationRepository, private val s
         saved["draft"] = ""
         saved["screen"] = "chat"
         saved["inFlight"] = false
-        mutable.update { AppState(screen = "chat", sessions = it.sessions, sessionsHaveMore = it.sessionsHaveMore) }
+        mutable.update { AppState(screen = "chat", sessions = it.sessions, sessionsHaveMore = it.sessionsHaveMore,
+            pendingDelete = it.pendingDelete, deleteNotice = it.deleteNotice) }
     }
 
     fun open(session: Session) {
@@ -126,10 +134,12 @@ class AppViewModel(private val repository: ConversationRepository, private val s
 
     fun activateComposer() { mutable.update { it.copy(composerActive = true) } }
     fun chooseAnswer(value: String) {
-        if (state.value.canSend) mutable.update { it.copy(question = it.question?.choose(value)) }
+        if (state.value.canSend) mutable.update { it.copy(question = it.question?.choose(value), questionError = null) }
     }
+    fun nextQuestion() { if (state.value.canSend) mutable.update { it.copy(question = it.question?.next(), questionError = null) } }
+    fun previousQuestion() { if (state.value.canSend) mutable.update { it.copy(question = it.question?.back(), questionError = null) } }
     fun editAnswer(index: Int) {
-        if (state.value.canSend) mutable.update { it.copy(question = it.question?.edit(index)) }
+        if (state.value.canSend) mutable.update { it.copy(question = it.question?.edit(index), questionError = null) }
     }
     fun submitAnswers() { state.value.question?.submission(state.value.sessionId)?.let(::sendRequest) }
     fun cancelQuestion() {
@@ -138,6 +148,31 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     fun removeFilter(filter: ActiveFilter) {
         if (filter in state.value.activeFilters) sendRequest(removeFilterRequest(filter, state.value.sessionId))
     }
+    fun sendSuggestion(suggestion: Suggestion) { sendRequest(suggestionRequest(suggestion, state.value.sessionId)) }
+    fun requestDelete(session: Session) { mutable.update { it.copy(deleteCandidate = session) } }
+    fun cancelDelete() { mutable.update { it.copy(deleteCandidate = null) } }
+    fun confirmDelete() {
+        val session = state.value.deleteCandidate ?: return
+        deleteJob?.cancel()
+        mutable.update { it.copy(sessions = it.sessions.filterNot { item -> item.id == session.id },
+            deleteCandidate = null, pendingDelete = session, deleteNotice = "Conversation deleted") }
+        if (state.value.sessionId == session.id) newConversation()
+        deleteJob = viewModelScope.launch {
+            delay(5000)
+            try {
+                repository.deleteSession(session.id)
+                mutable.update { it.copy(pendingDelete = null, deleteNotice = null) }
+            } catch (error: CancellationException) { throw error }
+            catch (error: Exception) { mutable.update { it.copy(sessions = (it.sessions + session).distinctBy(Session::id),
+                pendingDelete = null, deleteNotice = failureMessage(error)) } }
+        }
+    }
+    fun undoDelete() {
+        deleteJob?.cancel()
+        mutable.update { it.copy(sessions = (it.sessions + listOfNotNull(it.pendingDelete)).distinctBy(Session::id),
+            pendingDelete = null, deleteNotice = null) }
+    }
+    fun clearDeleteNotice() { mutable.update { it.copy(deleteNotice = null) } }
 
     fun loadHistory(sessionId: String? = state.value.sessionId, older: Boolean = false) {
         val targetId = sessionId ?: return
@@ -173,17 +208,18 @@ class AppViewModel(private val repository: ConversationRepository, private val s
         saved["inFlight"] = true
         saved["draft"] = query
         mutable.update { it.copy(sending = true, sendError = null, draft = query,
-            question = null, suggestionsDismissed = true, composerActive = false) }
+            question = null, questionError = null, suggestionsDismissed = true, composerActive = false) }
         viewModelScope.launch {
             try {
-                val response = repository.send(query, current.sessionId, request.answers, request.removeFilters)
+                val response = repository.send(query, current.sessionId, request.answers, request.removeFilters, request.action)
                 if (generation == threadGeneration) {
                     saved["sessionId"] = response.sessionId
                     saved["draft"] = ""
                     saved["inFlight"] = false
                     val message = Message(response.messageId, "assistant", response.answer, response.products,
                         suggestedReplies = response.suggestedReplies, comparison = response.comparison, lead = response.lead,
-                        interaction = response.interaction, suggestions = response.suggestions, activeFilters = response.activeFilters)
+                        interaction = response.interaction, suggestions = response.suggestions,
+                        recommendation = response.recommendation, activeFilters = response.activeFilters)
                     mutable.update { it.copy(sessionId = response.sessionId, title = if (current.sessionId == null) query.take(100) else it.title,
                         draft = "", sending = false, question = pendingQuestion(message), suggestionsDismissed = false,
                         messages = it.messages + listOf(Message(UUID.randomUUID().toString(), "user", query), message)) }
@@ -191,7 +227,13 @@ class AppViewModel(private val repository: ConversationRepository, private val s
                 refreshSessions()
             } catch (error: CancellationException) { throw error }
             catch (error: Exception) {
-                mutable.update { it.copy(sending = false, sendError = failureMessage(error), needsReconcile = true) }
+                val combination = if (request.answers.isNotEmpty()) emptyCombinationMessage(error) else null
+                if (combination != null) {
+                    saved["inFlight"] = false
+                    saved["draft"] = ""
+                    mutable.update { it.copy(sending = false, draft = "", question = current.question,
+                        questionError = combination, needsReconcile = false) }
+                } else mutable.update { it.copy(sending = false, sendError = failureMessage(error), needsReconcile = true) }
             }
         }
     }

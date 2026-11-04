@@ -69,6 +69,8 @@ private fun ComparisonDifferenceTable(comparison: DifferenceComparison) {
 private fun ModelComparisonCards(comparison: DifferenceComparison) {
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         ComparisonSummary(comparison)
+        if (comparison.keyFieldsReason.isNotBlank()) Text(comparison.keyFieldsReason,
+            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         comparison.models.forEachIndexed { index, code ->
             OutlinedCard(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {

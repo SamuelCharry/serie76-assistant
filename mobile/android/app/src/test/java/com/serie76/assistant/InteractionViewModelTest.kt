@@ -29,19 +29,20 @@ class InteractionViewModelTest {
         var history = listOf(Message("old", "assistant", "Choose", interaction = question, activeFilters = answer.activeFilters))
         override suspend fun sessions(offset: Int) = SessionsPage(emptyList())
         override suspend fun messages(sessionId: String, before: Long?) = MessagesPage("s", "Saved", history)
-        override suspend fun send(query: String, sessionId: String?, answers: Map<String, String>, removeFilters: List<String>): ConversationResponse {
-            requests += ConversationRequest(query, sessionId, answers, removeFilters)
+        override suspend fun send(query: String, sessionId: String?, answers: Map<String, String>, removeFilters: List<String>, action: SuggestionAction?): ConversationResponse {
+            requests += ConversationRequest(query, sessionId, answers, removeFilters, action)
             wait?.await()
             return answer
         }
+        override suspend fun deleteSession(sessionId: String) {}
     }
     private fun opened(repo: Repository): AppViewModel = AppViewModel(repo, SavedStateHandle()).also { it.open(Session("s", "Saved", "")) }
 
     @Test fun `history question advances edits and submits exactly once with new response metadata`() = runTest(dispatcher) {
         val repo = Repository(); val vm = opened(repo); advanceUntilIdle()
-        vm.chooseAnswer("on_off"); vm.chooseAnswer("220")
+        vm.chooseAnswer("on_off"); vm.nextQuestion(); vm.chooseAnswer("220"); vm.nextQuestion()
         assertTrue(vm.state.value.question!!.reviewing); assertTrue(repo.requests.isEmpty())
-        vm.editAnswer(0); vm.chooseAnswer("modulating")
+        vm.editAnswer(0); vm.chooseAnswer("modulating"); vm.nextQuestion(); vm.nextQuestion()
         repo.wait = CompletableDeferred()
         vm.submitAnswers(); vm.submitAnswers(); runCurrent()
         assertNull(vm.state.value.question)
@@ -76,15 +77,15 @@ class InteractionViewModelTest {
 
     @Test fun `typing dismisses suggestions even after clearing text and next answer resets dismissal`() = runTest(dispatcher) {
         val repo = Repository()
-        repo.history = listOf(Message("old", "assistant", "Answer", suggestions = listOf("Next")))
-        repo.answer = repo.answer.copy(interaction = null, suggestions = listOf("More"))
+        repo.history = listOf(Message("old", "assistant", "Answer", suggestions = listOf(Suggestion("Next"))))
+        repo.answer = repo.answer.copy(interaction = null, suggestions = listOf(Suggestion("More")))
         val vm = opened(repo); advanceUntilIdle()
         assertFalse(vm.state.value.suggestionsDismissed)
         vm.draft("x"); vm.draft("")
         assertTrue(vm.state.value.suggestionsDismissed)
         vm.draft("Send"); vm.send(); advanceUntilIdle()
         assertFalse(vm.state.value.suggestionsDismissed)
-        assertEquals(listOf("More"), vm.state.value.messages.last().suggestions)
+        assertEquals(listOf(Suggestion("More")), vm.state.value.messages.last().suggestions)
     }
 
     @Test fun `removing current filter sends field and duplicate action is blocked`() = runTest(dispatcher) {

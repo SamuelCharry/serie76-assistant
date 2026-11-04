@@ -26,7 +26,7 @@ class InteractionContractTest {
             assertEquals("Which service?", message.interaction!!.questions.single().prompt)
             assertEquals(response.activeFilters, message.activeFilters)
             assertEquals("110 V", message.activeFilters.single().label)
-            assertEquals(emptyList<String>(), message.suggestions)
+            assertEquals(emptyList<Suggestion>(), message.suggestions)
         }
     }
 
@@ -105,8 +105,8 @@ class InteractionContractTest {
                 assertEquals(name, comparison.layout)
                 assertTrue(comparison.summary.isNotBlank())
                 assertEquals("Comparison ready.", response.lead)
-                assertEquals(listOf("Show source notes"), response.suggestions)
-                assertEquals(response.suggestions, response.suggestedReplies)
+                assertEquals(listOf(Suggestion("Show source notes")), response.suggestions)
+                assertEquals(response.suggestions?.map { it.label }, response.suggestedReplies)
                 assertEquals("110 V", response.activeFilters.single().label)
                 val element = wireJson.parseToJsonElement(fixture).jsonObject
                 val stored = JsonObject(element + mapOf("id" to JsonPrimitive("saved"), "role" to JsonPrimitive("assistant"), "content" to element.getValue("answer")))
