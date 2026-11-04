@@ -92,6 +92,8 @@ Respuestas, mensajes fijos y sugerencias son solo en inglés; se admite entrada 
 
 `comparison` contiene `models` (dos códigos completos), `rows` con `{field,label,a,b,better}` e `identical_fields_hidden`. Solo muestra diferencias; a/b son textos formateados desde SQL y better es a, b o null, solo si la dirección es inequívoca. Answer sigue en texto plano sin tablas Markdown. Pulsar un chip envía su texto exacto; la tarjeta Android tiene tres columnas con ajuste de línea y sin scroll horizontal.
 
+Mostrar `label`, nunca el identificador interno `field`. El torque agrupa unidades en una fila: `On/Off torque`, con `700 in-lb / 80 Nm` frente a `880 in-lb / 100 Nm`. Cada par idéntico cuenta como un campo oculto. Las etiquetas explicitan la frecuencia: `Operating time at 60 Hz` y `FLA at 60 Hz`; N/A conserva su etiqueta. No se marca ganador si las columnas publicadas discrepan en dirección.
+
 La búsqueda directa acepta umbrales `{value,op}` con gt/gte/lt/lte; los escalares antiguos siguen inclusivos. `sort_by` es lista ordenada fastest/lowest_power/highest_torque/lowest_current. El agente aplica [conteo/aclaración/valor cercano](agent.md#política-conversacional-t6); `/api/actuators/search` mantiene paginación de catálogo.
 
 ## Dónde está en el código

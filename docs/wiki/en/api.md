@@ -92,6 +92,8 @@ Answers, fixed messages and suggestions are English-only; Spanish user input is 
 
 `comparison` has `models` (exactly two complete codes), `rows` of `{field,label,a,b,better}` and `identical_fields_hidden`. Only differences are included. a/b are SQL-formatted display strings; better is a, b or null, assigned only where direction is unambiguous. Answer stays plain text without Markdown tables. Tapping a suggested-reply chip sends its exact text; Android's difference card has three wrapping columns and no horizontal scroll.
 
+Display `label`, never the machine `field` identifier. Torque units share one row: `On/Off torque` with `700 in-lb / 80 Nm` versus `880 in-lb / 100 Nm`. Identical torque pairs count as one hidden field. Frequency labels are explicit, such as `Operating time at 60 Hz` and `FLA at 60 Hz`; source N/A remains labelled. A winner is omitted if published unit columns disagree in direction.
+
 Direct search magnitude filters accept `{value,op}` with gt/gte/lt/lte; legacy scalars remain inclusive. `sort_by` is an ordered list of fastest/lowest_power/highest_torque/lowest_current. The agent applies the count/narrowing/closest-value policy documented in [agent](agent.md#t6-conversation-policy); direct `/api/actuators/search` remains a paginated catalogue route.
 
 ## Where in the code
