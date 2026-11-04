@@ -26,12 +26,13 @@ class AppViewModelTest {
         var history = listOf(Message("persisted-user", "user", "Initial query"), Message("persisted-answer", "assistant", "Initial answer"))
         override suspend fun sessions(offset: Int) = SessionsPage(listOf(Session("saved-session", "Saved", "2026-11-03T12:00:00Z")))
         override suspend fun messages(sessionId: String, before: Long?) = MessagesPage(sessionId, "Saved", history)
-        override suspend fun send(query: String, sessionId: String?, answers: Map<String, String>, removeFilters: List<String>): ConversationResponse {
+        override suspend fun send(query: String, sessionId: String?, answers: Map<String, String>, removeFilters: List<String>, action: SuggestionAction?): ConversationResponse {
             requests += query to sessionId
             waitForSend?.await()
             if (failure) throw IOException("private internal URL must not be exposed")
             return ConversationResponse(sessionId ?: "new-session", "Published data", "answer-${requests.size}")
         }
+        override suspend fun deleteSession(sessionId: String) {}
     }
 
     @Test fun `chat first startup and history dismissal preserve draft without sending`() = runTest(dispatcher) {

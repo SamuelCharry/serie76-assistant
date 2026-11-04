@@ -17,15 +17,17 @@ class ConversationPresentationTest {
         assertEquals(0, stepper.index); assertFalse(stepper.reviewing)
         assertNull(stepper.submission("s"))
         stepper = stepper.choose("on_off")
+        assertEquals(0, stepper.index)
+        stepper = stepper.next()
         assertEquals(1, stepper.index)
-        stepper = stepper.choose("220").choose("1")
+        stepper = stepper.choose("220").next().choose("1").next()
         assertTrue(stepper.reviewing)
         assertEquals(listOf("Which service? → On/Off", "Which voltage? → 220 V", "How many phases? → 1 phase"), stepper.reviewLines)
         val request = stepper.submission("s")!!
         assertEquals("On/Off · 220 V · 1 phase", request.query)
         assertEquals(mapOf("service" to "on_off", "voltage" to "220", "phase" to "1"), request.answers)
         assertEquals("s", request.sessionId)
-        stepper = stepper.edit(0).choose("modulating")
+        stepper = stepper.edit(0).choose("modulating").next().next().next()
         assertTrue(stepper.reviewing)
         assertEquals("Modulating · 220 V · 1 phase", stepper.submission("s")!!.query)
     }
@@ -43,12 +45,12 @@ class ConversationPresentationTest {
     }
 
     @Test fun `suggestions are optional capped and suppressed while typing or asking`() {
-        val message = Message("m", "assistant", "Answer", suggestions = listOf("One", "Two", "Three", "Four"))
-        assertEquals(listOf("One", "Two", "Three"), visibleSuggestions(message, "", false))
+        val message = Message("m", "assistant", "Answer", suggestions = listOf("One", "Two", "Three", "Four").map(::Suggestion))
+        assertEquals(listOf("One", "Two", "Three").map(::Suggestion), visibleSuggestions(message, "", false))
         assertTrue(visibleSuggestions(message, "typing", false).isEmpty())
         assertTrue(visibleSuggestions(message, "", true).isEmpty())
         assertTrue(visibleSuggestions(message.copy(interaction = Interaction(questions = questions)), "", false).isEmpty())
-        assertEquals(listOf("Old"), visibleSuggestions(message.copy(suggestions = null, suggestedReplies = listOf("Old")), "", false))
+        assertEquals(listOf(Suggestion("Old")), visibleSuggestions(message.copy(suggestions = null, suggestedReplies = listOf("Old")), "", false))
         assertTrue(visibleSuggestions(message.copy(suggestions = emptyList(), suggestedReplies = listOf("Old")), "", false).isEmpty())
     }
 
@@ -92,7 +94,7 @@ class ConversationPresentationTest {
             (1..4).map { DifferenceRow("f$it", "Field $it", values = listOf("A", "B", "C", "D$it")) },
             layout = "cards", keyFields = listOf("f1", "f2", "f3", "f4"))
         assertEquals(listOf("D1", "D2", "D3", "D4"), comparison.cardFields(3).map { it.second })
-        val stepper = QuestionStepper(questions.take(1)).choose("on_off")
+        val stepper = QuestionStepper(questions.take(1)).choose("on_off").next()
         assertTrue(stepper.reviewing)
         assertEquals("On/Off", stepper.submission(null)!!.query)
     }

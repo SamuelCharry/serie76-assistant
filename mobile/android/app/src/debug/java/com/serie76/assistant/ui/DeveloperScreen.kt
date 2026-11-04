@@ -70,6 +70,12 @@ fun DeveloperScreen(state: AppState, onBack: () -> Unit, onChoose: (String) -> U
             if (loading) item { LoadingLine("Loading tool calls") }
             error?.let { item { ErrorPanel(it, "Try again", { attempt++ }) } }
             trace?.let { response ->
+                if (response.latencyMs != null || response.attempts != null || response.llmCalled != null) item {
+                    Text(listOfNotNull(response.latencyMs?.let { "Latency: $it ms" },
+                        response.attempts?.let { "Attempts: $it" },
+                        response.llmCalled?.let { "LLM called: $it" }).joinToString(" · "),
+                        style = MaterialTheme.typography.bodySmall)
+                }
                 if (response.toolCalls.isEmpty()) item { Text("No tools were called for this response.") }
                 items(response.toolCalls.withIndex().toList(), key = { it.index }) { (_, call) ->
                     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {

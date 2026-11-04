@@ -6,6 +6,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,12 +54,24 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.delay
 
 @Composable
 fun SeriesApp(viewModel: AppViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val drawer = rememberDrawerState(DrawerValue.Closed)
     val keyboard = LocalSoftwareKeyboardController.current
+    val snackbar = remember { SnackbarHostState() }
+    LaunchedEffect(state.pendingDelete?.id, state.deleteNotice) {
+        val notice = state.deleteNotice ?: return@LaunchedEffect
+        if (state.pendingDelete != null) {
+            if (snackbar.showSnackbar("Conversation deleted", "Undo", duration = SnackbarDuration.Short) == SnackbarResult.ActionPerformed)
+                viewModel.undoDelete()
+        } else {
+            snackbar.showSnackbar(notice)
+            viewModel.clearDeleteNotice()
+        }
+    }
     val latestScreen by rememberUpdatedState(state.screen)
     LaunchedEffect(state.screen) {
         if (state.screen == "sessions") { keyboard?.hide(); drawer.open() } else drawer.close()
@@ -72,6 +85,7 @@ fun SeriesApp(viewModel: AppViewModel) {
     }
     BackHandler(state.screen == "debug") { viewModel.back() }
     BackHandler(state.screen == "sessions" || drawer.isOpen) { viewModel.dismissConversations() }
+    Box(Modifier.fillMaxSize()) {
     ModalNavigationDrawer(
         drawerState = drawer, gesturesEnabled = state.screen != "debug",
         scrimColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.24f),
@@ -81,7 +95,7 @@ fun SeriesApp(viewModel: AppViewModel) {
                 drawerShape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp)) {
                 ConversationsScreen(state, viewModel::newConversation, viewModel::open,
                     { viewModel.refreshSessions() }, { viewModel.refreshSessions(more = true) },
-                    viewModel::dismissConversations, viewModel::debug)
+                    viewModel::dismissConversations, viewModel::debug, viewModel::requestDelete)
             }
         }
     ) {
@@ -93,14 +107,24 @@ fun SeriesApp(viewModel: AppViewModel) {
                 { viewModel.loadHistory() }, { viewModel.loadHistory(older = true) },
                 viewModel::reconcile, viewModel::debug, viewModel::newConversation,
                 viewModel::chooseAnswer, viewModel::editAnswer, viewModel::submitAnswers,
-                viewModel::cancelQuestion, viewModel::activateComposer, viewModel::removeFilter)
+                viewModel::cancelQuestion, viewModel::activateComposer, viewModel::removeFilter,
+                viewModel::nextQuestion, viewModel::previousQuestion, viewModel::sendSuggestion)
         }
+    }
+    SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
+    state.deleteCandidate?.let { session ->
+        AlertDialog(onDismissRequest = viewModel::cancelDelete, title = { Text("Delete conversation?") },
+            text = { Text("Delete ${session.title}?") },
+            confirmButton = { TextButton(onClick = viewModel::confirmDelete) { Text("Delete") } },
+            dismissButton = { TextButton(onClick = viewModel::cancelDelete) { Text("Cancel") } })
+    }
     }
 }
 
 @Composable
 fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) -> Unit,
-                        onRefresh: () -> Unit, onMore: () -> Unit, onClose: () -> Unit = {}, onDebug: () -> Unit = {}) {
+                        onRefresh: () -> Unit, onMore: () -> Unit, onClose: () -> Unit = {}, onDebug: () -> Unit = {},
+                        onDelete: (Session) -> Unit = {}) {
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(horizontal = 20.dp)) {
         Row(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("Conversations", Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
@@ -132,8 +156,9 @@ fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) ->
                 }
             }
             items(state.sessions, key = Session::id) { session ->
-                Surface(onClick = { onOpen(session) }, enabled = !state.sending,
-                    modifier = Modifier.fillMaxWidth().animateItem().semantics { selected = session.id == state.sessionId },
+                Surface(modifier = Modifier.fillMaxWidth().animateItem()
+                    .combinedClickable(enabled = !state.sending, onClick = { onOpen(session) }, onLongClick = { onDelete(session) })
+                    .semantics { selected = session.id == state.sessionId },
                     shape = RoundedCornerShape(12.dp),
                     color = if (session.id == state.sessionId) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background) {
                     Column(Modifier.padding(horizontal = 12.dp, vertical = 14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -156,7 +181,8 @@ fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) ->
 fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, onSend: () -> Unit,
                onReload: () -> Unit, onOlder: () -> Unit, onReconcile: () -> Unit, onDebug: () -> Unit, onNew: () -> Unit = {},
                onChoose: (String) -> Unit = {}, onEditAnswer: (Int) -> Unit = {}, onSubmitAnswers: () -> Unit = {},
-               onCancelQuestion: () -> Unit = {}, onActivateComposer: () -> Unit = {}, onRemoveFilter: (ActiveFilter) -> Unit = {}) {
+               onCancelQuestion: () -> Unit = {}, onActivateComposer: () -> Unit = {}, onRemoveFilter: (ActiveFilter) -> Unit = {},
+               onNextQuestion: () -> Unit = {}, onPreviousQuestion: () -> Unit = {}, onSuggestion: (Suggestion) -> Unit = {}) {
     val listState = rememberLazyListState()
     val focus = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
@@ -185,8 +211,9 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
                     state.sendError?.let { ErrorPanel(it, if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile) }
                     if (state.needsReconcile && state.sendError == null) ErrorPanel("A previous request may have completed. Check saved messages before sending again.",
                         if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile)
-                    state.question?.let { QuestionCard(it, state.canSend, onChoose, onEditAnswer, onSubmitAnswers, onCancelQuestion,
-                        Modifier.weight(1f, fill = false)) }
+                    state.question?.let { QuestionCard(it, state.canSend, onChoose, onEditAnswer,
+                        onNextQuestion, onPreviousQuestion, onSubmitAnswers, onCancelQuestion,
+                        state.questionError, Modifier.weight(1f, fill = false)) }
                     Surface(modifier = Modifier.alpha(if (state.question != null && !state.composerActive) 0.5f else 1f)
                         .pointerInput(onActivateComposer) {
                             awaitEachGesture {
@@ -232,16 +259,15 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
                 MessageContent(message)
                 if (message.role == "assistant" && message.id == state.messages.lastOrNull()?.id) {
                     SuggestedReplyChips(visibleSuggestions(message, state.draft, state.suggestionsDismissed || state.sending),
-                        enabled = state.canSend) { reply ->
-                        onDraft(reply)
-                        onSend()
-                    }
+                        enabled = state.canSend, onReply = onSuggestion)
                 }
             }
             if (state.sending) item {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(state.draft.trim(), style = MaterialTheme.typography.bodyLarge)
-                    ThinkingLabel()
+                    var stillWorking by remember { mutableStateOf(false) }
+                    LaunchedEffect(state.sending) { stillWorking = false; delay(8000); stillWorking = true }
+                    LoadingLine(if (stillWorking) "Still working…" else "Searching the catalog…")
                 }
             }
           }
@@ -264,8 +290,31 @@ fun MessageContent(message: Message) {
             Text(message.displayText(), style = MaterialTheme.typography.bodyLarge)
         }
         if (message.comparison != null) DifferenceComparisonCard(message.comparison)
-        else if (message.products.size == 1) ProductCard(message.products.first())
-        else if (message.products.isNotEmpty()) ComparisonTable(message.products)
+        if (message.recommendation != null) RecommendationBlock(message.recommendation)
+        else if (message.comparison == null && message.products.size == 1) ProductCard(message.products.first())
+        else if (message.comparison == null && message.products.isNotEmpty()) ComparisonTable(message.products)
+    }
+}
+
+@Composable
+fun RecommendationBlock(recommendation: Recommendation) {
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text("Ranked by ${recommendation.rankedBy}", style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.semantics { heading() })
+        recommendation.items.take(3).forEach { item ->
+            OutlinedCard(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(item.partNumber, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(item.reason, style = MaterialTheme.typography.bodyMedium)
+                    item.keyValues.forEach { value ->
+                        Text("${value.label}: ${value.value}", style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+        }
+        Text("Showing ${recommendation.items.size.coerceAtMost(3)} of ${recommendation.total}",
+            style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
