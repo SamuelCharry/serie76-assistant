@@ -140,24 +140,33 @@ def main():
     parser.add_argument('--replace-dataset', action='store_true', help='Reconcile the complete authoritative dataset; deactivate omitted/ambiguous examples')
     parser.add_argument('--dataset-version', help='Immutable identifier required with --replace-dataset')
     args = parser.parse_args()
+    if not 1 <= args.batch_size <= 64:
+        parser.error('--batch-size must be 1..64')
     if bool(args.dataset_version) != args.replace_dataset:
         parser.error('--replace-dataset and --dataset-version must be supplied together')
     cases = json.loads(args.cases.read_text(encoding='utf-8'))
     examples = examples_from_cases(cases)
     anchors = json.loads(args.anchors.read_text(encoding='utf-8'))
     model = os.getenv('OPENROUTER_EMBEDDING_MODEL', '')
-    if not model:
+    if not model and not args.dry_run:
         parser.error('Set OPENROUTER_EMBEDDING_MODEL in the process environment')
+    if args.dry_run and not model:
+        # No model namespace exists to check for duplicates. Preview the complete
+        # input without touching a database, provider, or local credentials.
+        missing = [('example', row) for row in examples] + [
+            ('anchor', dict(text=phrase)) for phrases in anchors.values()
+            for phrase in dict.fromkeys(phrases)]
+        print(json.dumps(load_estimate(missing, examples, anchors, args) | dict(
+            model=None, scope='input_only', existing_vectors_checked=False)), flush=True)
+        return 0
     local_environment()
     with connect() as connection:
         missing = pending(connection, examples, anchors, model)
         # UTF-8 bytes is a conservative token-count estimate, not a billed usage claim.
-        estimated_tokens = sum(len(row['text'].encode('utf-8')) for _, row in missing)
-        estimate = estimated_tokens * args.usd_per_million_tokens / 1_000_000
-        print(json.dumps(dict(pending_texts=len(missing), examples=len(examples),
-                              anchors=sum(map(len, anchors.values())), estimated_tokens=estimated_tokens,
-                              estimated_usd=round(estimate, 6), estimate_basis='UTF-8 byte upper estimate',
-                              batches=math.ceil(len(missing) / args.batch_size))), flush=True)
+        report = load_estimate(missing, examples, anchors, args)
+        estimate = report['estimated_usd']
+        print(json.dumps(report | dict(model=model, scope='model_pending',
+                                      existing_vectors_checked=True)), flush=True)
         if args.dry_run:
             return 0
         try:
@@ -171,6 +180,16 @@ def main():
             return 1
         print(json.dumps(dict(status='loaded', texts_embedded=count, estimated_usd=round(estimate, 6))))
     return 0
+
+
+def load_estimate(missing, examples, anchors, args):
+    estimated_tokens = sum(len(row['text'].encode('utf-8')) for _, row in missing)
+    return dict(pending_texts=len(missing), examples=len(examples),
+                anchors=sum(len(set(phrases)) for phrases in anchors.values()),
+                estimated_tokens=estimated_tokens,
+                estimated_usd=round(estimated_tokens * args.usd_per_million_tokens / 1_000_000, 6),
+                estimate_basis='UTF-8 byte upper estimate; configured unit price, not a provider quote',
+                batches=math.ceil(len(missing) / args.batch_size))
 
 
 if __name__ == '__main__':

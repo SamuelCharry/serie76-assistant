@@ -33,6 +33,7 @@ def local_environment(path=Path(".env")):
         "PGDATABASE": ("POSTGRES_DB", "series76"),
         "PGUSER": ("POSTGRES_USER", "series76"),
         "PGPASSWORD": ("POSTGRES_PASSWORD", ""),
+        "API_PORT": ("API_PORT", "8000"),
     }
     for target, (key, default) in mapping.items():
         os.environ.setdefault(target, values.get(key, default))

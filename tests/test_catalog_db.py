@@ -245,6 +245,11 @@ class PostgresCatalogTests(unittest.TestCase):
             self.assertIsNotNone(p["measurements"]["shared_torque_nm"])
 
     def test_ambiguity_returns_clarification(self):
+        for filters, total in [({'min_torque_nm': 100}, 55), ({'max_operating_time_s': 20}, 14)]:
+            result = self.search(**filters)
+            self.assertEqual(result['total'], total)
+            self.assertEqual(result['status'], 'needs_clarification')
+            self.assertEqual(result['products'], [])
         self.assertEqual(self.search(min_torque_nm=100)["fields"], ["service"])
         self.assertEqual(
             self.search(max_operating_time_s=20)["fields"], ["frequency_hz"]

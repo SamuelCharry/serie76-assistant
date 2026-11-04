@@ -57,6 +57,9 @@ class ComparisonSqlTests(Base):
     def test_sql_comparison_uses_card_labels_and_merged_units(self):
         result = self.turn("Compare 761A00-11300000/A and 761B00-11300000/A", ("get_actuator", {
             "part_numbers": ["761A00-11300000/A", "761B00-11300000/A"]}))
+        self.assertEqual(len(result.comparison['hidden_rows']), 10)
+        self.assertIn('. 10 identical fields hidden.\n', result.answer)
+        self.assertNotIn('. 1.\n', result.answer)
         self.assertIn("On/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm", result.answer)
         self.assertIn("Operating time at 60 Hz: 17 s vs 19 s", result.answer)
         self.assertIn("FLA at 60 Hz: 1.2 A vs 1.3 A", result.answer)

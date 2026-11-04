@@ -1412,6 +1412,36 @@ def trace_arguments(name, raw, models):
     return {k: v for k, v in raw.items() if k in allowed}
 
 
+def single_field_code(query):
+    """Recognize a closed field request; leave extra intent/constraints to the model.
+
+    Share the planner's vocabulary and let lookup apply its exact field rendering.
+    Never fill in a partial code or accept a second field/frequency/service.
+    """
+    import re
+    planned = answer_planner.plan(query)
+    if planned.shape != 'fields' or len(planned.metrics) != 1:
+        return None
+    text = query.strip().lower().rstrip(' .!?')
+    code_pattern = r'(?<![a-z0-9])[a-z0-9]{6}-[a-z0-9]{8}/a(?![a-z0-9])'
+    matches = re.findall(code_pattern, text)
+    if len(matches) != 1 or not policy.CODE_RE.fullmatch(matches[0].upper()):
+        return None
+    text = re.sub(code_pattern, '#', text)
+    # Scopes are accepted only once and in the same forms the planner understands.
+    if planned.frequency_hz:
+        text = re.sub(r'\s+at\s+(?:50|60)\s*hz$', '', text, count=1)
+    metric_pattern = dict(answer_planner.METRICS)[planned.metrics[0]]
+    field = rf'(?:{metric_pattern})'
+    if planned.service:
+        service = r'(?:on\s*/?\s*off|open.close)' if planned.service == 'on_off' else r'modulating'
+        field = rf'(?:{service}\s+)?{field}'
+    prefix = r'(?:(?:what is|what\x27s|show(?: me)?|tell me|give me)\s+)?(?:the\s+)?'
+    if re.fullmatch(prefix + field + r'\s+(?:(?:of|for)\s+)?#', text):
+        return matches[0].upper()
+    return None
+
+
 def fast_path_codes(query):
     """Only closed, complete code-only lookup and comparison commands qualify."""
     import re
@@ -1959,7 +1989,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         else:
             answers = interactions.free_text_answer(query, turn.context['pending_questions'])
     if model is None and action is None and not answers and not remove_filters:
-        codes = fast_path_codes(query)
+        field_code = single_field_code(query)
+        codes = [field_code] if field_code else fast_path_codes(query)
         if codes and all(get_actuator(connection, code) for code in codes):
             turn.trace = dict(name='get_actuator', raw_parameters={'part_numbers': codes},
                               parameters={'part_numbers': codes}, validation=['ok'], context_before=context_before,
@@ -2124,7 +2155,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
 def finish(turn, result):
     trace = turn.trace
     import re
-    result.answer = result.answer.replace('0 identical fields hidden', '').replace('  ', ' ').strip()
+    # Match the whole zero count: substring replacement also corrupts 10/20/100.
+    result.answer = re.sub(r'\b0 identical fields hidden\.?', '', result.answer).replace('  ', ' ').strip()
     if trace.get('name') == 'ranked_pick' and result.recommendation:
         stated, issues = requirement_coverage.apply(turn.query, {})
         missing = requirement_coverage.missing(stated, result.context.get('filters') or {})
