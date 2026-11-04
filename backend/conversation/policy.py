@@ -56,7 +56,7 @@ def colloquial_requirements(query):
                 notes.append(note)
     if re.search(r'\b(open and close|open or shut|fully open|abrir y cerrar|on/of|onoff|on off|on-off)\b', text):
         result['service'] = 'on_off'
-    if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open)\b', text):
+    if re.search(r'\b(stop halfway|intermediate positions?|regulat(?:e|ing)|throttl\w*|a medias|control the flow precisely|que module|\d+\s*%\s*open|mod(?=\s|\d))\b', text):
         result['service'] = 'modulating'
     if re.search(r'\b(outside|exteriores?|intemperie)\b|\boutdoors\b.*\bnot hazardous\b', text):
         result['enclosure'] = 'weatherproof'
@@ -80,6 +80,11 @@ def colloquial_requirements(query):
     if match:
         number = Decimal(match.group(1).replace(',', '.'))
         result['min_torque_nm'] = int(number) if number == int(number) else float(number)
+    upper = re.search(r'(?:\b(?:torque|par)\s+)?(no more than|at most|up to|max(?:imum)?|≤|below|under|hasta|m[aá]ximo)\s*(\d+(?:[.,]\d+)?)\s*nm\b', text)
+    if upper:
+        number = Decimal(upper.group(2).replace(',', '.'))
+        result['min_torque_nm'] = {'value': int(number) if number == int(number) else float(number),
+                                   'op': 'lt' if upper.group(1) in ('below', 'under') else 'lte'}
     if re.search(r'\b(?:a prueba de explosi[oó]n)\b', text):
         result['enclosure'] = 'explosionproof'
     match = re.search(r'\b(?:toque|torque|par)\s*m[ií]nimo\s*(?:de\s*)?(\d+(?:[.,]\d+)?)\s*nm\b', text)

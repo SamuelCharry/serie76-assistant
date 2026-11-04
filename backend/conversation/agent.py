@@ -27,7 +27,7 @@ from pydantic import create_model as pydantic_model
 from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import get_actuator, search_actuators
-from . import policy, quality, tool_wire, interactions, ranking, metrics
+from . import policy, quality, tool_wire, interactions, ranking, metrics, integrity
 from .interactions import InvalidInteraction
 from .rendering import render_lookup, render_search, render_terms, supplies_text
 
@@ -911,6 +911,13 @@ class Turn:
             return self.clarify("requirements", "These requirements could not be applied together. Please restate the supply, service and limits you need.")
         unscoped_superlative = bool(merged.get('sort_by')) and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS)
         result = search_actuators(self.connection, filters, allow_ambiguous=unscoped_superlative)
+        invalid_rows = [p['base_part_number'] for p in result['products'] if not integrity.satisfies(p, filters)]
+        if invalid_rows:
+            rerun = search_actuators(self.connection, SearchFilters.model_validate(
+                dict(merged, limit=100, offset=0)), allow_ambiguous=True)
+            safe = [p for p in rerun['products'] if integrity.satisfies(p, filters)]
+            result = dict(result, products=safe, total=len(safe), facets={}, status='ok')
+            self.trace.setdefault('validation', []).append('postcondition_excluded:' + ','.join(invalid_rows))
         sort_map = {'fastest': 'fastest', 'lowest_current': 'lowest_fla',
                     'highest_torque': 'most_torque', 'lowest_power': 'lowest_power'}
         by = sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque')
@@ -922,6 +929,7 @@ class Turn:
             question = self.question_result(result['fields'], result['facets'])
             all_rows = search_actuators(self.connection, SearchFilters.model_validate(dict(merged, limit=100, offset=0)),
                                         allow_ambiguous=True)['products']
+            all_rows = [p for p in all_rows if integrity.satisfies(p, filters)]
             rec = ranking.recommendation(all_rows, merged, by, total=result['total'])
             self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
             self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
@@ -1006,6 +1014,7 @@ class Turn:
                                lead='No exact match. Nearest published models follow.')
         all_filters = SearchFilters.model_validate(dict(merged, limit=100, offset=0))
         all_rows = search_actuators(self.connection, all_filters, allow_ambiguous=True)['products']
+        all_rows = [p for p in all_rows if integrity.satisfies(p, filters)]
         rec = ranking.recommendation(all_rows, merged, by, total=result['total'])
         self.context['last_ranked_list'] = [p['base_part_number'] for p in ranking.rank(all_rows, merged, by)]
         self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
