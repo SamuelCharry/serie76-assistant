@@ -6,10 +6,10 @@ from .rendering import _num
 
 
 class InvalidInteraction(ValueError):
-    def __init__(self, code):
+    def __init__(self, code, detail=None):
         self.code = code
-        super().__init__('Choose a published option for the pending question.' if code == 'invalid_answers'
-                         else 'Only active search filters can be removed.')
+        super().__init__(detail or ('Choose a published option for the pending question.' if code == 'invalid_answers'
+                         else 'Only active search filters can be removed.'))
 
 
 def greeting(query, name):
@@ -33,8 +33,10 @@ def questions(facets, fields):
     prompts = {'service': 'Which service?', 'frequency_hz': 'Which frequency?',
                'supply_voltage_v': 'Which supply voltage?', 'supply_current': 'Which current type?',
                'phase_count': 'How many phases?', 'enclosure': 'Which enclosure?'}
-    return [dict(id=f, prompt=prompts[f], options=[option(f, r['value']) for r in facets.get(f, [])])
-            for f in fields if f in prompts and facets.get(f)]
+    ranked = [f for f in fields if f in prompts and len(facets.get(f, [])) > 1]
+    ranked.sort(key=lambda f: (max(r['n'] for r in facets[f]), f))
+    return [dict(id=f, prompt=prompts[f],
+                 options=[dict(option(f, r['value']), count=r['n']) for r in facets[f]]) for f in ranked]
 
 
 def apply_submission(context, answers, remove_filters):

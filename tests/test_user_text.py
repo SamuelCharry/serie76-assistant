@@ -20,10 +20,14 @@ def visible_texts(response):
                 yield from visit(item)
         elif isinstance(value, dict):
             for key, item in value.items():
-                if key in {'answer', 'lead', 'label', 'reason', 'prompt', 'message', 'summary', 'suggested_replies'}:
+                if key in {'answer', 'lead', 'label', 'reason', 'prompt', 'message', 'summary', 'suggested_replies', 'values'}:
                     yield from visit(item)
-                elif isinstance(item, (dict, list)):
+                elif isinstance(item, dict):
                     yield from visit(item)
+                elif isinstance(item, list):
+                    for nested in item:
+                        if isinstance(nested, dict):
+                            yield from visit(nested)
     return list(visit(response))
 
 

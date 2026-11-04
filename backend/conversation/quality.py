@@ -160,7 +160,7 @@ def comparison(products, focus=None):
         if ("_unqualified_" in components[0][0]
                 and _frequency_label(a, "unqualified") != _frequency_label(b, "unqualified")):
             text += " " + _frequency_label(product, "unqualified")
-        return text
+        return text.capitalize() if key == 'enclosure' else text
 
     rows, hidden = [], []
     focus = normalized_focus(focus or ['overview'])

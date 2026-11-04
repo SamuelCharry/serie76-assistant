@@ -383,7 +383,7 @@ class Turn:
     def question_result(self, fields, facets, message=None):
         questions = interactions.questions(facets, fields)
         self.context['pending_questions'] = questions
-        first = fields[0] if fields else 'requirements'
+        first = questions[0]['id'] if questions else (fields[0] if fields else 'requirements')
         legacy = 'frequency' if first == 'frequency_hz' else first
         result = self.clarify(legacy, message or ' '.join(q['prompt'] for q in questions))
         result.interaction = dict(kind='question', questions=questions) if questions else None
@@ -597,12 +597,26 @@ class Turn:
         answer, products, narrowing, options, focus = quality.search_presentation(result, products, merged, notes, shown)
         self.context["pagination"] = {"has_more": bool(products) and result.get("offset", 0) + len(products) < result["total"]}
         self.context["focus"] = focus
-        if narrowing:
-            from backend.catalog.repository import question_facets
-            if narrowing in ('requirements',):
+        question = None
+        if result.get('facets') and result['total'] > 4:
+            fields = list(result['facets'])
+            question = self.question_result(fields, result['facets'])
+            if question.interaction:
+                prompts = ' '.join(q['prompt'] for q in question.interaction['questions'])
+                prefix = '\n'.join(notes)
+                if shown:
+                    prefix += '\nInterpretation: ' + '; '.join(
+                        f"'{a['user_phrase']}' read as {policy.describe({a['field']: a['value']})}" for a in shown) + '.'
+                answer = (prefix + '\n' + f"{result['total']} actuators meet: {policy.describe(merged)}. {prompts}").strip()
+                narrowing = question.interaction['questions'][0]['id']
+            else:
+                narrowing = None
+        elif narrowing:
+            if narrowing == 'requirements':
                 narrowing = None
                 answer = answer.rsplit('\nWhich ', 1)[0]
             else:
+                from backend.catalog.repository import question_facets
                 question = self.question_result([narrowing], question_facets(self.connection, filters, [narrowing]))
         terms = []
         if args.get("explain_terms"):
@@ -728,6 +742,9 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                           context_before=context_before, model={'attempts': [], 'decision_calls': 0})
         args = models['search_actuators'].model_validate(dict(refine=True)).model_dump(mode='json')
         result = turn.search(args, trusted=True)
+        if answers and turn.trace.get('data', {}).get('total') == 0:
+            raise InvalidInteraction('empty_combination',
+                                     'No model matches these answers together: ' + policy.describe(answers) + '.')
         if notes:
             result.answer = '\n'.join(notes) + '\n' + result.answer
         return finish(turn, result)
