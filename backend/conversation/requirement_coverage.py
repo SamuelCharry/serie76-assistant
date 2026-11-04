@@ -123,14 +123,15 @@ def apply(query, filters, context=None):
         if any(start <= match.start() < end for start, end in occupied):
             continue
         token = match.group(2)
-        if token in ('phase', 'phases', 'fase', 'fases', 'models', 'model', 'times'):
+        if token in ('wp', 'xp', 'phase', 'phases', 'fase', 'fases', 'models', 'model', 'times'):
             continue
         candidates = [canonical for canonical in ('nm', 'knm', 'v', 'volts', 'hz', 's', 'seconds', 'a', 'amps', 'w', 'watts')
                       if _distance_one(token, canonical)]
         if not candidates and match.start(2) > match.end(1):
             continue
         normalized = {_unit(candidate) for candidate in candidates}
-        if len(normalized) == 1:
+        # Only attached unit typos are recoverable; a separate word is not a unit.
+        if len(normalized) == 1 and match.start(2) == match.end(1):
             unit = normalized.pop()
             field = _field(unit, text[max(0, match.start()-32):match.end()+18], context)
             if field:
@@ -141,9 +142,38 @@ def apply(query, filters, context=None):
                     op = _operator(text[max(0, match.start()-30):match.start()], field)
                     found[field] = amount if op == 'gte' and field.startswith('min_') else {'value': amount, 'op': op}
                 continue
-        issues.append(f'I could not apply "{match.group(0)}"; please state the unit and limit clearly.')
+        if match.start(2) == match.end(1):
+            issues.append(f'I could not apply "{match.group(0)}"; please state the unit and limit clearly.')
+    # Bare supply shorthand is restricted to the catalogue's published voltages.
+    bare = [int(m.group()) for m in re.finditer(r'(?<![\w./-])(?:24|110|220)(?![\w./-])', text)
+            if not any(start <= m.start() < end for start, end in occupied)]
+    if len(set(bare)) == 1 and 'supply_voltage_v' not in found:
+        found['supply_voltage_v'] = bare[0]
     updated.update(found)
     return updated, list(dict.fromkeys(issues))
+
+
+def unsupported(query, filters):
+    """Reverse coverage: each numeric argument needs compatible quantity evidence.
+
+    Operators are handled by apply/merge; a repeated number in another physical
+    dimension never licenses a filter. Structured UI values are validated separately.
+    """
+    from backend.catalog.models import bound_value, bounds
+    from .policy import NUMERIC_FIELDS
+    evidence, _ = apply(query, {}, filters)
+    for kind in ('cycles', 'starts'):
+        values = re.findall(rf'({NUMBER})\s*{kind}\s*(?:/\s*h(?:our)?|per\s+hour|an?\s+hour)', query, re.I)
+        if values:
+            evidence[f'min_{kind}_per_hour'] = [_number(v) for v in values]
+    rejected = []
+    for field, value in filters.items():
+        if field not in NUMERIC_FIELDS or value is None:
+            continue
+        published = {Decimal(str(bound_value(v))) for v in bounds(evidence[field])} if field in evidence else set()
+        if any(Decimal(str(bound_value(v))) not in published for v in bounds(value)):
+            rejected.append(field)
+    return rejected
 
 
 def missing(claims, filters):

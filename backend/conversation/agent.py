@@ -865,6 +865,13 @@ class Turn:
                                          if field not in inferred and field not in written and not
                                          (field == 'enclosure' and delta.get(field) == 'explosionproof'
                                           and policy.hazard_signal(self.query, self.semantic))]
+        if not trusted:
+            # Reverse T8h coverage: even a model's quoted assumption cannot turn
+            # voltage into watts or license another numeric field without units.
+            ungrounded = list(dict.fromkeys(ungrounded + requirement_coverage.unsupported(
+                self.query, {k: v for k, v in delta.items()
+                             if v != (self.context.get('filters') or {}).get(k)
+                             and not (k == 'supply_voltage_v' and v == inferred.get(k) == 24)})))
         dropped = []
         if bad or ungrounded:
             # A value the user never expressed is NOT applied (it would be an invented
@@ -895,7 +902,9 @@ class Turn:
         merged, notes = policy.merge_filters(previous, delta, refine=args["refine"] or change_only or negated,
                                              remove=sorted(removals), more=args["more"])
         carried = dict(self.context.get('quantity_requirements', {})) if args['refine'] or change_only or args['more'] or negated else {}
-        carried.update(written)
+        for field, value in written.items():
+            carried[field] = (policy.merge_bounds(field, carried[field], value)
+                              if field in carried and field not in ('supply_voltage_v', 'frequency_hz') else value)
         for field in removals:
             carried.pop(field, None)
         missing_quantities = requirement_coverage.missing(carried, merged)

@@ -403,6 +403,10 @@ def merge_filters(previous, delta, *, refine, remove, more):
     base = {k: v for k, v in (previous or {}).items() if k in FILTER_FIELDS and v is not None} if (refine or more) else {}
     merged = dict(base)
     merged.update({k: v for k, v in delta.items() if v is not None})
+    for field in NUMERIC_FIELDS:
+        if field in ('supply_voltage_v', 'frequency_hz') or field not in base or delta.get(field) is None:
+            continue
+        merged[field] = merge_bounds(field, base[field], delta[field])
     for field in remove:
         merged.pop(field, None)
     old_service, new_service = base.get("service"), merged.get("service")
@@ -418,6 +422,16 @@ def merge_filters(previous, delta, *, refine, remove, more):
         merged["sort_by"] = previous["sort_by"]
     merged.update(limit=limit, offset=offset)
     return merged, notes
+
+
+def merge_bounds(field, previous, incoming):
+    """Replace only the incoming direction; preserve the opposite end of a range."""
+    default = 'gte' if field.startswith('min_') else 'lte'
+    direction = lambda item: bound_operator(item, default).startswith('g')
+    replaced = {direction(item) for item in bounds(incoming)}
+    combined = [item for item in bounds(previous) if direction(item) not in replaced] + bounds(incoming)
+    return combined[0] if len(combined) == 1 else [
+        {'value': bound_value(item), 'op': bound_operator(item, default)} for item in combined]
 
 
 def conflicts(filters):
