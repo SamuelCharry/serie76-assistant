@@ -456,10 +456,13 @@ class Turn:
             if not ordered:
                 return self.clarify('which_product')
             chosen = ranking.item(ordered[0], filters)
+            self.context['focused_model'] = chosen['part_number']
             open_choices = [policy.LABELS.get(q['id'], q['id'].replace('_', ' '))
                             for q in self.context.get('pending_questions', [])]
             assumption = (f"Assumes no preference on {', '.join(open_choices)}; tell me if that matters."
                           if open_choices else 'Assumes the current requirements; tell me if another constraint matters.')
+            if not any(filters.get(field) is not None for field in ('min_torque_nm', 'min_torque_in_lb')):
+                assumption += ' Assumes no torque requirement; tell me the torque you need.'
             rec = dict(ranked_by=ranking.ranked_by(filters, by), total=len(codes), shown=1, items=[chosen])
             self.trace['data'] = dict(status='ranked_pick')
             return AgentResult(f"My pick: {chosen['part_number']} — {chosen['reason']}. {assumption}",
@@ -1194,6 +1197,16 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                           context_before=context_before,
                           model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
         return finish(turn, turn.lookup(dict(part_numbers=[code], focus=['motor_power'], explain_terms=[])))
+    if (action is None and not answers and not remove_filters and turn.context.get('focused_model') and
+            re.search(r'\b(that one|your pick|it)\b', bare_query) and
+            re.search(r'\b(draw|draws|consume|consumption)\b', bare_query)):
+        code = turn.context['focused_model']
+        turn.trace = dict(name='get_actuator', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        return finish(turn, turn.lookup(dict(part_numbers=[], reference_kind='focused',
+                                           focus=['fla', 'lra', 'motor_power'],
+                                           explain_terms=[])))
     if action is None and not answers and not remove_filters and bare_query in ('thanks', 'thank you', 'gracias'):
         turn.trace = dict(name='courtesy', parameters={}, raw_parameters={}, validation=['ok'],
                           context_before=context_before,
@@ -1316,10 +1329,13 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             ordered = ranking.rank([row for row in rows if row], filters, by)
             if ordered:
                 chosen = ranking.item(ordered[0], filters)
+                turn.context['focused_model'] = chosen['part_number']
                 open_choices = [policy.LABELS.get(q['id'], q['id'].replace('_', ' '))
                                 for q in turn.context.get('pending_questions', [])]
                 assumption = (f"Assumes no preference on {', '.join(open_choices)}; tell me if that matters."
                               if open_choices else 'Assumes the current requirements; tell me if another constraint matters.')
+                if not any(filters.get(field) is not None for field in ('min_torque_nm', 'min_torque_in_lb')):
+                    assumption += ' Assumes no torque requirement; tell me the torque you need.'
                 answer = f"My pick: {chosen['part_number']} — {chosen['reason']}. {assumption}"
                 if cheap:
                     answer = "The catalogue doesn't publish prices. Lowest motor power is only a proxy, not a price estimate.\n" + answer
