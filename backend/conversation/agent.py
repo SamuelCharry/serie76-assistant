@@ -632,7 +632,7 @@ class Turn:
         focus = quality.normalized_focus(args.get("focus") or self.context.get("focus") or ["overview"])
         self.context["focus"] = focus
         public = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in products]
-        comparison_focus = focus
+        comparison_focus = ['overview']
         compared = quality.comparison(public, comparison_focus, self.context.get('filters')) if len(public) >= 2 else None
         if compared:
             self.context['last_comparison_models'] = compared['models']
@@ -673,18 +673,26 @@ class Turn:
         lead = quality.comparison_lead(compared) if compared else None
         if compared and len(compared['models']) == 2:
             import re
-            request = re.search(r'\b(faster|stronger|less current|lower current)\b', self.query, re.I)
-            if request:
-                metric = ('operating_time' if request.group(1).lower() == 'faster' else
-                          'torque' if request.group(1).lower() == 'stronger' else 'fla')
+            words = self.query.lower()
+            metric = ('lra' if re.search(r'\blra|starting current|locked rotor\b', words) else
+                      'fla' if re.search(r'\bfla|current|amps?\b', words) else
+                      'motor_power' if re.search(r'\bpower|electricity\b', words) else
+                      'operating_time' if re.search(r'\bfaster|quickest|speed|time\b', words) else
+                      'torque' if re.search(r'\bstronger|torque\b', words) else None)
+            direction = ('higher' if re.search(r'\b(more|higher|highest|stronger|most)\b', words) else 'lower')
+            if metric:
                 relevant = [row for row in compared['rows'] if metric in row['field'] and row['better'] is not None]
                 hz = re.search(r'\b(50|60)\s*hz\b', self.query, re.I)
                 if hz:
                     relevant = [row for row in relevant if hz.group(1) + 'hz' in row['field']]
                 if relevant:
                     row = relevant[0]
-                    adjective = {'operating_time': 'faster', 'torque': 'stronger', 'fla': 'lower in current'}[metric]
-                    lead = f"{compared['models'][row['better']]} is {adjective}" + (f" at {hz.group(1)} Hz" if hz else '') + ': ' + ' vs '.join(row['values']) + '.'
+                    winner = row['better'] if direction == 'lower' or metric == 'torque' and direction == 'higher' else 1 - row['better']
+                    adjective = ('faster' if metric == 'operating_time' and direction == 'lower' else
+                                 'stronger' if metric == 'torque' and direction == 'higher' else
+                                 ('more ' if direction == 'higher' else 'lower ') +
+                                 ('current' if metric == 'fla' else metric.upper() if metric == 'lra' else 'motor power'))
+                    lead = f"{compared['models'][winner]} is {adjective}" + (f" at {hz.group(1)} Hz" if hz else '') + ': ' + ' vs '.join(row['values']) + '.'
         return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared, lead=lead)
 
     def search(self, args, *, trusted=False):
