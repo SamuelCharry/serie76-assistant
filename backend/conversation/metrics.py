@@ -86,4 +86,7 @@ def verdict(products, query, filters):
                   'has lower LRA' if metric == 'lra' and direction == 'lower' else
                   f'has the {"highest" if direction == "higher" else "lowest"} {label}')
         return f'{codes} {phrase}{frequency}: {compared}.', winners[0][0]['base_part_number']
+    if len(winners) > 1:
+        return (f'{codes} tie for the {"highest" if direction == "higher" else "lowest"} '
+                f'{label}{frequency}: {_num(best)} {unit.strip()}.'), None
     return f'{codes} has the {"highest" if direction == "higher" else "lowest"} {label}{frequency}: {_num(best)} {unit.strip()}.', winners[0][0]['base_part_number'] if len(winners) == 1 else None
