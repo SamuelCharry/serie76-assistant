@@ -84,7 +84,8 @@ data class Interaction(val kind: String = "question", val questions: List<Questi
 data class Question(val id: String, val prompt: String, val options: List<QuestionOption>)
 
 @Serializable
-data class QuestionOption(val value: String, val label: String, val count: Int? = null)
+data class QuestionOption(val value: String, val label: String, val count: Int? = null,
+                          val description: String? = null)
 
 @Serializable data class SuggestionAction(val type: String, val args: JsonObject = JsonObject(emptyMap()))
 @Serializable data class Suggestion(val label: String, val action: SuggestionAction? = null)

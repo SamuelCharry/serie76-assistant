@@ -38,6 +38,13 @@ class T8ContractTest {
         assertNull(old.recommendation)
     }
 
+    @Test fun `option description decodes when present and stays optional for old messages`() {
+        val newQuestion = wireJson.decodeFromString<Question>("""{"id":"service","prompt":"Which service?","options":[{"value":"on_off","label":"On/Off","count":21,"description":"Moves fully open or closed."}]}""")
+        assertEquals("Moves fully open or closed.", newQuestion.options.single().description)
+        val oldQuestion = wireJson.decodeFromString<Question>("""{"id":"service","prompt":"Which service?","options":[{"value":"on_off","label":"On/Off","count":21}]}""")
+        assertNull(oldQuestion.options.single().description)
+    }
+
     @Test fun `question stepper requires explicit navigation and review`() {
         val questions = listOf(Question("voltage", "Which voltage?", listOf(QuestionOption("110", "110 V", 21))),
             Question("enclosure", "Which enclosure?", listOf(QuestionOption("explosionproof", "Explosionproof", 10))))

@@ -26,6 +26,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.serie76.assistant.data.ActiveFilter
@@ -54,13 +55,20 @@ fun QuestionCard(state: QuestionStepper, enabled: Boolean, onChoose: (String) ->
                 } else state.current?.let { question ->
                     Text(question.prompt, Modifier.padding(top = 12.dp, bottom = 4.dp),
                         style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
-                    question.options.forEach { option ->
+                    state.optionRows.forEach { option ->
                         val selected = state.answers[question.id] == option.value
                         Row(Modifier.fillMaxWidth().selectable(selected = selected, enabled = enabled,
                             role = Role.RadioButton, onClick = { onChoose(option.value) }).heightIn(min = 48.dp).padding(vertical = 4.dp),
                             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             RadioButton(selected = selected, onClick = null, enabled = enabled)
-                            Text(option.label + (option.count?.let { " · $it" } ?: ""), style = MaterialTheme.typography.bodyMedium)
+                            Column(Modifier.weight(1f)) {
+                                Text(option.title, style = MaterialTheme.typography.bodyMedium)
+                                option.description?.let { description ->
+                                    Text(description, style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 3, overflow = TextOverflow.Ellipsis)
+                                }
+                            }
                         }
                     }
                 }

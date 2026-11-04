@@ -2,6 +2,8 @@ package com.serie76.assistant.ui
 
 import com.serie76.assistant.data.*
 
+data class QuestionOptionRow(val value: String, val title: String, val description: String?)
+
 /** Pure state machine: selections stay local until the explicit review Submit. */
 data class QuestionStepper(
     val questions: List<Question>,
@@ -10,6 +12,10 @@ data class QuestionStepper(
 ) {
     val reviewing: Boolean get() = questions.isNotEmpty() && index == questions.size
     val current: Question? get() = questions.getOrNull(index)
+    val optionRows: List<QuestionOptionRow> get() = current?.options.orEmpty().map { option ->
+        QuestionOptionRow(option.value, option.label + (option.count?.let { " · $it" } ?: ""),
+            option.description?.takeIf { it.isNotBlank() })
+    }
     val reviewLines: List<String> get() = questions.map { "${it.prompt} → ${label(it)}" }
 
     private fun label(question: Question): String = question.options.firstOrNull { it.value == answers[question.id] }?.label.orEmpty()

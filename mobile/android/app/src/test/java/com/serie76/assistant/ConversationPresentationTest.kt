@@ -12,6 +12,20 @@ class ConversationPresentationTest {
         Question("phase", "How many phases?", listOf(QuestionOption("1", "1 phase"))),
     )
 
+    @Test fun `option UI keeps short title and separate secondary description`() {
+        val question = Question("service", "Which service?", listOf(
+            QuestionOption("on_off", "On/Off", 21, "Moves fully open or closed."),
+            QuestionOption("modulating", "Modulating", 10)))
+        val stepper = QuestionStepper(listOf(question))
+        assertEquals("On/Off · 21", stepper.optionRows[0].title)
+        assertEquals("Moves fully open or closed.", stepper.optionRows[0].description)
+        assertEquals("Modulating · 10", stepper.optionRows[1].title)
+        assertNull(stepper.optionRows[1].description)
+        val reviewed = stepper.choose("on_off").next()
+        assertEquals(listOf("Which service? → On/Off"), reviewed.reviewLines)
+        assertEquals("On/Off", reviewed.submission("s")!!.query)
+    }
+
     @Test fun `stepper advances to review and edits a reviewed answer before submit`() {
         var stepper = QuestionStepper(questions)
         assertEquals(0, stepper.index); assertFalse(stepper.reviewing)
