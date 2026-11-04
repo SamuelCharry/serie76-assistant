@@ -6,7 +6,7 @@ Date: 2026-11-04 (America/Bogota). Worktree: `C:\Users\nrir\orca\workspaces\seri
 
 | Slice | Screen state and behavior |
 |---|---|
-| Questions | One pinned card pages through all questions with `1/N`, option counts, Back/Next, clickable review lines, Submit and Cancel. Selection stays local until Submit sends exact `answers` and a readable label query. The composer remains dimmed and editable. A 422 `empty_combination` restores review and shows its detail inline. |
+| Questions | One pinned card pages through all questions with `1/N`, option counts, Back/Next, clickable review lines, Submit and Cancel. Optional option descriptions appear as muted secondary text below short labels, capped at three lines with ellipsis; review and the submitted query retain short labels. Selection stays local until Submit sends exact `answers` and a readable label query. The composer remains dimmed and editable. A 422 `empty_combination` restores review and shows its detail inline. |
 | Recommendation | A `Ranked by …` block shows at most three server-provided part numbers, reasons and key values, then `Showing 3 of N` using the actual shown count. No catalogue values are computed on the device. |
 | Suggestions | The dashed `Suggestions · optional` chips appear only beneath the latest response and hide while typing. Legacy strings send `query`; object suggestions send their label as `query` plus structured `action`. |
 | Comparison | Cards for 3+ models use the server's `key_fields`; `key_fields_reason` appears as the subtitle when present. |
@@ -28,9 +28,11 @@ Initial T8 run: exit 0, `BUILD SUCCESSFUL in 1m 27s`; **46 JVM tests, zero failu
 
 Follow-up review fix: a new JVM test first failed because confirming a second deletion canceled the first timer and lost its DELETE. The fix moves the previous deletion into a separate completion scope, keeps its ID hidden during the HTTP request, and restores its row only on failure. `ViewModelStore.clear()` commits the pending deletion through that scope. Three added JVM tests cover two deletes with Undo of only the second, ViewModel clearing, and failure of the first DELETE while the second remains undoable. The requested `.\mobile\android\gradlew.bat -p mobile/android testDebugUnitTest assembleDebug` then passed with **49 JVM tests, zero failures**, and `BUILD SUCCESSFUL in 42s`.
 
+Additive option-description update: the branch fast-forwarded to merged `release/submission` revision `da21a40` before editing. Two new JVM tests first failed against the missing DTO and UI state, then passed after `QuestionOption.description` and a separate option-row description were added. The final `.\mobile\android\gradlew.bat -p mobile/android testDebugUnitTest assembleDebug` passed with **51 JVM tests, zero failures**, and `BUILD SUCCESSFUL in 36s`. Legacy payloads without `description` still decode; no device rendering or backend integration was exercised in this update.
+
 | APK | Bytes | SHA-256 |
 |---|---:|---|
-| `mobile/android/app/build/outputs/apk/debug/app-debug.apk` | 12,475,719 | `9c40c99d2aea3772adbfc55846585298cee2de2c1687125c66216efdf969b139` |
+| `mobile/android/app/build/outputs/apk/debug/app-debug.apk` | 12,475,719 | `facf67383263f5d8d7b8e6c7352944e00eb7c2cc4c14fecfc9bf14cbfd1d67bc` |
 | `mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk` | 2,116,981 | `503040a5f79b3c12f5a22862bbf148e360d314815037b09e37a6f125497672cb` |
 
 Release output is unsigned. Device review and merged backend acceptance remain for the coordinator.
