@@ -11,7 +11,7 @@
           "query": "Compare the torque of 761A00-11300000/A, 761B00-11300000/A and 762A00-11300000/A",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.081,
+          "elapsed_s": 0.076,
           "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A vs 762A00-11300000/A.\nMotor power: 15 W vs 15 W vs 40 W\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm vs 1330 in-lb / 150 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm vs 1150 in-lb / 130 Nm\nOperating time at 50 Hz: 20 s vs 23 s vs 21 s\nFLA at 50 Hz: 1.1 A vs 1.2 A vs 2.3 A\nOperating time at 60 Hz: 17 s vs 19 s vs 18 s\nFLA at 60 Hz: 1.2 A vs 1.3 A vs 2.3 A",
           "clarification": null,
           "products": [],
@@ -207,7 +207,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 53,
+            "latency_ms": 50,
             "attempts": 1,
             "llm_called": true
           },
@@ -215,9 +215,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "07924187-25e8-4df3-9652-d853dba3c5c6",
+            "session_id": "82a315d3-bebc-4ee5-b458-454db4e5849f",
             "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A vs 762A00-11300000/A.\nMotor power: 15 W vs 15 W vs 40 W\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm vs 1330 in-lb / 150 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm vs 1150 in-lb / 130 Nm\nOperating time at 50 Hz: 20 s vs 23 s vs 21 s\nFLA at 50 Hz: 1.1 A vs 1.2 A vs 2.3 A\nOperating time at 60 Hz: 17 s vs 19 s vs 18 s\nFLA at 60 Hz: 1.2 A vs 1.3 A vs 2.3 A",
-            "message_id": "f8bb5a73-1f93-497b-ae4a-2547432e7e72",
+            "message_id": "8f8b729c-df97-4191-84e0-20623d5e1294",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -320,7 +320,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 53,
+              "latency_ms": 50,
               "attempts": 1,
               "llm_called": true
             }
@@ -336,7 +336,7 @@
           "query": "hello",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.052,
+          "elapsed_s": 0.033,
           "answer": "Hello. I can look up Series 76 actuators, find models for your requirements, compare models or explain catalogue terms.",
           "clarification": null,
           "products": [],
@@ -368,7 +368,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 26,
+            "latency_ms": 14,
             "attempts": 0,
             "llm_called": false
           },
@@ -376,9 +376,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "0527d97c-3641-47b8-97c0-9015d9b48654",
+            "session_id": "6796674a-1777-402e-aad5-d1f753a958af",
             "answer": "Hello. I can look up Series 76 actuators, find models for your requirements, compare models or explain catalogue terms.",
-            "message_id": "f68ef1d2-c441-44c7-b8f0-263ef4c5250c",
+            "message_id": "3c6d9573-ed79-4fa1-a761-e611b17730e0",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -391,7 +391,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 26,
+              "latency_ms": 14,
               "attempts": 0,
               "llm_called": false
             }
@@ -407,7 +407,7 @@
           "query": "I need at least 70 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.148,
+          "elapsed_s": 0.098,
           "answer": "63 actuators meet: torque ≥ 70 Nm.\nTo narrow it down: service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A: On/Off torque 100 Nm; Modulating torque 70 Nm; FLA 0.7 A\n761B00-11300000/A: On/Off torque 100 Nm; Modulating torque 70 Nm; FLA 1.2 A\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A",
           "clarification": {
             "field": "service",
@@ -666,7 +666,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 122,
+            "latency_ms": 77,
             "attempts": 1,
             "llm_called": true
           },
@@ -738,9 +738,9 @@
           ],
           "product_snapshots": [],
           "response": {
-            "session_id": "0d6b3ad1-6743-4c92-85a9-603f4b2a3acf",
+            "session_id": "d54688db-1870-4dfe-9057-0ce08406749d",
             "answer": "63 actuators meet: torque ≥ 70 Nm.\nTo narrow it down: service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A: On/Off torque 100 Nm; Modulating torque 70 Nm; FLA 0.7 A\n761B00-11300000/A: On/Off torque 100 Nm; Modulating torque 70 Nm; FLA 1.2 A\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A",
-            "message_id": "fa94d273-f89f-459e-8028-f2fddf27f22b",
+            "message_id": "b8480966-4df6-477e-b7a1-899659ea93a2",
             "products": [],
             "clarification": {
               "field": "service",
@@ -857,7 +857,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 122,
+              "latency_ms": 77,
               "attempts": 1,
               "llm_called": true
             }
@@ -867,7 +867,7 @@
           "query": "¿Tienen algún modelo de la serie 76 que soporte 100,000 In-Lbs de torque en 110V?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.089,
+          "elapsed_s": 0.059,
           "answer": "No actuator in the supplied catalogue meets all of: 110 V, torque >= 100000 in-lb.\nClosest published On/Off torque: 26500 in-lb, held by 765B00-11300000/A.\nClosest published Modulating torque: 22550 in-lb, held by 765B00-11300000/A.",
           "clarification": null,
           "products": [],
@@ -1089,7 +1089,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 62,
+            "latency_ms": 38,
             "attempts": 1,
             "llm_called": true
           },
@@ -1097,9 +1097,9 @@
           "eligible_codes": [],
           "product_snapshots": [],
           "response": {
-            "session_id": "0d6b3ad1-6743-4c92-85a9-603f4b2a3acf",
+            "session_id": "d54688db-1870-4dfe-9057-0ce08406749d",
             "answer": "No actuator in the supplied catalogue meets all of: 110 V, torque >= 100000 in-lb.\nClosest published On/Off torque: 26500 in-lb, held by 765B00-11300000/A.\nClosest published Modulating torque: 22550 in-lb, held by 765B00-11300000/A.",
-            "message_id": "40fc4569-16a1-496a-b424-2f926c42adca",
+            "message_id": "98dc6095-dad8-4d5e-ab05-80aa115b6791",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -1145,7 +1145,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 62,
+              "latency_ms": 38,
               "attempts": 1,
               "llm_called": true
             }
@@ -1161,7 +1161,7 @@
           "query": "The label says 761A00-11300000/A but my invoice says 761B00-11300000/A. Which one is actually installed?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.078,
+          "elapsed_s": 0.068,
           "answer": "The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\nComparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
           "clarification": null,
           "products": [],
@@ -1392,7 +1392,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 50,
+            "latency_ms": 42,
             "attempts": 0,
             "llm_called": false
           },
@@ -1400,9 +1400,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "e02ed153-c558-48a0-b96b-d99c913c5ba5",
+            "session_id": "da8a5854-1cc1-409b-8040-7b33534b13d8",
             "answer": "The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\nComparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
-            "message_id": "5e6d6b8a-c4dd-43c7-aa7e-3e7e1dafb819",
+            "message_id": "09313edf-f8d5-48fc-a129-a3f8cc6ca472",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -1583,7 +1583,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 50,
+              "latency_ms": 42,
               "attempts": 0,
               "llm_called": false
             }
@@ -1599,7 +1599,7 @@
           "query": "Find on/off actuators with torque between 70 and 100 Nm, including both ends.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.133,
+          "elapsed_s": 0.114,
           "answer": "10 actuators meet: On/Off service, torque >= 70 Nm and torque <= 100 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 0.7 A",
           "clarification": {
             "field": "supply_voltage_v",
@@ -1913,7 +1913,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 105,
+            "latency_ms": 90,
             "attempts": 1,
             "llm_called": true
           },
@@ -2262,9 +2262,9 @@
             }
           ],
           "response": {
-            "session_id": "1c4e1e30-0ed1-457b-ba17-b5bf085fa3e0",
+            "session_id": "85bc7d81-f2fe-4f75-897f-3d67c805d625",
             "answer": "10 actuators meet: On/Off service, torque >= 70 Nm and torque <= 100 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 0.7 A",
-            "message_id": "8083056b-e509-4465-841b-b749564f7354",
+            "message_id": "376b7774-e1fb-4148-b73b-d46686f08855",
             "products": [
               {
                 "base_part_number": "761X30-11380000/A",
@@ -2733,7 +2733,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 105,
+              "latency_ms": 90,
               "attempts": 1,
               "llm_called": true
             }
@@ -2749,7 +2749,7 @@
           "query": "Busco actuadores On/Off con FLA menor a 1,5 A a 60 Hz.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.127,
+          "elapsed_s": 0.109,
           "answer": "15 actuators meet: On/Off service, 60 Hz, FLA < 1.5 A. To narrow it down: enclosure, supply voltage and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; FLA 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; FLA 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 0.7 A",
           "clarification": {
             "field": "enclosure",
@@ -2905,7 +2905,7 @@
                   "timeout_s": 45.0
                 }
               ],
-              "latency_ms": 2,
+              "latency_ms": 1,
               "decision_calls": 1
             },
             "model_calls": [
@@ -3070,7 +3070,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 101,
+            "latency_ms": 86,
             "attempts": 1,
             "llm_called": true
           },
@@ -3413,9 +3413,9 @@
             }
           ],
           "response": {
-            "session_id": "34ccb843-28ec-4673-a99f-7c6f2a751de1",
+            "session_id": "bac6ccc9-38ce-4ca3-af8a-bbd42a588f65",
             "answer": "15 actuators meet: On/Off service, 60 Hz, FLA < 1.5 A. To narrow it down: enclosure, supply voltage and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; FLA 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; FLA 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 0.7 A",
-            "message_id": "1ac85579-2ffd-40b7-bb08-5c7f657900b7",
+            "message_id": "6365e9be-5047-4083-a62e-23a168f31355",
             "products": [
               {
                 "base_part_number": "761X30-11320000/A",
@@ -3887,7 +3887,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 101,
+              "latency_ms": 86,
               "attempts": 1,
               "llm_called": true
             }
@@ -3903,7 +3903,7 @@
           "query": "Find on/off actuators with at least 70 Nm.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.177,
+          "elapsed_s": 0.135,
           "answer": "59 actuators meet: On/Off service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 0.7 A",
           "clarification": {
             "field": "supply_voltage_v",
@@ -4089,7 +4089,7 @@
                   "timeout_s": 45.0
                 }
               ],
-              "latency_ms": 2,
+              "latency_ms": 1,
               "decision_calls": 1
             },
             "model_calls": [
@@ -4238,7 +4238,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 144,
+            "latency_ms": 111,
             "attempts": 1,
             "llm_called": true
           },
@@ -4636,9 +4636,9 @@
             }
           ],
           "response": {
-            "session_id": "c405abbf-b6c3-4bf0-9628-352f80bae1a5",
+            "session_id": "fc6396c4-4ee0-4ae3-a062-36331e67ce6c",
             "answer": "59 actuators meet: On/Off service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 0.7 A",
-            "message_id": "4827554a-26a5-480c-8ff6-12a1ea6439ed",
+            "message_id": "c5a0e2b0-1df0-46ce-908c-b2090be8ddca",
             "products": [
               {
                 "base_part_number": "761X30-11380000/A",
@@ -5107,7 +5107,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 144,
+              "latency_ms": 111,
               "attempts": 1,
               "llm_called": true
             }
@@ -5117,7 +5117,7 @@
           "query": "Actually I meant modulating, but keep the same performance.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.172,
+          "elapsed_s": 0.149,
           "answer": "54 actuators meet: Modulating service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nAssumption: \"same performance\" retains the numeric thresholds and applies them to the requested service.\nInterpretation: 'same performance' read as Modulating service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A: Modulating torque 70 Nm; FLA 0.7 A\n761B00-11300000/A: Modulating torque 70 Nm; FLA 1.2 A\n761Y30-11320000/A: Modulating torque 72 Nm; FLA 0.6 A",
           "clarification": {
             "field": "supply_voltage_v",
@@ -5579,7 +5579,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 139,
+            "latency_ms": 117,
             "attempts": 1,
             "llm_called": true
           },
@@ -5951,9 +5951,9 @@
             }
           ],
           "response": {
-            "session_id": "c405abbf-b6c3-4bf0-9628-352f80bae1a5",
+            "session_id": "fc6396c4-4ee0-4ae3-a062-36331e67ce6c",
             "answer": "54 actuators meet: Modulating service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nAssumption: \"same performance\" retains the numeric thresholds and applies them to the requested service.\nInterpretation: 'same performance' read as Modulating service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A: Modulating torque 70 Nm; FLA 0.7 A\n761B00-11300000/A: Modulating torque 70 Nm; FLA 1.2 A\n761Y30-11320000/A: Modulating torque 72 Nm; FLA 0.6 A",
-            "message_id": "80ef2b52-d09a-4e83-82b1-103db3dea1ac",
+            "message_id": "fb93cc3f-3581-4278-b764-461569036b7f",
             "products": [
               {
                 "base_part_number": "761B00-11320000/A",
@@ -6407,7 +6407,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 139,
+              "latency_ms": 117,
               "attempts": 1,
               "llm_called": true
             }
@@ -6423,7 +6423,7 @@
           "query": "I need a 110 V or 220 V on/off actuator. Either voltage is acceptable.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.075,
+          "elapsed_s": 0.051,
           "answer": "To narrow it down: supply voltage.",
           "clarification": {
             "field": "supply_voltage_v",
@@ -6486,7 +6486,7 @@
                   "timeout_s": 45.0
                 }
               ],
-              "latency_ms": 2,
+              "latency_ms": 1,
               "decision_calls": 1
             },
             "model_calls": [
@@ -6533,7 +6533,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 50,
+            "latency_ms": 30,
             "attempts": 1,
             "llm_called": true
           },
@@ -6541,9 +6541,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "2396b4fd-a5b8-4d3c-8771-8b162893e34a",
+            "session_id": "4ca8eadf-de22-4573-9f1a-97cb1d5ee221",
             "answer": "To narrow it down: supply voltage.",
-            "message_id": "23eaa9f4-7151-42c0-b463-eac93bd5ae6b",
+            "message_id": "77fa3d6d-b31c-4208-8221-ec9553b09c0c",
             "products": [],
             "clarification": {
               "field": "supply_voltage_v",
@@ -6584,7 +6584,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 50,
+              "latency_ms": 30,
               "attempts": 1,
               "llm_called": true
             }
@@ -6600,7 +6600,7 @@
           "query": "Which actuator is best overall if torque matters twice as much as speed and price?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.052,
+          "elapsed_s": 0.04,
           "answer": "The catalogue doesn't publish prices. A weighted price score is unavailable; I can compare published motor power or torque as a proxy only.",
           "clarification": null,
           "products": [],
@@ -6633,7 +6633,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 28,
+            "latency_ms": 17,
             "attempts": 0,
             "llm_called": false
           },
@@ -6641,9 +6641,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "b2ad3fd6-8f1e-4605-b5ac-c53a45fe7fbd",
+            "session_id": "646aab73-7250-4dcd-b520-fa26e6bb4603",
             "answer": "The catalogue doesn't publish prices. A weighted price score is unavailable; I can compare published motor power or torque as a proxy only.",
-            "message_id": "0d7350be-2f9e-42ca-a454-dcc54c2c1fae",
+            "message_id": "9bd34990-9fc7-4dd5-bcd2-d3f7d66dca80",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -6656,7 +6656,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 28,
+              "latency_ms": 17,
               "attempts": 0,
               "llm_called": false
             }
@@ -6672,7 +6672,7 @@
           "query": "Buy two units of 761A00-11300000/A and confirm delivery tomorrow.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.067,
+          "elapsed_s": 0.045,
           "answer": "The catalogue cannot process orders or confirm delivery. I can provide its published specifications.\n761A00-11300000/A\n  • On/Off torque: 700 in-lb / 80 Nm\n  • Modulating torque: 580 in-lb / 65 Nm\n  • Duty S4 On/Off: 40%\n  • Duty S4 Modulating: 40%\n  • On/Off cycles per hour: 36\n  • Modulating starts per hour: 960\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • FLA at 50 Hz: 1.1 A\n  • FLA at 60 Hz: 1.2 A\n  • LRA at 50 Hz: 1.3 A\n  • LRA at 60 Hz: 1.4 A\n  • Motor power: 15 W\n  Source: Series 76 electrical catalogue, page 1.",
           "clarification": null,
           "products": [
@@ -6764,7 +6764,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 40,
+            "latency_ms": 25,
             "attempts": 1,
             "llm_called": true
           },
@@ -6898,9 +6898,9 @@
             }
           ],
           "response": {
-            "session_id": "99039c36-0d9e-4bae-b693-744d642cbd87",
+            "session_id": "c39be758-bd32-445d-9b86-90bd763e7495",
             "answer": "The catalogue cannot process orders or confirm delivery. I can provide its published specifications.\n761A00-11300000/A\n  • On/Off torque: 700 in-lb / 80 Nm\n  • Modulating torque: 580 in-lb / 65 Nm\n  • Duty S4 On/Off: 40%\n  • Duty S4 Modulating: 40%\n  • On/Off cycles per hour: 36\n  • Modulating starts per hour: 960\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • FLA at 50 Hz: 1.1 A\n  • FLA at 60 Hz: 1.2 A\n  • LRA at 50 Hz: 1.3 A\n  • LRA at 60 Hz: 1.4 A\n  • Motor power: 15 W\n  Source: Series 76 electrical catalogue, page 1.",
-            "message_id": "93c8e997-1d3d-4394-95ad-7196eadc1a8e",
+            "message_id": "80ff9077-c3cc-44f4-94a4-73c52056622b",
             "products": [
               {
                 "base_part_number": "761A00-11300000/A",
@@ -7039,7 +7039,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 40,
+              "latency_ms": 25,
               "attempts": 1,
               "llm_called": true
             }
@@ -7055,7 +7055,7 @@
           "query": "For 761A00-11300000/A, give me torque, current, operating time, compare it with 761B00-11300000/A, and explain FLA, LRA, S4 and IP67.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.082,
+          "elapsed_s": 0.061,
           "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 2 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A\nLRA at 50 Hz: 1.3 A vs 1.3 A\nLRA at 60 Hz: 1.4 A vs 1.4 A\n\nFull Load Current (FLA): The electric current (in Amps) drawn by the motor under its maximum rated load. [Series 76 summary, p. 2]\n\nLocked Rotor Current (LRA): The current drawn by the motor at startup, which is significantly higher than the FLA. [Series 76 summary, p. 2]\n\nDuty Cycle (S4%): The percentage of time the actuator can be in operation over a given cycle without overheating. [Series 76 summary, p. 2]\nThe document doesn't define that term.",
           "clarification": null,
           "products": [],
@@ -7170,7 +7170,7 @@
                   "timeout_s": 45.0
                 }
               ],
-              "latency_ms": 2,
+              "latency_ms": 1,
               "decision_calls": 1
             },
             "model_calls": [
@@ -7291,7 +7291,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 55,
+            "latency_ms": 38,
             "attempts": 1,
             "llm_called": true
           },
@@ -7299,9 +7299,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "f2101c7f-586b-4be7-91f8-3461e237faef",
+            "session_id": "0faf34b0-e32d-4092-a429-121f1e6a9c43",
             "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 2 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A\nLRA at 50 Hz: 1.3 A vs 1.3 A\nLRA at 60 Hz: 1.4 A vs 1.4 A\n\nFull Load Current (FLA): The electric current (in Amps) drawn by the motor under its maximum rated load. [Series 76 summary, p. 2]\n\nLocked Rotor Current (LRA): The current drawn by the motor at startup, which is significantly higher than the FLA. [Series 76 summary, p. 2]\n\nDuty Cycle (S4%): The percentage of time the actuator can be in operation over a given cycle without overheating. [Series 76 summary, p. 2]\nThe document doesn't define that term.",
-            "message_id": "8d50f30a-e38c-4c00-b4c3-0143f9c65c57",
+            "message_id": "936da72c-111f-426e-b5ab-56cd3c36d7fb",
             "products": [],
             "clarification": null,
             "terms": [
@@ -7429,7 +7429,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 55,
+              "latency_ms": 38,
               "attempts": 1,
               "llm_called": true
             }
@@ -7445,7 +7445,7 @@
           "query": "I need an on/off actuator with at least 70 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.183,
+          "elapsed_s": 0.139,
           "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 0.7 A",
           "clarification": {
             "field": "supply_voltage_v",
@@ -7768,7 +7768,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 153,
+            "latency_ms": 117,
             "attempts": 1,
             "llm_called": true
           },
@@ -8166,9 +8166,9 @@
             }
           ],
           "response": {
-            "session_id": "e8a996f2-3344-450d-99f5-22643b218deb",
+            "session_id": "76cf6a96-477a-4328-b3d4-001e106f4299",
             "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 0.7 A",
-            "message_id": "1d66e00f-c6b4-41dd-94a4-a170b81cd830",
+            "message_id": "fddff23a-fbe8-4ab6-bf41-c1bb19184ea6",
             "products": [
               {
                 "base_part_number": "761X30-11380000/A",
@@ -8637,7 +8637,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 153,
+              "latency_ms": 117,
               "attempts": 1,
               "llm_called": true
             }
@@ -8647,7 +8647,7 @@
           "query": "Submit 110 V + explosionproof",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.113,
+          "elapsed_s": 0.08,
           "answer": "10 actuators meet: Explosionproof, On/Off service, 110 V, torque ≥ 70 Nm. Here are the leading published models.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11300000/A: On/Off torque 80 Nm; FLA 1.1 A\n761Y30-11300000/A: On/Off torque 100 Nm; FLA 1.1 A\n762X30-11300000/A: On/Off torque 150 Nm; FLA 1.9 A",
           "clarification": null,
           "products": [
@@ -8952,7 +8952,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 81,
+            "latency_ms": 55,
             "attempts": 0,
             "llm_called": false
           },
@@ -9329,9 +9329,9 @@
             }
           ],
           "response": {
-            "session_id": "e8a996f2-3344-450d-99f5-22643b218deb",
+            "session_id": "76cf6a96-477a-4328-b3d4-001e106f4299",
             "answer": "10 actuators meet: Explosionproof, On/Off service, 110 V, torque ≥ 70 Nm. Here are the leading published models.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11300000/A: On/Off torque 80 Nm; FLA 1.1 A\n761Y30-11300000/A: On/Off torque 100 Nm; FLA 1.1 A\n762X30-11300000/A: On/Off torque 150 Nm; FLA 1.9 A",
-            "message_id": "c7ce8f25-c14a-440e-9925-537108bb2995",
+            "message_id": "1a98b6f2-e127-4b8a-9144-4b0f8c5b6182",
             "products": [
               {
                 "base_part_number": "761X30-11300000/A",
@@ -9787,7 +9787,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 81,
+              "latency_ms": 55,
               "attempts": 0,
               "llm_called": false
             }
@@ -9803,7 +9803,7 @@
           "query": "Compare 761A00-11300000/A vs 761B00-11300000/A",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.088,
+          "elapsed_s": 0.074,
           "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
           "clarification": null,
           "products": [],
@@ -10039,7 +10039,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 60,
+            "latency_ms": 50,
             "attempts": 0,
             "llm_called": false
           },
@@ -10047,9 +10047,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "c590512a-74ea-49b9-bfd9-d8ec36edc8da",
+            "session_id": "8a53ae06-fc5f-42f8-bed6-7c6fa98dc575",
             "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
-            "message_id": "db9641c6-7984-4d14-8990-5b4f07d1e367",
+            "message_id": "3ba99789-e885-4f39-ba5c-b2d0245e5883",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -10230,7 +10230,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 60,
+              "latency_ms": 50,
               "attempts": 0,
               "llm_called": false
             }
@@ -10246,7 +10246,7 @@
           "query": "actuator for a mining site, 220 V",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.115,
+          "elapsed_s": 0.086,
           "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 0.9 A",
           "clarification": {
             "field": "enclosure",
@@ -10460,7 +10460,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 90,
+            "latency_ms": 67,
             "attempts": 1,
             "llm_called": true
           },
@@ -10468,9 +10468,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "09354f5b-a1e2-4cae-b9eb-2d8eb6c91ff6",
+            "session_id": "b01cfd1a-6044-4c2b-96d3-657022785a02",
             "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 0.9 A",
-            "message_id": "f6ca5310-15de-4478-9636-c25432207b05",
+            "message_id": "4be5f9a0-6100-47fb-aeba-1fc794f082af",
             "products": [],
             "clarification": {
               "field": "enclosure",
@@ -10593,7 +10593,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 90,
+              "latency_ms": 67,
               "attempts": 1,
               "llm_called": true
             }
@@ -10609,7 +10609,7 @@
           "query": "764A00-11300000/A vs 765A00-11300000/A — which is faster at 60 Hz?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.099,
+          "elapsed_s": 0.09,
           "answer": "Comparing 764A00-11300000/A vs 765A00-11300000/A. 9 identical fields hidden.\nOn/Off torque: 6650 in-lb / 750 Nm vs 17700 in-lb / 2000 Nm\nModulating torque: 6020 in-lb / 680 Nm vs 15000 in-lb / 1700 Nm\nOn/Off cycles: 12 /h vs 4 /h\nOperating time at 50 Hz: 36 s vs 106 s\nFLA at 50 Hz: 6.5 A vs 6.8 A\nOperating time at 60 Hz: 30 s vs 88 s\nFLA at 60 Hz: 6.5 A vs 6.8 A\nLRA at 60 Hz: 7.3 A vs 7.4 A",
           "clarification": null,
           "products": [],
@@ -10880,7 +10880,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 57,
+            "latency_ms": 59,
             "attempts": 1,
             "llm_called": true
           },
@@ -10888,9 +10888,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "887bd203-05e3-4b5e-872c-8acb1ffdacc1",
+            "session_id": "72b02005-e7da-4afd-ad03-9d4e61d0cae0",
             "answer": "Comparing 764A00-11300000/A vs 765A00-11300000/A. 9 identical fields hidden.\nOn/Off torque: 6650 in-lb / 750 Nm vs 17700 in-lb / 2000 Nm\nModulating torque: 6020 in-lb / 680 Nm vs 15000 in-lb / 1700 Nm\nOn/Off cycles: 12 /h vs 4 /h\nOperating time at 50 Hz: 36 s vs 106 s\nFLA at 50 Hz: 6.5 A vs 6.8 A\nOperating time at 60 Hz: 30 s vs 88 s\nFLA at 60 Hz: 6.5 A vs 6.8 A\nLRA at 60 Hz: 7.3 A vs 7.4 A",
-            "message_id": "c0750ee5-1c36-4cf9-a078-7804c8593cdd",
+            "message_id": "26bcba9f-e187-4087-94c7-b13a13fb8c54",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -11071,7 +11071,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 57,
+              "latency_ms": 59,
               "attempts": 1,
               "llm_called": true
             }
@@ -11087,7 +11087,7 @@
           "query": "we have a refinery with flammable gas, need a valve motor",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.149,
+          "elapsed_s": 0.092,
           "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 0.9 A",
           "clarification": {
             "field": "enclosure",
@@ -11197,7 +11197,7 @@
                   "timeout_s": 45.0
                 }
               ],
-              "latency_ms": 2,
+              "latency_ms": 1,
               "decision_calls": 1
             },
             "model_calls": [
@@ -11322,7 +11322,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 121,
+            "latency_ms": 73,
             "attempts": 1,
             "llm_called": true
           },
@@ -11330,9 +11330,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "16287c39-30a1-4a9a-b7d1-549a6fc3e85d",
+            "session_id": "8ed017c4-a411-4894-b839-38f316c29a79",
             "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 0.9 A",
-            "message_id": "7e5ddc56-6076-4eac-ba79-39d640107932",
+            "message_id": "e2b37c8c-87fa-41ef-a664-04914aff6d8c",
             "products": [],
             "clarification": {
               "field": "enclosure",
@@ -11450,7 +11450,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 121,
+              "latency_ms": 73,
               "attempts": 1,
               "llm_called": true
             }
@@ -11460,7 +11460,7 @@
           "query": "yes",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.156,
+          "elapsed_s": 0.103,
           "answer": "30 actuators meet: Explosionproof. To narrow it down: supply voltage and current type.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 0.9 A",
           "clarification": {
             "field": "supply_voltage_v",
@@ -11821,7 +11821,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 125,
+            "latency_ms": 82,
             "attempts": 0,
             "llm_called": false
           },
@@ -12212,9 +12212,9 @@
             }
           ],
           "response": {
-            "session_id": "16287c39-30a1-4a9a-b7d1-549a6fc3e85d",
+            "session_id": "8ed017c4-a411-4894-b839-38f316c29a79",
             "answer": "30 actuators meet: Explosionproof. To narrow it down: supply voltage and current type.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 0.9 A",
-            "message_id": "a26a58bc-4917-44ac-b5f6-9769fe4a13cc",
+            "message_id": "f5750b48-2742-4aea-b728-c7e6b894fa13",
             "products": [
               {
                 "base_part_number": "761X30-11320000/A",
@@ -12718,7 +12718,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 125,
+              "latency_ms": 82,
               "attempts": 0,
               "llm_called": false
             }
@@ -12728,7 +12728,7 @@
           "query": "110",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.103,
+          "elapsed_s": 0.082,
           "answer": "10 actuators match Explosionproof, 110 V. Top 3 ranked by lowest FLA. Ranking uses the lowest published value across frequencies; all displayed values retain their frequency.\n\n761X30-11300000/A\n  • FLA at 50 Hz: 1.1 A\n  • FLA at 60 Hz: 1.2 A\n  Source: Series 76 electrical catalogue, page 4.\n\n761Y30-11300000/A\n  • FLA at 50 Hz: 1.1 A\n  • FLA at 60 Hz: 1.2 A\n  Source: Series 76 electrical catalogue, page 4.\n\n762X30-11300000/A\n  • FLA at 50 Hz: 1.9 A\n  • FLA at 60 Hz: 2 A\n  Source: Series 76 electrical catalogue, page 4.\nRanked by lowest FLA, then shortest operating time.\n761X30-11300000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 1.1 A\n761Y30-11300000/A: On/Off torque 100 Nm; Modulating torque 80 Nm; FLA 1.1 A\n762X30-11300000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 1.9 A",
           "clarification": null,
           "products": [
@@ -13013,7 +13013,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 74,
+            "latency_ms": 58,
             "attempts": 0,
             "llm_called": false
           },
@@ -13384,9 +13384,9 @@
             }
           ],
           "response": {
-            "session_id": "16287c39-30a1-4a9a-b7d1-549a6fc3e85d",
+            "session_id": "8ed017c4-a411-4894-b839-38f316c29a79",
             "answer": "10 actuators match Explosionproof, 110 V. Top 3 ranked by lowest FLA. Ranking uses the lowest published value across frequencies; all displayed values retain their frequency.\n\n761X30-11300000/A\n  • FLA at 50 Hz: 1.1 A\n  • FLA at 60 Hz: 1.2 A\n  Source: Series 76 electrical catalogue, page 4.\n\n761Y30-11300000/A\n  • FLA at 50 Hz: 1.1 A\n  • FLA at 60 Hz: 1.2 A\n  Source: Series 76 electrical catalogue, page 4.\n\n762X30-11300000/A\n  • FLA at 50 Hz: 1.9 A\n  • FLA at 60 Hz: 2 A\n  Source: Series 76 electrical catalogue, page 4.\nRanked by lowest FLA, then shortest operating time.\n761X30-11300000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 1.1 A\n761Y30-11300000/A: On/Off torque 100 Nm; Modulating torque 80 Nm; FLA 1.1 A\n762X30-11300000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 1.9 A",
-            "message_id": "a9b3e8cf-8cd8-42da-9274-0b8aeb71a08f",
+            "message_id": "5a0f4691-ed6f-4853-a743-ac0402cd98c1",
             "products": [
               {
                 "base_part_number": "761X30-11300000/A",
@@ -13840,7 +13840,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 74,
+              "latency_ms": 58,
               "attempts": 0,
               "llm_called": false
             }
@@ -13856,7 +13856,7 @@
           "query": "necesito un actuador on/of para 220v con almenos 100 nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.155,
+          "elapsed_s": 0.108,
           "answer": "30 actuators meet: On/Off service, 220 V, torque ≥ 100 Nm. To narrow it down: enclosure and number of phases.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761B00-11320000/A: On/Off torque 100 Nm; FLA 0.7 A\n762X30-11320000/A: On/Off torque 150 Nm; FLA 0.9 A\n762A00-11320000/A: On/Off torque 150 Nm; FLA 1 A",
           "clarification": {
             "field": "enclosure",
@@ -14000,7 +14000,7 @@
                   "timeout_s": 45.0
                 }
               ],
-              "latency_ms": 2,
+              "latency_ms": 1,
               "decision_calls": 1
             },
             "model_calls": [
@@ -14145,7 +14145,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 125,
+            "latency_ms": 86,
             "attempts": 1,
             "llm_called": true
           },
@@ -14500,9 +14500,9 @@
             }
           ],
           "response": {
-            "session_id": "8e08469a-6963-4c58-b509-edc4631f450f",
+            "session_id": "e43ad244-170e-4d4d-9f90-409c0dde37b3",
             "answer": "30 actuators meet: On/Off service, 220 V, torque ≥ 100 Nm. To narrow it down: enclosure and number of phases.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761B00-11320000/A: On/Off torque 100 Nm; FLA 0.7 A\n762X30-11320000/A: On/Off torque 150 Nm; FLA 0.9 A\n762A00-11320000/A: On/Off torque 150 Nm; FLA 1 A",
-            "message_id": "9165edb6-cbf0-414d-8159-89407f357365",
+            "message_id": "e8a9efe6-fdc3-4e77-b299-6cc32dc52c5f",
             "products": [
               {
                 "base_part_number": "761B00-11320000/A",
@@ -14955,7 +14955,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 125,
+              "latency_ms": 86,
               "attempts": 1,
               "llm_called": true
             }
@@ -14971,7 +14971,7 @@
           "query": "how much does 761A00-11300000/A cost?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.057,
+          "elapsed_s": 0.034,
           "answer": "The catalogue doesn't publish prices. A weighted price score is unavailable; I can compare published motor power or torque as a proxy only.",
           "clarification": null,
           "products": [],
@@ -15004,7 +15004,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 31,
+            "latency_ms": 14,
             "attempts": 0,
             "llm_called": false
           },
@@ -15012,9 +15012,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "3d4448b3-cfbf-4d8a-b55e-e9d9080f61c0",
+            "session_id": "5568902e-8202-48f5-aff3-dafcdfece394",
             "answer": "The catalogue doesn't publish prices. A weighted price score is unavailable; I can compare published motor power or torque as a proxy only.",
-            "message_id": "2be790c7-442e-46bc-b6da-15012e8c7236",
+            "message_id": "580da6b0-0c0d-4afd-ae15-89092aafd8ea",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -15027,7 +15027,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 31,
+              "latency_ms": 14,
               "attempts": 0,
               "llm_called": false
             }
@@ -15043,7 +15043,7 @@
           "query": "on/off at least 70 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.197,
+          "elapsed_s": 0.133,
           "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 0.7 A",
           "clarification": {
             "field": "supply_voltage_v",
@@ -15366,7 +15366,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 168,
+            "latency_ms": 110,
             "attempts": 1,
             "llm_called": true
           },
@@ -15764,9 +15764,9 @@
             }
           ],
           "response": {
-            "session_id": "736c1d0d-cb45-48a9-bb50-7204b931fd6a",
+            "session_id": "07428a4b-3f73-4c62-bed2-2f195ff3a9f6",
             "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 0.7 A",
-            "message_id": "04cf8085-5a25-4e75-9a58-ccd51b940a32",
+            "message_id": "4767bacb-30a2-45fe-849f-c7d7bc8b93a7",
             "products": [
               {
                 "base_part_number": "761X30-11380000/A",
@@ -16235,7 +16235,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 168,
+              "latency_ms": 110,
               "attempts": 1,
               "llm_called": true
             }
@@ -16245,7 +16245,7 @@
           "query": "this doesn't help",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.648,
+          "elapsed_s": 0.377,
           "answer": "My pick: 761X30-11380000/A — On/Off torque 70 Nm; FLA 5 A. Assumes no preference on supply voltage, enclosure; tell me if that matters.",
           "clarification": null,
           "products": [],
@@ -16478,7 +16478,47 @@
                 "767B00-11320000/A",
                 "767C00-11320000/A"
               ],
-              "last_shown_offset": 3
+              "last_shown_offset": 3,
+              "pending_questions": [
+                {
+                  "id": "supply_voltage_v",
+                  "prompt": "Which supply voltage?",
+                  "options": [
+                    {
+                      "count": 5,
+                      "label": "24 V",
+                      "value": "24"
+                    },
+                    {
+                      "count": 21,
+                      "label": "110 V",
+                      "value": "110"
+                    },
+                    {
+                      "count": 33,
+                      "label": "220 V",
+                      "value": "220"
+                    }
+                  ]
+                },
+                {
+                  "id": "enclosure",
+                  "prompt": "Which enclosure?",
+                  "options": [
+                    {
+                      "count": 25,
+                      "label": "Explosionproof",
+                      "value": "explosionproof"
+                    },
+                    {
+                      "count": 34,
+                      "label": "Weatherproof",
+                      "value": "weatherproof"
+                    }
+                  ]
+                }
+              ],
+              "pending_clarification": "supply_voltage_v"
             },
             "model": {
               "attempts": [],
@@ -16545,7 +16585,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 595,
+            "latency_ms": 352,
             "attempts": 0,
             "llm_called": false
           },
@@ -16553,9 +16593,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "736c1d0d-cb45-48a9-bb50-7204b931fd6a",
+            "session_id": "07428a4b-3f73-4c62-bed2-2f195ff3a9f6",
             "answer": "My pick: 761X30-11380000/A — On/Off torque 70 Nm; FLA 5 A. Assumes no preference on supply voltage, enclosure; tell me if that matters.",
-            "message_id": "e12bca9a-1c7a-45d2-a1c3-1c626e4a9d84",
+            "message_id": "200d9ca5-36d9-4275-ba04-4ab958bfcb10",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -16617,7 +16657,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 595,
+              "latency_ms": 352,
               "attempts": 0,
               "llm_called": false
             }
@@ -16627,8 +16667,8 @@
           "query": "just tell me which one to buy",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.512,
-          "answer": "My pick: 761X30-11380000/A — On/Off torque 70 Nm; FLA 5 A. Assumes no preference on other unstated preferences; tell me if that matters.",
+          "elapsed_s": 0.455,
+          "answer": "My pick: 761X30-11380000/A — On/Off torque 70 Nm; FLA 5 A. Assumes no preference on supply voltage, enclosure; tell me if that matters.",
           "clarification": null,
           "products": [],
           "terms": [],
@@ -16730,7 +16770,47 @@
                 "767B00-11320000/A",
                 "767C00-11320000/A"
               ],
-              "last_shown_offset": 3
+              "last_shown_offset": 3,
+              "pending_questions": [
+                {
+                  "id": "supply_voltage_v",
+                  "prompt": "Which supply voltage?",
+                  "options": [
+                    {
+                      "count": 5,
+                      "label": "24 V",
+                      "value": "24"
+                    },
+                    {
+                      "count": 21,
+                      "label": "110 V",
+                      "value": "110"
+                    },
+                    {
+                      "count": 33,
+                      "label": "220 V",
+                      "value": "220"
+                    }
+                  ]
+                },
+                {
+                  "id": "enclosure",
+                  "prompt": "Which enclosure?",
+                  "options": [
+                    {
+                      "count": 25,
+                      "label": "Explosionproof",
+                      "value": "explosionproof"
+                    },
+                    {
+                      "count": 34,
+                      "label": "Weatherproof",
+                      "value": "weatherproof"
+                    }
+                  ]
+                }
+              ],
+              "pending_clarification": "supply_voltage_v"
             },
             "context_after": {
               "focus": [
@@ -16820,7 +16900,47 @@
                 "767B00-11320000/A",
                 "767C00-11320000/A"
               ],
-              "last_shown_offset": 3
+              "last_shown_offset": 3,
+              "pending_questions": [
+                {
+                  "id": "supply_voltage_v",
+                  "prompt": "Which supply voltage?",
+                  "options": [
+                    {
+                      "count": 5,
+                      "label": "24 V",
+                      "value": "24"
+                    },
+                    {
+                      "count": 21,
+                      "label": "110 V",
+                      "value": "110"
+                    },
+                    {
+                      "count": 33,
+                      "label": "220 V",
+                      "value": "220"
+                    }
+                  ]
+                },
+                {
+                  "id": "enclosure",
+                  "prompt": "Which enclosure?",
+                  "options": [
+                    {
+                      "count": 25,
+                      "label": "Explosionproof",
+                      "value": "explosionproof"
+                    },
+                    {
+                      "count": 34,
+                      "label": "Weatherproof",
+                      "value": "weatherproof"
+                    }
+                  ]
+                }
+              ],
+              "pending_clarification": "supply_voltage_v"
             },
             "model": {
               "attempts": [],
@@ -16887,7 +17007,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 476,
+            "latency_ms": 430,
             "attempts": 0,
             "llm_called": false
           },
@@ -16895,9 +17015,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "736c1d0d-cb45-48a9-bb50-7204b931fd6a",
-            "answer": "My pick: 761X30-11380000/A — On/Off torque 70 Nm; FLA 5 A. Assumes no preference on other unstated preferences; tell me if that matters.",
-            "message_id": "1c8e8ae5-79fe-4b4d-ad77-fa9818709cd7",
+            "session_id": "07428a4b-3f73-4c62-bed2-2f195ff3a9f6",
+            "answer": "My pick: 761X30-11380000/A — On/Off torque 70 Nm; FLA 5 A. Assumes no preference on supply voltage, enclosure; tell me if that matters.",
+            "message_id": "ff32f2e7-531b-4c57-96a7-d3600fac4395",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -16959,7 +17079,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 476,
+              "latency_ms": 430,
               "attempts": 0,
               "llm_called": false
             }
@@ -16975,7 +17095,7 @@
           "query": "weatherproof 220 V on/off at least 300 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.124,
+          "elapsed_s": 0.1,
           "answer": "19 actuators meet: Weatherproof, On/Off service, 220 V, torque ≥ 300 Nm. To narrow it down: number of phases.\nRanked by closest torque at or above 300 Nm, then lowest FLA.\n763A00-11330C00/A: Shared torque 300 Nm; FLA 1 A\n763A00-11320000/A: On/Off torque 300 Nm; FLA 1.3 A\n763B00-11330C00/A: Shared torque 500 Nm; FLA 2 A",
           "clarification": {
             "field": "phase_count",
@@ -17096,7 +17216,7 @@
                   "timeout_s": 45.0
                 }
               ],
-              "latency_ms": 2,
+              "latency_ms": 1,
               "decision_calls": 1
             },
             "model_calls": [
@@ -17231,7 +17351,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 98,
+            "latency_ms": 75,
             "attempts": 1,
             "llm_called": true
           },
@@ -17542,9 +17662,9 @@
             }
           ],
           "response": {
-            "session_id": "feb5907a-b115-44db-b2c8-333f54ad2720",
+            "session_id": "c0a959b2-5f8a-44e5-b0c7-c5d06c747644",
             "answer": "19 actuators meet: Weatherproof, On/Off service, 220 V, torque ≥ 300 Nm. To narrow it down: number of phases.\nRanked by closest torque at or above 300 Nm, then lowest FLA.\n763A00-11330C00/A: Shared torque 300 Nm; FLA 1 A\n763A00-11320000/A: On/Off torque 300 Nm; FLA 1.3 A\n763B00-11330C00/A: Shared torque 500 Nm; FLA 2 A",
-            "message_id": "900eea78-3c98-434d-8ee1-3a9638350498",
+            "message_id": "0ad70e76-aee2-45be-b47c-76bdbe5f66f5",
             "products": [
               {
                 "base_part_number": "763A00-11330C00/A",
@@ -17952,7 +18072,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 98,
+              "latency_ms": 75,
               "attempts": 1,
               "llm_called": true
             }
@@ -17962,7 +18082,7 @@
           "query": "that one",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.061,
+          "elapsed_s": 0.05,
           "answer": "763A00-11330C00/A\n  • Torque: 2650 in-lb / 300 Nm (published once for On/Off and Modulating)\n  • Duty S4 On/Off and Modulating (shared): 70%\n  • On/Off cycles per hour: 39\n  • Modulating starts per hour: 1200\n  • Operating time at 50 Hz: 32 s\n  • Operating time at 60 Hz: 26 s\n  • FLA at 50 Hz: 1 A\n  • FLA at 60 Hz: 1 A\n  • LRA at 50 Hz: 1.2 A\n  • LRA at 60 Hz: 1.2 A\n  • Motor power: 40 W\n  Source: Series 76 electrical catalogue, page 2.",
           "clarification": null,
           "products": [
@@ -18140,7 +18260,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 31,
+            "latency_ms": 25,
             "attempts": 0,
             "llm_called": false
           },
@@ -18274,9 +18394,9 @@
             }
           ],
           "response": {
-            "session_id": "feb5907a-b115-44db-b2c8-333f54ad2720",
+            "session_id": "c0a959b2-5f8a-44e5-b0c7-c5d06c747644",
             "answer": "763A00-11330C00/A\n  • Torque: 2650 in-lb / 300 Nm (published once for On/Off and Modulating)\n  • Duty S4 On/Off and Modulating (shared): 70%\n  • On/Off cycles per hour: 39\n  • Modulating starts per hour: 1200\n  • Operating time at 50 Hz: 32 s\n  • Operating time at 60 Hz: 26 s\n  • FLA at 50 Hz: 1 A\n  • FLA at 60 Hz: 1 A\n  • LRA at 50 Hz: 1.2 A\n  • LRA at 60 Hz: 1.2 A\n  • Motor power: 40 W\n  Source: Series 76 electrical catalogue, page 2.",
-            "message_id": "19369839-f3ab-4d10-8175-95cb653dd220",
+            "message_id": "f114fe8b-b43a-4641-8db4-803145109986",
             "products": [
               {
                 "base_part_number": "763A00-11330C00/A",
@@ -18432,7 +18552,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 31,
+              "latency_ms": 25,
               "attempts": 0,
               "llm_called": false
             }
@@ -18442,7 +18562,7 @@
           "query": "the other one",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.064,
+          "elapsed_s": 0.059,
           "answer": "763A00-11320000/A\n  • On/Off torque: 2650 in-lb / 300 Nm\n  • Modulating torque: 1950 in-lb / 220 Nm\n  • Duty S4 On/Off: 40%\n  • Duty S4 Modulating: 40%\n  • On/Off cycles per hour: 24\n  • Modulating starts per hour: 960\n  • Operating time at 50 Hz: 29 s\n  • Operating time at 60 Hz: 24 s\n  • FLA at 50 Hz: 1.3 A\n  • FLA at 60 Hz: 1.3 A\n  • LRA at 50 Hz: 1.5 A\n  • LRA at 60 Hz: 1.4 A\n  • Motor power: 40 W\n  Source: Series 76 electrical catalogue, page 1.",
           "clarification": null,
           "products": [
@@ -18596,7 +18716,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 35,
+            "latency_ms": 30,
             "attempts": 0,
             "llm_called": false
           },
@@ -18737,9 +18857,9 @@
             }
           ],
           "response": {
-            "session_id": "feb5907a-b115-44db-b2c8-333f54ad2720",
+            "session_id": "c0a959b2-5f8a-44e5-b0c7-c5d06c747644",
             "answer": "763A00-11320000/A\n  • On/Off torque: 2650 in-lb / 300 Nm\n  • Modulating torque: 1950 in-lb / 220 Nm\n  • Duty S4 On/Off: 40%\n  • Duty S4 Modulating: 40%\n  • On/Off cycles per hour: 24\n  • Modulating starts per hour: 960\n  • Operating time at 50 Hz: 29 s\n  • Operating time at 60 Hz: 24 s\n  • FLA at 50 Hz: 1.3 A\n  • FLA at 60 Hz: 1.3 A\n  • LRA at 50 Hz: 1.5 A\n  • LRA at 60 Hz: 1.4 A\n  • Motor power: 40 W\n  Source: Series 76 electrical catalogue, page 1.",
-            "message_id": "71d4526d-4c45-411b-b864-d610e8a6be1a",
+            "message_id": "cb54f1a5-e7ee-4c8a-b37c-dbfa17afd48b",
             "products": [
               {
                 "base_part_number": "763A00-11320000/A",
@@ -18902,7 +19022,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 35,
+              "latency_ms": 30,
               "attempts": 0,
               "llm_called": false
             }
