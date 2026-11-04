@@ -59,7 +59,15 @@ def questions(facets, fields):
     prompts = {'service': 'Which service?', 'frequency_hz': 'Which frequency?',
                'supply_voltage_v': 'Which supply voltage?', 'supply_current': 'Which current type?',
                'phase_count': 'How many phases?', 'enclosure': 'Which enclosure?'}
-    ranked = [f for f in fields if f in prompts and len(facets.get(f, [])) > 1]
+    ranked = []
+    for field in fields:
+        rows = facets.get(field, [])
+        if field not in prompts or len(rows) <= 1:
+            continue
+        universe = set().union(*(set(row.get('codes', [])) for row in rows))
+        if universe and all(row['n'] > 0.85 * len(universe) for row in rows):
+            continue
+        ranked.append(field)
     ranked.sort(key=lambda f: max(r['n'] for r in facets[f]))
     selected = []
     for field in ranked:

@@ -130,3 +130,14 @@ class RecommendationTests(Base):
                            [], {}, model=Raising(AssertionError('LLM must not run')))
         self.assertIn('Sizes 6 and 7 are not CSA Certified', result.answer)
         self.assertNotIn('On/Off torque', result.answer)
+
+    def test_empty_request_has_natural_prompt_and_two_real_splits(self):
+        result = self.turn('?', ('search_actuators', {}))
+        self.assertIn('Tell me what it must do:', result.answer)
+        self.assertLessEqual(len(result.interaction['questions']), 2)
+        self.assertNotIn('59/59', result.answer)
+
+    def test_strongest_answers_directly_without_question_card(self):
+        result = self.turn("what's the strongest?", ('search_actuators', {'sort_by': ['highest_torque']}))
+        self.assertIsNone(result.interaction)
+        self.assertIn('767C00-11320000/A', result.answer)

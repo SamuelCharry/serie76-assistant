@@ -608,8 +608,10 @@ class Turn:
             self.trace.setdefault("overrides", []).append("empty_search_clarified")
             self.context['filters'] = merged
             from backend.catalog.repository import question_facets
-            fields = ['service', 'supply_voltage_v', 'supply_current']
-            return self.question_result(fields, question_facets(self.connection, SearchFilters(), fields))
+            fields = ['supply_voltage_v', 'enclosure']
+            result = self.question_result(fields, question_facets(self.connection, SearchFilters(), fields))
+            result.answer = 'Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.'
+            return result
         found = policy.conflicts(merged)
         if found:
             kind, fields = found[0]
@@ -668,7 +670,8 @@ class Turn:
         except ValidationError as exc:
             self.trace["validation"] = _safe_errors(exc)
             return self.clarify("requirements", "These requirements could not be applied together. Please restate the supply, service and limits you need.")
-        result = search_actuators(self.connection, filters)
+        unscoped_superlative = bool(merged.get('sort_by')) and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS)
+        result = search_actuators(self.connection, filters, allow_ambiguous=unscoped_superlative)
         sort_map = {'fastest': 'fastest', 'lowest_current': 'lowest_fla',
                     'highest_torque': 'most_torque', 'lowest_power': 'lowest_power'}
         by = sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque')
@@ -725,10 +728,12 @@ class Turn:
         self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
         self.context['last_shown_offset'] = len(rec['items'])
         answer, products, narrowing, options, focus = quality.search_presentation(result, products, merged, notes, shown)
+        if unscoped_superlative:
+            narrowing = None
         self.context["pagination"] = {"has_more": bool(products) and result.get("offset", 0) + len(products) < result["total"]}
         self.context["focus"] = focus
         question = None
-        if result.get('facets') and result['total'] > 4:
+        if result.get('facets') and result['total'] > 4 and not unscoped_superlative:
             fields = list(result['facets'])
             from backend.catalog.repository import question_facets
             question = self.question_result(fields, question_facets(self.connection, filters, fields))
@@ -754,6 +759,8 @@ class Turn:
             text, terms = self.explained(args["explain_terms"])
             answer += ("\n\n" + text) if text else ""
         if result['total'] > 4:
+            if unscoped_superlative:
+                answer = f"All {result['total']} catalogue models were considered."
             answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
             products = [quality.focused_product(public_product(p) | {'frequencies': p.get('frequencies', [])}, focus)
@@ -765,7 +772,7 @@ class Turn:
         self.context["part_numbers"] = [p["base_part_number"] for p in products]
         return AgentResult(answer, products, context=self.context, terms=terms, assumptions=shown,
                            clarification=dict(field=narrowing, message=answer, options=options) if narrowing else None,
-                           interaction=question.interaction if narrowing else None, recommendation=rec,
+                           interaction=question.interaction if narrowing and not unscoped_superlative else None, recommendation=rec,
                            lead='Ranked by ' + rec['ranked_by'] + '.')
 
     def explain(self, args):
@@ -813,10 +820,13 @@ class Turn:
             from backend.catalog.repository import question_facets
             fields = {'service': ['service'], 'frequency': ['frequency_hz'],
                       'supply': ['supply_voltage_v', 'supply_current'],
-                      'requirements': ['service', 'supply_voltage_v', 'supply_current']}[field_name]
+                      'requirements': ['supply_voltage_v', 'enclosure']}[field_name]
             self.context.setdefault('filters', {})
             filters = SearchFilters.model_validate(self.context['filters'])
-            return self.question_result(fields, question_facets(self.connection, filters, fields))
+            result = self.question_result(fields, question_facets(self.connection, filters, fields))
+            if field_name == 'requirements' and not self.context.get('filters'):
+                result.answer = 'Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.'
+            return result
         # Unsupported commerce still permits the named product's catalogue facts;
         # finish() states the limitation without an additional model decision.
         purchase = field_name == 'unsupported' and policy.purchase_request(self.query)
