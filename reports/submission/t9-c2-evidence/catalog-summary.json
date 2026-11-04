@@ -1,0 +1,97 @@
+{
+  "status": "passed",
+  "tests_run": 491,
+  "postgres_version": "17.11 (Debian 17.11-1.pgdg13+2)",
+  "active_catalog": {
+    "id": 2,
+    "document_sha256": "4c28023929183df8e2a763e759cc84572b44604b30837a21e22c1166f88267e0",
+    "pipeline_signature": "d7e1c05b179f6b44dc77cda695cfd83a4b570e0db1ee2083d537fd709df70b27",
+    "rows": 68
+  },
+  "rows": 68,
+  "numeric_values": 869,
+  "source_na_rows": 4,
+  "http_checks": [
+    {
+      "path": "/health",
+      "request": null,
+      "status": 200,
+      "result_status": "ok",
+      "total": null
+    },
+    {
+      "path": "/api/actuators/764B00-11300000/A",
+      "request": null,
+      "status": 200,
+      "result_status": null,
+      "total": null
+    },
+    {
+      "path": "/api/actuators/761A00",
+      "request": null,
+      "status": 422,
+      "result_status": null,
+      "total": null
+    },
+    {
+      "path": "/api/actuators/999Z99-99999999/A",
+      "request": null,
+      "status": 404,
+      "result_status": null,
+      "total": null
+    },
+    {
+      "path": "/api/actuators/search",
+      "request": {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "supply_current": "AC"
+      },
+      "status": 200,
+      "result_status": "ok",
+      "total": 5
+    },
+    {
+      "path": "/api/actuators/search",
+      "request": {
+        "service": "modulating",
+        "supply_voltage_v": 220,
+        "phase_count": 3,
+        "min_torque_nm": 100
+      },
+      "status": 200,
+      "result_status": "ok",
+      "total": 7
+    },
+    {
+      "path": "/api/actuators/search",
+      "request": {
+        "min_torque_nm": 100
+      },
+      "status": 200,
+      "result_status": "needs_clarification",
+      "total": 55
+    },
+    {
+      "path": "/api/actuators/search",
+      "request": {
+        "max_operating_time_s": 20
+      },
+      "status": 200,
+      "result_status": "needs_clarification",
+      "total": 14
+    },
+    {
+      "path": "/api/actuators/search",
+      "request": {
+        "unknown": 1
+      },
+      "status": 422,
+      "result_status": null,
+      "total": null
+    }
+  ],
+  "restart_persistence": null,
+  "grid_sha256": "f7454653c8c1562455e84b2b1e06681915f0dea18e4a140ed88da6ee4c4c116d",
+  "reference_use": "Offline evaluator only; database loader never reads manual/reference/reviewed."
+}

@@ -74,6 +74,18 @@ $env:SERIES76_TEST_DB='1'
 python -m unittest discover -s tests
 ```
 
+Current offline gate: **v7, 446/446 scripted scenarios**. In the activated backend Python environment, after Compose startup:
+
+```text
+python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --config config/agent_acceptance_v7.json
+python scripts/check_tool_schemas.py
+python scripts/verify_catalog_db.py
+```
+
+The catalogue verifier logs in with the public TEST ONLY demo account and sends its Bearer token to protected endpoints. It defaults to `http://127.0.0.1:${API_PORT:-8000}`, using process `API_PORT` before the local template setting; `--base-url http://127.0.0.1:18000` overrides it explicitly. Its SQL, full database test suite and HTTP stages must all pass for exit 0. Existing demo passwords are never reset.
+
+The v6 selfcheck is historical: its presentation expectations predate T8 and it no longer passes this release. Its files and archived 103/103 result are preserved, not the current gate. Scripted checks do not establish provider interpretation quality.
+
 ## PostgreSQL connection
 
 Tests connect to Compose service `db` through host loopback `127.0.0.1:5432`, not Docker hostname `db`. The connection helper `backend.catalog.cli.local_environment()` reads the repository-root .env without printing it: PGHOST defaults to 127.0.0.1; POSTGRES_PORT → PGPORT (default 5432), POSTGRES_DB → PGDATABASE (default series76), POSTGRES_USER → PGUSER (default series76), POSTGRES_PASSWORD → PGPASSWORD. Existing process PG* values take precedence. Use the same local values that initialized the Compose volume; changing .env does not reset its password. CI supplies PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD directly in the workflow. Without SERIES76_TEST_DB=1 the database tests skip.
@@ -82,7 +94,7 @@ In the activated backend environment:
 
 ```sh
 python scripts/verify_catalog_db.py
-python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v6.json --config config/agent_acceptance_v6.json
+python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --config config/agent_acceptance_v7.json
 ```
 
 OCR uses a second environment: follow [ingestion setup](ingestion.md#rerun), then run these commands with that OCR environment active:
@@ -104,6 +116,8 @@ Instrumented tests require a running emulator. The excluded live-auth helper nee
 
 ## T7 / v6 offline acceptance
 
+Historical section: v6 presentation expectations predate T8 and no longer pass this release; run v7 above. The v6 cases/configuration remain unchanged.
+
 [v6 cases](../../../config/agent_acceptance_cases_v6.json) retain all 63 v5 scenarios and add the 40 EC scenarios from the [edge-case specification](../../evaluation/edge-case-suite.es.md). Historical v5 files remain unchanged; v6 records approved presentation changes and exploratory policies. Expectations use the validated CSV; scripted decisions stay out of real-model prompts.
 
 [Backend evidence](../../../reports/submission/T7-backend.md): 202 Python tests, 2 optional OCR/geometry module skips; 103/103 selfcheck scenarios; six mutation checks; keyless rebuild and `/ready` 200. [Android evidence](../../../reports/submission/T7-android.md): 40 JVM tests and debug APK build, not device visual acceptance. These are recorded worker results, not a claim that this documentation edit reran the suites.
@@ -111,7 +125,6 @@ Instrumented tests require a running emulator. The excluded live-auth helper nee
 With PostgreSQL running and the backend Python environment active:
 
 ```sh
-python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v6.json --config config/agent_acceptance_v6.json
 python -m unittest discover -s tests -p test_acceptance_v6.py -v
 python scripts/check_tool_schemas.py
 ```

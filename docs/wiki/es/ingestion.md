@@ -21,6 +21,8 @@ El extractor de producción lee el PDF, nunca `data/manual`, `data/reference` ni
 
 ## Reejecutar
 
+La primera ejecución OCR descarga pesos públicos de RapidOCR en `.cache/ocr` del checkout; después el reconocimiento es local. Prepara esos pesos antes de una ejecución sin red. La exportación lista, incluido `manifest.json`, queda en una subcarpeta por documento de `data/processed/new-import`, no directamente en esa raíz.
+
 Usa Python 3.12 de 64 bits. La primera ejecución descarga pesos públicos; después el reconocimiento es local. Usa una raíz de salida nueva para preservar evidencia. Un directorio procesa un lote; `--no-images --threads 2` reduce imágenes retenidas y controla hilos.
 
 Ejecuta solo el bloque de tu shell; `deactivate` sale de un entorno activo antes de cambiar.

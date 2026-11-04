@@ -6,12 +6,17 @@ Valores de configuración y recuperación sin destruir catálogo ni historial.
 
 Docker Compose es la ruta de backend admitida. Copia el ejemplo solo si no hay configuración local; no sobrescribas un .env operativo. El arranque migra, carga catálogo/glosario validados y provisiona usuarios TEST ONLY idempotentemente antes de Uvicorn. El volumen persiste tras reinicio y compose down normal; nunca ejecutes `docker compose down -v`.
 
+Para un segundo checkout independiente, añade `COMPOSE_PROJECT_NAME=serie76-clean`, `POSTGRES_PORT=55432` y `API_PORT=18000` a su `.env` antes de ejecutar Compose. Usa `http://localhost:18000` en los ejemplos HTTP y `-PbackendUrl=http://10.0.2.2:18000/` al compilar para su emulador. Estos nombres y puertos aíslan el checkout; conserva la contraseña de su propio volumen.
+
 ## Referencia de configuración
 
 Los valores provienen de [.env.example](../../../.env.example) y [Compose](../../../docker-compose.yml), no del entorno privado local.
 
+La tabla del README cubre las variables añadidas de embeddings/debug. [.env.example](../../../.env.example) es la plantilla completa: el arranque usa `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT` y `API_PORT`; Compose también acepta `COMPOSE_PROJECT_NAME`. La interpretación de lenguaje requiere `OPENROUTER_API_KEY` y `OPENROUTER_CHAT_MODEL`. Conserva las credenciales vacías para evaluar sin claves; la plantilla comenta las variables avanzadas de reintentos, plazos, trazas y evaluación.
+
 | Variable | Predeterminado | Propósito |
 |---|---|---|
+| `COMPOSE_PROJECT_NAME` | nombre del directorio | Aislamiento de proyecto/volumen Compose; fijar para un segundo checkout. |
 | `POSTGRES_DB` | `series76` | Base PostgreSQL al inicializar. |
 | `POSTGRES_USER` | `series76` | Rol PostgreSQL al inicializar. |
 | `POSTGRES_PASSWORD` | `replace-with-local-password` | Placeholder local; elegir valor privado antes de usar fuera de TEST ONLY. Compose lo exige; cambiarlo no restablece la contraseña del volumen. |
@@ -82,7 +87,7 @@ Antes de cambiar la imagen de un volumen PG17 existente, haz backup y verifica v
 
 El loader usa `config/agent_acceptance_cases_v7.json` y `config/concept_anchors.json`: 649 frases/interpretaciones únicas más 100 anclas. No almacena respuestas ni cifras publicadas como conocimiento; las cantidades presentes en una frase son requisitos de ese ejemplo, no requisitos de una nueva consulta. Conserva todos los IDs de procedencia, excluye etiquetas ambiguas/conflictivas y permite excluir fuentes retenidas. El banco incluye casos históricos v7: su replay es regresión, no aceptación retenida. [Método](testing.md#behavior-evaluation).
 
-Configura modelo/endpoint/clave en `.env`, según la tabla, y arranca Compose. Comandos desde la raíz para PowerShell y macOS/Linux; el montaje suministra config sin alterar la imagen ni el entrypoint normal:
+El banco es opcional para funcionar sin claves. Sin modelo configurado, `--dry-run` informa todos los ejemplos/anclas suministrados sin DB, clave ni inferencia (`scope: input_only`); no comprueba vectores existentes. Con un modelo explícito comprueba filas pendientes en la DB activa, también sin inferencia. El segundo comando carga vectores para el modelo indicado y exige autorización de inferencia pagada; configura ese mismo modelo para el retrieval del backend. Inicia Compose para comprobar pendientes de un modelo concreto. Comandos desde la raíz para PowerShell y macOS/Linux; el montaje suministra config sin alterar la imagen ni el entrypoint normal:
 
 ```text
 docker compose run --rm --no-deps --entrypoint python -v ./config:/app/config:ro backend scripts/load_example_bank.py --dry-run
@@ -91,13 +96,13 @@ docker compose run --rm --no-deps --entrypoint python -v ./config:/app/config:ro
 Solo después de autorizar la inferencia:
 
 ```text
-docker compose run --rm --no-deps --entrypoint python -v ./config:/app/config:ro backend scripts/load_example_bank.py
+docker compose run --rm --no-deps --entrypoint python -e OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2 -v ./config:/app/config:ro backend scripts/load_example_bank.py
 docker compose up -d backend
 ```
 
 La carga Google inicial estimó USD 0.004911 (aproximadamente USD 0.005), 749 textos en 24 requests; no es factura ni coste garantizado de OpenRouter. La repetición comprobada no tenía textos pendientes ni coste estimado adicional. Los vectores se separan por nombre de modelo: cambiar a `google/gemini-embedding-2` necesita una carga autorizada nueva, nunca renombrar vectores viejos. La carga es transaccional/idempotente; un fallo no devuelve cargos ya incurridos. `--replace-dataset --dataset-version VERSION` reemplaza explícitamente el conjunto completo, desactiva ausentes/conflictivos y conserva procedencia histórica; no uses un subconjunto como reemplazo completo.
 
-Sin modelo, el loader falla antes de cargar; con modelo y sin clave, `--dry-run` puede calcular pendientes con DB disponible, pero una carga nueva falla sin inferencia válida. En conversación, OFF/configuración ausente/timeout/fallo SQL omite retrieval y mantiene el parser determinista; sin chat configurado, una consulta que requiere interpretación devuelve 503. El arranque solo prepara el cliente, nunca paga embeddings; las rutas deterministas tampoco los invocan. No se carga el banco automáticamente al arrancar. [Código loader](../../../scripts/load_example_bank.py), [cliente y deadline](../../../backend/conversation/embeddings.py).
+Una carga real exige modelo explícito y credenciales de inferencia válidas; el dry-run sin modelo solo muestra los datos de entrada. En conversación, OFF/configuración ausente/timeout/fallo SQL omite retrieval y mantiene el parser determinista; sin chat configurado, una consulta que requiere interpretación devuelve 503. El arranque solo prepara el cliente, nunca paga embeddings; las rutas deterministas tampoco los invocan. No se carga el banco automáticamente al arrancar. [Código loader](../../../scripts/load_example_bank.py), [cliente y deadline](../../../backend/conversation/embeddings.py).
 
 **Voz/debug:** la voz se configura por permiso Android, sin clave de backend. Para trazas usa `DEV_DEBUG=true`, recrea backend y activa el gesto de siete toques; vuelve a `false` al terminar la revisión. El GET es perezoso y limitado al propietario. [Instrucciones Android](android.md#developer-debug).
 

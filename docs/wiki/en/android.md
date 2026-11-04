@@ -52,6 +52,30 @@ Android stores only an AES-GCM encrypted bearer in private preferences with a no
 
 ## Build and run
 
+Before building, run `java -version` and confirm **JDK 17**. Set `JAVA_HOME` to that JDK installation and put its `bin` first on PATH; set `ANDROID_HOME` to the SDK folder containing `platforms/android-36`. Android Studio's SDK Manager installs SDK Platform 36. Add the SDK's `platform-tools` to PATH before using `adb`. JDK 17 is the documented validation baseline; success on another JDK does not establish that baseline.
+
+```sh
+# macOS/Linux: replace these paths with your installed locations
+export JAVA_HOME=/path/to/jdk-17
+export ANDROID_HOME=/path/to/Android/sdk
+export PATH="$JAVA_HOME/bin:$ANDROID_HOME/platform-tools:$PATH"
+java -version
+test -d "$ANDROID_HOME/platforms/android-36"
+adb version
+```
+
+```powershell
+# Windows PowerShell: replace these paths with your installed locations
+$env:JAVA_HOME='C:\path\to\jdk-17'
+$env:ANDROID_HOME="$env:LOCALAPPDATA\Android\Sdk"
+$env:Path="$env:JAVA_HOME\bin;$env:ANDROID_HOME\platform-tools;$env:Path"
+java -version
+Test-Path "$env:ANDROID_HOME\platforms\android-36"
+adb version
+```
+
+For an independent second checkout, add `COMPOSE_PROJECT_NAME=serie76-clean`, `POSTGRES_PORT=55432` and `API_PORT=18000` to its `.env` before running Compose. Use `http://localhost:18000` in HTTP examples and `-PbackendUrl=http://10.0.2.2:18000/` for its emulator build. These names and ports isolate this checkout; keep its database password consistent with its own volume.
+
 Install Android Studio, JDK 17, SDK Platform 36 and an API 26+ emulator/device. Open `mobile/android`, let Studio generate ignored `local.properties`, select app/debug and Run. Start the backend with the [README](../../../README.md). No model key is packaged in the APK.
 
 ```sh

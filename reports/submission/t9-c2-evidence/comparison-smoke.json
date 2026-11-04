@@ -1,0 +1,15 @@
+{
+  "status": 200,
+  "first_line": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.",
+  "hidden_fields": 10,
+  "debug": {
+    "attempts": 0,
+    "retrieval": {
+      "concepts": {},
+      "examples": [],
+      "embedding_ms": 0
+    },
+    "latency_ms": 42,
+    "llm_called": false
+  }
+}

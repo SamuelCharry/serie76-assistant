@@ -1,0 +1,50 @@
+[
+  {
+    "query": "What is the motor power of 761A00-11300000/A?",
+    "status": 200,
+    "answer": "761A00-11300000/A\n \u2022 Motor power: 15 W\n Source: Series 76 electrical catalogue, page 1.\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption.",
+    "wall_ms": 106.2,
+    "debug": {
+      "attempts": 0,
+      "retrieval": {
+        "concepts": {},
+        "examples": [],
+        "embedding_ms": 0
+      },
+      "latency_ms": 50,
+      "llm_called": false
+    }
+  },
+  {
+    "query": "FLA of 761A00-11300000/A at 60 Hz",
+    "status": 200,
+    "answer": "761A00-11300000/A\n \u2022 FLA at 60 Hz: 1.2 A\n Source: Series 76 electrical catalogue, page 1.",
+    "wall_ms": 72.1,
+    "debug": {
+      "attempts": 0,
+      "retrieval": {
+        "concepts": {},
+        "examples": [],
+        "embedding_ms": 0
+      },
+      "latency_ms": 30,
+      "llm_called": false
+    }
+  },
+  {
+    "query": "operating time of 761A00-11300000/A",
+    "status": 200,
+    "answer": "761A00-11300000/A\n \u2022 Operating time at 50 Hz: 20 s\n \u2022 Operating time at 60 Hz: 17 s\n Source: Series 76 electrical catalogue, page 1.",
+    "wall_ms": 62.2,
+    "debug": {
+      "attempts": 0,
+      "retrieval": {
+        "concepts": {},
+        "examples": [],
+        "embedding_ms": 0
+      },
+      "latency_ms": 24,
+      "llm_called": false
+    }
+  }
+]

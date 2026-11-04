@@ -2,6 +2,8 @@
 
 [Wiki](index.md) · [English](../en/api.md) · [Español](../es/api.md)
 
+Después del login, `What is the motor power of 761A00-11300000/A?` funciona sin clave y devuelve los **15 W** publicados. Un campo explícito para un único código completo válido (incluidos `FLA of 761A00-11300000/A at 60 Hz` y `operating time of 761A00-11300000/A`), los saludos y las comparaciones explícitas de códigos usan SQL/plantillas sin llamadas al modelo. Las consultas ambiguas, condiciones adicionales y selección en lenguaje libre requieren `OPENROUTER_API_KEY` y `OPENROUTER_CHAT_MODEL`; sin ellos esas consultas de interpretación devuelven 503 `not_configured`. La ruta de campo usa el mismo planificador de respuesta que una decisión LLM de consulta equivalente.
+
 Superficie HTTP completa y fallos que debe manejar el cliente.
 
 Todas las rutas `/api/*`, excepto login, requieren `Authorization: Bearer <TOKEN>`. El token caduca en 12 horas y logout revoca el actual. Se comprueba propietario antes del modelo; conversaciones ajenas o en cuarentena devuelven 404. La API usa `Cache-Control: no-store`. Ejecuta ejemplos desde la raíz; usa `curl.exe` en Windows PowerShell para evitar el alias. TOKEN, SESSION_ID y MESSAGE_ID son marcadores, nunca credenciales públicas.
