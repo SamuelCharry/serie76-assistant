@@ -539,8 +539,11 @@ class Turn:
         if merged.get("sort_by"):
             merged["limit"] = 3
         if dropped:
-            notes.insert(0, "Not applied because it was not stated in the conversation: "
-                         + "; ".join(policy.describe({f: v}) for f, v in dropped) + ". Tell me if you need it.")
+            supply = {field: value for field, value in dropped if field in ('supply_current', 'phase_count')}
+            if supply.get('supply_current') == 'ac' and supply.get('phase_count') == 1:
+                notes.insert(0, "Assumed AC, single-phase supply. Tell me if that's wrong.")
+            else:
+                notes.insert(0, "I left out an unstated requirement. Tell me if you need it.")
         merged["limit"] = args.get("limit", merged["limit"]) if not args["more"] else merged["limit"]
         if merged.get("sort_by"):
             merged["limit"] = 3
