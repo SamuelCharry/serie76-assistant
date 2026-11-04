@@ -11,7 +11,7 @@
           "query": "Compare the torque of 761A00-11300000/A, 761B00-11300000/A and 762A00-11300000/A",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.078,
+          "elapsed_s": 0.068,
           "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A vs 762A00-11300000/A. 6 identical fields hidden.\nMotor power: 15 W vs 15 W vs 40 W\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm vs 1330 in-lb / 150 Nm\nOn/Off duty S4: 40 % vs 40 % vs 50 %\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm vs 1150 in-lb / 130 Nm\nOn/Off cycles: 36 /h vs 31 /h vs 42 /h\nOperating time at 50 Hz: 20 s vs 23 s vs 21 s\nFLA at 50 Hz: 1.1 A vs 1.2 A vs 2.3 A\nLRA at 50 Hz: 1.3 A vs 1.3 A vs 2.4 A\nOperating time at 60 Hz: 17 s vs 19 s vs 18 s\nFLA at 60 Hz: 1.2 A vs 1.3 A vs 2.3 A\nLRA at 60 Hz: 1.4 A vs 1.4 A vs 2.5 A",
           "clarification": null,
           "products": [],
@@ -320,7 +320,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 47,
+            "latency_ms": 42,
             "attempts": 1,
             "llm_called": true
           },
@@ -328,9 +328,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "bdeeb7c2-2954-44db-9e8d-77f512f8511a",
+            "session_id": "e0870b4c-dcf6-47fe-bb28-ba7b7ed4a8d6",
             "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A vs 762A00-11300000/A. 6 identical fields hidden.\nMotor power: 15 W vs 15 W vs 40 W\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm vs 1330 in-lb / 150 Nm\nOn/Off duty S4: 40 % vs 40 % vs 50 %\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm vs 1150 in-lb / 130 Nm\nOn/Off cycles: 36 /h vs 31 /h vs 42 /h\nOperating time at 50 Hz: 20 s vs 23 s vs 21 s\nFLA at 50 Hz: 1.1 A vs 1.2 A vs 2.3 A\nLRA at 50 Hz: 1.3 A vs 1.3 A vs 2.4 A\nOperating time at 60 Hz: 17 s vs 19 s vs 18 s\nFLA at 60 Hz: 1.2 A vs 1.3 A vs 2.3 A\nLRA at 60 Hz: 1.4 A vs 1.4 A vs 2.5 A",
-            "message_id": "3d775c94-3e7d-4b23-861b-865cdde992eb",
+            "message_id": "e14631a8-89e5-49ea-8696-5bbaf8ff1434",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -534,7 +534,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 47,
+              "latency_ms": 42,
               "attempts": 1,
               "llm_called": true
             }
@@ -550,7 +550,7 @@
           "query": "hello",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.037,
+          "elapsed_s": 0.036,
           "answer": "Hello. I can look up Series 76 actuators, find models for your requirements, compare models or explain catalogue terms.",
           "clarification": null,
           "products": [],
@@ -590,9 +590,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "8652e9d5-2d9f-4f53-aec1-8e005f41df43",
+            "session_id": "203931db-7b06-4934-b642-f42703550ada",
             "answer": "Hello. I can look up Series 76 actuators, find models for your requirements, compare models or explain catalogue terms.",
-            "message_id": "3f5b4361-b124-4d36-8da8-cf05e53320d7",
+            "message_id": "305bf856-9b74-4a9f-9168-51d9343fe394",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -621,8 +621,8 @@
           "query": "I need at least 70 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.133,
-          "answer": "63 actuators meet: torque ≥ 70 Nm.\nTo narrow it down: service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A (Weatherproof): Weatherproof; Modulating torque 70 Nm (closest to 70 Nm); On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n761B00-11300000/A (Weatherproof): Weatherproof; Modulating torque 70 Nm (closest to 70 Nm); On/Off torque 100 Nm; FLA 50 Hz 1.2 A\n761X30-11380000/A (Explosionproof): Explosionproof; On/Off torque 70 Nm; FLA 5 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.137,
+          "answer": "63 actuators meet: torque ≥ 70 Nm.\nTo narrow it down: service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A: Weatherproof; Modulating torque 70 Nm (closest to 70 Nm); On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n761B00-11300000/A: Weatherproof; Modulating torque 70 Nm (closest to 70 Nm); On/Off torque 100 Nm; FLA 50 Hz 1.2 A\n761X30-11380000/A: Explosionproof; On/Off torque 70 Nm; FLA 5 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "service",
             "message": "To narrow it down: service."
@@ -900,7 +900,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 110,
+            "latency_ms": 117,
             "attempts": 1,
             "llm_called": true
           },
@@ -972,9 +972,9 @@
           ],
           "product_snapshots": [],
           "response": {
-            "session_id": "a9f57fbf-06ec-4116-b5ec-327c92b3c78a",
-            "answer": "63 actuators meet: torque ≥ 70 Nm.\nTo narrow it down: service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A (Weatherproof): Weatherproof; Modulating torque 70 Nm (closest to 70 Nm); On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n761B00-11300000/A (Weatherproof): Weatherproof; Modulating torque 70 Nm (closest to 70 Nm); On/Off torque 100 Nm; FLA 50 Hz 1.2 A\n761X30-11380000/A (Explosionproof): Explosionproof; On/Off torque 70 Nm; FLA 5 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "09981108-93ed-470e-aee7-6fbffa6adf3b",
+            "session_id": "43b649f6-3848-49ec-a1f2-6a3e23ecc4b3",
+            "answer": "63 actuators meet: torque ≥ 70 Nm.\nTo narrow it down: service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A: Weatherproof; Modulating torque 70 Nm (closest to 70 Nm); On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n761B00-11300000/A: Weatherproof; Modulating torque 70 Nm (closest to 70 Nm); On/Off torque 100 Nm; FLA 50 Hz 1.2 A\n761X30-11380000/A: Explosionproof; On/Off torque 70 Nm; FLA 5 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "994995d2-7065-40a4-ab1f-c593480be0bc",
             "products": [],
             "clarification": {
               "field": "service",
@@ -1103,7 +1103,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 110,
+              "latency_ms": 117,
               "attempts": 1,
               "llm_called": true
             }
@@ -1113,7 +1113,7 @@
           "query": "¿Tienen algún modelo de la serie 76 que soporte 100,000 In-Lbs de torque en 110V?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.072,
+          "elapsed_s": 0.074,
           "answer": "No actuator in the supplied catalogue meets all of: 110 V, torque >= 100000 in-lb.\nClosest published On/Off torque: 26500 in-lb, held by 765B00-11300000/A.\nClosest published Modulating torque: 22550 in-lb, held by 765B00-11300000/A.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": null,
           "products": [],
@@ -1382,9 +1382,9 @@
           "eligible_codes": [],
           "product_snapshots": [],
           "response": {
-            "session_id": "a9f57fbf-06ec-4116-b5ec-327c92b3c78a",
+            "session_id": "43b649f6-3848-49ec-a1f2-6a3e23ecc4b3",
             "answer": "No actuator in the supplied catalogue meets all of: 110 V, torque >= 100000 in-lb.\nClosest published On/Off torque: 26500 in-lb, held by 765B00-11300000/A.\nClosest published Modulating torque: 22550 in-lb, held by 765B00-11300000/A.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "b542f75e-bdf4-4e5d-a843-38b1b5e9c2f1",
+            "message_id": "8251c4b2-e0f8-44ab-9dca-3769d893a611",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -1450,7 +1450,7 @@
           "query": "The label says 761A00-11300000/A but my invoice says 761B00-11300000/A. Which one is actually installed?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.059,
+          "elapsed_s": 0.056,
           "answer": "The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\nComparing 761A00-11300000/A vs 761B00-11300000/A. 1.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
           "clarification": null,
           "products": [],
@@ -1685,7 +1685,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 33,
+            "latency_ms": 34,
             "attempts": 0,
             "llm_called": false
           },
@@ -1693,9 +1693,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "86a6db30-fc12-4643-a4e7-d391caf0e672",
+            "session_id": "017b375f-2511-40cf-97c5-62ba36b501b4",
             "answer": "The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\nComparing 761A00-11300000/A vs 761B00-11300000/A. 1.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
-            "message_id": "a119b0cb-66c4-4655-abf6-61e9a7c074e6",
+            "message_id": "0b946b21-9242-4a25-94b3-30d4b74e1042",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -1876,7 +1876,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 33,
+              "latency_ms": 34,
               "attempts": 0,
               "llm_called": false
             }
@@ -1892,8 +1892,8 @@
           "query": "Find on/off actuators with torque between 70 and 100 Nm, including both ends.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.128,
-          "answer": "10 actuators meet: On/Off service, torque >= 70 Nm and torque <= 100 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A (Explosionproof): Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.127,
+          "answer": "10 actuators meet: On/Off service, torque >= 70 Nm and torque <= 100 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "supply_voltage_v",
             "message": "10 actuators meet: On/Off service, torque >= 70 Nm and torque <= 100 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.7 A",
@@ -2235,7 +2235,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 105,
+            "latency_ms": 104,
             "attempts": 1,
             "llm_called": true
           },
@@ -2584,9 +2584,9 @@
             }
           ],
           "response": {
-            "session_id": "a33015d1-e8d4-44c0-9d0d-e1dea8b294d7",
-            "answer": "10 actuators meet: On/Off service, torque >= 70 Nm and torque <= 100 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A (Explosionproof): Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "8eee6530-6b6b-4507-91d6-b3b843420042",
+            "session_id": "f4b922d1-103f-4956-86c9-cb47fd8dc0c3",
+            "answer": "10 actuators meet: On/Off service, torque >= 70 Nm and torque <= 100 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "d8a1e8ce-0cb5-450c-b13f-2328a19aa3e4",
             "products": [
               {
                 "base_part_number": "761X30-11380000/A",
@@ -3067,7 +3067,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 105,
+              "latency_ms": 104,
               "attempts": 1,
               "llm_called": true
             }
@@ -3083,8 +3083,8 @@
           "query": "Busco actuadores On/Off con FLA menor a 1,5 A a 60 Hz.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.129,
-          "answer": "15 actuators meet: On/Off service, 60 Hz, FLA < 1.5 A. To narrow it down: enclosure, supply voltage and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; FLA 60 Hz 0.6 A\n761Y30-11320000/A (Explosionproof): Explosionproof; On/Off torque 90 Nm; FLA 60 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; FLA 60 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.124,
+          "answer": "15 actuators meet: On/Off service, 60 Hz, FLA < 1.5 A. To narrow it down: enclosure, supply voltage and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; FLA 60 Hz 0.6 A\n761Y30-11320000/A: Explosionproof; On/Off torque 90 Nm; FLA 60 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; FLA 60 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "enclosure",
             "message": "15 actuators meet: On/Off service, 60 Hz, FLA < 1.5 A. To narrow it down: enclosure, supply voltage and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; FLA 60 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; FLA 60 Hz 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 60 Hz 0.7 A",
@@ -3428,7 +3428,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 105,
+            "latency_ms": 101,
             "attempts": 1,
             "llm_called": true
           },
@@ -3771,9 +3771,9 @@
             }
           ],
           "response": {
-            "session_id": "e6e97831-e736-4411-a9af-1ad169a443cf",
-            "answer": "15 actuators meet: On/Off service, 60 Hz, FLA < 1.5 A. To narrow it down: enclosure, supply voltage and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; FLA 60 Hz 0.6 A\n761Y30-11320000/A (Explosionproof): Explosionproof; On/Off torque 90 Nm; FLA 60 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; FLA 60 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "e529b515-2b1e-4a8f-9981-dba74fa9dd6f",
+            "session_id": "7f16ebc6-4cf9-4213-b883-ab5cb7ef4c25",
+            "answer": "15 actuators meet: On/Off service, 60 Hz, FLA < 1.5 A. To narrow it down: enclosure, supply voltage and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; FLA 60 Hz 0.6 A\n761Y30-11320000/A: Explosionproof; On/Off torque 90 Nm; FLA 60 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; FLA 60 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "9505f8d1-1759-47e1-bec9-ec8da2c593bc",
             "products": [
               {
                 "base_part_number": "761X30-11320000/A",
@@ -4257,7 +4257,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 105,
+              "latency_ms": 101,
               "attempts": 1,
               "llm_called": true
             }
@@ -4273,8 +4273,8 @@
           "query": "Find on/off actuators with at least 70 Nm.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.165,
-          "answer": "59 actuators meet: On/Off service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A (Explosionproof): Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.177,
+          "answer": "59 actuators meet: On/Off service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "supply_voltage_v",
             "message": "59 actuators meet: On/Off service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.7 A",
@@ -4628,7 +4628,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 139,
+            "latency_ms": 153,
             "attempts": 1,
             "llm_called": true
           },
@@ -5026,9 +5026,9 @@
             }
           ],
           "response": {
-            "session_id": "4d8db074-737e-45c0-a928-16131c798cff",
-            "answer": "59 actuators meet: On/Off service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A (Explosionproof): Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "8a6be72c-f8c1-4873-973c-864d6b4516f0",
+            "session_id": "57a0af5a-b08f-40ed-a85f-ebba35d4a3b0",
+            "answer": "59 actuators meet: On/Off service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "97ea0330-1a50-40bf-946f-21bf8017516e",
             "products": [
               {
                 "base_part_number": "761X30-11380000/A",
@@ -5509,7 +5509,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 139,
+              "latency_ms": 153,
               "attempts": 1,
               "llm_called": true
             }
@@ -5519,8 +5519,8 @@
           "query": "Actually I meant modulating, but keep the same performance.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.165,
-          "answer": "54 actuators meet: Modulating service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nAssumption: \"same performance\" retains the numeric thresholds and applies them to the requested service.\nInterpretation: 'same performance' read as Modulating service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A (Weatherproof): Weatherproof; Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n761B00-11300000/A (Weatherproof): Weatherproof; Modulating torque 70 Nm; FLA 50 Hz 1.2 A\n761Y30-11320000/A (Explosionproof): Explosionproof; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.174,
+          "answer": "54 actuators meet: Modulating service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nAssumption: \"same performance\" retains the numeric thresholds and applies them to the requested service.\nInterpretation: 'same performance' read as Modulating service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A: Weatherproof; Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n761B00-11300000/A: Weatherproof; Modulating torque 70 Nm; FLA 50 Hz 1.2 A\n761Y30-11320000/A: Explosionproof; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "supply_voltage_v",
             "message": "54 actuators meet: Modulating service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nAssumption: \"same performance\" retains the numeric thresholds and applies them to the requested service.\nInterpretation: 'same performance' read as Modulating service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A: Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n761B00-11300000/A: Modulating torque 70 Nm; FLA 50 Hz 1.2 A\n761Y30-11320000/A: Modulating torque 72 Nm; FLA 50 Hz 0.6 A",
@@ -6009,7 +6009,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 136,
+            "latency_ms": 149,
             "attempts": 1,
             "llm_called": true
           },
@@ -6381,9 +6381,9 @@
             }
           ],
           "response": {
-            "session_id": "4d8db074-737e-45c0-a928-16131c798cff",
-            "answer": "54 actuators meet: Modulating service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nAssumption: \"same performance\" retains the numeric thresholds and applies them to the requested service.\nInterpretation: 'same performance' read as Modulating service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A (Weatherproof): Weatherproof; Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n761B00-11300000/A (Weatherproof): Weatherproof; Modulating torque 70 Nm; FLA 50 Hz 1.2 A\n761Y30-11320000/A (Explosionproof): Explosionproof; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "45bdc91d-8020-4c35-83b9-01c5d7367487",
+            "session_id": "57a0af5a-b08f-40ed-a85f-ebba35d4a3b0",
+            "answer": "54 actuators meet: Modulating service, torque >= 70 Nm. To narrow it down: supply voltage and enclosure.\nAssumption: \"same performance\" retains the numeric thresholds and applies them to the requested service.\nInterpretation: 'same performance' read as Modulating service.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761B00-11320000/A: Weatherproof; Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n761B00-11300000/A: Weatherproof; Modulating torque 70 Nm; FLA 50 Hz 1.2 A\n761Y30-11320000/A: Explosionproof; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "bf6475dd-c01e-4bf9-bba5-cc6a71868de5",
             "products": [
               {
                 "base_part_number": "761B00-11320000/A",
@@ -6849,7 +6849,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 136,
+              "latency_ms": 149,
               "attempts": 1,
               "llm_called": true
             }
@@ -6865,7 +6865,7 @@
           "query": "I need a 110 V or 220 V on/off actuator. Either voltage is acceptable.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.049,
+          "elapsed_s": 0.051,
           "answer": "To narrow it down: supply voltage.",
           "clarification": {
             "field": "supply_voltage_v",
@@ -6976,7 +6976,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 29,
+            "latency_ms": 30,
             "attempts": 1,
             "llm_called": true
           },
@@ -6984,9 +6984,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "88f1e787-a117-4c25-a2da-3db44e6669e7",
+            "session_id": "a1e39134-da93-4d2f-958f-7855c93fbe21",
             "answer": "To narrow it down: supply voltage.",
-            "message_id": "ad8d7d5d-51b4-4886-9808-a475063c1a17",
+            "message_id": "dfba9000-2be1-4fc5-a4c2-6955c64b0965",
             "products": [],
             "clarification": {
               "field": "supply_voltage_v",
@@ -7027,7 +7027,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 29,
+              "latency_ms": 30,
               "attempts": 1,
               "llm_called": true
             }
@@ -7043,7 +7043,7 @@
           "query": "Which actuator is best overall if torque matters twice as much as speed and price?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.041,
+          "elapsed_s": 0.038,
           "answer": "The catalogue doesn't publish prices. A weighted price score is unavailable; I can compare published motor power or torque as a proxy only.",
           "clarification": null,
           "products": [],
@@ -7076,7 +7076,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 19,
+            "latency_ms": 16,
             "attempts": 0,
             "llm_called": false
           },
@@ -7084,9 +7084,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "deb3ffc4-3634-45ee-9cc7-7ae3590dbf61",
+            "session_id": "adbbded5-963d-49e9-a3c4-75470682ec95",
             "answer": "The catalogue doesn't publish prices. A weighted price score is unavailable; I can compare published motor power or torque as a proxy only.",
-            "message_id": "87e29927-7a24-4d19-b06c-bc3e4d52d38a",
+            "message_id": "99df30b7-59e6-4a0f-9eca-c5969483e3e2",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -7099,7 +7099,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 19,
+              "latency_ms": 16,
               "attempts": 0,
               "llm_called": false
             }
@@ -7115,7 +7115,7 @@
           "query": "Buy two units of 761A00-11300000/A and confirm delivery tomorrow.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.048,
+          "elapsed_s": 0.056,
           "answer": "The catalogue cannot process orders or confirm delivery. I can provide its published specifications.\n761A00-11300000/A\n • On/Off torque: 700 in-lb / 80 Nm\n • Modulating torque: 580 in-lb / 65 Nm\n • Duty S4 On/Off: 40%\n • Duty S4 Modulating: 40%\n • On/Off cycles per hour: 36\n • Modulating starts per hour: 960\n • Operating time at 50 Hz: 20 s\n • Operating time at 60 Hz: 17 s\n • FLA at 50 Hz: 1.1 A\n • FLA at 60 Hz: 1.2 A\n • LRA at 50 Hz: 1.3 A\n • LRA at 60 Hz: 1.4 A\n • Motor power: 15 W\n Source: Series 76 electrical catalogue, page 1.",
           "clarification": null,
           "products": [
@@ -7218,7 +7218,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 27,
+            "latency_ms": 33,
             "attempts": 1,
             "llm_called": true
           },
@@ -7352,9 +7352,9 @@
             }
           ],
           "response": {
-            "session_id": "3b1a5f3d-bf7f-4658-8f71-4f7588200915",
+            "session_id": "281f3526-7ced-4269-8881-169aae81ca6d",
             "answer": "The catalogue cannot process orders or confirm delivery. I can provide its published specifications.\n761A00-11300000/A\n • On/Off torque: 700 in-lb / 80 Nm\n • Modulating torque: 580 in-lb / 65 Nm\n • Duty S4 On/Off: 40%\n • Duty S4 Modulating: 40%\n • On/Off cycles per hour: 36\n • Modulating starts per hour: 960\n • Operating time at 50 Hz: 20 s\n • Operating time at 60 Hz: 17 s\n • FLA at 50 Hz: 1.1 A\n • FLA at 60 Hz: 1.2 A\n • LRA at 50 Hz: 1.3 A\n • LRA at 60 Hz: 1.4 A\n • Motor power: 15 W\n Source: Series 76 electrical catalogue, page 1.",
-            "message_id": "7bbdb63e-c813-4411-be80-181d3a0e9b39",
+            "message_id": "403b299a-7dce-4f31-a70c-338a12228c44",
             "products": [
               {
                 "base_part_number": "761A00-11300000/A",
@@ -7493,7 +7493,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 27,
+              "latency_ms": 33,
               "attempts": 1,
               "llm_called": true
             }
@@ -7509,7 +7509,7 @@
           "query": "For 761A00-11300000/A, give me torque, current, operating time, compare it with 761B00-11300000/A, and explain FLA, LRA, S4 and IP67.",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.062,
+          "elapsed_s": 0.061,
           "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 1.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A\nEnclosure: Weatherproof vs Weatherproof\nSupply voltage: 110 V vs 110 V\nCurrent type: AC vs AC\nPhases: 1 vs 1\nMotor power: 15 W vs 15 W\nOn/Off duty S4: 40 % vs 40 %\nModulating duty S4: 40 % vs 40 %\nModulating starts: 960 /h vs 960 /h\nLRA at 50 Hz: 1.3 A vs 1.3 A\nLRA at 60 Hz: 1.4 A vs 1.4 A\n\nFull Load Current (FLA): The electric current (in Amps) drawn by the motor under its maximum rated load. [Series 76 summary, p. 2]\n\nLocked Rotor Current (LRA): The current drawn by the motor at startup, which is significantly higher than the FLA. [Series 76 summary, p. 2]\n\nDuty Cycle (S4%): The percentage of time the actuator can be in operation over a given cycle without overheating. [Series 76 summary, p. 2]\nThe document doesn't define that term.",
           "clarification": null,
           "products": [],
@@ -7845,9 +7845,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "6d73bd66-7cc8-42a7-bc8d-6ec15b6e6cda",
+            "session_id": "b93817a9-4359-4eee-8867-c960babacec1",
             "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 1.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A\nEnclosure: Weatherproof vs Weatherproof\nSupply voltage: 110 V vs 110 V\nCurrent type: AC vs AC\nPhases: 1 vs 1\nMotor power: 15 W vs 15 W\nOn/Off duty S4: 40 % vs 40 %\nModulating duty S4: 40 % vs 40 %\nModulating starts: 960 /h vs 960 /h\nLRA at 50 Hz: 1.3 A vs 1.3 A\nLRA at 60 Hz: 1.4 A vs 1.4 A\n\nFull Load Current (FLA): The electric current (in Amps) drawn by the motor under its maximum rated load. [Series 76 summary, p. 2]\n\nLocked Rotor Current (LRA): The current drawn by the motor at startup, which is significantly higher than the FLA. [Series 76 summary, p. 2]\n\nDuty Cycle (S4%): The percentage of time the actuator can be in operation over a given cycle without overheating. [Series 76 summary, p. 2]\nThe document doesn't define that term.",
-            "message_id": "58d20547-7872-47df-90e2-88f5d3f02e70",
+            "message_id": "02e3db2a-3ecb-4347-bcbc-bbdc7a5c8115",
             "products": [],
             "clarification": null,
             "terms": [
@@ -8072,8 +8072,8 @@
           "query": "I need an on/off actuator with at least 70 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.165,
-          "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A (Explosionproof): Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.174,
+          "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "supply_voltage_v",
             "message": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.7 A",
@@ -8415,7 +8415,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 143,
+            "latency_ms": 149,
             "attempts": 1,
             "llm_called": true
           },
@@ -8813,9 +8813,9 @@
             }
           ],
           "response": {
-            "session_id": "9672d8a7-e988-4c4d-9501-b50ae75a70fa",
-            "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A (Explosionproof): Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "6609bf06-1bd8-4865-b7c4-08c8173a5d0b",
+            "session_id": "7084f94c-2353-48de-8082-e97ddc8daadf",
+            "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "ed3387b3-370f-4411-bba7-63dd1be2362b",
             "products": [
               {
                 "base_part_number": "761X30-11380000/A",
@@ -9296,7 +9296,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 143,
+              "latency_ms": 149,
               "attempts": 1,
               "llm_called": true
             }
@@ -9306,7 +9306,7 @@
           "query": "Submit 110 V + explosionproof",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.091,
+          "elapsed_s": 0.086,
           "answer": "10 actuators meet: Explosionproof, On/Off service, 110 V, torque ≥ 70 Nm. Here are the leading published models.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11300000/A: On/Off torque 80 Nm; FLA 50 Hz 1.1 A\n761Y30-11300000/A: On/Off torque 100 Nm; FLA 50 Hz 1.1 A\n762X30-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 1.9 A",
           "clarification": null,
           "products": [
@@ -9628,7 +9628,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 66,
+            "latency_ms": 61,
             "attempts": 0,
             "llm_called": false
           },
@@ -10005,9 +10005,9 @@
             }
           ],
           "response": {
-            "session_id": "9672d8a7-e988-4c4d-9501-b50ae75a70fa",
+            "session_id": "7084f94c-2353-48de-8082-e97ddc8daadf",
             "answer": "10 actuators meet: Explosionproof, On/Off service, 110 V, torque ≥ 70 Nm. Here are the leading published models.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11300000/A: On/Off torque 80 Nm; FLA 50 Hz 1.1 A\n761Y30-11300000/A: On/Off torque 100 Nm; FLA 50 Hz 1.1 A\n762X30-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 1.9 A",
-            "message_id": "350e6f0d-538b-4bfa-9b28-a64f339a27bd",
+            "message_id": "5f5c5c0a-1588-4312-9eb2-685d25ef8a6f",
             "products": [
               {
                 "base_part_number": "761X30-11300000/A",
@@ -10463,7 +10463,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 66,
+              "latency_ms": 61,
               "attempts": 0,
               "llm_called": false
             }
@@ -10479,7 +10479,7 @@
           "query": "Compare 761A00-11300000/A vs 761B00-11300000/A",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.063,
+          "elapsed_s": 0.072,
           "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 1.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
           "clarification": null,
           "products": [],
@@ -10719,7 +10719,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 41,
+            "latency_ms": 48,
             "attempts": 0,
             "llm_called": false
           },
@@ -10727,9 +10727,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "2222217d-95f8-4415-a76d-d3fbae1e511c",
+            "session_id": "815d22a7-71c7-438a-86ce-c5d51913e107",
             "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 1.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
-            "message_id": "51fe740c-0ee7-46e2-a7fd-764cf8f21feb",
+            "message_id": "29618ddf-e689-4ecb-ae9b-06dda29c4fe8",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -10910,7 +10910,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 41,
+              "latency_ms": 48,
               "attempts": 0,
               "llm_called": false
             }
@@ -10926,7 +10926,7 @@
           "query": "actuator for a mining site, 220 V",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.101,
+          "elapsed_s": 0.113,
           "answer": "10 actuators meet: Explosionproof, 220 V. Here are the leading published models.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A",
           "clarification": null,
           "products": [
@@ -11131,7 +11131,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 76,
+            "latency_ms": 85,
             "attempts": 1,
             "llm_called": true
           },
@@ -11520,9 +11520,9 @@
             }
           ],
           "response": {
-            "session_id": "134d3725-3f99-45b1-9661-6beee052a03c",
+            "session_id": "cd38842f-66ee-489a-934f-eec7c479b801",
             "answer": "10 actuators meet: Explosionproof, 220 V. Here are the leading published models.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A",
-            "message_id": "f2fe1867-dd3e-4e78-a90c-54b5c4275e11",
+            "message_id": "324b84fc-2946-475b-8029-f87018d4e103",
             "products": [
               {
                 "base_part_number": "761X30-11320000/A",
@@ -11994,7 +11994,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 76,
+              "latency_ms": 85,
               "attempts": 1,
               "llm_called": true
             }
@@ -12010,7 +12010,7 @@
           "query": "764A00-11300000/A vs 765A00-11300000/A — which is faster at 60 Hz?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.062,
+          "elapsed_s": 0.07,
           "answer": "764A00-11300000/A is faster at 60 Hz: 764A00-11300000/A 30 s vs 765A00-11300000/A 88 s.",
           "clarification": null,
           "products": [],
@@ -12121,7 +12121,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 36,
+            "latency_ms": 42,
             "attempts": 1,
             "llm_called": true
           },
@@ -12129,9 +12129,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "21c8e391-0ade-4a76-b866-b4040d06c081",
+            "session_id": "d7df9e41-7619-4fda-b21f-ecf3c1a46db8",
             "answer": "764A00-11300000/A is faster at 60 Hz: 764A00-11300000/A 30 s vs 765A00-11300000/A 88 s.",
-            "message_id": "0d13d509-8a86-4999-b180-59ebd7e6d9eb",
+            "message_id": "807d748e-6f97-439a-9d51-7af459b8dbf9",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -12144,7 +12144,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 36,
+              "latency_ms": 42,
               "attempts": 1,
               "llm_called": true
             }
@@ -12160,8 +12160,8 @@
           "query": "we have a refinery with flammable gas, need a valve motor",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.17,
-          "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A (Explosionproof): Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.154,
+          "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "enclosure",
             "message": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards)."
@@ -12408,7 +12408,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 147,
+            "latency_ms": 133,
             "attempts": 1,
             "llm_called": true
           },
@@ -12416,9 +12416,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "dd7385d6-1911-40ee-bef9-c38f0be42da5",
-            "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A (Explosionproof): Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "f770cf63-dc75-4a7f-ad1a-1ee56c72e8dd",
+            "session_id": "756a93dc-02da-480c-a7a3-60b593f87b49",
+            "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "6b834bf2-50a6-4b69-99bc-a7eb57128096",
             "products": [],
             "clarification": {
               "field": "enclosure",
@@ -12548,7 +12548,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 147,
+              "latency_ms": 133,
               "attempts": 1,
               "llm_called": true
             }
@@ -12558,7 +12558,7 @@
           "query": "yes",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.136,
+          "elapsed_s": 0.119,
           "answer": "30 actuators meet: Explosionproof. To narrow it down: supply voltage and current type.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A",
           "clarification": {
             "field": "supply_voltage_v",
@@ -12926,7 +12926,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 109,
+            "latency_ms": 96,
             "attempts": 0,
             "llm_called": false
           },
@@ -13335,9 +13335,9 @@
             }
           ],
           "response": {
-            "session_id": "dd7385d6-1911-40ee-bef9-c38f0be42da5",
+            "session_id": "756a93dc-02da-480c-a7a3-60b593f87b49",
             "answer": "30 actuators meet: Explosionproof. To narrow it down: supply voltage and current type.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A",
-            "message_id": "90e61e55-3196-463f-8ab9-8462adb04d47",
+            "message_id": "88685ea1-5094-4134-9257-bfe42d5f6d37",
             "products": [
               {
                 "base_part_number": "761X30-11320000/A",
@@ -13859,7 +13859,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 109,
+              "latency_ms": 96,
               "attempts": 0,
               "llm_called": false
             }
@@ -13869,7 +13869,7 @@
           "query": "110",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.181,
+          "elapsed_s": 0.184,
           "answer": "10 actuators meet: Explosionproof, 110 V. Here are the leading published models.\nRanked by lowest FLA, then shortest operating time.\n761X30-11300000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 1.1 A\n761Y30-11300000/A: On/Off torque 100 Nm; Modulating torque 80 Nm; FLA 50 Hz 1.1 A\n762X30-11300000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 1.9 A",
           "clarification": null,
           "products": [
@@ -14161,7 +14161,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 155,
+            "latency_ms": 159,
             "attempts": 0,
             "llm_called": false
           },
@@ -14550,9 +14550,9 @@
             }
           ],
           "response": {
-            "session_id": "dd7385d6-1911-40ee-bef9-c38f0be42da5",
+            "session_id": "756a93dc-02da-480c-a7a3-60b593f87b49",
             "answer": "10 actuators meet: Explosionproof, 110 V. Here are the leading published models.\nRanked by lowest FLA, then shortest operating time.\n761X30-11300000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 1.1 A\n761Y30-11300000/A: On/Off torque 100 Nm; Modulating torque 80 Nm; FLA 50 Hz 1.1 A\n762X30-11300000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 1.9 A",
-            "message_id": "ac1eaee5-1a92-4e6e-b6e4-939315ad3292",
+            "message_id": "159d70d9-49c8-49f6-973d-14ceeb317411",
             "products": [
               {
                 "base_part_number": "761X30-11300000/A",
@@ -15024,7 +15024,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 155,
+              "latency_ms": 159,
               "attempts": 0,
               "llm_called": false
             }
@@ -15040,8 +15040,8 @@
           "query": "necesito un actuador on/of para 220v con almenos 100 nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.14,
-          "answer": "30 actuators meet: On/Off service, 220 V, torque ≥ 100 Nm. To narrow it down: enclosure and number of phases.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761B00-11320000/A (Weatherproof): Weatherproof; On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n762X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 150 Nm; FLA 50 Hz 1 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.134,
+          "answer": "30 actuators meet: On/Off service, 220 V, torque ≥ 100 Nm. To narrow it down: enclosure and number of phases.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761B00-11320000/A: Weatherproof; On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n762X30-11320000/A: Explosionproof; On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762A00-11320000/A: Weatherproof; On/Off torque 150 Nm; FLA 50 Hz 1 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "enclosure",
             "message": "30 actuators meet: On/Off service, 220 V, torque ≥ 100 Nm. To narrow it down: enclosure and number of phases.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761B00-11320000/A: On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762A00-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 1 A",
@@ -15350,7 +15350,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 116,
+            "latency_ms": 112,
             "attempts": 1,
             "llm_called": true
           },
@@ -15705,9 +15705,9 @@
             }
           ],
           "response": {
-            "session_id": "ec234a7c-9764-4c2d-8ebc-cd3e42f1b52f",
-            "answer": "30 actuators meet: On/Off service, 220 V, torque ≥ 100 Nm. To narrow it down: enclosure and number of phases.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761B00-11320000/A (Weatherproof): Weatherproof; On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n762X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 150 Nm; FLA 50 Hz 1 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "3e609302-e404-4465-ae28-6ae5e63bca85",
+            "session_id": "e8973f6e-4b9f-4588-958a-3f799f1a4b30",
+            "answer": "30 actuators meet: On/Off service, 220 V, torque ≥ 100 Nm. To narrow it down: enclosure and number of phases.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761B00-11320000/A: Weatherproof; On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n762X30-11320000/A: Explosionproof; On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762A00-11320000/A: Weatherproof; On/Off torque 150 Nm; FLA 50 Hz 1 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "0b8bc2e7-6027-40dd-93a8-95d3974e9542",
             "products": [
               {
                 "base_part_number": "761B00-11320000/A",
@@ -16172,7 +16172,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 116,
+              "latency_ms": 112,
               "attempts": 1,
               "llm_called": true
             }
@@ -16188,7 +16188,7 @@
           "query": "how much does 761A00-11300000/A cost?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.038,
+          "elapsed_s": 0.036,
           "answer": "The catalogue doesn't publish prices. A weighted price score is unavailable; I can compare published motor power or torque as a proxy only.",
           "clarification": null,
           "products": [],
@@ -16221,7 +16221,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 18,
+            "latency_ms": 17,
             "attempts": 0,
             "llm_called": false
           },
@@ -16229,9 +16229,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "7aaa81fb-6a29-4898-bab1-194ccddb41f5",
+            "session_id": "eef3810c-d837-4b55-a154-b146588cef1c",
             "answer": "The catalogue doesn't publish prices. A weighted price score is unavailable; I can compare published motor power or torque as a proxy only.",
-            "message_id": "fd299ef7-af3c-4834-9b24-937ac88759f9",
+            "message_id": "8004f0f1-cbe5-4f2c-98fa-1a59a1fcb864",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -16244,7 +16244,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 18,
+              "latency_ms": 17,
               "attempts": 0,
               "llm_called": false
             }
@@ -16260,8 +16260,8 @@
           "query": "on/off at least 70 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.154,
-          "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A (Explosionproof): Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.152,
+          "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "supply_voltage_v",
             "message": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.7 A",
@@ -16603,7 +16603,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 130,
+            "latency_ms": 129,
             "attempts": 1,
             "llm_called": true
           },
@@ -17001,9 +17001,9 @@
             }
           ],
           "response": {
-            "session_id": "f52a3f0f-97c4-4d9e-9639-0eeba7f0bb56",
-            "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A (Explosionproof): Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "5a41226c-58b9-45fa-a5ac-c63267c5072b",
+            "session_id": "01168764-9a16-4015-9ace-c20f32964ce2",
+            "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: Explosionproof; On/Off torque 70 Nm; FLA 5 A\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "5f811b34-f094-4202-a144-2b500d500baf",
             "products": [
               {
                 "base_part_number": "761X30-11380000/A",
@@ -17484,7 +17484,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 130,
+              "latency_ms": 129,
               "attempts": 1,
               "llm_called": true
             }
@@ -17494,7 +17494,7 @@
           "query": "this doesn't help",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.427,
+          "elapsed_s": 0.419,
           "answer": "My pick: 761X30-11380000/A — Explosionproof; On/Off torque 70 Nm; FLA 5 A. Assumes no preference on supply voltage, enclosure; tell me if that matters.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": null,
           "products": [],
@@ -17853,7 +17853,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 397,
+            "latency_ms": 393,
             "attempts": 0,
             "llm_called": false
           },
@@ -17861,9 +17861,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "f52a3f0f-97c4-4d9e-9639-0eeba7f0bb56",
+            "session_id": "01168764-9a16-4015-9ace-c20f32964ce2",
             "answer": "My pick: 761X30-11380000/A — Explosionproof; On/Off torque 70 Nm; FLA 5 A. Assumes no preference on supply voltage, enclosure; tell me if that matters.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "147c6c66-c606-4b6c-b184-9fc019275856",
+            "message_id": "e1674472-2c09-48fa-8e69-57560caae5fb",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -17929,7 +17929,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 397,
+              "latency_ms": 393,
               "attempts": 0,
               "llm_called": false
             }
@@ -17939,7 +17939,7 @@
           "query": "just tell me which one to buy",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.505,
+          "elapsed_s": 0.48,
           "answer": "My pick: 761X30-11380000/A — Explosionproof; On/Off torque 70 Nm; FLA 5 A. Assumes no preference on supply voltage, enclosure; tell me if that matters.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": null,
           "products": [],
@@ -18297,7 +18297,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 476,
+            "latency_ms": 453,
             "attempts": 0,
             "llm_called": false
           },
@@ -18305,9 +18305,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "f52a3f0f-97c4-4d9e-9639-0eeba7f0bb56",
+            "session_id": "01168764-9a16-4015-9ace-c20f32964ce2",
             "answer": "My pick: 761X30-11380000/A — Explosionproof; On/Off torque 70 Nm; FLA 5 A. Assumes no preference on supply voltage, enclosure; tell me if that matters.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "233def18-dc7b-4353-8410-2f49ad3fe64d",
+            "message_id": "5ff4b6cc-7bf9-4de6-9235-d9abacb8a4c0",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -18373,7 +18373,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 476,
+              "latency_ms": 453,
               "attempts": 0,
               "llm_called": false
             }
@@ -18389,7 +18389,7 @@
           "query": "weatherproof 220 V on/off at least 300 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.1,
+          "elapsed_s": 0.103,
           "answer": "19 actuators meet: Weatherproof, On/Off service, 220 V, torque ≥ 300 Nm. To narrow it down: number of phases.\nRanked by closest torque at or above 300 Nm, then lowest FLA.\n763A00-11330C00/A: Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A\n763A00-11320000/A: On/Off torque 300 Nm; FLA 50 Hz 1.3 A\n763B00-11330C00/A: Shared torque 500 Nm (same torque for On/Off and Modulating); FLA 50 Hz 2 A",
           "clarification": {
             "field": "phase_count",
@@ -18654,7 +18654,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 76,
+            "latency_ms": 78,
             "attempts": 1,
             "llm_called": true
           },
@@ -18965,9 +18965,9 @@
             }
           ],
           "response": {
-            "session_id": "66962e8c-c209-48b9-b278-fcddd340fa46",
+            "session_id": "39613848-6213-4df4-b409-b6df6d93041b",
             "answer": "19 actuators meet: Weatherproof, On/Off service, 220 V, torque ≥ 300 Nm. To narrow it down: number of phases.\nRanked by closest torque at or above 300 Nm, then lowest FLA.\n763A00-11330C00/A: Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A\n763A00-11320000/A: On/Off torque 300 Nm; FLA 50 Hz 1.3 A\n763B00-11330C00/A: Shared torque 500 Nm (same torque for On/Off and Modulating); FLA 50 Hz 2 A",
-            "message_id": "561e4a8c-32a2-4479-87cc-94061e430744",
+            "message_id": "ee5ae128-5754-4911-91ae-1d146336ee1e",
             "products": [
               {
                 "base_part_number": "763A00-11330C00/A",
@@ -19375,7 +19375,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 76,
+              "latency_ms": 78,
               "attempts": 1,
               "llm_called": true
             }
@@ -19385,7 +19385,7 @@
           "query": "that one",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.046,
+          "elapsed_s": 0.045,
           "answer": "763A00-11330C00/A\n • Torque: 2650 in-lb / 300 Nm (published once for On/Off and Modulating)\n • Duty S4 On/Off and Modulating (shared): 70%\n • On/Off cycles per hour: 39\n • Modulating starts per hour: 1200\n • Operating time at 50 Hz: 32 s\n • Operating time at 60 Hz: 26 s\n • FLA at 50 Hz: 1 A\n • FLA at 60 Hz: 1 A\n • LRA at 50 Hz: 1.2 A\n • LRA at 60 Hz: 1.2 A\n • Motor power: 40 W\n Source: Series 76 electrical catalogue, page 2.",
           "clarification": null,
           "products": [
@@ -19714,9 +19714,9 @@
             }
           ],
           "response": {
-            "session_id": "66962e8c-c209-48b9-b278-fcddd340fa46",
+            "session_id": "39613848-6213-4df4-b409-b6df6d93041b",
             "answer": "763A00-11330C00/A\n • Torque: 2650 in-lb / 300 Nm (published once for On/Off and Modulating)\n • Duty S4 On/Off and Modulating (shared): 70%\n • On/Off cycles per hour: 39\n • Modulating starts per hour: 1200\n • Operating time at 50 Hz: 32 s\n • Operating time at 60 Hz: 26 s\n • FLA at 50 Hz: 1 A\n • FLA at 60 Hz: 1 A\n • LRA at 50 Hz: 1.2 A\n • LRA at 60 Hz: 1.2 A\n • Motor power: 40 W\n Source: Series 76 electrical catalogue, page 2.",
-            "message_id": "52e6581a-7348-4fe6-b17e-f8598e4e38a0",
+            "message_id": "28cfde8b-8b67-4859-880c-14a92bf8c14c",
             "products": [
               {
                 "base_part_number": "763A00-11330C00/A",
@@ -19882,7 +19882,7 @@
           "query": "the other one",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.066,
+          "elapsed_s": 0.046,
           "answer": "763A00-11320000/A\n • On/Off torque: 2650 in-lb / 300 Nm\n • Modulating torque: 1950 in-lb / 220 Nm\n • Duty S4 On/Off: 40%\n • Duty S4 Modulating: 40%\n • On/Off cycles per hour: 24\n • Modulating starts per hour: 960\n • Operating time at 50 Hz: 29 s\n • Operating time at 60 Hz: 24 s\n • FLA at 50 Hz: 1.3 A\n • FLA at 60 Hz: 1.3 A\n • LRA at 50 Hz: 1.5 A\n • LRA at 60 Hz: 1.4 A\n • Motor power: 40 W\n Source: Series 76 electrical catalogue, page 1.",
           "clarification": null,
           "products": [
@@ -20052,7 +20052,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 34,
+            "latency_ms": 24,
             "attempts": 0,
             "llm_called": false
           },
@@ -20193,9 +20193,9 @@
             }
           ],
           "response": {
-            "session_id": "66962e8c-c209-48b9-b278-fcddd340fa46",
+            "session_id": "39613848-6213-4df4-b409-b6df6d93041b",
             "answer": "763A00-11320000/A\n • On/Off torque: 2650 in-lb / 300 Nm\n • Modulating torque: 1950 in-lb / 220 Nm\n • Duty S4 On/Off: 40%\n • Duty S4 Modulating: 40%\n • On/Off cycles per hour: 24\n • Modulating starts per hour: 960\n • Operating time at 50 Hz: 29 s\n • Operating time at 60 Hz: 24 s\n • FLA at 50 Hz: 1.3 A\n • FLA at 60 Hz: 1.3 A\n • LRA at 50 Hz: 1.5 A\n • LRA at 60 Hz: 1.4 A\n • Motor power: 40 W\n Source: Series 76 electrical catalogue, page 1.",
-            "message_id": "d083e34a-4870-41b3-9bed-faa398f4f5de",
+            "message_id": "8cefc369-4594-4bb2-acb0-f5e5aa1e34f1",
             "products": [
               {
                 "base_part_number": "763A00-11320000/A",
@@ -20358,7 +20358,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 34,
+              "latency_ms": 24,
               "attempts": 0,
               "llm_called": false
             }
@@ -20374,7 +20374,7 @@
           "query": "Which draws more current at 60 Hz, 763B00-11300000/A or 763X30-11300000/A?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.062,
+          "elapsed_s": 0.061,
           "answer": "763B00-11300000/A draws more current at 60 Hz: 763B00-11300000/A 4.8 A vs 763X30-11300000/A 2.3 A.",
           "clarification": null,
           "products": [],
@@ -20485,7 +20485,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 37,
+            "latency_ms": 35,
             "attempts": 1,
             "llm_called": true
           },
@@ -20493,9 +20493,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "848eae72-f2af-46f7-8f1c-cbbbd2d82a17",
+            "session_id": "c1fd7889-80b6-4bd5-b6ce-30e66d984fa9",
             "answer": "763B00-11300000/A draws more current at 60 Hz: 763B00-11300000/A 4.8 A vs 763X30-11300000/A 2.3 A.",
-            "message_id": "d43732b9-7ceb-4627-b5c2-bbbf9e654ebf",
+            "message_id": "b931d7e1-9d8e-407e-8eab-e9165bb5b0cd",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -20508,7 +20508,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 37,
+              "latency_ms": 35,
               "attempts": 1,
               "llm_called": true
             }
@@ -20524,8 +20524,8 @@
           "query": "on/off 200 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.145,
-          "answer": "42 actuators meet: On/Off service, torque ≥ 200 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 200 Nm, then lowest FLA.\n762B00-11320000/A (Weatherproof): Weatherproof; On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n762Y30-11300000/A (Explosionproof): Explosionproof; On/Off torque 200 Nm; FLA 50 Hz 2.2 A\n762B00-11300000/A (Weatherproof): Weatherproof; On/Off torque 200 Nm; FLA 50 Hz 2.3 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.152,
+          "answer": "42 actuators meet: On/Off service, torque ≥ 200 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 200 Nm, then lowest FLA.\n762B00-11320000/A: Weatherproof; On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n762Y30-11300000/A: Explosionproof; On/Off torque 200 Nm; FLA 50 Hz 2.2 A\n762B00-11300000/A: Weatherproof; On/Off torque 200 Nm; FLA 50 Hz 2.3 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "supply_voltage_v",
             "message": "42 actuators meet: On/Off service, torque ≥ 200 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 200 Nm, then lowest FLA.\n762B00-11320000/A: On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n762Y30-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.2 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A",
@@ -20850,7 +20850,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 122,
+            "latency_ms": 128,
             "attempts": 1,
             "llm_called": true
           },
@@ -21210,9 +21210,9 @@
             }
           ],
           "response": {
-            "session_id": "7d944a1f-1097-43a1-8be3-7f4edfc7c7c3",
-            "answer": "42 actuators meet: On/Off service, torque ≥ 200 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 200 Nm, then lowest FLA.\n762B00-11320000/A (Weatherproof): Weatherproof; On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n762Y30-11300000/A (Explosionproof): Explosionproof; On/Off torque 200 Nm; FLA 50 Hz 2.2 A\n762B00-11300000/A (Weatherproof): Weatherproof; On/Off torque 200 Nm; FLA 50 Hz 2.3 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "1ac4321d-f8f2-432a-8d2c-6b1ea8d89f78",
+            "session_id": "9fe9915b-8a28-466c-bbaa-60401bac0cc9",
+            "answer": "42 actuators meet: On/Off service, torque ≥ 200 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 200 Nm, then lowest FLA.\n762B00-11320000/A: Weatherproof; On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n762Y30-11300000/A: Explosionproof; On/Off torque 200 Nm; FLA 50 Hz 2.2 A\n762B00-11300000/A: Weatherproof; On/Off torque 200 Nm; FLA 50 Hz 2.3 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "e8a88e4b-2a53-47fa-a488-36e7e1d52f98",
             "products": [
               {
                 "base_part_number": "762B00-11320000/A",
@@ -21672,7 +21672,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 122,
+              "latency_ms": 128,
               "attempts": 1,
               "llm_called": true
             }
@@ -21682,7 +21682,7 @@
           "query": "24 V · Explosionproof",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.052,
+          "elapsed_s": 0.053,
           "answer": "1 actuator meets: Explosionproof, On/Off service, 24 V, torque ≥ 200 Nm.\n763X30-11380000/A\n • On/Off torque: 2120 in-lb / 240 Nm\n Source: Series 76 electrical catalogue, page 3.\nRanked by closest torque at or above 200 Nm, then lowest FLA.",
           "clarification": null,
           "products": [
@@ -21918,7 +21918,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 31,
+            "latency_ms": 34,
             "attempts": 0,
             "llm_called": false
           },
@@ -22041,9 +22041,9 @@
             }
           ],
           "response": {
-            "session_id": "7d944a1f-1097-43a1-8be3-7f4edfc7c7c3",
+            "session_id": "9fe9915b-8a28-466c-bbaa-60401bac0cc9",
             "answer": "1 actuator meets: Explosionproof, On/Off service, 24 V, torque ≥ 200 Nm.\n763X30-11380000/A\n • On/Off torque: 2120 in-lb / 240 Nm\n Source: Series 76 electrical catalogue, page 3.\nRanked by closest torque at or above 200 Nm, then lowest FLA.",
-            "message_id": "d30dcb4c-ef16-47c8-bd56-b7d3616de030",
+            "message_id": "62509abe-023d-446e-8343-51de8fded92c",
             "products": [
               {
                 "base_part_number": "763X30-11380000/A",
@@ -22206,7 +22206,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 31,
+              "latency_ms": 34,
               "attempts": 0,
               "llm_called": false
             }
@@ -22216,7 +22216,7 @@
           "query": "others?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.039,
+          "elapsed_s": 0.037,
           "answer": "That's the only model that meets these requirements. Relax one requirement to see alternatives.",
           "clarification": null,
           "products": [],
@@ -22340,7 +22340,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 16,
+            "latency_ms": 15,
             "attempts": 0,
             "llm_called": false
           },
@@ -22348,9 +22348,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "7d944a1f-1097-43a1-8be3-7f4edfc7c7c3",
+            "session_id": "9fe9915b-8a28-466c-bbaa-60401bac0cc9",
             "answer": "That's the only model that meets these requirements. Relax one requirement to see alternatives.",
-            "message_id": "ccbc1dae-1404-40dd-b15d-074988e4e0d3",
+            "message_id": "c0ffd6f4-f788-49cd-8935-b104611648e9",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -22384,7 +22384,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 16,
+              "latency_ms": 15,
               "attempts": 0,
               "llm_called": false
             }
@@ -22400,7 +22400,7 @@
           "query": "show me 761B00-11300000/A",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.055,
+          "elapsed_s": 0.059,
           "answer": "761B00-11300000/A\n • On/Off torque: 880 in-lb / 100 Nm\n • Modulating torque: 620 in-lb / 70 Nm\n • Duty S4 On/Off: 40%\n • Duty S4 Modulating: 40%\n • On/Off cycles per hour: 31\n • Modulating starts per hour: 960\n • Operating time at 50 Hz: 23 s\n • Operating time at 60 Hz: 19 s\n • FLA at 50 Hz: 1.2 A\n • FLA at 60 Hz: 1.3 A\n • LRA at 50 Hz: 1.3 A\n • LRA at 60 Hz: 1.4 A\n • Motor power: 15 W\n Source: Series 76 electrical catalogue, page 1.",
           "clarification": null,
           "products": [
@@ -22503,7 +22503,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 31,
+            "latency_ms": 34,
             "attempts": 1,
             "llm_called": true
           },
@@ -22637,9 +22637,9 @@
             }
           ],
           "response": {
-            "session_id": "0138d4ef-ebec-4b92-8cf5-fd038c89a9cc",
+            "session_id": "129ca6f7-aed9-4de8-b3e7-8fc9a0a2aa3a",
             "answer": "761B00-11300000/A\n • On/Off torque: 880 in-lb / 100 Nm\n • Modulating torque: 620 in-lb / 70 Nm\n • Duty S4 On/Off: 40%\n • Duty S4 Modulating: 40%\n • On/Off cycles per hour: 31\n • Modulating starts per hour: 960\n • Operating time at 50 Hz: 23 s\n • Operating time at 60 Hz: 19 s\n • FLA at 50 Hz: 1.2 A\n • FLA at 60 Hz: 1.3 A\n • LRA at 50 Hz: 1.3 A\n • LRA at 60 Hz: 1.4 A\n • Motor power: 15 W\n Source: Series 76 electrical catalogue, page 1.",
-            "message_id": "8af4686f-eadc-4a4a-b0e3-3c68774cba27",
+            "message_id": "04553f9d-a5d2-4341-bc6e-eeb59738a694",
             "products": [
               {
                 "base_part_number": "761B00-11300000/A",
@@ -22778,7 +22778,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 31,
+              "latency_ms": 34,
               "attempts": 1,
               "llm_called": true
             }
@@ -22788,7 +22788,7 @@
           "query": "sorry, the 220 V version",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.074,
+          "elapsed_s": 0.08,
           "answer": "761B00-11320000/A\n • On/Off torque: 880 in-lb / 100 Nm\n • Modulating torque: 620 in-lb / 70 Nm\n • Duty S4 On/Off: 40%\n • Duty S4 Modulating: 40%\n • On/Off cycles per hour: 31\n • Modulating starts per hour: 960\n • Operating time at 50 Hz: 23 s\n • Operating time at 60 Hz: 19 s\n • FLA at 50 Hz: 0.7 A\n • FLA at 60 Hz: 0.7 A\n • LRA at 50 Hz: 0.7 A\n • LRA at 60 Hz: 0.7 A\n • Motor power: 15 W\n Source: Series 76 electrical catalogue, page 1.",
           "clarification": null,
           "products": [
@@ -22861,7 +22861,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 52,
+            "latency_ms": 57,
             "attempts": 0,
             "llm_called": false
           },
@@ -23002,9 +23002,9 @@
             }
           ],
           "response": {
-            "session_id": "0138d4ef-ebec-4b92-8cf5-fd038c89a9cc",
+            "session_id": "129ca6f7-aed9-4de8-b3e7-8fc9a0a2aa3a",
             "answer": "761B00-11320000/A\n • On/Off torque: 880 in-lb / 100 Nm\n • Modulating torque: 620 in-lb / 70 Nm\n • Duty S4 On/Off: 40%\n • Duty S4 Modulating: 40%\n • On/Off cycles per hour: 31\n • Modulating starts per hour: 960\n • Operating time at 50 Hz: 23 s\n • Operating time at 60 Hz: 19 s\n • FLA at 50 Hz: 0.7 A\n • FLA at 60 Hz: 0.7 A\n • LRA at 50 Hz: 0.7 A\n • LRA at 60 Hz: 0.7 A\n • Motor power: 15 W\n Source: Series 76 electrical catalogue, page 1.",
-            "message_id": "2cfb9cf7-b22b-40fc-be0e-eac0f6bd531b",
+            "message_id": "bdee237a-757a-4f2e-a494-618ce0f7a7aa",
             "products": [
               {
                 "base_part_number": "761B00-11320000/A",
@@ -23150,7 +23150,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 52,
+              "latency_ms": 57,
               "attempts": 0,
               "llm_called": false
             }
@@ -23166,7 +23166,7 @@
           "query": "explsionproof 3 phase",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.102,
+          "elapsed_s": 0.106,
           "answer": "No actuator meets Explosionproof, 3-phase. All 3-phase models are Weatherproof in this catalogue. If you can drop Explosionproof, Weatherproof 3-phase models are available. If you can drop 3-phase, Explosionproof 1-phase models are available.\nInterpreted 'explsionproof' as Explosionproof.",
           "clarification": null,
           "products": [],
@@ -23331,7 +23331,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 80,
+            "latency_ms": 85,
             "attempts": 1,
             "llm_called": true
           },
@@ -23339,9 +23339,9 @@
           "eligible_codes": [],
           "product_snapshots": [],
           "response": {
-            "session_id": "417333d8-d3be-4a5f-ba8e-c44ab75c9d95",
+            "session_id": "5e604cdf-2d79-49b9-8629-c83eedb4bcd7",
             "answer": "No actuator meets Explosionproof, 3-phase. All 3-phase models are Weatherproof in this catalogue. If you can drop Explosionproof, Weatherproof 3-phase models are available. If you can drop 3-phase, Explosionproof 1-phase models are available.\nInterpreted 'explsionproof' as Explosionproof.",
-            "message_id": "7b2e8c13-4ed7-4c1b-a5f2-7b5a56fa35be",
+            "message_id": "3597d297-bb43-4041-a101-b000a4f96ad9",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -23407,7 +23407,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 80,
+              "latency_ms": 85,
               "attempts": 1,
               "llm_called": true
             }
@@ -23423,7 +23423,7 @@
           "query": "what is the delivery time for 762A00-11320000/A?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.039,
+          "elapsed_s": 0.034,
           "answer": "The catalogue does not publish delivery times. I can show the published model specifications.",
           "clarification": null,
           "products": [],
@@ -23456,7 +23456,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 17,
+            "latency_ms": 14,
             "attempts": 0,
             "llm_called": false
           },
@@ -23464,9 +23464,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "d6404e13-5222-4a52-ab16-7f8150530a87",
+            "session_id": "954752db-9de0-4db0-8dd8-330d34761c69",
             "answer": "The catalogue does not publish delivery times. I can show the published model specifications.",
-            "message_id": "a2781dea-db4a-4543-b18e-41d5eb5b7812",
+            "message_id": "cfc88427-fe56-4d13-8d6f-4664dd9b838e",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -23479,7 +23479,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 17,
+              "latency_ms": 14,
               "attempts": 0,
               "llm_called": false
             }
@@ -23495,7 +23495,7 @@
           "query": "explosionproof on/off",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.223,
+          "elapsed_s": 0.186,
           "answer": "25 actuators meet: Explosionproof, On/Off service. To narrow it down: supply voltage.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A",
           "clarification": {
             "field": "supply_voltage_v",
@@ -23764,7 +23764,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 194,
+            "latency_ms": 162,
             "attempts": 1,
             "llm_called": true
           },
@@ -24156,9 +24156,9 @@
             }
           ],
           "response": {
-            "session_id": "92f6dd25-c8a2-48f9-afd7-7ba4c5573f0b",
+            "session_id": "8e3b8a47-83a6-4d47-bfa2-60aaf6764e69",
             "answer": "25 actuators meet: Explosionproof, On/Off service. To narrow it down: supply voltage.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A",
-            "message_id": "8a92cc87-4b63-4efd-ac81-8f5f1164d077",
+            "message_id": "c45791c3-c180-43de-b681-a448b9a5f2d9",
             "products": [
               {
                 "base_part_number": "761X30-11320000/A",
@@ -24639,7 +24639,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 194,
+              "latency_ms": 162,
               "attempts": 1,
               "llm_called": true
             }
@@ -24649,7 +24649,7 @@
           "query": "I don't care about the voltage, just recommend something",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.212,
+          "elapsed_s": 0.191,
           "answer": "My pick: 761X30-11320000/A — On/Off torque 80 Nm; FLA 50 Hz 0.6 A. Assumes no preference on supply voltage; tell me if that matters. Assumes no torque requirement; tell me the torque you need.",
           "clarification": null,
           "products": [],
@@ -24924,7 +24924,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 187,
+            "latency_ms": 171,
             "attempts": 1,
             "llm_called": true
           },
@@ -24932,9 +24932,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "92f6dd25-c8a2-48f9-afd7-7ba4c5573f0b",
+            "session_id": "8e3b8a47-83a6-4d47-bfa2-60aaf6764e69",
             "answer": "My pick: 761X30-11320000/A — On/Off torque 80 Nm; FLA 50 Hz 0.6 A. Assumes no preference on supply voltage; tell me if that matters. Assumes no torque requirement; tell me the torque you need.",
-            "message_id": "c8a520d0-e38e-4f42-ae92-20f20e58437f",
+            "message_id": "47ddb933-ceb2-46ad-a511-4bda91b013df",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -24996,7 +24996,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 187,
+              "latency_ms": 171,
               "attempts": 1,
               "llm_called": true
             }
@@ -25006,7 +25006,7 @@
           "query": "why that one?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.04,
+          "elapsed_s": 0.043,
           "answer": "I ranked the models by lowest FLA, then shortest operating time. Those are catalogue measurements, not an overall suitability or price score.",
           "clarification": null,
           "products": [],
@@ -25192,7 +25192,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 15,
+            "latency_ms": 22,
             "attempts": 0,
             "llm_called": false
           },
@@ -25200,9 +25200,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "92f6dd25-c8a2-48f9-afd7-7ba4c5573f0b",
+            "session_id": "8e3b8a47-83a6-4d47-bfa2-60aaf6764e69",
             "answer": "I ranked the models by lowest FLA, then shortest operating time. Those are catalogue measurements, not an overall suitability or price score.",
-            "message_id": "29d323b1-33cf-4dcf-b085-9493bc78b0ef",
+            "message_id": "869e7dcf-cbf6-49c9-b57b-3163de23d260",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -25224,7 +25224,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 15,
+              "latency_ms": 22,
               "attempts": 0,
               "llm_called": false
             }
@@ -25240,7 +25240,7 @@
           "query": "compare 762A00-11300000/A and 762B00-11300000/A",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.071,
+          "elapsed_s": 0.073,
           "answer": "Comparing 762A00-11300000/A vs 762B00-11300000/A. 11 identical fields hidden.\nOn/Off torque: 1330 in-lb / 150 Nm vs 1750 in-lb / 200 Nm\nOn/Off duty S4: 50 % vs 35 %\nModulating torque: 1150 in-lb / 130 Nm vs 1330 in-lb / 150 Nm\nOn/Off cycles: 42 /h vs 21 /h\nOperating time at 50 Hz: 21 s vs 30 s\nOperating time at 60 Hz: 18 s vs 25 s",
           "clarification": null,
           "products": [],
@@ -25480,7 +25480,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 47,
+            "latency_ms": 48,
             "attempts": 0,
             "llm_called": false
           },
@@ -25488,9 +25488,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "44dd45f0-bafa-4e80-b5ea-f560df205ce4",
+            "session_id": "060de4ad-4fa2-42bc-b0a9-4ac2562cc44b",
             "answer": "Comparing 762A00-11300000/A vs 762B00-11300000/A. 11 identical fields hidden.\nOn/Off torque: 1330 in-lb / 150 Nm vs 1750 in-lb / 200 Nm\nOn/Off duty S4: 50 % vs 35 %\nModulating torque: 1150 in-lb / 130 Nm vs 1330 in-lb / 150 Nm\nOn/Off cycles: 42 /h vs 21 /h\nOperating time at 50 Hz: 21 s vs 30 s\nOperating time at 60 Hz: 18 s vs 25 s",
-            "message_id": "5a7fa893-9fac-4ee7-8eed-f8dcec75366f",
+            "message_id": "09882549-a73a-476c-b343-23804e4d9336",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -25671,7 +25671,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 47,
+              "latency_ms": 48,
               "attempts": 0,
               "llm_called": false
             }
@@ -25681,7 +25681,7 @@
           "query": "the faster one",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.063,
+          "elapsed_s": 0.066,
           "answer": "762A00-11300000/A is faster: 762A00-11300000/A 18 s at 60 Hz vs 762B00-11300000/A 25 s at 60 Hz.",
           "clarification": null,
           "products": [
@@ -25760,7 +25760,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 42,
+            "latency_ms": 46,
             "attempts": 0,
             "llm_called": false
           },
@@ -25878,9 +25878,9 @@
             }
           ],
           "response": {
-            "session_id": "44dd45f0-bafa-4e80-b5ea-f560df205ce4",
+            "session_id": "060de4ad-4fa2-42bc-b0a9-4ac2562cc44b",
             "answer": "762A00-11300000/A is faster: 762A00-11300000/A 18 s at 60 Hz vs 762B00-11300000/A 25 s at 60 Hz.",
-            "message_id": "2bdd52ff-b4fb-402a-9e05-ba197b90eae8",
+            "message_id": "2e31ff12-8044-449c-bfef-a2cd82317ab1",
             "products": [
               {
                 "base_part_number": "762A00-11300000/A",
@@ -26003,7 +26003,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 42,
+              "latency_ms": 46,
               "attempts": 0,
               "llm_called": false
             }
@@ -26013,7 +26013,7 @@
           "query": "its power?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.052,
+          "elapsed_s": 0.051,
           "answer": "762A00-11300000/A\n • Motor power: 40 W\n Source: Series 76 electrical catalogue, page 1.\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption.",
           "clarification": null,
           "products": [
@@ -26197,9 +26197,9 @@
             }
           ],
           "response": {
-            "session_id": "44dd45f0-bafa-4e80-b5ea-f560df205ce4",
+            "session_id": "060de4ad-4fa2-42bc-b0a9-4ac2562cc44b",
             "answer": "762A00-11300000/A\n • Motor power: 40 W\n Source: Series 76 electrical catalogue, page 1.\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption.",
-            "message_id": "be0cfe2e-35db-4710-9f21-22f5b12b52d1",
+            "message_id": "a1640d3d-c29f-44d2-a12d-08d862f6f561",
             "products": [
               {
                 "base_part_number": "762A00-11300000/A",
@@ -26314,7 +26314,7 @@
           "query": "Explosionproof, 110 V, modulating, ≥ 300 Nm, rank by current",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.08,
+          "elapsed_s": 0.089,
           "answer": "5 actuators meet: Explosionproof, Modulating service, 110 V, torque ≥ 300 Nm. Here are the leading published models.\nRanked by closest torque at or above 300 Nm, then lowest FLA.\n763Y30-11300000/A: Modulating torque 360 Nm; FLA 50 Hz 3.8 A\n764X30-11300000/A: Modulating torque 640 Nm; FLA 50 Hz 5 A\n764Y30-11300000/A: Modulating torque 880 Nm; FLA 50 Hz 5.4 A",
           "clarification": null,
           "products": [
@@ -26525,7 +26525,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 58,
+            "latency_ms": 64,
             "attempts": 1,
             "llm_called": true
           },
@@ -26897,9 +26897,9 @@
             }
           ],
           "response": {
-            "session_id": "02d5c00d-66f0-4936-adb9-880c9fecf1ad",
+            "session_id": "8c7c6698-c47a-49bd-8896-d5bb16fecdec",
             "answer": "5 actuators meet: Explosionproof, Modulating service, 110 V, torque ≥ 300 Nm. Here are the leading published models.\nRanked by closest torque at or above 300 Nm, then lowest FLA.\n763Y30-11300000/A: Modulating torque 360 Nm; FLA 50 Hz 3.8 A\n764X30-11300000/A: Modulating torque 640 Nm; FLA 50 Hz 5 A\n764Y30-11300000/A: Modulating torque 880 Nm; FLA 50 Hz 5.4 A",
-            "message_id": "5492ed95-41e7-4f22-8245-5fe11d9f24ed",
+            "message_id": "f830c1ba-251c-4df8-b140-dec9d3790ac6",
             "products": [
               {
                 "base_part_number": "763Y30-11300000/A",
@@ -27355,7 +27355,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 58,
+              "latency_ms": 64,
               "attempts": 1,
               "llm_called": true
             }
@@ -27371,7 +27371,7 @@
           "query": "Between 761Y30-11300000/A and 762Y30-11300000/A, which one cycles more per hour on/off?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.058,
+          "elapsed_s": 0.059,
           "answer": "761Y30-11300000/A has the highest On/Off cycles: 761Y30-11300000/A 190 cycles/h vs 762Y30-11300000/A 100 cycles/h.",
           "clarification": null,
           "products": [],
@@ -27482,7 +27482,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 34,
+            "latency_ms": 35,
             "attempts": 1,
             "llm_called": true
           },
@@ -27490,9 +27490,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "a36ccf22-3ed8-43da-b947-0d7adb9b77ef",
+            "session_id": "ef570dd5-a798-4bad-9829-7ffd84015432",
             "answer": "761Y30-11300000/A has the highest On/Off cycles: 761Y30-11300000/A 190 cycles/h vs 762Y30-11300000/A 100 cycles/h.",
-            "message_id": "28804dfc-c79a-4118-9130-4f372cc14295",
+            "message_id": "b65b5655-95a1-4345-8ee2-c52bc13ebc18",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -27505,7 +27505,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 34,
+              "latency_ms": 35,
               "attempts": 1,
               "llm_called": true
             }
@@ -27521,7 +27521,7 @@
           "query": "busco uno para exteriores, 110v, que module",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.095,
+          "elapsed_s": 0.115,
           "answer": "11 actuators meet: Weatherproof, Modulating service, 110 V. To narrow it down: minimum torque.\nRanked by lowest FLA, then shortest operating time.\n761A00-11300000/A: Modulating torque 65 Nm; FLA 50 Hz 1.1 A\n761B00-11300000/A: Modulating torque 70 Nm; FLA 50 Hz 1.2 A\n762A00-11300000/A: Modulating torque 130 Nm; FLA 50 Hz 2.3 A",
           "clarification": {
             "field": "min_torque_nm",
@@ -27778,7 +27778,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 71,
+            "latency_ms": 87,
             "attempts": 1,
             "llm_called": true
           },
@@ -28072,9 +28072,9 @@
             }
           ],
           "response": {
-            "session_id": "e2fd8339-874d-48ea-80d2-45df212568f9",
+            "session_id": "da290ab6-a3c4-4bd1-be6a-f0106b2fddaa",
             "answer": "11 actuators meet: Weatherproof, Modulating service, 110 V. To narrow it down: minimum torque.\nRanked by lowest FLA, then shortest operating time.\n761A00-11300000/A: Modulating torque 65 Nm; FLA 50 Hz 1.1 A\n761B00-11300000/A: Modulating torque 70 Nm; FLA 50 Hz 1.2 A\n762A00-11300000/A: Modulating torque 130 Nm; FLA 50 Hz 2.3 A",
-            "message_id": "b15c9edf-dd6d-45fc-b3f2-50f1f9cbdc30",
+            "message_id": "0605c1d0-59f6-4292-8b35-bf92130d4cbe",
             "products": [
               {
                 "base_part_number": "761A00-11300000/A",
@@ -28471,7 +28471,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 71,
+              "latency_ms": 87,
               "attempts": 1,
               "llm_called": true
             }
@@ -28487,8 +28487,8 @@
           "query": "min torque 1.2kNm, 3 fases",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.094,
-          "answer": "3 actuators meet: 3-phase, torque ≥ 1200 Nm.\n1.2 kNm = 1200 Nm.\nRanked by closest torque at or above 1200 Nm, then lowest FLA.\n764B00-11330C00/A (Weatherproof): Weatherproof; Shared torque 1200 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\n765A00-11330C00/A (Weatherproof): Weatherproof; Shared torque 2000 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\n765B00-11330C00/A (Weatherproof): Weatherproof; Shared torque 3000 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.101,
+          "answer": "3 actuators meet: 3-phase, torque ≥ 1200 Nm.\n1.2 kNm = 1200 Nm.\nRanked by closest torque at or above 1200 Nm, then lowest FLA.\n764B00-11330C00/A: Weatherproof; Shared torque 1200 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\n765A00-11330C00/A: Weatherproof; Shared torque 2000 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\n765B00-11330C00/A: Weatherproof; Shared torque 3000 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "service",
             "message": "Tell me which requirement matters next."
@@ -28659,7 +28659,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 70,
+            "latency_ms": 78,
             "attempts": 1,
             "llm_called": true
           },
@@ -28671,9 +28671,9 @@
           ],
           "product_snapshots": [],
           "response": {
-            "session_id": "03d1a91d-c541-4565-a2bf-8c5bcdd1c435",
-            "answer": "3 actuators meet: 3-phase, torque ≥ 1200 Nm.\n1.2 kNm = 1200 Nm.\nRanked by closest torque at or above 1200 Nm, then lowest FLA.\n764B00-11330C00/A (Weatherproof): Weatherproof; Shared torque 1200 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\n765A00-11330C00/A (Weatherproof): Weatherproof; Shared torque 2000 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\n765B00-11330C00/A (Weatherproof): Weatherproof; Shared torque 3000 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "4f5657b1-6c8e-4640-a071-75a7d96cadaa",
+            "session_id": "a834a825-0d5e-4dcd-9a33-9eef0a44e9cc",
+            "answer": "3 actuators meet: 3-phase, torque ≥ 1200 Nm.\n1.2 kNm = 1200 Nm.\nRanked by closest torque at or above 1200 Nm, then lowest FLA.\n764B00-11330C00/A: Weatherproof; Shared torque 1200 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\n765A00-11330C00/A: Weatherproof; Shared torque 2000 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\n765B00-11330C00/A: Weatherproof; Shared torque 3000 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "3d1b6abf-c05a-45ba-944e-03240b9575e9",
             "products": [],
             "clarification": {
               "field": "service",
@@ -28770,7 +28770,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 70,
+              "latency_ms": 78,
               "attempts": 1,
               "llm_called": true
             }
@@ -28819,7 +28819,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 19,
+            "latency_ms": 20,
             "attempts": 0,
             "llm_called": false
           },
@@ -28827,9 +28827,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "62344cf2-b1ea-40b5-b11b-cdaee8179ecb",
+            "session_id": "757a777a-2293-4f45-886e-c76f95c07b90",
             "answer": "The catalogue doesn't publish weight for 763A00-11320000/A. I can compare its published electrical fields.",
-            "message_id": "68b6dffd-7196-4cd6-8c7b-93c9882778ff",
+            "message_id": "400da840-f058-4eab-aa60-4f1365f439fa",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -28842,7 +28842,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 19,
+              "latency_ms": 20,
               "attempts": 0,
               "llm_called": false
             }
@@ -28858,7 +28858,7 @@
           "query": "can you send me the wiring diagram for 761A00-11300000/A?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.041,
+          "elapsed_s": 0.045,
           "answer": "The catalogue doesn't publish wiring diagram for 761A00-11300000/A. I can compare its published electrical fields.",
           "clarification": null,
           "products": [],
@@ -28891,7 +28891,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 18,
+            "latency_ms": 23,
             "attempts": 0,
             "llm_called": false
           },
@@ -28899,9 +28899,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "f2489851-a6e9-420a-a6ef-12046fc2b8f2",
+            "session_id": "a8bd4807-328c-4cb6-984e-a8da6bb4e9c3",
             "answer": "The catalogue doesn't publish wiring diagram for 761A00-11300000/A. I can compare its published electrical fields.",
-            "message_id": "1fc7b81c-7af4-406d-a9a0-2f6bb256bdc3",
+            "message_id": "224072b8-9ce0-4f9f-bdf5-5e5d526c1ee2",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -28914,7 +28914,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 18,
+              "latency_ms": 23,
               "attempts": 0,
               "llm_called": false
             }
@@ -28930,7 +28930,7 @@
           "query": "is 761A00-11300000/A compatible with a 4-20 mA signal?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.043,
+          "elapsed_s": 0.042,
           "answer": "The catalogue doesn't publish signal compatibility for 761A00-11300000/A. I can compare its published electrical fields.",
           "clarification": null,
           "products": [],
@@ -28963,7 +28963,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 18,
+            "latency_ms": 19,
             "attempts": 0,
             "llm_called": false
           },
@@ -28971,9 +28971,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "d0db523b-24c6-4e65-8997-6cbecf081643",
+            "session_id": "15bd1a07-ed13-4276-8873-afc29366d265",
             "answer": "The catalogue doesn't publish signal compatibility for 761A00-11300000/A. I can compare its published electrical fields.",
-            "message_id": "e72061e2-5b3e-421d-b439-b58d39c0fa25",
+            "message_id": "9ee66660-4c13-4514-9eed-63ccd6bc973e",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -28986,7 +28986,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 18,
+              "latency_ms": 19,
               "attempts": 0,
               "llm_called": false
             }
@@ -29002,8 +29002,8 @@
           "query": "220 V",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.136,
-          "answer": "33 actuators meet: 220 V. To narrow it down: enclosure and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A (Explosionproof): Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.135,
+          "answer": "33 actuators meet: 220 V. To narrow it down: enclosure and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "enclosure",
             "message": "33 actuators meet: 220 V. To narrow it down: enclosure and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.7 A",
@@ -29708,9 +29708,9 @@
             }
           ],
           "response": {
-            "session_id": "3b040800-2d37-412b-b205-339d965f91ef",
-            "answer": "33 actuators meet: 220 V. To narrow it down: enclosure and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A (Explosionproof): Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A (Weatherproof): Weatherproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "5b3344af-64a3-4899-8ac8-d2fb437cdbf4",
+            "session_id": "9c4cd029-a710-422d-9041-9b90eeca9fa2",
+            "answer": "33 actuators meet: 220 V. To narrow it down: enclosure and number of phases.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n761A00-11320000/A: Weatherproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.7 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "572fad33-5244-45c9-9d7f-1bdc8548d1cc",
             "products": [
               {
                 "base_part_number": "761X30-11320000/A",
@@ -30222,7 +30222,7 @@
           "query": "I said I don't know the rest, recommend one already",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.26,
+          "elapsed_s": 0.261,
           "answer": "My pick: 761X30-11320000/A — Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A. Assumes no preference on enclosure, phase count; tell me if that matters. Assumes no torque requirement; tell me the torque you need.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": null,
           "products": [],
@@ -30539,7 +30539,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 239,
+            "latency_ms": 241,
             "attempts": 1,
             "llm_called": true
           },
@@ -30547,9 +30547,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "3b040800-2d37-412b-b205-339d965f91ef",
+            "session_id": "9c4cd029-a710-422d-9041-9b90eeca9fa2",
             "answer": "My pick: 761X30-11320000/A — Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A. Assumes no preference on enclosure, phase count; tell me if that matters. Assumes no torque requirement; tell me the torque you need.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "7e828bca-4c0b-43f5-a871-400cf03d00f9",
+            "message_id": "bbb039a6-74b4-48ee-a2ff-23c975afcc9d",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -30615,7 +30615,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 239,
+              "latency_ms": 241,
               "attempts": 1,
               "llm_called": true
             }
@@ -30625,7 +30625,7 @@
           "query": "fine, and what does that one draw?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.047,
+          "elapsed_s": 0.05,
           "answer": "761X30-11320000/A\n • FLA at 50 Hz: 0.6 A\n • FLA at 60 Hz: 0.6 A\n • LRA at 50 Hz: 0.7 A\n • LRA at 60 Hz: 0.7 A\n • Motor power: 15 W\n Source: Series 76 electrical catalogue, page 4.\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption.",
           "clarification": null,
           "products": [
@@ -30887,7 +30887,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 24,
+            "latency_ms": 25,
             "attempts": 0,
             "llm_called": false
           },
@@ -31021,9 +31021,9 @@
             }
           ],
           "response": {
-            "session_id": "3b040800-2d37-412b-b205-339d965f91ef",
+            "session_id": "9c4cd029-a710-422d-9041-9b90eeca9fa2",
             "answer": "761X30-11320000/A\n • FLA at 50 Hz: 0.6 A\n • FLA at 60 Hz: 0.6 A\n • LRA at 50 Hz: 0.7 A\n • LRA at 60 Hz: 0.7 A\n • Motor power: 15 W\n Source: Series 76 electrical catalogue, page 4.\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption.",
-            "message_id": "8ff26908-f44a-4fd1-95c1-1e55c2dc81c4",
+            "message_id": "0b62b466-5787-4363-beeb-2cee6d236316",
             "products": [
               {
                 "base_part_number": "761X30-11320000/A",
@@ -31167,7 +31167,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 24,
+              "latency_ms": 25,
               "attempts": 0,
               "llm_called": false
             }
@@ -31183,8 +31183,8 @@
           "query": "on/off 110 V at least 100 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.125,
-          "answer": "19 actuators meet: On/Off service, 110 V, torque ≥ 100 Nm. To narrow it down: enclosure.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761Y30-11300000/A (Explosionproof): Explosionproof; On/Off torque 100 Nm; FLA 50 Hz 1.1 A\n761B00-11300000/A (Weatherproof): Weatherproof; On/Off torque 100 Nm; FLA 50 Hz 1.2 A\n762X30-11300000/A (Explosionproof): Explosionproof; On/Off torque 150 Nm; FLA 50 Hz 1.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.132,
+          "answer": "19 actuators meet: On/Off service, 110 V, torque ≥ 100 Nm. To narrow it down: enclosure.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761Y30-11300000/A: Explosionproof; On/Off torque 100 Nm; FLA 50 Hz 1.1 A\n761B00-11300000/A: Weatherproof; On/Off torque 100 Nm; FLA 50 Hz 1.2 A\n762X30-11300000/A: Explosionproof; On/Off torque 150 Nm; FLA 50 Hz 1.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "enclosure",
             "message": "19 actuators meet: On/Off service, 110 V, torque ≥ 100 Nm. To narrow it down: enclosure.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761Y30-11300000/A: On/Off torque 100 Nm; FLA 50 Hz 1.1 A\n761B00-11300000/A: On/Off torque 100 Nm; FLA 50 Hz 1.2 A\n762X30-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 1.9 A",
@@ -31452,7 +31452,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 100,
+            "latency_ms": 103,
             "attempts": 1,
             "llm_called": true
           },
@@ -31810,9 +31810,9 @@
             }
           ],
           "response": {
-            "session_id": "68155f2f-dca7-45d8-a2be-cedd7c910117",
-            "answer": "19 actuators meet: On/Off service, 110 V, torque ≥ 100 Nm. To narrow it down: enclosure.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761Y30-11300000/A (Explosionproof): Explosionproof; On/Off torque 100 Nm; FLA 50 Hz 1.1 A\n761B00-11300000/A (Weatherproof): Weatherproof; On/Off torque 100 Nm; FLA 50 Hz 1.2 A\n762X30-11300000/A (Explosionproof): Explosionproof; On/Off torque 150 Nm; FLA 50 Hz 1.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "bd42db19-c63e-43bb-b344-a7cf31492df0",
+            "session_id": "cc2cc889-2e27-415e-84de-400acd550e48",
+            "answer": "19 actuators meet: On/Off service, 110 V, torque ≥ 100 Nm. To narrow it down: enclosure.\nRanked by closest torque at or above 100 Nm, then lowest FLA.\n761Y30-11300000/A: Explosionproof; On/Off torque 100 Nm; FLA 50 Hz 1.1 A\n761B00-11300000/A: Weatherproof; On/Off torque 100 Nm; FLA 50 Hz 1.2 A\n762X30-11300000/A: Explosionproof; On/Off torque 150 Nm; FLA 50 Hz 1.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "ae3fcf83-f2f3-48c3-b321-a731bb973473",
             "products": [
               {
                 "base_part_number": "761Y30-11300000/A",
@@ -32275,7 +32275,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 100,
+              "latency_ms": 103,
               "attempts": 1,
               "llm_called": true
             }
@@ -32504,9 +32504,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "68155f2f-dca7-45d8-a2be-cedd7c910117",
+            "session_id": "cc2cc889-2e27-415e-84de-400acd550e48",
             "answer": "Duty Cycle (S4%): The percentage of time the actuator can be in operation over a given cycle without overheating. [Series 76 summary, p. 2]",
-            "message_id": "52d35675-6aaf-4598-be01-fba0d685a6d5",
+            "message_id": "e461ed91-98a2-4576-b13c-6b53541c424c",
             "products": [],
             "clarification": null,
             "terms": [
@@ -32552,7 +32552,7 @@
           "query": "got it. now the one with the highest duty among the results?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.161,
+          "elapsed_s": 0.153,
           "answer": "762X30-11300000/A, 762Y30-11300000/A, 763X30-11300000/A tie for the highest duty S4: 70 %.",
           "clarification": null,
           "products": [],
@@ -32716,7 +32716,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 138,
+            "latency_ms": 129,
             "attempts": 0,
             "llm_called": false
           },
@@ -32724,9 +32724,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "68155f2f-dca7-45d8-a2be-cedd7c910117",
+            "session_id": "cc2cc889-2e27-415e-84de-400acd550e48",
             "answer": "762X30-11300000/A, 762Y30-11300000/A, 763X30-11300000/A tie for the highest duty S4: 70 %.",
-            "message_id": "abd1c1d0-5179-42f6-9f31-94e9f106376e",
+            "message_id": "cfd66ab8-95bd-441e-b73f-32e1cf867df8",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -32752,7 +32752,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 138,
+              "latency_ms": 129,
               "attempts": 0,
               "llm_called": false
             }
@@ -32768,7 +32768,7 @@
           "query": "weatherproof 24 V",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.1,
+          "elapsed_s": 0.099,
           "answer": "No actuator meets Weatherproof, 24 V. 24 V models are only Explosionproof under the other requirements in this catalogue. Weatherproof models are available at 110/220 V under the other requirements.",
           "clarification": null,
           "products": [],
@@ -32943,7 +32943,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 79,
+            "latency_ms": 78,
             "attempts": 1,
             "llm_called": true
           },
@@ -32951,9 +32951,9 @@
           "eligible_codes": [],
           "product_snapshots": [],
           "response": {
-            "session_id": "a0af07b7-687d-4e47-b17d-921878acfdfc",
+            "session_id": "05cc6b35-f8a0-4c7b-8659-422b33a2576f",
             "answer": "No actuator meets Weatherproof, 24 V. 24 V models are only Explosionproof under the other requirements in this catalogue. Weatherproof models are available at 110/220 V under the other requirements.",
-            "message_id": "23ce85dd-13e4-4769-8387-ccedfebbaf7d",
+            "message_id": "4f7f878d-6079-45f4-a5fd-d763d7661903",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -33019,7 +33019,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 79,
+              "latency_ms": 78,
               "attempts": 1,
               "llm_called": true
             }
@@ -33029,7 +33029,7 @@
           "query": "and modulating at least 100 Nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.094,
+          "elapsed_s": 0.098,
           "answer": "No actuator meets Weatherproof, Modulating service, 24 V, torque ≥ 100 Nm. 24 V models are only Explosionproof under the other requirements in this catalogue. Weatherproof models are available at 110/220 V under the other requirements.",
           "clarification": null,
           "products": [],
@@ -33269,7 +33269,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 72,
+            "latency_ms": 78,
             "attempts": 1,
             "llm_called": true
           },
@@ -33277,9 +33277,9 @@
           "eligible_codes": [],
           "product_snapshots": [],
           "response": {
-            "session_id": "a0af07b7-687d-4e47-b17d-921878acfdfc",
+            "session_id": "05cc6b35-f8a0-4c7b-8659-422b33a2576f",
             "answer": "No actuator meets Weatherproof, Modulating service, 24 V, torque ≥ 100 Nm. 24 V models are only Explosionproof under the other requirements in this catalogue. Weatherproof models are available at 110/220 V under the other requirements.",
-            "message_id": "bd0b2a0c-679f-4ae6-bfb5-04f7df352e91",
+            "message_id": "4584f174-fdf3-4731-931a-f3c9efccad6c",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -33349,7 +33349,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 72,
+              "latency_ms": 78,
               "attempts": 1,
               "llm_called": true
             }
@@ -33365,8 +33365,8 @@
           "query": "mine shaft ventilation damper, 220 V",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.121,
-          "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A (Explosionproof): Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.124,
+          "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "enclosure",
             "message": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards)."
@@ -33604,7 +33604,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 100,
+            "latency_ms": 104,
             "attempts": 1,
             "llm_called": true
           },
@@ -33612,9 +33612,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "25f9bf58-c630-4594-b90b-acdcc00036c7",
-            "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A (Explosionproof): Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "5baf4a67-d4e0-433a-b3ba-0695d4fd2851",
+            "session_id": "548a2262-cf60-4549-abd1-76320bf58831",
+            "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "386d3ef7-4367-4c09-be6a-7d3a890f3c08",
             "products": [],
             "clarification": {
               "field": "enclosure",
@@ -33749,7 +33749,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 100,
+              "latency_ms": 104,
               "attempts": 1,
               "llm_called": true
             }
@@ -33759,7 +33759,7 @@
           "query": "yes it's a hazardous area",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.101,
+          "elapsed_s": 0.096,
           "answer": "10 actuators meet: Explosionproof, 220 V. Here are the leading published models.\nInterpreted the explicit hazardous-area requirement as Explosionproof.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A",
           "clarification": null,
           "products": [
@@ -34000,7 +34000,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 75,
+            "latency_ms": 72,
             "attempts": 0,
             "llm_called": false
           },
@@ -34389,9 +34389,9 @@
             }
           ],
           "response": {
-            "session_id": "25f9bf58-c630-4594-b90b-acdcc00036c7",
+            "session_id": "548a2262-cf60-4549-abd1-76320bf58831",
             "answer": "10 actuators meet: Explosionproof, 220 V. Here are the leading published models.\nInterpreted the explicit hazardous-area requirement as Explosionproof.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A",
-            "message_id": "598b5475-0fc0-4103-af22-ce03ea88289c",
+            "message_id": "a5ba9c6a-2431-4048-bb54-b7200b44982c",
             "products": [
               {
                 "base_part_number": "761X30-11320000/A",
@@ -34863,7 +34863,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 75,
+              "latency_ms": 72,
               "attempts": 0,
               "llm_called": false
             }
@@ -34879,7 +34879,7 @@
           "query": "What's the LRA/FLA ratio of 762A00-11320000/A at 60 Hz?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.049,
+          "elapsed_s": 0.054,
           "answer": "762A00-11320000/A LRA/FLA at 60 Hz: 1.2 A / 1 A = 1.2 (unitless).",
           "clarification": null,
           "products": [],
@@ -34974,7 +34974,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 28,
+            "latency_ms": 31,
             "attempts": 1,
             "llm_called": true
           },
@@ -34982,9 +34982,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "d2460775-479e-449c-bcec-72c35b407f0f",
+            "session_id": "024c964e-7510-4761-a055-9530b2c7b2ee",
             "answer": "762A00-11320000/A LRA/FLA at 60 Hz: 1.2 A / 1 A = 1.2 (unitless).",
-            "message_id": "6af9c03a-74fe-4111-8652-0fd568c28395",
+            "message_id": "ec8a3527-764b-4a0f-8b83-51525a2bbf1f",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -34997,7 +34997,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 28,
+              "latency_ms": 31,
               "attempts": 1,
               "llm_called": true
             }
@@ -35013,7 +35013,7 @@
           "query": "Torque no more than 100 Nm, weatherproof, 220 V",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.063,
+          "elapsed_s": 0.069,
           "answer": "2 actuators meet: Weatherproof, 220 V, torque <= 100 Nm.\nRanked by closest torque at or below 100 Nm, then lowest FLA.\n761B00-11320000/A: On/Off torque 100 Nm (closest to 100 Nm); Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n761A00-11320000/A: On/Off torque 80 Nm (closest to 100 Nm); Modulating torque 65 Nm; FLA 50 Hz 0.7 A",
           "clarification": {
             "field": "service",
@@ -35188,7 +35188,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 42,
+            "latency_ms": 48,
             "attempts": 1,
             "llm_called": true
           },
@@ -35199,9 +35199,9 @@
           ],
           "product_snapshots": [],
           "response": {
-            "session_id": "e9419e3e-31b0-453d-9efa-4b7701829aa3",
+            "session_id": "61088171-6dec-4e12-94df-57c36a4a5e3f",
             "answer": "2 actuators meet: Weatherproof, 220 V, torque <= 100 Nm.\nRanked by closest torque at or below 100 Nm, then lowest FLA.\n761B00-11320000/A: On/Off torque 100 Nm (closest to 100 Nm); Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n761A00-11320000/A: On/Off torque 80 Nm (closest to 100 Nm); Modulating torque 65 Nm; FLA 50 Hz 0.7 A",
-            "message_id": "eeefb644-677f-48ad-9e45-4192644ce0d0",
+            "message_id": "64348e54-717c-4ed8-ada5-681a392c1bbf",
             "products": [],
             "clarification": {
               "field": "service",
@@ -35284,7 +35284,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 42,
+              "latency_ms": 48,
               "attempts": 1,
               "llm_called": true
             }
@@ -35300,7 +35300,7 @@
           "query": "what voltages do you have?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.036,
+          "elapsed_s": 0.043,
           "answer": "Published supply voltages: 24 V (10 models), 110 V (21 models), 220 V (33 models).",
           "clarification": null,
           "products": [],
@@ -35333,7 +35333,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 19,
+            "latency_ms": 25,
             "attempts": 0,
             "llm_called": false
           },
@@ -35341,9 +35341,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "2467b98e-c538-4131-8b6d-1514b252cee0",
+            "session_id": "a424b365-80f1-45d1-a5ae-8c7e5c4aedb0",
             "answer": "Published supply voltages: 24 V (10 models), 110 V (21 models), 220 V (33 models).",
-            "message_id": "8323af96-7afe-4b70-981e-5e23dbf0fbde",
+            "message_id": "3dcf30b9-9881-421a-918a-86ba15ff3fa9",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -35356,7 +35356,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 19,
+              "latency_ms": 25,
               "attempts": 0,
               "llm_called": false
             }
@@ -35372,8 +35372,8 @@
           "query": "110 mod 200nm",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.123,
-          "answer": "13 actuators meet: Modulating service, 110 V, torque ≥ 200 Nm. To narrow it down: enclosure.\nRanked by closest torque at or above 200 Nm, then lowest FLA.\n763A00-11300000/A (Weatherproof): Weatherproof; Modulating torque 220 Nm; FLA 50 Hz 2.5 A\n763X30-11300000/A (Explosionproof): Explosionproof; Modulating torque 240 Nm; FLA 50 Hz 2 A\n763Y30-11300000/A (Explosionproof): Explosionproof; Modulating torque 360 Nm; FLA 50 Hz 3.8 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.114,
+          "answer": "13 actuators meet: Modulating service, 110 V, torque ≥ 200 Nm. To narrow it down: enclosure.\nRanked by closest torque at or above 200 Nm, then lowest FLA.\n763A00-11300000/A: Weatherproof; Modulating torque 220 Nm; FLA 50 Hz 2.5 A\n763X30-11300000/A: Explosionproof; Modulating torque 240 Nm; FLA 50 Hz 2 A\n763Y30-11300000/A: Explosionproof; Modulating torque 360 Nm; FLA 50 Hz 3.8 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "enclosure",
             "message": "13 actuators meet: Modulating service, 110 V, torque ≥ 200 Nm. To narrow it down: enclosure.\nRanked by closest torque at or above 200 Nm, then lowest FLA.\n763A00-11300000/A: Modulating torque 220 Nm; FLA 50 Hz 2.5 A\n763X30-11300000/A: Modulating torque 240 Nm; FLA 50 Hz 2 A\n763Y30-11300000/A: Modulating torque 360 Nm; FLA 50 Hz 3.8 A",
@@ -35632,7 +35632,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 99,
+            "latency_ms": 92,
             "attempts": 1,
             "llm_called": true
           },
@@ -35984,9 +35984,9 @@
             }
           ],
           "response": {
-            "session_id": "0698aab7-d4c8-48b3-83dd-c77c1b6feb2a",
-            "answer": "13 actuators meet: Modulating service, 110 V, torque ≥ 200 Nm. To narrow it down: enclosure.\nRanked by closest torque at or above 200 Nm, then lowest FLA.\n763A00-11300000/A (Weatherproof): Weatherproof; Modulating torque 220 Nm; FLA 50 Hz 2.5 A\n763X30-11300000/A (Explosionproof): Explosionproof; Modulating torque 240 Nm; FLA 50 Hz 2 A\n763Y30-11300000/A (Explosionproof): Explosionproof; Modulating torque 360 Nm; FLA 50 Hz 3.8 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "11c6ea49-2d40-46b3-8c78-62e7d8276dcc",
+            "session_id": "ec6790b8-1068-4d69-b709-b2a1f53286b7",
+            "answer": "13 actuators meet: Modulating service, 110 V, torque ≥ 200 Nm. To narrow it down: enclosure.\nRanked by closest torque at or above 200 Nm, then lowest FLA.\n763A00-11300000/A: Weatherproof; Modulating torque 220 Nm; FLA 50 Hz 2.5 A\n763X30-11300000/A: Explosionproof; Modulating torque 240 Nm; FLA 50 Hz 2 A\n763Y30-11300000/A: Explosionproof; Modulating torque 360 Nm; FLA 50 Hz 3.8 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "24c46ab2-740d-45aa-8927-988861d665e3",
             "products": [
               {
                 "base_part_number": "763A00-11300000/A",
@@ -36449,7 +36449,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 99,
+              "latency_ms": 92,
               "attempts": 1,
               "llm_called": true
             }
@@ -36459,7 +36459,7 @@
           "query": "best",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.215,
+          "elapsed_s": 0.207,
           "answer": "My pick: 763A00-11300000/A — Weatherproof; Modulating torque 220 Nm; FLA 50 Hz 2.5 A. Assumes no preference on enclosure; tell me if that matters.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": null,
           "products": [],
@@ -36690,7 +36690,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 193,
+            "latency_ms": 187,
             "attempts": 0,
             "llm_called": false
           },
@@ -36698,9 +36698,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "0698aab7-d4c8-48b3-83dd-c77c1b6feb2a",
+            "session_id": "ec6790b8-1068-4d69-b709-b2a1f53286b7",
             "answer": "My pick: 763A00-11300000/A — Weatherproof; Modulating torque 220 Nm; FLA 50 Hz 2.5 A. Assumes no preference on enclosure; tell me if that matters.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "5ffc4d4a-f06e-4298-a9f1-430e65ddb4b9",
+            "message_id": "30e6b0d9-8d09-406e-a036-751cd1be846b",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -36770,7 +36770,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 193,
+              "latency_ms": 187,
               "attempts": 0,
               "llm_called": false
             }
@@ -36786,7 +36786,7 @@
           "query": "cual gasta menos corriente de los de 24v?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.088,
+          "elapsed_s": 0.089,
           "answer": "761X30-11370000/A, 761X30-11380000/A tie for the lowest FLA: 5 A.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": null,
           "products": [],
@@ -36953,7 +36953,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 66,
+            "latency_ms": 68,
             "attempts": 1,
             "llm_called": true
           },
@@ -36972,9 +36972,9 @@
           ],
           "product_snapshots": [],
           "response": {
-            "session_id": "3faa622c-7cfc-47c1-b413-91ee4b16a4d9",
+            "session_id": "13c83b92-b37f-41bc-8748-9f91fbde57bf",
             "answer": "761X30-11370000/A, 761X30-11380000/A tie for the lowest FLA: 5 A.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "f4789814-72e3-4ebb-b8c7-7793237414f6",
+            "message_id": "ea7208a1-754c-4984-b110-b68574af9a46",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -37054,7 +37054,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 66,
+              "latency_ms": 68,
               "attempts": 1,
               "llm_called": true
             }
@@ -37070,7 +37070,7 @@
           "query": "how long does 762A00-11320000/A last before maintenance?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.035,
+          "elapsed_s": 0.038,
           "answer": "The catalogue doesn't publish maintenance interval for 762A00-11320000/A. I can compare its published electrical fields.",
           "clarification": null,
           "products": [],
@@ -37103,7 +37103,7 @@
           "active_filters": [],
           "recommendation": null,
           "debug": {
-            "latency_ms": 16,
+            "latency_ms": 17,
             "attempts": 0,
             "llm_called": false
           },
@@ -37111,9 +37111,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "dd2147c1-46df-4fb8-acee-5394f26d169d",
+            "session_id": "94e26f46-fb86-4166-aa91-6e5671af8e75",
             "answer": "The catalogue doesn't publish maintenance interval for 762A00-11320000/A. I can compare its published electrical fields.",
-            "message_id": "f0deed59-1380-42bc-9eb1-2033d2ba3b7c",
+            "message_id": "0bf6ddc2-4222-4ff9-bf03-25458c94c444",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -37126,7 +37126,7 @@
             "active_filters": [],
             "recommendation": null,
             "debug": {
-              "latency_ms": 16,
+              "latency_ms": 17,
               "attempts": 0,
               "llm_called": false
             }
@@ -37142,7 +37142,7 @@
           "query": "weatherproof modulating 220 V",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.104,
+          "elapsed_s": 0.089,
           "answer": "23 actuators meet: Weatherproof, Modulating service, 220 V. To narrow it down: number of phases.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: Modulating torque 65 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: Modulating torque 130 Nm; FLA 50 Hz 1 A",
           "clarification": {
             "field": "phase_count",
@@ -37408,7 +37408,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 79,
+            "latency_ms": 67,
             "attempts": 1,
             "llm_called": true
           },
@@ -37735,9 +37735,9 @@
             }
           ],
           "response": {
-            "session_id": "45b783fd-9f5d-4748-83f0-2ea297cccd68",
+            "session_id": "a1111b4f-915a-43a3-a65f-7dd36bdff501",
             "answer": "23 actuators meet: Weatherproof, Modulating service, 220 V. To narrow it down: number of phases.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: Modulating torque 65 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: Modulating torque 130 Nm; FLA 50 Hz 1 A",
-            "message_id": "348aca14-490a-474e-bbb1-05c4cf186d4e",
+            "message_id": "9eaf83da-f6f1-41ca-b7eb-7bc825eef9ce",
             "products": [
               {
                 "base_part_number": "761A00-11320000/A",
@@ -38153,7 +38153,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 79,
+              "latency_ms": 67,
               "attempts": 1,
               "llm_called": true
             }
@@ -38163,7 +38163,7 @@
           "query": "compare the top 3",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.078,
+          "elapsed_s": 0.065,
           "answer": "Comparing 761A00-11320000/A vs 761B00-11320000/A vs 762A00-11320000/A. 6 identical fields hidden.\nMotor power: 15 W vs 15 W vs 40 W\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm vs 1330 in-lb / 150 Nm\nOn/Off duty S4: 40 % vs 40 % vs 35 %\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm vs 1150 in-lb / 130 Nm\nOn/Off cycles: 36 /h vs 31 /h vs 30 /h\nOperating time at 50 Hz: 20 s vs 23 s vs 21 s\nFLA at 50 Hz: 0.7 A vs 0.7 A vs 1 A\nLRA at 50 Hz: 0.7 A vs 0.7 A vs 1.1 A\nOperating time at 60 Hz: 17 s vs 19 s vs 18 s\nFLA at 60 Hz: 0.7 A vs 0.7 A vs 1 A\nLRA at 60 Hz: 0.7 A vs 0.7 A vs 1.2 A",
           "clarification": null,
           "products": [],
@@ -38580,7 +38580,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 51,
+            "latency_ms": 40,
             "attempts": 0,
             "llm_called": false
           },
@@ -38588,9 +38588,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "45b783fd-9f5d-4748-83f0-2ea297cccd68",
+            "session_id": "a1111b4f-915a-43a3-a65f-7dd36bdff501",
             "answer": "Comparing 761A00-11320000/A vs 761B00-11320000/A vs 762A00-11320000/A. 6 identical fields hidden.\nMotor power: 15 W vs 15 W vs 40 W\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm vs 1330 in-lb / 150 Nm\nOn/Off duty S4: 40 % vs 40 % vs 35 %\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm vs 1150 in-lb / 130 Nm\nOn/Off cycles: 36 /h vs 31 /h vs 30 /h\nOperating time at 50 Hz: 20 s vs 23 s vs 21 s\nFLA at 50 Hz: 0.7 A vs 0.7 A vs 1 A\nLRA at 50 Hz: 0.7 A vs 0.7 A vs 1.1 A\nOperating time at 60 Hz: 17 s vs 19 s vs 18 s\nFLA at 60 Hz: 0.7 A vs 0.7 A vs 1 A\nLRA at 60 Hz: 0.7 A vs 0.7 A vs 1.2 A",
-            "message_id": "917cb792-8aa3-499a-9514-e373e6bfde53",
+            "message_id": "e5751e59-a846-4b39-b99c-379e704781d5",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -38807,7 +38807,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 51,
+              "latency_ms": 40,
               "attempts": 0,
               "llm_called": false
             }
@@ -38817,7 +38817,7 @@
           "query": "the cheapest of those",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.178,
+          "elapsed_s": 0.168,
           "answer": "The catalogue doesn't publish prices. Lowest motor power is only a proxy, not a price estimate.\nMy pick: 761A00-11320000/A — Modulating torque 65 Nm; FLA 50 Hz 0.7 A. Assumes no preference on phase count; tell me if that matters. Assumes no torque requirement; tell me the torque you need.",
           "clarification": null,
           "products": [],
@@ -39066,7 +39066,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 153,
+            "latency_ms": 145,
             "attempts": 0,
             "llm_called": false
           },
@@ -39074,9 +39074,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "45b783fd-9f5d-4748-83f0-2ea297cccd68",
+            "session_id": "a1111b4f-915a-43a3-a65f-7dd36bdff501",
             "answer": "The catalogue doesn't publish prices. Lowest motor power is only a proxy, not a price estimate.\nMy pick: 761A00-11320000/A — Modulating torque 65 Nm; FLA 50 Hz 0.7 A. Assumes no preference on phase count; tell me if that matters. Assumes no torque requirement; tell me the torque you need.",
-            "message_id": "4a072b98-2cce-4e83-b92c-82f86e74cf9f",
+            "message_id": "8863a5bc-a7b5-4f8c-90e8-ac22db5cc28e",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -39142,7 +39142,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 153,
+              "latency_ms": 145,
               "attempts": 0,
               "llm_called": false
             }
@@ -39158,7 +39158,7 @@
           "query": "explosionproof 3-phase modulating",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.109,
+          "elapsed_s": 0.09,
           "answer": "No actuator meets Explosionproof, 3-phase, Modulating service. All 3-phase models are Weatherproof in this catalogue. If you can drop Explosionproof, Weatherproof 3-phase models are available. If you can drop 3-phase, Explosionproof 1-phase models are available.",
           "clarification": null,
           "products": [],
@@ -39331,7 +39331,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 88,
+            "latency_ms": 71,
             "attempts": 1,
             "llm_called": true
           },
@@ -39339,9 +39339,9 @@
           "eligible_codes": [],
           "product_snapshots": [],
           "response": {
-            "session_id": "361c2ee9-9e57-44e4-8e75-8294a8fbe2dd",
+            "session_id": "2eb9a47a-cc65-4de6-981e-077ad1860157",
             "answer": "No actuator meets Explosionproof, 3-phase, Modulating service. All 3-phase models are Weatherproof in this catalogue. If you can drop Explosionproof, Weatherproof 3-phase models are available. If you can drop 3-phase, Explosionproof 1-phase models are available.",
-            "message_id": "0980e798-1741-4630-91a1-856a2f616e93",
+            "message_id": "bfb16238-8a63-407d-a761-de22bf6824f4",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -39407,7 +39407,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 88,
+              "latency_ms": 71,
               "attempts": 1,
               "llm_called": true
             }
@@ -39417,7 +39417,7 @@
           "query": "so what can I do?",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.037,
+          "elapsed_s": 0.035,
           "answer": "To keep the stated requirements, there is no exact model. Available relaxations: Weatherproof; Explosionproof 1-phase.",
           "clarification": null,
           "products": [],
@@ -39569,7 +39569,7 @@
           ],
           "recommendation": null,
           "debug": {
-            "latency_ms": 17,
+            "latency_ms": 15,
             "attempts": 0,
             "llm_called": false
           },
@@ -39577,9 +39577,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "361c2ee9-9e57-44e4-8e75-8294a8fbe2dd",
+            "session_id": "2eb9a47a-cc65-4de6-981e-077ad1860157",
             "answer": "To keep the stated requirements, there is no exact model. Available relaxations: Weatherproof; Explosionproof 1-phase.",
-            "message_id": "bf4d26cb-a23f-4c45-9ff7-041847f93c46",
+            "message_id": "4cc57649-7816-4195-a7fd-fbd5d4a11bb2",
             "products": [],
             "clarification": null,
             "terms": [],
@@ -39605,7 +39605,7 @@
             ],
             "recommendation": null,
             "debug": {
-              "latency_ms": 17,
+              "latency_ms": 15,
               "attempts": 0,
               "llm_called": false
             }
@@ -39621,8 +39621,8 @@
           "query": "damper in a grain silo with combustible dust, 220 V",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.21,
-          "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A (Explosionproof): Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "elapsed_s": 0.239,
+          "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
           "clarification": {
             "field": "enclosure",
             "message": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards)."
@@ -39860,7 +39860,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 189,
+            "latency_ms": 215,
             "attempts": 1,
             "llm_called": true
           },
@@ -39868,9 +39868,9 @@
           "eligible_codes": null,
           "product_snapshots": [],
           "response": {
-            "session_id": "b7dd8202-5b72-4b1e-a1e5-b657f0d90ae0",
-            "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A (Explosionproof): Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A (Explosionproof): Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
-            "message_id": "c4f8a709-ede4-4f28-9a7b-b6d570a28749",
+            "session_id": "a1ca42a6-c381-4298-a124-4bd60096129b",
+            "answer": "Which published enclosure matches your site? Explosionproof: Built with a more robust enclosure to be safely operated in hazardous environments where flammable gases or dust may be present (compliant with CSA, IECEx/ATEX standards). Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards).\nPreview only: Explosionproof models; confirm the enclosure before applying it.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: Explosionproof; On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: Explosionproof; On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: Explosionproof; On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+            "message_id": "2a1dc680-2eb5-4f98-9afa-fd7d27805791",
             "products": [],
             "clarification": {
               "field": "enclosure",
@@ -40005,7 +40005,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 189,
+              "latency_ms": 215,
               "attempts": 1,
               "llm_called": true
             }
@@ -40015,7 +40015,7 @@
           "query": "yes",
           "passed": true,
           "failures": [],
-          "elapsed_s": 0.094,
+          "elapsed_s": 0.104,
           "answer": "10 actuators meet: Explosionproof, 220 V. Here are the leading published models.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A",
           "clarification": null,
           "products": [
@@ -40255,7 +40255,7 @@
             ]
           },
           "debug": {
-            "latency_ms": 72,
+            "latency_ms": 79,
             "attempts": 0,
             "llm_called": false
           },
@@ -40644,9 +40644,9 @@
             }
           ],
           "response": {
-            "session_id": "b7dd8202-5b72-4b1e-a1e5-b657f0d90ae0",
+            "session_id": "a1ca42a6-c381-4298-a124-4bd60096129b",
             "answer": "10 actuators meet: Explosionproof, 220 V. Here are the leading published models.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; Modulating torque 72 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 0.9 A",
-            "message_id": "0bc0c105-d476-49b6-b3db-3402191df8d1",
+            "message_id": "9867675b-edeb-4dbd-b8f3-a2b3437c0fbc",
             "products": [
               {
                 "base_part_number": "761X30-11320000/A",
@@ -41118,7 +41118,7 @@
               ]
             },
             "debug": {
-              "latency_ms": 72,
+              "latency_ms": 79,
               "attempts": 0,
               "llm_called": false
             }
