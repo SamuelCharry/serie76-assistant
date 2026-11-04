@@ -38,6 +38,8 @@ services:
       AGENT_REASONING_EFFORT: ${AGENT_REASONING_EFFORT:-low}
       AGENT_TOOL_CHOICE: ${AGENT_TOOL_CHOICE:-required}
       AGENT_TIMEOUT_S: ${AGENT_TIMEOUT_S:-45}
+      AGENT_TURN_DEADLINE_S: ${AGENT_TURN_DEADLINE_S:-60}
+      AGENT_RETRY_MIN_REMAINING_S: ${AGENT_RETRY_MIN_REMAINING_S:-10}
       AGENT_TEMPERATURE: ${AGENT_TEMPERATURE:-}
       # Opt-in LangSmith tracing: sends prompts, user text and catalogue rows to LangSmith.
       LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}

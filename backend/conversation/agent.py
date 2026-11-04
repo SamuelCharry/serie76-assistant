@@ -277,19 +277,28 @@ def invoke_decision(client, tools, chat, *, fallback=True):
     import openai
     from langchain_core.runnables import RunnableLambda
     attempts = []
+    deadline = time.monotonic() + float(os.environ.get('AGENT_TURN_DEADLINE_S', '60'))
+    minimum = float(os.environ.get('AGENT_RETRY_MIN_REMAINING_S', '10'))
+    per_attempt = float(os.environ.get('AGENT_TIMEOUT_S', '45'))
 
     def wrapped(get_client, label):
         router = None
 
         def attempt(messages):
             nonlocal router
+            remaining = deadline - time.monotonic()
+            if remaining < minimum:
+                attempts.append(dict(attempt=len(attempts) + 1, model=label, status='deadline_skipped',
+                                     remaining_s=round(max(remaining, 0), 3)))
+                raise AgentUnavailable('turn_deadline')
             reserve_agent_call()
-            entry = dict(attempt=len(attempts) + 1, model=label, status='started')
+            timeout = min(per_attempt, remaining)
+            entry = dict(attempt=len(attempts) + 1, model=label, status='started', timeout_s=round(timeout, 3))
             attempts.append(entry)
             try:
                 if router is None:
                     router = get_client().bind_tools(tools, tool_choice=os.environ.get('AGENT_TOOL_CHOICE', 'required') or None)
-                response = router.invoke(messages, config={'run_name': 'llm_decision'})
+                response = router.invoke(messages, config={'run_name': 'llm_decision'}, timeout=timeout)
                 entry['status'] = 'ok'
                 return response
             except Exception as exc:
@@ -309,7 +318,8 @@ def invoke_decision(client, tools, chat, *, fallback=True):
                                          exceptions_to_handle=(TransientProviderError,))
     try:
         return primary.invoke(chat), attempts
-    except AgentUnavailable:
+    except AgentUnavailable as exc:
+        exc.attempts = attempts
         raise
     except Exception as exc:
         failure = AgentUnavailable(exc.code if isinstance(exc, TransientProviderError) else provider_error_code(exc))

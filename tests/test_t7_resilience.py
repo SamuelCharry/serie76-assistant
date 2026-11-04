@@ -58,3 +58,38 @@ class ResilienceTests(unittest.TestCase):
             with self.assertRaises(agent.AgentUnavailable):
                 agent.invoke_decision(Client(['unused']), [], [])
         self.assertEqual(reserve.call_count, 1)
+
+    def test_slow_local_transport_obeys_total_deadline_and_records_skip(self):
+        import threading
+        import time
+        from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+        from langchain_openai import ChatOpenAI
+        class Slow(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def do_POST(self):
+                self.rfile.read(int(self.headers['Content-Length']))
+                time.sleep(0.8)
+                self.send_response(503)
+                self.end_headers()
+        server = ThreadingHTTPServer(('127.0.0.1', 0), Slow)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        client = ChatOpenAI(api_key='synthetic-local-test-key', model='fixture', max_retries=0,
+                            base_url=f'http://127.0.0.1:{server.server_port}/v1')
+        try:
+            with patch.dict(os.environ, {'AGENT_TURN_DEADLINE_S': '0.6', 'AGENT_TIMEOUT_S': '0.45',
+                                         'AGENT_RETRY_MIN_REMAINING_S': '0.2'}), \
+                 patch.object(agent, 'reserve_agent_call') as reserve:
+                started = time.monotonic()
+                with self.assertRaises(agent.AgentUnavailable) as caught:
+                    agent.invoke_decision(client, [], [('human', 'local fixture')], fallback=False)
+                elapsed = time.monotonic() - started
+            self.assertLess(elapsed, 0.75)
+            self.assertEqual(caught.exception.code, 'turn_deadline')
+            self.assertEqual(reserve.call_count, 1)
+            self.assertEqual(caught.exception.attempts[-1]['status'], 'deadline_skipped')
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=2)
