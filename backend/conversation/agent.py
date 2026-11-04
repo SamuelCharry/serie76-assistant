@@ -553,7 +553,7 @@ class Turn:
             codes = [row['base_part_number'] for row in rows]
             self.context['last_shown_list'] = codes
             self.context['part_numbers'] = codes
-            self.trace['data'] = dict(status='equivalent_models', products=codes)
+            self.trace['data'] = dict(status='equivalent_models', products=rows)
             label = ('enclosure' if target_enclosure else 'voltage')
             return AgentResult(f'Published {label} equivalents for {selected[0]}: ' + ', '.join(codes) + '.',
                                [public_product(row) for row in rows], context=self.context)
@@ -911,6 +911,8 @@ class Turn:
                     break
             rec = dict(ranked_by=ranking.ranked_by(merged, by), total=0, shown=len(nearest), items=nearest)
             self.context['last_ranked_list'] = []
+            if notes:
+                answer += '\n' + '\n'.join(dict.fromkeys(notes))
             return AgentResult(answer, context=self.context, recommendation=rec,
                                lead='No exact match. Nearest published models follow.')
         all_filters = SearchFilters.model_validate(dict(merged, limit=100, offset=0))
@@ -1165,7 +1167,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         limitation = None
         if re.search(r'\b(are you chatgpt|are you an ai)\b', bare_query):
             limitation = "I'm the Series 76 catalogue assistant. I can help compare published models."
-        if limitation is None and not policy.purchase_request(query) and re.search(r'\b(delivery|lead time|ship(?:ping)?)\b', bare_query):
+        if limitation is None and not re.search(r'\b(buy|order|purchase)\b', bare_query) and re.search(r'\b(delivery|lead time|ship(?:ping)?)\b', bare_query):
             limitation = 'The catalogue does not publish delivery times. I can show the published model specifications.'
         if limitation is None and re.search(r'\b(warranty|guarantee)\b', bare_query):
             limitation = 'The catalogue does not publish warranty terms. I can show the published model specifications.'

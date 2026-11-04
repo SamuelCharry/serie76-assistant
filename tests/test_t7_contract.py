@@ -97,7 +97,7 @@ class InteractionTests(Base):
         result = self.turn('No.', ('ask_clarification', {'field': 'decline'}))
         self.assertEqual(len(result.products), 3)
         self.assertIsNone(result.interaction)
-        self.assertIn('still open', result.answer)
+        self.assertIn('I can narrow these further', result.answer)
 
     def test_unrelated_free_text_does_not_repeat_pending_questions(self):
         first = self.turn('at least 70 Nm and FLA below 1.5 A', ('search_actuators', {
@@ -105,7 +105,7 @@ class InteractionTests(Base):
         result = self.turn('I do not know those details', ('ask_clarification', {'field': 'unsupported'}))
         self.assertIsNone(result.interaction)
         self.assertEqual(len(result.products), 3)
-        self.assertIn('still open', result.answer)
+        self.assertIn('I can narrow these further', result.answer)
         self.assertIn('service', result.answer)
         self.assertIn('frequency', result.answer)
 

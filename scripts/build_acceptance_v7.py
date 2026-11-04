@@ -32,6 +32,8 @@ def main():
                     't6_manual_05', 't6_manual_06', 't6_manual_07', 't6_manual_08'):
         for item in by_id[case_id]['turns']:
             item['expect'].pop('suggested_replies_count', None)
+    for case_id in ('t6_manual_05', 'EC24'):
+        by_id[case_id]['turns'][1]['expect']['contains'] = ['I can narrow these further']
     for key in ('contains', 'products_include', 'product_count', 'clarification'):
         by_id['t6_manual_03']['turns'][1]['expect'].pop(key, None)
     by_id['t6_manual_03']['turns'][1]['expect']['args'].pop('enclosure', None)
@@ -105,6 +107,47 @@ def main():
     require('P6-01', contains=["doesn't publish prices"], no_products=True)
     require('P1-03', lead_contains=['is faster at 60 Hz: 30 s vs 88 s'])
     cases['scenarios'].extend(heldout['scenarios'])
+    heldout_v2 = json.loads((CONFIG / 'agent_acceptance_heldout_v2.json').read_text(encoding='utf-8'))
+    v2_by_id = {s['id']: s for s in heldout_v2['scenarios']}
+    def v2_expect(case_id, turn_index=0, **expected):
+        v2_by_id['heldout_v2_' + case_id]['turns'][turn_index]['expect'].update(expected)
+    v2_expect('Q1-03', lead_contains=['more current', '60 Hz'])
+    v2_expect('Q1-08', not_contains=['Motor power: 180 W vs 180 W vs 180 W'])
+    v2_expect('Q2-01', 1, contains=['My pick:'])
+    v2_expect('Q2-02', 0, interaction_ids=['enclosure'])
+    v2_expect('Q2-03', 0, contains=['Modulating service'])
+    v2_expect('Q2-06', 0, contains=['DC'])
+    v2_expect('Q3-01', 2, contains=['761A00'])
+    v2_expect('Q3-04', 2, contains=["That's the only model"])
+    v2_expect('Q4-03', 1, contains=['761B00-11320000/A'])
+    v2_expect('Q5-06', 0, contains=['kNm ='])
+    v2_expect('Q5-05', 0, contains=["Interpreted 'explsionproof' as Explosionproof."])
+    v2_expect('Q6-01', 0, contains=['does not publish delivery times'], no_products=True)
+    v2_expect('Q6-02', 0, contains=['does not specify underwater use'], no_products=True)
+    v2_expect('Q6-03', 0, contains=["I'm the Series 76 catalogue assistant"])
+    v2_expect('Q6-04', 0, contains=["can't use other values"], no_products=True)
+    v2_expect('Q6-05', 0, contains=['only cover the Series 76 catalogue'])
+    v2_expect('Q6-06', 0, contains=['does not publish warranty terms'])
+    v2_expect('C-FRUSTRATION-01', 1, contains=['My pick:'])
+    v2_expect('C-FRUSTRATION-01', 2, contains=['ranked the models by'])
+    v2_expect('C-FRUSTRATION-02', 1, contains=['My pick:'])
+    v2_expect('C-TOPICJUMP-01', 2, not_contains=['Enclosure: Weatherproof vs Weatherproof vs Weatherproof'])
+    v2_expect('C-CORRECTION-01', 1, contains=['763X30-11320000/A'])
+    v2_expect('C-CONFIRM-01', 1, contains=['Weatherproof'])
+    v2_by_id['heldout_v2_Q4-03']['turns'][1]['scripted_decision'] = ['get_actuator',
+        {'reference_kind': 'focused', 'equivalent_voltage_v': 220}]
+    v2_by_id['heldout_v2_Q2-02']['turns'][0]['scripted_decision'] = ['search_actuators', {}]
+    v2_by_id['heldout_v2_Q2-03']['turns'][0]['scripted_decision'] = ['search_actuators', {}]
+    v2_by_id['heldout_v2_Q5-05']['turns'][0]['scripted_decision'] = ['search_actuators',
+        {'phase_count': 3}]
+    v2_by_id['heldout_v2_C-CORRECTION-01']['turns'][1]['scripted_decision'] = ['get_actuator',
+        {'reference_kind': 'focused', 'equivalent_enclosure': 'explosionproof'}]
+    for case_id, index, intent in [('C-FRUSTRATION-01', 1, 'pick'),
+                                    ('C-FRUSTRATION-01', 2, 'explain_pick'),
+                                    ('C-FRUSTRATION-02', 1, 'pick')]:
+        v2_by_id['heldout_v2_' + case_id]['turns'][index]['scripted_decision'] = [
+            'ask_clarification', {'field': 'requirements', 'intent': intent}]
+    cases['scenarios'].extend(heldout_v2['scenarios'])
     (CONFIG / 'agent_acceptance_cases_v7.json').write_text(json.dumps(cases, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     print({'v6_cases': len(by_id), 'v7_cases': len(cases['scenarios'])})
 

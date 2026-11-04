@@ -10,7 +10,9 @@ FORBIDDEN = re.compile(
     r"NEMA|IP\s*\d+)\b|[{}]|"
     r"I left out an unstated requirement|These are the top 3 candidates|"
     r"unresolved scopes are not assumed|I will not pick one for you|"
-    r"not published in this table layout|\b0 identical fields hidden|I cannot place orders",
+    r"not published in this table layout|\b0 identical fields hidden|I cannot place orders|"
+    r"The requirement for|I could not apply that request|"
+    r"Ranking uses the lowest published value across frequencies|full catalogue scope",
 )
 
 
@@ -50,7 +52,10 @@ class PublicTextTests(unittest.TestCase):
         for mutation in ('Not applied', 'min_torque_nm', 'get_actuator', 'IP67', '{service}', 'explosionproof',
                          'I left out an unstated requirement', 'These are the top 3 candidates',
                          'I will not pick one for you', 'not published in this table layout',
-                         '0 identical fields hidden', 'I cannot place orders'):
+                         '0 identical fields hidden', 'I cannot place orders',
+                         'The requirement for', 'I could not apply that request',
+                         'Ranking uses the lowest published value across frequencies',
+                         'full catalogue scope'):
             with self.subTest(mutation=mutation), self.assertRaises(AssertionError):
                 assert_public_text_clean({'answer': mutation})
 

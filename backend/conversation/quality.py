@@ -250,8 +250,6 @@ def search_presentation(raw, products, filters, notes, assumptions):
         text = f"{total} actuators match {criteria}. Top {len(products)} ranked by " + ", then ".join(labels[key] for key in sort_by) + "."
         if "lowest_power" in sort_by:
             text += " Motor power is the published rated motor power, not total electrical consumption."
-        if not filters.get("frequency_hz") and any(k in sort_by for k in ("fastest", "lowest_current")):
-            text += " Ranking uses the lowest published value across frequencies; all displayed values retain their frequency."
         text += "\n\n" + "\n\n".join(render_focused(p, focus) for p in products)
         field = choose_split(raw.get("facets", {}))
         options = [split_reply(field, row["value"]) for row in raw["facets"][field]] if field else []

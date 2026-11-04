@@ -69,6 +69,7 @@ def decision(turn):
 def main():
     source = Path(sys.argv[1])
     output = Path(sys.argv[2])
+    prefix = sys.argv[3] if len(sys.argv) > 3 else 'heldout_'
     raw = json.loads(source.read_text(encoding='utf-8'))
     scenarios = []
     for conversation in raw['results']:
@@ -85,7 +86,7 @@ def main():
                 if key in original['request']:
                     item[key] = original['request'][key]
             turns.append(item)
-        scenarios.append({'id': 'heldout_' + conversation['id'],
+        scenarios.append({'id': prefix + conversation['id'],
                           'category': 'heldout_scripted', 'turns': turns})
     output.write_text(json.dumps({'source_set': raw['set'], 'source_sha256': raw['set_sha256'],
                                   'scenarios': scenarios}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
