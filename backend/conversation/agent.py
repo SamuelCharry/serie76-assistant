@@ -909,6 +909,45 @@ class Turn:
             self.context["reply_options"] = quality.impossible_replies(merged, closest)
             self.context["part_numbers"] = []
             nearest = []
+            categorical = {}
+            for relaxed in ('enclosure', 'supply_voltage_v'):
+                if merged.get(relaxed) is None:
+                    continue
+                trial = {k: v for k, v in merged.items() if k != relaxed}
+                alternatives = search_actuators(
+                    self.connection, SearchFilters.model_validate(dict(trial, limit=100, offset=0)),
+                    allow_ambiguous=True)['products']
+                alternatives = [row for row in alternatives if row.get(relaxed) != merged[relaxed]]
+                if alternatives:
+                    categorical[relaxed] = alternatives
+            if categorical:
+                alternatives_text = []
+                choices = []
+                if 'enclosure' in categorical:
+                    values = sorted({row['enclosure'].capitalize() for row in categorical['enclosure']})
+                    voltage = merged.get('supply_voltage_v')
+                    if voltage is not None and len(values) == 1:
+                        alternatives_text.append(f'{voltage} V models are only {values[0]} under the other requirements in this catalogue.')
+                    choices.append(f'{values[0]} at {voltage} V' if voltage is not None else values[0])
+                if 'supply_voltage_v' in categorical:
+                    values = sorted({row['supply_voltage_v'] for row in categorical['supply_voltage_v']})
+                    voltages = '/'.join(f'{value:g}' for value in values) + ' V'
+                    enclosure = merged.get('enclosure')
+                    alternatives_text.append(f'{str(enclosure).capitalize()} models are available at {voltages} under the other requirements.' if enclosure else
+                                             f'Other models are available at {voltages} under the other requirements.')
+                    choices.append(f'{str(enclosure).capitalize()} at {voltages}' if enclosure else voltages)
+                answer = 'No actuator meets ' + policy.describe(merged) + '. ' + ' '.join(alternatives_text)
+                self.context['reply_options'] = choices
+                for rows in categorical.values():
+                    for product in rows:
+                        code = product['base_part_number']
+                        if code not in {item['part_number'] for item in nearest}:
+                            nearest.append(ranking.item(product, {k: v for k, v in merged.items() if k not in categorical},
+                                                        'Nearest alternative under a relaxed requirement'))
+                        if len(nearest) >= 2:
+                            break
+                    if len(nearest) >= 2:
+                        break
             for row in closest:
                 for code in row.get('models', []):
                     if code in {item['part_number'] for item in nearest}:

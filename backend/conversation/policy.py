@@ -68,6 +68,9 @@ def colloquial_requirements(query):
         value = number * 1000
         result['min_torque_nm'] = int(value) if value == int(value) else value
         notes.append(f'{match.group(1)} kNm = {value:f} Nm.'.replace('.0 Nm.', ' Nm.'))
+    match = re.search(r'\b(?:at least|minimum|min(?:imum)?\s+torque)\s*(\d+(?:[.,]\d+)?)\s*nm\b', text)
+    if match:
+        result['min_torque_nm'] = Decimal(match.group(1).replace(',', '.'))
     if re.search(r'\b(?:a prueba de explosi[oó]n)\b', text):
         result['enclosure'] = 'explosionproof'
     match = re.search(r'\b(?:toque|torque|par)\s*m[ií]nimo\s*(?:de\s*)?(\d+(?:[.,]\d+)?)\s*nm\b', text)
