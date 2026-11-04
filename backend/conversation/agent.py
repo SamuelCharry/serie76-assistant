@@ -192,6 +192,7 @@ def schemas(term_keys):
     SearchBase = pydantic_model("SearchBase", __base__=Strict, **filter_fields)
 
     class SearchInput(SearchBase):
+        intent: Literal['none', 'pick', 'explain_pick', 'next_page'] = 'none'
         sort_by: SearchFilters.model_fields["sort_by"].annotation = []
         cancel_previous: bool = False
         limit: Annotated[int, Field(ge=1, le=20)] = 5
@@ -206,6 +207,7 @@ def schemas(term_keys):
 
     class ClarifyInput(Strict):
         field: ClarifyField
+        intent: Literal['none', 'pick', 'explain_pick', 'next_page'] = 'none'
         cancel_previous: bool = False
 
     return {"get_actuator": LookupInput, "search_actuators": SearchInput,
@@ -214,9 +216,9 @@ def schemas(term_keys):
 
 DESCRIPTIONS = {
     "get_actuator": "Look up complete Base Part Numbers (up to four). For prior models use flat reference_kind=shown_position with 1-based reference_index, last_shown, focused, or compared_winner with reference_metric/direction/frequency. For the last ranked list use from_results_items='1,3' for comparisons, or list_results=true. Use focus=overview for full specs; include comma-separated explain_terms for combined facts/definitions.",
-    "search_actuators": "Find actuators for ALL stated requirements, including every numeric limit. New independent requests use refine=false; explicit follow-ups use refine=true or more/remove. Unknown data never passes a threshold.",
+    "search_actuators": "Find actuators for ALL stated requirements, including every numeric limit. New independent requests use refine=false; explicit follow-ups use refine=true or more/remove. For a follow-up asking to choose one, explain the choice or show the next page, set intent=pick, explain_pick or next_page. Unknown data never passes a threshold.",
     "explain_terms": "Quote only glossary definitions; absent terms use ask_clarification term_not_in_summary, not a related definition.",
-    "ask_clarification": "Ask for missing data/disambiguation, or mark unsupported requests such as jokes and terms absent from the glossary.",
+    "ask_clarification": "Ask for missing data/disambiguation, or mark unsupported requests such as jokes and terms absent from the glossary. If prior results exist and the user wants a pick, explanation or next page, set intent=pick, explain_pick or next_page rather than repeating a question.",
 }
 
 
@@ -413,7 +415,7 @@ class Turn:
         rows = [get_actuator(self.connection, code) for code in codes[:3]]
         products = [public_product(p) for p in rows if p]
         labels = ', '.join(policy.LABELS.get(f, f.replace('_', ' ')) for f in fields)
-        answer = 'The requirement for ' + labels + ' is still open. Leading matches:\n'
+        answer = 'I can narrow these further when you know ' + labels + '. Current matches:\n'
         answer += '\n'.join(item['part_number'] + ': ' + item['reason'] for item in
                             [ranking.item(p, filters) for p in rows if p])
         self.context.pop('pending_questions', None)
@@ -435,6 +437,52 @@ class Turn:
         public = [dict(term_key=t["term_key"], label=t["label"], definition=t["definition"],
                        source=dict(document=t["document"], page=t["page"])) for t in chosen]
         return render_terms(chosen, self.supplies), public
+
+    def contextual_intent(self, intent):
+        """Render a model-signalled discourse action from persisted SQL-backed context."""
+        if intent == 'none':
+            return None
+        filters = self.context.get('filters') or {}
+        ranked = self.context.get('last_ranked_list') or []
+        if intent == 'pick':
+            codes = self.context.get('last_comparison_models') or ranked
+            if not codes:
+                return self.clarify('requirements', 'Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.')
+            rows = [get_actuator(self.connection, code) for code in codes]
+            by = self.context.get('rank_by', 'closest_torque')
+            ordered = ranking.rank([row for row in rows if row], filters, by)
+            if not ordered:
+                return self.clarify('which_product')
+            chosen = ranking.item(ordered[0], filters)
+            open_choices = [policy.LABELS.get(q['id'], q['id'].replace('_', ' '))
+                            for q in self.context.get('pending_questions', [])]
+            assumption = (f"Assumes no preference on {', '.join(open_choices)}; tell me if that matters."
+                          if open_choices else 'Assumes the current requirements; tell me if another constraint matters.')
+            rec = dict(ranked_by=ranking.ranked_by(filters, by), total=len(codes), shown=1, items=[chosen])
+            self.trace['data'] = dict(status='ranked_pick')
+            return AgentResult(f"My pick: {chosen['part_number']} — {chosen['reason']}. {assumption}",
+                               context=self.context, recommendation=rec,
+                               lead=f"My pick: {chosen['part_number']} — {chosen['reason']}.")
+        if intent == 'explain_pick' and ranked:
+            self.trace['data'] = dict(status='ranking_explanation')
+            criterion = ranking.ranked_by(filters, self.context.get('rank_by', 'closest_torque'))
+            return AgentResult('I ranked the models by ' + criterion + '. Those are catalogue measurements, not an overall suitability or price score.',
+                               context=self.context)
+        if intent == 'next_page' and ranked:
+            start = self.context.get('last_shown_offset', 3)
+            selected = ranked[start:start + 3]
+            self.context['last_shown_offset'] = start + len(selected)
+            self.context['last_shown_list'] = selected
+            self.trace['data'] = dict(status='ranked_page')
+            if not selected:
+                self.context['reply_options'] = ['Relax one requirement']
+                answer = ("That's the only model that meets these requirements. Relax one requirement to see alternatives."
+                          if len(ranked) == 1 else 'No more ranked models.')
+                return AgentResult(answer, context=self.context)
+            rows = [get_actuator(self.connection, code) for code in selected]
+            return AgentResult(f"Showing {start + 1}–{start + len(selected)} of {len(ranked)} ranked models.\n" + '\n'.join(selected),
+                               [public_product(row) for row in rows if row], context=self.context)
+        return None
 
     # --- tools -------------------------------------------------------------------------
     def lookup(self, args):
@@ -608,6 +656,9 @@ class Turn:
         return AgentResult(answer.strip(), [] if compared else [quality.focused_product(p, focus) for p in public], context=self.context, terms=terms, comparison=compared, lead=lead)
 
     def search(self, args, *, trusted=False):
+        signalled = self.contextual_intent(args.get('intent', 'none'))
+        if signalled is not None:
+            return signalled
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
         inferred, interpretation_notes = policy.colloquial_requirements(self.query)
         delta.update(inferred)
@@ -868,6 +919,9 @@ class Turn:
         return AgentResult(text, context=self.context, terms=terms)
 
     def ask(self, args):
+        signalled = self.contextual_intent(args.get('intent', 'none'))
+        if signalled is not None:
+            return signalled
         field_name = args["field"]
         if field_name == 'term_not_in_summary':
             unknown = policy.terms_not_in_glossary(self.query, self.terms)
@@ -1297,6 +1351,7 @@ def finish(turn, result):
         result.answer = 'The catalogue cannot identify which actuator is installed. Check the physical nameplate; I can compare both catalogue models.\n' + result.answer
         result.lead = 'Check the physical nameplate to identify the installed actuator; the catalogue comparison cannot establish that.'
     preserve_pending = (trace.get('data', {}).get('status') == 'ranked_list'
+                        or trace.get('data', {}).get('status') in ('ranked_pick', 'ranking_explanation', 'ranked_page')
                         or trace.get('name') == 'ranked_pick'
                         or 'ranked_reference_resolved' in trace.get('overrides', [])
                         or (trace.get('raw_parameters') or {}).get('type') in ('compare_top', 'show_all', 'rank_by'))

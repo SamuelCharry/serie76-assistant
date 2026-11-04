@@ -54,6 +54,7 @@ def schemas(term_keys):
                              "focus": array(enum(FOCUS_FIELDS)), "focus_frequency_hz": {"type": "integer", "enum": [50, 60]},
                              "focus_service": enum(["on_off", "modulating"]), "explain_terms": {"type": "string"}, "cancel_previous": boolean}),
         "search_actuators": obj({
+            "intent": enum(["none", "pick", "explain_pick", "next_page"]),
             "enclosure": enum(["weatherproof", "explosionproof"]),
             "supply_voltage_v": {"type": "number"},
             "supply_current": enum(["AC", "DC", "AC/DC"]),
@@ -67,6 +68,7 @@ def schemas(term_keys):
         "explain_terms": obj({"term_keys": terms}, ["term_keys"]),
         "ask_clarification": obj({"field": enum(["part_number", "service", "frequency", "supply", "requirements", "which_product",
                                                 "term_not_in_summary", "unsupported", "cancel", "decline"]),
+                                  "intent": enum(["none", "pick", "explain_pick", "next_page"]),
                                   "cancel_previous": boolean}, ["field"]),
     }
 
