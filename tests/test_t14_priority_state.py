@@ -15,6 +15,7 @@ class PriorityStateTests(Base):
         result=self.turn('Now rank fastest.',('search_actuators',dict(refine=True,sort_by=['fastest'])))
         self.assertEqual(result.context['rank_by'],'fastest')
         self.assertNotIn('selection_priority',result.context)
+        self.assertEqual(result.context['filters']['sort_by'],['fastest'])
         self.assertIn('fastest',result.recommendation['ranked_by'])
 
     def test_ui_priority_replaces_structured_priority(self):
@@ -23,3 +24,7 @@ class PriorityStateTests(Base):
                          action=dict(type='rank_by',args=dict(by='fastest')))
         self.assertEqual(result.context['rank_by'],'fastest')
         self.assertNotIn('selection_priority',result.context)
+        self.context=result.context
+        followup=self.turn('Add a minimum torque of 80 Nm.',
+                           ('search_actuators',dict(refine=True,min_torque_nm=80)))
+        self.assertEqual(followup.context['rank_by'],'fastest')

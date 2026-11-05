@@ -2448,6 +2448,13 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             turn.context['last_ranked_list'] = [p['base_part_number'] for p in ordered]
             turn.context['rank_by'] = by
             turn.context.pop('selection_priority', None)
+            objective = {'fastest': 'fastest', 'most_torque': 'highest_torque',
+                         'lowest_fla': 'lowest_current'}.get(by)
+            if objective:
+                filters['sort_by'] = [objective]
+            else:
+                filters.pop('sort_by', None)
+            turn.context['filters'] = filters
             rec = ranking.recommendation(ordered, filters, by)
             result = AgentResult('Ranked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items']),
