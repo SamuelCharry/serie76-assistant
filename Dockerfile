@@ -5,6 +5,7 @@ COPY requirements.txt requirements.lock.txt ./
 RUN pip install --no-cache-dir -r requirements.lock.txt
 COPY backend backend
 COPY scripts scripts
+COPY config/prompt_variants_t10.json config/prompt_variants_t10.json
 
 FROM base AS backend
 EXPOSE 8000

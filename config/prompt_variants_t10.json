@@ -1,0 +1,18 @@
+{
+  "baseline_sha256": "0e629445f865093a5c41d28b8cb4fc205eae41f61406ec020dbd5c2ca44117c3",
+  "status": "prepared_only_no_inference",
+  "variants": {
+    "state_operations": {
+      "hypothesis": "Explicit delta classification reduces bound replacement, negation and objective persistence errors seen in v10/v11.",
+      "append": "Before choosing the one tool, distinguish ADD, REPLACE, REMOVE and objective change. Follow-ups use refine=true. Adding an upper limit preserves the prior lower limit; correcting a lower limit into an upper limit removes that numeric field and supplies the new bound. Removing a requirement uses remove; DC, not AC sets supply_current=DC, not remove. A refinement omits sort_by to preserve the objective; an explicit new priority supplies sort_by. Hazard negation must be scoped: a cleared hazard does not cancel another hazard still present. Do not infer site certification."
+    },
+    "references": {
+      "hypothesis": "Separating relative search from lookup/comparison reduces accidental comparison and invented reference thresholds.",
+      "append": "Classify reference intent before selecting the tool. A stronger/faster alternative is search_actuators with reference_operation=stronger/faster; reference_part_number is only an explicitly stated complete code, otherwise let the server resolve the focused model. Never copy a remembered torque or time into bounds. A comparison is get_actuator with the explicitly named codes or supported reference selectors. Ambiguous singular references ask which_product; physical smaller uses reference_operation=smaller so the server can report unpublished dimensions. Frequency and service stay explicit; do not guess them."
+    },
+    "compound_questions": {
+      "hypothesis": "Decomposing supported and unsupported clauses before the single decision reduces lost lookups and fabricated commercial or rating answers.",
+      "append": "For a compound question, identify every supported lookup field and glossary definition, then represent them in ONE get_actuator/search_actuators call. Use focus plus explain_terms for supported mixed requests. Price, lead time, physical dimensions and unlisted ratings are not catalogue facts: do not invent fields, values or glossary keys. Retain supported clauses while the server reports unsupported clauses. If the entire question is unsupported, ask_clarification field=unsupported (or term_not_in_summary for an undefined term). Never discard torque or motor power merely because the same question also asks price."
+    }
+  }
+}
