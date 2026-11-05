@@ -225,6 +225,10 @@ Porque cada conversación se probó con ambas configuraciones: solo cuentan los 
 
 Como límite provisional de contexto, no como óptimo probado. Con 649 ejemplos y excluyendo cada consulta y sus textos idénticos, MRR sin umbral fue 0,476/0,546/0,563/0,570 para k=1/3/5/8: después de cinco la ganancia es pequeña. P@5 fue solo 38,2%; el umbral 0,70 cubre 98,3% pero apenas mejora la precisión de los vecinos devueltos, así que requiere calibración con consultas nuevas. [Métrica y límites](testing.md#diagnóstico-del-recuperador).
 
+## 43. ¿Cómo mejoraste la recuperación y cómo sabes que mejoró?
+
+Probé reranking por metadatos, BM25+denso, diversidad MMR y embeddings con cantidades enmascaradas; medí precisión y primer vecino relevante bajo dos definiciones, con ajuste y validación separados dentro del banco. No afirmo una mejora suficiente: el mejor P@5 útil pasó de 37,8% a 39,2%, por debajo de los 5 puntos exigidos, y empeoró la métrica estricta. Conservé denso y sus filtros: medir también sirve para rechazar complejidad que no demuestra beneficio. [Tabla y decisión](testing.md#mejorar-la-recuperación).
+
 ## Límites conocidos
 
 No hay aceptación OpenRouter ni Android con LLM real cerrada; la voz está implementada con pruebas JVM, pendiente en dispositivo; no hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.

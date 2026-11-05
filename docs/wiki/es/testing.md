@@ -82,6 +82,21 @@ Leave-one-out sobre **649 ejemplos activos almacenados**, sin embeddings nuevos,
 
 Sin corte, MRR sube 0,476/0,546/0,563/0,570 con k=1/3/5/8: k=5 limita contexto con ganancias decrecientes, pero no es un óptimo demostrado. Con 0,70, la precisión entre vecinos devueltos sigue en 38,2%; esta muestra **no justifica** el umbral como filtro de relevancia. El [barrido completo](../../../reports/behavior/retrieval.json) muestra el coste en cobertura. Quince consultas no tienen par relevante; pueden quedar paráfrasis relacionadas entre conjuntos y estas etiquetas no certifican recomendaciones correctas. Validar con consultas nuevas antes de ajustar; no se cambiaron parámetros de producción.
 
+### Mejorar la recuperación
+
+Comparamos cinco enfoques sobre el mismo banco de 649 ejemplos, dejando fuera cada consulta. **Estricto** exige igual herramienta, servicio, carcasa, voltaje y operadores de torque; **útil para el prompt** exige igual herramienta y conjunto de campos no nulos, manteniendo servicio/carcasa aunque cambien otros valores. Una semilla fija separa 129 consultas para ajustar y 520 para validar dentro del banco; no son conversaciones inéditas.
+
+| Variante | Estricto P@1 / P@3 / P@5 | Estricto MRR@5 | Útil P@1 / P@3 / P@5 | Útil MRR@5 | ms extra/consulta | Llamadas API extra |
+|---|---|---:|---|---:|---:|---:|
+| A: denso | 47,6 / 41,1 / 38,2% | 0,563 | 47,5 / 41,2 / 37,8% | 0,554 | 0 | 0 |
+| B: metadatos, w=0,02 | 51,8 / 43,4 / 40,1% | 0,598 | 47,5 / 40,8 / 37,8% | 0,552 | 0,42 | 0 |
+| C: BM25 + denso, RRF 60 | 48,5 / 41,2 / 38,1% | 0,572 | 44,1 / 38,1 / 35,6% | 0,534 | 6,77 | 0 |
+| D: MMR sobre A, λ=0,6 | 47,6 / 41,0 / 38,3% | 0,565 | 47,5 / 41,1 / 37,9% | 0,556 | 0,32 | 0 |
+| E: cantidades enmascaradas | 43,0 / 40,1 / 37,5% | 0,524 | 48,1 / 43,1 / 39,2% | 0,557 | 0,01 | 0 |
+| E + B, w=0,02 | 49,8 / 42,5 / 39,1% | 0,572 | 48,7 / 42,9 / 39,0% | 0,558 | 0,34 | 0 |
+
+Todas las precisiones son porcentajes; no hay corte de coseno, igual que en el baseline original. Los tiempos miden sobrecoste local de ranking/enmascarado, sin DB ni proveedor; cero llamadas extra significa reutilizar/sustituir el embedding de consulta existente, no un servicio gratuito. Barridos: w=0,02/0,05/0,1/0,2/0,4 y λ=0,5–0,9. **Se mantiene denso:** ninguna variante gana los 5 puntos exigidos de P@5 útil y mejora también P@5 estricto; la mejor ganancia útil es solo 1,4 puntos y empeora precisión estricta. La partición de validación lleva a la misma decisión. No cambió ningún valor predeterminado y el banco enmascarado queda inactivo; el replay v7 programado con recuperación SQL densa real conserva en ON todos los filtros de OFF. [Experimento, límites y registro de uso Google](../../../reports/submission/T9-S2-retrieval.md).
+
 ### Impacto y por qué la integridad va primero
 
 La idea de valor esperado de Provost pondera beneficio/coste de cada resultado por su probabilidad, en lugar de tratar todos los errores igual. Estas son **suposiciones ilustrativas en unidades relativas**, no dinero medido ni valores aprobados por el cliente; el cliente fija los costes reales y no hemos estimado retorno económico.

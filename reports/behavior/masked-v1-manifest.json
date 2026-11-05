@@ -1,0 +1,38 @@
+{
+  "version": "gemini-embedding-2/masked-t9s2-v1",
+  "active": false,
+  "source_sha256": "fcd906b4932708f561c1948f10fa76b8a6cc00df1309056ce28a49b111e611a2",
+  "examples": 649,
+  "unique_masked_texts": 623,
+  "requests": 626,
+  "prompt_tokens": null,
+  "provider": "Google",
+  "openrouter_calls": 0,
+  "chat_calls": 0,
+  "attempted_texts": 752,
+  "usage_complete": false,
+  "completed_requests": 623,
+  "failed_reservations": [
+    {
+      "state": "failed_unknown_charge",
+      "texts": 64
+    },
+    {
+      "state": "failed_unknown_charge",
+      "texts": 64,
+      "stage": "response_received"
+    },
+    {
+      "state": "failed_unknown_charge",
+      "texts": 1,
+      "stage": "response_received",
+      "data_type": "list",
+      "response_fields": [
+        "data",
+        "model",
+        "object",
+        "usage"
+      ]
+    }
+  ]
+}

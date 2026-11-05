@@ -34,3 +34,5 @@ reports/behavior/*
 !reports/behavior/verdicts.json
 !reports/behavior/stats.json
 !reports/behavior/retrieval.json
+!reports/behavior/retrieval-variants.json
+!reports/behavior/masked-v1-manifest.json

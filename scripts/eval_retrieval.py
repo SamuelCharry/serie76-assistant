@@ -1,7 +1,9 @@
 """Leave-one-out evaluation using stored vectors only; no embedding calls.
 
-Relevant means identical tool, service, enclosure, supply_voltage_v and torque
-operators (gt/gte/lt/lte/eq, including both bounds). Missing fields must also agree.
+STRICT means identical tool, service, enclosure, voltage and torque operators,
+including missing fields and both bounds.
+PROMPT-USEFUL means the same tool and set of non-null argument fields, with the
+same service/enclosure mapping when stated, while other argument values may differ.
 A scalar minimum means gte. Torque magnitude/unit is ignored: this measures an
 interpretation pattern, not a correct product or interchangeable requirements.
 For other tools this deliberately coarse label does not compare codes or terms.
@@ -34,7 +36,15 @@ def signature(interpretation):
             args.get('supply_voltage_v'), tuple(sorted(operators)))
 
 
-def rank_bank(bank):
+def prompt_useful(query, neighbor):
+    """All non-null argument keys count, including focus/refine when labeled."""
+    a, b = query['args'], neighbor['args']
+    return (query['tool'] == neighbor['tool']
+            and {k for k, v in a.items() if v is not None} == {k for k, v in b.items() if v is not None}
+            and all(a.get(k) is None or a[k] == b.get(k) for k in ('service', 'enclosure')))
+
+
+def rank_bank(bank, definition='strict'):
     """Normalize stored vectors once, then compute exact cosine without a service."""
     normalized = []
     dimensions = {}
@@ -54,9 +64,15 @@ def rank_bank(bank):
             if query['model'] != other['model'] or query['id'] == other['id'] or query['text'] == other['text']:
                 continue
             score = sum(a*b for a, b in zip(normalized[i], normalized[j]))
-            relevant = signature(query['interpretation']) == signature(other['interpretation'])
-            ranked[i].append((score, other['id'], relevant))
-            ranked[j].append((score, query['id'], relevant))
+            if definition == 'strict':
+                forward = backward = signature(query['interpretation']) == signature(other['interpretation'])
+            elif definition == 'prompt_useful':
+                forward = prompt_useful(query['interpretation'], other['interpretation'])
+                backward = prompt_useful(other['interpretation'], query['interpretation'])
+            else:
+                raise ValueError('Unknown relevance definition')
+            ranked[i].append((score, other['id'], forward))
+            ranked[j].append((score, query['id'], backward))
     return [sorted(rows, key=lambda r: (-r[0], r[1])) for rows in ranked]
 
 
@@ -73,10 +89,10 @@ def metrics(ranked, k, threshold=None):
                 returned_precision=relevant/returned if returned else None)
 
 
-def evaluate(bank, threshold):
+def evaluate(bank, threshold, definition='strict'):
     if not bank:
         raise ValueError('No active examples')
-    ranked = rank_bank(bank)
+    ranked = rank_bank(bank, definition)
     # This fingerprint detects a changed bank without publishing vectors or text.
     fingerprint = hashlib.sha256(json.dumps(bank, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
     results = []
@@ -95,7 +111,7 @@ def evaluate(bank, threshold):
         results.append(dict(model=model, queries=len(rows),
                             queries_without_relevant_neighbor=sum(not any(r[2] for r in ns) for ns in rows),
                             unfiltered=baseline, current=current, sweep=sweep, recommendation=recommendation))
-    return dict(bank_sha256=fingerprint, active_examples=len(bank),
+    return dict(definition=definition, bank_sha256=fingerprint, active_examples=len(bank),
                 dataset_versions=dict(Counter(str(r.get('dataset_version')) for r in bank)),
                 current_k=5, current_threshold=threshold, models=results)
 
@@ -120,6 +136,7 @@ def readable(result):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out', type=Path, default=ROOT / 'reports/behavior/retrieval.json')
+    parser.add_argument('--definition', choices=['strict', 'prompt_useful', 'both'], default='both')
     args = parser.parse_args()
     # Load only database settings through the approved helper; never display them.
     from backend.catalog.cli import local_environment
@@ -133,14 +150,17 @@ def main():
                 embedding::text AS vector FROM series76.example_bank WHERE active ORDER BY id'''))
         for row in bank:
             row['vector'] = json.loads(row['vector'])
-        result = evaluate(bank, MIN_SIMILARITY)
+        definitions = ['strict', 'prompt_useful'] if args.definition == 'both' else [args.definition]
+        results = {name: evaluate(bank, MIN_SIMILARITY, name) for name in definitions}
     except Exception:
         # Database exceptions may contain connection details; never echo them.
         print('Retrieval evaluation failed; check local DB availability and active stored vectors.', file=sys.stderr)
         return 1
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
-    print(readable(result))
+    args.out.write_text(json.dumps(results, indent=2) + '\n', encoding='utf-8')
+    for name, result in results.items():
+        print(name.upper())
+        print(readable(result))
     return 0
 
 

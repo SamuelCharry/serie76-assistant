@@ -45,6 +45,21 @@ Leave-one-out on **649 active stored examples**, with no new embeddings, exclude
 
 Unfiltered MRR rises from 0.476/0.546/0.563/0.570 at k=1/3/5/8: k=5 is a provisional context cap with diminishing gains, not a proven optimum. At 0.70, precision among returned neighbors is still 38.2%; this snapshot does **not** justify the threshold as a relevance filter. The [full sweep](../../../reports/behavior/retrieval.json) exposes the coverage trade-off. Fifteen queries have no relevant peer; related phrases can remain across the split, and the coarse labels cannot certify correct recommendations. Validate on fresh labeled queries before tuning; production settings are unchanged.
 
+### Improving retrieval
+
+We compared five approaches on the same 649-example leave-one-out bank. **Strict** requires the same tool, service, enclosure, voltage and torque operators; **prompt-useful** requires the same tool and set of non-null argument fields, with service/enclosure mappings preserved while other values may differ. A fixed seed selects 129 queries for tuning and 520 for validation within this bank. This is not a fresh-conversation test.
+
+| Variant | Strict P@1 / P@3 / P@5 | Strict MRR@5 | Useful P@1 / P@3 / P@5 | Useful MRR@5 | Extra ms/query | Extra API calls |
+|---|---|---:|---|---:|---:|---:|
+| A: dense | 47.6 / 41.1 / 38.2% | 0.563 | 47.5 / 41.2 / 37.8% | 0.554 | 0 | 0 |
+| B: metadata, w=0.02 | 51.8 / 43.4 / 40.1% | 0.598 | 47.5 / 40.8 / 37.8% | 0.552 | 0.42 | 0 |
+| C: BM25 + dense, RRF 60 | 48.5 / 41.2 / 38.1% | 0.572 | 44.1 / 38.1 / 35.6% | 0.534 | 6.77 | 0 |
+| D: MMR on A, λ=0.6 | 47.6 / 41.0 / 38.3% | 0.565 | 47.5 / 41.1 / 37.9% | 0.556 | 0.32 | 0 |
+| E: masked quantities | 43.0 / 40.1 / 37.5% | 0.524 | 48.1 / 43.1 / 39.2% | 0.557 | 0.01 | 0 |
+| E + B, w=0.02 | 49.8 / 42.5 / 39.1% | 0.572 | 48.7 / 42.9 / 39.0% | 0.558 | 0.34 | 0 |
+
+All precision values are percentages; no cosine cutoff is applied, matching the original baseline. Times are measured local ranking/masking overhead, excluding DB/provider latency; zero extra API calls means reusing/replacing the existing query embedding, not a free retrieval service. Grids: w=0.02/0.05/0.1/0.2/0.4 and λ=0.5–0.9. **Keep dense:** no variant improves useful P@5 by the required 5 points while also improving strict P@5; the best useful gain is only 1.4 points and loses strict precision. The validation split reaches the same decision. No runtime/config default changed and the masked dataset stays inactive; the v7 scripted replay with actual dense SQL retrieval preserves every OFF filter when ON. [Full experiment, limits and Google usage ledger](../../../reports/submission/T9-S2-retrieval.md).
+
 ### Impact and why integrity comes first
 
 Provost's expected-value idea is to weight each outcome's benefit/cost by its probability, rather than treating every error equally. The following assumptions are **illustrative relative units**, not measured money or client-approved values; the client must set real costs and we have not estimated a financial return.
