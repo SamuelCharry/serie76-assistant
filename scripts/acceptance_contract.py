@@ -59,6 +59,8 @@ def eligible_codes(filters):
         if any(filters.get(f) is not None and (not row[f] or number(filters[f]) != number(row[f])) for f in ('supply_voltage_v','phase_count')):
             continue
         current = filters.get('supply_current')
+        if filters.get('dc_only') and row['supply_current'] != 'DC':
+            continue
         if current and row['supply_current'] != current and not (current in ('AC','DC') and row['supply_current'] == 'AC/DC'):
             continue
         if filters.get('csa_required') and row['csa_status'] != 'reported_in_header':

@@ -5,7 +5,7 @@ from decimal import Decimal
 import re
 
 NUMBER = r'(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:[.,]\d+)?)'
-UNIT = r'k\s*n\s*-?\s*m|n\s*-?\s*m|m\s*n|in\s*-?\s*lbs?|volts?|v|hz|seconds?|sec|s|amps?|a|watts?|w|%'
+UNIT = r'k\s*n\s*-?\s*m|n\s*-?\s*m|m\s*n|in\s*-?\s*lbs?|volts?|v(?:ac|dc)?|hz|seconds?|sec|s|amps?|a|watts?|w|%'
 RANGE = re.compile(rf'(?<![\w-])(?:between\s+)?({NUMBER})\s*(?:to|and|–|-)\s*({NUMBER})\s*({UNIT})(?![a-z])', re.I)
 SINGLE = re.compile(rf'(?<![\w-])({NUMBER})\s*({UNIT})(?![a-z])', re.I)
 POSSIBLE_UNIT = re.compile(rf'(?<![\w-])({NUMBER})\s*([a-z]{{1,8}})(?![\w/-])', re.I)
@@ -32,7 +32,7 @@ def _number(raw):
 def _unit(raw):
     normalized = re.sub(r'[\s-]', '', raw.lower())
     return {'nm': 'nm', 'mn': 'nm', 'knm': 'knm', 'inlb': 'in_lb', 'inlbs': 'in_lb',
-            'v': 'v', 'volt': 'v', 'volts': 'v', 'hz': 'hz',
+            'v': 'v', 'vac': 'v', 'vdc': 'v', 'volt': 'v', 'volts': 'v', 'hz': 'hz',
             's': 's', 'sec': 's', 'second': 's', 'seconds': 's',
             'a': 'a', 'amp': 'a', 'amps': 'a',
             'w': 'w', 'watt': 'w', 'watts': 'w', '%': '%'}.get(normalized)
@@ -96,6 +96,12 @@ def apply(query, filters, context=None):
     text = query.lower()
     occupied = []
     found = {}
+    named_rates = re.compile(rf'\b(cycles?|ciclos?|starts?|arranques?)\s*(>=|<=|>|<|at least|at most|minimum|maximum)?\s*({NUMBER})\s*(?:/\s*h(?:our)?|per\s+hour|por\s+hora)\b', re.I)
+    for match in named_rates.finditer(text):
+        field = 'min_cycles_per_hour' if match.group(1).startswith(('cycl', 'cicl')) else 'min_starts_per_hour'
+        op = _operator(match.group(2) or '', field)
+        found[field] = {'value': _number(match.group(3)), 'op': op}
+        occupied.append(match.span())
     rates = re.compile(rf'(?<![\w-])(?:between\s+|entre\s+)?({NUMBER})(?:\s*(?:to|and|a|y|–|-)\s*({NUMBER}))?\s*(cycles?|ciclos?|starts?|arranques?)\s*(?:/\s*h(?:our)?|per\s+hour|an?\s+hour|por\s+hora)\b', re.I)
     for match in rates.finditer(text):
         field = 'min_cycles_per_hour' if match.group(3).startswith(('cycl', 'cicl')) else 'min_starts_per_hour'

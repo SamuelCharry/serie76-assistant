@@ -44,6 +44,8 @@ def priority(query, previous='closest_torque', hint=()):
                if (m := re.search(pattern, query, re.I))]
     if choices:
         return min(choices)[1]
+    if policy.sort_grounded('lowest_power', query):
+        return 'lowest_power'
     return next((HINTS[h] for h in hint if h in HINTS),
                 previous if previous in LABELS else 'closest_torque')
 
@@ -145,6 +147,8 @@ def failures(product, filters):
                 actual, wanted = f'{_num(actual)} V', f'{_num(wanted)} V'
             elif field == 'csa_required':
                 actual, wanted = product.get('certification', {}).get('csa_status', 'not published').replace('_', ' '), 'CSA certification'
+            elif field == 'dc_only':
+                actual, wanted = product.get('supply_current'), 'DC-only eligibility (AC/DC excluded)'
             elif field == 'enclosure':
                 actual, wanted = str(actual).capitalize(), str(wanted).capitalize()
             reasons.append(f'{label} {actual} does not meet {wanted}'.replace('on_off', 'On/Off'))

@@ -427,6 +427,11 @@ class Turn:
         return AgentResult(text, context=self.context, clarification=dict(field=field, message=text, **extra))
 
     def question_result(self, fields, facets, message=None):
+        fields = [f for f in fields if f not in self.context.get('withdrawn_fields', [])]
+        if not fields:
+            self.context.pop('pending_questions', None)
+            self.context.pop('pending_clarification', None)
+            return AgentResult('', context=self.context)
         questions = interactions.questions(facets, fields)
         self.context['pending_questions'] = questions
         first = questions[0]['id'] if questions else (fields[0] if fields else 'requirements')
@@ -998,11 +1003,23 @@ class Turn:
         for field, value in inferred.items():
             if field not in delta or field not in ('min_torque_nm', 'min_torque_in_lb') or isinstance(value, dict):
                 delta[field] = value
+        if 'dc_only' not in inferred:
+            # A boolean from the interpreter cannot silently relax an exclusive
+            # requirement; absent fresh evidence, refinement carries prior state.
+            delta.pop('dc_only', None)
         written, coverage_issues = requirement_coverage.apply(
             self.query, {}, dict(self.context.get('filters') or {}, **delta))
         for field, claim in written.items():
             if field not in delta or requirement_coverage.missing({field: claim}, {field: delta[field]}):
                 delta[field] = claim
+            elif isinstance(delta[field], list) and (self.context.get('filters') or {}).get(field) is not None:
+                previous_claim = self.context['filters'][field]
+                if all(not requirement_coverage.missing({field: item}, {field: claim}) or
+                       not requirement_coverage.missing({field: item}, {field: previous_claim})
+                       for item in delta[field]):
+                    # A repeated old bound is carried by merge_filters; it is not
+                    # a new quantity that must be restated in the current turn.
+                    delta[field] = claim
         interpretation_notes.extend(issue for issue in coverage_issues if issue.startswith('Modulating service'))
         undisclosed = [issue for issue in coverage_issues
                        if 'both stated' not in issue and not issue.startswith('Modulating service')]
@@ -1040,8 +1057,19 @@ class Turn:
                 return self.clarify("requirements")
         previous = self.context.get("filters") or {}
         import re
-        removals = set(args['remove']) | policy.removed_fields(
-            self.query, self.context.get('pending_questions') or [])
+        removals = policy.removed_fields(self.query, self.context.get('pending_questions') or [])
+        if re.search(r'\b(?:remove|drop|withdraw|forget)\b.*\bcurrent limit\b', self.query, re.I):
+            active_current_limits = [f for f in ('max_fla_a', 'max_lra_a') if previous.get(f) is not None]
+            if len(active_current_limits) == 1:
+                removals.discard('supply_current')
+                removals.add(active_current_limits[0])
+        # A model removal cannot erase a requirement the user asked to retain,
+        # nor a corrected value explicitly present in this same turn.
+        model_removals = set(args['remove'])
+        if re.search(r'\b(?:keep|retain|preserve|conserva|mant[eé]n)\b', self.query, re.I):
+            model_removals &= removals
+        model_removals -= set(written)
+        removals |= model_removals
         if self.semantic is not None:
             # A negated alternative cannot erase an affirmative service in another clause.
             explicit = policy.explicit_context_values(self.query)
@@ -1049,8 +1077,13 @@ class Turn:
                 delta['service'] = explicit['service']
                 removals.discard('service')
         negated = bool(removals)
-        if 'enclosure' in removals and delta.get('enclosure') == 'weatherproof' and policy.nonhazard_signal(self.query):
+        if policy.enclosure_withdrawal(self.query):
+            removals.add('enclosure')
+            delta.pop('enclosure', None)
+        if 'enclosure' in removals and delta.get('enclosure') == 'weatherproof' and policy.nonhazard_signal(self.query) and not policy.enclosure_withdrawal(self.query):
             removals.remove('enclosure')
+        if 'supply_current' in removals:
+            removals.add('dc_only')
         if policy.removed_fields(self.query) and 'enclosure' in policy.removed_fields(self.query):
             self.context.pop('hazard_signal', None)
         same_performance = re.search(r'\bsame performance\b', self.query, re.I) and args.get('refine') and delta.get('service')
@@ -1058,6 +1091,10 @@ class Turn:
                                                  self.query, re.I))
         merged, notes = policy.merge_filters(previous, delta, refine=args["refine"] or change_only or negated,
                                              remove=sorted(removals), more=args["more"], query=self.query)
+        withdrawn = set(self.context.get('withdrawn_fields', [])) if args['refine'] or change_only or negated or args['more'] else set()
+        withdrawn.update(removals)
+        withdrawn.difference_update(k for k in delta if k not in removals)
+        self.context['withdrawn_fields'] = sorted(withdrawn)
         carried = dict(self.context.get('quantity_requirements', {})) if args['refine'] or change_only or args['more'] or negated else {}
         for field, value in written.items():
             carried[field] = (policy.merge_bounds(field, carried[field], value,
@@ -1076,6 +1113,8 @@ class Turn:
             notes.append('Assumption: "same performance" retains the numeric thresholds and applies them to the requested service.')
             assumptions.append(dict(field='service', user_phrase='same performance'))
         requested_sort = [key for key in args.get('sort_by', []) if policy.sort_grounded(key, self.query)]
+        if not requested_sort and policy.sort_grounded('lowest_power', self.query):
+            requested_sort = ['lowest_power']
         if re.search(r'\b(?:cheapest|cheap)\b', self.query, re.I):
             requested_sort = ['lowest_power']
         if requested_sort:
@@ -1222,6 +1261,7 @@ class Turn:
         self.context["pagination"] = {"has_more": False}
         self.trace["data"] = result
         self.context["filters"] = merged
+        self.context['empty_search'] = result['total'] == 0
         if result["status"] == "needs_clarification":
             question = self.question_result(result['fields'], result['facets'])
             all_rows = search_actuators(self.connection, SearchFilters.model_validate(dict(merged, limit=100, offset=0)),
@@ -1245,6 +1285,11 @@ class Turn:
         shown = project_assumptions(assumptions, merged)
         products = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in result["products"]]
         if not result["total"]:
+            if merged.get('dc_only'):
+                for key in ('part_numbers', 'on_screen', 'last_ranked_list', 'last_shown_list', 'last_comparison_models'):
+                    self.context[key] = []
+                self.context.pop('focused_model', None)
+                return AgentResult('No actuator meets ' + policy.describe(merged) + '.', context=self.context)
             from backend.catalog.repository import closest_numeric
             closest = closest_numeric(self.connection, filters)
             self.trace["data"]["closest"] = closest
@@ -1643,7 +1688,42 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
     import re
+    if not answers and not remove_filters and turn.context.get('empty_search') and (turn.context.get('filters') or {}).get('dc_only'):
+        refers_to_results = ((isinstance(action, dict) and action.get('type') in ('compare_top', 'show_all')) or
+                             re.search(r'\b(?:that|this|the|eligible)\s+(?:list|comparison|results?|models?)\b|\b(?:compare|choose|recommend)\s+(?:them|those)\b', query, re.I))
+        if refers_to_results and not policy.codes_in_text(query):
+            turn.trace = dict(name='empty_selection', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            # Keep any newly stated bounds even though the earlier set was empty.
+            written, _ = requirement_coverage.apply(query, {}, turn.context.get('filters'))
+            if written:
+                args = models['search_actuators'].model_validate(dict(refine=True, **written)).model_dump(mode='json')
+                return finish(turn, turn.search(args, trusted=True))
+            return finish(turn, AgentResult('There are no eligible models in the current result set to list, compare or recommend. '
+                                           'No actuator meets ' + policy.describe(turn.context['filters']) + '.', context=turn.context))
     if action is None and not answers and not remove_filters:
+        if re.search(r'\b(?:n/a|missing|unpublished)\b', query, re.I) and re.search(
+                r'\b(?:fill|borrow|replace|substitute|infer|transfer)\b', query, re.I):
+            turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            return finish(turn, AgentResult('I cannot fill, infer or transfer N/A values from another model. '
+                                           'Each part number keeps its own published values; N/A remains N/A.', context=turn.context))
+        supply_codes = policy.codes_in_text(query)
+        supply_question = (re.search(r'\b(?:ac|dc|alterna|continua)\b', query, re.I) and
+                           re.search(r'\b(?:accept|support|admite|compatible|compatibility|only|[úu?]nicamente)\b', query, re.I))
+        if len(supply_codes) == 1 and supply_question and not re.search(r'\b(?:fla|lra|amps?|amperes?)\b', query, re.I):
+            product = get_actuator(connection, supply_codes[0])
+            if product:
+                supply = product['supply_current']
+                explanation = ('DC-only; it does not accept AC.' if supply == 'DC' else
+                               'AC/DC; it accepts AC or DC.' if supply == 'AC/DC' else 'AC; it does not accept DC.')
+                turn.trace = dict(name='supply_compatibility', parameters={}, raw_parameters={}, validation=['ok'],
+                                  context_before=context_before,
+                                  model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+                turn.context['focused_model'] = supply_codes[0]
+                return finish(turn, AgentResult(supply_codes[0] + ' is published as ' + explanation, context=turn.context))
         declined = catalogue_answers.limitations(query)
         named = policy.codes_in_text(query)
         purchase = policy.purchase_request(query) and re.search(r'\b(?:buy|purchase|order|comprar|compra)\b', query, re.I)
@@ -2503,4 +2583,9 @@ def finish(turn, result):
                        else str(len(result.products)) + ' catalogue candidates are shown under the current requirements.')
     if (result.context.get('filters') or {}).get('sort_by', [None])[:1] == ['lowest_power']:
         result.answer += '\nModels with N/A motor power rank after published motor power values; N/A is not zero.'
+    supply_filters = result.context.get('filters') or {}
+    if supply_filters.get('dc_only'):
+        result.answer += '\nDC-only eligibility excludes AC/DC models.'
+    elif supply_filters.get('supply_current') == 'DC':
+        result.answer += '\nFor a DC supply, compatible AC/DC models remain eligible.'
     return result

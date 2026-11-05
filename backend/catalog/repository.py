@@ -167,6 +167,8 @@ def _matching_sql(connection, filters):
     if filters.supply_current:
         conditions.append("e.supply_current IN (%s,'AC/DC')" if filters.supply_current in ("AC", "DC") else "e.supply_current=%s")
         params.append(filters.supply_current)
+    if filters.dc_only:
+        conditions.append("e.supply_current='DC'")
     if filters.service:
         conditions.append("(t.layout IN ('mixed',%s) OR (t.layout='shared' AND t.shared_services_confirmed))")
         params.append(filters.service)

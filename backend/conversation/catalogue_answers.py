@@ -17,6 +17,9 @@ def limitations(query):
          "The catalogue does not publish delivery times or lead times."),
         (r'\b(?:weigh(?:s|t)?|weight|mass|peso|pesa)\b', "The catalogue doesn't publish weight."),
         (r'\b(?:SIL|safety integrity)\b', "The catalogue does not publish SIL ratings or certification."),
+        (r'\b(?:stock|availability|inventory|disponibilidad|existencias)\b', "The catalogue does not publish current stock or availability."),
+        (r'\b(?:mounting|dimensions?|dimensiones)\b', "The catalogue does not publish mounting dimensions."),
+        (r'\b(?:installation instructions|how to install|install it)\b', "The catalogue does not publish installation instructions."),
         (r'\b(?:series?|serie)\s+(?!76\b)\d+\b', "Other series are outside this catalogue; I only cover the Series 76 catalogue."),
     )
     return [message for pattern, message in patterns if re.search(pattern, query, re.I)]
@@ -38,6 +41,11 @@ def relative_operation(query):
 
 def answer(connection, query):
     text = query.lower()
+    supply_overview = re.search(r'\b(?:tipos? de (?:alimentaci[óo?]n|suministro(?: el[ée]ctrico)?)|supply types|types of (?:power )?supply)\b', text)
+    if supply_overview:
+        from backend.catalog.context import published_supplies
+        from .rendering import supplies_text
+        return supplies_text(published_supplies(connection))
     # A request for products with a property is not a request for facet statistics.
     product_search = bool(re.search(r'\b(?:models?|actuators?|modelos?|actuadores?)\b', text))
     if re.search(r'\btorque range\b.*\b(?:catalogue|series 76)\b|\b(?:catalogue|series 76)\b.*\btorque range\b', text):

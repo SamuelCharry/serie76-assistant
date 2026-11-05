@@ -1,0 +1,3309 @@
+{
+  "version": "t12-oracle",
+  "cohort": "t12",
+  "scenarios": [
+    {
+      "id": "T12_V12-05",
+      "t12_class": "dc_only",
+      "source_v12": "V12-05",
+      "turns": [
+        {
+          "query": "List explosionproof 24 V DC-only units suitable for on/off operation.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "empty": true,
+              "required_text": [
+                "DC.only",
+                "AC/DC",
+                "(?:exclude|not eligible|ineligible)"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-07",
+      "t12_class": "list",
+      "source_v12": "V12-07",
+      "turns": [
+        {
+          "query": "Which 110 V AC weatherproof units provide 150 to 500 Nm for on/off duty?",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": [
+                {
+                  "op": "gte",
+                  "value": 150
+                },
+                {
+                  "op": "lte",
+                  "value": 500
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ]
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ]
+                }
+              },
+              "list": true,
+              "forbidden_text": [
+                "lowest duty"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Keep that range and limit motor power to 40 W.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "max_motor_power_w": 40
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ],
+                  "max_motor_power_w": 40
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ],
+                  "max_motor_power_w": 40
+                },
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-12",
+      "t12_class": "negated_hazard",
+      "source_v12": "V12-12",
+      "turns": [
+        {
+          "query": "For an ordinary outdoor water tank, no hazardous area, I need 200 Nm and 110 V AC for opening and closing. Please show suitable units.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": 200,
+              "assumptions": {
+                "service": "opening and closing"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                },
+                "nonempty": true
+              },
+              "forbidden_text": [
+                "explicit hazardous.area requirement"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-14",
+      "t12_class": "supply_overview",
+      "source_v12": "V12-14",
+      "turns": [
+        {
+          "query": "Quiero una explicaci?n sencilla de los tipos de alimentaci?n disponibles en la serie 76.",
+          "scripted_decision": [
+            "explain_terms",
+            {
+              "term_keys": [
+                "supply_24v_ac_dc",
+                "supply_110v_1ph",
+                "supply_220v_1ph"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "24\\s*V",
+                "110\\s*V",
+                "220\\s*V",
+                "AC",
+                "DC"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-22",
+      "t12_class": "withdraw_enclosure",
+      "source_v12": "V12-22",
+      "turns": [
+        {
+          "query": "I need explosionproof 24 V DC on/off units with at least 100 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "service": "on_off",
+              "min_torque_nm": 100
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "products_satisfy": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "The installation has moved to a non-hazardous room. Remove the explosionproof restriction but retain the electrical and torque requirements.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "enclosure"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "products_satisfy": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "absent": [
+                  "enclosure"
+                ],
+                "hazard_clear": true,
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-23",
+      "t12_class": "withdraw_phase",
+      "source_v12": "V12-23",
+      "turns": [
+        {
+          "query": "List 220 V AC three-phase weatherproof on/off models.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 220,
+              "supply_current": "AC",
+              "service": "on_off",
+              "phase_count": 3
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "phase_count": 3
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "phase_count": 3
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "I withdraw the three-phase constraint.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "phase_count"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "absent": [
+                  "phase_count"
+                ],
+                "questions_absent": [
+                  "phase_count"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Add a minimum torque of 500 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 500
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "absent": [
+                  "phase_count"
+                ],
+                "questions_absent": [
+                  "phase_count"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-24",
+      "t12_class": "correct_range",
+      "source_v12": "V12-24",
+      "turns": [
+        {
+          "query": "Weatherproof 110 V AC on/off, torque no less than 300 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": 300
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 300
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 300
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "I reversed the limit: it must be no more than 300 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": {
+                "op": "lte",
+                "value": 300
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": {
+                    "op": "lte",
+                    "value": 300
+                  }
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": {
+                    "op": "lte",
+                    "value": 300
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "Also require at least 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": {
+                "op": "gte",
+                "value": 150
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "lte",
+                      "value": 300
+                    },
+                    {
+                      "op": "gte",
+                      "value": 150
+                    }
+                  ]
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "lte",
+                      "value": 300
+                    },
+                    {
+                      "op": "gte",
+                      "value": 150
+                    }
+                  ]
+                },
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-25",
+      "t12_class": "power_objective",
+      "source_v12": "V12-25",
+      "turns": [
+        {
+          "query": "Find the lowest motor-wattage weatherproof 110 V AC model for on/off use.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "sort_by": [
+                "lowest_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "objective": "lowest_power",
+                "rank": "lowest_power",
+                "ranking_label": true
+              }
+            }
+          }
+        },
+        {
+          "query": "Require at least 150 Nm as well.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 150
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "objective": "lowest_power",
+                "rank": "lowest_power"
+              }
+            }
+          }
+        },
+        {
+          "query": "Raise that minimum to 500 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 500
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "objective": "lowest_power",
+                "rank": "lowest_power"
+              }
+            }
+          }
+        },
+        {
+          "query": "Choose the lowest-wattage option that still meets it.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "intent": "pick",
+              "sort_by": [
+                "lowest_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "objective": "lowest_power"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-28",
+      "t12_class": "dc_only",
+      "source_v12": "V12-28",
+      "turns": [
+        {
+          "query": "For a hazardous site, show 24 V units that accept either AC or DC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "AC/DC"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "AC/DC"
+                },
+                "products_satisfy": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "AC/DC"
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "Actually the supply is strictly DC, and I only want DC-only models.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "state": {
+                "filters": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC"
+                },
+                "products_satisfy": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC"
+                },
+                "nonempty": true
+              },
+              "required_text": [
+                "DC.only",
+                "AC/DC"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Keep the hazardous-site requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "state": {
+                "filters": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC"
+                },
+                "products_satisfy": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC"
+                },
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-32",
+      "t12_class": "vac_vdc",
+      "source_v12": "V12-32",
+      "turns": [
+        {
+          "query": "weathrproof 110 vac open close, 150 Nm min",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": 150,
+              "assumptions": {
+                "service": "open close"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "questions_absent": [
+                  "supply_current"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "sry make that 200 Nm min",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 200
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-33",
+      "t12_class": "supply_lookup",
+      "source_v12": "V12-33",
+      "turns": [
+        {
+          "query": "?El 762Y30-11370000/A admite corriente alterna o ?nicamente continua?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762Y30-11370000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "DC.only|only DC|DC only",
+                "(?:not|cannot|does not)[^.\\n]*AC"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-35",
+      "t12_class": "compound_install",
+      "source_v12": "V12-35",
+      "turns": [
+        {
+          "query": "How many watts is 764B00-11300000/A, and what are its exact mounting dimensions?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "764B00-11300000/A"
+              ],
+              "focus": [
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "(?:not|doesn.t)[^.\\n]*(?:mounting|dimensions|installation)"
+              ],
+              "published_values": [
+                [
+                  "764B00-11300000/A",
+                  "motor_power_w"
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-36",
+      "t12_class": "compound_stock",
+      "source_v12": "V12-36",
+      "turns": [
+        {
+          "query": "Compare the 60 Hz operating times of 762A00-11300000/A and 762B00-11300000/A, then confirm which is in stock today.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762A00-11300000/A",
+                "762B00-11300000/A"
+              ],
+              "focus": [
+                {
+                  "field": "operating_time",
+                  "frequency_hz": 60
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "(?:not|doesn.t|cannot)[^.\\n]*(?:stock|availability)"
+              ],
+              "published_values": [
+                [
+                  "762A00-11300000/A",
+                  "operating_time_60hz_s"
+                ],
+                [
+                  "762B00-11300000/A",
+                  "operating_time_60hz_s"
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-39",
+      "t12_class": "dc_only",
+      "source_v12": "V12-39",
+      "turns": [
+        {
+          "query": "Show explosionproof 24 V DC-only models for on/off service.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "empty": true,
+              "required_text": [
+                "DC.only",
+                "AC/DC",
+                "(?:exclude|not eligible|ineligible)"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Compare top 2",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [],
+              "focus": []
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "empty": true
+            }
+          },
+          "action": {
+            "type": "compare_top",
+            "args": {
+              "n": 2
+            }
+          }
+        },
+        {
+          "query": "Recommend one from that comparison for at least 100 Nm and explain the trade-off.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "intent": "pick",
+              "min_torque_nm": 100
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "empty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-42",
+      "t12_class": "no_imputation",
+      "source_v12": "V12-42",
+      "turns": [
+        {
+          "query": "What are the listed torque and motor power for 761B00-11330C00/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11330C00/A"
+              ],
+              "focus": [
+                "torque",
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "N/A"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Could you fill any N/A values using 761B00-11300000/A instead?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                "torque",
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "(?:cannot|can.t|never|will not|do not)[^.\\n]*(?:fill|borrow|substitut|infer|transfer)",
+                "N/A"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-44",
+      "t12_class": "dc_only",
+      "source_v12": "V12-44",
+      "turns": [
+        {
+          "query": "I want the fastest explosionproof 24 V DC-only on/off model.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "service": "on_off",
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "empty": true,
+              "required_text": [
+                "DC.only",
+                "AC/DC",
+                "(?:exclude|not eligible|ineligible)"
+              ]
+            }
+          }
+        },
+        {
+          "query": "It now needs at least 100 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 100
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "empty": true
+            }
+          }
+        },
+        {
+          "query": "Show the eligible list.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "list_results": true
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "empty": true
+            }
+          }
+        },
+        {
+          "query": "Choose the fastest from that list without dropping the torque minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "intent": "pick",
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "empty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-05_P1",
+      "t12_class": "dc_only",
+      "turns": [
+        {
+          "query": "List explosionproof 24 V solo DC actuators for on/off.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "empty": true,
+              "required_text": [
+                "DC.only",
+                "AC/DC",
+                "(?:exclude|not eligible|ineligible)"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-05_P2",
+      "t12_class": "dc_only",
+      "turns": [
+        {
+          "query": "Find explosionproof on/off units accepting only direct current at 24 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "dc_only": true,
+              "empty": true,
+              "required_text": [
+                "DC.only",
+                "AC/DC",
+                "(?:exclude|not eligible|ineligible)"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-07_P1",
+      "t12_class": "list",
+      "turns": [
+        {
+          "query": "List weatherproof 110 V AC on/off units with torque from 150 to 500 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": [
+                {
+                  "op": "gte",
+                  "value": 150
+                },
+                {
+                  "op": "lte",
+                  "value": 500
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ]
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ]
+                }
+              },
+              "list": true,
+              "forbidden_text": [
+                "lowest duty"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Keep that range and limit motor power to 40 W.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "max_motor_power_w": 40
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ],
+                  "max_motor_power_w": 40
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ],
+                  "max_motor_power_w": 40
+                },
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-07_P2",
+      "t12_class": "list",
+      "turns": [
+        {
+          "query": "Show weatherproof 110 V AC on/off models with 150 to 500 Nm torque.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": [
+                {
+                  "op": "gte",
+                  "value": 150
+                },
+                {
+                  "op": "lte",
+                  "value": 500
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ]
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ]
+                }
+              },
+              "list": true,
+              "forbidden_text": [
+                "lowest duty"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Keep that range and limit motor power to 40 W.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "max_motor_power_w": 40
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ],
+                  "max_motor_power_w": 40
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "gte",
+                      "value": 150
+                    },
+                    {
+                      "op": "lte",
+                      "value": 500
+                    }
+                  ],
+                  "max_motor_power_w": 40
+                },
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-12_P1",
+      "t12_class": "negated_hazard",
+      "turns": [
+        {
+          "query": "No hazardous area: an outdoor water tank needs 200 Nm and 110 V AC opening and closing.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": 200,
+              "assumptions": {
+                "service": "opening and closing"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                },
+                "nonempty": true
+              },
+              "forbidden_text": [
+                "explicit hazardous.area requirement"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-12_P2",
+      "t12_class": "negated_hazard",
+      "turns": [
+        {
+          "query": "For a non-hazardous outdoor water tank, show 110 V AC open/close units with at least 200 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": 200
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                },
+                "nonempty": true
+              },
+              "forbidden_text": [
+                "explicit hazardous.area requirement"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-14_P1",
+      "t12_class": "supply_overview",
+      "turns": [
+        {
+          "query": "Explica los tipos de alimentación disponibles en la serie 76.",
+          "scripted_decision": [
+            "explain_terms",
+            {
+              "term_keys": [
+                "supply_24v_ac_dc",
+                "supply_110v_1ph",
+                "supply_220v_1ph"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "24\\s*V",
+                "110\\s*V",
+                "220\\s*V",
+                "AC",
+                "DC"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-14_P2",
+      "t12_class": "supply_overview",
+      "turns": [
+        {
+          "query": "¿Qué tipos de suministro eléctrico tiene la serie 76?",
+          "scripted_decision": [
+            "explain_terms",
+            {
+              "term_keys": [
+                "supply_24v_ac_dc",
+                "supply_110v_1ph",
+                "supply_220v_1ph"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "24\\s*V",
+                "110\\s*V",
+                "220\\s*V",
+                "AC",
+                "DC"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-22_P1",
+      "t12_class": "withdraw_enclosure",
+      "turns": [
+        {
+          "query": "I need explosionproof 24 V DC on/off units with at least 100 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "service": "on_off",
+              "min_torque_nm": 100
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "products_satisfy": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "Withdraw the explosionproof requirement; keep the other requirements.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "enclosure"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "products_satisfy": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "absent": [
+                  "enclosure"
+                ],
+                "hazard_clear": true,
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-22_P2",
+      "t12_class": "withdraw_enclosure",
+      "turns": [
+        {
+          "query": "I need explosionproof 24 V DC on/off units with at least 100 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "service": "on_off",
+              "min_torque_nm": 100
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "products_satisfy": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "The room is non-hazardous; drop the enclosure constraint.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "enclosure"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "products_satisfy": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "absent": [
+                  "enclosure"
+                ],
+                "hazard_clear": true,
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-23_P1",
+      "t12_class": "withdraw_phase",
+      "turns": [
+        {
+          "query": "List 220 V AC three-phase weatherproof on/off models.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 220,
+              "supply_current": "AC",
+              "service": "on_off",
+              "phase_count": 3
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "phase_count": 3
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "phase_count": 3
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "Retract the phase requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "phase_count"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "absent": [
+                  "phase_count"
+                ],
+                "questions_absent": [
+                  "phase_count"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Add a minimum torque of 500 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 500
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "absent": [
+                  "phase_count"
+                ],
+                "questions_absent": [
+                  "phase_count"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-23_P2",
+      "t12_class": "withdraw_phase",
+      "turns": [
+        {
+          "query": "List 220 V AC three-phase weatherproof on/off models.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 220,
+              "supply_current": "AC",
+              "service": "on_off",
+              "phase_count": 3
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "phase_count": 3
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "phase_count": 3
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "Phase count is no longer required.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "phase_count"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "absent": [
+                  "phase_count"
+                ],
+                "questions_absent": [
+                  "phase_count"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Add a minimum torque of 500 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 500
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "absent": [
+                  "phase_count"
+                ],
+                "questions_absent": [
+                  "phase_count"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-24_P1",
+      "t12_class": "correct_range",
+      "turns": [
+        {
+          "query": "Weatherproof 110 V AC on/off, torque no less than 300 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": 300
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 300
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 300
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "I reversed that limit: maximum 300 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": {
+                "op": "lte",
+                "value": 300
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": {
+                    "op": "lte",
+                    "value": 300
+                  }
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": {
+                    "op": "lte",
+                    "value": 300
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "Also require at least 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": {
+                "op": "gte",
+                "value": 150
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "lte",
+                      "value": 300
+                    },
+                    {
+                      "op": "gte",
+                      "value": 150
+                    }
+                  ]
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "lte",
+                      "value": 300
+                    },
+                    {
+                      "op": "gte",
+                      "value": 150
+                    }
+                  ]
+                },
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-24_P2",
+      "t12_class": "correct_range",
+      "turns": [
+        {
+          "query": "Weatherproof 110 V AC on/off, torque no less than 300 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": 300
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 300
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 300
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "Correction: no more than 300 Nm rather than a minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": {
+                "op": "lte",
+                "value": 300
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": {
+                    "op": "lte",
+                    "value": 300
+                  }
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": {
+                    "op": "lte",
+                    "value": 300
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "query": "Also require at least 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": {
+                "op": "gte",
+                "value": 150
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "lte",
+                      "value": 300
+                    },
+                    {
+                      "op": "gte",
+                      "value": 150
+                    }
+                  ]
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": [
+                    {
+                      "op": "lte",
+                      "value": 300
+                    },
+                    {
+                      "op": "gte",
+                      "value": 150
+                    }
+                  ]
+                },
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-25_P1",
+      "t12_class": "power_objective",
+      "turns": [
+        {
+          "query": "Find the least watts weatherproof 110 V AC model for on/off use.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "sort_by": [
+                "lowest_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "objective": "lowest_power",
+                "rank": "lowest_power",
+                "ranking_label": true
+              }
+            }
+          }
+        },
+        {
+          "query": "Require at least 150 Nm as well.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 150
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "objective": "lowest_power",
+                "rank": "lowest_power"
+              }
+            }
+          }
+        },
+        {
+          "query": "Raise that minimum to 500 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 500
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "objective": "lowest_power",
+                "rank": "lowest_power"
+              }
+            }
+          }
+        },
+        {
+          "query": "Choose the lowest-wattage option that still meets it.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "intent": "pick",
+              "sort_by": [
+                "lowest_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "objective": "lowest_power"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-25_P2",
+      "t12_class": "power_objective",
+      "turns": [
+        {
+          "query": "Find the lowest motor power weatherproof 110 V AC model for on/off use.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "sort_by": [
+                "lowest_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off"
+                },
+                "objective": "lowest_power",
+                "rank": "lowest_power",
+                "ranking_label": true
+              }
+            }
+          }
+        },
+        {
+          "query": "Require at least 150 Nm as well.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 150
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "objective": "lowest_power",
+                "rank": "lowest_power"
+              }
+            }
+          }
+        },
+        {
+          "query": "Raise that minimum to 500 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 500
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "objective": "lowest_power",
+                "rank": "lowest_power"
+              }
+            }
+          }
+        },
+        {
+          "query": "Choose the lowest-wattage option that still meets it.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "intent": "pick",
+              "sort_by": [
+                "lowest_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 500
+                },
+                "objective": "lowest_power"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-32_P1",
+      "t12_class": "vac_vdc",
+      "turns": [
+        {
+          "query": "Weatherproof 110 VAC on/off units with at least 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": 150
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "questions_absent": [
+                  "supply_current"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "sry make that 200 Nm min",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 200
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-32_P2",
+      "t12_class": "vac_vdc",
+      "turns": [
+        {
+          "query": "Weatherproof 110 volts AC on/off units with at least 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "supply_current": "AC",
+              "service": "on_off",
+              "min_torque_nm": 150
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 150
+                },
+                "questions_absent": [
+                  "supply_current"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "sry make that 200 Nm min",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 200
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "supply_current": "AC",
+                  "service": "on_off",
+                  "min_torque_nm": 200
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-33_P1",
+      "t12_class": "supply_lookup",
+      "turns": [
+        {
+          "query": "Does 762Y30-11370000/A accept AC or only DC?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762Y30-11370000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "DC.only|only DC|DC only",
+                "(?:not|cannot|does not)[^.\\n]*AC"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-33_P2",
+      "t12_class": "supply_lookup",
+      "turns": [
+        {
+          "query": "¿El 762Y30-11370000/A admite corriente alterna o únicamente continua?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762Y30-11370000/A"
+              ],
+              "focus": [
+                "overview"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "DC.only|only DC|DC only",
+                "(?:not|cannot|does not)[^.\\n]*AC"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-35_P1",
+      "t12_class": "compound_install",
+      "turns": [
+        {
+          "query": "Give the motor power of 764B00-11300000/A and its installation instructions.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "764B00-11300000/A"
+              ],
+              "focus": [
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "(?:not|doesn.t)[^.\\n]*(?:mounting|dimensions|installation)"
+              ],
+              "published_values": [
+                [
+                  "764B00-11300000/A",
+                  "motor_power_w"
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-35_P2",
+      "t12_class": "compound_install",
+      "turns": [
+        {
+          "query": "What is the wattage of 764B00-11300000/A and what mounting dimensions does it have?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "764B00-11300000/A"
+              ],
+              "focus": [
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "(?:not|doesn.t)[^.\\n]*(?:mounting|dimensions|installation)"
+              ],
+              "published_values": [
+                [
+                  "764B00-11300000/A",
+                  "motor_power_w"
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-36_P1",
+      "t12_class": "compound_stock",
+      "turns": [
+        {
+          "query": "Compare 762A00-11300000/A and 762B00-11300000/A at 60 Hz for operating time and availability.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762A00-11300000/A",
+                "762B00-11300000/A"
+              ],
+              "focus": [
+                {
+                  "field": "operating_time",
+                  "frequency_hz": 60
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "(?:not|doesn.t|cannot)[^.\\n]*(?:stock|availability)"
+              ],
+              "published_values": [
+                [
+                  "762A00-11300000/A",
+                  "operating_time_60hz_s"
+                ],
+                [
+                  "762B00-11300000/A",
+                  "operating_time_60hz_s"
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-36_P2",
+      "t12_class": "compound_stock",
+      "turns": [
+        {
+          "query": "Show the 60 Hz operating times of 762A00-11300000/A and 762B00-11300000/A and check current stock.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762A00-11300000/A",
+                "762B00-11300000/A"
+              ],
+              "focus": [
+                {
+                  "field": "operating_time",
+                  "frequency_hz": 60
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "(?:not|doesn.t|cannot)[^.\\n]*(?:stock|availability)"
+              ],
+              "published_values": [
+                [
+                  "762A00-11300000/A",
+                  "operating_time_60hz_s"
+                ],
+                [
+                  "762B00-11300000/A",
+                  "operating_time_60hz_s"
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-42_P1",
+      "t12_class": "no_imputation",
+      "turns": [
+        {
+          "query": "What are the listed torque and motor power for 761B00-11330C00/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11330C00/A"
+              ],
+              "focus": [
+                "torque",
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "N/A"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Can you replace the missing N/A data with values from 761B00-11300000/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                "torque",
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "(?:cannot|can.t|never|will not|do not)[^.\\n]*(?:fill|borrow|substitut|infer|transfer)",
+                "N/A"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_V12-42_P2",
+      "t12_class": "no_imputation",
+      "turns": [
+        {
+          "query": "What are the listed torque and motor power for 761B00-11330C00/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11330C00/A"
+              ],
+              "focus": [
+                "torque",
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "N/A"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Please infer those N/A values from 761B00-11300000/A.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                "torque",
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "required_text": [
+                "(?:cannot|can.t|never|will not|do not)[^.\\n]*(?:fill|borrow|substitut|infer|transfer)",
+                "N/A"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_DC_CONTROL_0",
+      "t12_class": "dc_control",
+      "turns": [
+        {
+          "query": "Show explosionproof 24 V DC on/off models.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off"
+                },
+                "products_satisfy": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off"
+                },
+                "nonempty": true
+              },
+              "required_text": [
+                "AC/DC.*(?:eligible|included|compatible)"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_DC_CONTROL_1",
+      "t12_class": "dc_control",
+      "turns": [
+        {
+          "query": "Show explosionproof 24 VDC on/off models.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off"
+                },
+                "products_satisfy": {
+                  "enclosure": "explosionproof",
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "service": "on_off"
+                },
+                "nonempty": true
+              },
+              "required_text": [
+                "AC/DC.*(?:eligible|included|compatible)"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_R22_0",
+      "t12_class": "shared_service",
+      "turns": [
+        {
+          "query": "Weatherproof 220 V three-phase AC modulating at 60 Hz, at least 300 Nm and 1200 starts/h. Maximize torque.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 220,
+              "supply_current": "AC",
+              "phase_count": 3,
+              "service": "modulating",
+              "frequency_hz": 60,
+              "min_torque_nm": 300,
+              "min_starts_per_hour": 1200,
+              "sort_by": [
+                "highest_torque"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "phase_count": 3,
+                  "service": "modulating",
+                  "frequency_hz": 60,
+                  "min_torque_nm": 300,
+                  "min_starts_per_hour": 1200
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "phase_count": 3,
+                  "service": "modulating",
+                  "frequency_hz": 60,
+                  "min_torque_nm": 300,
+                  "min_starts_per_hour": 1200
+                },
+                "nonempty": true
+              },
+              "candidate_count": 7
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_R22_1",
+      "t12_class": "shared_service",
+      "turns": [
+        {
+          "query": "Find weatherproof 220 V AC 3-phase modulating units at 60 Hz with minimum 300 Nm and minimum 1200 starts per hour; highest torque first.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 220,
+              "supply_current": "AC",
+              "phase_count": 3,
+              "service": "modulating",
+              "frequency_hz": 60,
+              "min_torque_nm": 300,
+              "min_starts_per_hour": 1200,
+              "sort_by": [
+                "highest_torque"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "phase_count": 3,
+                  "service": "modulating",
+                  "frequency_hz": 60,
+                  "min_torque_nm": 300,
+                  "min_starts_per_hour": 1200
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "phase_count": 3,
+                  "service": "modulating",
+                  "frequency_hz": 60,
+                  "min_torque_nm": 300,
+                  "min_starts_per_hour": 1200
+                },
+                "nonempty": true
+              },
+              "candidate_count": 7
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T12_R22_2",
+      "t12_class": "shared_service",
+      "turns": [
+        {
+          "query": "Show weatherproof 220 V AC three-phase actuators for modulating: 60 Hz, torque >= 300 Nm, starts >= 1200 per hour. Highest torque.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 220,
+              "supply_current": "AC",
+              "phase_count": 3,
+              "service": "modulating",
+              "frequency_hz": 60,
+              "min_torque_nm": 300,
+              "min_starts_per_hour": 1200,
+              "sort_by": [
+                "highest_torque"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t12_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "phase_count": 3,
+                  "service": "modulating",
+                  "frequency_hz": 60,
+                  "min_torque_nm": 300,
+                  "min_starts_per_hour": 1200
+                },
+                "products_satisfy": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 220,
+                  "supply_current": "AC",
+                  "phase_count": 3,
+                  "service": "modulating",
+                  "frequency_hz": 60,
+                  "min_torque_nm": 300,
+                  "min_starts_per_hour": 1200
+                },
+                "nonempty": true
+              },
+              "candidate_count": 7
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

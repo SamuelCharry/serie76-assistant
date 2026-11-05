@@ -39,7 +39,8 @@ def schemas(term_keys):
     terms = array(enum(term_keys))
     bound = obj({"field": enum(COMPARISONS), "op": enum(["gt", "gte", "lt", "lte"]),
                  "value": {"type": "number"}})
-    assumption = obj({name: {"type": "string"} for name in policy.FILTER_FIELDS})
+    # Exclusivity must be explicit; it is never a model assumption.
+    assumption = obj({name: {"type": "string"} for name in policy.FILTER_FIELDS if name != 'dc_only'})
     boolean = {"type": "boolean"}
     return {
         "get_actuator": obj({"part_numbers": array({"type": "string"}),
@@ -61,6 +62,7 @@ def schemas(term_keys):
             "enclosure": enum(["weatherproof", "explosionproof"]),
             "supply_voltage_v": {"type": "number"},
             "supply_current": enum(["AC", "DC", "AC/DC"]),
+            "dc_only": boolean,
             "phase_count": {"type": "integer", "enum": [1, 3]}, "service": enum(["on_off", "modulating"]),
             "frequency_hz": {"type": "integer", "enum": [50, 60]}, "csa_required": boolean,
             "bounds": array(bound),

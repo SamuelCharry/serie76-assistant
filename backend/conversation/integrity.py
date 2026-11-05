@@ -32,12 +32,14 @@ def _passes(value, requirement, default):
 
 
 def satisfies(product, filters):
-    """Require one qualifying service row and one qualifying frequency row."""
+    """Combine confirmed shared fields with ONE requested service, never two services."""
     for field in ('enclosure', 'supply_voltage_v', 'phase_count'):
         wanted = getattr(filters, field)
         if wanted is not None and product.get(field) != wanted:
             return False
     if filters.supply_current and product.get('supply_current') not in (filters.supply_current, 'AC/DC'):
+        return False
+    if filters.dc_only and product.get('supply_current') != 'DC':
         return False
     if filters.csa_required and product.get('certification', {}).get('csa_status') != 'reported_in_header':
         return False
@@ -47,9 +49,20 @@ def satisfies(product, filters):
     service_limits = [(column, getattr(filters, field)) for field, column in SERVICE_FIELDS.items()
                       if getattr(filters, field) is not None]
     if filters.service or service_limits:
-        service_rows = [row for row in product.get('services', [])
-                        if filters.service is None or row['service'] in (filters.service, 'shared')]
-        if not any(all(_passes(row.get(column), requirement, 'gte')
+        rows = product.get('services', [])
+        shared = next((r for r in rows if r['service'] == 'shared'), {}) if (
+            product.get('provenance', {}).get('shared_services_confirmed')) else {}
+        service_rows = [r for r in rows if r['service'] != 'shared'
+                        and (filters.service is None or r['service'] == filters.service)]
+        if shared and not service_rows:
+            service_rows = [{}]
+        def service_value(row, column):
+            value = row.get(column)
+            # SQL only coalesces shared torque/duty. Rates belong to the service.
+            if value is None and column in ('torque_nm', 'torque_in_lb', 'duty_s4_percent'):
+                value = shared.get(column)
+            return value
+        if not any(all(_passes(service_value(row, column), requirement, 'gte')
                        for column, requirement in service_limits) for row in service_rows):
             return False
     frequency_limits = [(column, getattr(filters, field)) for field, column in FREQUENCY_FIELDS.items()

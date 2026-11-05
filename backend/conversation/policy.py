@@ -20,7 +20,7 @@ PARTIAL_RE = re.compile(r"^[A-Z0-9][A-Z0-9\-/]{2,16}$")
 NUMERIC_FIELDS = ("supply_voltage_v", "frequency_hz", "min_torque_nm", "min_torque_in_lb",
                   "min_duty_s4_percent", "min_cycles_per_hour", "min_starts_per_hour",
                   "max_operating_time_s", "max_fla_a", "max_lra_a", "max_motor_power_w")
-CATEGORICAL_FIELDS = ("enclosure", "supply_current", "phase_count", "service", "csa_required")
+CATEGORICAL_FIELDS = ("enclosure", "supply_current", "phase_count", "service", "csa_required", "dc_only")
 FILTER_FIELDS = CATEGORICAL_FIELDS + NUMERIC_FIELDS
 
 
@@ -29,8 +29,8 @@ def sort_grounded(sort_key, query):
     text = query.lower()
     patterns = {
         'fastest': r'\b(?:fast(?:est)?|quick(?:est)?|speed|r[aá]pid[oa])\b',
-        'lowest_power': r'\b(?:low(?:est)?|least|less|minimum|menos)\b.*\b(?:power|energy|electricity|consumption|potencia|energ[ií]a)\b|\b(?:consum\w*|gasta)\b',
-        'highest_torque': r'\bstrongest\b|\b(?:highest|biggest|most|maximum|m[aá]ximo|mayor)\b.*\b(?:torque|par|strength)\b',
+        'lowest_power': r'\b(?:low(?:est)?|least|less|minimum|menos)\b.*\b(?:power|wattage|watts?|energy|electricity|consumption|potencia|energ[ií]a)\b|\b(?:consum\w*|gasta)\b',
+        'highest_torque': r'\bstrongest\b|\b(?:highest|biggest|most|maximi[sz]e|maximum|m[aá]ximo|mayor)\b.*\b(?:torque|par|strength)\b',
         'lowest_current': r'\b(?:low(?:est)?|least|less|minimum|menos)\b.*\b(?:current|fla|amps?|corriente)\b|\b(?:corriente|current|fla)\b.*\b(?:low(?:est)?|least|less|minimum|menos)\b',
     }
     return bool(re.search(patterns.get(sort_key, r'(?!)'), text))
@@ -43,9 +43,9 @@ LEXICON = {
     ("enclosure", "explosionproof"): ("explosionproof", "explosion proof", "explosion-proof", "antiexplos",
                                         "a prueba de explosión", "a prueba de explosion"),
     ("enclosure", "weatherproof"): ("weatherproof", "weather proof", "weather-proof"),
-    ("supply_current", "DC"): ("dc", "direct current", "corriente continua", "battery"),
+    ("supply_current", "DC"): ("dc", "vdc", "direct current", "corriente continua", "battery"),
     # Phases exist only for AC supplies (DC has none), so stated phases ground AC.
-    ("supply_current", "AC"): ("ac", "alternating", "alterna", "mains", "hz", "single phase", "single-phase",
+    ("supply_current", "AC"): ("ac", "vac", "alternating", "alterna", "mains", "hz", "single phase", "single-phase",
                                "three phase", "three-phase", "1-phase", "3-phase", "monofas", "trifas"),
     ("supply_current", "AC/DC"): ("ac/dc", "ac or dc", "ac-dc", "ac and dc", "ac y dc", "ac o dc",
                                     "dc and ac", "dc y ac", "alterna y continua", "alternating and direct current"),
@@ -77,7 +77,7 @@ def colloquial_requirements(query, semantic=None):
         result['enclosure'] = 'weatherproof'
     if re.search(r'\b(?:[13])[-\s]*(?:phase|phases|fases)\b', text):
         result['phase_count'] = int(re.search(r'\b([13])[-\s]*(?:phase|phases|fases)\b', text).group(1))
-    if re.search(r'\b(?:classified as hazardous|hazardous (?:area|room|zone)|(?:area|room|zone) is hazardous)\b', text):
+    if not nonhazard_signal(text) and re.search(r'\b(?:classified as hazardous|hazardous (?:area|room|zone)|(?:area|room|zone) is hazardous)\b', text):
         result['enclosure'] = 'explosionproof'
         notes.append('Interpreted the explicit hazardous-area requirement as Explosionproof.')
     if re.search(r'\b(battery|low voltage|bater[ií]a|bajo voltaje)\b', text):
@@ -133,7 +133,39 @@ def colloquial_requirements(query, semantic=None):
         if 'safe_area' in semantic and 'enclosure' not in result and 'enclosure' not in removed:
             result['enclosure'] = 'weatherproof'
             notes.append('Interpreted the site as a nonhazardous area; please confirm if that is incorrect.')
+    if enclosure_withdrawal(text):
+        result.pop('enclosure', None)
+        notes = [n for n in notes if 'Explosionproof' not in n and 'nonhazardous' not in n]
+    if re.search(r'\bopening and closing\b|\bopen close\b', text):
+        result['service'] = 'on_off'
+    supply = current_requirement(text)
+    if supply:
+        result.update(supply)
     return result, notes
+
+
+def enclosure_withdrawal(text):
+    text = canonical_enclosures(text)
+    withdrawal = bool(re.search(r'\b(?:remove|drop|withdraw|retract|clear|forget|elimina|quita|retira|olvida)\b[^.;!?]*\b(?:enclosure|explosionproof|weatherproof|envolvente|carcasa|antiexplos\w*)\b', text, re.I))
+    explicit_constraint = re.search(r'\b(?:restriction|requirement|constraint|filter|restricci[óo]n|requisito|filtro)\b', text, re.I)
+    # Explicitly withdrawing a filter means no enclosure preference even when
+    # site context is supplied. A generic site correction retains T10 clearance.
+    return withdrawal and (bool(explicit_constraint) or not nonhazard_signal(text))
+
+
+def current_requirement(text):
+    """Ground a stated supply type and distinguish exclusive DC from compatibility."""
+    text = text.lower()
+    exclusive = re.search(r'\b(?:dc[ -]*only|only\s+(?:dc|direct current)|solo\s+dc|solamente\s+dc|[úu?]nicamente\s+continua)\b', text)
+    if exclusive and not re.search(r'\b(?:or|o)\b', text):
+        return {'supply_current': 'DC', 'dc_only': True}
+    if re.search(r'\bvac\s*/\s*vdc\b', text) or _dual_current(text):
+        return {'supply_current': 'AC/DC', 'dc_only': False}
+    if re.search(r'(?<![a-z])v?dc\b|\bdirect current\b', text) and not re.search(r'\b(?:ac|vac)\b', text):
+        return {'supply_current': 'DC', **({'dc_only': True} if exclusive else {})}
+    if re.search(r'(?<![a-z])vac\b', text) and not re.search(r'\bvdc\b', text):
+        return {'supply_current': 'AC', 'dc_only': False}
+    return {}
 
 
 NONHAZARD_RE = re.compile(
@@ -179,7 +211,7 @@ def explicit_context_values(text):
         for field, value, pattern in patterns:
             for match in re.finditer(pattern, clause, re.I):
                 prefix = clause[:match.start()]
-                if not re.search(r'\b(?:no|not|sin|forget|drop|remove|any)\s+(?:\w+\s+){0,2}$', prefix, re.I):
+                if not re.search(r'\b(?:no|not|sin|forget|drop|remove|withdraw|retract|olvida|quita|elimina|retira|any)\s+(?:\w+\s+){0,2}$', prefix, re.I):
                     values[field] = value
     return values
 
@@ -222,7 +254,7 @@ REMOVE_WORDS = {
 
 
 REMOVAL_PREFIX = re.compile(
-    r'\b(?:forget|drop|remove|clear|without|sin|ya no|elimina|quita|olvida|no|not|'
+    r'\b(?:forget|drop|remove|withdraw|retract|clear|without|sin|ya no|elimina|quita|olvida|no|not|'
     r'rather than|instead of|en vez de)\b', re.I)
 
 
@@ -270,7 +302,7 @@ def removed_fields(query, pending_questions=()):
     removed = set()
     for clause in context_clauses(text):
         for field, words in REMOVE_WORDS.items():
-            if re.search(r'\b(?:forget|drop|remove|clear|without|sin|ya no|elimina|quita|olvida|no|not)\b(?:\W+\w+){0,3}?\W+(?:' + words + r')\b', clause) or \
+            if re.search(r'\b(?:forget|drop|remove|withdraw|retract|clear|without|sin|ya no|elimina|quita|olvida|no|not)\b(?:\W+\w+){0,3}?\W+(?:' + words + r')\b', clause) or \
                     re.search(r'\b(?:any|cualquier)\s+(?:' + words + r')\b', clause) or \
                     (NO_PREFERENCE.search(clause) and re.search(r'\b(?:' + words + r')\b', clause)) or \
                     re.search(r'\b(?:' + words + r')\b.{0,35}\b(?:no longer (?:needed|required)|ya no|no (?:es necesario|importa))\b', clause) or \
@@ -459,6 +491,10 @@ def grounding_errors(delta, assumptions, texts, semantic=None):
             if any(Decimal(str(bound_value(item))) not in numbers for item in bounds(value)):
                 errors.append(field)
         elif field in CATEGORICAL_FIELDS:
+            if field == 'dc_only':
+                if value and not current_requirement(corpus).get('dc_only'):
+                    errors.append(field)
+                continue
             if field == "csa_required" and value is False:
                 continue
             if field == 'supply_current' and value == 'AC/DC' and _dual_current(corpus):
@@ -511,7 +547,7 @@ def replaced_fields(query, delta):
     by filter state and the independent quantity ledger so their deltas agree.
     """
     from .requirement_coverage import apply
-    correction = r'\b(?:i meant|actually|instead|rather|no\s*[, ]\s*sorry|sorry|correction|correct(?:ion)?|reverse|replace|quise decir|queria decir|rectifico|corrijo|en vez de|mejor dicho)\b'
+    correction = r'\b(?:i meant|actually|instead|rather|no\s*[, ]\s*sorry|sorry|correction|correct(?:ion)?|revers(?:e|ed)|replace|quise decir|queria decir|rectifico|corrijo|en vez de|mejor dicho)\b'
     fields = set()
     for clause in re.split(r';|(?<!\d)\.(?!\d)|\b(?:but|pero)\b|\b(?:and|y)\s+(?=add\b|keep\b|also\b|conserva\b|agrega\b)', query, flags=re.I):
         if re.search(correction, clause, re.I):
@@ -583,6 +619,7 @@ LABELS = {
     "min_cycles_per_hour": "minimum cycles/hour", "min_starts_per_hour": "minimum starts/hour",
     "max_operating_time_s": "maximum operating time", "max_fla_a": "maximum FLA", "max_lra_a": "maximum LRA",
     "max_motor_power_w": "maximum motor power", "csa_required": "CSA",
+    "dc_only": "DC-only models",
 }
 
 
@@ -594,7 +631,7 @@ def describe(filters):
     parts = []
     for field in FILTER_FIELDS:
         value = filters.get(field)
-        if value is None or (field == "csa_required" and not value):
+        if value is None or (field in ("csa_required", "dc_only") and not value):
             continue
         if isinstance(value, list):
             parts.append(' and '.join(describe({field: item}) for item in value))
@@ -604,6 +641,7 @@ def describe(filters):
             "enclosure": lambda v: str(v).capitalize(),
             "supply_voltage_v": lambda v: f"{v} V",
             "supply_current": lambda v: v,
+            "dc_only": lambda v: "DC-only models",
             "phase_count": lambda v: f"{v}-phase",
             "frequency_hz": lambda v: f"{v} Hz",
             "min_torque_nm": lambda v: f"torque ≥ {v} Nm",

@@ -56,6 +56,7 @@ class SearchFilters(BaseModel):
         Annotated[Decimal, Field(gt=0, le=Decimal("1e12"), allow_inf_nan=False)] | None
     ) = None
     supply_current: Literal["AC", "DC", "AC/DC"] | None = None
+    dc_only: bool | None = None
     phase_count: Literal[1, 3] | None = None
     service: Literal["on_off", "modulating"] | None = Field(default=None, description="On/Off means fully open or closed. Modulating means regulate or throttle flow, hold an intermediate opening, position anywhere between 0 and 90 degrees, or stop at any position; Spanish regule/regular caudal is Modulating.")
     frequency_hz: Literal[50, 60] | None = None
@@ -112,7 +113,9 @@ class SearchFilters(BaseModel):
                         raise ValueError('Invalid percentage or integer rate bound')
         if len(set(self.sort_by)) != len(self.sort_by):
             raise ValueError("Duplicate sort key")
-        if self.supply_current == "DC" and (self.frequency_hz or self.phase_count):
+        if self.dc_only and self.supply_current not in (None, 'DC'):
+            raise ValueError("DC-only requires DC supply")
+        if (self.supply_current == "DC" or self.dc_only) and (self.frequency_hz or self.phase_count):
             raise ValueError("DC cannot be filtered by mains frequency or phase count")
         if self.service == "on_off" and self.min_starts_per_hour is not None:
             raise ValueError("Starts/hour belongs to modulating service")

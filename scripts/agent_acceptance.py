@@ -310,6 +310,9 @@ def check(expect, observed, queries=()):
         failures.extend(verify(expect, observed))
     if 't10_oracle' in expect:
         failures.extend(t10_oracle().verify(expect['t10_oracle'], observed))
+    if 't12_oracle' in expect:
+        from scripts.t12_oracle import verify
+        failures.extend(verify(expect['t12_oracle'], observed))
     return failures
 
 
@@ -558,7 +561,7 @@ def command_selfcheck(cases, evidence_path=None):
         print(scenario["id"], result["status"], *[t["failures"] for t in result["turns"] if t["failures"]])
         if result["status"] != "passed":
             bad.append(scenario["id"])
-        if scenario.get('t10_defect') or scenario['id'] in selected or scenario['id'].startswith('T9_R1_') or result['status'] != 'passed':
+        if scenario.get('t12_class') or scenario.get('t10_defect') or scenario['id'] in selected or scenario['id'].startswith('T9_R1_') or result['status'] != 'passed':
             evidence.append(dict(scenario=scenario['id'], **result))
     print(json.dumps(dict(selfcheck="ok" if not bad else "failed", scenarios=len(cases['scenarios']), failing=bad)))
     if evidence_path:

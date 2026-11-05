@@ -8,12 +8,12 @@ from .rendering import _num
 # One vocabulary for lookup focus and metric verdicts. Order matters.
 METRICS = (
     ('lra', r'\b(?:lra|locked rotor|starting current|inrush|arranque)\b'),
-    ('motor_power', r'\b(?:motor power|rated power|electricity|consumption|potencia|power)\b'),
+    ('motor_power', r'\b(?:motor power|rated power|wattage|watts?|electricity|consumption|potencia|power)\b'),
     ('fla', r'\b(?:fla|full load current|current|draws?|amps?|corriente)\b'),
     ('duty', r'\b(?:duty|s4)\b'),
     ('cycles', r'\b(?:cycles?|ciclos?)\b'),
     ('starts', r'\b(?:starts?|arranques?)\b'),
-    ('operating_time', r'\b(?:faster|fastest|quicker|quickest|speed|operating time|tiempo|velocidad)\b'),
+    ('operating_time', r'\b(?:faster|fastest|quicker|quickest|speed|operating times?|travel times?|tiempo|velocidad)\b'),
     ('torque', r'\b(?:stronger|strongest|torque|par)\b'),
 )
 VERDICT = re.compile(r'\b(?:which|who|most|least|lowest|highest|faster|fastest|quicker|stronger|better|more|less|cu[aá]l|menos|mayor|mejor|m[aá]s)\b', re.I)
@@ -47,7 +47,9 @@ def plan(query):
     found = tuple(name for name, pattern in METRICS if re.search(pattern, text))
     direction = 'higher' if re.search(r'\b(?:more|higher|highest|most|stronger|strongest|mayor|m[aá]s)\b', text) else 'lower'
     verdict_text = re.sub(r'\b(?:at least|at most|more than|less than|no more than|mayor (?:a|que)|menor (?:a|que))\b', '', text)
-    if found and VERDICT.search(verdict_text):
+    plural_selection = re.search(r'\b(?:which|list|show)\b[^?]*\b(?:units|models|actuators)\b', text)
+    explicit_superlative = re.search(r'\b(?:lowest|highest|least|most|fastest|strongest|quickest|better|faster|stronger)\b', verdict_text)
+    if found and VERDICT.search(verdict_text) and (not plural_selection or explicit_superlative):
         return Plan('verdict', found, frequency, service, direction)
     if found:
         return Plan('fields', found, frequency, service, direction)
