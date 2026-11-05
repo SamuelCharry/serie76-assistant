@@ -18,7 +18,7 @@ A scripted model returns predetermined tool calls; the real tools then execute v
 
 ## OpenRouter model selection
 
-**OpenRouter acceptance completed on 2026-11-05:** USD 1.17 spent from the USD 10 key. Blind strict review used three independent reviewers per round and shuffled variants per conversation: held-out v10 (41 conversations) + v11 (40), 81 total, including 74 in English. These are measured cohort results, not current price quotes or latency guarantees.
+**Historical OpenRouter v10/v11 acceptance (2026-11-05):** USD 1.17 spent from the USD 10 key. Blind strict review used three independent reviewers per round and shuffled variants per conversation: held-out v10 (41 conversations) + v11 (40), 81 total, including 74 in English. These are measured cohort results, not current price quotes or latency guarantees.
 
 | Model | English | All | p95 / max | Turns > 10 s | USD / 1,000 LLM turns |
 |---|---:|---:|---:|---:|---:|
@@ -27,9 +27,13 @@ A scripted model returns predetermined tool calls; the real tools then execute v
 | deepseek-v4.1-flash | 59/74 | 65/81 | 8.8 / 10.8 s | 2 | 0.8 |
 | claude-haiku-5.5 | 50/74 | 55/81 | 3.1 / 8.7 s | 0 | 0.7 |
 
-**Decision rule, fixed before re-measuring:** (1) English quality unless statistically tied, (2) no observed turn over 10 s, (3) cost, (4) licence for production only (DeepSeek has open weights; licence still needs verification). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordant); Flash vs DeepSeek: p = 0.125; Haiku is significantly worse (p < 0.001). Lack of significance does not establish equivalence.
+**Historical v10/v11 model-selection rule:** (1) English quality unless statistically tied, (2) no observed turn over 10 s, (3) cost, (4) licence for production only (DeepSeek has open weights; licence still needs verification). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordant); Flash vs DeepSeek: p = 0.125; Haiku is significantly worse (p < 0.001). Lack of significance does not establish equivalence.
 
-**Single-model default:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=` (disabled), `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. No fallback is configured because each interpreted turn needs one simple tool decision, the measured acceptance recorded 0 provider errors, and `.with_retry(stop_after_attempt=2)` already allows two total attempts for transient failures (503, timeout or connection errors). Flash meets the observed latency rule; the final Flash vs `qwen/qwen3.7-plus` comparison on held-out v12 after the code fixes is pending. v11 is now diagnostic/regression evidence only.
+**Single-model default:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=` (disabled), `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. One tool decision per interpreted turn; code validates and SQL supplies figures. Plan B adds validated priority, unpublished request parts and requirement retention, with no additional agents or calls.
+
+**Plan B / T14 retained:** strict blind results are v12 **29/45**, v13 **23/45**, and new held-out v14 **32/45 (71%)**. These are different cohorts, so the difference is not a causal estimate. v13 is diagnostic only. The fixed T14 rule required at least 27/45, all offline gates green and p95 at most 10 s. v14 had 85 turns (66 interpreted), p95 **6.2 s**, maximum **9.3 s**, no turns above 10 s and no HTTP errors. In v13, two of 79 interpreted turns took 11–16 s in single provider calls, not code loops. Plan B spent **USD 0.236607225**; settled total key usage was **USD 1.919522541**.
+
+**Verified on the final Plan B source:** 615 Python tests run (613 passed, two skipped); v7 453/453; T10 48/48 (8/48 before fixes); T12 47/47 (7/47 before); T14 42/42 (7/42 before). All required gates exited zero. Tool schema: **5,520 bytes / 108 enum values**; live preflight accepted. Ranking NDCG@3 **0.965378**, returned compliance **1.0**. Recorded v13 decisions replayed without inference at 23/45 before and 28/45 after; this is diagnostic and old decisions lack the new fields. [T14 report](../../../reports/submission/T14-plan-b.md).
 
 Schema preflight passed for gemini-3.6-flash, gemini-3.8-flash, gpt-6-luna, deepseek-v4.1-flash and gpt-6-sol. claude-haiku-5.5 passes only with `OPENROUTER_REQUIRE_PARAMETERS=false`: OpenRouter does not route `tool_choice=required` to Anthropic with `require_parameters`. claude-sonnet-5.5 rejects `tool_choice=required`. This records the tested routing, not future availability.
 
@@ -39,13 +43,13 @@ OpenRouter `google/gemini-embedding-2` produced vectors identical to Google's in
 
 ## T10 oracle suite: model vs code defects
 
-In v11 the three best models failed the same nine conversations. The coordinator traced those shared failures to deterministic code after the model decision. The T10 suite scripts the ideal LLM decision: **8/48 before fixes, 48/48 after**, as reported by the coordinator, not re-run by this documentation task. It isolates bound corrections, AC/DC grounding, objective persistence, reference operations, compound out-of-scope parts, every/all, overview paraphrases, hazard suitability, ranking labels and empty interpretation.
+In v11 the three best models failed the same nine conversations. The coordinator traced those shared failures to deterministic code after the model decision. The T10 suite scripts the ideal LLM decision: **8/48 before fixes, 48/48 after**, reverified on the final T14 source. It isolates bound corrections, AC/DC grounding, objective persistence, reference operations, compound out-of-scope parts, every/all, overview paraphrases, hazard suitability, ranking labels and empty interpretation.
 
 ```text
 python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_t10.json --config config/agent_acceptance_t10.json
 ```
 
-Run from the repository root in the backend Python environment with the catalogue available. This is a scripted code regression check, not paid model inference or proof of language understanding. Method references: IC-DST (EMNLP 2022) for add/replace/remove state deltas; Dataflow (TACL 2020) for reference operations. See [state semantics](agent.md#state-deltas-and-reference-operations-t10). v11 is now diagnostic/regression only; generalization claims require a new held-out v12 after the fixes. Earlier Google rounds below are historical and are not pooled with this OpenRouter selection.
+Run from the repository root in the backend Python environment with the catalogue available. This is a scripted code regression check, not paid model inference or proof of language understanding. Method references: IC-DST (EMNLP 2022) for add/replace/remove state deltas; Dataflow (TACL 2020) for reference operations. See [state semantics](agent.md#state-deltas-and-reference-operations-t10). v11–v13 are now diagnostic/regression material; the new held-out v14 result is reported above. Earlier Google rounds below are historical and are not pooled with this OpenRouter selection.
 
 ## How we know a difference is real
 
@@ -279,4 +283,6 @@ Where: [preflight script](../../../scripts/check_tool_schemas.py), [complexity/o
 
 ## Known limits
 
-No automatic test establishes arbitrary-language correctness or heterogeneous OCR accuracy. Local DB tests may create scoped test records or rollback transactions. Post-fix held-out v12 and the full Android → real model → SQL → Android path remain pending.
+No automatic test establishes arbitrary-language correctness or heterogeneous OCR accuracy. Local DB tests may create scoped test records or rollback transactions. The full Android → real model → SQL → Android path and clean-clone test remain pending.
+
+**Known limitations:** v14 failed 13/45 conversations: intent errors, dropped requirements or request parts, and incomplete explanations remain. Reviewers checked all displayed figures: zero incorrect individual product values, but **two incorrect aggregate counts**. Therefore v14 does not support a claim of zero numeric errors. Emulator, actual voice and Android integration, and a clean-clone test remain pending. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**.

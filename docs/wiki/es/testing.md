@@ -18,7 +18,7 @@ Un modelo programado devuelve herramientas predeterminadas; las herramientas rea
 
 ## Selección de modelo en OpenRouter
 
-**Aceptación OpenRouter completada el 2026-11-05:** USD 1.17 gastados de la clave de USD 10. La revisión ciega estricta usó tres revisores independientes por ronda y variantes mezcladas por conversación: v10 reservado (41 conversaciones) + v11 (40), 81 en total, 74 en inglés. Son resultados medidos de esas cohortes, no precios actuales ni garantías de latencia.
+**Aceptación histórica OpenRouter v10/v11 (2026-11-05):** USD 1.17 gastados de la clave de USD 10. La revisión ciega estricta usó tres revisores independientes por ronda y variantes mezcladas por conversación: v10 reservado (41 conversaciones) + v11 (40), 81 en total, 74 en inglés. Son resultados medidos de esas cohortes, no precios actuales ni garantías de latencia.
 
 | Modelo | Inglés | Total | p95 / max | Turnos > 10 s | USD / 1,000 turnos LLM |
 |---|---:|---:|---:|---:|---:|
@@ -27,9 +27,13 @@ Un modelo programado devuelve herramientas predeterminadas; las herramientas rea
 | deepseek-v4.1-flash | 59/74 | 65/81 | 8.8 / 10.8 s | 2 | 0.8 |
 | claude-haiku-5.5 | 50/74 | 55/81 | 3.1 / 8.7 s | 0 | 0.7 |
 
-**Regla fijada antes de volver a medir:** (1) calidad en inglés salvo empate estadístico, (2) ningún turno observado superior a 10 s, (3) coste, (4) licencia solo para producción (DeepSeek tiene pesos abiertos; falta verificar la licencia). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordantes); Flash vs DeepSeek: p = 0.125; Haiku es significativamente peor (p < 0.001). La falta de significancia no demuestra equivalencia.
+**Regla histórica de selección de modelo v10/v11:** (1) calidad en inglés salvo empate estadístico, (2) ningún turno observado superior a 10 s, (3) coste, (4) licencia solo para producción (DeepSeek tiene pesos abiertos; falta verificar la licencia). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordantes); Flash vs DeepSeek: p = 0.125; Haiku es significativamente peor (p < 0.001). La falta de significancia no demuestra equivalencia.
 
-**Modelo único predeterminado:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=` (desactivado), `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. No se configura fallback porque cada turno interpretado requiere una decisión simple de herramienta, la aceptación medida registró 0 errores del proveedor y `.with_retry(stop_after_attempt=2)` ya permite dos intentos totales ante fallos transitorios (503, timeout o conexión). Flash cumple la regla de latencia observada; queda pendiente la comparación final de Flash frente a `qwen/qwen3.7-plus` en el conjunto reservado v12 tras las correcciones. v11 queda solo como diagnóstico/regresión.
+**Modelo único predeterminado:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=` (desactivado), `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. Una decisión de herramienta por turno interpretado; el código valida y SQL aporta las cifras. Plan B añade prioridad validada, partes no publicadas y retención de requisitos, sin agentes ni llamadas adicionales.
+
+**Plan B / T14 conservado:** resultados ciegos estrictos: v12 **29/45**, v13 **23/45** y nuevo conjunto reservado v14 **32/45 (71 %)**. Son cohortes distintas; la diferencia no estima un efecto causal. v13 queda solo como diagnóstico. La regla T14 exigía al menos 27/45, todos los gates verdes y p95 de hasta 10 s. v14 tuvo 85 turnos (66 interpretados), p95 **6,2 s**, máximo **9,3 s**, ningún turno superior a 10 s y ningún error HTTP. En v13, dos de 79 turnos interpretados tardaron 11–16 s en llamadas individuales al proveedor, no en bucles del código. Plan B gastó **USD 0,236607225**; uso total liquidado de la clave: **USD 1,919522541**.
+
+**Verificado sobre el código final de Plan B:** 615 pruebas Python ejecutadas (613 aprobadas, dos omitidas); v7 453/453; T10 48/48 (8/48 antes); T12 47/47 (7/47 antes); T14 42/42 (7/42 antes). Todos los gates obligatorios terminaron con código cero. Esquema: **5.520 bytes / 108 valores enum**; preflight real aceptado. Ranking NDCG@3 **0,965378**, cumplimiento de resultados **1,0**. Las decisiones grabadas de v13 se reprodujeron sin inferencia: 23/45 antes y 28/45 después; es diagnóstico y las decisiones antiguas no tienen los nuevos campos. [T14 report](../../../reports/submission/T14-plan-b.md).
 
 El preflight de esquema aprobó gemini-3.6-flash, gemini-3.8-flash, gpt-6-luna, deepseek-v4.1-flash y gpt-6-sol. claude-haiku-5.5 solo aprueba con `OPENROUTER_REQUIRE_PARAMETERS=false`: OpenRouter no enruta `tool_choice=required` a Anthropic con `require_parameters`. claude-sonnet-5.5 rechaza `tool_choice=required`. Esto registra el enrutamiento probado, no disponibilidad futura.
 
@@ -39,13 +43,13 @@ OpenRouter `google/gemini-embedding-2` produjo vectores idénticos a los de Goog
 
 ## Oráculo T10: defectos del modelo frente al código
 
-En v11 los tres mejores modelos fallaron las mismas nueve conversaciones. El coordinador atribuyó esos fallos compartidos al código determinista posterior a la decisión. T10 programa la decisión ideal del LLM: **8/48 antes de corregir, 48/48 después**, según el coordinador; esta tarea documental no lo reejecutó. Aísla correcciones de límites, fundamentación AC/DC, persistencia del objetivo, operaciones por referencia, partes fuera de alcance en peticiones compuestas, every/all, paráfrasis de resumen, idoneidad ante peligro, etiquetas de ranking e interpretación vacía.
+En v11 los tres mejores modelos fallaron las mismas nueve conversaciones. El coordinador atribuyó esos fallos compartidos al código determinista posterior a la decisión. T10 programa la decisión ideal del LLM: **8/48 antes de corregir, 48/48 después**, verificado de nuevo sobre el código final de T14. Aísla correcciones de límites, fundamentación AC/DC, persistencia del objetivo, operaciones por referencia, partes fuera de alcance en peticiones compuestas, every/all, paráfrasis de resumen, idoneidad ante peligro, etiquetas de ranking e interpretación vacía.
 
 ```text
 python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_t10.json --config config/agent_acceptance_t10.json
 ```
 
-Ejecutar desde la raíz en el entorno Python backend con el catálogo disponible. Es una regresión de código programada, no inferencia pagada ni prueba de comprensión. Referencias metodológicas: IC-DST (EMNLP 2022) para deltas add/replace/remove; Dataflow (TACL 2020) para operaciones por referencia. Ver [semántica de estado](agent.md#deltas-de-estado-y-operaciones-por-referencia-t10). v11 queda solo para diagnóstico/regresión; afirmar generalización exige un v12 nuevo y reservado tras corregir. Las rondas Google siguientes son históricas y no se suman a esta selección OpenRouter.
+Ejecutar desde la raíz en el entorno Python backend con el catálogo disponible. Es una regresión de código programada, no inferencia pagada ni prueba de comprensión. Referencias metodológicas: IC-DST (EMNLP 2022) para deltas add/replace/remove; Dataflow (TACL 2020) para operaciones por referencia. Ver [semántica de estado](agent.md#deltas-de-estado-y-operaciones-por-referencia-t10). v11–v13 quedan como material de diagnóstico/regresión; el resultado del nuevo conjunto reservado v14 se presenta arriba. Las rondas Google siguientes son históricas y no se suman a esta selección OpenRouter.
 
 ## Behavior evaluation
 
@@ -271,7 +275,9 @@ El [workflow CI](../../../.github/workflows/ci.yml) prepara PostgreSQL, instala 
 
 ## Límites conocidos
 
-Ninguna prueba automática acredita lenguaje arbitrario ni precisión OCR heterogénea. Las pruebas DB pueden crear registros acotados o revertir transacciones. Pendientes v12 reservado tras las correcciones y recorrido Android → modelo real → SQL → Android.
+Ninguna prueba automática acredita lenguaje arbitrario ni precisión OCR heterogénea. Las pruebas DB pueden crear registros acotados o revertir transacciones. Pendientes el recorrido Android → modelo real → SQL → Android y la prueba desde un clon limpio.
+
+**Límites conocidos:** v14 falló 13/45 conversaciones: persisten errores de intención, requisitos o partes omitidas y explicaciones incompletas. Los revisores comprobaron todas las cifras mostradas: cero valores individuales de producto incorrectos, pero **dos conteos agregados incorrectos**. Por tanto, no se afirma que v14 tenga cero errores numéricos. Quedan pendientes emulador, voz real e integración Android y prueba desde un clon limpio. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**.
 
 ## Preflight del esquema antes de cualquier cohorte
 

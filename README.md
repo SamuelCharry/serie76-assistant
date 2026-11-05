@@ -22,7 +22,7 @@ flowchart LR
 |---|---|---|
 | OCR and PostgreSQL catalogue | [941/941 primary checks](docs/evidence/ocr.md), idempotent loading | New layouts |
 | T8 interaction, recommendations, actions, deletion, planner and guards | [T8–T8h backend](docs/wiki/en/testing.md), [51 T8 JVM tests](reports/submission/T8-android.md) | Real device flow |
-| T9 additive embeddings | [484 Python tests, 2 skips; 446 scripted scenarios](reports/submission/T9-embeddings.md), Google smoke | Post-fix held-out v12 |
+| T9 additive embeddings | [484 Python tests, 2 skips; 446 scripted scenarios](reports/submission/T9-embeddings.md), Google smoke | Emulator and clean clone; v14 32/45 |
 | T9 voice and per-answer debug | [74 JVM tests, debug/release APKs](reports/submission/T9-android.md) | Actual voice, UI and integrated backend on device |
 | Login, private history, Docker | [Authentication](docs/wiki/en/api.md), [reproducible startup](reports/submission/T2.md) | Public HTTPS and final reproduction |
 
@@ -163,7 +163,7 @@ Open Series 76 and use a test account. Emulator backend: `http://10.0.2.2:8000/`
 
 After a comparison or a shown list, ask `which one do you recommend and why?` or `¿cuál me recomiendas?`. Recommendations stay within those shown models, apply active and newly stated requirements before ranking, explain exclusions with catalogue values, and state the priority, advantages and runner-up trade-off. `Which should I buy?` asks for selection advice; it does not place an order. If none qualifies, the nearest shown model is explicitly described as failing, never recommended.
 
-**OpenRouter acceptance completed on 2026-11-05:** USD 1.17 spent from the USD 10 key. Blind strict review used three independent reviewers per round and shuffled variants per conversation: held-out v10 (41 conversations) + v11 (40), 81 total, including 74 in English. These are measured cohort results, not current price quotes or latency guarantees.
+**Historical OpenRouter v10/v11 acceptance (2026-11-05):** USD 1.17 spent from the USD 10 key. Blind strict review used three independent reviewers per round and shuffled variants per conversation: held-out v10 (41 conversations) + v11 (40), 81 total, including 74 in English. These are measured cohort results, not current price quotes or latency guarantees.
 
 | Model | English | All | p95 / max | Turns > 10 s | USD / 1,000 LLM turns |
 |---|---:|---:|---:|---:|---:|
@@ -172,15 +172,19 @@ After a comparison or a shown list, ask `which one do you recommend and why?` or
 | deepseek-v4.1-flash | 59/74 | 65/81 | 8.8 / 10.8 s | 2 | 0.8 |
 | claude-haiku-5.5 | 50/74 | 55/81 | 3.1 / 8.7 s | 0 | 0.7 |
 
-**Decision rule, fixed before re-measuring:** (1) English quality unless statistically tied, (2) no observed turn over 10 s, (3) cost, (4) licence for production only (DeepSeek has open weights; licence still needs verification). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordant); Flash vs DeepSeek: p = 0.125; Haiku is significantly worse (p < 0.001). Lack of significance does not establish equivalence.
+**Historical v10/v11 model-selection rule:** (1) English quality unless statistically tied, (2) no observed turn over 10 s, (3) cost, (4) licence for production only (DeepSeek has open weights; licence still needs verification). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordant); Flash vs DeepSeek: p = 0.125; Haiku is significantly worse (p < 0.001). Lack of significance does not establish equivalence.
 
-**Single-model default:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=` (disabled), `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. No fallback is configured because each interpreted turn needs one simple tool decision, the measured acceptance recorded 0 provider errors, and `.with_retry(stop_after_attempt=2)` already allows two total attempts for transient failures (503, timeout or connection errors). Flash meets the observed latency rule; the final Flash vs `qwen/qwen3.7-plus` comparison on held-out v12 after the code fixes is pending. v11 is now diagnostic/regression evidence only. [Preflight, other models, embeddings and T10 oracle](docs/wiki/en/testing.md#openrouter-model-selection).
+**Single-model default:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=` (disabled), `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. One tool decision per interpreted turn; code validates and SQL supplies figures. Plan B adds validated priority, unpublished request parts and requirement retention, with no additional agents or calls.
+
+**Plan B / T14 retained:** strict blind results are v12 **29/45**, v13 **23/45**, and new held-out v14 **32/45 (71%)**. These are different cohorts, so the difference is not a causal estimate. v13 is diagnostic only. The fixed T14 rule required at least 27/45, all offline gates green and p95 at most 10 s. v14 had 85 turns (66 interpreted), p95 **6.2 s**, maximum **9.3 s**, no turns above 10 s and no HTTP errors. In v13, two of 79 interpreted turns took 11–16 s in single provider calls, not code loops. Plan B spent **USD 0.236607225**; settled total key usage was **USD 1.919522541**.
+
+**Verified on the final Plan B source:** 615 Python tests run (613 passed, two skipped); v7 453/453; T10 48/48 (8/48 before fixes); T12 47/47 (7/47 before); T14 42/42 (7/42 before). All required gates exited zero. Tool schema: **5,520 bytes / 108 enum values**; live preflight accepted. Ranking NDCG@3 **0.965378**, returned compliance **1.0**. Recorded v13 decisions replayed without inference at 23/45 before and 28/45 after; this is diagnostic and old decisions lack the new fields. [T14 report](reports/submission/T14-plan-b.md).
 
 **How:** the LLM never produces final numbers: one decision per interpreted turn, zero on deterministic routes. Retrieval only adds unresolved fields; it cannot replace explicit requirements. The final guard checks quantity and filter coverage; SQL/templates preserve units, N/A and provenance. Ranking declares its criterion, not suitability certification. **Code:** [agent](backend/conversation/agent.py), [coverage guard](backend/conversation/requirement_coverage.py), [ranking](backend/conversation/ranking.py); [architecture](docs/wiki/en/agent.md), [decisions and trade-offs](docs/wiki/en/patterns.md).
 
 **Historical Google quality (before T10):** On 41 unseen conversations (68 turns): 0 wrong catalogue numbers in 491 checked values, all replies under 10 s, 18 of 19 everyday conversations fully correct and 82 % of turns correct; weaker on unusual phrasing (12 of 22 adversarial conversations), mainly open/close or modulating needs written in plain or Spanish wording and site descriptions. [Turn-level results, intervals and scoring differences](docs/wiki/en/testing.md#turn-level-and-everyday-use-view).
 
-**Known limitations:** T10 repairs pass 48/48 scripted oracle scenarios (8/48 before fixes), as reported by the coordinator; this does not establish real-model generalization. New held-out v12, actual voice and Android integration remain pending. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**.
+**Known limitations:** v14 failed 13/45 conversations: intent errors, dropped requirements or request parts, and incomplete explanations remain. Reviewers checked all displayed figures: zero incorrect individual product values, but **two incorrect aggregate counts**. Therefore v14 does not support a claim of zero numeric errors. Emulator, actual voice and Android integration, and a clean-clone test remain pending. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**.
 
 ## Reproduction gates
 
