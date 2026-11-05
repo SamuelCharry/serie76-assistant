@@ -213,6 +213,18 @@ Seis personas, conjuntos congelados y revisión independiente por conversación;
 
 Congelaría una cohorte nueva para medir las reparaciones sin reutilizar entrenamiento, con revisión independiente y costes/latencia separados. Cerraría aceptación OpenRouter autorizada y pruebas Android reales de voz, filtros y debug; después mediría carga, colas/cupos globales y recuperación. Mientras tanto, el ingeniero confirma filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar.
 
+## 40. ¿Es 73 % mejor que 71 %?
+
+Es mayor en esta muestra, pero no demuestra una mejora: son 30 frente a 29 aprobaciones de las mismas 41 conversaciones. ON−OFF tiene IC95% de −4,9 a +12,2 puntos y McNemar p=1; ambas direcciones siguen siendo compatibles con la incertidumbre. [Resultados](testing.md#cómo-sabemos-si-una-diferencia-es-real).
+
+## 41. ¿Por qué McNemar y no comparar porcentajes?
+
+Porque cada conversación se probó con ambas configuraciones: solo cuentan los desacuerdos, 2 a favor de ON y 1 de OFF. Comparar porcentajes ignora ese emparejamiento; McNemar pregunta si los desacuerdos favorecen sistemáticamente un lado. No rechazar igualdad tampoco demuestra equivalencia.
+
+## 42. ¿Cómo justificaste k = 5 en la recuperación?
+
+Como límite provisional de contexto, no como óptimo probado. Con 649 ejemplos y excluyendo cada consulta y sus textos idénticos, MRR sin umbral fue 0,476/0,546/0,563/0,570 para k=1/3/5/8: después de cinco la ganancia es pequeña. P@5 fue solo 38,2%; el umbral 0,70 cubre 98,3% pero apenas mejora la precisión de los vecinos devueltos, así que requiere calibración con consultas nuevas. [Métrica y límites](testing.md#diagnóstico-del-recuperador).
+
 ## Límites conocidos
 
 No hay aceptación OpenRouter ni Android con LLM real cerrada; la voz está implementada con pruebas JVM, pendiente en dispositivo; no hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.

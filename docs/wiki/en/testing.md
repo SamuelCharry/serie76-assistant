@@ -16,6 +16,47 @@ A scripted model returns predetermined tool calls; the real tools then execute v
 - [test_auth.py](../../../tests/test_auth.py): Hashed auth, revocation, owner isolation and Android-facing auth contract.
 - [test_submission_readiness.py](../../../tests/test_submission_readiness.py): Routing require_parameters, process call guard and idempotent demo users.
 
+## How we know a difference is real
+
+A 95% bootstrap interval describes variation from resampling these conversations; it does not cover reviewer bias or guarantee performance on new domains.
+McNemar compares paired pass/fail outcomes: **only the conversations where the two setups disagree count**.
+We resample whole conversations 10,000 times with seed 20261104, use percentile intervals and a two-sided exact McNemar test.
+
+| Setup | Strict pass | 95% CI | Paired McNemar p |
+|---|---:|---:|---:|
+| Round 9 retrieval ON | 30/41 (73.2%) | 58.5–85.4% | 1.000 vs OFF |
+| Round 9 retrieval OFF | 29/41 (70.7%) | 56.1–82.9% | same comparison |
+| Round 10 Flash | 28/41 (68.3%) | 53.7–82.9% | 1.000 vs Pro |
+| Round 10 Pro | 28/41 (68.3%) | 53.7–82.9% | same comparison |
+
+ON/OFF has 2 vs 1 discordant pairs; ON−OFF is +2.44 percentage points (95% CI −4.9 to +12.2). Flash/Pro has 3 vs 3; Flash−Pro is 0 points (−12.2 to +12.2).
+The honest result is **about 70% strict pass**, with wide uncertainty: neither comparison is statistically distinguishable at n=41; this does not prove equivalence. Flash is chosen for the large observed latency advantage, p95 about **4 s vs 7.4 s** (coordinator-supplied observations, not a latency significance test).
+At n=41, six disagreements all favoring one setup, with all other pairs agreeing, give p=0.03125; five give p=0.0625. This is a best-case discordance count, not a sample-size/power calculation.
+[Script and complete round results](../../../reports/submission/T9-S1-stats.md); [verdicts](../../../reports/behavior/verdicts.json), [stats JSON](../../../reports/behavior/stats.json). Rounds 3–8 have aggregate intervals only; no invented pairing or pooling across rounds.
+
+### Retriever diagnostic
+
+Leave-one-out on **649 active stored examples**, with no new embeddings, excludes self and exact duplicate text. Relevance requires the same tool, service, enclosure, voltage and torque operators, including missing fields; torque values/units and non-search codes/terms are deliberately outside this pattern metric. P@k is relevant neighbors divided by k (empty slots miss); MRR@5 averages 1/rank of the first relevant neighbor, or zero. Coverage means at least one returned example, not at least one relevant example.
+
+| Cosine cutoff | P@1 | P@3 | P@5 | MRR@5 | Coverage |
+|---|---:|---:|---:|---:|---:|
+| None | 47.6% | 41.1% | 38.2% | 0.563 | 100% |
+| Current 0.70 | 47.0% | 39.3% | 35.6% | 0.551 | 98.3% |
+
+Unfiltered MRR rises from 0.476/0.546/0.563/0.570 at k=1/3/5/8: k=5 is a provisional context cap with diminishing gains, not a proven optimum. At 0.70, precision among returned neighbors is still 38.2%; this snapshot does **not** justify the threshold as a relevance filter. The [full sweep](../../../reports/behavior/retrieval.json) exposes the coverage trade-off. Fifteen queries have no relevant peer; related phrases can remain across the split, and the coarse labels cannot certify correct recommendations. Validate on fresh labeled queries before tuning; production settings are unchanged.
+
+### Impact and why integrity comes first
+
+Provost's expected-value idea is to weight each outcome's benefit/cost by its probability, rather than treating every error equally. The following assumptions are **illustrative relative units**, not measured money or client-approved values; the client must set real costs and we have not estimated a financial return.
+
+| Outcome | Illustrative relative benefit/cost | Reason |
+|---|---:|---|
+| Correct recommendation | +1 | Saves an engineer's manual table lookup |
+| Clarification question | −0.1 | Small extra interaction cost |
+| Integrity error: wrong enclosure or service | −100 | Potentially very costly wrong selection |
+
+Expected utility would be `P(correct) × 1 − P(clarification) × 0.1 − P(integrity error) × 100`; strict pass rates do not estimate those separate probabilities. This is why the design trades some convenience for verification and confirmation.
+
 ## Behavior evaluation
 
 T8/T9 rounds use held-out sets frozen before reading answers, six personas and strict independent review of complete conversations. This table and the model comparison were supplied by the coordinator for this delivery; linked reports document subsequent repairs and local verification. Their scripted replays are not new provider measurements.

@@ -29,3 +29,8 @@ data/processed/*
 # Generated verification runs; submission reports are retained.
 reports/*
 !reports/submission/
+!reports/behavior/
+reports/behavior/*
+!reports/behavior/verdicts.json
+!reports/behavior/stats.json
+!reports/behavior/retrieval.json

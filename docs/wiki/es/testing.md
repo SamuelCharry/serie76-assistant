@@ -53,6 +53,47 @@ El banco v7 guarda frases/interpretaciones y todos los IDs de origen, nunca las 
 [T9 embeddings](../../../reports/submission/T9-embeddings.md): **484 pruebas Python, 2 omisiones opcionales; 446 escenarios scripted sin fallos**, replay de 41 conversaciones por modo/138 turnos totales, SQL local, esquema y scanner. [T8 Android](../../../reports/submission/T8-android.md): 51 JVM; [T9 Android](../../../reports/submission/T9-android.md): **74 JVM y APK debug/release**, sin dispositivo ni voz real. Son resultados de esos informes, no suites reejecutadas por la tarea documental. Las secciones T7/v6 siguientes son históricas; sus cohortes sí pueden solaparse y no se suman a T8/T9.
 
 
+## Cómo sabemos si una diferencia es real
+
+Un intervalo bootstrap del 95% describe la variación al remuestrear estas conversaciones; no cubre sesgos del evaluador ni garantiza resultados en otros dominios.
+McNemar compara aprobaciones/fallos pareados: **solo cuentan las conversaciones donde las dos configuraciones discrepan**.
+Remuestreamos conversaciones completas 10.000 veces con semilla 20261104, intervalos percentiles y McNemar exacto bilateral.
+
+| Configuración | Aprobación estricta | IC95% | p de McNemar pareado |
+|---|---:|---:|---:|
+| Ronda 9 recuperación ON | 30/41 (73,2%) | 58,5–85,4% | 1,000 vs OFF |
+| Ronda 9 recuperación OFF | 29/41 (70,7%) | 56,1–82,9% | misma comparación |
+| Ronda 10 Flash | 28/41 (68,3%) | 53,7–82,9% | 1,000 vs Pro |
+| Ronda 10 Pro | 28/41 (68,3%) | 53,7–82,9% | misma comparación |
+
+ON/OFF tiene 2 frente a 1 pares discordantes; ON−OFF es +2,44 puntos porcentuales (IC95% −4,9 a +12,2). Flash/Pro tiene 3 frente a 3; Flash−Pro es 0 puntos (−12,2 a +12,2).
+La conclusión honesta es **cerca del 70% de aprobación estricta**, con incertidumbre amplia: ninguna comparación se distingue estadísticamente con n=41; eso no demuestra equivalencia. Flash se elige por la gran ventaja de latencia observada, p95 de unos **4 s frente a 7,4 s** (observaciones suministradas por el coordinador, no una prueba estadística de latencia).
+Con n=41, seis discrepancias todas a favor de una configuración y acuerdo en los demás casos dan p=0,03125; cinco dan p=0,0625. Es el mínimo favorable de discordancias, no un cálculo de potencia/tamaño muestral.
+[Script y resultados de todas las rondas](../../../reports/submission/T9-S1-stats.md); [veredictos](../../../reports/behavior/verdicts.json), [JSON estadístico](../../../reports/behavior/stats.json). Rondas 3–8 tienen solo intervalos agregados; no inventamos parejas ni sumamos rondas.
+
+### Diagnóstico del recuperador
+
+Leave-one-out sobre **649 ejemplos activos almacenados**, sin embeddings nuevos, excluyendo el propio ejemplo y texto idéntico. Relevancia exige igual herramienta, servicio, carcasa, voltaje y operadores de torque, incluidos campos ausentes; magnitudes/unidades del torque y códigos/términos de otras herramientas quedan fuera de esta métrica de patrones. P@k divide vecinos relevantes entre k (huecos cuentan como fallo); MRR@5 promedia 1/posición del primer relevante, o cero. Cobertura significa recibir algún ejemplo, no necesariamente relevante.
+
+| Corte de coseno | P@1 | P@3 | P@5 | MRR@5 | Cobertura |
+|---|---:|---:|---:|---:|---:|
+| Ninguno | 47,6% | 41,1% | 38,2% | 0,563 | 100% |
+| Actual 0,70 | 47,0% | 39,3% | 35,6% | 0,551 | 98,3% |
+
+Sin corte, MRR sube 0,476/0,546/0,563/0,570 con k=1/3/5/8: k=5 limita contexto con ganancias decrecientes, pero no es un óptimo demostrado. Con 0,70, la precisión entre vecinos devueltos sigue en 38,2%; esta muestra **no justifica** el umbral como filtro de relevancia. El [barrido completo](../../../reports/behavior/retrieval.json) muestra el coste en cobertura. Quince consultas no tienen par relevante; pueden quedar paráfrasis relacionadas entre conjuntos y estas etiquetas no certifican recomendaciones correctas. Validar con consultas nuevas antes de ajustar; no se cambiaron parámetros de producción.
+
+### Impacto y por qué la integridad va primero
+
+La idea de valor esperado de Provost pondera beneficio/coste de cada resultado por su probabilidad, en lugar de tratar todos los errores igual. Estas son **suposiciones ilustrativas en unidades relativas**, no dinero medido ni valores aprobados por el cliente; el cliente fija los costes reales y no hemos estimado retorno económico.
+
+| Resultado | Beneficio/coste relativo ilustrativo | Motivo |
+|---|---:|---|
+| Recomendación correcta | +1 | Ahorra al ingeniero una búsqueda manual en tablas |
+| Pregunta de aclaración | −0,1 | Pequeño coste de interacción adicional |
+| Error de integridad: carcasa o servicio incorrecto | −100 | Selección equivocada potencialmente muy costosa |
+
+La utilidad esperada sería `P(correcta) × 1 − P(aclaración) × 0,1 − P(error de integridad) × 100`; la aprobación estricta no estima esas probabilidades por separado. Por eso el diseño sacrifica algo de comodidad a cambio de verificación y confirmación.
+
 ## Ejecutar localmente
 
 Inicia Compose desde el [README](../../../README.es.md); crea y activa un entorno Python 3.12 desde la raíz. Ejecuta solo el bloque de tu shell:

@@ -1,0 +1,151 @@
+{
+  "seed": 20261104,
+  "resamples": 10000,
+  "method": "percentile bootstrap, whole conversations",
+  "configurations": [
+    {
+      "configuration": "round3/rules",
+      "passed": 21,
+      "n": 45,
+      "pass_rate": 0.4666666666666667,
+      "ci95": [
+        0.3111111111111111,
+        0.6
+      ]
+    },
+    {
+      "configuration": "round4/rules",
+      "passed": 24,
+      "n": 45,
+      "pass_rate": 0.5333333333333333,
+      "ci95": [
+        0.37777777777777777,
+        0.6666666666666666
+      ]
+    },
+    {
+      "configuration": "round5/rules",
+      "passed": 21,
+      "n": 44,
+      "pass_rate": 0.4772727272727273,
+      "ci95": [
+        0.3409090909090909,
+        0.6136363636363636
+      ]
+    },
+    {
+      "configuration": "round6/rules",
+      "passed": 28,
+      "n": 43,
+      "pass_rate": 0.6511627906976745,
+      "ci95": [
+        0.5116279069767442,
+        0.7906976744186046
+      ]
+    },
+    {
+      "configuration": "round7/rules",
+      "passed": 24,
+      "n": 43,
+      "pass_rate": 0.5581395348837209,
+      "ci95": [
+        0.4186046511627907,
+        0.6976744186046512
+      ]
+    },
+    {
+      "configuration": "round8/retrieval_on",
+      "passed": 25,
+      "n": 41,
+      "pass_rate": 0.6097560975609756,
+      "ci95": [
+        0.4634146341463415,
+        0.7560975609756098
+      ]
+    },
+    {
+      "configuration": "round8/retrieval_off",
+      "passed": 26,
+      "n": 41,
+      "pass_rate": 0.6341463414634146,
+      "ci95": [
+        0.4878048780487805,
+        0.7804878048780488
+      ]
+    },
+    {
+      "configuration": "round9_retrieval/retrieval_on",
+      "passed": 30,
+      "n": 41,
+      "pass_rate": 0.7317073170731707,
+      "ci95": [
+        0.5853658536585366,
+        0.8536585365853658
+      ]
+    },
+    {
+      "configuration": "round9_retrieval/retrieval_off",
+      "passed": 29,
+      "n": 41,
+      "pass_rate": 0.7073170731707317,
+      "ci95": [
+        0.5609756097560976,
+        0.8292682926829268
+      ]
+    },
+    {
+      "configuration": "round10_models/gemini-3.6-flash",
+      "passed": 28,
+      "n": 41,
+      "pass_rate": 0.6829268292682927,
+      "ci95": [
+        0.5365853658536586,
+        0.8292682926829268
+      ]
+    },
+    {
+      "configuration": "round10_models/gemini-3.1-pro-preview",
+      "passed": 28,
+      "n": 41,
+      "pass_rate": 0.6829268292682927,
+      "ci95": [
+        0.5365853658536586,
+        0.8292682926829268
+      ]
+    }
+  ],
+  "paired": [
+    {
+      "comparison": "round9_retrieval",
+      "a": "retrieval_on",
+      "b": "retrieval_off",
+      "n": 41,
+      "only_a": 2,
+      "only_b": 1,
+      "p_value": 1.0,
+      "difference": 0.024390243902439025,
+      "ci95": [
+        -0.04878048780487805,
+        0.12195121951219512
+      ],
+      "minimum_one_way": 6,
+      "verdict": "not significant: the difference is within sampling noise"
+    },
+    {
+      "comparison": "round10_models",
+      "a": "gemini-3.6-flash",
+      "b": "gemini-3.1-pro-preview",
+      "n": 41,
+      "only_a": 3,
+      "only_b": 3,
+      "p_value": 1.0,
+      "difference": 0.0,
+      "ci95": [
+        -0.12195121951219512,
+        0.12195121951219512
+      ],
+      "minimum_one_way": 6,
+      "verdict": "not significant: the difference is within sampling noise"
+    }
+  ]
+}
