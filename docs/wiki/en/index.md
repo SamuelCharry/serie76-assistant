@@ -38,4 +38,4 @@ Evidence: [OCR](../../evidence/ocr.md), [PostgreSQL](../../evidence/postgres.md)
 
 ## Known limits
 
-OpenRouter acceptance and Android-to-real-LLM acceptance are pending. T8 interaction and T9 embeddings/voice/hidden debug are implemented and locally tested; actual device voice remains pending. Earlier progress checklists are historical, not current proof.
+OpenRouter acceptance completed on 2026-11-05; see [Models](../../../README.md#models-design-and-limitations). Post-fix held-out v12 remains pending. Android-to-real-LLM acceptance remains pending. T8 interaction and T9 embeddings/voice/hidden debug are implemented and locally tested; actual device voice remains pending. Earlier progress checklists are historical, not current proof.

@@ -26,7 +26,7 @@ Brief received Monday 2026-11-02; delivery due within one week (Sunday 2026-11-0
 ## Pending
 
 - [ ] OpenRouter acceptance with the provided key (issue #2). Readiness: `python scripts/check_openrouter.py`, then a capped cohort with `config/agent_acceptance_openrouter.json` (safety cap USD 1.00).
-- [ ] After authorized OpenRouter acceptance, update README status and evidence with that actual provider result; do not relabel Google or scripted evidence.
+- [x] OpenRouter acceptance completed on 2026-11-05; [README Models](../README.md#models-design-and-limitations) records provider results and provisional defaults; post-fix held-out v12 remains pending, and historical Google/scripted evidence is unchanged.
 - [ ] After future behavior changes, repeat a fresh frozen held-out cohort with provenance exclusions and independent strict review; preserve the disclosed round 9–10 results.
 - [ ] Verify Android on emulator/device against the merged backend: real voice services/permissions, transcript review, questions/actions/deletion and lazy debug for current/resumed answers with DEV_DEBUG true/false.
 - [ ] Confirm fresh-clone reproduction and current remote CI for the final commit; macOS/Linux commands are documented, not executed on a separate host by the docs task.

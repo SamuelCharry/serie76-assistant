@@ -24,8 +24,8 @@ The README table covers the added embedding/debug settings. [.env.example](../..
 | `API_PORT` | `8000` | Host loopback HTTP port; container stays 8000. |
 | `OPENROUTER_API_KEY` | _empty_ | Private model credential; empty disables conversation interpretation. |
 | `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` | OpenAI-compatible chat endpoint; production default is OpenRouter. |
-| `OPENROUTER_CHAT_MODEL` | _empty_ | Explicit tool-calling model ID; no automatic model selection. |
-| `OPENROUTER_FALLBACK_MODEL` | _empty_ | Optional fallback model on the same endpoint/key; empty disables it. Transient failures only. |
+| `OPENROUTER_CHAT_MODEL` | `google/gemini-3.6-flash` (provisional) | Explicit tool-calling model ID; no automatic model selection. |
+| `OPENROUTER_FALLBACK_MODEL` | `openai/gpt-6-luna` (provisional) | Optional fallback model on the same endpoint/key; empty disables it. Transient failures only. |
 | `AGENT_TURN_DEADLINE_S` | `60` | Shared deadline for primary attempts and fallback, below Android's 70/75 s timeouts. |
 | `AGENT_RETRY_MIN_REMAINING_S` | `10` | Minimum remaining seconds to start an attempt; otherwise record deadline_skipped without a reservation. |
 | `AGENT_MAX_TOKENS` | `2048` | Maximum generated tokens per decision. |
@@ -38,7 +38,7 @@ The README table covers the added embedding/debug settings. [.env.example](../..
 | `LANGSMITH_PROJECT` | `serie76-assistant` | Trace project name. |
 | `LANGSMITH_ENDPOINT` | `https://api.smith.langchain.com` | Trace service endpoint; configure EU host for an EU workspace. |
 | `DEV_DEBUG` | `false` | Owner-scoped developer trace endpoint; false returns 404. |
-| `OPENROUTER_EMBEDDING_MODEL` | _empty_ | Optional model; Google `gemini-embedding-2`, OpenRouter `google/gemini-embedding-2`. |
+| `OPENROUTER_EMBEDDING_MODEL` | `google/gemini-embedding-2` (provisional) | Optional model; Google `gemini-embedding-2`, OpenRouter `google/gemini-embedding-2`. |
 | `EMBEDDINGS_ENABLED` | `true` | ON only with a configured model; `false` forces OFF. |
 | `EMBEDDING_DIM` | `768` | Only dimension accepted by schema/client. |
 | `EMBEDDING_BASE_URL` | _empty_ | Inherits `OPENROUTER_BASE_URL` when empty. |
@@ -75,7 +75,9 @@ OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash
 docker compose up -d backend
 curl http://localhost:8000/ready
 ```
-The model was evaluated through Google's OpenAI-compatible endpoint; OpenRouter acceptance is pending. A ready=200 response checks catalogue/glossary, not credentials, model routing or remaining balance. LangSmith remains off unless tracing=true and a key are both present; enabling it sends prompts/user text/tool data/catalogue rows externally. See [agent](agent.md).
+OpenRouter acceptance completed on 2026-11-05; see [Models](../../../README.md#models-design-and-limitations). Post-fix held-out v12 remains pending. A ready=200 response checks catalogue/glossary, not credentials, model routing or remaining balance. LangSmith remains off unless tracing=true and a key are both present; enabling it sends prompts/user text/tool data/catalogue rows externally. See [agent](agent.md).
+
+The OpenRouter bank reload used `google/gemini-embedding-2`: 658 examples + 100 anchors, about USD 0.0015; see [Models](../../../README.md#models-design-and-limitations).
 
 ## pgvector
 
@@ -152,7 +154,7 @@ For private account administration, `python -m backend.auth.cli create-user --em
 
 Run `python scripts/check_tool_schemas.py` offline first. It builds the real four production tools without a database or credentials and prints compact bytes, enum values, arrays, required fields, depth, numeric range keywords and lookup object arrays. Offline guards cap enums/arrays/required/depth at the pre-T6 counts (108/6/5/7) and reject numeric ranges, nullable unions/references and object arrays in get_actuator. Byte size alone did not predict the provider's cumulative schema limit.
 
-Only after explicit paid-call approval, run `python scripts/check_tool_schemas.py --live` with OPENROUTER_API_KEY, OPENROUTER_CHAT_MODEL and optional OPENROUTER_BASE_URL already in the process environment. It never loads .env or prints the key, provider response or exception body; it sends exactly one request with all four tools and the production system/glossary prompt, disables tracing, performs no tool/SQL execution and has no retries. A 400 or other failure exits non-zero: stop before the cohort. A successful preflight checks schema acceptance only, not conversation quality. Re-run after any tool-schema change; the compact-schema live check is pending until the coordinator runs it.
+Only after explicit paid-call approval, run `python scripts/check_tool_schemas.py --live` with OPENROUTER_API_KEY, OPENROUTER_CHAT_MODEL and optional OPENROUTER_BASE_URL already in the process environment. It never loads .env or prints the key, provider response or exception body; it sends exactly one request with all four tools and the production system/glossary prompt, disables tracing, performs no tool/SQL execution and has no retries. A 400 or other failure exits non-zero: stop before the cohort. A successful preflight checks schema acceptance only, not conversation quality. Re-run after any tool-schema change; see the recorded [OpenRouter preflight results](testing.md#openrouter-model-selection).
 
 Where: [preflight script](../../../scripts/check_tool_schemas.py), [complexity/one-call tests](../../../tests/test_tool_schema_budget.py), [metadata-only readiness script](../../../scripts/check_openrouter.py).
 

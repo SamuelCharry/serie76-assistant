@@ -57,7 +57,7 @@ Los defectos deterministas de A–E (validación DC + 60 Hz y pedir completar un
 
 El [motor archivado](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/architecture_eval/engine.py) hace 2 decisiones de proveedor en turnos completos C/E; D usa 1 al aclarar, 2 en catálogo o 3 con contexto, excluyendo embeddings/FixedRouter local. Con [19 fallos de proveedor en 103 llamadas](../../evidence/architecture_comparison.md) y [presupuesto de USD 10](https://github.com/SamuelCharry/serie76-assistant/blob/archive/pre-cleanup/docs/adr/0001-arquitectura-agente.md), cada llamada extra añade exposición a fallo, latencia y coste. No son probabilidades de fallo independientes.
 
-A+ logró [50/55 en v4 con 4 fallos solo de proveedor](../../evidence/agent_acceptance.md), mediante Google. A–E fue inconcluso: un agente es decisión de ingeniería, no superioridad medida. Reconsideraría varios ante flujos realmente distintos o un corpus grande que exija recuperación especializada; aceptación OpenRouter pendiente.
+A+ logró [50/55 en v4 con 4 fallos solo de proveedor](../../evidence/agent_acceptance.md), mediante Google. A–E fue inconcluso: un agente es decisión de ingeniería, no superioridad medida. Reconsideraría varios ante flujos realmente distintos o un corpus grande que exija recuperación especializada; La aceptación OpenRouter se completó el 2026-11-05; ver [Models](../../../README.md#models-design-and-limitations). Sigue pendiente el v12 reservado tras las correcciones.
 
 ### Interacción estructurada y presentación determinista
 
@@ -65,7 +65,7 @@ A+ logró [50/55 en v4 con 4 fallos solo de proveedor](../../evidence/agent_acce
 
 ### Reintentos acotados y vida de conexiones
 
-[agent.py](../../../backend/conversation/agent.py) usa retry LangChain solo ante fallos transitorios, conservando una decisión completada por turno de lenguaje y cero para saludos/envíos estructurados. Predeterminados: `OPENROUTER_FALLBACK_MODEL` vacío, `AGENT_TIMEOUT_S=45`, `AGENT_TURN_DEADLINE_S=60`, `AGENT_RETRY_MIN_REMAINING_S=10`. Cada intento cuenta para `AGENT_MAX_CALLS_PER_HOUR=120`; sin retry 4xx ni del SDK. Ver [configuración](operations.md#referencia-de-configuración).
+[agent.py](../../../backend/conversation/agent.py) usa retry LangChain solo ante fallos transitorios, conservando una decisión completada por turno de lenguaje y cero para saludos/envíos estructurados. Predeterminados: `OPENROUTER_FALLBACK_MODEL=openai/gpt-6-luna` (provisional), `AGENT_TIMEOUT_S=45`, `AGENT_TURN_DEADLINE_S=60`, `AGENT_RETRY_MIN_REMAINING_S=10`. Cada intento cuenta para `AGENT_MAX_CALLS_PER_HOUR=120`; sin retry 4xx ni del SDK. Ver [configuración](operations.md#referencia-de-configuración).
 
 El pool Android expira a 30 s, antes del keep-alive Uvicorn de 75 s, para evitar reutilizar sockets cerrados por el antiguo timeout de 5 s. Los retries POST automáticos siguen desactivados: una escritura con timeout pudo haberse confirmado. [Diagnóstico y límites de evidencia](operations.md#falla-el-primer-toque-tras-inactividad).
 

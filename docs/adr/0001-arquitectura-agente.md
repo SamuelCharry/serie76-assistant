@@ -1,5 +1,7 @@
 # ADR 0001: arquitectura del agente (A+)
 
+> Actualización 2026-11-05: este ADR conserva la decisión histórica; la aceptación OpenRouter está completada y T9 usa pgvector para ejemplos de interpretación y anclas, sin sustituir el glosario ni las cifras SQL; ver [Models y predeterminados provisionales](../../README.md#models-design-and-limitations), con v12 reservado tras las correcciones pendiente.
+
 - Estado: aceptada para la entrega, pendiente de aceptación final con OpenRouter.
 - Fecha: 2026-11-03.
 - Sustituye: la recomendación provisional "B corregida" de `https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/contexto/06_ARQUITECTURAS_Y_RELEVO.md`, que nunca fue un resultado experimental.

@@ -95,7 +95,7 @@ Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L
 
 ## 15. ¿Está verificado OpenRouter?
 
-No. Hay cohortes Google con cliente A+ y cero llamadas OpenRouter. La aceptación OpenRouter y Android con modelo real están pendientes.
+Sí: aceptación OpenRouter completada el 2026-11-05, con 81 conversaciones v10/v11 y USD 1.17 gastados. Predeterminados provisionales: `google/gemini-3.6-flash`, fallback `openai/gpt-6-luna` y embeddings `google/gemini-embedding-2`; v12 tras las correcciones y Android con modelo real siguen pendientes. [Models](../../../README.md#models-design-and-limitations).
 
 Prueba: [docs/evidence/agent_acceptance.md](../../../docs/evidence/agent_acceptance.md#L1).
 
@@ -143,7 +143,7 @@ Prueba: [regresiones T6](../../../tests/test_conversation_quality.py), [SQL de f
 
 ## 23. ¿Qué harías con más tiempo o menos presupuesto?
 
-Primero cerraría aceptación OpenRouter acotada y el recorrido Android real; después ampliaría casos reservados y resiliencia con proveedor real; las desigualdades estrictas ya tienen cobertura offline. Con menos presupuesto priorizaría controles offline y un corpus congelado pequeño antes de gastar.
+Primero mediría las correcciones con un v12 reservado y cerraría el recorrido Android real; después ampliaría casos reservados y resiliencia con proveedor real; las desigualdades estrictas ya tienen cobertura offline. Con menos presupuesto priorizaría controles offline y un corpus congelado pequeño antes de gastar.
 
 Prueba: [docs/evidence/agent_acceptance.md](../../../docs/evidence/agent_acceptance.md#L1).
 
@@ -203,7 +203,7 @@ La traza sirve para inspeccionar un resultado concreto; no debe ocupar la conver
 
 ## 37. ¿Por qué gemini-3.6-flash y no Pro?
 
-Pro ganó el primer conjunto común de 44: 28/44 frente a 21/44 de 3.6 y 25/44 de 3.8, pero tuvo p95 7.1 s y un turno de 11 s. Tras ronda 6, 3.6 obtuvo 28/43 frente a 26/43 de 3.8. Elegimos ese equilibrio observado de calidad/latencia; no afirmamos que Flash sea universalmente mejor ni que OpenRouter ya esté validado. [Modelos](testing.md#selección-de-modelos).
+Pro ganó el primer conjunto común de 44: 28/44 frente a 21/44 de 3.6 y 25/44 de 3.8, pero tuvo p95 7.1 s y un turno de 11 s. Tras ronda 6, 3.6 obtuvo 28/43 frente a 26/43 de 3.8. Elegimos ese equilibrio observado de calidad/latencia; no afirmamos que Flash sea universalmente mejor; estos resultados Google son históricos y la aceptación OpenRouter posterior está documentada en [Models](../../../README.md#models-design-and-limitations). [Modelos](testing.md#selección-de-modelos).
 
 ## 38. ¿Cómo mediste calidad y por qué reportas 68–73 % estricto?
 
@@ -211,7 +211,7 @@ Seis personas, conjuntos congelados y revisión independiente por conversación;
 
 ## 39. ¿Qué harías después?
 
-Congelaría una cohorte nueva para medir las reparaciones sin reutilizar entrenamiento, con revisión independiente y costes/latencia separados. Cerraría aceptación OpenRouter autorizada y pruebas Android reales de voz, filtros y debug; después mediría carga, colas/cupos globales y recuperación. Mientras tanto, el ingeniero confirma filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar.
+Congelaría una cohorte nueva para medir las reparaciones sin reutilizar entrenamiento, con revisión independiente y costes/latencia separados. Cerraría v12 reservado tras las correcciones y pruebas Android reales de voz, filtros y debug; después mediría carga, colas/cupos globales y recuperación. Mientras tanto, el ingeniero confirma filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar.
 
 ## 40. ¿Es 73 % mejor que 71 %?
 
@@ -239,4 +239,4 @@ Esa revisión aceptó algunos casos dudosos y llegó a 30/41 conversaciones; no 
 
 ## Límites conocidos
 
-No hay aceptación OpenRouter ni Android con LLM real cerrada; la voz está implementada con pruebas JVM, pendiente en dispositivo; no hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.
+La aceptación OpenRouter se completó el 2026-11-05; v12 tras las correcciones y Android con LLM real siguen pendientes; la voz está implementada con pruebas JVM, pendiente en dispositivo; no hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.

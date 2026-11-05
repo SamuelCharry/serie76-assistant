@@ -1,5 +1,7 @@
 # Agent acceptance
 
+> Update 2026-11-05: this historical report retains its original run scope and numbers; OpenRouter acceptance and bank reload are now completed, with provisional model defaults and pending post-fix held-out v12 documented in [README Models](../../README.md#models-design-and-limitations).
+
 Production A+ client, model `gemini-3.6-flash`, Google OpenAI-compatible endpoint. OpenRouter calls: 0. Cohorts overlap and must not be summed as independent cases. Costs below are the exact summary values in USD; conservative reservations are not an invoice.
 
 | Cohort | Passed/scenarios | Quality failures | Provider-only failures | Provider | Conservative charge USD | Usage-based charge USD |

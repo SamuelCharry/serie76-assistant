@@ -1,5 +1,7 @@
 # T9: embeddings for interpretation
 
+> Update 2026-11-05: this historical report retains its original run scope and numbers; OpenRouter acceptance and bank reload are now completed, with provisional model defaults and pending post-fix held-out v12 documented in [README Models](../../README.md#models-design-and-limitations).
+
 ## Round 8/9 A/B results
 
 Coordinator-reported live results, before the round-nine deterministic repairs:

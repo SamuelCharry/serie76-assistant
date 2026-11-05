@@ -123,4 +123,4 @@ La respuesta HTTP es `{message_id,session_id,tool_calls,debug}`. Un 404 muestra 
 
 ## Límites conocidos
 
-Sin base/sincronización offline ni recuperación garantizada de borrador tras muerte de proceso. Emulador/UI y HTTP controlado no prueban aceptación Android con LLM real. OpenRouter, medición en teléfono físico y despliegue HTTPS público siguen pendientes; [evidencia móvil](../../evidence/mobile.md) delimita lo verificado.
+Sin base/sincronización offline ni recuperación garantizada de borrador tras muerte de proceso. Emulador/UI y HTTP controlado no prueban aceptación Android con LLM real. La aceptación OpenRouter se completó el 2026-11-05; ver [Models](../../../README.md#models-design-and-limitations). Sigue pendiente el v12 reservado tras las correcciones. La medición en teléfono físico y el despliegue HTTPS público siguen pendientes; [evidencia móvil](../../evidence/mobile.md) delimita lo verificado.

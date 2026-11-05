@@ -1,5 +1,7 @@
 # T9-S2: retrieval variants, dense retained
 
+> Update 2026-11-05: this historical report retains its original run scope and numbers; OpenRouter acceptance and bank reload are now completed, with provisional model defaults and pending post-fix held-out v12 documented in [README Models](../../README.md#models-design-and-limitations).
+
 **Decision: keep the existing dense retriever.** None of the tested variants meets the adoption rule on both definitions. No runtime mode, default, threshold, concept classifier, additive-filter policy or tool schema changed; the experimental rankers are used by the offline evaluator only. The existing `EMBEDDINGS_ENABLED` flag still controls retrieval. Since no variant qualifies, no unproven production mode is exposed.
 
 ## What the two labels mean

@@ -1,5 +1,7 @@
 # T9-C1 - Clean README reproducibility audit
 
+> Update 2026-11-05: this historical report retains its original run scope and numbers; OpenRouter acceptance and bank reload are now completed, with provisional model defaults and pending post-fix held-out v12 documented in [README Models](../../README.md#models-design-and-limitations).
+
 Commit: `54a0a83936f7185180ed1ec2c73f8998680e5575` (`release/submission`).
 Clone: `C:\Users\nrir\orca\clean-test\serie76-assistant`.
 Started: 2026-11-04 22:56:15 UTC. Verification and cleanup finished: 2026-11-04 23:15:23 UTC. Total wall time: **19 minutes 8 seconds** (includes installs, report drafting, audit commands and explicit-isolation rerun; excludes final delivery).
