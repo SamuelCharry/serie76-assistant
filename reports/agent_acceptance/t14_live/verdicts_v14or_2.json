@@ -1,0 +1,92 @@
+{
+  "L3-01": {
+    "A": {
+      "v": 1,
+      "why": "Requested motor power matches the catalogue; concise answer within latency limits."
+    }
+  },
+  "L3-02": {
+    "A": {
+      "v": 1,
+      "why": "Retains voltage, enclosure and minimum torque; all listed models and figures match the catalogue."
+    }
+  },
+  "L3-03": {
+    "A": {
+      "v": 1,
+      "why": "Recommendation satisfies retained supply, enclosure and service requirements and uses a previously listed model; comparative figures match."
+    }
+  },
+  "L3-04": {
+    "A": {
+      "v": 1,
+      "why": "Cycles per hour match the exact requested part number."
+    }
+  },
+  "L3-05": {
+    "A": {
+      "v": 1,
+      "why": "Correctly reports impossible torque at 24 V and labels the nearest published value as noncompliant."
+    }
+  },
+  "L3-06": {
+    "A": {
+      "v": 1,
+      "why": "Recovers missing comparison context with clear, answerable requirements questions by the second turn."
+    }
+  },
+  "L4-01": {
+    "A": {
+      "v": 1,
+      "why": "Correctly applies DC compatibility, excludes dual-supply models when requested, and restores their eligibility after retraction."
+    }
+  },
+  "L4-02": {
+    "A": {
+      "v": 1,
+      "why": "Corrects voltage while retaining torque and enclosure; figures and eligible counts match the catalogue."
+    }
+  },
+  "L4-03": {
+    "A": {
+      "v": 1,
+      "why": "Removes phase restriction and applies modulating service; published torque figures and option counts are correct."
+    }
+  },
+  "L4-04": {
+    "A": {
+      "v": 1,
+      "why": "Retains 24 V while withdrawing enclosure restriction after explicit site relocation; all figures match."
+    }
+  },
+  "L4-05": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 2: interprets higher torque as highest operating time, answering the wrong selection criterion."
+    }
+  },
+  "L4-06": {
+    "A": {
+      "v": 1,
+      "why": "Understands Spanish requirements and voltage correction; retains minimum torque and correctly permits either enclosure after retraction."
+    }
+  },
+  "L5-01": {
+    "A": {
+      "v": 1,
+      "why": "Correctly interprets typos and open/close phrasing; retained requirements and displayed figures match."
+    }
+  },
+  "L5-02": {
+    "A": {
+      "v": 1,
+      "why": "Correctly reports the exact nonexistent part number without substituting another model."
+    }
+  },
+  "L5-03": {
+    "A": {
+      "v": 1,
+      "why": "Reports the correct operating time for the exact part number at 50 Hz."
+    }
+  }
+}

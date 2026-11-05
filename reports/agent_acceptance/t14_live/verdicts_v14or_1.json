@@ -1,0 +1,92 @@
+{
+  "L1-01": {
+    "A": {
+      "v": 1,
+      "why": "Requested 50 Hz travel time matches the catalogue."
+    }
+  },
+  "L1-02": {
+    "A": {
+      "v": 1,
+      "why": "Both torque answers retain the exact model and match published values."
+    }
+  },
+  "L1-03": {
+    "A": {
+      "v": 1,
+      "why": "Motor wattage and 60 Hz current match the catalogue."
+    }
+  },
+  "L1-04": {
+    "A": {
+      "v": 1,
+      "why": "Requested comparison is answered; all displayed technical values match both catalogue rows."
+    }
+  },
+  "L1-05": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/2/3, turn 1: restricts DC-compatible request to AC/DC, omitting five DC-only models; ten eligible models, not five."
+    }
+  },
+  "L1-06": {
+    "A": {
+      "v": 1,
+      "why": "All five listed models are 24 V DC-only; displayed torques and currents match the catalogue."
+    }
+  },
+  "L1-07": {
+    "A": {
+      "v": 1,
+      "why": "Correctly preserves source N/A for the exact three-phase model without inferring performance."
+    }
+  },
+  "L2-01": {
+    "A": {
+      "v": 1,
+      "why": "Overview answers the applications question using the supplied definition."
+    }
+  },
+  "L2-02": {
+    "A": {
+      "v": 1,
+      "why": "Retains voltage and on/off service, applies outdoor context, and asks an answerable torque question; figures match."
+    }
+  },
+  "L2-03": {
+    "A": {
+      "v": 0,
+      "why": "Items 2/5, turn 1: explains only fully open/closed operation; omits partway modulation and the requested difference."
+    }
+  },
+  "L2-04": {
+    "A": {
+      "v": 1,
+      "why": "Retains weatherproof and 220 V, applies on/off and minimum torque, and asks the unresolved phase question; figures match."
+    }
+  },
+  "L2-05": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/3/5, turn 1: falsely says travel time is unpublished; the exact model has a published 50 Hz time of 23 s."
+    }
+  },
+  "L2-06": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/5, turn 1: gives catalogue-wide enclosure counts without answering whether the specified model is weatherproof."
+    }
+  },
+  "L2-07": {
+    "A": {
+      "v": 1,
+      "why": "Correctly interprets battery as DC and includes compatible AC/DC entries; displayed figures match."
+    }
+  },
+  "L2-08": {
+    "A": {
+      "v": 1,
+      "why": "Published-model voltage counts and three-phase options match the catalogue; shared torque and current values are correct."
+    }
+  }
+}
