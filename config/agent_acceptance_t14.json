@@ -1,0 +1,6 @@
+{
+  "purpose": "Offline Plan B ideal decisions; diagnostic paraphrases, not held-out.",
+  "provider": "scripted",
+  "model": "IdealModel",
+  "inference_allowed": false
+}
