@@ -32,6 +32,20 @@ sequenceDiagram
     F-->>U: Respuesta pública sin traza interna
 ```
 
+## Deltas de estado y operaciones por referencia (T10)
+
+El modelo aporta el delta; el código conserva el estado anterior. En [policy.py](../../../backend/conversation/policy.py), `replaced_fields` y `removed_fields` fundamentan los cambios en el texto del usuario:
+
+- **Add (añadir):** un refinamiento conserva los otros filtros; un límite numérico actualiza su dirección y mantiene el extremo opuesto, formando un rango.
+- **Replace (sustituir):** una corrección explícita como “quise decir” sustituye los límites anteriores solo de las cantidades de esa cláusula. Un delta categórico sustituye ese campo. Conserva los demás requisitos.
+- **Remove (quitar):** las retractaciones explícitas eliminan campos nombrados; expresiones de rango como “no more than” no eliminan filtros. Conserva los campos afirmados de nuevo en el mismo turno.
+- **Clear (limpiar):** “borra todos los filtros” quita los campos técnicos salvo los reafirmados explícitamente. Cancelar la conversación también limpia preguntas pendientes y foco. El objetivo de ranking persiste entre refinamientos salvo cambio; las operaciones relativas reinician el objetivo anterior.
+
+`search_actuators` acepta `reference_operation` (`stronger`, `faster`, `smaller` o vacío) y `reference_part_number`. En [agent.py](../../../backend/conversation/agent.py), `reference_constraints` resuelve un código completo de la consulta o del contexto conocido, usando el modelo enfocado o el único código conocido cuando no hay ambigüedad. Pide aclaración si la referencia falta, es ambigua o no tiene datos publicados. Lee voltaje y cerramiento desde SQL y usa el servicio explícito o conservado; pregunta si falta servicio.
+
+`stronger` exige torque estrictamente mayor al de referencia; `faster`, tiempo estrictamente menor en la frecuencia seleccionada (pregunta si hay varias sin resolver). `smaller` exige que se indique menor torque; las dimensiones físicas no están publicadas. Si falta una medición, pregunta y nunca inventa el umbral. Las restricciones derivadas contienen valores SQL, no cifras generadas por el modelo.
+
+
 ## T8/T9: flujo actual
 
 El modelo interpreta una decisión por turno que requiere lenguaje; no redacta cifras ni respuestas. Saludos, Submit, retirada de filtros, acciones estructuradas y consultas cerradas de códigos completos usan rutas deterministas sin chat ni embeddings. Los intentos de transporte no equivalen a decisiones adicionales completadas.

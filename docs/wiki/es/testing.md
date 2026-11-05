@@ -16,6 +16,37 @@ Un modelo programado devuelve herramientas predeterminadas; las herramientas rea
 - [test_auth.py](../../../tests/test_auth.py): Autenticación con hash, revocación, aislamiento y contrato de login.
 - [test_submission_readiness.py](../../../tests/test_submission_readiness.py): require_parameters, guarda por proceso y cuentas demo idempotentes.
 
+## Selección de modelo en OpenRouter
+
+**Aceptación OpenRouter completada el 2026-11-05:** USD 1.17 gastados de la clave de USD 10. La revisión ciega estricta usó tres revisores independientes por ronda y variantes mezcladas por conversación: v10 reservado (41 conversaciones) + v11 (40), 81 en total, 74 en inglés. Son resultados medidos de esas cohortes, no precios actuales ni garantías de latencia.
+
+| Modelo | Inglés | Total | p95 / max | Turnos > 10 s | USD / 1,000 turnos LLM |
+|---|---:|---:|---:|---:|---:|
+| gemini-3.6-flash | 63/74 | 69/81 | 5.9 / 8.9 s | 0 | 3.0 |
+| gpt-6-luna | 61/74 | 67/81 | 4.9 / 12.2 s | 1 | 0.8 |
+| deepseek-v4.1-flash | 59/74 | 65/81 | 8.8 / 10.8 s | 2 | 0.8 |
+| claude-haiku-5.5 | 50/74 | 55/81 | 3.1 / 8.7 s | 0 | 0.7 |
+
+**Regla fijada antes de volver a medir:** (1) calidad en inglés salvo empate estadístico, (2) ningún turno observado superior a 10 s, (3) coste, (4) licencia solo para producción (DeepSeek tiene pesos abiertos; falta verificar la licencia). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordantes); Flash vs DeepSeek: p = 0.125; Haiku es significativamente peor (p < 0.001). La falta de significancia no demuestra equivalencia.
+
+**Valores provisionales:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=openai/gpt-6-luna`, `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. Flash cumple la regla de latencia observada; un v12 nuevo y reservado tras corregir el código podría elegir Luna si empatan en calidad y ningún turno supera 10 s. v11 queda solo como diagnóstico/regresión.
+
+El preflight de esquema aprobó gemini-3.6-flash, gemini-3.8-flash, gpt-6-luna, deepseek-v4.1-flash y gpt-6-sol. claude-haiku-5.5 solo aprueba con `OPENROUTER_REQUIRE_PARAMETERS=false`: OpenRouter no enruta `tool_choice=required` a Anthropic con `require_parameters`. claude-sonnet-5.5 rechaza `tool_choice=required`. Esto registra el enrutamiento probado, no disponibilidad futura.
+
+gpt-6-sol solo se probó en v10: 37/41 frente a Flash 38/41, p = 1.0, a USD 7.5 por 1,000 turnos LLM. gemini-3.8-flash se excluyó por latencia: p95 16.4 s y siete turnos superiores a 10 s.
+
+OpenRouter `google/gemini-embedding-2` produjo vectores idénticos a los de Google en la comparación (coseno 1.00000, 768 dimensiones). La recuperación filtra por nombre de modelo, por lo que se recargó el banco bajo `google/gemini-embedding-2` con el cargador del README: 658 ejemplos + 100 anclas, unos USD 0.0015. Vectores iguales no hacen intercambiables bancos con nombres distintos.
+
+## Oráculo T10: defectos del modelo frente al código
+
+En v11 los tres mejores modelos fallaron las mismas nueve conversaciones. El coordinador atribuyó esos fallos compartidos al código determinista posterior a la decisión. T10 programa la decisión ideal del LLM: **8/48 antes de corregir, 48/48 después**, según el coordinador; esta tarea documental no lo reejecutó. Aísla correcciones de límites, fundamentación AC/DC, persistencia del objetivo, operaciones por referencia, partes fuera de alcance en peticiones compuestas, every/all, paráfrasis de resumen, idoneidad ante peligro, etiquetas de ranking e interpretación vacía.
+
+```text
+python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_t10.json --config config/agent_acceptance_t10.json
+```
+
+Ejecutar desde la raíz en el entorno Python backend con el catálogo disponible. Es una regresión de código programada, no inferencia pagada ni prueba de comprensión. Referencias metodológicas: IC-DST (EMNLP 2022) para deltas add/replace/remove; Dataflow (TACL 2020) para operaciones por referencia. Ver [semántica de estado](agent.md#deltas-de-estado-y-operaciones-por-referencia-t10). v11 queda solo para diagnóstico/regresión; afirmar generalización exige un v12 nuevo y reservado tras corregir. Las rondas Google siguientes son históricas y no se suman a esta selección OpenRouter.
+
 ## Behavior evaluation
 
 Las rondas T8/T9 usan conjuntos retenidos congelados antes de leer respuestas, seis personas y revisión estricta independiente por conversación completa. La tabla y comparación de modelos fueron suministradas por el coordinador para esta entrega; los informes enlazados documentan las reparaciones y verificaciones locales posteriores. No confundir sus replays scripted con nuevas mediciones del proveedor.
@@ -35,7 +66,7 @@ Las rondas se solapan en el método, pero no en las conversaciones. Rondas 1–2
 
 Ronda 9 deja una diferencia de **una conversación** (73 % frente a 71 %); ronda 8 favoreció OFF. Ronda 10, con retrieval ON después de las reparaciones de ronda 9, obtuvo **28/41 (68 %)**. Por tanto, la calidad observada en conversaciones inéditas retenidas es **68–73 % estricto (rondas 9–10)**, no una mejora causal demostrada ni superioridad estadística de embeddings. Todas las respuestas de esas dos rondas estuvieron bajo **10 s**, con **p95 3.7–5.1 s**. Según la revisión del coordinador, no hubo cifras de catálogo incorrectas en ninguna ronda.
 
-Persisten cuatro clases de fallo: señales parafraseadas o españolas de servicio/cerramiento omitidas que se convierten en aclaraciones; retractaciones o límites añadidos a mitad de conversación que a veces no se fusionan; juicio de peligro con errores en ambos sentidos, por lo que se solicita confirmación y siempre se muestra el cerramiento; y exceso de detalle ante preguntas de un campo o fuera de alcance. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**. El informe T9 registra 6/7 fallos de integridad ON/OFF en ronda 9: integridad incluye requisitos/selección, no solo cifras. La ronda 10 es evidencia en vivo posterior a las reparaciones; OpenRouter sigue pendiente y las pruebas offline no amplían esa aceptación.
+Las cohortes históricas anteriores a T10 mostraron cuatro clases de fallo: señales parafraseadas o españolas de servicio/cerramiento omitidas que se convierten en aclaraciones; retractaciones o límites añadidos a mitad de conversación que a veces no se fusionan; juicio de peligro con errores en ambos sentidos, por lo que se solicita confirmación y siempre se muestra el cerramiento; y exceso de detalle ante preguntas de un campo o fuera de alcance. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**. El informe T9 registra 6/7 fallos de integridad ON/OFF en ronda 9: integridad incluye requisitos/selección, no solo cifras. La ronda 10 es evidencia en vivo posterior a las reparaciones; los resultados OpenRouter figuran arriba y las pruebas offline no amplían esa aceptación.
 
 
 ### Vista por turno y uso cotidiano
@@ -60,7 +91,7 @@ La revisión por turno aceptó algunos casos dudosos y obtuvo **30/41 conversaci
 
 ### Selección de modelos
 
-Cliente compatible OpenAI, medido a través de Google; OpenRouter es el destino de entrega pendiente. En las mismas **44 conversaciones**, `gemini-3.6-flash` obtuvo **21/44**, `gemini-3.8-flash` **25/44** y `gemini-3.1-pro` **28/44**. Pro tuvo **p95 7.1 s**, incluido un turno de **11 s**. Después de ronda 6 se mantuvo 3.6 Flash: **28/43** frente a **26/43** de 3.8 Flash. Es una decisión calidad/latencia en estos conjuntos, no un ranking universal. Embeddings usan `gemini-embedding-2`; ID de OpenRouter `google/gemini-embedding-2`, con compatibilidad en vivo pendiente.
+Cliente compatible OpenAI, medido a través de Google; esta selección histórica precede la aceptación OpenRouter descrita arriba. En las mismas **44 conversaciones**, `gemini-3.6-flash` obtuvo **21/44**, `gemini-3.8-flash` **25/44** y `gemini-3.1-pro` **28/44**. Pro tuvo **p95 7.1 s**, incluido un turno de **11 s**. Después de ronda 6 se mantuvo 3.6 Flash: **28/43** frente a **26/43** de 3.8 Flash. Es una decisión calidad/latencia en estos conjuntos, no un ranking universal. Embeddings usan `gemini-embedding-2`; ID de OpenRouter `google/gemini-embedding-2`, cuya compatibilidad OpenRouter se verificó después, como se documenta arriba.
 
 ### Procedencia y fuga de evaluación
 
@@ -240,12 +271,12 @@ El [workflow CI](../../../.github/workflows/ci.yml) prepara PostgreSQL, instala 
 
 ## Límites conocidos
 
-Ninguna prueba automática acredita lenguaje arbitrario ni precisión OCR heterogénea. Las pruebas DB pueden crear registros acotados o revertir transacciones. Aceptación OpenRouter y recorrido Android → modelo real → SQL → Android pendientes.
+Ninguna prueba automática acredita lenguaje arbitrario ni precisión OCR heterogénea. Las pruebas DB pueden crear registros acotados o revertir transacciones. Pendientes v12 reservado tras las correcciones y recorrido Android → modelo real → SQL → Android.
 
 ## Preflight del esquema antes de cualquier cohorte
 
 Ejecutar primero `python scripts/check_tool_schemas.py` sin red. Construye las cuatro herramientas reales sin base de datos ni credenciales e imprime bytes compactos, valores enum, arrays, campos obligatorios, profundidad, restricciones numéricas y arrays de objetos de lookup. Los límites offline para enums/arrays/obligatorios/profundidad son los anteriores a T6 (108/6/5/7); rechaza rangos numéricos, uniones/referencias y arrays de objetos en get_actuator. El tamaño en bytes por sí solo no predijo el límite acumulado del proveedor.
 
-Solo con aprobación explícita de gasto, ejecutar `python scripts/check_tool_schemas.py --live` con OPENROUTER_API_KEY, OPENROUTER_CHAT_MODEL y OPENROUTER_BASE_URL opcional ya en el entorno del proceso. Nunca carga .env ni imprime la clave, la respuesta del proveedor o el cuerpo de errores; envía exactamente una petición con las cuatro herramientas y el prompt/glosario de producción, desactiva trazas, no ejecuta herramientas/SQL y no reintenta. Un 400 u otro fallo devuelve salida no cero: detenerse antes de la cohorte. Un preflight exitoso comprueba aceptación del esquema, no calidad de conversación. Repetir después de cambiar esquemas; la comprobación real del esquema compacto queda pendiente del coordinador.
+Solo con aprobación explícita de gasto, ejecutar `python scripts/check_tool_schemas.py --live` con OPENROUTER_API_KEY, OPENROUTER_CHAT_MODEL y OPENROUTER_BASE_URL opcional ya en el entorno del proceso. Nunca carga .env ni imprime la clave, la respuesta del proveedor o el cuerpo de errores; envía exactamente una petición con las cuatro herramientas y el prompt/glosario de producción, desactiva trazas, no ejecuta herramientas/SQL y no reintenta. Un 400 u otro fallo devuelve salida no cero: detenerse antes de la cohorte. Un preflight exitoso comprueba aceptación del esquema, no calidad de conversación. Repetir después de cambiar esquemas; los resultados OpenRouter anteriores registran el esquema probado y no cubren cambios posteriores del esquema.
 
 Dónde: [script de preflight](../../../scripts/check_tool_schemas.py), [pruebas de complejidad y una llamada](../../../tests/test_tool_schema_budget.py), [comprobación solo de metadatos](../../../scripts/check_openrouter.py).

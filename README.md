@@ -21,8 +21,8 @@ flowchart LR
 | Feature | Implemented and verified locally | Pending |
 |---|---|---|
 | OCR and PostgreSQL catalogue | [941/941 primary checks](docs/evidence/ocr.md), idempotent loading | New layouts |
-| T8 interaction, recommendations, actions, deletion, planner and guards | [T8–T8h backend](docs/wiki/en/testing.md), [51 T8 JVM tests](reports/submission/T8-android.md) | OpenRouter acceptance and real device flow |
-| T9 additive embeddings | [484 Python tests, 2 skips; 446 scripted scenarios](reports/submission/T9-embeddings.md), Google smoke | OpenRouter acceptance |
+| T8 interaction, recommendations, actions, deletion, planner and guards | [T8–T8h backend](docs/wiki/en/testing.md), [51 T8 JVM tests](reports/submission/T8-android.md) | Real device flow |
+| T9 additive embeddings | [484 Python tests, 2 skips; 446 scripted scenarios](reports/submission/T9-embeddings.md), Google smoke | Post-fix held-out v12 |
 | T9 voice and per-answer debug | [74 JVM tests, debug/release APKs](reports/submission/T9-android.md) | Actual voice, UI and integrated backend on device |
 | Login, private history, Docker | [Authentication](docs/wiki/en/api.md), [reproducible startup](reports/submission/T2.md) | Public HTTPS and final reproduction |
 
@@ -56,7 +56,7 @@ This table covers the added embedding/debug settings. [.env.example](.env.exampl
 
 | New variable | Default | Purpose |
 |---|---|---|
-| `OPENROUTER_EMBEDDING_MODEL` | empty | `google/gemini-embedding-2` on OpenRouter; `gemini-embedding-2` on Google |
+| `OPENROUTER_EMBEDDING_MODEL` | `google/gemini-embedding-2` | `google/gemini-embedding-2` on OpenRouter; `gemini-embedding-2` on Google |
 | `EMBEDDING_BASE_URL` | empty | Inherits `OPENROUTER_BASE_URL` |
 | `EMBEDDING_API_KEY` | empty | Inherits `OPENROUTER_API_KEY` |
 | `EMBEDDING_DIM` | `768` | Must match the schema |
@@ -104,7 +104,7 @@ docker compose exec -T backend python -m backend.catalog.cli load data/extracted
 
 ## Example bank
 
-**What:** 658 user phrasings with interpretations and 100 anchors; never catalogue figures as knowledge. The Google load cost about **USD 0.005 estimated**, not a billing receipt or guaranteed price. **How:** inspect the dry-run; the second command performs inference and requires authorization. The mount supplies `config/`, absent from the image. **Code:** [loader](scripts/load_example_bank.py), [embeddings](backend/conversation/embeddings.py); [loading, provenance and keyless behavior](docs/wiki/en/operations.md#example-bank).
+**What:** 658 user phrasings with interpretations and 100 anchors; never catalogue figures as knowledge. The historical Google load cost about **USD 0.005 estimated**. The OpenRouter reload under `google/gemini-embedding-2` cost about **USD 0.0015**; retrieval filters by this exact model name. These are run estimates, not guaranteed prices. **How:** inspect the dry-run; the second command performs inference and requires authorization. The mount supplies `config/`, absent from the image. **Code:** [loader](scripts/load_example_bank.py), [embeddings](backend/conversation/embeddings.py); [loading, provenance and keyless behavior](docs/wiki/en/operations.md#example-bank).
 
 The bank is optional for keyless operation. With no model configured, `--dry-run` reports all supplied examples/anchors without a database, API key or inference (`scope: input_only`); it does not check existing vectors. With an explicit model it checks pending rows in the running DB, still without inference. The second command below loads vectors for the named model and must wait for paid-inference authorization; configure that same model for backend retrieval.
 
@@ -163,13 +163,24 @@ Open Series 76 and use a test account. Emulator backend: `http://10.0.2.2:8000/`
 
 After a comparison or a shown list, ask `which one do you recommend and why?` or `¿cuál me recomiendas?`. Recommendations stay within those shown models, apply active and newly stated requirements before ranking, explain exclusions with catalogue values, and state the priority, advantages and runner-up trade-off. `Which should I buy?` asks for selection advice; it does not place an order. If none qualifies, the nearest shown model is explicitly described as failing, never recommended.
 
-**What/why:** `gemini-3.6-flash` uses the OpenAI-compatible client; OpenRouter is the submission target, with acceptance pending. On the same 44 conversations, 3.6 Flash/3.8 Flash/3.1 Pro scored **21/44, 25/44, 28/44**; Pro had **7.1 s p95** and an **11 s** turn. After round 6, 3.6 Flash was selected: **28/43** against 3.8 Flash's **26/43**. Embeddings use `gemini-embedding-2`, OpenRouter ID `google/gemini-embedding-2`. [Method and full results](docs/wiki/en/testing.md).
+**OpenRouter acceptance completed on 2026-11-05:** USD 1.17 spent from the USD 10 key. Blind strict review used three independent reviewers per round and shuffled variants per conversation: held-out v10 (41 conversations) + v11 (40), 81 total, including 74 in English. These are measured cohort results, not current price quotes or latency guarantees.
+
+| Model | English | All | p95 / max | Turns > 10 s | USD / 1,000 LLM turns |
+|---|---:|---:|---:|---:|---:|
+| gemini-3.6-flash | 63/74 | 69/81 | 5.9 / 8.9 s | 0 | 3.0 |
+| gpt-6-luna | 61/74 | 67/81 | 4.9 / 12.2 s | 1 | 0.8 |
+| deepseek-v4.1-flash | 59/74 | 65/81 | 8.8 / 10.8 s | 2 | 0.8 |
+| claude-haiku-5.5 | 50/74 | 55/81 | 3.1 / 8.7 s | 0 | 0.7 |
+
+**Decision rule, fixed before re-measuring:** (1) English quality unless statistically tied, (2) no observed turn over 10 s, (3) cost, (4) licence for production only (DeepSeek has open weights; licence still needs verification). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordant); Flash vs DeepSeek: p = 0.125; Haiku is significantly worse (p < 0.001). Lack of significance does not establish equivalence.
+
+**Provisional defaults:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=openai/gpt-6-luna`, `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. Flash meets the observed latency rule; a new held-out v12 after the code fixes may select Luna if quality remains tied and no turn exceeds 10 s. v11 is now diagnostic/regression evidence only. [Preflight, other models, embeddings and T10 oracle](docs/wiki/en/testing.md#openrouter-model-selection).
 
 **How:** the LLM never produces final numbers: one decision per interpreted turn, zero on deterministic routes. Retrieval only adds unresolved fields; it cannot replace explicit requirements. The final guard checks quantity and filter coverage; SQL/templates preserve units, N/A and provenance. Ranking declares its criterion, not suitability certification. **Code:** [agent](backend/conversation/agent.py), [coverage guard](backend/conversation/requirement_coverage.py), [ranking](backend/conversation/ranking.py); [architecture](docs/wiki/en/agent.md), [decisions and trade-offs](docs/wiki/en/patterns.md).
 
-**Measured quality:** On 41 unseen conversations (68 turns): 0 wrong catalogue numbers in 491 checked values, all replies under 10 s, 18 of 19 everyday conversations fully correct and 82 % of turns correct; weaker on unusual phrasing (12 of 22 adversarial conversations), mainly open/close or modulating needs written in plain or Spanish wording and site descriptions. [Turn-level results, intervals and scoring differences](docs/wiki/en/testing.md#turn-level-and-everyday-use-view).
+**Historical Google quality (before T10):** On 41 unseen conversations (68 turns): 0 wrong catalogue numbers in 491 checked values, all replies under 10 s, 18 of 19 everyday conversations fully correct and 82 % of turns correct; weaker on unusual phrasing (12 of 22 adversarial conversations), mainly open/close or modulating needs written in plain or Spanish wording and site descriptions. [Turn-level results, intervals and scoring differences](docs/wiki/en/testing.md#turn-level-and-everyday-use-view).
 
-**Known limitations:** Some mid-conversation retractions or added bounds are not merged; site-hazard judgment can err both ways, so the assistant asks for confirmation and always shows the enclosure; some single-field or out-of-scope questions receive excessive detail. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**. Actual voice, Android integration and OpenRouter acceptance remain pending.
+**Known limitations:** T10 repairs pass 48/48 scripted oracle scenarios (8/48 before fixes), as reported by the coordinator; this does not establish real-model generalization. New held-out v12, actual voice and Android integration remain pending. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**.
 
 ## Reproduction gates
 

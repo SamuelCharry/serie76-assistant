@@ -21,8 +21,8 @@ flowchart LR
 | Función | Implementado y verificado localmente | Pendiente |
 |---|---|---|
 | OCR y catálogo PostgreSQL | [941/941 verificaciones primarias](docs/evidence/ocr.md), carga idempotente | Nuevos layouts |
-| T8 interacción, recomendaciones, acciones, borrado, planificador y guardas | [Backend T8–T8h](docs/wiki/es/testing.md), [51 pruebas JVM T8](reports/submission/T8-android.md) | Aceptación OpenRouter y flujo real en dispositivo |
-| T9 embeddings aditivos | [484 pruebas Python, 2 omisiones; 446 escenarios scripted](reports/submission/T9-embeddings.md), smoke Google | Aceptación OpenRouter |
+| T8 interacción, recomendaciones, acciones, borrado, planificador y guardas | [Backend T8–T8h](docs/wiki/es/testing.md), [51 pruebas JVM T8](reports/submission/T8-android.md) | Flujo real en dispositivo |
+| T9 embeddings aditivos | [484 pruebas Python, 2 omisiones; 446 escenarios scripted](reports/submission/T9-embeddings.md), smoke Google | v12 reservado tras las correcciones |
 | T9 voz y debug por respuesta | [74 pruebas JVM, APK debug/release](reports/submission/T9-android.md) | Voz real, UI y backend integrado en dispositivo |
 | Login, historial privado, Docker | [Autenticación](docs/wiki/es/api.md), [arranque reproducible](reports/submission/T2.md) | HTTPS público y reproducción final |
 
@@ -56,7 +56,7 @@ Esta tabla cubre las variables añadidas de embeddings/debug. [.env.example](.en
 
 | Variable nueva | Default | Uso |
 |---|---|---|
-| `OPENROUTER_EMBEDDING_MODEL` | vacío | `google/gemini-embedding-2` en OpenRouter; `gemini-embedding-2` en Google |
+| `OPENROUTER_EMBEDDING_MODEL` | `google/gemini-embedding-2` | `google/gemini-embedding-2` en OpenRouter; `gemini-embedding-2` en Google |
 | `EMBEDDING_BASE_URL` | vacío | Hereda `OPENROUTER_BASE_URL` |
 | `EMBEDDING_API_KEY` | vacío | Hereda `OPENROUTER_API_KEY` |
 | `EMBEDDING_DIM` | `768` | Debe coincidir con el esquema |
@@ -104,7 +104,7 @@ docker compose exec -T backend python -m backend.catalog.cli load data/extracted
 
 ## Banco de ejemplos
 
-**Qué:** 658 frases de usuario con interpretaciones y 100 anclas; nunca cifras del catálogo como conocimiento. La carga Google costó aproximadamente **USD 0.005 estimados**, no una factura ni un precio garantizado. **Cómo:** revisa el dry-run; la segunda orden hace inferencia y requiere autorización. El montaje aporta `config/`, ausente en la imagen. **Código:** [loader](scripts/load_example_bank.py), [embeddings](backend/conversation/embeddings.py); [carga, procedencia y comportamiento sin claves](docs/wiki/es/operations.md#example-bank).
+**Qué:** 658 frases de usuario con interpretaciones y 100 anclas; nunca cifras del catálogo como conocimiento. La carga histórica Google costó aproximadamente **USD 0.005 estimados**. La recarga OpenRouter bajo `google/gemini-embedding-2` costó unos **USD 0.0015**; la recuperación filtra por ese nombre exacto. Son estimaciones de esas ejecuciones, no precios garantizados. **Cómo:** revisa el dry-run; la segunda orden hace inferencia y requiere autorización. El montaje aporta `config/`, ausente en la imagen. **Código:** [loader](scripts/load_example_bank.py), [embeddings](backend/conversation/embeddings.py); [carga, procedencia y comportamiento sin claves](docs/wiki/es/operations.md#example-bank).
 
 El banco es opcional para funcionar sin claves. Sin modelo configurado, `--dry-run` informa todos los ejemplos/anclas suministrados sin DB, clave ni inferencia (`scope: input_only`); no comprueba vectores existentes. Con un modelo explícito comprueba filas pendientes en la DB activa, también sin inferencia. El segundo comando carga vectores para el modelo indicado y exige autorización de inferencia pagada; configura ese mismo modelo para el retrieval del backend.
 
@@ -163,13 +163,24 @@ Abre Series 76 y usa una cuenta de prueba. Backend del emulador: `http://10.0.2.
 
 Después de una comparación o lista visible, pregunta `which one do you recommend and why?` o `¿cuál me recomiendas?`. La recomendación se limita a esos modelos, aplica los requisitos activos y los del nuevo turno antes de ordenar, explica exclusiones con valores del catálogo y declara prioridad, ventajas y contrapartida del segundo candidato. `Which should I buy?` pide consejo de selección; no realiza un pedido. Si ninguno cumple, el modelo visible más cercano se identifica expresamente como incumplidor y no se recomienda.
 
-**Qué/por qué:** `gemini-3.6-flash` usa el cliente compatible OpenAI; OpenRouter es el destino de entrega, con aceptación pendiente. En las mismas 44 conversaciones, 3.6 Flash/3.8 Flash/3.1 Pro lograron **21/44, 25/44, 28/44**; Pro tuvo p95 **7.1 s** y un turno de **11 s**. Tras ronda 6 se eligió 3.6 Flash: **28/43** frente a **26/43** de 3.8 Flash. Embeddings: `gemini-embedding-2`, identificador OpenRouter `google/gemini-embedding-2`. [Método y tabla completa](docs/wiki/es/testing.md).
+**Aceptación OpenRouter completada el 2026-11-05:** USD 1.17 gastados de la clave de USD 10. La revisión ciega estricta usó tres revisores independientes por ronda y variantes mezcladas por conversación: v10 reservado (41 conversaciones) + v11 (40), 81 en total, 74 en inglés. Son resultados medidos de esas cohortes, no precios actuales ni garantías de latencia.
+
+| Modelo | Inglés | Total | p95 / max | Turnos > 10 s | USD / 1,000 turnos LLM |
+|---|---:|---:|---:|---:|---:|
+| gemini-3.6-flash | 63/74 | 69/81 | 5.9 / 8.9 s | 0 | 3.0 |
+| gpt-6-luna | 61/74 | 67/81 | 4.9 / 12.2 s | 1 | 0.8 |
+| deepseek-v4.1-flash | 59/74 | 65/81 | 8.8 / 10.8 s | 2 | 0.8 |
+| claude-haiku-5.5 | 50/74 | 55/81 | 3.1 / 8.7 s | 0 | 0.7 |
+
+**Regla fijada antes de volver a medir:** (1) calidad en inglés salvo empate estadístico, (2) ningún turno observado superior a 10 s, (3) coste, (4) licencia solo para producción (DeepSeek tiene pesos abiertos; falta verificar la licencia). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordantes); Flash vs DeepSeek: p = 0.125; Haiku es significativamente peor (p < 0.001). La falta de significancia no demuestra equivalencia.
+
+**Valores provisionales:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=openai/gpt-6-luna`, `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. Flash cumple la regla de latencia observada; un v12 nuevo y reservado tras corregir el código podría elegir Luna si empatan en calidad y ningún turno supera 10 s. v11 queda solo como diagnóstico/regresión. [Preflight, otros modelos, embeddings y oráculo T10](docs/wiki/es/testing.md#selección-de-modelo-en-openrouter).
 
 **Cómo:** el LLM nunca produce cifras finales: una decisión por turno interpretado, cero en rutas deterministas. Retrieval solo añade campos no resueltos; no sustituye requisitos explícitos. La guarda final revisa cobertura de cantidades y filtros; SQL/plantillas preservan unidades, N/A y procedencia. El ranking declara su criterio, no certifica idoneidad. **Código:** [agente](backend/conversation/agent.py), [guardas](backend/conversation/requirement_coverage.py), [ranking](backend/conversation/ranking.py); [arquitectura](docs/wiki/es/agent.md), [decisiones y trade-offs](docs/wiki/es/patterns.md).
 
-**Calidad medida:** En 41 conversaciones inéditas (68 turnos): 0 cifras de catálogo incorrectas en 491 valores comprobados, todas las respuestas en menos de 10 s, 18 de 19 conversaciones cotidianas completamente correctas y 82 % de turnos correctos; menor acierto con formulaciones inusuales (12 de 22 conversaciones adversariales), principalmente requisitos de apertura/cierre o modulación expresados en lenguaje cotidiano o en español y descripciones del lugar. [Resultados por turno, intervalos y diferencias de puntuación](docs/wiki/es/testing.md#vista-por-turno-y-uso-cotidiano).
+**Calidad histórica Google (antes de T10):** En 41 conversaciones inéditas (68 turnos): 0 cifras de catálogo incorrectas en 491 valores comprobados, todas las respuestas en menos de 10 s, 18 de 19 conversaciones cotidianas completamente correctas y 82 % de turnos correctos; menor acierto con formulaciones inusuales (12 de 22 conversaciones adversariales), principalmente requisitos de apertura/cierre o modulación expresados en lenguaje cotidiano o en español y descripciones del lugar. [Resultados por turno, intervalos y diferencias de puntuación](docs/wiki/es/testing.md#vista-por-turno-y-uso-cotidiano).
 
-**Límites conocidos:** Algunas retractaciones o nuevos límites no se fusionan; el juicio de peligro puede errar en ambos sentidos, por lo que se solicita confirmación y siempre se muestra el cerramiento; algunas preguntas de un campo o fuera de alcance reciben detalle excesivo. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**. Voz real, integración Android y aceptación OpenRouter siguen pendientes.
+**Límites conocidos:** Las correcciones T10 aprueban 48/48 escenarios del oráculo programado (8/48 antes), según el coordinador; esto no acredita generalización con modelo real. Quedan pendientes v12 reservado, voz real e integración Android. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**.
 
 ## Gates de reproducción
 

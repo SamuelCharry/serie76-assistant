@@ -32,6 +32,20 @@ sequenceDiagram
     F-->>U: Public response without internal trace
 ```
 
+## State deltas and reference operations (T10)
+
+The model supplies a delta; code owns the carried state. In [policy.py](../../../backend/conversation/policy.py), `replaced_fields` and `removed_fields` ground changes in user wording:
+
+- **Add:** a refinement keeps other filters; a numeric bound updates its own direction and preserves the opposite bound, forming a range.
+- **Replace:** an explicit correction such as “I meant” replaces the old bounds only for quantities in that correction clause. A categorical delta replaces that field. Other requirements remain.
+- **Remove:** explicit retractions remove named fields; range phrases such as “no more than” are not removals. Fields positively restated in the same turn are retained.
+- **Clear:** “clear all filters” removes technical filter fields except those explicitly reaffirmed. This is distinct from cancelling the conversation, which also clears pending information and focus. Ranking objectives persist across refinements unless changed; relative operations reset the old ranking objective.
+
+`search_actuators` accepts `reference_operation` (`stronger`, `faster`, `smaller`, or empty) and `reference_part_number`. [agent.py](../../../backend/conversation/agent.py) `reference_constraints` resolves a complete code from the current query or known context, using the focused model or sole known code when unambiguous. An absent, ambiguous or unpublished reference asks for clarification. It reads the reference voltage and enclosure from SQL and uses the explicitly stated or carried service; missing service is clarified.
+
+`stronger` adds torque strictly greater than the reference; `faster` adds operating time strictly less than the reference in the selected frequency scope (asking when multiple frequencies are unresolved). `smaller` requires an explicit lower-torque meaning; physical dimensions are not published. Missing measurements trigger clarification, never guessed thresholds. The derived constraints carry SQL values, not model-generated numbers.
+
+
 ## T8/T9: current flow
 
 The model makes one decision on turns requiring language interpretation; it writes neither figures nor final answers. Greetings, Submit, filter removal, structured actions and closed lookups of complete codes use deterministic routes without chat or embeddings. Transport attempts are not additional completed decisions.

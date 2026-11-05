@@ -16,6 +16,37 @@ A scripted model returns predetermined tool calls; the real tools then execute v
 - [test_auth.py](../../../tests/test_auth.py): Hashed auth, revocation, owner isolation and Android-facing auth contract.
 - [test_submission_readiness.py](../../../tests/test_submission_readiness.py): Routing require_parameters, process call guard and idempotent demo users.
 
+## OpenRouter model selection
+
+**OpenRouter acceptance completed on 2026-11-05:** USD 1.17 spent from the USD 10 key. Blind strict review used three independent reviewers per round and shuffled variants per conversation: held-out v10 (41 conversations) + v11 (40), 81 total, including 74 in English. These are measured cohort results, not current price quotes or latency guarantees.
+
+| Model | English | All | p95 / max | Turns > 10 s | USD / 1,000 LLM turns |
+|---|---:|---:|---:|---:|---:|
+| gemini-3.6-flash | 63/74 | 69/81 | 5.9 / 8.9 s | 0 | 3.0 |
+| gpt-6-luna | 61/74 | 67/81 | 4.9 / 12.2 s | 1 | 0.8 |
+| deepseek-v4.1-flash | 59/74 | 65/81 | 8.8 / 10.8 s | 2 | 0.8 |
+| claude-haiku-5.5 | 50/74 | 55/81 | 3.1 / 8.7 s | 0 | 0.7 |
+
+**Decision rule, fixed before re-measuring:** (1) English quality unless statistically tied, (2) no observed turn over 10 s, (3) cost, (4) licence for production only (DeepSeek has open weights; licence still needs verification). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordant); Flash vs DeepSeek: p = 0.125; Haiku is significantly worse (p < 0.001). Lack of significance does not establish equivalence.
+
+**Provisional defaults:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=openai/gpt-6-luna`, `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. Flash meets the observed latency rule; a new held-out v12 after the code fixes may select Luna if quality remains tied and no turn exceeds 10 s. v11 is now diagnostic/regression evidence only.
+
+Schema preflight passed for gemini-3.6-flash, gemini-3.8-flash, gpt-6-luna, deepseek-v4.1-flash and gpt-6-sol. claude-haiku-5.5 passes only with `OPENROUTER_REQUIRE_PARAMETERS=false`: OpenRouter does not route `tool_choice=required` to Anthropic with `require_parameters`. claude-sonnet-5.5 rejects `tool_choice=required`. This records the tested routing, not future availability.
+
+gpt-6-sol was tested on v10 only: 37/41 vs Flash 38/41, p = 1.0, at USD 7.5 per 1,000 LLM turns. gemini-3.8-flash was excluded by latency: p95 16.4 s and seven turns over 10 s.
+
+OpenRouter `google/gemini-embedding-2` produced vectors identical to Google's in the comparison (cosine 1.00000, 768 dimensions). Retrieval filters by model name, so the bank was reloaded under `google/gemini-embedding-2` using the README loader: 658 examples + 100 anchors, about USD 0.0015. Matching vectors do not make differently named banks interchangeable.
+
+## T10 oracle suite: model vs code defects
+
+In v11 the three best models failed the same nine conversations. The coordinator traced those shared failures to deterministic code after the model decision. The T10 suite scripts the ideal LLM decision: **8/48 before fixes, 48/48 after**, as reported by the coordinator, not re-run by this documentation task. It isolates bound corrections, AC/DC grounding, objective persistence, reference operations, compound out-of-scope parts, every/all, overview paraphrases, hazard suitability, ranking labels and empty interpretation.
+
+```text
+python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_t10.json --config config/agent_acceptance_t10.json
+```
+
+Run from the repository root in the backend Python environment with the catalogue available. This is a scripted code regression check, not paid model inference or proof of language understanding. Method references: IC-DST (EMNLP 2022) for add/replace/remove state deltas; Dataflow (TACL 2020) for reference operations. See [state semantics](agent.md#state-deltas-and-reference-operations-t10). v11 is now diagnostic/regression only; generalization claims require a new held-out v12 after the fixes. Earlier Google rounds below are historical and are not pooled with this OpenRouter selection.
+
 ## How we know a difference is real
 
 A 95% bootstrap interval describes variation from resampling these conversations; it does not cover reviewer bias or guarantee performance on new domains.
@@ -91,7 +122,7 @@ Rounds overlap in method but not in conversations. Rounds 1–2 used a looser re
 
 Round 9 differs by **one conversation** (73% versus 71%); round 8 favored OFF. Round 10, retrieval ON after round-nine fixes, scored **28/41 (68%)**. Observed quality on unseen held-out conversations is therefore **68–73% strict pass (rounds 9–10)**, not demonstrated causal improvement or statistical superiority for embeddings. Every response in those two rounds was under **10 s**, with **3.7–5.1 s p95**. The coordinator's review reports no wrong catalogue numbers in any round.
 
-Four failure classes remain: paraphrased or Spanish service/enclosure cues can be missed and become clarifying questions; mid-conversation retractions or added bounds are sometimes not merged; site-hazard judgment can err both ways, so the assistant asks for confirmation and always shows the enclosure; and some single-field or out-of-scope questions receive more detail than asked. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**. T9 records 6/7 ON/OFF integrity failures in round 9: integrity includes requirements/selection, not just figures. Round 10 is live evidence after the fixes; OpenRouter remains pending and offline tests do not extend that acceptance.
+Historical pre-T10 cohorts showed four failure classes: paraphrased or Spanish service/enclosure cues can be missed and become clarifying questions; mid-conversation retractions or added bounds are sometimes not merged; site-hazard judgment can err both ways, so the assistant asks for confirmation and always shows the enclosure; and some single-field or out-of-scope questions receive more detail than asked. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**. T9 records 6/7 ON/OFF integrity failures in round 9: integrity includes requirements/selection, not just figures. Round 10 is live evidence after the fixes; OpenRouter results are documented above; offline tests do not extend that acceptance.
 
 
 ### Turn-level and everyday-use view
@@ -116,7 +147,7 @@ The turn-level review accepted a few borderline turns, giving **30/41 conversati
 
 ### Model selection
 
-OpenAI-compatible client, measured through Google; OpenRouter is the pending submission target. On the same **44 conversations**, `gemini-3.6-flash` scored **21/44**, `gemini-3.8-flash` **25/44**, and `gemini-3.1-pro` **28/44**. Pro had **7.1 s p95**, including an **11 s** turn. After round 6, 3.6 Flash was retained: **28/43** versus 3.8 Flash's **26/43**. This is a quality/latency decision on these sets, not a universal model ranking. Embeddings use `gemini-embedding-2`; OpenRouter ID `google/gemini-embedding-2`, with live compatibility pending.
+OpenAI-compatible client, measured through Google; this historical selection predates the OpenRouter acceptance above. On the same **44 conversations**, `gemini-3.6-flash` scored **21/44**, `gemini-3.8-flash` **25/44**, and `gemini-3.1-pro` **28/44**. Pro had **7.1 s p95**, including an **11 s** turn. After round 6, 3.6 Flash was retained: **28/43** versus 3.8 Flash's **26/43**. This is a quality/latency decision on these sets, not a universal model ranking. Embeddings use `gemini-embedding-2`; OpenRouter ID `google/gemini-embedding-2`, whose OpenRouter compatibility was subsequently checked as documented above.
 
 ### Provenance and evaluation leakage
 
@@ -236,7 +267,7 @@ Method: freeze corpus/code/config/catalogue hashes before inference; keep expect
 
 Run `python scripts/check_tool_schemas.py` offline first. It builds the real four production tools without a database or credentials and prints compact bytes, enum values, arrays, required fields, depth, numeric range keywords and lookup object arrays. Offline guards cap enums/arrays/required/depth at the pre-T6 counts (108/6/5/7) and reject numeric ranges, nullable unions/references and object arrays in get_actuator. Byte size alone did not predict the provider's cumulative schema limit.
 
-Only after explicit paid-call approval, run `python scripts/check_tool_schemas.py --live` with OPENROUTER_API_KEY, OPENROUTER_CHAT_MODEL and optional OPENROUTER_BASE_URL already in the process environment. It never loads .env or prints the key, provider response or exception body; it sends exactly one request with all four tools and the production system/glossary prompt, disables tracing, performs no tool/SQL execution and has no retries. A 400 or other failure exits non-zero: stop before the cohort. A successful preflight checks schema acceptance only, not conversation quality. Re-run after any tool-schema change; the compact-schema live check is pending until the coordinator runs it.
+Only after explicit paid-call approval, run `python scripts/check_tool_schemas.py --live` with OPENROUTER_API_KEY, OPENROUTER_CHAT_MODEL and optional OPENROUTER_BASE_URL already in the process environment. It never loads .env or prints the key, provider response or exception body; it sends exactly one request with all four tools and the production system/glossary prompt, disables tracing, performs no tool/SQL execution and has no retries. A 400 or other failure exits non-zero: stop before the cohort. A successful preflight checks schema acceptance only, not conversation quality. Re-run after any tool-schema change; the OpenRouter preflight results above record the tested schema, and do not cover later schema changes.
 
 Where: [preflight script](../../../scripts/check_tool_schemas.py), [complexity/one-call tests](../../../tests/test_tool_schema_budget.py), [metadata-only readiness script](../../../scripts/check_openrouter.py).
 
@@ -248,4 +279,4 @@ Where: [preflight script](../../../scripts/check_tool_schemas.py), [complexity/o
 
 ## Known limits
 
-No automatic test establishes arbitrary-language correctness or heterogeneous OCR accuracy. Local DB tests may create scoped test records or rollback transactions. OpenRouter acceptance and the full Android → real model → SQL → Android path remain pending.
+No automatic test establishes arbitrary-language correctness or heterogeneous OCR accuracy. Local DB tests may create scoped test records or rollback transactions. Post-fix held-out v12 and the full Android → real model → SQL → Android path remain pending.
