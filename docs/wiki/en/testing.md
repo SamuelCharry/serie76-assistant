@@ -94,6 +94,26 @@ Round 9 differs by **one conversation** (73% versus 71%); round 8 favored OFF. R
 Four failure classes remain: paraphrased or Spanish service/enclosure cues can be missed and become clarifying questions; mid-conversation retractions or added bounds are sometimes not merged; site-hazard judgment can err both ways, so the assistant asks for confirmation and always shows the enclosure; and some single-field or out-of-scope questions receive more detail than asked. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**. T9 records 6/7 ON/OFF integrity failures in round 9: integrity includes requirements/selection, not just figures. Round 10 is live evidence after the fixes; OpenRouter remains pending and offline tests do not extend that acceptance.
 
 
+### Turn-level and everyday-use view
+
+An independent reviewer re-scored round 10 (`gemini-3.6-flash`, retrieval ON): the same 41 unseen conversations, containing 68 turns. These supplied results are another view of the recorded answers, not a new provider run; intervals below are Wilson 95% intervals.
+
+| Measure | Result | Wilson 95% interval/bound |
+|---|---:|---:|
+| Correct turns | 56/68 = 82.4% | 71.6–89.6% |
+| Integrity failures | 7/68 = 10.3% | 5.1–19.8% |
+| Shape failures | 4/68 = 5.9% | Not supplied |
+| Memory failures | 1/68 = 1.5% | Not supplied |
+| TYPICAL conversations fully correct | 18/19 = 94.7% | 75.4–99.1% |
+| ADVERSARIAL conversations fully correct | 12/22 = 54.5% | 34.7–73.1% |
+| Wrong catalogue numbers | 0/491 checked values | Error ≤0.78%; accuracy ≥99.2% |
+
+**TYPICAL** means a part-number lookup or follow-up, a clear requirement in catalogue terms (abbreviations allowed), a comparison or recommendation, or a simple correction. **ADVERSARIAL** means a paraphrase-only requirement, a misspelled or mixed-language requirement, an implied hazard or safe-site judgment, out-of-scope or injection, a rephrase request, or a mid-conversation retraction.
+
+Every integrity failure was an unapplied constraint, never a wrong number; five of seven involved paraphrased or Spanish service wording. All replies took under 10 s, with a maximum of **5.03 s**. The numeric accuracy bound uses the review's sampling assumptions; it is not a guarantee for new conversations.
+
+The turn-level review accepted a few borderline turns, giving **30/41 conversations** versus the earlier stricter **28/41 (68.3%)**; report both because the scoring standard differs.
+
 ### Model selection
 
 OpenAI-compatible client, measured through Google; OpenRouter is the pending submission target. On the same **44 conversations**, `gemini-3.6-flash` scored **21/44**, `gemini-3.8-flash` **25/44**, and `gemini-3.1-pro` **28/44**. Pro had **7.1 s p95**, including an **11 s** turn. After round 6, 3.6 Flash was retained: **28/43** versus 3.8 Flash's **26/43**. This is a quality/latency decision on these sets, not a universal model ranking. Embeddings use `gemini-embedding-2`; OpenRouter ID `google/gemini-embedding-2`, with live compatibility pending.

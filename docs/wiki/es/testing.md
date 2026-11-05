@@ -38,6 +38,26 @@ Ronda 9 deja una diferencia de **una conversación** (73 % frente a 71 %); ronda
 Persisten cuatro clases de fallo: señales parafraseadas o españolas de servicio/cerramiento omitidas que se convierten en aclaraciones; retractaciones o límites añadidos a mitad de conversación que a veces no se fusionan; juicio de peligro con errores en ambos sentidos, por lo que se solicita confirmación y siempre se muestra el cerramiento; y exceso de detalle ante preguntas de un campo o fuera de alcance. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**. El informe T9 registra 6/7 fallos de integridad ON/OFF en ronda 9: integridad incluye requisitos/selección, no solo cifras. La ronda 10 es evidencia en vivo posterior a las reparaciones; OpenRouter sigue pendiente y las pruebas offline no amplían esa aceptación.
 
 
+### Vista por turno y uso cotidiano
+
+Un revisor independiente volvió a puntuar la ronda 10 (`gemini-3.6-flash`, recuperación ON): las mismas 41 conversaciones inéditas, con 68 turnos. Son resultados suministrados de otra revisión de las respuestas registradas, no una nueva ejecución del proveedor; los intervalos siguientes son Wilson del 95%.
+
+| Medida | Resultado | Intervalo/límite Wilson 95% |
+|---|---:|---:|
+| Turnos correctos | 56/68 = 82,4% | 71,6–89,6% |
+| Fallos de integridad | 7/68 = 10,3% | 5,1–19,8% |
+| Fallos de forma | 4/68 = 5,9% | No suministrado |
+| Fallos de memoria | 1/68 = 1,5% | No suministrado |
+| Conversaciones TÍPICAS completamente correctas | 18/19 = 94,7% | 75,4–99,1% |
+| Conversaciones ADVERSARIALES completamente correctas | 12/22 = 54,5% | 34,7–73,1% |
+| Cifras de catálogo incorrectas | 0/491 valores comprobados | Error ≤0,78%; exactitud ≥99,2% |
+
+**TÍPICA** significa una consulta por código o su seguimiento, un requisito claro en términos del catálogo (se permiten abreviaturas), una comparación o recomendación, o una corrección simple. **ADVERSARIAL** significa un requisito expresado solo mediante paráfrasis, con errores ortográficos o mezcla de idiomas, un juicio implícito de peligro o de sitio seguro, una petición fuera de alcance o una inyección, una solicitud de reformulación o una retractación durante la conversación.
+
+Todos los fallos de integridad fueron restricciones no aplicadas, nunca cifras incorrectas; cinco de siete correspondieron a servicio expresado mediante paráfrasis o en español. Todas las respuestas tardaron menos de 10 s, con un máximo de **5,03 s**. El límite de exactitud numérica usa los supuestos de muestreo de la revisión; no garantiza resultados en conversaciones nuevas.
+
+La revisión por turno aceptó algunos casos dudosos y obtuvo **30/41 conversaciones**, frente al resultado anterior más estricto de **28/41 (68,3%)**; se conservan ambos porque cambia el criterio de puntuación.
+
 ### Selección de modelos
 
 Cliente compatible OpenAI, medido a través de Google; OpenRouter es el destino de entrega pendiente. En las mismas **44 conversaciones**, `gemini-3.6-flash` obtuvo **21/44**, `gemini-3.8-flash` **25/44** y `gemini-3.1-pro` **28/44**. Pro tuvo **p95 7.1 s**, incluido un turno de **11 s**. Después de ronda 6 se mantuvo 3.6 Flash: **28/43** frente a **26/43** de 3.8 Flash. Es una decisión calidad/latencia en estos conjuntos, no un ranking universal. Embeddings usan `gemini-embedding-2`; ID de OpenRouter `google/gemini-embedding-2`, con compatibilidad en vivo pendiente.

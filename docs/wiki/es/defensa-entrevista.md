@@ -229,6 +229,14 @@ Como límite provisional de contexto, no como óptimo probado. Con 649 ejemplos 
 
 Probé reranking por metadatos, BM25+denso, diversidad MMR y embeddings con cantidades enmascaradas; medí precisión y primer vecino relevante bajo dos definiciones, con ajuste y validación separados dentro del banco. No afirmo una mejora suficiente: el mejor P@5 útil pasó de 37,8% a 39,2%, por debajo de los 5 puntos exigidos, y empeoró la métrica estricta. Conservé denso y sus filtros: medir también sirve para rechazar complejidad que no demuestra beneficio. [Tabla y decisión](testing.md#mejorar-la-recuperación).
 
+## 44. ¿Por qué 68 % si los números nunca fallan?
+
+El 68% corresponde a 28/41 conversaciones completas bajo el criterio estricto, que exige más que exactitud numérica.
+Hubo 0 cifras incorrectas en 491 valores, pero 7/68 turnos omitieron requisitos; cinco de esos siete fallos fueron por servicio expresado mediante paráfrasis o en español.
+La revisión por turno aprobó 56/68 (82,4%): 18/19 conversaciones cotidianas y 12/22 adversariales fueron completamente correctas.
+Todas las respuestas tardaron menos de 10 s, con un máximo de 5,03 s.
+Esa revisión aceptó algunos casos dudosos y llegó a 30/41 conversaciones; no sustituye el 28/41 estricto ni demuestra que las cifras nunca puedan fallar. [Detalle](testing.md#vista-por-turno-y-uso-cotidiano).
+
 ## Límites conocidos
 
 No hay aceptación OpenRouter ni Android con LLM real cerrada; la voz está implementada con pruebas JVM, pendiente en dispositivo; no hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.
