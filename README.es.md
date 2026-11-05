@@ -1,6 +1,28 @@
+# Series 76 Technical Assistant
 [English](README.md) · [Español](README.es.md)
 
-# Series 76 Technical Assistant
+## Inicio rápido
+
+1. **Requisitos:** Git, Docker con contenedores Linux; Android Studio, **JDK 17**, SDK Platform 36 y un emulador API 26+ encendido. Ejecuta desde la raíz del repositorio; configura `JAVA_HOME` con JDK 17 y `ANDROID_HOME` con tu SDK Android.
+2. **Configurar:** `cp .env.example .env` (Windows: `copy .env.example .env`), solo si no existe `.env`. Pega tu clave OpenRouter en `OPENROUTER_API_KEY` para interpretación de pago; déjala vacía para arrancar sin clave. Para ver detalles de debug local, configura `DEV_DEBUG=true` antes de arrancar.
+3. **Arrancar:** `docker compose up -d --build` (ambos sistemas). El arranque carga el catálogo y crea las cuentas TEST ONLY de abajo sin restablecer contraseñas existentes.
+4. **Salud:** abre [http://localhost:8000/ready](http://localhost:8000/ready); espera HTTP 200 tras compilar/cargar. [API / Swagger](http://localhost:8000/docs). Comprueba base de datos/catálogo/glosario, no OpenRouter.
+5. **Login:** usa cualquiera de estas cuentas públicas **TEST ONLY**:
+
+| Correo | Contraseña pública de prueba |
+|---|---|
+| demo@series76.test | Series76-Demo-1 |
+| reviewer@series76.test | Series76-Demo-2 |
+
+6. **Compilar + instalar en el emulador encendido** (elige tu sistema):
+   - macOS/Linux: `sh mobile/android/gradlew -p mobile/android :app:installDebug -PbackendUrl=http://10.0.2.2:8000/`
+   - Windows PowerShell: `./mobile/android/gradlew.bat -p mobile/android :app:installDebug -PbackendUrl=http://10.0.2.2:8000/`
+   - Abre **Series 76**, inicia sesión y prueba `What is the motor power of 761A00-11300000/A?` (sin clave). El emulador accede al backend en **http://10.0.2.2:8000/**.
+7. **Debug:** toca el nombre/correo del perfil **7 veces en 3 segundos** y luego **ⓘ** en una respuesta. Requiere `DEV_DEBUG=true`; si lo cambias después del arranque, aplica con `docker compose up -d backend`.
+
+Sin clave funcionan login/historial y consultas deterministas; la interpretación libre devuelve `503 not_configured`. Más abajo se explican conflictos de puertos, volúmenes existentes y configuración Android.
+
+## Descripción
 
 Asistente Android nativo para seleccionar actuadores Series 76: FastAPI, una decisión LangChain y PostgreSQL. El LLM interpreta; SQL y plantillas producen las cifras. Respuestas en inglés, entrada también en español.
 
