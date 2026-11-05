@@ -9,6 +9,7 @@ LABELS = {
     'fastest': 'fastest operating time', 'most_torque': 'most torque',
     'lowest_power': 'lowest motor power', 'lowest_lra': 'lowest LRA',
     'most_duty': 'highest duty S4', 'most_cycles': 'most On/Off cycles',
+    'closest_time': 'closest faster operating time',
 }
 
 
@@ -121,6 +122,8 @@ def rank(products, filters, by='closest_torque'):
             primary = missing(measurement(product, 'lra', filters))
         elif by == 'fastest':
             primary = missing(speed)
+        elif by == 'closest_time':
+            primary = (speed is None, -speed if speed is not None else 0)
         elif by == 'most_torque':
             primary = (torque is None, -torque if torque is not None else 0)
         elif by == 'lowest_power':
@@ -146,8 +149,10 @@ def ranked_by(filters, by='closest_torque'):
     if minimum is None:
         minimum = filters.get('min_torque_in_lb')
     if minimum is not None:
-        direction = 'below' if upper_torque_only(filters) else 'above'
-        return f'closest torque at or {direction} {_num(bound_value(minimum))} {torque_unit(filters)}, then lowest FLA'
+        labels = {'lt': 'below', 'lte': 'at or below', 'gt': 'above', 'gte': 'at or above'}
+        applied = ' and '.join(f'{labels[bound_operator(item, "gte")]} {_num(bound_value(item))} {torque_unit(filters)}'
+                               for item in bounds(minimum))
+        return f'closest torque {applied}, then lowest FLA'
     return 'lowest FLA, then shortest operating time'
 
 
@@ -167,6 +172,11 @@ def item(product, filters, reason=None):
     if fla is not None:
         parts.append(f'{fla[0]} {_num(fla[1])} A{fla[2]}')
     key_values = []
+    if filters.get('rank_by') == 'lowest_power':
+        power = product['measurements'].get('motor_power_w')
+        value = f'{_num(power)} W' if power is not None else 'N/A'
+        parts.insert(0, f'Motor power {value}')
+        key_values.append(dict(label='Motor power', value=value))
     if filters.get('rank_by') == 'lowest_lra':
         hz = filters.get('frequency_hz')
         lra = measurement(product, 'lra', filters)

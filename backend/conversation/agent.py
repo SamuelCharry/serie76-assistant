@@ -196,6 +196,16 @@ def schemas(term_keys):
     SearchBase = pydantic_model("SearchBase", __base__=Strict, **filter_fields)
 
     class SearchInput(SearchBase):
+        reference_operation: Annotated[str, Field(max_length=16)] = ''
+        reference_part_number: Annotated[str, Field(max_length=40)] = ''
+
+        @field_validator('reference_operation')
+        @classmethod
+        def valid_reference_operation(cls, value):
+            if value not in ('', 'stronger', 'faster', 'smaller'):
+                raise ValueError('Unknown reference operation')
+            return value
+
         intent: Literal['none', 'pick', 'explain_pick', 'next_page'] = 'none'
         sort_by: SearchFilters.model_fields["sort_by"].annotation = []
         cancel_previous: bool = False
@@ -219,8 +229,8 @@ def schemas(term_keys):
 
 
 DESCRIPTIONS = {
-    "get_actuator": "Look up complete Base Part Numbers (up to four). For prior models use flat reference_kind=shown_position with 1-based reference_index, last_shown, focused, or compared_winner with reference_metric/direction/frequency. For a same-frame voltage or enclosure equivalent of the focused model, set equivalent_voltage_v or equivalent_enclosure. For the last ranked list use from_results_items='1,3' for comparisons, or list_results=true. Use focus=overview for full specs; include comma-separated explain_terms for combined facts/definitions.",
-    "search_actuators": "Find ALL stated requirements, including every numeric limit. New independent requests use refine=false; follow-ups use refine=true or more/remove. To choose one, explain the choice or show the next page, set intent=pick, explain_pick or next_page. Unknown data never passes a threshold.",
+    "get_actuator": "Look up up to four complete codes. Resolve prior models with reference_kind/index/metric/direction/frequency. Set equivalent_voltage_v or equivalent_enclosure for same-frame equivalents. Use from_results_items='1,3' to compare ranked positions, list_results=true to list, focus=overview for specs and explain_terms for definitions.",
+    "search_actuators": "Find ALL stated requirements, including every numeric limit. New independent requests use refine=false; follow-ups use refine/more/remove. intent=pick/explain_pick/next_page acts on results. reference_operation=stronger/faster/smaller copies SQL supply/enclosure/service from reference_part_number or focused model; smaller needs a published metric. Unknown values never pass bounds.",
     "explain_terms": "Quote only glossary definitions; absent terms use ask_clarification term_not_in_summary, not a related definition.",
     "ask_clarification": "Ask for missing data/disambiguation, or mark unsupported requests such as jokes and terms absent from the glossary. If prior results exist and the user wants a pick, explanation or next page, set intent=pick, explain_pick or next_page rather than repeating a question.",
 }
@@ -374,6 +384,12 @@ def _safe_errors(exc):
     return [f"{e['type']}:{'.'.join(str(x) for x in e['loc'])}" for e in exc.errors()][:8]
 
 
+def project_assumptions(assumptions, filters):
+    """Only describe an interpretation that survived validation and merging."""
+    return [dict(item, value=filters[item['field']]) for item in assumptions
+            if item['field'] in filters and policy.describe({item['field']: filters[item['field']]}).strip()]
+
+
 class Turn:
     def __init__(self, connection, query, messages, context):
         self.started = time.perf_counter()
@@ -473,6 +489,10 @@ class Turn:
         elif policy.hazard_signal(self.query):
             self.context['hazard_signal'] = True
         by = shown_recommendation.priority(self.query, self.context.get('rank_by', 'closest_torque'), priority_hint)
+        objective = {'lowest_power': 'lowest_power', 'fastest': 'fastest',
+                     'most_torque': 'highest_torque', 'lowest_fla': 'lowest_current'}.get(by)
+        if objective:
+            filters['sort_by'] = [objective]
         rows = [get_actuator(self.connection, code) for code in codes]
         if any(row is None for row in rows):
             return self.clarify('which_product', 'A shown model is no longer in the active catalogue; compare the models again.')
@@ -803,6 +823,9 @@ class Turn:
             self.context["part_numbers"] = [p["base_part_number"] for p in products]
             if len(products) == 1:
                 self.context['focused_model'] = products[0]['base_part_number']
+                service = policy.colloquial_requirements(self.query)[0].get('service')
+                if service:
+                    self.context['reference_service'] = service
         lead = quality.comparison_lead(compared) if compared else None
         if compared and len(compared['models']) == 2:
             import re
@@ -871,14 +894,80 @@ class Turn:
                 display_products = []
                 if winner:
                     self.context['focused_model'] = winner
+        if products and policy.hazard_signal(self.query):
+            suitability = []
+            for product in products:
+                enclosure = product['enclosure']
+                statement = f"{product['base_part_number']} is {enclosure.capitalize()}."
+                if enclosure == 'weatherproof':
+                    statement += ' It is not Explosionproof. Confirm the area classification; I can find Explosionproof equivalents.'
+                else:
+                    statement += ' Confirm the area classification against the published enclosure header before selecting it.'
+                suitability.append(statement)
+            lead = ' '.join(suitability)
+            answer = lead + '\n' + answer
         return AgentResult(answer.strip(), display_products, context=self.context, terms=terms, comparison=compared, lead=lead)
+
+    def reference_constraints(self, args):
+        """Resolve a relative operation against a grounded SQL product, never model figures."""
+        import re
+        operation = args.get('reference_operation')
+        if not operation:
+            return {}
+        known = set(policy.codes_in_text(self.query))
+        for key in ('part_numbers', 'on_screen', 'last_shown_list', 'last_comparison_models'):
+            known.update(self.context.get(key) or [])
+        focused = self.context.get('focused_model')
+        if focused:
+            known.add(focused)
+        code = args.get('reference_part_number') or focused or (next(iter(known)) if len(known) == 1 else None)
+        code, _ = policy.canonical_code(code or '')
+        if not code or code not in known:
+            return self.clarify('which_product')
+        source = get_actuator(self.connection, code)
+        if not source or source.get('data_status') != 'reported':
+            return self.clarify('which_product', 'The reference has no published measurements. Which model should I use?')
+        explicit, _ = policy.colloquial_requirements(self.query)
+        service = explicit.get('service') or self.context.get('reference_service') or (self.context.get('filters') or {}).get('service')
+        if not service:
+            return self.clarify('service')
+        result = dict(service=service, enclosure=source['enclosure'], supply_voltage_v=source['supply_voltage_v'])
+        scope = dict(self.context.get('filters') or {}, service=service)
+        if operation == 'faster':
+            hz = re.search(r'\b(50|60)\s*hz\b', self.query, re.I)
+            if hz:
+                scope['frequency_hz'] = int(hz.group(1))
+            frequencies = {r.get('frequency_hz') for r in source.get('frequencies', []) if r.get('frequency_hz')}
+            if not scope.get('frequency_hz') and len(frequencies) > 1:
+                return self.clarify('frequency')
+            if scope.get('frequency_hz'):
+                result['frequency_hz'] = scope['frequency_hz']
+            value = ranking.measurement(source, 'operating_time', scope)
+            field, op = 'max_operating_time_s', 'lt'
+        else:
+            if operation == 'smaller' and not re.search(r'\b(?:torque|par)\b', self.query, re.I):
+                return self.clarify('requirements', 'Physical dimensions are not published. Do you mean lower torque?')
+            # Existing bounds must not hide the reference measurement.
+            scope.pop('min_torque_nm', None)
+            scope.pop('min_torque_in_lb', None)
+            value = ranking.measurement(source, 'torque', scope)
+            field, op = 'min_torque_nm', 'gt' if operation == 'stronger' else 'lt'
+        if value is None:
+            return self.clarify('requirements', 'The reference has no published value for that operation and scope.')
+        result[field] = dict(value=value, op=op)
+        self.trace['reference_operation'] = dict(operation=operation, part_number=code, filters=json_numbers(result))
+        return result
 
     def search(self, args, *, trusted=False):
         import re
-        signalled = self.contextual_intent(args.get('intent', 'none'), args.get('sort_by') or ())
+        reference = self.reference_constraints(args)
+        if isinstance(reference, AgentResult):
+            return reference
+        signalled = None if reference else self.contextual_intent(args.get('intent', 'none'), args.get('sort_by') or ())
         if signalled is not None:
             return signalled
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
+        delta.update(reference)
         if self.semantic is not None:
             deterministic, _ = policy.colloquial_requirements(self.query)
             valid_assumptions = [a for a in args.get('assumptions', []) if a not in
@@ -923,7 +1012,7 @@ class Turn:
         bad = policy.invalid_assumptions(args.get("assumptions", []), self.texts)
         assumptions = [a for a in args.get("assumptions", []) if a not in bad]
         ungrounded = [] if trusted else [field for field in policy.grounding_errors(delta, assumptions, self.texts, self.semantic)
-                                         if field not in inferred and field not in written and not
+                                         if field not in reference and field not in inferred and field not in written and not
                                          (field == 'enclosure' and delta.get(field) == 'explosionproof'
                                           and policy.hazard_signal(self.query, self.semantic))]
         if not trusted:
@@ -931,7 +1020,7 @@ class Turn:
             # voltage into watts or license another numeric field without units.
             ungrounded = list(dict.fromkeys(ungrounded + requirement_coverage.unsupported(
                 self.query, {k: v for k, v in delta.items()
-                             if k not in policy.removed_fields(self.query)
+                             if k not in reference and k not in policy.removed_fields(self.query)
                              and str(v) != str((self.context.get('filters') or {}).get(k))
                              and not (k == 'supply_voltage_v' and v == inferred.get(k) == 24)})))
         dropped = []
@@ -962,10 +1051,11 @@ class Turn:
         change_only = bool(previous and re.match(r'^\s*(?:and |actually |make (?:that|it) |no wait[, ]*|instead\b)',
                                                  self.query, re.I))
         merged, notes = policy.merge_filters(previous, delta, refine=args["refine"] or change_only or negated,
-                                             remove=sorted(removals), more=args["more"])
+                                             remove=sorted(removals), more=args["more"], query=self.query)
         carried = dict(self.context.get('quantity_requirements', {})) if args['refine'] or change_only or args['more'] or negated else {}
         for field, value in written.items():
-            carried[field] = (policy.merge_bounds(field, carried[field], value)
+            carried[field] = (policy.merge_bounds(field, carried[field], value,
+                                                 replace=field in policy.replaced_fields(self.query, written))
                               if field in carried and field not in ('supply_voltage_v', 'frequency_hz') else value)
         for field in removals:
             carried.pop(field, None)
@@ -984,6 +1074,11 @@ class Turn:
             requested_sort = ['lowest_power']
         if requested_sort:
             merged['sort_by'] = requested_sort
+        if reference:
+            # A relative request changes the objective to the nearest qualifying torque.
+            merged.pop('sort_by', None)
+            notes.append('Using ' + self.trace['reference_operation']['part_number'] +
+                         ' as the reference; keeping its published voltage, enclosure and service.')
         if merged.get("sort_by"):
             merged["limit"] = 3
         if dropped:
@@ -1015,7 +1110,7 @@ class Turn:
             self.context.pop('hazard_signal', None)
         if self.context.get('hazard_signal') and merged.get('enclosure') == 'weatherproof':
             merged.pop('enclosure', None)
-        if not scenario and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS) and not merged.get('sort_by'):
+        if not scenario and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS) and not merged.get('sort_by') and not catalogue_answers.all_requested(self.query):
             if re.search(r'\b(?:big|large)\s+valve\b', self.query, re.I):
                 from backend.catalog.repository import torque_band_facets
                 bands = torque_band_facets(self.connection, SearchFilters())
@@ -1104,7 +1199,7 @@ class Turn:
             return self.clarify("requirements", "These requirements could not be applied together. Please restate the supply, service and limits you need.")
         unscoped_superlative = bool(merged.get('sort_by')) and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS)
         result = search_actuators(self.connection, filters, allow_ambiguous=(
-            unscoped_superlative or bool(re.search(r'\bshow all\b', self.query, re.I))))
+            unscoped_superlative or catalogue_answers.all_requested(self.query)))
         invalid_rows = [p['base_part_number'] for p in result['products'] if not integrity.satisfies(p, filters)]
         if invalid_rows:
             rerun = search_actuators(self.connection, SearchFilters.model_validate(
@@ -1115,6 +1210,8 @@ class Turn:
         sort_map = {'fastest': 'fastest', 'lowest_current': 'lowest_fla',
                     'highest_torque': 'most_torque', 'lowest_power': 'lowest_power'}
         by = sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque')
+        if reference and args.get('reference_operation') == 'faster':
+            by = 'closest_time'
         self.context['rank_by'] = by
         self.context["pagination"] = {"has_more": False}
         self.trace["data"] = result
@@ -1139,7 +1236,7 @@ class Turn:
                 question.answer += '\nMotor power is the published rated motor power, not total electrical consumption.'
             question.lead = 'Ranked by ' + rec['ranked_by'] + '.'
             return question
-        shown = [dict(a, value=merged.get(a["field"])) for a in assumptions]
+        shown = project_assumptions(assumptions, merged)
         products = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in result["products"]]
         if not result["total"]:
             from backend.catalog.repository import closest_numeric
@@ -1148,19 +1245,12 @@ class Turn:
             answer = quality.render_impossible(merged, closest)
             torque_bound = merged.get('min_torque_nm')
             if isinstance(torque_bound, dict) and torque_bound.get('op') in ('lt', 'lte'):
-                nearest_torque = next((row['value'] for row in closest
-                                       if row['field'] == 'min_torque_nm' and row.get('value') is not None), None)
-                published_minimum = self.connection.execute(
-                    "SELECT min(s.torque_nm) AS torque FROM series76.service_specs s "
-                    "JOIN series76.entries e ON e.id=s.entry_id "
-                    "JOIN series76.catalog_state c ON c.active_import_id=e.import_id "
-                    "WHERE e.data_status='reported' AND s.torque_nm IS NOT NULL").fetchone()['torque']
-                if published_minimum is not None:
-                    nearest_torque = published_minimum
+                nearest_torque = min((row['value'] for row in closest
+                                     if row['field'] == 'min_torque_nm' and row.get('value') is not None), default=None)
                 if nearest_torque is not None:
                     comparison = 'below' if torque_bound['op'] == 'lt' else 'at or below'
                     answer = (f"No model is {comparison} {torque_bound['value']} Nm; "
-                              f'the lowest published torque is {nearest_torque} Nm.')
+                              f'the lowest published torque is {nearest_torque} Nm under the remaining requirements.')
             self.context["reply_options"] = quality.impossible_replies(merged, closest)
             self.context["part_numbers"] = []
             nearest = []
@@ -1218,32 +1308,42 @@ class Turn:
                             break
                     if len(nearest) >= 2:
                         break
+            numeric_nearest = []
             for row in closest:
                 for code in row.get('models', []):
-                    if code in {item['part_number'] for item in nearest}:
+                    if code in {item['part_number'] for item in nearest + numeric_nearest}:
                         continue
                     product = get_actuator(self.connection, code)
                     if product:
                         requirement = policy.describe({row['field']: merged[row['field']]})
-                        nearest.append(ranking.item(product, merged, f'Fails {requirement}; closest published value is {row["value"]}'))
-                    if len(nearest) == 2:
+                        reason = f'Does not meet {requirement}; closest published value in this scope is {row["value"]}'
+                        numeric_nearest.append(ranking.item(product, merged, reason))
+                        answer += f'\n{code}: {reason}.'
+                    if len(numeric_nearest) == 2:
                         break
-                if len(nearest) == 2:
+                if len(numeric_nearest) == 2:
                     break
             rec = dict(ranked_by='Alternatives after relaxing a requirement', total=0,
                        shown=len(nearest), items=nearest)
             self.context['last_ranked_list'] = []
             self.context['zero_result_options'] = self.context.get('reply_options', [])
-            self.context['zero_result_nearest'] = nearest
+            self.context['zero_result_nearest'] = nearest + numeric_nearest
             if notes:
                 answer += '\n' + '\n'.join(dict.fromkeys(notes))
             return AgentResult(answer, context=self.context, recommendation=rec,
                                lead='No exact match. Nearest published models follow.')
         all_filters = SearchFilters.model_validate(dict(merged, limit=100, offset=0))
         all_rows = search_actuators(self.connection, all_filters, allow_ambiguous=True)['products']
+        if catalogue_answers.all_requested(self.query):
+            while len(all_rows) < result['total']:
+                page = search_actuators(self.connection, SearchFilters.model_validate(
+                    dict(merged, limit=100, offset=len(all_rows))), allow_ambiguous=True)['products']
+                if not page:
+                    break
+                all_rows.extend(page)
         all_rows = [p for p in all_rows if integrity.satisfies(p, filters)]
         planned_search = answer_planner.plan(self.query)
-        if planned_search.shape == 'verdict' and len(planned_search.metrics) == 1 and len(all_rows) >= 2:
+        if (merged.get('sort_by') or [None])[0] != 'lowest_power' and not reference and planned_search.shape == 'verdict' and len(planned_search.metrics) == 1 and len(all_rows) >= 2:
             metric_rank = {('operating_time', 'lower'): 'fastest',
                            ('motor_power', 'lower'): 'lowest_power',
                            ('fla', 'lower'): 'lowest_fla',
@@ -1266,7 +1366,7 @@ class Turn:
                 rec = dict(ranked_by=ranking.ranked_by(merged, by), total=result['total'],
                            shown=len(items), items=items)
                 return AgentResult(verdict, context=self.context, lead=verdict, recommendation=rec)
-        if re.search(r'\bshow all\b', self.query, re.I) and all_rows:
+        if catalogue_answers.all_requested(self.query) and all_rows:
             ordered = ranking.rank(all_rows, merged, by)
             items = [ranking.item(row, merged) for row in ordered]
             ranked_by = ranking.ranked_by(merged, by)
@@ -1537,6 +1637,49 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
     import re
+    if action is None and not answers and not remove_filters:
+        declined = catalogue_answers.limitations(query)
+        named = policy.codes_in_text(query)
+        purchase = policy.purchase_request(query) and re.search(r'\b(?:buy|purchase|order|comprar|compra)\b', query, re.I)
+        if (declined or named and policy.hazard_signal(query)) and not purchase:
+            supported = bool(answer_planner.plan(query).metrics) or bool(re.search(
+                r'\b(?:specs|specifications|especificaciones|published data|voltage|voltaje|supply|enclosure|carcasa|CSA)\b', query, re.I))
+            lookup = named and (supported or policy.hazard_signal(query))
+            turn.trace = dict(name='get_actuator' if lookup else 'document_limitation', parameters={},
+                              raw_parameters={}, validation=['ok'], context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            if lookup:
+                result = turn.lookup(dict(part_numbers=named[:4], focus=['overview'], explain_terms=[]))
+            elif named:
+                result = AgentResult('I can show published specs for ' + ', '.join(named) + '.', context=turn.context)
+            else:
+                facts = catalogue_answers.answer(connection, query)
+                stated, _ = policy.colloquial_requirements(query)
+                if not facts and stated and re.search(r'\b(?:find|search|show|list|busc\w*|necesito)\b', query, re.I):
+                    turn.trace['name'] = 'search_actuators'
+                    args = models['search_actuators'].model_validate(stated).model_dump(mode='json')
+                    result = turn.search(args, trusted=True)
+                else:
+                    result = AgentResult(facts or '', context=turn.context)
+            result.answer = '\n'.join(declined + [result.answer]).strip()
+            return finish(turn, result)
+        relative = catalogue_answers.relative_operation(query)
+        if relative and (named or any(turn.context.get(k) for k in ('focused_model', 'on_screen', 'part_numbers'))):
+            turn.trace = dict(name='search_actuators', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            args = models['search_actuators'].model_validate(dict(
+                reference_operation=relative, reference_part_number=named[0] if len(named) == 1 else '')).model_dump(mode='json')
+            return finish(turn, turn.search(args))
+        preference = re.search(r'\b(?:prefer|preference|rank|sort|prioriti[sz]e|prefiero|prioriza|ordena)\b', query, re.I)
+        objectives = [key for key in ('fastest', 'lowest_power', 'highest_torque', 'lowest_current')
+                      if policy.sort_grounded(key, query)]
+        if preference and objectives and turn.context.get('filters'):
+            turn.trace = dict(name='search_actuators', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            args = models['search_actuators'].model_validate(dict(refine=True, sort_by=objectives)).model_dump(mode='json')
+            return finish(turn, turn.search(args))
     if action is None and not answers and not remove_filters and policy.recommendation_request(query):
         turn.trace = dict(name='ranked_pick', parameters={}, raw_parameters={}, validation=['ok'],
                           context_before=context_before,
@@ -1697,6 +1840,14 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                 and not (turn.context.get('filters') or {})):
             metric = 'motor_power' if re.search(r'\b(?:power|electricity)\b', bare_query) else 'torque'
             direction = 'highest' if re.search(r'\b(?:biggest|highest|most|strongest)\b', bare_query) else 'lowest'
+            objective = ('lowest_power' if metric == 'motor_power' and direction == 'lowest' else
+                         'highest_torque' if metric == 'torque' and direction == 'highest' else None)
+            if objective:
+                turn.trace = dict(name='search_actuators', parameters={}, raw_parameters={}, validation=['ok'],
+                                  context_before=context_before,
+                                  model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+                args = models['search_actuators'].model_validate(dict(sort_by=[objective])).model_dump(mode='json')
+                return finish(turn, turn.search(args, trusted=True))
             all_rows = search_actuators(connection, SearchFilters(limit=100), allow_ambiguous=True)['products']
             answer, winner = metrics.verdict(all_rows, f'Which model has the {direction} {metric.replace("_", " ")}?', {})
             if answer:
@@ -1951,7 +2102,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                               model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
             return finish(turn, turn.clarify('term_not_in_summary',
                           "The document doesn't define that term. I can show the published enclosure description."))
-        if limitation is None and not policy.codes_in_text(query) and re.search(r'\b(ambient temperature|temperature rating|certification)\b', bare_query):
+        if limitation is None and not policy.codes_in_text(query) and not policy.colloquial_requirements(query)[0] and re.search(r'\b(ambient temperature|temperature rating|certification)\b', bare_query):
             limitation = 'The catalogue does not specify that condition. I can show the published enclosure description.'
         if limitation is None and re.search(r'\b(how strong is strong enough|size (?:my|a|the) valve|valve sizing)\b', bare_query):
             limitation = 'The catalogue does not size valves. Tell me the required torque and I can find actuators that meet it.'
@@ -2286,7 +2437,7 @@ def finish(turn, result):
             result.recommendation = None
             result.products = []
             result.comparison = None
-    if re.search(r'\b(price|prices|precio|precios|cheapest|cheap)\b', turn.query, re.I) and not result.answer.startswith("The catalogue doesn't publish prices."):
+    if re.search(r'\b(price|prices|precio|precios|cheapest|cheap)\b', turn.query, re.I) and not result.answer.startswith(("The catalogue doesn't publish prices.", 'The catalogue does not publish prices.')):
         limitation = 'The supplied catalogue has no prices. I cannot calculate a weighted overall score involving price; I can compare published torque, operating time, current and motor power.'
         if re.search(r'\b(?:cheapest|cheap)\b', turn.query, re.I) and result.recommendation:
             limitation = "The catalogue doesn't publish prices. Lowest motor power is a proxy for comparison, not a price estimate."
@@ -2338,10 +2489,12 @@ def finish(turn, result):
         total = result.recommendation['total']
         result.suggestions = ([dict(label='Compare them' if total == 2 else 'Compare top 2',
                                     action=dict(type='compare_top', args=dict(n=2)))] if total >= 2 else [])
-        if total > 3 and not re.search(r'\bshow all\b', turn.query, re.I):
+        if total > 3 and not catalogue_answers.all_requested(turn.query):
             result.suggestions.append(dict(label=f'Show all {total}', action=dict(type='show_all', args={})))
     result.suggested_replies = [s['label'] if isinstance(s, dict) else s for s in result.suggestions]
     if result.products and not result.lead:
         result.lead = ('Catalogue specifications for ' + result.products[0]['base_part_number'] + '.' if len(result.products) == 1
                        else str(len(result.products)) + ' catalogue candidates are shown under the current requirements.')
+    if (result.context.get('filters') or {}).get('sort_by', [None])[:1] == ['lowest_power']:
+        result.answer += '\nModels with N/A motor power rank after published motor power values; N/A is not zero.'
     return result

@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import re
+import unicodedata
 from decimal import Decimal, InvalidOperation
 from backend.catalog.models import bound_value, bound_operator, bounds
 
@@ -39,13 +40,15 @@ def sort_grounded(sort_key, query):
 LEXICON = {
     ("service", "on_off"): ("on/off", "on_off", "on-off", "on off"),
     ("service", "modulating"): ("modulating", "modulation", "modulante"),
-    ("enclosure", "explosionproof"): ("explosionproof", "explosion proof", "explosion-proof", "antiexplos"),
+    ("enclosure", "explosionproof"): ("explosionproof", "explosion proof", "explosion-proof", "antiexplos",
+                                        "a prueba de explosión", "a prueba de explosion"),
     ("enclosure", "weatherproof"): ("weatherproof", "weather proof", "weather-proof"),
     ("supply_current", "DC"): ("dc", "direct current", "corriente continua", "battery"),
     # Phases exist only for AC supplies (DC has none), so stated phases ground AC.
     ("supply_current", "AC"): ("ac", "alternating", "alterna", "mains", "hz", "single phase", "single-phase",
                                "three phase", "three-phase", "1-phase", "3-phase", "monofas", "trifas"),
-    ("supply_current", "AC/DC"): ("ac/dc", "ac or dc", "ac-dc"),
+    ("supply_current", "AC/DC"): ("ac/dc", "ac or dc", "ac-dc", "ac and dc", "ac y dc", "ac o dc",
+                                    "dc and ac", "dc y ac", "alterna y continua", "alternating and direct current"),
     ("phase_count", 1): ("single phase", "single-phase", "1 phase", "1-phase", "one phase", "monofas", "1ph"),
     ("phase_count", 3): ("three phase", "three-phase", "3 phase", "3-phase", "trifas", "3ph"),
     ("csa_required", True): ("csa",),
@@ -133,12 +136,20 @@ def colloquial_requirements(query, semantic=None):
     return result, notes
 
 
-NONHAZARD_RE = re.compile(r'\b(?:not hazardous|not a (?:classified|hazardous) (?:area|zone)|outside (?:the )?(?:classified|hazardous) (?:area|zone)|(?:safe|normal) area|area is safe|no gas)\b', re.I)
+NONHAZARD_RE = re.compile(
+    r'\b(?:not hazardous|non[ -]?hazardous|not a (?:classified|hazardous) (?:area|zone)|'
+    r'outside (?:the )?(?:classified|hazardous) (?:area|zone)|'
+    r'(?:safe|normal|ordinary|regular) (?:area|room|zone)|area is safe|'
+    r'(?:zona|area|sala) (?:segura|normal|ordinaria|no peligrosa)|'
+    r'(?:no|not|nothing|without|sin)\s+(?:(?:any|longer|stored|materials?|materiales|sustancias|hay)\s+){0,2}'
+    r'(?:gas|fuel|solvents?|flammable|explosive|hazardous|combustibles?|inflamables?|explosiv[oa]s?)'
+    r'(?:\s+(?:materials?|gases|gas|vapou?rs?|liquids?))?)\b', re.I)
 
 
 def nonhazard_signal(text):
-    return bool(NONHAZARD_RE.search(text) or re.search(
-        r'\b(?:no|not|nothing|without|sin)\s+(?:\w+\s+){0,2}(?:flammable|explosive|hazardous|inflamables?|explosiv[oa]s?)\b', text, re.I))
+    from .context_fallback import HAZARD_RE
+    # A negated hazard does not cancel a different affirmative hazard nearby.
+    return bool(NONHAZARD_RE.search(text)) and not HAZARD_RE.search(NONHAZARD_RE.sub(' ', text))
 
 
 def canonical_enclosures(text):
@@ -191,35 +202,85 @@ def weather_exposure(text, semantic=None):
 
 
 REMOVE_WORDS = {
-    'enclosure': r'enclosure|explosionproof|weatherproof|hazardous|classified',
-    'supply_voltage_v': r'voltage|volts?|\d+\s*v\b',
-    'service': r'service|on\s*/?\s*off|modulating',
-    'phase_count': r'phases?|fases?',
-    'frequency_hz': r'frequency|hz',
+    'enclosure': r'enclosure|explosionproof|weatherproof|hazardous|classified|envolvente|carcasa',
+    'supply_voltage_v': r'voltage|volts?|voltaje|tensi[oó]n|\d+\s*v\b',
+    'supply_current': r'(?:supply )?current|corriente|ac|dc',
+    'service': r'service|servicio|on\s*/?\s*off|modulating|modulante',
+    'phase_count': r'phases?|fases?|trif[aá?]sic[oa]|monof[aá?]sic[oa]',
+    'frequency_hz': r'frequency|frecuencia|hz',
     'min_torque_nm': r'torque|\bnm\b',
     'min_torque_in_lb': r'torque|in\s*-?\s*lb',
     'max_fla_a': r'fla|full.load current',
     'max_lra_a': r'lra|locked.rotor current',
     'max_motor_power_w': r'motor power|wattage',
+    'min_duty_s4_percent': r'duty|s4',
+    'min_cycles_per_hour': r'cycles?|ciclos?',
+    'min_starts_per_hour': r'starts?|arranques?',
+    'max_operating_time_s': r'operating time|tiempo',
+    'csa_required': r'csa|certification|certificaci[oó]n',
 }
+
+
+REMOVAL_PREFIX = re.compile(
+    r'\b(?:forget|drop|remove|clear|without|sin|ya no|elimina|quita|olvida|no|not|'
+    r'rather than|instead of|en vez de)\b', re.I)
+
+
+def _affirmed_fields(text):
+    """Distinguish an affirmed value from a negated alternative or a field name.
+
+    In "DC, not AC" the negative clause must not erase the affirmative one.
+    "Any DC actuator" also affirms DC; "any current" supplies no value.
+    """
+    from .context_fallback import CONTEXT_LEXICON
+    from .requirement_coverage import apply
+    fields = set()
+    clauses = re.split(r'[,;!?]|(?<!\d)\.(?!\d)|\b(?:but|pero|sino|only|solo|solamente)\b|'
+                       r'\b(?:and|y)\s+(?=use\b|need\b|want\b|usa\b|necesito\b|quiero\b)', text, flags=re.I)
+    for clause in clauses:
+        if NO_PREFERENCE.search(clause):
+            continue
+        for key in set(LEXICON) | set(CONTEXT_LEXICON):
+            field, _ = key
+            for word in LEXICON.get(key, ()) + CONTEXT_LEXICON.get(key, ()):
+                # Short electrical labels need whole tokens; long stems follow
+                # the same bounded vocabulary as grounding_errors.
+                pattern = (r'(?<![a-z])' + re.escape(word) + r'(?![a-z])'
+                           if len(word) <= 3 else re.escape(word))
+                for match in re.finditer(pattern, clause, re.I):
+                    denied_after = re.search(r'\b(?:no longer (?:needed|required)|ya no|no (?:es necesario|importa))\b',
+                                             clause[match.end():match.end() + 45])
+                    if not REMOVAL_PREFIX.search(clause[:match.start()]) and not denied_after:
+                        fields.add(field)
+        if not REMOVAL_PREFIX.search(clause):
+            quantities, _ = apply(clause, {})
+            fields.update(quantities)
+    return fields
 
 
 def removed_fields(query, pending_questions=()):
     """Map an explicit negation to filter keys, independent of model output."""
     text = query.lower()
-    text = re.sub(r'\b(?:no more than|not more than|no less than)\b', 'bound', text)
+    text = re.sub(r'\bno\s*[, ]\s*sorry\b', 'correction', text)
+    text = re.sub(r'\b(?:no more than|not more than|no less than|no m[aá?]s de)\b', 'bound', text)
+    affirmed = _affirmed_fields(text)
+    if re.search(r'\b(?:clear|remove|drop|forget)\s+(?:all|every)(?:\s+\w+)?\s+(?:filters?|requirements?|constraints?)\b|'
+                 r'\b(?:quita|elimina|borra|olvida)\s+tod[oa]s?\s+(?:(?:los|las)\s+)?(?:filtros|requisitos|restricciones)\b', text):
+        return set(FILTER_FIELDS) - affirmed
     removed = set()
     for clause in context_clauses(text):
         for field, words in REMOVE_WORDS.items():
-            if re.search(r'\b(?:forget|drop|remove|no|not|any)\b(?:\W+\w+){0,3}?\W+(?:' + words + r')\b', clause) or \
+            if re.search(r'\b(?:forget|drop|remove|clear|without|sin|ya no|elimina|quita|olvida|no|not)\b(?:\W+\w+){0,3}?\W+(?:' + words + r')\b', clause) or \
+                    re.search(r'\b(?:any|cualquier)\s+(?:' + words + r')\b', clause) or \
                     (NO_PREFERENCE.search(clause) and re.search(r'\b(?:' + words + r')\b', clause)) or \
+                    re.search(r'\b(?:' + words + r')\b.{0,35}\b(?:no longer (?:needed|required)|ya no|no (?:es necesario|importa))\b', clause) or \
                     re.search(r'\b(?:' + words + r')\b.{0,20}\bany(?:thing)?\b', clause):
                 removed.add(field)
     if NO_PREFERENCE.search(text) and not removed and pending_questions:
         removed.add(pending_questions[0]['id'])
     if nonhazard_signal(text):
         removed.add('enclosure')
-    return removed
+    return removed - affirmed
 
 
 CATALOGUE_ATTRIBUTE_WORDS = frozenset({
@@ -387,9 +448,9 @@ def numbers_in(texts):
 
 def grounding_errors(delta, assumptions, texts, semantic=None):
     """Fields whose value is not traceable to the conversation or to a quoted assumption."""
-    corpus = " ".join(texts).lower()
+    corpus = _evidence_text(" ".join(texts))
     numbers = numbers_in(texts)
-    assumed = {a["field"] for a in assumptions if a["user_phrase"].strip().lower() in corpus}
+    assumed = {a["field"] for a in assumptions if _evidence_text(a["user_phrase"]) in corpus}
     errors = []
     for field, value in delta.items():
         if value is None or field in assumed:
@@ -400,11 +461,22 @@ def grounding_errors(delta, assumptions, texts, semantic=None):
         elif field in CATEGORICAL_FIELDS:
             if field == "csa_required" and value is False:
                 continue
+            if field == 'supply_current' and value == 'AC/DC' and _dual_current(corpus):
+                continue
             words = LEXICON.get((field, value), ())
             if field in ('service', 'enclosure'):
                 from .context_fallback import CONTEXT_LEXICON
-                words = CONTEXT_LEXICON.get((field, value), words)
-            if not any(_has_word(corpus, w) for w in words):
+                words = words + CONTEXT_LEXICON.get((field, value), ())
+            evidence = corpus
+            # Long, unambiguous domain labels may have a small spelling error;
+            # short electrical tokens (AC/DC) must always match exactly.
+            if field in ('service', 'enclosure'):
+                labels = ('weatherproof', 'explosionproof', 'modulating', 'modulante', 'exterior', 'intemperie')
+                for token in re.findall(r'\b[a-z]{6,}\b', corpus):
+                    candidates = [label for label in labels if _edit_distance(token, label) <= (2 if len(label) >= 10 else 1)]
+                    if len(candidates) == 1:
+                        evidence = re.sub(r'\b' + re.escape(token) + r'\b', candidates[0], evidence)
+            if not any(_has_word(evidence, _evidence_text(w)) for w in words):
                 errors.append(field)
     return errors
 
@@ -416,14 +488,42 @@ def _has_word(corpus, word):
     return word in corpus
 
 
+def _evidence_text(text):
+    return ' '.join(unicodedata.normalize('NFKC', text).lower().split())
+
+
+def _dual_current(text):
+    ac = r'(?:ac|alternating(?: current)?|(?:corriente )?alterna)'
+    dc = r'(?:dc|direct(?: current)?|(?:corriente )?continua)'
+    join = r'\s*(?:[/&+]|and|or|y|o|as well as)\s*'
+    return bool(re.search(r'\b(?:' + ac + join + dc + '|' + dc + join + ac + r')\b', text))
+
+
 def invalid_assumptions(assumptions, texts):
-    corpus = " ".join(texts).lower()
-    return [a for a in assumptions if a["user_phrase"].strip().lower() not in corpus]
+    corpus = _evidence_text(" ".join(texts))
+    return [a for a in assumptions if _evidence_text(a["user_phrase"]) not in corpus]
 
 
-def merge_filters(previous, delta, *, refine, remove, more):
+def replaced_fields(query, delta):
+    """Corrections replace only quantities in their clause; additions retain a range.
+
+    This signal comes from user text, never an ungrounded model flag. Keep it shared
+    by filter state and the independent quantity ledger so their deltas agree.
+    """
+    from .requirement_coverage import apply
+    correction = r'\b(?:i meant|actually|instead|rather|no\s*[, ]\s*sorry|sorry|correction|correct(?:ion)?|reverse|replace|quise decir|queria decir|rectifico|corrijo|en vez de|mejor dicho)\b'
+    fields = set()
+    for clause in re.split(r';|(?<!\d)\.(?!\d)|\b(?:but|pero)\b|\b(?:and|y)\s+(?=add\b|keep\b|also\b|conserva\b|agrega\b)', query, flags=re.I):
+        if re.search(correction, clause, re.I):
+            evidence, _ = apply(clause, {}, delta)
+            fields.update(field for field in evidence if field in delta)
+    return fields
+
+
+def merge_filters(previous, delta, *, refine, remove, more, query=''):
     """Return (merged, notes). Only the delta is the model's; carried values are the code's."""
     notes = []
+    replacements = replaced_fields(query, delta)
     refine = refine or bool(remove)  # removing a requirement only makes sense on the previous search
     base = {k: v for k, v in (previous or {}).items() if k in FILTER_FIELDS and v is not None} if (refine or more) else {}
     merged = dict(base)
@@ -431,7 +531,7 @@ def merge_filters(previous, delta, *, refine, remove, more):
     for field in NUMERIC_FIELDS:
         if field in ('supply_voltage_v', 'frequency_hz') or field not in base or delta.get(field) is None:
             continue
-        merged[field] = merge_bounds(field, base[field], delta[field])
+        merged[field] = merge_bounds(field, base[field], delta[field], replace=field in replacements)
     for field in remove:
         merged.pop(field, None)
     old_service, new_service = base.get("service"), merged.get("service")
@@ -449,8 +549,10 @@ def merge_filters(previous, delta, *, refine, remove, more):
     return merged, notes
 
 
-def merge_bounds(field, previous, incoming):
+def merge_bounds(field, previous, incoming, *, replace=False):
     """Replace only the incoming direction; preserve the opposite end of a range."""
+    if replace:
+        return incoming
     default = 'gte' if field.startswith('min_') else 'lte'
     direction = lambda item: bound_operator(item, default).startswith('g')
     replaced = {direction(item) for item in bounds(incoming)}

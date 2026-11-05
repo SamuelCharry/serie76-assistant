@@ -1449,19 +1449,8 @@
           "scripted_decision": [
             "search_actuators",
             {
-              "service": "on_off",
-              "enclosure": {
-                "catalogue_value": "enclosure"
-              },
-              "supply_voltage_v": {
-                "catalogue_value": "supply_voltage_v"
-              },
-              "min_torque_nm": {
-                "value": {
-                  "catalogue_value": "on_off_torque_nm"
-                },
-                "op": "gt"
-              }
+              "reference_operation": "stronger",
+              "service": "on_off"
             }
           ],
           "expect": {
@@ -1540,19 +1529,8 @@
           "scripted_decision": [
             "search_actuators",
             {
-              "service": "on_off",
-              "enclosure": {
-                "catalogue_value": "enclosure"
-              },
-              "supply_voltage_v": {
-                "catalogue_value": "supply_voltage_v"
-              },
-              "min_torque_nm": {
-                "value": {
-                  "catalogue_value": "on_off_torque_nm"
-                },
-                "op": "gt"
-              }
+              "reference_operation": "stronger",
+              "service": "on_off"
             }
           ],
           "expect": {
@@ -1631,19 +1609,8 @@
           "scripted_decision": [
             "search_actuators",
             {
-              "service": "on_off",
-              "enclosure": {
-                "catalogue_value": "enclosure"
-              },
-              "supply_voltage_v": {
-                "catalogue_value": "supply_voltage_v"
-              },
-              "min_torque_nm": {
-                "value": {
-                  "catalogue_value": "on_off_torque_nm"
-                },
-                "op": "gt"
-              }
+              "reference_operation": "stronger",
+              "service": "on_off"
             }
           ],
           "expect": {
@@ -1802,9 +1769,12 @@
             "t10_oracle": {
               "declined": [
                 "sil"
-              ],
-              "published": true
-            }
+              ]
+            },
+            "no_products": true,
+            "contains": [
+              "show published specs for {{reference}}"
+            ]
           }
         }
       ]
@@ -1831,9 +1801,12 @@
             "t10_oracle": {
               "declined": [
                 "weight"
-              ],
-              "published": true
-            }
+              ]
+            },
+            "no_products": true,
+            "contains": [
+              "show published specs for {{reference}}"
+            ]
           }
         }
       ]
@@ -1861,9 +1834,12 @@
               "declined": [
                 "weight",
                 "sil"
-              ],
-              "published": true
-            }
+              ]
+            },
+            "no_products": true,
+            "contains": [
+              "show published specs for {{reference}}"
+            ]
           }
         }
       ]

@@ -66,11 +66,23 @@ def _field(unit, nearby, context=None):
     return None
 
 
-def _operator(prefix, field):
-    if re.search(r'\b(?:no more than|at most|up to|max(?:imum)?|below|under|less than|menor\s+a|menor\s+que)\b|≤', prefix):
-        return 'lt' if re.search(r'\b(?:below|under|less than|menor\s+a|menor\s+que)\b', prefix) else 'lte'
-    if re.search(r'\b(?:more than|above|over|mayor\s+(?:a|que))\b', prefix):
-        return 'gt'
+def _operator(prefix, field, suffix=''):
+    # The nearest operator belongs to this quantity. A trailing "maximum" is
+    # common in additions; inspecting only the prefix reversed that constraint.
+    operators = (
+        ('lte', r'no more than|not more than|at most|up to|max(?:imum)?|upper(?:\s+\w+){0,2}\s+limit|hasta|m[aá?]xim[oa]|no m[aá?]s de|<=|≤'),
+        ('gte', r'at least|no less than|not less than|min(?:imum)?|lower(?:\s+\w+){0,2}\s+limit|al menos|m[ií?]nim[oa]|como poco|>=|≥'),
+        ('lt', r'below|under|less than|menor\s+(?:a|que)|menos de|por debajo de|<'),
+        ('gt', r'more than|above|over|mayor\s+(?:a|que)|m[aá?]s de|por encima de|>'),
+    )
+    pattern = '|'.join(rf'(?P<{op}>(?<!\w)(?:{words})(?!\w))' for op, words in operators)
+    # Consume each phrase once: "no more than" must not also match "more than".
+    matches = list(re.finditer(pattern, prefix, re.I))
+    trailing = re.match(r'^\s*(?:as\s+(?:a\s+)?)?(maximum|minimum|max|min|m[aá?]xim[oa]|m[ií?]nim[oa])\b', suffix, re.I)
+    if trailing:
+        return 'lte' if re.match(r'max|m[aá?]x', trailing.group(1), re.I) else 'gte'
+    if matches:
+        return matches[-1].lastgroup
     return 'gte' if field.startswith('min_') else 'lte'
 
 
@@ -88,7 +100,7 @@ def apply(query, filters, context=None):
     for match in rates.finditer(text):
         field = 'min_cycles_per_hour' if match.group(3).startswith(('cycl', 'cicl')) else 'min_starts_per_hour'
         value = _number(match.group(1))
-        op = _operator(text[max(0, match.start()-30):match.start()], field)
+        op = _operator(text[max(0, match.start()-60):match.start()], field, text[match.end():])
         limits = ([{'value': value, 'op': 'gte'}, {'value': _number(match.group(2)), 'op': 'lte'}]
                   if match.group(2) else [value if op == 'gte' else {'value': value, 'op': op}])
         previous = found.get(field, [])
@@ -132,8 +144,11 @@ def apply(query, filters, context=None):
             elif not any('both stated' in issue for issue in issues):
                 found[field] = value
         else:
-            op = _operator(text[max(0, match.start()-30):match.start()], field)
-            found[field] = value if op == 'gte' and field.startswith('min_') else {'value': value, 'op': op}
+            prefix_start = max((end for start, end in occupied if end <= match.start()), default=0)
+            op = _operator(text[max(prefix_start, match.start()-60):match.start()], field, text[match.end():])
+            limit = value if op == 'gte' and field.startswith('min_') else {'value': value, 'op': op}
+            previous = found.get(field)
+            found[field] = (previous if isinstance(previous, list) else [previous]) + [limit] if previous is not None else limit
     for match in POSSIBLE_UNIT.finditer(text):
         if any(start <= match.start() < end for start, end in occupied):
             continue
@@ -154,7 +169,7 @@ def apply(query, filters, context=None):
                 if field in ('supply_voltage_v', 'frequency_hz'):
                     found[field] = amount
                 else:
-                    op = _operator(text[max(0, match.start()-30):match.start()], field)
+                    op = _operator(text[max(0, match.start()-60):match.start()], field, text[match.end():])
                     found[field] = amount if op == 'gte' and field.startswith('min_') else {'value': amount, 'op': op}
                 continue
         if match.start(2) == match.end(1):

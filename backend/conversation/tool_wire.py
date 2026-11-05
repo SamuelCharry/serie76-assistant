@@ -56,6 +56,7 @@ def schemas(term_keys):
                              "focus": array(enum(FOCUS_FIELDS)), "focus_frequency_hz": {"type": "integer", "enum": [50, 60]},
                              "focus_service": enum(["on_off", "modulating"]), "explain_terms": {"type": "string"}, "cancel_previous": boolean}),
         "search_actuators": obj({
+            "reference_operation": {"type": "string"}, "reference_part_number": {"type": "string"},
             "intent": enum(["none", "pick", "explain_pick", "next_page"]),
             "enclosure": enum(["weatherproof", "explosionproof"]),
             "supply_voltage_v": {"type": "number"},
