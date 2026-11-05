@@ -845,6 +845,8 @@ class Turn:
                 answer += '\n' + '\n'.join(row['label'] + ': ' + ' vs '.join(row['values']) for row in compared['hidden_rows'])
         elif public:
             answer = "\n".join(notes) + "\n" + "\n\n".join(quality.render_focused(p, focus) for p in public)
+            if len(products) == 1 and re.search(r'\b(?:enclosure|carcasa|envolvente)\b', self.query, re.I):
+                answer += '\nEnclosure: ' + products[0]['enclosure'].capitalize() + '.'
             if any(spec['field'] == 'motor_power' for spec in focus):
                 answer += "\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption."
         else:
@@ -1329,6 +1331,9 @@ class Turn:
             safe = [p for p in rerun['products'] if integrity.satisfies(p, filters)]
             result = dict(result, products=safe, total=len(safe), facets={}, status='ok')
             self.trace.setdefault('validation', []).append('postcondition_excluded:' + ','.join(invalid_rows))
+        count_sentence = catalogue_answers.search_count(result['total'], merged)
+        missing_note = catalogue_answers.unavailable_note(self.connection, merged)
+        count_sentence += missing_note
         sort_map = {'fastest': 'fastest', 'lowest_current': 'lowest_fla',
                     'highest_torque': 'most_torque', 'lowest_power': 'lowest_power'}
         by = (interpretation.priority_key(self.context['selection_priority']) if self.context.get('selection_priority')
@@ -1350,7 +1355,7 @@ class Turn:
             self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
             self.context['last_shown_offset'] = len(rec['items'])
             question.recommendation = rec
-            question.answer = f"{result['total']} actuators meet: {policy.describe(merged)}." + (
+            question.answer = count_sentence + (
                 '\n' + question.answer if question.interaction else '')
             if notes:
                 question.answer += '\n' + '\n'.join(dict.fromkeys(notes))
@@ -1459,6 +1464,7 @@ class Turn:
             self.context['zero_result_nearest'] = nearest + numeric_nearest
             if notes:
                 answer += '\n' + '\n'.join(dict.fromkeys(notes))
+            answer += missing_note
             return AgentResult(answer, context=self.context, recommendation=rec,
                                lead='No exact match. Nearest published models follow.')
         all_filters = SearchFilters.model_validate(dict(merged, limit=100, offset=0))
@@ -1503,7 +1509,7 @@ class Turn:
             self.context['last_shown_list'] = self.context['last_ranked_list'][:]
             self.context['last_shown_offset'] = len(ordered)
             self.context.pop('pending_questions', None)
-            answer = (f"{len(ordered)} actuators meet: {policy.describe(merged)}.\nRanked by {ranked_by}.\n" +
+            answer = (count_sentence + f"\nRanked by {ranked_by}.\n" +
                       '\n'.join(item['part_number'] + ': ' + item['reason'] for item in items))
             return AgentResult(answer, context=self.context,
                                recommendation=dict(ranked_by=ranked_by, total=len(ordered),
@@ -1515,7 +1521,7 @@ class Turn:
         self.context['last_shown_offset'] = len(rec['items'])
         products = [public_product(p) | {'frequencies': p.get('frequencies', [])}
                     for p in ranking.rank(result['products'], merged, by)]
-        answer, products, narrowing, options, focus = quality.search_presentation(result, products, merged, notes, shown)
+        answer, products, narrowing, options, focus = quality.search_presentation(dict(result, count_sentence=count_sentence), products, merged, notes, shown)
         if unscoped_superlative:
             narrowing = None
         self.context["pagination"] = {"has_more": bool(products) and result.get("offset", 0) + len(products) < result["total"]}
@@ -1531,12 +1537,12 @@ class Turn:
                 if shown:
                     prefix += '\nInterpretation: ' + '; '.join(
                         f"'{a['user_phrase']}' read as {policy.describe({a['field']: a['value']})}" for a in shown) + '.'
-                answer = (f"{result['total']} actuators meet: {policy.describe(merged)}. {summary}" +
+                answer = (count_sentence + " " + summary +
                           ('\n' + prefix.strip() if prefix.strip() else '')).strip()
                 narrowing = question.interaction['questions'][0]['id']
             else:
                 narrowing = None
-                answer = f"{result['total']} actuators meet: {policy.describe(merged)}. Here are the leading published models."
+                answer = count_sentence + " Here are the leading published models."
                 if notes:
                     answer += '\n' + '\n'.join(notes)
         elif narrowing:
@@ -1555,7 +1561,7 @@ class Turn:
             if bands:
                 question = self.question_result(['min_torque_nm'], {'min_torque_nm': bands})
                 if question.interaction:
-                    answer = (f"{result['total']} actuators meet: {policy.describe(merged)}. "
+                    answer = (count_sentence + " "
                               + interactions.question_summary(question.interaction['questions']))
                     narrowing = 'min_torque_nm'
         terms = []
@@ -1563,19 +1569,12 @@ class Turn:
             text, terms = self.explained(args["explain_terms"])
             answer += ("\n\n" + text) if text else ""
         if merged.get('sort_by') and result['total'] > 4:
-            answer = f"{result['total']} actuators meet: {policy.describe(merged)}."
+            answer = count_sentence
             if notes:
                 answer += '\n' + '\n'.join(dict.fromkeys(notes))
         if result['total'] > 4:
             if unscoped_superlative:
-                answer = f"All {result['total']} catalogue models are ranked by their published values."
-                from backend.catalog.repository import active_import
-                unavailable = self.connection.execute(
-                    "SELECT count(DISTINCT base_part_number) AS n FROM series76.entries "
-                    "WHERE import_id=%s AND data_status='source_NA'", (active_import(self.connection),)
-                ).fetchone()['n']
-                if unavailable:
-                    answer += f' {unavailable} catalogue rows marked N/A have no published values and are excluded.'
+                answer = count_sentence
                 if notes:
                     answer += '\n' + '\n'.join(dict.fromkeys(notes))
             answer += '\nRanked by ' + rec['ranked_by'] + '.\n' + '\n'.join(

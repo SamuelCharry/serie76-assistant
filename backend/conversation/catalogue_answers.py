@@ -1,8 +1,46 @@
 """Catalogue-wide counts come directly from the active PostgreSQL import."""
 import re
 from backend.catalog.models import SearchFilters
-from backend.catalog.repository import active_import, search_actuators
-from .policy import colloquial_requirements
+from backend.catalog.repository import active_import, search_actuators, source_na_count
+from .policy import colloquial_requirements, codes_in_text, describe
+
+
+def count_scope(filters):
+    scope = describe(filters) or 'the whole catalogue (no additional filters)'
+    if filters.get('supply_current') in ('AC', 'DC') and not filters.get('dc_only'):
+        scope += ' (including AC/DC models)'
+    return scope
+
+
+def unavailable_note(connection, filters):
+    missing = source_na_count(connection, SearchFilters.model_validate(filters))
+    if not missing['count']:
+        return ''
+    return (f" {missing['count']} more models within {count_scope(missing['filters'])} are listed with N/A, "
+            "without published values, and excluded from the published-data count; their performance eligibility is unverified.")
+
+
+def search_count(total, filters):
+    """Every search aggregate names both the applied filters and publication scope."""
+    noun = 'actuator meets' if total == 1 else 'actuators meet'
+    return f"{total} {noun}: {count_scope(filters)}; with published electrical data."
+
+
+def facet_counts(connection, field):
+    # Field identifiers are a closed internal vocabulary, never user SQL.
+    if field not in ('supply_voltage_v', 'enclosure'):
+        raise ValueError('Unknown catalogue facet')
+    return connection.execute(
+        f"SELECT {field} AS value, count(DISTINCT base_part_number) FILTER "
+        "(WHERE data_status='reported') AS n, count(DISTINCT base_part_number) FILTER "
+        "(WHERE data_status='source_NA') AS na, count(*) OVER () AS groups "
+        "FROM series76.entries WHERE import_id=%s "
+        f"GROUP BY {field} ORDER BY {field}", (active_import(connection),)).fetchall()
+
+
+def facet_text(row, label):
+    return (f"{label} ({row['n']} models) with published data; "
+            f"{row['na']} more {label} models listed with N/A, excluded from that count")
 
 
 def all_requested(query):
@@ -41,6 +79,9 @@ def relative_operation(query):
 
 def answer(connection, query):
     text = query.lower()
+    # An explicit part number requests that product, never a catalogue aggregate.
+    if codes_in_text(query):
+        return None
     # Multi-facet and voltage-scoped service questions require structured intent;
     # catalogue-wide statistics would silently answer only one request part.
     if (re.search(r'\bvoltages?\b', text) and re.search(r'\benclosures?\b', text)
@@ -69,47 +110,32 @@ def answer(connection, query):
                 f"On/Off {span('on_off')}, Modulating {span('modulating')}.")
     if not product_search and re.search(r'\b(?:voltages?|voltajes?|tensiones?)\b', text) and re.search(
             r'\b(?:what|which|available|have|list|show|how many|count|distinct|different|disponibles|diferentes|cu[aá?]ntos|cu[aá?]les)\b', text):
-        rows = connection.execute(
-            "SELECT supply_voltage_v AS value,count(DISTINCT base_part_number) AS n "
-            "FROM series76.entries WHERE import_id=%s AND data_status='reported' "
-            "GROUP BY supply_voltage_v ORDER BY supply_voltage_v", (active_import(connection),)).fetchall()
-        return f'{len(rows)} published supply voltages: ' + ', '.join(f'{r["value"]:g} V ({r["n"]} models)' for r in rows) + '.'
+        rows = facet_counts(connection, 'supply_voltage_v')
+        return f"{rows[0]['groups'] if rows else 0} published supply voltages across the whole catalogue: " + ', '.join(
+            facet_text(r, f"{r['value']:g} V") for r in rows) + '.'
     if not product_search and re.search(r'\b(?:what|which|available|have|list|show)\b.*\benclosures?\b', text):
-        rows = connection.execute(
-            "SELECT enclosure AS value,count(DISTINCT base_part_number) AS n "
-            "FROM series76.entries WHERE import_id=%s AND data_status='reported' "
-            "GROUP BY enclosure ORDER BY enclosure", (active_import(connection),)).fetchall()
-        return 'Published enclosures: ' + ', '.join(f'{r["value"].capitalize()} ({r["n"]} models)' for r in rows) + '.'
+        rows = facet_counts(connection, 'enclosure')
+        return 'Published enclosures across the whole catalogue: ' + ', '.join(
+            facet_text(r, r['value'].capitalize()) for r in rows) + '.'
     if not product_search and re.search(r'\b(?:what|which|available|have|list|show)\b.*\bservices?\b', text):
-        counts = [(label, search_actuators(connection, SearchFilters(service=service, limit=1),
-                                          allow_ambiguous=True)['total'])
-                  for service, label in [('on_off', 'On/Off'), ('modulating', 'Modulating')]]
-        return 'Published services: ' + ', '.join(f'{label} ({count} models)' for label, count in counts) + '.'
-    if re.search(r'\bhow many\b.*\b(?:models?|actuators?)\b', text):
-        if re.search(r'\b3[-\s]*phase\b', text):
-            rows = connection.execute(
-                "SELECT data_status,count(DISTINCT base_part_number) AS n FROM series76.entries "
-                "WHERE import_id=%s AND phase_count=3 GROUP BY data_status",
-                (active_import(connection),)).fetchall()
-            counts = {row['data_status']: row['n'] for row in rows}
-            return (f"The catalogue lists {counts.get('reported', 0)} three-phase models with published data; "
-                    f"{counts.get('source_NA', 0)} more listed without published values.")
+        return ' '.join(search_count(search_actuators(connection, SearchFilters(service=service, limit=1),
+                           allow_ambiguous=True)['total'], {'service': service}) +
+                        unavailable_note(connection, {'service': service})
+                        for service in ('on_off', 'modulating'))
+    if re.search(r'\b(?:how many|count|number of|cu[aá]ntos)\b.*\b(?:models?|actuators?|modelos?|actuadores?)\b', text):
+        from .requirement_coverage import apply
         stated, _ = colloquial_requirements(query)
-        voltage = re.search(r'\b(24|110|220)\s*(?:v|volts?)\b', text)
-        if voltage:
-            stated['supply_voltage_v'] = int(voltage.group(1))
-        if stated:
-            count = search_actuators(connection, SearchFilters.model_validate(dict(stated, limit=1)),
-                                     allow_ambiguous=True)['total']
-            scope = ', '.join(f'{value} V' if field == 'supply_voltage_v' else
-                              'Explosionproof' if value == 'explosionproof' else
-                              'Weatherproof' if value == 'weatherproof' else
-                              'On/Off' if value == 'on_off' else
-                              'Modulating' if value == 'modulating' else str(value)
-                              for field, value in stated.items())
-            return f'The catalogue has {count} models at {scope}.'
-        count = connection.execute(
-            "SELECT count(DISTINCT base_part_number) AS n FROM series76.entries "
-            "WHERE import_id=%s AND data_status='reported'", (active_import(connection),)).fetchone()['n']
-        return f'The catalogue has {count} models with published electrical data.'
+        phase = re.search(r'\b([13])[-\s]*phase\b', text)
+        if phase:
+            stated['phase_count'] = int(phase.group(1))
+        stated, issues = apply(query, stated, stated)
+        if issues:
+            return None
+        try:
+            filters = SearchFilters.model_validate(dict(stated, limit=1))
+        except ValueError:
+            return None
+        count = search_actuators(connection, filters, allow_ambiguous=True)['total']
+        return (f'The catalogue has {count} models with published electrical data within {count_scope(stated)}.'
+                + unavailable_note(connection, stated))
     return None

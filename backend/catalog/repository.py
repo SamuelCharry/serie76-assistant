@@ -153,12 +153,13 @@ COMPARISONS = {
 OPERATORS = {"gt": ">", "gte": ">=", "lt": "<", "lte": "<="}
 
 
-def _matching_sql(connection, filters):
+def _matching_sql(connection, filters, *, data_status='reported'):
     joins = """ LEFT JOIN series76.service_specs s ON s.entry_id=e.id
         AND (%s::text IS NULL OR s.service=%s)
         LEFT JOIN series76.service_specs sh ON sh.entry_id=e.id AND sh.service='shared' AND t.shared_services_confirmed"""
     params = [filters.service, filters.service, active_import(connection)]
-    conditions = ["e.import_id=%s", "e.data_status='reported'"]
+    conditions = ["e.import_id=%s", "e.data_status=%s"]
+    params.append(data_status)
     for field in ("enclosure", "supply_voltage_v", "phase_count"):
         value = getattr(filters, field)
         if value is not None:
@@ -268,6 +269,16 @@ def torque_band_facets(connection, filters):
         if 0 < len(codes) <= 0.85 * total:
             choices.append(dict(value=json_numbers(value), n=len(codes), codes=codes))
     return choices
+
+
+def source_na_count(connection, filters: SearchFilters):
+    """Count unpublished rows under known categorical filters, never infer performance."""
+    categorical = filters.model_dump(include={
+        'enclosure', 'supply_voltage_v', 'supply_current', 'dc_only',
+        'phase_count', 'service', 'csa_required'}, exclude_none=True)
+    unique, params = _matching_sql(connection, SearchFilters(**categorical), data_status='source_NA')
+    count = connection.execute("SELECT count(*) AS n FROM (" + unique + ") q", params).fetchone()['n']
+    return dict(count=count, filters=json_numbers(categorical))
 
 
 def search_actuators(connection, filters: SearchFilters, *, allow_ambiguous=False):

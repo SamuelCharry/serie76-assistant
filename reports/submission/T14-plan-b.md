@@ -93,7 +93,8 @@ a disjoint pack of 15 conversations against the catalogue CSV: **11/15,
 The author used `gpt-6-astra`, low effort. Reviewers could not read code,
 other packs/verdicts or blind keys. All 45 verdicts were present; the scorer
 reported **32/45**, with one model variant. No code or expectation was changed
-after seeing v14. [Dataset, rendered packs and verdicts](../agent_acceptance/t14_live/).
+between v14 screening and scoring; later T15 repairs are documented below.
+[Dataset, rendered packs and verdicts](../agent_acceptance/t14_live/).
 
 | Live measurement | Result |
 | --- | --- |
@@ -114,12 +115,20 @@ credentials. [Machine-readable live summary](../agent_acceptance/t14_live/summar
 ## Remaining failures and measurement limits
 
 The reviewers checked all displayed catalogue figures and found **zero
-incorrect individual product values, but two incorrect aggregate counts**:
-L1-05 omitted five eligible DC-only models (five returned as the eligible count
-instead of ten); L7-09 reported 34 Weatherproof models rather than all 38 CSV
-entries, excluding four source_NA entries without qualification. Therefore
+incorrect individual product values, but two aggregate-scope failures**:
+L1-05 requested DC compatibility including AC/DC, but the AC/DC-only filter
+omitted five eligible DC-only models (five returned instead of ten); L7-09
+answered a model-specific query with an irrelevant 34-model Weatherproof
+subtotal, excluding four source_NA entries without qualification. Therefore
 the earlier zero-numeric-error observation must not be extended to v14.
 SQL-derived numbers can still answer the wrong scope.
+
+**2026-11-05 — T15 audit and repair:** L1-05's reviewer was correct: the
+question was not DC-only. L7-09's 34 is the published-data subtotal, not the
+38-entry inventory. SQL-derived aggregates now name their filters and disclose
+excluded N/A entries; exact-code queries no longer trigger catalogue aggregates.
+[Verdicts, CSV evidence and offline verification](T15-aggregate-counts.md).
+No new inference or v14 rescoring was performed.
 
 The 13 failures also include dropped request components, wrong selection
 priorities, lost model context and incomplete catalogue-limit explanations.

@@ -238,7 +238,8 @@ def search_presentation(raw, products, filters, notes, assumptions):
     prefix = "\n".join(notes)
     if assumptions:
         prefix += "\nInterpretation: " + "; ".join(f"'{a['user_phrase']}' read as {describe({a['field']: a['value']})}" for a in assumptions) + "."
-    criteria = describe(filters) or "the stated preferences"
+    from .catalogue_answers import search_count
+    count_sentence = raw.get("count_sentence") or search_count(total, filters)
     focus = ranking_focus(sort_by, filters) if sort_by else [dict(field=_search_focus(filters), **({"service": filters["service"]} if filters.get("service") else {}))]
     if not sort_by and filters.get("frequency_hz") and focus[0]["field"] in ("operating_time", "fla", "lra"):
         focus[0]["frequency_hz"] = filters["frequency_hz"]
@@ -248,7 +249,7 @@ def search_presentation(raw, products, filters, notes, assumptions):
         return message, [], None, [], focus
     if sort_by:
         labels = {"fastest": "shortest operating time", "lowest_power": "lowest motor power", "highest_torque": "highest torque", "lowest_current": "lowest FLA"}
-        text = f"{total} actuators match {criteria}. Top {len(products)} ranked by " + ", then ".join(labels[key] for key in sort_by) + "."
+        text = count_sentence + f" Top {len(products)} shown matches ranked by " + ", then ".join(labels[key] for key in sort_by) + "."
         if "lowest_power" in sort_by:
             text += " Motor power is the published rated motor power, not total electrical consumption."
         text += "\n\n" + "\n\n".join(render_focused(p, focus) for p in products)
@@ -262,10 +263,10 @@ def search_presentation(raw, products, filters, notes, assumptions):
             values = raw["facets"][field]
             options = [split_reply(field, row["value"]) for row in values]
             label = LABELS.get(field, field.replace("_", " "))
-            text = f"{total} actuators meet: {criteria}. Which {label} do you need? Options: " + ", ".join(str(r["value"]).capitalize() if r["value"] is not None else "not published" for r in values) + "."
+            text = count_sentence + f" Which {label} do you need? Options: " + ", ".join(str(r["value"]).capitalize() if r["value"] is not None else "not published" for r in values) + "."
             return (prefix + "\n" + text).strip(), [], field, options, focus
-        return (prefix + f"\n{total} actuators meet: {criteria}. Here are the leading published models.").strip(), [], None, [], focus
-    text = f"{total} {'actuator meets' if total == 1 else 'actuators meet'}: {criteria}."
+        return (prefix + "\n" + count_sentence + " Here are the leading published models.").strip(), [], None, [], focus
+    text = count_sentence
     if total == 1:
         text += "\n" + render_focused(products[0], focus)
     else:

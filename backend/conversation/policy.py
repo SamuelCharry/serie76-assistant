@@ -163,6 +163,19 @@ def current_requirement(text):
     exclusive = exclusive or re.search(r'\b(?:exclusivamente|solamente)\s+(?:de\s+)?(?:corriente\s+)?continua\b|\bcorriente continua solamente\b', text)
     if exclusive and not re.search(r'\b(?:or|o)\b', text):
         return {'supply_current': 'DC', 'dc_only': True}
+    # Compatibility includes dual-rated units; mentioning AC/DC does not require
+    # every result to be dual-rated. Strip that label before reading the supply.
+    dual = r'\bac\s*[/\-]\s*dc\b'
+    without_dual = re.sub(dual, '', text)
+    dual_only = re.search(r'\bonly\s+' + dual + '|' + dual + r'\s+(?:(?:units|models|entries)\s+)?only\b', text)
+    inclusive_dual = re.search(
+        r'\b(?:including|include|also|as well as|incluye|incluyendo|tambi[eé]n)\b[^.!?;]*' + dual +
+        r'|\bdc(?:[ -]only)?\s+(?:or|and|o|y)\s+(?:dual\s+)?' + dual +
+        '|' + dual + r'\s+(?:or|and|o|y)\s+dc\b|\bboth\b[^.!?;]*' + dual, text)
+    if (inclusive_dual and not dual_only
+            and re.search(r'\b(?:v?dc|direct current|corriente continua)\b', without_dual)
+            and not re.search(r'\b(?:ac|vac)\b', without_dual)):
+        return {'supply_current': 'DC', 'dc_only': False}
     if re.search(r'\bvac\s*/\s*vdc\b', text) or _dual_current(text):
         return {'supply_current': 'AC/DC', 'dc_only': False}
     if re.search(r'(?<![a-z])v?dc\b|\bdirect current\b', text) and not re.search(r'\b(?:ac|vac)\b', text):
