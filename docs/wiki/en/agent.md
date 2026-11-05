@@ -63,6 +63,10 @@ Filters: `enclosure` weatherproof/explosionproof; `supply_current` accepts `AC`,
 
 ## Deterministic policy
 
+After a comparison or shown list, recommendation intent operates on `on_screen`, not the full previous search. Common English/Spanish selection questions work without inference; a model can also signal `intent=pick` and a priority through the existing tool fields. Code parses new requirements, merges active bounds, excludes failing models, ranks the remaining visible set and renders a winner, up to three advantages, a runner-up trade-off and exclusions from SQL. An independent post-condition checks each recommendation's visible-set membership and every active requirement. A buying-advice question is not an order. If none qualifies, the nearest visible model is named as failing and the recommendation items are empty.
+
+Priority uses FLA, operating time, torque, motor power, duty or cycles as requested; ties use the declared remaining ranking keys. Defaults retain the existing closest qualifying torque / lowest FLA / shortest operating time policy, with part number as the final stable tie-break. Advantages reuse comparison arrows; fields with no agreed direction never become invented advantages. [Implementation](../../../backend/conversation/shown_recommendation.py), [regressions](../../../tests/test_shown_recommendation.py).
+
 For `DC + 60 Hz`, ask which requirement is intended; retain compatible constraints. A follow-up `now 220 V` uses `refine=true` and only the voltage delta; `merge_filters` carries the rest. `remove` drops named constraints; `more` advances pagination. Changing service drops the incompatible old cycles/starts constraint with an explanation.
 
 Codes are canonicalised for case/spaces/missing hyphen, never completed with `/A` or a guessed suffix. Partial codes receive prefix candidates; well-formed absent codes return not found. Codes must be in the conversation or persisted context. Unstated filters are dropped and named; assumptions must quote actual user wording and are shown. T9 also checks quantity/unit coverage in both directions; semantic field assignment can still fail.

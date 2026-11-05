@@ -74,13 +74,15 @@ $env:SERIES76_TEST_DB='1'
 python -m unittest discover -s tests
 ```
 
-Current offline gate: **v7, 446/446 scripted scenarios**. In the activated backend Python environment, after Compose startup:
+Current offline gate: **v7, 453/453 scripted scenarios**. In the activated backend Python environment, after Compose startup:
 
 ```text
 python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --config config/agent_acceptance_v7.json
 python scripts/check_tool_schemas.py
 python scripts/verify_catalog_db.py
 ```
+
+The seven T9-R1 scenarios cover recommendations after comparisons and shown lists, new requirements, Spanish intent, ties and no qualifying model. The [recommendation report](../../../reports/submission/T9-R1-recommendation.md) records the three complete probe answers; [regression tests](../../../tests/test_shown_recommendation.py) assert their exact text and reject invalid or unseen winners. Replay safety checks use the validated CSV independently of the SQL ranking implementation.
 
 The catalogue verifier logs in with the public TEST ONLY demo account and sends its Bearer token to protected endpoints. It defaults to `http://127.0.0.1:${API_PORT:-8000}`, using process `API_PORT` before the local template setting; `--base-url http://127.0.0.1:18000` overrides it explicitly. Its SQL, full database test suite and HTTP stages must all pass for exit 0. Existing demo passwords are never reset.
 

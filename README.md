@@ -104,7 +104,7 @@ docker compose exec -T backend python -m backend.catalog.cli load data/extracted
 
 ## Example bank
 
-**What:** 649 user phrasings with interpretations and 100 anchors; never catalogue figures as knowledge. The Google load cost about **USD 0.005 estimated**, not a billing receipt or guaranteed price. **How:** inspect the dry-run; the second command performs inference and requires authorization. The mount supplies `config/`, absent from the image. **Code:** [loader](scripts/load_example_bank.py), [embeddings](backend/conversation/embeddings.py); [loading, provenance and keyless behavior](docs/wiki/en/operations.md#example-bank).
+**What:** 658 user phrasings with interpretations and 100 anchors; never catalogue figures as knowledge. The Google load cost about **USD 0.005 estimated**, not a billing receipt or guaranteed price. **How:** inspect the dry-run; the second command performs inference and requires authorization. The mount supplies `config/`, absent from the image. **Code:** [loader](scripts/load_example_bank.py), [embeddings](backend/conversation/embeddings.py); [loading, provenance and keyless behavior](docs/wiki/en/operations.md#example-bank).
 
 The bank is optional for keyless operation. With no model configured, `--dry-run` reports all supplied examples/anchors without a database, API key or inference (`scope: input_only`); it does not check existing vectors. With an explicit model it checks pending rows in the running DB, still without inference. The second command below loads vectors for the named model and must wait for paid-inference authorization; configure that same model for backend retrieval.
 
@@ -161,6 +161,8 @@ Open Series 76 and use a test account. Emulator backend: `http://10.0.2.2:8000/`
 
 ## Models, design and limitations
 
+After a comparison or a shown list, ask `which one do you recommend and why?` or `¿cuál me recomiendas?`. Recommendations stay within those shown models, apply active and newly stated requirements before ranking, explain exclusions with catalogue values, and state the priority, advantages and runner-up trade-off. `Which should I buy?` asks for selection advice; it does not place an order. If none qualifies, the nearest shown model is explicitly described as failing, never recommended.
+
 **What/why:** `gemini-3.6-flash` uses the OpenAI-compatible client; OpenRouter is the submission target, with acceptance pending. On the same 44 conversations, 3.6 Flash/3.8 Flash/3.1 Pro scored **21/44, 25/44, 28/44**; Pro had **7.1 s p95** and an **11 s** turn. After round 6, 3.6 Flash was selected: **28/43** against 3.8 Flash's **26/43**. Embeddings use `gemini-embedding-2`, OpenRouter ID `google/gemini-embedding-2`. [Method and full results](docs/wiki/en/testing.md).
 
 **How:** the LLM never produces final numbers: one decision per interpreted turn, zero on deterministic routes. Retrieval only adds unresolved fields; it cannot replace explicit requirements. The final guard checks quantity and filter coverage; SQL/templates preserve units, N/A and provenance. Ranking declares its criterion, not suitability certification. **Code:** [agent](backend/conversation/agent.py), [coverage guard](backend/conversation/requirement_coverage.py), [ranking](backend/conversation/ranking.py); [architecture](docs/wiki/en/agent.md), [decisions and trade-offs](docs/wiki/en/patterns.md).
@@ -169,7 +171,7 @@ Open Series 76 and use a test account. Emulator backend: `http://10.0.2.2:8000/`
 
 ## Reproduction gates
 
-Current offline gate: **v7, 446/446 scripted scenarios**. In the activated backend Python environment, after Compose startup:
+Current offline gate: **v7, 453/453 scripted scenarios**. In the activated backend Python environment, after Compose startup:
 
 ```text
 python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --config config/agent_acceptance_v7.json

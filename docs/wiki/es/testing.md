@@ -74,13 +74,15 @@ $env:SERIES76_TEST_DB='1'
 python -m unittest discover -s tests
 ```
 
-Gate offline vigente: **v7, 446/446 escenarios programados**. En el entorno Python backend activado, después de iniciar Compose:
+Gate offline vigente: **v7, 453/453 escenarios programados**. En el entorno Python backend activado, después de iniciar Compose:
 
 ```text
 python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --config config/agent_acceptance_v7.json
 python scripts/check_tool_schemas.py
 python scripts/verify_catalog_db.py
 ```
+
+Los siete escenarios T9-R1 cubren recomendaciones después de comparaciones y listas visibles, requisitos nuevos, intención en español, empates y ningún modelo admisible. El [informe de recomendaciones](../../../reports/submission/T9-R1-recommendation.md) conserva las tres respuestas completas; las [regresiones](../../../tests/test_shown_recommendation.py) comprueban el texto exacto y rechazan ganadores inválidos o no mostrados. El replay comprueba el cumplimiento mediante el CSV validado, independientemente del ordenamiento SQL.
 
 El verificador del catálogo inicia sesión con la cuenta demo pública TEST ONLY y envía su token Bearer a las rutas protegidas. Usa `http://127.0.0.1:${API_PORT:-8000}`, priorizando `API_PORT` del proceso sobre la configuración local; `--base-url http://127.0.0.1:18000` lo sustituye explícitamente. SQL, suite completa con DB y HTTP deben aprobar para salir con 0. Nunca restablece contraseñas demo existentes.
 
