@@ -308,7 +308,21 @@ def check(expect, observed, queries=()):
     if expect.get('contract_v6'):
         from scripts.acceptance_contract import verify
         failures.extend(verify(expect, observed))
+    if 't10_oracle' in expect:
+        failures.extend(t10_oracle().verify(expect['t10_oracle'], observed))
     return failures
+
+
+def t10_oracle():
+    """Load the optional offline oracle without making tests a runtime dependency."""
+    import importlib.util
+    name = '_acceptance_t10_oracle'
+    if name not in sys.modules:
+        spec = importlib.util.spec_from_file_location(name, ROOT / 'tests/test_t10_oracle.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        spec.loader.exec_module(module)
+    return sys.modules[name]
 
 
 def score(turn, observed, queries=None):
@@ -351,6 +365,8 @@ def scenario_environment():
 
 
 def run_scenario(scenario, model_factory):
+    if scenario.get('t10_defect'):
+        scenario = t10_oracle().resolve(scenario)
     from fastapi.testclient import TestClient
     from backend.conversation import store
     turns, session = [], None
@@ -542,7 +558,7 @@ def command_selfcheck(cases, evidence_path=None):
         print(scenario["id"], result["status"], *[t["failures"] for t in result["turns"] if t["failures"]])
         if result["status"] != "passed":
             bad.append(scenario["id"])
-        if scenario['id'] in selected or scenario['id'].startswith('T9_R1_') or result['status'] != 'passed':
+        if scenario.get('t10_defect') or scenario['id'] in selected or scenario['id'].startswith('T9_R1_') or result['status'] != 'passed':
             evidence.append(dict(scenario=scenario['id'], **result))
     print(json.dumps(dict(selfcheck="ok" if not bad else "failed", scenarios=len(cases['scenarios']), failing=bad)))
     if evidence_path:

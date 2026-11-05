@@ -1,0 +1,8 @@
+{
+  "purpose": "Offline T10 oracle pre-fix cohort; no inference authorised or configured.",
+  "cohort": "t10_oracle_pre_fix",
+  "provider": "scripted",
+  "model": "IdealModel",
+  "tool_choice": "required",
+  "inference_allowed": false
+}
