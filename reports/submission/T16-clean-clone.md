@@ -34,7 +34,7 @@ Commands below run from the clone root unless stated otherwise. `TOKEN` means th
 | 10 | `./mobile/android/gradlew.bat -p mobile/android testDebugUnitTest assembleDebug -PbackendUrl=http://10.0.2.2:18000/` | PASS: BUILD SUCCESSFUL in 2m 2s, 45 tasks executed; XML totals 74 tests, zero failures/errors/skips; debug APK generated, not installed. |
 | Documentation validation | `python scripts/check_docs_links.py`; `git diff --check` | PASS: 819 relative links/anchors checked, zero broken links; no whitespace errors. |
 | Cleanup | `docker compose -p serie76-clean down -v`; `docker ps`; `docker volume ls --filter label=com.docker.compose.project=serie76-clean` | PASS for Docker: test containers/network/volume removed; original containers still running on 5432/8000; no test volumes remain. |
-| Clone deletion | `(Resolve-Path -LiteralPath C:\Users\nrir\Desktop\clean-test-T16).Path`, then `Remove-Item -LiteralPath C:\Users\nrir\Desktop\clean-test-T16 -Recurse -Force` | BLOCKED: execution policy rejected the deletion before execution, without a more specific reason. Verified clone remains for coordinator cleanup; no workaround attempted. |
+| Clone deletion | Coordinator removed the verified GitHub clone; worker checked `Test-Path -LiteralPath C:\Users\nrir\Desktop\clean-test-T16` | PASS: coordinator confirmed removal and the worker independently observed `False`. The earlier worker deletion attempt was rejected by execution policy; coordinator cleanup resolved that blocker. |
 
 ## Findings, ordered by impact
 
@@ -50,5 +50,7 @@ An exploratory comparison initially used the unverified code `761A00-12300000/A`
 Windows PowerShell surfaced native stderr from pip/Docker as `NativeCommandError` under redirection. Pip still exited 0 and installed successfully. The first HTTP harness stopped at Docker's restart progress line because its own `ErrorActionPreference` was `Stop`; the harness was corrected to allow native progress stderr, and the complete login/query/restart/resume sequence passed. These are recorded harness artifacts, not hidden product failures.
 
 ## Scope and disposition
+
+Functional steps 1–10 and final cleanup are complete. The isolated test containers, network, volume and clone folder were removed; the original stack was not modified.
 
 Only README documentation and this report changed. After test-stack teardown, these two files were copied to the unchanged source checkout for publication; the runtime evaluation used the independent clone throughout. Local token-free execution logs remain outside the clone in `C:\Users\nrir\Desktop\T16-evidence`. Fresh-container startup, retained-data loading, authentication, deterministic HTTP, expected keyless failure, persisted history and Android JVM/build verification are measured here. Fresh OCR, cold dependency downloads, production HTTPS, emulator/device integration, voice and real-provider interpretation remain outside this run. Existing historical model-quality findings are not resolved by these checks.
