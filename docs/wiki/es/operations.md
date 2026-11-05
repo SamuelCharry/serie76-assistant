@@ -25,7 +25,7 @@ La tabla del README cubre las variables añadidas de embeddings/debug. [.env.exa
 | `OPENROUTER_API_KEY` | _vacío_ | Credencial privada de modelo; vacía desactiva interpretación. |
 | `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` | Endpoint chat compatible OpenAI; predeterminado OpenRouter. |
 | `OPENROUTER_CHAT_MODEL` | `google/gemini-3.6-flash` (provisional) | ID explícito de modelo con herramientas; sin selección automática. |
-| `OPENROUTER_FALLBACK_MODEL` | `openai/gpt-6-luna` (provisional) | Modelo alternativo opcional en el mismo endpoint/clave; vacío lo desactiva. Solo fallos transitorios. |
+| `OPENROUTER_FALLBACK_MODEL` | vacío (desactivado) | Modelo alternativo opcional en el mismo endpoint/clave; vacío lo desactiva. Solo fallos transitorios. |
 | `AGENT_TURN_DEADLINE_S` | `60` | Plazo compartido entre intentos primarios y fallback, menor que los 70/75 s de Android. |
 | `AGENT_RETRY_MIN_REMAINING_S` | `10` | Margen mínimo para iniciar intento; si falta, registra deadline_skipped sin reserva. |
 | `AGENT_MAX_TOKENS` | `2048` | Máximo de tokens generados por decisión. |

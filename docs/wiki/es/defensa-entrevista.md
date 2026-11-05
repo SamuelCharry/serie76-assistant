@@ -95,7 +95,7 @@ Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L
 
 ## 15. ¿Está verificado OpenRouter?
 
-Sí: aceptación OpenRouter completada el 2026-11-05, con 81 conversaciones v10/v11 y USD 1.17 gastados. Predeterminados provisionales: `google/gemini-3.6-flash`, fallback `openai/gpt-6-luna` y embeddings `google/gemini-embedding-2`; v12 tras las correcciones y Android con modelo real siguen pendientes. [Models](../../../README.md#models-design-and-limitations).
+Sí: aceptación OpenRouter completada el 2026-11-05, con 81 conversaciones v10/v11 y USD 1.17 gastados. Modelo único: `google/gemini-3.6-flash`, sin fallback, y embeddings `google/gemini-embedding-2`. No se configura fallback porque basta una decisión simple de herramienta, se midieron 0 errores del proveedor y el retry ya permite dos intentos totales ante 503, timeout o conexión. La comparación final Flash frente a `qwen/qwen3.7-plus` en el conjunto reservado v12 y Android con modelo real siguen pendientes. [Models](../../../README.md#models-design-and-limitations).
 
 Prueba: [docs/evidence/agent_acceptance.md](../../../docs/evidence/agent_acceptance.md#L1).
 

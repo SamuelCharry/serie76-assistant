@@ -65,7 +65,7 @@ A+ achieved [50/55 in v4 with 4 provider-only failures](../../evidence/agent_acc
 
 ### Bounded retries and connection lifetime
 
-[agent.py](../../../backend/conversation/agent.py) uses LangChain retry for transient failures only, while keeping one completed decision per language turn and zero for greetings/structured submissions. Defaults: `OPENROUTER_FALLBACK_MODEL=openai/gpt-6-luna` (provisional), `AGENT_TIMEOUT_S=45`, `AGENT_TURN_DEADLINE_S=60`, `AGENT_RETRY_MIN_REMAINING_S=10`. Each attempt counts toward `AGENT_MAX_CALLS_PER_HOUR=120`; no 4xx retry and no SDK retry. See [configuration](operations.md#configuration-reference).
+[agent.py](../../../backend/conversation/agent.py) uses LangChain retry for transient failures only, while keeping one completed decision per language turn and zero for greetings/structured submissions. Defaults: `OPENROUTER_FALLBACK_MODEL=` (disabled), `AGENT_TIMEOUT_S=45`, `AGENT_TURN_DEADLINE_S=60`, `AGENT_RETRY_MIN_REMAINING_S=10`. Each attempt counts toward `AGENT_MAX_CALLS_PER_HOUR=120`; no 4xx retry and no SDK retry. See [configuration](operations.md#configuration-reference).
 
 The Android pool expires after 30 s, before Uvicorn's 75 s keep-alive, to address reuse of a socket closed by the former 5 s server timeout. Automatic POST retries remain disabled because a timed-out write may already have committed. [Troubleshooting and evidence limits](operations.md#first-tap-fails-after-idle).
 
