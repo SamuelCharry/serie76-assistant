@@ -93,7 +93,7 @@ def apply(query, filters, context=None):
     units are reported instead of turning into a guess or silently vanishing.
     """
     updated, issues = dict(filters), []
-    text = query.lower()
+    text = re.sub(r'(?<=\d)-(?=[a-zA-Z])', ' ', query.lower())
     occupied = []
     found = {}
     named_rates = re.compile(rf'\b(cycles?|ciclos?|starts?|arranques?)\s*(>=|<=|>|<|at least|at most|minimum|maximum)?\s*({NUMBER})\s*(?:/\s*h(?:our)?|per\s+hour|por\s+hora)\b', re.I)

@@ -43,7 +43,7 @@ def schemas(term_keys):
     assumption = obj({name: {"type": "string"} for name in policy.FILTER_FIELDS if name != 'dc_only'})
     boolean = {"type": "boolean"}
     return {
-        "get_actuator": obj({"part_numbers": array({"type": "string"}),
+        "get_actuator": obj({"unsupported_requests": {"type": "string"}, "part_numbers": array({"type": "string"}),
                              "reference_kind": enum(["none", "shown_position", "last_shown", "focused", "compared_winner"]),
                              "reference_index": {"type": "integer"},
                              "reference_metric": enum(["operating_time", "fla", "lra", "motor_power", "torque"]),
@@ -57,6 +57,8 @@ def schemas(term_keys):
                              "focus": array(enum(FOCUS_FIELDS)), "focus_frequency_hz": {"type": "integer", "enum": [50, 60]},
                              "focus_service": enum(["on_off", "modulating"]), "explain_terms": {"type": "string"}, "cancel_previous": boolean}),
         "search_actuators": obj({
+            "priority": obj({"metric": {"type": "string"}, "direction": {"type": "string"}, "frequency_hz": {"type": "integer"}}),
+            "keep": {"type": "string"}, "unsupported_requests": {"type": "string"},
             "reference_operation": {"type": "string"}, "reference_part_number": {"type": "string"},
             "intent": enum(["none", "pick", "explain_pick", "next_page"]),
             "enclosure": enum(["weatherproof", "explosionproof"]),
@@ -71,7 +73,7 @@ def schemas(term_keys):
             "refine": boolean, "more": boolean, "cancel_previous": boolean,
             "remove": array(enum(policy.FILTER_FIELDS)), "assumptions": assumption, "explain_terms": {"type": "string"}}),
         "explain_terms": obj({"term_keys": terms}, ["term_keys"]),
-        "ask_clarification": obj({"field": enum(["part_number", "service", "frequency", "supply", "requirements", "which_product",
+        "ask_clarification": obj({"topic": {"type": "string"}, "field": enum(["part_number", "service", "frequency", "supply", "requirements", "which_product",
                                                 "term_not_in_summary", "unsupported", "cancel", "decline"]),
                                   "intent": enum(["none", "pick", "explain_pick", "next_page"]),
                                   "cancel_previous": boolean}, ["field"]),

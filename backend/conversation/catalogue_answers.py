@@ -13,7 +13,7 @@ def limitations(query):
     """Independent request parts, so a compound question loses none of them."""
     patterns = (
         (r'\b(?:prices?|pricing|costs?|precios?|cuesta|coste)\b', "The catalogue doesn't publish prices. A weighted price score is unavailable."),
-        (r'\b(?:lead[ -]?times?|delivery|ships?|shipping|dispatch|entrega|env[ií]o)\b',
+        (r'\b(?:lead[ -]?times?|delivery|ships?|shipping|dispatch|entrega(?!\s+(?:(?:m[a\u00e1]s|mayor)\s+)?(?:de\s+)?(?:torque|par)\b)|env[ií]o)\b',
          "The catalogue does not publish delivery times or lead times."),
         (r'\b(?:weigh(?:s|t)?|weight|mass|peso|pesa)\b', "The catalogue doesn't publish weight."),
         (r'\b(?:SIL|safety integrity)\b', "The catalogue does not publish SIL ratings or certification."),
@@ -41,6 +41,11 @@ def relative_operation(query):
 
 def answer(connection, query):
     text = query.lower()
+    # Multi-facet and voltage-scoped service questions require structured intent;
+    # catalogue-wide statistics would silently answer only one request part.
+    if (re.search(r'\bvoltages?\b', text) and re.search(r'\benclosures?\b', text)
+            or re.search(r'\d+\s*v\b', text) and re.search(r'\bservices?\b', text)):
+        return None
     supply_overview = re.search(r'\b(?:tipos? de (?:alimentaci[óo?]n|suministro(?: el[ée]ctrico)?)|supply types|types of (?:power )?supply)\b', text)
     if supply_overview:
         from backend.catalog.context import published_supplies

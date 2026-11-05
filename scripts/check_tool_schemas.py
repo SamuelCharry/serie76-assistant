@@ -59,7 +59,7 @@ def live_preflight():
         agent.reserve_agent_call()
         terms = json.loads((ROOT / "data/extracted/series76_summary/terms.json").read_text(encoding="utf-8"))["terms"]
         with tracing_context(enabled=False):
-            response = client.invoke([SystemMessage(content=agent.SYSTEM + "\n" + agent.glossary_block(terms)),
+            response = client.invoke([SystemMessage(content=agent.SYSTEM + "\n" + agent.PLAN_B_GUIDANCE + "\n" + agent.glossary_block(terms)),
                                       HumanMessage(content="Explain FLA.")])
         if len(response.tool_calls) != 1:
             print("FAIL: provider accepted the request but did not return exactly one tool decision")

@@ -43,6 +43,9 @@ add('supply_overview',['Summarize the electrical supply options briefly.','Give 
 add('compound_overview',['List the published supply voltages together with enclosure categories.','Summarize enclosure choices and supply voltages in this catalogue.'],['ask_clarification',dict(field='requirements',topic='catalogue_overview')],dict(required_text=['24','110','220','Weatherproof','Explosionproof']))
 add('scoped_service_overview',['At 24 V, compare the service options for DC-only versus AC/DC ratings.','For 24 V supplies, which services go with DC-only and with AC/DC?'],['ask_clarification',dict(field='requirements',topic='supply_services')],dict(required_text=['DC','AC/DC','Modulating','On/Off']))
 add('retain_site_refinement',['Reevaluate the selection, retaining voltage, service and torque.','Keep those electrical and torque requirements when reviewing the list again.'],search(refine=True,keep=['supply_voltage_v','service','min_torque_nm']),state(base,nonempty=True),[seed])
+for scenario in S:
+    if scenario['id'] == 'T14_spanish_service_2':
+        scenario['turns'][0]['scripted_decision'][1]['assumptions'][0]['user_phrase'] = 'regular caudal'
 Path('config/agent_acceptance_cases_t14.json').write_text(json.dumps(dict(version='t14-oracle',cohort='t14',scenarios=S),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 Path('config/agent_acceptance_t14.json').write_text(json.dumps(dict(purpose='Offline Plan B ideal decisions; diagnostic paraphrases, not held-out.',provider='scripted',model='IdealModel',inference_allowed=False),indent=2)+'\n',encoding='utf-8')
 print(len(S))

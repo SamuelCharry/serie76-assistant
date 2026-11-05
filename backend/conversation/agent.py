@@ -27,6 +27,7 @@ from pydantic import create_model as pydantic_model
 from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
 from backend.catalog.repository import get_actuator, search_actuators, json_numbers
+from . import interpretation
 from . import policy, quality, tool_wire, interactions, ranking, metrics, integrity, answer_planner, catalogue_answers, requirement_coverage
 from . import embeddings
 from . import shown_recommendation
@@ -177,6 +178,8 @@ def schemas(term_keys):
     explain = Annotated[list[TermKey], Field(max_length=3)]
 
     class LookupInput(Strict):
+        unsupported_requests: list[str] = []
+        _unsupported = field_validator("unsupported_requests", mode="before")(interpretation.unsupported_items)
         part_numbers: Annotated[list[Annotated[str, Field(max_length=40)]], Field(max_length=4)] = []
         reference_kind: Literal['none', 'shown_position', 'last_shown', 'focused', 'compared_winner'] = 'none'
         reference_index: int = 0
@@ -202,6 +205,11 @@ def schemas(term_keys):
     SearchBase = pydantic_model("SearchBase", __base__=Strict, **filter_fields)
 
     class SearchInput(SearchBase):
+        priority: interpretation.Priority | None = None
+        keep: list[str] = []
+        unsupported_requests: list[str] = []
+        _keep = field_validator("keep", mode="before")(interpretation.keep_fields)
+        _unsupported = field_validator("unsupported_requests", mode="before")(interpretation.unsupported_items)
         reference_operation: Annotated[str, Field(max_length=16)] = ''
         reference_part_number: Annotated[str, Field(max_length=40)] = ''
 
@@ -226,6 +234,8 @@ def schemas(term_keys):
         term_keys: Annotated[list[TermKey], Field(min_length=1, max_length=3)]
 
     class ClarifyInput(Strict):
+        topic: str = ""
+        _topic = field_validator("topic")(interpretation.topic_value)
         field: ClarifyField
         intent: Literal['none', 'pick', 'explain_pick', 'next_page'] = 'none'
         cancel_previous: bool = False
@@ -234,11 +244,25 @@ def schemas(term_keys):
             "explain_terms": ExplainInput, "ask_clarification": ClarifyInput}
 
 
+PLAN_B_GUIDANCE = """Interpret the whole request in ONE tool decision. For search or a pick among shown/compared models,
+priority={metric,direction,frequency_hz?} states the actual selection criterion; metric is torque, operating_time,
+fla, motor_power, duty, cycles or starts; direction is highest or lowest. Do not invent numeric thresholds.
+Use intent=pick for a selection among shown models. Keep frequency 50/60 only when stated.
+unsupported_requests is comma-separated short English item names (max 40 characters each) such as warranty,
+bolt pattern, price or stock: answer the published parts with the same lookup/search decision.
+keep is comma-separated filter names explicitly retained from state; use refine=true for follow-ups.
+Never remove retained requirements. Repeated quantities may be grounded in earlier user turns.
+Use assumptions quoting actual user wording for service/enclosure interpretations outside literal labels.
+For conversational questions use ask_clarification: requirements for capabilities; topic=source_na,
+enclosure_guidance, supply_overview, catalogue_overview or supply_services for those catalogue topics.
+If AC operation and DC-only are both required, ask_clarification field=supply; never choose one silently.
+"""
+
 DESCRIPTIONS = {
-    "get_actuator": "Look up up to four complete codes. Resolve prior models with reference_kind/index/metric/direction/frequency. Set equivalent_voltage_v or equivalent_enclosure for same-frame equivalents. Use from_results_items='1,3' to compare ranked positions, list_results=true to list, focus=overview for specs and explain_terms for definitions.",
-    "search_actuators": "Find ALL stated requirements, including every numeric limit. New independent requests use refine=false; follow-ups use refine/more/remove. intent=pick/explain_pick/next_page acts on results. reference_operation=stronger/faster/smaller copies SQL supply/enclosure/service from reference_part_number or focused model; smaller needs a published metric. Unknown values never pass bounds.",
-    "explain_terms": "Quote only glossary definitions; absent terms use ask_clarification term_not_in_summary, not a related definition.",
-    "ask_clarification": "Ask for missing data/disambiguation, or mark unsupported requests such as jokes and terms absent from the glossary. If prior results exist and the user wants a pick, explanation or next page, set intent=pick, explain_pick or next_page rather than repeating a question.",
+    "get_actuator": "<=4 full codes. Prior: reference_kind/index/metric/direction/frequency. equivalent_voltage_v/enclosure finds same-frame units. from_results_items='1,3': positions; list_results: list; focus=overview: specs; explain_terms: definitions.",
+    "search_actuators": "ALL requirements, including every numeric limit. New independent requests use refine=false; follow-up: refine/more/remove. intent=pick/explain_pick/next_page uses results. reference_operation=stronger/faster/smaller copies SQL supply/enclosure/service from reference_part_number or focus; smaller needs a published metric. Unknowns fail.",
+    "explain_terms": "Quote glossary; absent: ask_clarification term_not_in_summary, never a related definition.",
+    "ask_clarification": "Clarify missing/ambiguous data or unsupported jokes/terms. Prior results: intent=pick/explain_pick/next_page (pick/explain/page); never reask answered fields.",
 }
 
 
@@ -427,7 +451,8 @@ class Turn:
         return AgentResult(text, context=self.context, clarification=dict(field=field, message=text, **extra))
 
     def question_result(self, fields, facets, message=None):
-        fields = [f for f in fields if f not in self.context.get('withdrawn_fields', [])]
+        fields = [f for f in fields if f not in self.context.get('withdrawn_fields', [])
+                  and (self.context.get('filters') or {}).get(f) is None]
         if not fields:
             self.context.pop('pending_questions', None)
             self.context.pop('pending_clarification', None)
@@ -474,7 +499,7 @@ class Turn:
                        source=dict(document=t["document"], page=t["page"])) for t in chosen]
         return render_terms(chosen, self.supplies), public
 
-    def recommend_shown(self, priority_hint=()):
+    def recommend_shown(self, priority_hint=(), structured_priority=None):
         codes = list(dict.fromkeys(self.context.get('on_screen') or self.context.get('last_comparison_models') or []))
         if not codes:
             return None
@@ -499,7 +524,14 @@ class Turn:
             self.context.pop('hazard_signal', None)
         elif policy.hazard_signal(self.query):
             self.context['hazard_signal'] = True
-        by = shown_recommendation.priority(self.query, self.context.get('rank_by', 'closest_torque'), priority_hint)
+        by = (interpretation.priority_key(structured_priority) if structured_priority else
+              shown_recommendation.priority(self.query, self.context.get('rank_by', 'closest_torque'), priority_hint))
+        if structured_priority and structured_priority.get('frequency_hz'):
+            filters['frequency_hz'] = structured_priority['frequency_hz']
+            try:
+                SearchFilters.model_validate(filters)
+            except ValidationError:
+                return self.clarify('supply', 'DC-only supply and a mains frequency conflict. Please clarify the supply.')
         objective = {'lowest_power': 'lowest_power', 'fastest': 'fastest',
                      'most_torque': 'highest_torque', 'lowest_fla': 'lowest_current'}.get(by)
         if objective:
@@ -534,12 +566,12 @@ class Turn:
             self.context.pop('focused_model', None)
         return AgentResult(answer, context=self.context, recommendation=recommendation, lead=answer.split(' Ranked by ')[0])
 
-    def contextual_intent(self, intent, priority_hint=()):
+    def contextual_intent(self, intent, priority_hint=(), structured_priority=None):
         """Render a model-signalled discourse action from persisted SQL-backed context."""
         if intent == 'none':
             return None
         if intent == 'pick':
-            result = self.recommend_shown(priority_hint)
+            result = self.recommend_shown(priority_hint, structured_priority)
             if result is not None:
                 return result
         filters = self.context.get('filters') or {}
@@ -969,12 +1001,35 @@ class Turn:
         self.trace['reference_operation'] = dict(operation=operation, part_number=code, filters=json_numbers(result))
         return result
 
+    def carried_value(self, field, value, args):
+        previous = self.context.get('filters') or {}
+        if not (args.get('refine') or args.get('more') or args.get('keep')):
+            return False
+        if field in previous:
+            return not requirement_coverage.missing({field: value}, previous) if field in policy.NUMERIC_FIELDS else value == previous[field]
+        if field in self.context.get('withdrawn_fields', []):
+            return False
+        texts = [m['content'] for m in self.messages if m.get('role') == 'user']
+        return bool(texts) and not policy.grounding_errors({field: value}, [], texts) and not requirement_coverage.unsupported(' '.join(texts), {field: value})
+
     def search(self, args, *, trusted=False):
         import re
         reference = self.reference_constraints(args)
         if isinstance(reference, AgentResult):
             return reference
-        signalled = None if reference else self.contextual_intent(args.get('intent', 'none'), args.get('sort_by') or ())
+        priority = args.get('priority')
+        kept = set(args.get('keep') or []) & set(self.context.get('filters') or {})
+        if priority:
+            if priority.get('frequency_hz'):
+                hz = priority['frequency_hz']
+                if (not trusted and requirement_coverage.unsupported(self.query, {'frequency_hz': hz})
+                        and not self.carried_value('frequency_hz', hz, args)):
+                    return self.clarify('frequency', 'Which published frequency should the priority use: 50 Hz or 60 Hz?')
+                args = dict(args, frequency_hz=priority['frequency_hz'])
+            self.context['selection_priority'] = priority
+        elif not args.get('refine') and not args.get('more') and not kept:
+            self.context.pop('selection_priority', None)
+        signalled = None if reference or args.get('intent') == 'pick' else self.contextual_intent(args.get('intent', 'none'), args.get('sort_by') or (), priority)
         if signalled is not None:
             return signalled
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
@@ -1003,7 +1058,7 @@ class Turn:
         for field, value in inferred.items():
             if field not in delta or field not in ('min_torque_nm', 'min_torque_in_lb') or isinstance(value, dict):
                 delta[field] = value
-        if 'dc_only' not in inferred:
+        if 'dc_only' not in inferred and not args.get('dc_only'):
             # A boolean from the interpreter cannot silently relax an exclusive
             # requirement; absent fresh evidence, refinement carries prior state.
             delta.pop('dc_only', None)
@@ -1035,7 +1090,8 @@ class Turn:
         bad = policy.invalid_assumptions(args.get("assumptions", []), self.texts)
         assumptions = [a for a in args.get("assumptions", []) if a not in bad]
         ungrounded = [] if trusted else [field for field in policy.grounding_errors(delta, assumptions, self.texts, self.semantic)
-                                         if field not in reference and field not in inferred and field not in written and not
+                                         if field not in reference and field not in inferred and field not in written
+                                         and not self.carried_value(field, delta[field], args) and not
                                          (field == 'enclosure' and delta.get(field) == 'explosionproof'
                                           and policy.hazard_signal(self.query, self.semantic))]
         if not trusted:
@@ -1043,7 +1099,7 @@ class Turn:
             # voltage into watts or license another numeric field without units.
             ungrounded = list(dict.fromkeys(ungrounded + requirement_coverage.unsupported(
                 self.query, {k: v for k, v in delta.items()
-                             if k not in reference and k not in policy.removed_fields(self.query)
+                             if not self.carried_value(k, v, args) and k not in reference and k not in policy.removed_fields(self.query)
                              and str(v) != str((self.context.get('filters') or {}).get(k))
                              and not (k == 'supply_voltage_v' and v == inferred.get(k) == 24)})))
         dropped = []
@@ -1070,6 +1126,10 @@ class Turn:
             model_removals &= removals
         model_removals -= set(written)
         removals |= model_removals
+        removals -= kept
+        for field in kept:
+            if field not in written:
+                delta[field] = previous[field]
         if self.semantic is not None:
             # A negated alternative cannot erase an affirmative service in another clause.
             explicit = policy.explicit_context_values(self.query)
@@ -1089,13 +1149,13 @@ class Turn:
         same_performance = re.search(r'\bsame performance\b', self.query, re.I) and args.get('refine') and delta.get('service')
         change_only = bool(previous and re.match(r'^\s*(?:and |actually |make (?:that|it) |no wait[, ]*|instead\b)',
                                                  self.query, re.I))
-        merged, notes = policy.merge_filters(previous, delta, refine=args["refine"] or change_only or negated,
+        merged, notes = policy.merge_filters(previous, delta, refine=args["refine"] or bool(kept) or change_only or negated,
                                              remove=sorted(removals), more=args["more"], query=self.query)
-        withdrawn = set(self.context.get('withdrawn_fields', [])) if args['refine'] or change_only or negated or args['more'] else set()
+        withdrawn = set(self.context.get('withdrawn_fields', [])) if args['refine'] or kept or change_only or negated or args['more'] else set()
         withdrawn.update(removals)
         withdrawn.difference_update(k for k in delta if k not in removals)
         self.context['withdrawn_fields'] = sorted(withdrawn)
-        carried = dict(self.context.get('quantity_requirements', {})) if args['refine'] or change_only or args['more'] or negated else {}
+        carried = dict(self.context.get('quantity_requirements', {})) if args['refine'] or kept or change_only or args['more'] or negated else {}
         for field, value in written.items():
             carried[field] = (policy.merge_bounds(field, carried[field], value,
                                                  replace=field in policy.replaced_fields(self.query, written))
@@ -1117,6 +1177,10 @@ class Turn:
             requested_sort = ['lowest_power']
         if re.search(r'\b(?:cheapest|cheap)\b', self.query, re.I):
             requested_sort = ['lowest_power']
+        if priority:
+            requested_sort = {('torque', 'highest'): ['highest_torque'], ('operating_time', 'lowest'): ['fastest'],
+                              ('motor_power', 'lowest'): ['lowest_power'], ('fla', 'lowest'): ['lowest_current']}.get(
+                                  (priority['metric'], priority['direction']), [])
         if requested_sort:
             merged['sort_by'] = requested_sort
         if reference:
@@ -1155,7 +1219,7 @@ class Turn:
             self.context.pop('hazard_signal', None)
         if self.context.get('hazard_signal') and merged.get('enclosure') == 'weatherproof':
             merged.pop('enclosure', None)
-        if not scenario and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS) and not merged.get('sort_by') and not catalogue_answers.all_requested(self.query):
+        if not scenario and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS) and not merged.get('sort_by') and not self.context.get('selection_priority') and not catalogue_answers.all_requested(self.query):
             if re.search(r'\b(?:big|large)\s+valve\b', self.query, re.I):
                 from backend.catalog.repository import torque_band_facets
                 bands = torque_band_facets(self.connection, SearchFilters())
@@ -1185,6 +1249,15 @@ class Turn:
             if kind == 'dc_phase':
                 self.context['conflict_options'] = ['Drop 3-phase for DC supply', 'Drop DC for 3-phase AC supply']
             return self.clarify("requirements", message, conflict=dict(kind=kind, fields=fields))
+        if args.get('intent') == 'pick' and not reference:
+            try:
+                SearchFilters.model_validate(merged)
+            except ValidationError:
+                return self.clarify('requirements', 'The requirements conflict; please clarify the supply and service.')
+            self.context['filters'] = merged
+            signalled = self.contextual_intent('pick', args.get('sort_by') or (), priority)
+            if signalled is not None:
+                return signalled
         explicit_enclosure = re.search(r'\b(explosionproof|weatherproof)\b', self.query, re.I)
         if (scenario and merged.get('enclosure') is None and
                 (hazard or (not explicit_enclosure and 'enclosure' not in inferred))):
@@ -1212,7 +1285,8 @@ class Turn:
                 option['label'] + ': ' + option['description'] for option in question.interaction['questions'][0]['options'])
             sort_map = {'fastest': 'fastest', 'lowest_current': 'lowest_fla',
                         'highest_torque': 'most_torque', 'lowest_power': 'lowest_power'}
-            by = sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque')
+            by = (interpretation.priority_key(self.context['selection_priority']) if self.context.get('selection_priority')
+                  else sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque'))
             all_rows = search_actuators(self.connection, SearchFilters.model_validate(dict(merged, limit=100, offset=0)),
                                         allow_ambiguous=True)['products']
             preview_enclosure = ('explosionproof' if self.context.get('hazard_signal') else 'weatherproof'
@@ -1242,7 +1316,7 @@ class Turn:
         except ValidationError as exc:
             self.trace["validation"] = _safe_errors(exc)
             return self.clarify("requirements", "These requirements could not be applied together. Please restate the supply, service and limits you need.")
-        unscoped_superlative = bool(merged.get('sort_by')) and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS)
+        unscoped_superlative = bool(merged.get('sort_by') or self.context.get('selection_priority')) and not any(merged.get(k) not in (None, False) for k in policy.FILTER_FIELDS)
         result = search_actuators(self.connection, filters, allow_ambiguous=(
             unscoped_superlative or catalogue_answers.all_requested(self.query)))
         invalid_rows = [p['base_part_number'] for p in result['products'] if not integrity.satisfies(p, filters)]
@@ -1254,7 +1328,8 @@ class Turn:
             self.trace.setdefault('validation', []).append('postcondition_excluded:' + ','.join(invalid_rows))
         sort_map = {'fastest': 'fastest', 'lowest_current': 'lowest_fla',
                     'highest_torque': 'most_torque', 'lowest_power': 'lowest_power'}
-        by = sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque')
+        by = (interpretation.priority_key(self.context['selection_priority']) if self.context.get('selection_priority')
+                  else sort_map.get((merged.get('sort_by') or [None])[0], 'closest_torque'))
         if reference and args.get('reference_operation') == 'faster':
             by = 'closest_time'
         self.context['rank_by'] = by
@@ -1543,6 +1618,36 @@ class Turn:
         return AgentResult(text, context=self.context, terms=terms)
 
     def ask(self, args):
+        topic = args.get('topic')
+        if topic == 'source_na':
+            return AgentResult('N/A means the source does not provide an available value for that field. '
+                               'It is not zero and cannot be inferred from another model.', context=self.context)
+        if topic == 'enclosure_guidance':
+            chosen = [self.term_index[k] for k in ('weatherproof', 'explosionproof') if k in self.term_index]
+            text = render_terms(chosen, self.supplies)
+            text += '\nConfirm the site classification with the responsible engineer; the catalogue alone does not establish site suitability.'
+            return AgentResult(text, context=self.context)
+        if topic in ('supply_overview', 'catalogue_overview'):
+            from .rendering import supplies_text
+            text = self.supplies
+            if topic == 'catalogue_overview':
+                chosen = [self.term_index[k] for k in ('weatherproof', 'explosionproof') if k in self.term_index]
+                text += '\n' + render_terms(chosen, self.supplies)
+            return AgentResult(text, context=self.context)
+        if topic == 'supply_services':
+            from backend.catalog.repository import active_import
+            stated, _ = requirement_coverage.apply(self.query, {})
+            voltage = stated.get('supply_voltage_v') or (self.context.get('filters') or {}).get('supply_voltage_v')
+            if voltage is None:
+                return self.clarify('supply')
+            rows = self.connection.execute(
+                "SELECT DISTINCT e.supply_current,s.service FROM series76.entries e "
+                "JOIN series76.service_specs s ON s.entry_id=e.id WHERE e.import_id=%s "
+                "AND e.data_status='reported' AND e.supply_voltage_v=%s ORDER BY 1,2",
+                (active_import(self.connection), voltage)).fetchall()
+            labels = {'on_off': 'On/Off', 'modulating': 'Modulating', 'shared': 'On/Off and Modulating'}
+            return AgentResult('Published services for the requested supply voltage: ' + '; '.join(
+                row['supply_current'] + ': ' + labels[row['service']] for row in rows) + '.', context=self.context)
         signalled = self.contextual_intent(args.get('intent', 'none'))
         if signalled is not None:
             return signalled
@@ -1727,7 +1832,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         declined = catalogue_answers.limitations(query)
         named = policy.codes_in_text(query)
         purchase = policy.purchase_request(query) and re.search(r'\b(?:buy|purchase|order|comprar|compra)\b', query, re.I)
-        if (declined or named and policy.hazard_signal(query)) and not purchase:
+        if (declined and not turn.context.get('filters') or named and policy.hazard_signal(query) and not answer_planner.plan(query).metrics) and not purchase:
             supported = bool(answer_planner.plan(query).metrics) or bool(re.search(
                 r'\b(?:specs|specifications|especificaciones|published data|voltage|voltaje|supply|enclosure|carcasa|CSA)\b', query, re.I))
             lookup = named and (supported or policy.hazard_signal(query))
@@ -1908,7 +2013,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                               context_before=context_before,
                               model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
             return finish(turn, AgentResult(answer, context=turn.context))
-        catalogue_answer = catalogue_answers.answer(connection, query)
+        catalogue_answer = (None if turn.context.get('filters') and re.search(r'\b(?:keep|retain|preserv|reassess|reevaluate|review|conserva|mant)', query, re.I)
+                            else catalogue_answers.answer(connection, query))
         if catalogue_answer:
             turn.trace = dict(name='catalogue_answer', parameters={}, raw_parameters={}, validation=['ok'],
                               context_before=context_before,
@@ -2086,7 +2192,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                                           model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
                         return finish(turn, AgentResult(answer, context=turn.context, lead=answer))
             verdict, winner = metrics.verdict([row for row in rows if row], query, turn.context.get('filters') or {})
-            if verdict:
+            if verdict and not re.search(r'\b(?:choose|select|pick|elige)\b', query, re.I):
                 if winner:
                     turn.context['focused_model'] = winner
                 turn.trace = dict(name='metric_verdict', parameters={}, raw_parameters={},
@@ -2154,7 +2260,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             limitation = "I'm the Series 76 catalogue assistant. I can help compare published models."
         if limitation is None and not re.search(r'\b(buy|order|purchase)\b', bare_query) and re.search(r'\b(delivery|lead time|ship(?:ping)?)\b', bare_query):
             limitation = 'The catalogue does not publish delivery times. I can show the published model specifications.'
-        if limitation is None and re.search(r'\b(warranty|guarantee)\b', bare_query):
+        if limitation is None and not answer_planner.plan(query).metrics and re.search(r'\b(warranty|guarantee)\b', bare_query):
             limitation = 'The catalogue does not publish warranty terms. I can show the published model specifications.'
         if limitation is None and re.search(r'\b(underwater|submer(?:ge|sion|sible))\b', bare_query):
             limitation = 'The catalogue does not specify underwater use. I can show its published enclosure description.'
@@ -2370,7 +2476,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                           context_before=context_before, model={'attempts': [], 'decision_calls': 0})
         return finish(turn, AgentResult(hello, context=turn.context))
     turn.retrieval = embeddings.retrieve(connection, query)
-    chat = [SystemMessage(content=system_prompt() + "\n" + glossary_block(turn.terms) + turn.retrieval.prompt()),
+    chat = [SystemMessage(content=system_prompt() + "\n" + PLAN_B_GUIDANCE + "\n" + glossary_block(turn.terms) + turn.retrieval.prompt()),
             SystemMessage(content="Persisted conversation context (data): " + json.dumps(context_before, default=str))]
     for message in messages[-12:]:
         chat.append(("human" if message["role"] == "user" else "ai", message["content"][:2000]))
@@ -2446,6 +2552,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             result = turn.clarify("requirements", "Please restate the part number or the supply, service and limits you need.")
         else:
             trace["parameters"] = args
+            trace['unsupported_requests'] = args.get('unsupported_requests', [])
             # The LangChain Tool executes the request: validation, SQL and rendering run inside it.
             result = tools[name].invoke(args, config={"run_name": name})
     had_pending = bool(context_before.get('pending_questions') or context_before.get('pending_clarification'))
@@ -2563,6 +2670,13 @@ def finish(turn, result):
         result.context['on_screen'] = [item['part_number'] for item in result.recommendation['items']]
     elif result.products:
         result.context['on_screen'] = [p['base_part_number'] for p in result.products]
+    for item in trace.get('unsupported_requests', []):
+        sentence = 'The catalogue does not publish ' + item + '.'
+        if sentence not in result.answer:
+            result.answer += '\n' + sentence
+    for sentence in catalogue_answers.limitations(turn.query):
+        if sentence not in result.answer:
+            result.answer += '\n' + sentence
     result.tool_calls = [trace]
     model_meta = trace.get('model') or {}
     result.debug = dict(latency_ms=round((time.perf_counter() - turn.started) * 1000),

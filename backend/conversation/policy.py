@@ -157,6 +157,10 @@ def current_requirement(text):
     """Ground a stated supply type and distinguish exclusive DC from compatibility."""
     text = text.lower()
     exclusive = re.search(r'\b(?:dc[ -]*only|only\s+(?:dc|direct current)|solo\s+dc|solamente\s+dc|[úu?]nicamente\s+continua)\b', text)
+    excluded_dual = re.search(r'\b(?:exclude|excluded|excluding)\b[^.!?;]*\bac/dc\b|\bac/dc\b[^.!?;]*\bexcluded\b', text)
+    if excluded_dual:
+        return {'supply_current': 'DC', 'dc_only': True}
+    exclusive = exclusive or re.search(r'\b(?:exclusivamente|solamente)\s+(?:de\s+)?(?:corriente\s+)?continua\b|\bcorriente continua solamente\b', text)
     if exclusive and not re.search(r'\b(?:or|o)\b', text):
         return {'supply_current': 'DC', 'dc_only': True}
     if re.search(r'\bvac\s*/\s*vdc\b', text) or _dual_current(text):
@@ -169,7 +173,7 @@ def current_requirement(text):
 
 
 NONHAZARD_RE = re.compile(
-    r'\b(?:not hazardous|non[ -]?hazardous|not a (?:classified|hazardous) (?:area|zone)|'
+    r'\b(?:away from (?:all|anything) flammable|nonflammable|not hazardous|non[ -]?hazardous|not a (?:classified|hazardous) (?:area|zone)|'
     r'outside (?:the )?(?:classified|hazardous) (?:area|zone)|'
     r'(?:safe|normal|ordinary|regular) (?:area|room|zone)|area is safe|'
     r'(?:zona|area|sala) (?:segura|normal|ordinaria|no peligrosa)|'

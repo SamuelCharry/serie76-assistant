@@ -11,6 +11,11 @@ LABELS = {
     'most_duty': 'highest duty S4', 'most_cycles': 'most On/Off cycles',
     'closest_time': 'closest faster operating time',
 }
+for _metric, _label in {'torque': 'torque', 'operating_time': 'operating time', 'fla': 'FLA',
+                       'motor_power': 'motor power', 'duty': 'duty S4', 'cycles': 'On/Off cycles',
+                       'starts': 'Modulating starts'}.items():
+    for _direction in ('highest', 'lowest'):
+        LABELS.setdefault(_direction + '_' + _metric, _direction + ' ' + _label)
 
 
 def torque_unit(filters):
@@ -24,9 +29,11 @@ def upper_torque_only(filters):
 
 def measurement(product, stem, filters):
     values = product['measurements']
-    if stem in ('duty', 'cycles'):
-        column = 'duty_s4_percent' if stem == 'duty' else 'cycles_per_hour'
-        service = filters.get('service') or ('on_off' if stem == 'cycles' else None)
+    if stem == 'motor_power':
+        return values.get('motor_power_w')
+    if stem in ('duty', 'cycles', 'starts'):
+        column = {'duty': 'duty_s4_percent', 'cycles': 'cycles_per_hour', 'starts': 'starts_per_hour'}[stem]
+        service = filters.get('service') or {'cycles': 'on_off', 'starts': 'modulating'}.get(stem)
         found = [r[column] for r in product.get('services', []) if r.get(column) is not None
                  and (service is None or r['service'] in (service, 'shared'))]
         return min(found) if found else None
@@ -116,7 +123,12 @@ def rank(products, filters, by='closest_torque'):
         torque = measurement(product, 'torque', filters)
         fla = measurement(product, 'fla', filters)
         speed = measurement(product, 'operating_time', filters)
-        if by == 'lowest_fla':
+        from .interpretation import METRICS
+        direction, _, metric = by.partition('_')
+        if direction in ('highest', 'lowest') and metric in METRICS:
+            value = measurement(product, metric, filters)
+            primary = (value is None, (-value if direction == 'highest' else value) if value is not None else 0)
+        elif by == 'lowest_fla':
             primary = missing(fla)
         elif by == 'lowest_lra':
             primary = missing(measurement(product, 'lra', filters))

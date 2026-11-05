@@ -44,6 +44,14 @@ def priority(query, previous='closest_torque', hint=()):
                if (m := re.search(pattern, query, re.I))]
     if choices:
         return min(choices)[1]
+    from . import answer_planner, interpretation
+    planned = answer_planner.plan(query)
+    quantities, _ = requirement_coverage.apply(query, {})
+    if (planned.shape == 'verdict' and len(planned.metrics) == 1
+            and planned.metrics[0] in interpretation.METRICS
+            and not (set(quantities) - {'frequency_hz'})):
+        return interpretation.priority_key(dict(metric=planned.metrics[0],
+            direction='highest' if planned.direction == 'higher' else 'lowest'))
     if policy.sort_grounded('lowest_power', query):
         return 'lowest_power'
     return next((HINTS[h] for h in hint if h in HINTS),
@@ -52,6 +60,15 @@ def priority(query, previous='closest_torque', hint=()):
 
 def measured(product, by, filters):
     """Value and labelled scope used by the stable ranking (no invented frequency)."""
+    from .interpretation import METRICS
+    direction, _, metric = by.partition('_')
+    if direction in ('highest', 'lowest') and metric in METRICS and by != 'lowest_fla':
+        unit = {'torque': ranking.torque_unit(filters), 'operating_time': 's', 'fla': 'A',
+                'motor_power': 'W', 'duty': '%', 'cycles': 'cycles/h', 'starts': 'starts/h'}[metric]
+        label = ranking.LABELS[by]
+        if metric in ('operating_time', 'fla') and filters.get('frequency_hz'):
+            label += ' at ' + str(filters['frequency_hz']) + ' Hz'
+        return ranking.measurement(product, metric, filters), label, unit
     if by == 'lowest_power':
         return product['measurements'].get('motor_power_w'), 'Motor power', 'W'
     if by in ('closest_torque', 'most_torque'):
@@ -171,7 +188,7 @@ def pair_rows(winner, runner, filters, by):
         rows = [r for r in rows if other not in r['field'] and 'unqualified' not in r['field']]
     prefix = {'lowest_fla': 'fla', 'lowest_lra': 'lra', 'fastest': 'operating_time',
               'lowest_power': 'motor_power', 'most_torque': 'torque', 'closest_torque': 'torque',
-              'most_duty': 'duty', 'most_cycles': 'cycles'}[by]
+              'most_duty': 'duty', 'most_cycles': 'cycles'}.get(by, by.partition('_')[2])
     rows.sort(key=lambda r: (prefix not in r['field'], 'fla' not in r['field'], 'operating_time' not in r['field']))
     return rows
 
