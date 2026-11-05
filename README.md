@@ -52,6 +52,8 @@ In `.env`, `POSTGRES_PASSWORD` starts as a local placeholder; preserve an existi
 
 After login, `What is the motor power of 761A00-11300000/A?` works keyless and returns the published **15 W**. A single named field for one complete valid code (including `FLA of 761A00-11300000/A at 60 Hz` or `operating time of 761A00-11300000/A`), greetings and explicit code comparisons use SQL/templates with zero model calls. Ambiguous requests, extra conditions and free-language selection need `OPENROUTER_API_KEY` plus `OPENROUTER_CHAT_MODEL`; without them those interpretation requests return 503 `not_configured`. The field route uses the same answer planner as an equivalent LLM lookup decision.
 
+For a copyable keyless comparison, send `Compare 761A00-11300000/A and 761B00-11300000/A` as `query` to the same conversation endpoint. Both full codes are published catalogue entries. To check the missing-provider response, send `I need an actuator for an outdoor valve` with an empty API key; expect HTTP 503 and `error_code: not_configured`.
+
 This table covers the added embedding/debug settings. [.env.example](.env.example) is the full configuration template: startup uses `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT` and `API_PORT`; Compose also accepts `COMPOSE_PROJECT_NAME`. Language interpretation requires `OPENROUTER_API_KEY` and `OPENROUTER_CHAT_MODEL`. Preserve empty credentials for keyless evaluation; advanced retries, deadlines, tracing and evaluation-only variables are commented in that template.
 
 | New variable | Default | Purpose |
@@ -106,7 +108,7 @@ docker compose exec -T backend python -m backend.catalog.cli load data/extracted
 
 **What:** 658 user phrasings with interpretations and 100 anchors; never catalogue figures as knowledge. The historical Google load cost about **USD 0.005 estimated**. The OpenRouter reload under `google/gemini-embedding-2` cost about **USD 0.0015**; retrieval filters by this exact model name. These are run estimates, not guaranteed prices. **How:** inspect the dry-run; the second command performs inference and requires authorization. The mount supplies `config/`, absent from the image. **Code:** [loader](scripts/load_example_bank.py), [embeddings](backend/conversation/embeddings.py); [loading, provenance and keyless behavior](docs/wiki/en/operations.md#example-bank).
 
-The bank is optional for keyless operation. With no model configured, `--dry-run` reports all supplied examples/anchors without a database, API key or inference (`scope: input_only`); it does not check existing vectors. With an explicit model it checks pending rows in the running DB, still without inference. The second command below loads vectors for the named model and must wait for paid-inference authorization; configure that same model for backend retrieval.
+The bank is optional for keyless operation. With no model configured, `--dry-run` reports all supplied examples/anchors without a database, API key or inference (`scope: input_only`); it does not check existing vectors. With an explicit model it checks pending rows in the running DB, still without inference. The default `.env.example` already names an embedding model, even with an empty API key, so the first command below checks the running database and reports `scope: model_pending`; keyless does not mean model-less. The second command below loads vectors for the named model and must wait for paid-inference authorization; configure that same model for backend retrieval.
 
 ```text
 docker compose run --rm --no-deps --entrypoint python -v ./config:/app/config:ro backend scripts/load_example_bank.py --dry-run
@@ -143,13 +145,13 @@ adb version
 
 ```sh
 # macOS/Linux; adb on PATH
-sh mobile/android/gradlew -p mobile/android assembleDebug
+sh mobile/android/gradlew -p mobile/android testDebugUnitTest assembleDebug
 adb install -r mobile/android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
 ```powershell
 # Windows PowerShell; adb on PATH
-./mobile/android/gradlew.bat -p mobile/android assembleDebug
+./mobile/android/gradlew.bat -p mobile/android testDebugUnitTest assembleDebug
 adb install -r mobile/android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
@@ -184,11 +186,11 @@ After a comparison or a shown list, ask `which one do you recommend and why?` or
 
 **Historical Google quality (before T10):** On 41 unseen conversations (68 turns): 0 wrong catalogue numbers in 491 checked values, all replies under 10 s, 18 of 19 everyday conversations fully correct and 82 % of turns correct; weaker on unusual phrasing (12 of 22 adversarial conversations), mainly open/close or modulating needs written in plain or Spanish wording and site descriptions. [Turn-level results, intervals and scoring differences](docs/wiki/en/testing.md#turn-level-and-everyday-use-view).
 
-**Known limitations:** v14 failed 13/45 conversations: intent errors, dropped requirements or request parts, and incomplete explanations remain. Reviewers checked all displayed figures: zero incorrect individual product values, but **two aggregate-scope failures**. Therefore v14 does not support a claim of zero numeric errors. Emulator, actual voice and Android integration, and a clean-clone test remain pending. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**. **2026-11-05 T15:** offline repairs cover DC compatibility (10 eligible, including 5 DC-only and 5 AC/DC) and Weatherproof counts (34 published plus 4 N/A); aggregates now declare their filters and N/A exclusions. No new inference or v14 rescoring. [Audit](reports/submission/T15-aggregate-counts.md).
+**Known limitations:** v14 failed 13/45 conversations: intent errors, dropped requirements or request parts, and incomplete explanations remain. Reviewers checked all displayed figures: zero incorrect individual product values, but **two aggregate-scope failures**. Therefore v14 does not support a claim of zero numeric errors. Emulator, actual voice and Android integration remain pending. The [T16 keyless clean-clone test](reports/submission/T16-clean-clone.md) covers isolated startup, deterministic API/history, offline gates and the Android JVM/debug build; it does not validate live-provider or device behavior. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**. **2026-11-05 T15:** offline repairs cover DC compatibility (10 eligible, including 5 DC-only and 5 AC/DC) and Weatherproof counts (34 published plus 4 N/A); aggregates now declare their filters and N/A exclusions. No new inference or v14 rescoring. [Audit](reports/submission/T15-aggregate-counts.md).
 
 ## Reproduction gates
 
-Current offline gate: **v7, 453/453 scripted scenarios**. In the activated backend Python environment, after Compose startup:
+Current offline gate: **v7, 453/453 scripted scenarios**. First create and activate the Python 3.12 backend environment and install `requirements-dev.txt`, following [Run locally](docs/wiki/en/testing.md#run-locally). That section also gives the database-enabled unittest command. The separate OCR environment above is not the backend test environment. After Compose startup, run:
 
 ```text
 python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --config config/agent_acceptance_v7.json
