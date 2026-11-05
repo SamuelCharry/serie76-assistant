@@ -77,8 +77,9 @@ class RecommendationTests(Base):
         from test_agent_scenarios import Raising
         result = run_agent(self.connection, 'Just pick one', self.history, self.context,
                            model=Raising(AssertionError('LLM must not run')))
-        self.assertTrue(result.answer.startswith('My pick: '))
-        self.assertEqual(len(result.recommendation['items']), 1)
+        self.assertTrue(result.answer.startswith('I recommend '))
+        self.assertEqual(result.recommendation['items'][0]['part_number'], result.context['focused_model'])
+        self.assertTrue(set(item['part_number'] for item in result.recommendation['items']) <= set(result.context['on_screen']))
         self.assertIsNone(result.interaction)
         self.assertFalse(result.debug['llm_called'])
 

@@ -261,6 +261,16 @@ def check(expect, observed, queries=()):
                 failures.append('ranked code repeated or absent in answer: ' + code)
     if 'recommendation_total' in expect and recommendation.get('total') != expect['recommendation_total']:
         failures.append('recommendation total differs')
+    recommendation_codes = [item['part_number'] for item in recommendation.get('items', [])]
+    if 'recommendation_first' in expect and (recommendation_codes or [None])[0] != expect['recommendation_first']:
+        failures.append('recommended winner differs')
+    if 'recommendation_scope' in expect and not set(recommendation_codes) <= set(expect['recommendation_scope']):
+        failures.append('recommendation escaped the shown set')
+    if expect.get('recommendation_safe'):
+        from scripts.acceptance_contract import eligible_codes
+        filters = (trace.get('context_after') or {}).get('filters') or {}
+        if not set(recommendation_codes) <= set(eligible_codes(filters)):
+            failures.append('recommendation violates the independent CSV requirements oracle')
     if expect.get('recommendation_ranked_by') and not recommendation.get('ranked_by'):
         failures.append('ranking explanation missing')
     if 'debug_llm_called' in expect and observed.get('debug', {}).get('llm_called') != expect['debug_llm_called']:
@@ -532,7 +542,7 @@ def command_selfcheck(cases, evidence_path=None):
         print(scenario["id"], result["status"], *[t["failures"] for t in result["turns"] if t["failures"]])
         if result["status"] != "passed":
             bad.append(scenario["id"])
-        if scenario['id'] in selected or result['status'] != 'passed':
+        if scenario['id'] in selected or scenario['id'].startswith('T9_R1_') or result['status'] != 'passed':
             evidence.append(dict(scenario=scenario['id'], **result))
     print(json.dumps(dict(selfcheck="ok" if not bad else "failed", scenarios=len(cases['scenarios']), failing=bad)))
     if evidence_path:

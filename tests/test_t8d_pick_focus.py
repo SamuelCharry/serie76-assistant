@@ -8,7 +8,7 @@ class PickFocusTests(Base):
         self.turn('220 V', ('search_actuators', {'supply_voltage_v': 220}))
         picked = run_agent(self.connection, 'just pick one', self.history, self.context,
                            model=Raising(AssertionError('no LLM')))
-        self.assertIn('My pick:', picked.answer)
+        self.assertIn('I recommend', picked.answer)
         self.assertIn('Assumes no torque requirement', picked.answer)
         code = picked.recommendation['items'][0]['part_number']
         result = run_agent(self.connection, 'what does that one draw?', self.history, picked.context,

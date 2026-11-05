@@ -6493,7 +6493,7 @@
               "I cannot place orders"
             ],
             "contains": [
-              "My pick:"
+              "I recommend"
             ]
           }
         },
@@ -6515,7 +6515,7 @@
               "I cannot place orders"
             ],
             "contains": [
-              "My pick:"
+              "I recommend"
             ]
           }
         }
@@ -7395,7 +7395,7 @@
               "I cannot place orders"
             ],
             "contains": [
-              "My pick:"
+              "I recommend"
             ]
           }
         }
@@ -8524,7 +8524,7 @@
               "I cannot place orders"
             ],
             "contains": [
-              "My pick:"
+              "I recommend"
             ]
           }
         }
@@ -8890,7 +8890,7 @@
               "I cannot place orders"
             ],
             "contains": [
-              "My pick:"
+              "I recommend"
             ]
           }
         },
@@ -8961,7 +8961,7 @@
               "I cannot place orders"
             ],
             "contains": [
-              "My pick:"
+              "I recommend"
             ]
           }
         }
@@ -12103,7 +12103,7 @@
               "I cannot place orders"
             ],
             "contains": [
-              "My pick:",
+              "I recommend",
               "Modulating torque"
             ]
           }
@@ -19610,6 +19610,388 @@
               "not published in this table layout",
               "0 identical fields hidden",
               "I cannot place orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T9_R1_pair",
+      "category": "shown_recommendation",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A vs 761B00-11300000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "comparison_models": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ]
+          }
+        },
+        {
+          "query": "which one do you recommend and why?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "intent": "pick"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "recommendation_first": "761A00-11300000/A",
+            "recommendation_scope": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ],
+            "recommendation_safe": true,
+            "recommendation_total": 2,
+            "debug_llm_called": false,
+            "contains": [
+              "I recommend 761A00-11300000/A",
+              "FLA at 50 Hz: 1.1 A vs 1.2 A",
+              "Choose 761B00-11300000/A only if"
+            ],
+            "not_contains": [
+              "cannot process orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T9_R1_top_two",
+      "category": "shown_recommendation",
+      "turns": [
+        {
+          "query": "on/off 220 V weatherproof at least 150 Nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_voltage_v": 220,
+              "enclosure": "weatherproof",
+              "min_torque_nm": 150
+            }
+          ],
+          "expect": {
+            "contract_v6": true
+          }
+        },
+        {
+          "query": "compare the top 2",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "from_results_top": 2
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "comparison_models": [
+              "762A00-11320000/A",
+              "762B00-11320000/A"
+            ]
+          }
+        },
+        {
+          "query": "which is better for me?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "intent": "pick"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "recommendation_first": "762A00-11320000/A",
+            "recommendation_scope": [
+              "762A00-11320000/A",
+              "762B00-11320000/A"
+            ],
+            "recommendation_safe": true,
+            "recommendation_total": 2,
+            "debug_llm_called": false,
+            "contains": [
+              "I recommend 762A00-11320000/A",
+              "closest torque at or above 150 Nm"
+            ],
+            "not_contains": [
+              "cannot process orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T9_R1_new_bound",
+      "category": "shown_recommendation",
+      "turns": [
+        {
+          "query": "Compare 762A00-11320000/A vs 763A00-11320000/A vs 764A00-11320000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762A00-11320000/A",
+                "763A00-11320000/A",
+                "764A00-11320000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "comparison_models": [
+              "762A00-11320000/A",
+              "763A00-11320000/A",
+              "764A00-11320000/A"
+            ]
+          }
+        },
+        {
+          "query": "I need at least 200 Nm on/off and low current, which should I buy?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "intent": "pick"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "recommendation_first": "763A00-11320000/A",
+            "recommendation_scope": [
+              "762A00-11320000/A",
+              "763A00-11320000/A",
+              "764A00-11320000/A"
+            ],
+            "recommendation_safe": true,
+            "recommendation_total": 2,
+            "debug_llm_called": false,
+            "contains": [
+              "I recommend 763A00-11320000/A",
+              "762A00-11320000/A is out: On/Off torque 150 Nm < 200 Nm."
+            ],
+            "not_contains": [
+              "cannot process orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T9_R1_spanish",
+      "category": "shown_recommendation",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A vs 761B00-11300000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "comparison_models": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ]
+          }
+        },
+        {
+          "query": "¿cuál me recomiendas?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "intent": "pick"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "recommendation_first": "761A00-11300000/A",
+            "recommendation_scope": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ],
+            "recommendation_safe": true,
+            "recommendation_total": 2,
+            "debug_llm_called": false,
+            "contains": [
+              "I recommend 761A00-11300000/A"
+            ],
+            "not_contains": [
+              "cannot process orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T9_R1_list",
+      "category": "shown_recommendation",
+      "turns": [
+        {
+          "query": "on/off 220 V weatherproof at least 150 Nm",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_voltage_v": 220,
+              "enclosure": "weatherproof",
+              "min_torque_nm": 150
+            }
+          ],
+          "expect": {
+            "contract_v6": true
+          }
+        },
+        {
+          "query": "of those, which one for low power?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "intent": "pick"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "recommendation_first": "762A00-11320000/A",
+            "recommendation_scope": [
+              "762A00-11320000/A",
+              "762B00-11320000/A",
+              "763A00-11330C00/A"
+            ],
+            "recommendation_safe": true,
+            "recommendation_total": 3,
+            "debug_llm_called": false,
+            "contains": [
+              "Motor power 40 W",
+              "lowest motor power"
+            ],
+            "not_contains": [
+              "cannot process orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T9_R1_tie",
+      "category": "shown_recommendation",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A vs 761B00-11300000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "comparison_models": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ]
+          }
+        },
+        {
+          "query": "which do you recommend for low power?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "intent": "pick"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "recommendation_first": "761A00-11300000/A",
+            "recommendation_scope": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ],
+            "recommendation_safe": true,
+            "recommendation_total": 2,
+            "debug_llm_called": false,
+            "contains": [
+              "The priority ties at 15 W; lowest FLA breaks the tie."
+            ],
+            "not_contains": [
+              "cannot process orders"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T9_R1_none",
+      "category": "shown_recommendation",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A vs 761B00-11300000/A",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "comparison_models": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ]
+          }
+        },
+        {
+          "query": "I need at least 200 Nm on/off, which is best?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "intent": "pick"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "recommendation_first": null,
+            "recommendation_scope": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ],
+            "recommendation_safe": true,
+            "recommendation_total": 0,
+            "debug_llm_called": false,
+            "contains": [
+              "None of the shown models meets every requirement.",
+              "Nearest shown model: 761B00-11300000/A"
+            ],
+            "not_contains": [
+              "cannot process orders"
             ]
           }
         }

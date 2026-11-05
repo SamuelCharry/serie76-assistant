@@ -8,6 +8,7 @@ LABELS = {
     'closest_torque': 'closest torque', 'lowest_fla': 'lowest FLA',
     'fastest': 'fastest operating time', 'most_torque': 'most torque',
     'lowest_power': 'lowest motor power', 'lowest_lra': 'lowest LRA',
+    'most_duty': 'highest duty S4', 'most_cycles': 'most On/Off cycles',
 }
 
 
@@ -22,6 +23,12 @@ def upper_torque_only(filters):
 
 def measurement(product, stem, filters):
     values = product['measurements']
+    if stem in ('duty', 'cycles'):
+        column = 'duty_s4_percent' if stem == 'duty' else 'cycles_per_hour'
+        service = filters.get('service') or ('on_off' if stem == 'cycles' else None)
+        found = [r[column] for r in product.get('services', []) if r.get(column) is not None
+                 and (service is None or r['service'] in (service, 'shared'))]
+        return min(found) if found else None
     if stem == 'torque':
         service = filters.get('service')
         unit = 'in_lb' if torque_unit(filters) == 'in-lb' else 'nm'
@@ -118,6 +125,9 @@ def rank(products, filters, by='closest_torque'):
             primary = (torque is None, -torque if torque is not None else 0)
         elif by == 'lowest_power':
             primary = missing(product['measurements'].get('motor_power_w'))
+        elif by in ('most_duty', 'most_cycles'):
+            value = measurement(product, 'duty' if by == 'most_duty' else 'cycles', filters)
+            primary = (value is None, -value if value is not None else 0)
         else:
             primary = ((torque is None, -torque if torque is not None else 0) if upper_torque_only(filters)
                        else missing(torque)) if threshold is not None else (False, 0)

@@ -84,7 +84,21 @@ def apply(query, filters, context=None):
     text = query.lower()
     occupied = []
     found = {}
+    rates = re.compile(rf'(?<![\w-])(?:between\s+|entre\s+)?({NUMBER})(?:\s*(?:to|and|a|y|–|-)\s*({NUMBER}))?\s*(cycles?|ciclos?|starts?|arranques?)\s*(?:/\s*h(?:our)?|per\s+hour|an?\s+hour|por\s+hora)\b', re.I)
+    for match in rates.finditer(text):
+        field = 'min_cycles_per_hour' if match.group(3).startswith(('cycl', 'cicl')) else 'min_starts_per_hour'
+        value = _number(match.group(1))
+        op = _operator(text[max(0, match.start()-30):match.start()], field)
+        limits = ([{'value': value, 'op': 'gte'}, {'value': _number(match.group(2)), 'op': 'lte'}]
+                  if match.group(2) else [value if op == 'gte' else {'value': value, 'op': op}])
+        previous = found.get(field, [])
+        previous = previous if isinstance(previous, list) else [previous]
+        limits = previous + limits
+        found[field] = limits[0] if len(limits) == 1 else limits
+        occupied.append(match.span())
     for match in RANGE.finditer(text):
+        if any(start <= match.start() < end for start, end in occupied):
+            continue
         unit = _unit(match.group(3))
         field = _field(unit, text[max(0, match.start()-32):match.end()+18], context)
         occupied.append(match.span())
@@ -165,7 +179,7 @@ def unsupported(query, filters):
     evidence, _ = apply(query, {}, filters)
     for kind in ('cycles', 'starts'):
         values = re.findall(rf'({NUMBER})\s*{kind}\s*(?:/\s*h(?:our)?|per\s+hour|an?\s+hour)', query, re.I)
-        if values:
+        if values and f'min_{kind}_per_hour' not in evidence:
             evidence[f'min_{kind}_per_hour'] = [_number(v) for v in values]
     rejected = []
     for field, value in filters.items():

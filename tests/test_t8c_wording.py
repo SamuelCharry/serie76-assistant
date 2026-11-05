@@ -25,7 +25,7 @@ class WordingTests(Base):
         self.context.pop('pending_clarification', None)
         result = run_agent(self.connection, 'go', self.history, self.context,
                            model=Raising(AssertionError('LLM must not run')))
-        self.assertIn('My pick:', result.answer)
+        self.assertIn('I recommend', result.answer)
 
     def test_partial_code_lists_all_matches(self):
         result = self.turn('762A', ('get_actuator', {'part_numbers': ['762A']}))

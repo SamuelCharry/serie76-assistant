@@ -26,9 +26,10 @@ from pydantic import create_model as pydantic_model
 
 from backend.catalog.context import list_terms, published_supplies
 from backend.catalog.models import SearchFilters
-from backend.catalog.repository import get_actuator, search_actuators
+from backend.catalog.repository import get_actuator, search_actuators, json_numbers
 from . import policy, quality, tool_wire, interactions, ranking, metrics, integrity, answer_planner, catalogue_answers, requirement_coverage
 from . import embeddings
+from . import shown_recommendation
 from .interactions import InvalidInteraction
 from .rendering import render_lookup, render_search, render_terms, supplies_text
 
@@ -446,10 +447,70 @@ class Turn:
                        source=dict(document=t["document"], page=t["page"])) for t in chosen]
         return render_terms(chosen, self.supplies), public
 
-    def contextual_intent(self, intent):
+    def recommend_shown(self, priority_hint=()):
+        codes = list(dict.fromkeys(self.context.get('on_screen') or self.context.get('last_comparison_models') or []))
+        if not codes:
+            return None
+        if 'other way round' in self.query.lower():
+            codes.reverse()
+            self.context['last_comparison_models'] = codes[:]
+        if policy.terms_not_in_glossary(self.query, self.terms):
+            return self.clarify('requirements', 'The document does not define that rating; please confirm a published requirement before I recommend a model.')
+        merged, notes, issues = shown_recommendation.requirements(self.query, self.context.get('filters') or {})
+        if issues:
+            self.trace['validation'] = ['unrepresented_quantity']
+            return self.clarify('requirements', ' '.join(issues))
+        try:
+            validated = SearchFilters.model_validate(merged)
+        except ValidationError:
+            self.trace['validation'] = ['conflicting_requirements']
+            return self.clarify('requirements', 'The stated requirements conflict; please clarify them before I choose a model.')
+        filters = {k: v for k, v in json_numbers(validated.model_dump()).items()
+                   if k in policy.FILTER_FIELDS and v is not None}
+        self.context['filters'] = filters
+        if policy.nonhazard_signal(self.query):
+            self.context.pop('hazard_signal', None)
+        elif policy.hazard_signal(self.query):
+            self.context['hazard_signal'] = True
+        by = shown_recommendation.priority(self.query, self.context.get('rank_by', 'closest_torque'), priority_hint)
+        rows = [get_actuator(self.connection, code) for code in codes]
+        if any(row is None for row in rows):
+            return self.clarify('which_product', 'A shown model is no longer in the active catalogue; compare the models again.')
+        answer, recommendation, ordered = shown_recommendation.verdict(rows, filters, by)
+        open_fields = [q['id'] for q in self.context.get('pending_questions', [])] or self.context.get('recommendation_open_choices', [])
+        open_fields = [field for field in open_fields if filters.get(field) is None]
+        self.context['recommendation_open_choices'] = open_fields
+        if ordered and open_fields:
+            torque_assumption = ' Assumes no torque requirement; tell me the torque you need.'
+            torque_open = torque_assumption in answer
+            answer = answer.replace(torque_assumption, '')
+            answer += ((' Assumes no torque requirement and no preference on ' if torque_open else ' Assumes no preference on ')
+                       + ', '.join(policy.LABELS.get(field, field.replace('_', ' ')) for field in open_fields)
+                       + '; tell me if that matters.')
+        if notes:
+            answer += '\n' + ' '.join(notes)
+        self.trace['shown_recommendation'] = codes
+        self.trace['data'] = dict(status='ranked_pick', products=ordered)
+        self.trace['merged_parameters'] = filters
+        self.context['rank_by'] = by
+        self.context['last_ranked_list'] = [row['base_part_number'] for row in ordered]
+        self.context['last_shown_list'] = [item['part_number'] for item in recommendation['items']]
+        self.context.pop('pending_questions', None)
+        self.context.pop('pending_clarification', None)
+        if ordered:
+            self.context['focused_model'] = ordered[0]['base_part_number']
+        else:
+            self.context.pop('focused_model', None)
+        return AgentResult(answer, context=self.context, recommendation=recommendation, lead=answer.split(' Ranked by ')[0])
+
+    def contextual_intent(self, intent, priority_hint=()):
         """Render a model-signalled discourse action from persisted SQL-backed context."""
         if intent == 'none':
             return None
+        if intent == 'pick':
+            result = self.recommend_shown(priority_hint)
+            if result is not None:
+                return result
         filters = self.context.get('filters') or {}
         ranked = self.context.get('last_ranked_list') or []
         if intent == 'pick':
@@ -814,7 +875,7 @@ class Turn:
 
     def search(self, args, *, trusted=False):
         import re
-        signalled = self.contextual_intent(args.get('intent', 'none'))
+        signalled = self.contextual_intent(args.get('intent', 'none'), args.get('sort_by') or ())
         if signalled is not None:
             return signalled
         delta = {k: args.get(k) for k in policy.FILTER_FIELDS if args.get(k) is not None}
@@ -1476,6 +1537,13 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
     import re
+    if action is None and not answers and not remove_filters and policy.recommendation_request(query):
+        turn.trace = dict(name='ranked_pick', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        result = turn.recommend_shown()
+        if result is not None:
+            return finish(turn, result)
     if (action is None and not answers and not remove_filters and turn.context.get('filters')
             and policy.nonhazard_signal(query)):
         turn.trace = dict(name='search_actuators', parameters={}, raw_parameters={}, validation=['ok'],
@@ -1940,6 +2008,12 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
     pick = (not re.search(r'\bcompare\b', bare_query) and bool(re.search(r'\b(best|(?:just )?pick one|just tell me|which one should i buy|which is best|the cheap one|this doesn.t help|too many questions)\b', bare_query)))
     cheap = bool(re.search(r'\b(cheap|cheapest|price|cost)\b', bare_query))
     if action is None and not answers and not remove_filters and (pick or cheap):
+        turn.trace = dict(name='ranked_pick', parameters={}, raw_parameters={}, validation=['ok'],
+                          context_before=context_before,
+                          model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+        shown_pick = turn.recommend_shown()
+        if shown_pick is not None:
+            return finish(turn, shown_pick)
         focus_codes = (turn.context.get('last_comparison_models') if turn.context.get('last_comparison_models') and
                        re.search(r'\b(which is best|best|which one)\b', bare_query) else None)
         codes = focus_codes or turn.context.get('last_ranked_list') or []
@@ -2157,7 +2231,20 @@ def finish(turn, result):
     import re
     # Match the whole zero count: substring replacement also corrupts 10/20/100.
     result.answer = re.sub(r'\b0 identical fields hidden\.?', '', result.answer).replace('  ', ' ').strip()
-    if trace.get('name') == 'ranked_pick' and result.recommendation:
+    if trace.get('shown_recommendation') and result.recommendation:
+        allowed = set(trace['shown_recommendation'])
+        filters = SearchFilters.model_validate(result.context.get('filters') or {})
+        selected = [item['part_number'] for item in result.recommendation['items']]
+        rows = [get_actuator(turn.connection, code) for code in selected]
+        if (not set(selected) <= allowed or (selected and not result.answer.startswith('I recommend ' + selected[0] + ':'))
+                or any(row is None or row.get('data_status') != 'reported'
+                                               or not integrity.satisfies(row, filters) for row in rows)):
+            trace.setdefault('validation', []).append('recommendation_integrity_failed')
+            result.answer = 'I could not verify every requirement for the shown models; no model is recommended.'
+            result.lead = result.answer
+            result.recommendation = None
+            result.products = []
+    if (trace.get('name') == 'ranked_pick' or trace.get('shown_recommendation')) and result.recommendation:
         stated, issues = requirement_coverage.apply(turn.query, {})
         missing = requirement_coverage.missing(stated, result.context.get('filters') or {})
         if missing or issues:
@@ -2229,7 +2316,11 @@ def finish(turn, result):
     trace["context_after"] = result.context
     if not trace.get("data"):
         trace["data"] = dict(status="needs_clarification", clarification=result.clarification) if result.clarification else {}
-    if result.comparison:
+    if trace.get('shown_recommendation'):
+        # The verdict discusses this entire visible set, including exclusions.
+        # Keep its reference order for subsequent priorities and position references.
+        result.context['on_screen'] = trace['shown_recommendation'][:]
+    elif result.comparison:
         result.context['on_screen'] = result.comparison['models']
     elif result.recommendation and result.recommendation.get('items'):
         result.context['on_screen'] = [item['part_number'] for item in result.recommendation['items']]
@@ -2243,7 +2334,7 @@ def finish(turn, result):
                         retrieval=turn.retrieval.debug())
     result.active_filters = interactions.active_filters(result.context)
     result.suggestions = quality.replies(result, turn.terms)
-    if result.recommendation and result.recommendation['total'] > 0:
+    if result.recommendation and result.recommendation['total'] > 0 and not trace.get('shown_recommendation'):
         total = result.recommendation['total']
         result.suggestions = ([dict(label='Compare them' if total == 2 else 'Compare top 2',
                                     action=dict(type='compare_top', args=dict(n=2)))] if total >= 2 else [])

@@ -74,7 +74,7 @@ def colloquial_requirements(query, semantic=None):
         result['enclosure'] = 'weatherproof'
     if re.search(r'\b(?:[13])[-\s]*(?:phase|phases|fases)\b', text):
         result['phase_count'] = int(re.search(r'\b([13])[-\s]*(?:phase|phases|fases)\b', text).group(1))
-    if re.search(r'\b(?:classified as hazardous|hazardous area|area is hazardous)\b', text):
+    if re.search(r'\b(?:classified as hazardous|hazardous (?:area|room|zone)|(?:area|room|zone) is hazardous)\b', text):
         result['enclosure'] = 'explosionproof'
         notes.append('Interpreted the explicit hazardous-area requirement as Explosionproof.')
     if re.search(r'\b(battery|low voltage|bater[ií]a|bajo voltaje)\b', text):
@@ -353,7 +353,23 @@ def grounded_lookup_codes(raw_codes, query):
     return chosen, repaired
 
 
+def recommendation_request(query):
+    """Selection intent, including buying advice; no catalogue-wide expansion."""
+    text = query.lower()
+    if re.search(r'\b(?:compare|compara|comparar)\b', text):
+        return False
+    return bool(re.search(
+        r'\b(?:recommend\w*|recomiend\w*|recomend\w*|better|best|mejor|mejores)\b|'
+        r'\bwhich\b.{0,45}\b(?:buy|purchase|for me|for low|should i choose)\b|'
+        r'\b(?:cu[aá]l|qu[eé])\b.{0,35}\b(?:comprar|compro|conviene|para m[ií])\b', text))
+
+
 def purchase_request(query):
+    # A selection question does not ask us to place an order. Explicit commerce
+    # clauses still keep their limitation, even when combined with a recommendation.
+    if recommendation_request(query) and not re.search(
+            r'\b(?:orders?|ordering|delivery|shipping|price|prices|pedido|entrega|precio)\b', query, re.I):
+        return False
     return bool(re.search(r'\b(buy|purchase|order|delivery|comprar|compra)\b', query, re.I))
 
 

@@ -60,9 +60,9 @@ class BankPreviewTests(unittest.TestCase):
                 patch('sys.stdout', new_callable=io.StringIO) as output:
             self.assertEqual(load_example_bank.main(), 0)
         report = json.loads(output.getvalue())
-        self.assertEqual(report['examples'], 649)
+        self.assertEqual(report['examples'], 658)
         self.assertEqual(report['anchors'], 100)
-        self.assertEqual(report['pending_texts'], 749)
+        self.assertEqual(report['pending_texts'], 758)
         self.assertEqual(report['scope'], 'input_only')
         self.assertFalse(report['existing_vectors_checked'])
 

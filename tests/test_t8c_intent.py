@@ -8,15 +8,15 @@ class IntentTests(Base):
                   ('search_actuators', {'service': 'on_off', 'min_torque_nm': 70}))
         result = self.turn('cual me recomiendas?',
                            ('ask_clarification', {'field': 'requirements', 'intent': 'pick'}))
-        self.assertTrue(result.answer.startswith('My pick: '))
-        self.assertEqual(result.recommendation['shown'], 1)
+        self.assertTrue(result.answer.startswith('I recommend '))
+        self.assertEqual(result.recommendation['shown'], len(result.recommendation['items']))
 
     def test_search_tool_can_signal_pick_without_new_filters(self):
         self.turn('modulating 220 V',
                   ('search_actuators', {'service': 'modulating', 'supply_voltage_v': 220}))
         result = self.turn("I don't care about voltage, just recommend something",
                            ('search_actuators', {'intent': 'pick'}))
-        self.assertIn('My pick:', result.answer)
+        self.assertIn('I recommend', result.answer)
         self.assertIsNone(result.interaction)
 
     def test_explain_pick_is_short(self):
