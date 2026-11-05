@@ -1183,9 +1183,12 @@ class Turn:
                                   (priority['metric'], priority['direction']), [])
         if requested_sort:
             merged['sort_by'] = requested_sort
+            if not priority:
+                self.context.pop('selection_priority', None)
         if reference:
             # A relative request changes the objective to the nearest qualifying torque.
             merged.pop('sort_by', None)
+            self.context.pop('selection_priority', None)
             notes.append('Using ' + self.trace['reference_operation']['part_number'] +
                          ' as the reference; keeping its published voltage, enclosure and service.')
         if merged.get("sort_by"):
@@ -2444,6 +2447,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             ordered = ranking.rank([p for p in rows if p], filters, by)
             turn.context['last_ranked_list'] = [p['base_part_number'] for p in ordered]
             turn.context['rank_by'] = by
+            turn.context.pop('selection_priority', None)
             rec = ranking.recommendation(ordered, filters, by)
             result = AgentResult('Ranked by ' + rec['ranked_by'] + '.\n' + '\n'.join(
                 item['part_number'] + ': ' + item['reason'] for item in rec['items']),
