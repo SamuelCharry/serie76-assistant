@@ -16,15 +16,34 @@ A scripted model returns predetermined tool calls; the real tools then execute v
 - [test_auth.py](../../../tests/test_auth.py): Hashed auth, revocation, owner isolation and Android-facing auth contract.
 - [test_submission_readiness.py](../../../tests/test_submission_readiness.py): Routing require_parameters, process call guard and idempotent demo users.
 
-## v15 / SV2 and P1-F
+## Current evaluation
 
-**SV2 experiment — not adopted:** on the same frozen v15, production v1 passed **42/60 (70%)** and complete-state v2 **8/60 (13.3%)** (discordants 35/1; McNemar p ≈ 1.1e-9). A smaller schema (108 → 6 enums) did not improve behavior. [Design, adoption rule and results](../../../reports/submission/SV2-experiment.md).
+**Adopted improvement:** the owner authorized the improved Flash version as an explicit exception to the pre-registered no-regression rule; the original absolute integrity target was not met. The [paired evaluation and repair record](../../../reports/submission/P2-A.md) distinguishes the measured candidate from subsequent offline repairs. Both new regressions and the shared relative-bound defects were repaired with regression tests. Repaired source `1dda5f2` passed **797 tests (795 passed, 2 skipped)**, the **119/119** expanded oracle and all required offline gates. The paid scores below belong only to measured candidate `3ede96c`; v17 became regression material during repair, and the repaired source has no independent paid evaluation.
 
-**Final documented status:** P1-F: **669 tests (667 passed, 2 skipped)**; v7 **453/453**, T10 **48/48**, T12 **47/47**, T14 **42/42**. Recorded settled total usage: **USD 2.697095241 (about USD 2.70 of 10)**, including SV2; this is not a live balance check. [P1-F tests](../../../reports/submission/P1-F.md#verification) · [SV2 spend](../../../reports/submission/SV2-experiment.md#paired-held-out-v15-results).
+Three paired runs on the same 60 previously unseen, multi-turn conversations (v17) used the same model, catalogue and retrieval:
 
-**P1-F integrity invariant:** the final SQL eligibility check covers product cards, comparisons, rankings and positive product references in prose, including prior shown-set membership when requested. An invalid positive selection clears all selection channels; informational non-matches require explicit failure labels. v15 exposed **four technical violations**, now repaired and covered by local regressions, plus two shown-set violations. The historical 42/60 score predates this fix; no new live-model acceptance or deployment is claimed. This enforces represented requirements, not perfect interpretation, aggregate scope or installation suitability. [Implementation and verification](../../../reports/submission/P1-F.md).
+| Measure | Previous version | Improved version |
+|---|---:|---:|
+| Conversations passing, per run | 37/60, 35/60, 38/60 | 47/60, 46/60, 50/60 |
+| Mean conversation pass rate | 61.1% | 79.4% |
+| Passed in all three runs (pass^3) | 33/60 (55.0%) | 43/60 (71.7%) |
+| Turns meeting adjudicated integrity requirements | 410/438 | 429/438 |
+| Pooled client latency p95 / maximum | 6.06 / 11.23 s | 6.69 / 17.89 s |
+| Turns over 10 s | 1 | 3 |
 
-The paired review used three disjoint blind packs of 20 conversations: one reviewer per conversation, not three votes. Same model, catalogue and retrieval content; frozen dataset hashes checked before and after. v1/v2 LLM-turn p95 was **5.11/6.25 s**, spend **USD 0.32/0.46**; runs were sequential, not repeated performance trials. P1-F local verification: **669 tests (667 passed, 2 skipped)**, v7 **453/453**, T10 **48/48**, T12 **47/47**, T14 **42/42**. The direct public-text command is import-only; its exit zero is not a standalone audit. v15 is now diagnostic/regression material; fresh held-out provider validation remains pending.
+Exact paired McNemar p-values were **0.013, 0.007 and 0.002**. The full structured audit found **0 wrong figures in 18,792 values** across both versions. Correct figures do not guarantee correct product identity or retained requirements. The p95 ≤10 s rule passed; individual turns still exceeded 10 s. Earlier slow-turn diagnosis found single provider calls, not application loops; that does not establish the cause of every v17 tail.
+
+Client timing scope: a brief auxiliary offline selfcheck overlapped baseline repeat 2 and was stopped; these are observed timings, not an isolated load benchmark. The [repair report](../../../reports/submission/P2-A.md) discloses this run context.
+
+**Limits:** about **20% of novel multi-turn conversations still fail** on average; the three repeats are not 180 independent conversations. Two new regressions concerned a withdrawn torque ceiling and the second comparison member; two shared defects concerned relative torque bounds. Their offline repairs and tests are tracked in the linked report, separately from live measurements. Voice recognition, microphone permissions/service behavior and physical-device readability still need manual checks.
+
+**Earlier evidence:** v14 **32/45** and v15 **42/60** predate the latest improvements; v16 was used for development and is not independent validation. Synthetic ranking achieved **NDCG@3 0.965 / compliance 1.0**, not end-to-end accuracy. The complete-state experiment (SV2) was **not adopted**: 8/60 versus 42/60. [Testing history](testing.md) · [Rejected experiment](../../../reports/submission/SV2-experiment.md).
+
+**Integrity boundary:** the SQL eligibility invariant checks cards, comparisons, rankings and positive prose, plus membership in the previously shown set when requested. Invalid selections are cleared; informational non-matches require explicit labels. It checks represented requirements, not perfect interpretation or installation suitability. [Invariant and tests (P1-F)](../../../reports/submission/P1-F.md).
+
+**Delivery evidence:** the executable public-text audit detected **0 production leaks in its recorded scope**; later v17 blind review found a baseline token that automation missed, so zero detected leaks is not a universal guarantee. Linux keyless Quick start passed in CI; a separate Windows clean clone passed its ten steps. Android emulator acceptance passed **8/8**, mixing real keyless HTTP/SQL with controlled debug, fault, delay and voice inputs. [Text audit (P2-B)](../../../reports/submission/P2-B.md) · [Linux CI (P2-C)](../../../reports/submission/P2-C.md) · [Windows clone (T17)](../../../reports/submission/T17-final-clean-clone.md) · [Emulator (P2-D)](../../../reports/submission/P2-D.md).
+
+**Recorded OpenRouter spend:** **USD 6.170259916 ≈ USD 6.17 of 10**, including failed attempts and experiments; this is the settled evaluation ledger, not a live balance. [Spend record](../../../reports/submission/P2-A.md#spend-and-excluded-attempt).
 
 ## OpenRouter model selection
 
@@ -275,7 +294,7 @@ Method: freeze corpus/code/config/catalogue hashes before inference; keep expect
 
 ## CI
 
-[CI workflow](../../../.github/workflows/ci.yml) provisions PostgreSQL, installs backend dev dependencies, migrates, loads catalogue/glossary and runs unittest; Android runs JVM tests on JDK 17. It does not run paid inference, full OCR inference or emulator instrumented tests. Workflow presence is implementation evidence, not proof of the latest remote CI run. This task runs local checks only.
+[CI workflow](../../../.github/workflows/ci.yml) provisions PostgreSQL, installs backend dev dependencies, migrates, loads catalogue/glossary and runs unittest; Android runs JVM tests on JDK 17. It does not run paid inference, full OCR inference or emulator instrumented tests. Workflow presence is implementation evidence, not proof of the latest remote CI run. The separate [Linux keyless Quick start workflow](../../../reports/submission/P2-C.md) passed on GitHub at its recorded commit; verify final-head checks before delivery.
 
 ## Tool-schema preflight before any cohort
 
@@ -293,6 +312,6 @@ Where: [preflight script](../../../scripts/check_tool_schemas.py), [complexity/o
 
 ## Known limits
 
-No automatic test establishes arbitrary-language correctness or heterogeneous OCR accuracy. Local DB tests may create scoped test records or rollback transactions. The full Android → real model → SQL → Android path and clean-clone test remain pending.
+No automatic test establishes arbitrary-language correctness or heterogeneous OCR accuracy. Local DB tests may create scoped test records or rollback transactions. The full Android → real model → SQL → Android path remains outside emulator acceptance; Linux and Windows reproduction are evidenced above.
 
-**Known limitations:** v14 failed 13/45 conversations: intent errors, dropped requirements or request parts, and incomplete explanations remain. Reviewers checked all displayed figures: zero incorrect individual product values, but **two incorrect aggregate counts**. Therefore v14 does not support a claim of zero numeric errors. Emulator, actual voice and Android integration, and a clean-clone test remain pending. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**.
+**Historical v14 limitations:** v14 failed 13/45 conversations: intent errors, dropped requirements or request parts, and incomplete explanations remain. Reviewers checked all displayed figures: zero incorrect individual product values, but **two incorrect aggregate counts**. Therefore v14 does not support a claim of zero numeric errors. Emulator coverage is recorded in [P2-D](../../../reports/submission/P2-D.md); actual recognition remains manual. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**.

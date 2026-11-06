@@ -109,6 +109,8 @@ La respuesta HTTP es `{message_id,session_id,tool_calls,debug}`. Un 404 muestra 
 
 ## Verificación T8/T9
 
+Evidencia vigente en emulador: [8/8 pruebas de aceptación](../../../reports/submission/P2-D.md). Login/tarjetas/comparación reales sin claves se distinguen de debug, errores, demora y voz controlados. Reconocimiento real y fallos de login/debug siguen pendientes de comprobación manual. Los conteos JVM siguientes son históricos.
+
 [T8](../../../reports/submission/T8-android.md): 51 pruebas JVM; [T9 revisado](../../../reports/submission/T9-android.md): **74 pruebas JVM**, APK debug y release (sin firmar). Los dobles de reconocimiento verifican permiso, parcial/final, cancelación y callbacks tardíos; fixtures HTTP verifican trazas guardadas. La compilación de instrumentación no equivale a ejecutarla. Pendientes: voz real y sus servicios/idiomas, accesibilidad/rendering, backend fusionado y flujo con LLM real.
 
 ## Dónde está en el código
@@ -123,4 +125,4 @@ La respuesta HTTP es `{message_id,session_id,tool_calls,debug}`. Un 404 muestra 
 
 ## Límites conocidos
 
-Sin base/sincronización offline ni recuperación garantizada de borrador tras muerte de proceso. Emulador/UI y HTTP controlado no prueban aceptación Android con LLM real. La aceptación OpenRouter se completó el 2026-11-05; ver [Models](../../../README.md#models-design-and-limitations). v14 obtuvo 32/45 y v15 v1 obtuvo 42/60 antes de P1-F; sigue pendiente una cohorte nueva con proveedor tras P1-F. La medición en teléfono físico y el despliegue HTTPS público siguen pendientes; [evidencia móvil](../../evidence/mobile.md) delimita lo verificado.
+Sin base/sincronización offline ni recuperación garantizada de borrador tras muerte de proceso. Emulador/UI y HTTP controlado no prueban aceptación Android con LLM real. La mejora adoptada obtuvo una media de 79,4 % frente a 61,1 % en tres ejecuciones pareadas v17; todavía falla cerca del 20 % de las conversaciones inéditas. Ver [resultados y límites de las correcciones](../../../README.es.md#modelos-diseño-y-límites). La medición en teléfono físico y el despliegue HTTPS público siguen pendientes; [evidencia móvil](../../evidence/mobile.md) delimita lo verificado.

@@ -109,6 +109,8 @@ The HTTP contract is `{message_id,session_id,tool_calls,debug}`. A 404 displays 
 
 ## T8/T9 verification
 
+Current emulator evidence: [8/8 acceptance tests](../../../reports/submission/P2-D.md). Real keyless login/cards/comparison are separate from controlled debug, fault, delay and voice inputs. Actual recognition and login/debug error paths remain manual checks. Older JVM counts below are historical snapshots.
+
 [T8](../../../reports/submission/T8-android.md): 51 JVM tests; [reviewed T9](../../../reports/submission/T9-android.md): **74 JVM tests**, debug and unsigned release APKs. Fake recognizers verify permission, partial/final text, cancellation and late callbacks; HTTP fixtures verify persisted traces. Compiling instrumentation does not mean executing it. Pending: actual recognition services/languages, accessibility/rendering, merged backend and real-model flow.
 
 ## Where in the code
@@ -123,4 +125,4 @@ The HTTP contract is `{message_id,session_id,tool_calls,debug}`. A 404 displays 
 
 ## Known limits
 
-No offline DB/sync or guaranteed draft recovery after process death. Emulator/UI and controlled HTTP checks do not prove Android-to-real-LLM acceptance. OpenRouter acceptance completed on 2026-11-05; see [Models](../../../README.md#models-design-and-limitations). Held-out v14 scored 32/45 and v15 v1 scored 42/60 before P1-F; fresh post-P1-F provider validation remains pending. Physical-device measurement and public HTTPS deployment remain pending; [mobile evidence](../../evidence/mobile.md) describes verified scope.
+No offline DB/sync or guaranteed draft recovery after process death. Emulator/UI and controlled HTTP checks do not prove Android-to-real-LLM acceptance. The adopted improvement averaged 79.4% versus 61.1% in three paired v17 runs; about 20% of novel conversations still fail. See [current results and repair boundaries](../../../README.md#models-design-and-limitations). Physical-device measurement and public HTTPS deployment remain pending; [mobile evidence](../../evidence/mobile.md) describes verified scope.

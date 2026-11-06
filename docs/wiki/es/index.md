@@ -37,6 +37,10 @@ Evidencia: [OCR](../../evidence/ocr.md), [PostgreSQL](../../evidence/postgres.md
 - [backend/app/main.py](../../../backend/app/main.py#L1)
 - [backend/conversation/agent.py](../../../backend/conversation/agent.py#L508)
 
-## Límites conocidos
+## Evidencia vigente y límites
 
-La aceptación OpenRouter se completó el 2026-11-05; ver [Models](../../../README.md#models-design-and-limitations). v14 obtuvo 32/45 y v15 v1 obtuvo 42/60 antes de P1-F; sigue pendiente una cohorte nueva con proveedor tras P1-F. Android con LLM real sigue pendiente. T8 interacción y T9 embeddings/voz/debug oculto están implementados y probados localmente; falta voz real en dispositivo. Los checklists antiguos son históricos, no prueba vigente.
+El único modelo de chat es `google/gemini-3.6-flash`, sin fallback; embeddings: `google/gemini-embedding-2`. La mejora adoptada obtuvo **79,4 % frente a 61,1 %** en tres ejecuciones pareadas v17; pass^3 fue **71,7 % frente a 55 %**. Todavía falla cerca del **20 % de las conversaciones inéditas de varios turnos**. [Mediciones, excepción autorizada y correcciones offline](../../../reports/submission/P2-A.md).
+
+La [auditoría de texto público](../../../reports/submission/P2-B.md), [CI Linux](../../../reports/submission/P2-C.md), [clon Windows](../../../reports/submission/T17-final-clean-clone.md) y [8/8 pruebas de emulador](../../../reports/submission/P2-D.md) acreditan sus alcances concretos. El reconocimiento de voz todavía necesita una comprobación manual. Las entradas controladas del emulador no acreditan el recorrido Android-modelo real ni legibilidad física. Gasto OpenRouter registrado: aproximadamente **USD 6,17 de 10**.
+
+Las etiquetas P2-A o T17 identifican informes de evidencia, no funciones del producto. Los informes históricos conservan sus versiones originales y no son garantías universales vigentes.

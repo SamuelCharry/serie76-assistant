@@ -36,6 +36,10 @@ Evidence: [OCR](../../evidence/ocr.md), [PostgreSQL](../../evidence/postgres.md)
 - [backend/app/main.py](../../../backend/app/main.py#L1)
 - [backend/conversation/agent.py](../../../backend/conversation/agent.py#L508)
 
-## Known limits
+## Current evidence and limits
 
-OpenRouter acceptance completed on 2026-11-05; see [Models](../../../README.md#models-design-and-limitations). Held-out v14 scored 32/45 and v15 v1 scored 42/60 before P1-F; fresh post-P1-F provider validation remains pending. Android-to-real-LLM acceptance remains pending. T8 interaction and T9 embeddings/voice/hidden debug are implemented and locally tested; actual device voice remains pending. Earlier progress checklists are historical, not current proof.
+The single chat model is `google/gemini-3.6-flash`, with no fallback; embeddings use `google/gemini-embedding-2`. The adopted improvement averaged **79.4% versus 61.1%** in three paired v17 runs; pass^3 was **71.7% versus 55%**. About **20% of novel multi-turn conversations still fail**. [Measurements, authorized exception and offline repairs](../../../reports/submission/P2-A.md).
+
+[Public-text audit](../../../reports/submission/P2-B.md), [Linux Quick start CI](../../../reports/submission/P2-C.md), [Windows clean clone](../../../reports/submission/T17-final-clean-clone.md) and [8/8 emulator tests](../../../reports/submission/P2-D.md) establish their stated scopes. Actual voice recognition still needs a manual check. Android-to-real-LLM acceptance and physical-device readability are not established by controlled emulator inputs. Recorded OpenRouter spend is about **USD 6.17 of 10**.
+
+Report labels such as P2-A or T17 identify evidence records, not product features. Historical records retain their original versions and must not be treated as current universal guarantees.

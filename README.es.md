@@ -40,13 +40,13 @@ flowchart LR
 
 ## Estado
 
-| Función | Implementado y verificado localmente | Pendiente |
+| Función | Evidencia verificada | Límite pendiente |
 |---|---|---|
-| OCR y catálogo PostgreSQL | [941/941 verificaciones primarias](docs/evidence/ocr.md), carga idempotente | Nuevos layouts |
-| T8 interacción, recomendaciones, acciones, borrado, planificador y guardas | [Backend T8–T8h](docs/wiki/es/testing.md), [51 pruebas JVM T8](reports/submission/T8-android.md) | Flujo real en dispositivo |
-| T9 embeddings aditivos | [484 pruebas Python, 2 omisiones; 446 escenarios scripted](reports/submission/T9-embeddings.md), smoke Google | Dispositivo; v14 32/45 y v15 v1 42/60 antes de P1-F |
-| T9 voz y debug por respuesta | [74 pruebas JVM, APK debug/release](reports/submission/T9-android.md) | Voz real, UI y backend integrado en dispositivo |
-| Login, historial privado, Docker | [Autenticación](docs/wiki/es/api.md), [arranque reproducible](reports/submission/T2.md) | HTTPS público y reproducción final |
+| OCR y catálogo PostgreSQL | [941/941 comprobaciones primarias](docs/evidence/ocr.md), carga idempotente | Validar diseños nuevos |
+| Selección de varios turnos | [v17 pareado: media 79,4 %, 0/18.792 cifras incorrectas](reports/submission/P2-A.md) | Falla cerca del 20 %; las correcciones son posteriores a la medición |
+| Texto público y debug oculto | [Auditoría ejecutable](reports/submission/P2-B.md), [emulador](reports/submission/P2-D.md) | Cobertura limitada del detector; transporte debug controlado |
+| Interacción Android y voz | [8/8 pruebas en emulador](reports/submission/P2-D.md) | Reconocimiento real y fallos de login/debug por comprobar |
+| Login, historial privado, Docker | [CI Linux](reports/submission/P2-C.md), [clon Windows](reports/submission/T17-final-clean-clone.md) | Tag/acceso final y validación física |
 
 ## Setup y backend
 
@@ -183,36 +183,32 @@ Abre Series 76 y usa una cuenta de prueba. Backend del emulador: `http://10.0.2.
 
 ## Modelos, diseño y límites
 
-Después de una comparación o lista visible, pregunta `which one do you recommend and why?` o `¿cuál me recomiendas?`. La recomendación se limita a esos modelos, aplica los requisitos activos y los del nuevo turno antes de ordenar, explica exclusiones con valores del catálogo y declara prioridad, ventajas y contrapartida del segundo candidato. `Which should I buy?` pide consejo de selección; no realiza un pedido. Si ninguno cumple, el modelo visible más cercano se identifica expresamente como incumplidor y no se recomienda.
+**Modelos:** `google/gemini-3.6-flash` es el único modelo de chat; fallback desactivado (`OPENROUTER_FALLBACK_MODEL=`). Embeddings: `google/gemini-embedding-2`. Flash se eligió por el equilibrio observado de calidad/latencia en la [comparación histórica pareada](docs/wiki/es/testing.md#selección-de-modelo-en-openrouter), no por superioridad universal. Una decisión completada por turno interpretado; las rutas deterministas no llaman al modelo. SQL y plantillas aportan cifras; la recuperación sólo añade campos de interpretación no resueltos. [Arquitectura](docs/wiki/es/agent.md) · [Decisiones](docs/wiki/es/patterns.md).
 
-**Aceptación histórica OpenRouter v10/v11 (2026-11-05):** USD 1.17 gastados de la clave de USD 10. La revisión ciega estricta usó tres revisores independientes por ronda y variantes mezcladas por conversación: v10 reservado (41 conversaciones) + v11 (40), 81 en total, 74 en inglés. Son resultados medidos de esas cohortes, no precios actuales ni garantías de latencia.
+**Mejora adoptada:** el propietario autorizó la versión mejorada de Flash como excepción explícita a la regla preinscrita de no introducir regresiones; tampoco se cumplió el objetivo original de integridad absoluta. El [informe de evaluación y reparación](reports/submission/P2-A.md) distingue el candidato medido de las correcciones offline posteriores. Las dos regresiones nuevas y los defectos compartidos de límites relativos se corrigieron con pruebas de regresión. El código reparado `1dda5f2` pasó **797 pruebas (795 aprobadas, 2 omitidas)**, el oráculo ampliado **119/119** y todos los controles offline obligatorios. Las puntuaciones pagadas siguientes pertenecen sólo al candidato medido `3ede96c`; v17 pasó a ser material de regresión durante las reparaciones y el código reparado no tiene evaluación pagada independiente.
 
-| Modelo | Inglés | Total | p95 / max | Turnos > 10 s | USD / 1,000 turnos LLM |
-|---|---:|---:|---:|---:|---:|
-| gemini-3.6-flash | 63/74 | 69/81 | 5.9 / 8.9 s | 0 | 3.0 |
-| gpt-6-luna | 61/74 | 67/81 | 4.9 / 12.2 s | 1 | 0.8 |
-| deepseek-v4.1-flash | 59/74 | 65/81 | 8.8 / 10.8 s | 2 | 0.8 |
-| claude-haiku-5.5 | 50/74 | 55/81 | 3.1 / 8.7 s | 0 | 0.7 |
+Tres ejecuciones pareadas sobre las mismas 60 conversaciones inéditas de varios turnos (v17) mantuvieron modelo, catálogo y recuperación:
 
-**Regla histórica de selección de modelo v10/v11:** (1) calidad en inglés salvo empate estadístico, (2) ningún turno observado superior a 10 s, (3) coste, (4) licencia solo para producción (DeepSeek tiene pesos abiertos; falta verificar la licencia). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordantes); Flash vs DeepSeek: p = 0.125; Haiku es significativamente peor (p < 0.001). La falta de significancia no demuestra equivalencia.
+| Medida | Versión anterior | Versión mejorada |
+|---|---:|---:|
+| Conversaciones aprobadas por ejecución | 37/60, 35/60, 38/60 | 47/60, 46/60, 50/60 |
+| Tasa media de aprobación | 61,1 % | 79,4 % |
+| Aprobadas en las tres ejecuciones (pass^3) | 33/60 (55,0 %) | 43/60 (71,7 %) |
+| Turnos que cumplen la integridad adjudicada | 410/438 | 429/438 |
+| Latencia cliente agrupada p95 / máxima | 6,06 / 11,23 s | 6,69 / 17,89 s |
+| Turnos de más de 10 s | 1 | 3 |
 
-**Modelo único predeterminado:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=` (desactivado), `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. Una decisión de herramienta por turno interpretado; el código valida y SQL aporta las cifras. Plan B añade prioridad validada, partes no publicadas y retención de requisitos, sin agentes ni llamadas adicionales.
+McNemar exacto pareado: **p = 0,013, 0,007 y 0,002**. La auditoría estructurada completa encontró **0 cifras incorrectas en 18.792 valores** de ambas versiones. Una cifra correcta no garantiza identidad ni requisitos correctos. Se cumplió la regla p95 ≤10 s, aunque hubo turnos individuales más lentos. El diagnóstico anterior localizó demoras en llamadas individuales al proveedor, no en bucles de la aplicación; no demuestra la causa de cada demora v17.
 
-**Plan B / T14 conservado:** resultados ciegos estrictos: v12 **29/45**, v13 **23/45** y nuevo conjunto reservado v14 **32/45 (71 %)** y después v1 de producción en v15 **42/60 (70 %)**, antes de P1-F. Son cohortes distintas; la diferencia no estima un efecto causal. v13 queda solo como diagnóstico. La regla T14 exigía al menos 27/45, todos los gates verdes y p95 de hasta 10 s. v14 tuvo 85 turnos (66 interpretados), p95 **6,2 s**, máximo **9,3 s**, ningún turno superior a 10 s y ningún error HTTP. En v13, dos de 79 turnos interpretados tardaron 11–16 s en llamadas individuales al proveedor, no en bucles del código. Plan B gastó **USD 0,236607225**; uso liquidado en ese hito histórico: **USD 1,919522541**.
+**Límites:** todavía falla, en promedio, cerca del **20 % de las conversaciones inéditas de varios turnos**; las repeticiones no son 180 conversaciones independientes. Las dos regresiones nuevas afectan un techo de torque retirado y el segundo miembro de una comparación; dos defectos compartidos afectan límites relativos de torque. Sus correcciones y pruebas offline se registran aparte de la medición real. Faltan comprobaciones manuales del reconocimiento de voz, permisos/servicio del micrófono y legibilidad en dispositivo físico.
 
-**Verificado sobre el código final de Plan B:** 615 pruebas Python ejecutadas (613 aprobadas, dos omitidas); v7 453/453; T10 48/48 (8/48 antes); T12 47/47 (7/47 antes); T14 42/42 (7/42 antes). Todos los gates obligatorios terminaron con código cero. Esquema: **5.520 bytes / 108 valores enum**; preflight real aceptado. Ranking NDCG@3 **0,965378**, cumplimiento **1,0 en la evaluación sintética de ranking**, no en todas las conversaciones reales. Las decisiones grabadas de v13 se reprodujeron sin inferencia: 23/45 antes y 28/45 después; es diagnóstico y las decisiones antiguas no tienen los nuevos campos. [T14 report](reports/submission/T14-plan-b.md).
+**Evidencia anterior:** v14 **32/45** y v15 **42/60** preceden a las últimas mejoras; v16 se usó para desarrollo y no es validación independiente. El ranking sintético obtuvo **NDCG@3 0,965 / cumplimiento 1,0**, no exactitud integral. El experimento de estado completo (SV2) **no fue adoptado**: 8/60 frente a 42/60. [Historial de pruebas](docs/wiki/es/testing.md) · [Experimento rechazado](reports/submission/SV2-experiment.md).
 
-**Experimento SV2 — no adoptado:** en el mismo v15 congelado, v1 de producción aprobó **42/60 (70 %)** y v2 de estado completo **8/60 (13,3 %)** (discordantes 35/1; McNemar p ≈ 1,1e-9). Reducir el esquema de 108 a 6 enums no mejoró el comportamiento. [Diseño, regla y resultados](reports/submission/SV2-experiment.md).
+**Límite de integridad:** la comprobación final contra SQL cubre tarjetas, comparaciones, ranking y prosa positiva, además de pertenencia al conjunto mostrado cuando se exige. Una selección inválida se elimina; los incumplidores informativos llevan etiquetas explícitas. Verifica requisitos representados, no comprensión perfecta ni idoneidad de instalación. [Invariante y pruebas (P1-F)](reports/submission/P1-F.md).
 
-**Estado final documentado:** P1-F: **669 pruebas (667 aprobadas, 2 omitidas)**; v7 **453/453**, T10 **48/48**, T12 **47/47**, T14 **42/42**. Uso total liquidado registrado: **USD 2,697095241 (aprox. USD 2,70 de 10)**, incluido SV2; no es una consulta de saldo actual. [Pruebas P1-F](reports/submission/P1-F.md#verification) · [Gasto SV2](reports/submission/SV2-experiment.md#paired-held-out-v15-results).
+**Evidencia de entrega:** la auditoría ejecutable de texto público detectó **0 filtraciones en producción dentro de su alcance**; la revisión ciega v17 encontró después un token del baseline que el detector omitió, por lo que no es garantía universal. Quick start sin claves pasó en CI Linux; otro clon limpio en Windows pasó diez pasos. La aceptación en emulador Android pasó **8/8**, combinando HTTP/SQL reales sin claves con datos controlados para debug, errores, demora y voz. [Texto público (P2-B)](reports/submission/P2-B.md) · [CI Linux (P2-C)](reports/submission/P2-C.md) · [Clon Windows (T17)](reports/submission/T17-final-clean-clone.md) · [Emulador (P2-D)](reports/submission/P2-D.md).
 
-**Invariante P1-F:** la comprobación final de elegibilidad contra SQL cubre tarjetas, comparaciones, rankings y referencias positivas a productos en la prosa, incluida la pertenencia al conjunto mostrado cuando se exige. Una selección positiva inválida elimina todos sus canales; los incumplidores informativos exigen etiquetas explícitas. v15 expuso **cuatro violaciones técnicas**, corregidas y cubiertas por regresiones locales, además de dos violaciones del conjunto mostrado. El 42/60 histórico precede al arreglo; no se afirma nueva aceptación con modelo real ni despliegue. Se verifican requisitos representados, no interpretación perfecta, alcance de agregados ni idoneidad de la instalación. [Implementación y verificación](reports/submission/P1-F.md).
-
-**Cómo:** el LLM nunca produce cifras finales: una decisión por turno interpretado, cero en rutas deterministas. Retrieval solo añade campos no resueltos; no sustituye requisitos explícitos. La guarda final revisa cobertura de cantidades y filtros; SQL/plantillas preservan unidades, N/A y procedencia. El ranking declara su criterio, no certifica idoneidad. **Código:** [agente](backend/conversation/agent.py), [guardas](backend/conversation/requirement_coverage.py), [ranking](backend/conversation/ranking.py); [arquitectura](docs/wiki/es/agent.md), [decisiones y trade-offs](docs/wiki/es/patterns.md).
-
-**Calidad histórica Google (antes de T10):** En 41 conversaciones inéditas (68 turnos): 0 cifras de catálogo incorrectas en 491 valores comprobados, todas las respuestas en menos de 10 s, 18 de 19 conversaciones cotidianas completamente correctas y 82 % de turnos correctos; menor acierto con formulaciones inusuales (12 de 22 conversaciones adversariales), principalmente requisitos de apertura/cierre o modulación expresados en lenguaje cotidiano o en español y descripciones del lugar. [Resultados por turno, intervalos y diferencias de puntuación](docs/wiki/es/testing.md#vista-por-turno-y-uso-cotidiano).
-
-**Límites conocidos:** v14 falló 13/45 conversaciones: persisten errores de intención, requisitos o partes omitidas y explicaciones incompletas. Los revisores comprobaron todas las cifras mostradas: cero valores individuales de producto incorrectos, pero **dos fallos de alcance en conteos agregados**. Por tanto, no se afirma que v14 tenga cero errores numéricos. Quedan pendientes emulador, voz real e integración Android. [T16](reports/submission/T16-clean-clone.md) verificó un clon y una DB nuevos sin claves, API/historial, gates offline y build/pruebas JVM; precede a P1-F y no verificó proveedor ni dispositivo. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**. **2026-11-05 T15:** las correcciones offline cubren compatibilidad DC (10 elegibles: 5 DC puros y 5 AC/DC) y Weatherproof (34 publicados y 4 N/A); los conteos declaran filtros y exclusiones N/A. Sin nueva inferencia ni cambio de la puntuación v14. [Auditoría](reports/submission/T15-aggregate-counts.md).
+**Gasto OpenRouter registrado:** **USD 6,170259916 ≈ USD 6,17 de 10**, incluidos intentos fallidos y experimentos; es el registro liquidado de evaluación, no una consulta de saldo actual. [Registro de gasto](reports/submission/P2-A.md#spend-and-excluded-attempt).
 
 ## Gates de reproducción
 

@@ -63,7 +63,7 @@ Prueba: [backend/conversation/policy.py](../../../backend/conversation/policy.py
 
 ## 10. ¿Qué hace ante un código incompleto?
 
-No añade /A ni inventa sufijo. Puede mostrar candidatos por prefijo y pedir selección. Un código completo inexistente se informa como ausente.
+Busca coincidencias verificadas del catálogo. Si el prefijo tiene una coincidencia única, puede resolver el código completo mostrando el supuesto; si es ambiguo, ofrece candidatos y pide elegir. Un código completo inexistente se informa como ausente. [Reproducción sin claves](../../../reports/submission/P2-C.md).
 
 Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L306).
 
@@ -95,7 +95,7 @@ Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L
 
 ## 15. ¿Está verificado OpenRouter?
 
-Sí: aceptación OpenRouter completada el 2026-11-05, con 81 conversaciones v10/v11 y USD 1.17 gastados. Modelo único: `google/gemini-3.6-flash`, sin fallback, y embeddings `google/gemini-embedding-2`. No se configura fallback porque basta una decisión simple de herramienta, se midieron 0 errores del proveedor y el retry ya permite dos intentos totales ante 503, timeout o conexión. Flash sigue como modelo único; v14 obtuvo 32/45 y v15 v1 obtuvo 42/60 antes de P1-F. SV2 no fue adoptado; siguen pendientes una cohorte nueva tras P1-F y Android con modelo real. [Models](../../../README.md#models-design-and-limitations).
+Sí. El modelo único es `google/gemini-3.6-flash`, sin fallback, con embeddings `google/gemini-embedding-2`. En v17, tres ejecuciones pareadas dieron 47/46/50 de 60 frente a 37/35/38: media 79,4 % frente a 61,1 %, y pass^3 71,7 % frente a 55 %. La adopción fue una excepción autorizada a la regla de no regresiones; las reparaciones offline posteriores se documentan aparte. El gasto registrado es USD 6,17 de 10. [Mediciones y reparación](../../../reports/submission/P2-A.md).
 
 Prueba: [docs/evidence/agent_acceptance.md](../../../docs/evidence/agent_acceptance.md#L1).
 
@@ -137,7 +137,7 @@ Prueba: [backend/conversation/api.py](../../../backend/conversation/api.py#L18).
 
 ## 22. ¿Cuál es una debilidad técnica concreta?
 
-Los umbrales estrictos ya se admiten: below 5 W usa lt y mayor a/over usa gt; al menos/hasta son inclusivos. Se verificaron offline con decisiones programadas, SQL y pruebas de frontera; la comprobación v6 con LLM real queda pendiente del coordinador. Sigue siendo una debilidad que presencia de un número no prueba su asignación al campo semántico correcto.
+Los umbrales estrictos ya se admiten: below 5 W usa lt y mayor a/over usa gt; al menos/hasta son inclusivos. Se verificaron offline con decisiones programadas, SQL y pruebas de frontera; la evaluación real posterior v17 y las reparaciones offline están separadas en el informe vigente. Sigue siendo una debilidad que presencia de un número no prueba su asignación al campo semántico correcto.
 
 Prueba: [regresiones T6](../../../tests/test_conversation_quality.py), [SQL de filtros](../../../backend/catalog/repository.py) y [evidencia T6](../../../reports/submission/T6.md).
 
@@ -207,11 +207,11 @@ Pro ganó el primer conjunto común de 44: 28/44 frente a 21/44 de 3.6 y 25/44 d
 
 ## 38. ¿Cómo mediste calidad y por qué reportas 68–73 % estricto?
 
-Seis personas, conjuntos congelados y revisión independiente por conversación; las rondas 1–2 usaron un criterio más laxo. En ronda 9 ON pasó 30/41 y OFF 29/41; ronda 10 ON tras las reparaciones pasó 28/41. El rango honesto es 68–73 %, con todas las respuestas de rondas 9–10 bajo 10 s y p95 3.7–5.1 s. No hubo cifras de catálogo incorrectas, pero eso no compensa perder un requisito, errar el contexto de peligro o responder de más; los replays no autorizan inflar la tasa. [Tabla completa](testing.md#behavior-evaluation).
+Seis personas, conjuntos congelados y revisión independiente por conversación; las rondas 1–2 usaron un criterio más laxo. En ronda 9 ON pasó 30/41 y OFF 29/41; ronda 10 ON tras las reparaciones pasó 28/41. El rango histórico de esas rondas fue 68–73 %, con todas las respuestas de rondas 9–10 bajo 10 s y p95 3.7–5.1 s. No hubo cifras de catálogo incorrectas, pero eso no compensa perder un requisito, errar el contexto de peligro o responder de más; los replays no autorizan inflar la tasa. [Tabla completa](testing.md#behavior-evaluation).
 
 ## 39. ¿Qué harías después?
 
-Congelaría una cohorte nueva para medir las reparaciones sin reutilizar entrenamiento, con revisión independiente y costes/latencia separados. Completaría una cohorte nueva tras P1-F y pruebas Android reales de voz, filtros y debug; después mediría carga, colas/cupos globales y recuperación. Mientras tanto, el ingeniero confirma filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar.
+Congelaría una cohorte nueva para medir las reparaciones sin reutilizar entrenamiento, con revisión independiente y costes/latencia separados. v17 ya aporta tres comparaciones pareadas; las reparaciones posteriores no tienen una nueva medición pagada. Completaría reconocimiento de voz y fallos de login/debug manuales; después mediría carga, colas/cupos globales y recuperación. Mientras tanto, el ingeniero confirma filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar.
 
 ## 40. ¿Es 73 % mejor que 71 %?
 
@@ -251,4 +251,4 @@ v15 se congeló con hash; se compararon el mismo modelo, catálogo y recuperaci�
 
 ## Límites conocidos
 
-La aceptación OpenRouter se completó el 2026-11-05; una cohorte nueva tras P1-F y Android con LLM real siguen pendientes; la voz está implementada con pruebas JVM, pendiente en dispositivo; no hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.
+v17 obtuvo 79,4 % de aprobación media: todavía falla cerca del 20 %. La aceptación de emulador pasó 8/8, pero usa voz inyectada y debug controlado; reconocimiento real, permisos y fallos de login/debug necesitan comprobaciones manuales. No hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.

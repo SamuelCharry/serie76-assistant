@@ -1,6 +1,6 @@
 # Agent acceptance
 
-> Update 2026-11-05: this historical report retains its original run scope and numbers; OpenRouter acceptance and bank reload are now completed, with provisional model defaults and pending post-fix held-out v12 documented in [README Models](../../README.md#models-design-and-limitations).
+> Historical Google cohorts below are retained unchanged. Current OpenRouter results, the adopted improvement and repair boundaries are in [the paired v17 report](../../reports/submission/P2-A.md) and [README](../../README.md#models-design-and-limitations).
 
 Production A+ client, model `gemini-3.6-flash`, Google OpenAI-compatible endpoint. OpenRouter calls: 0. Cohorts overlap and must not be summed as independent cases. Costs below are the exact summary values in USD; conservative reservations are not an invoice.
 
@@ -17,7 +17,7 @@ Offline check: `python scripts/agent_acceptance.py selfcheck --cases config/agen
 
 Historical reproduction, requiring explicit paid-call approval: run `scripts/agent_acceptance.py run --cohort NEW --cases config/agent_acceptance_cases_v4.json`, then `scripts/agent_acceptance.py report --cohort NEW --cases config/agent_acceptance_cases_v4.json`. Use a new cohort to preserve frozen records. No inference was run during cleanup.
 
-The v4 strict power-limit case failed; its prompt correction has not been rechecked with a real LLM. Four v4 cases remained unevaluated after provider errors. OpenRouter acceptance and Android-to-real-LLM acceptance remain pending.
+The v4 strict power-limit case failed; its prompt correction has not been rechecked with a real LLM. Four v4 cases remained unevaluated after provider errors. These old cohorts do not establish current OpenRouter or Android acceptance; see the current evidence above.
 
 [Original archive](https://github.com/SamuelCharry/serie76-assistant/tree/archive/pre-cleanup/reports/agent_acceptance).
 

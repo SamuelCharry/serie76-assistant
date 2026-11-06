@@ -16,15 +16,34 @@ Un modelo programado devuelve herramientas predeterminadas; las herramientas rea
 - [test_auth.py](../../../tests/test_auth.py): Autenticación con hash, revocación, aislamiento y contrato de login.
 - [test_submission_readiness.py](../../../tests/test_submission_readiness.py): require_parameters, guarda por proceso y cuentas demo idempotentes.
 
-## v15 / SV2 y P1-F
+## Evaluación vigente
 
-**Experimento SV2 — no adoptado:** en el mismo v15 congelado, v1 de producción aprobó **42/60 (70 %)** y v2 de estado completo **8/60 (13,3 %)** (discordantes 35/1; McNemar p ≈ 1,1e-9). Reducir el esquema de 108 a 6 enums no mejoró el comportamiento. [Diseño, regla y resultados](../../../reports/submission/SV2-experiment.md).
+**Mejora adoptada:** el propietario autorizó la versión mejorada de Flash como excepción explícita a la regla preinscrita de no introducir regresiones; tampoco se cumplió el objetivo original de integridad absoluta. El [informe de evaluación y reparación](../../../reports/submission/P2-A.md) distingue el candidato medido de las correcciones offline posteriores. Las dos regresiones nuevas y los defectos compartidos de límites relativos se corrigieron con pruebas de regresión. El código reparado `1dda5f2` pasó **797 pruebas (795 aprobadas, 2 omitidas)**, el oráculo ampliado **119/119** y todos los controles offline obligatorios. Las puntuaciones pagadas siguientes pertenecen sólo al candidato medido `3ede96c`; v17 pasó a ser material de regresión durante las reparaciones y el código reparado no tiene evaluación pagada independiente.
 
-**Estado final documentado:** P1-F: **669 pruebas (667 aprobadas, 2 omitidas)**; v7 **453/453**, T10 **48/48**, T12 **47/47**, T14 **42/42**. Uso total liquidado registrado: **USD 2,697095241 (aprox. USD 2,70 de 10)**, incluido SV2; no es una consulta de saldo actual. [Pruebas P1-F](../../../reports/submission/P1-F.md#verification) · [Gasto SV2](../../../reports/submission/SV2-experiment.md#paired-held-out-v15-results).
+Tres ejecuciones pareadas sobre las mismas 60 conversaciones inéditas de varios turnos (v17) mantuvieron modelo, catálogo y recuperación:
 
-**Invariante P1-F:** la comprobación final de elegibilidad contra SQL cubre tarjetas, comparaciones, rankings y referencias positivas a productos en la prosa, incluida la pertenencia al conjunto mostrado cuando se exige. Una selección positiva inválida elimina todos sus canales; los incumplidores informativos exigen etiquetas explícitas. v15 expuso **cuatro violaciones técnicas**, corregidas y cubiertas por regresiones locales, además de dos violaciones del conjunto mostrado. El 42/60 histórico precede al arreglo; no se afirma nueva aceptación con modelo real ni despliegue. Se verifican requisitos representados, no interpretación perfecta, alcance de agregados ni idoneidad de la instalación. [Implementación y verificación](../../../reports/submission/P1-F.md).
+| Medida | Versión anterior | Versión mejorada |
+|---|---:|---:|
+| Conversaciones aprobadas por ejecución | 37/60, 35/60, 38/60 | 47/60, 46/60, 50/60 |
+| Tasa media de aprobación | 61,1 % | 79,4 % |
+| Aprobadas en las tres ejecuciones (pass^3) | 33/60 (55,0 %) | 43/60 (71,7 %) |
+| Turnos que cumplen la integridad adjudicada | 410/438 | 429/438 |
+| Latencia cliente agrupada p95 / máxima | 6,06 / 11,23 s | 6,69 / 17,89 s |
+| Turnos de más de 10 s | 1 | 3 |
 
-La revisión pareada usó tres paquetes ciegos disjuntos de 20 conversaciones: un revisor por conversación, no tres votos. Mismo modelo, catálogo y recuperación; hashes congelados verificados antes y después. p95 de turnos LLM v1/v2: **5,11/6,25 s**; gasto **USD 0,32/0,46**; ejecuciones secuenciales, no ensayos repetidos. Verificación local P1-F: **669 pruebas (667 aprobadas, 2 omitidas)**, v7 **453/453**, T10 **48/48**, T12 **47/47**, T14 **42/42**. El comando directo de texto público solo importa definiciones; su salida cero no es una auditoría independiente. v15 pasa a diagnóstico/regresión; queda pendiente una nueva cohorte reservada con proveedor.
+McNemar exacto pareado: **p = 0,013, 0,007 y 0,002**. La auditoría estructurada completa encontró **0 cifras incorrectas en 18.792 valores** de ambas versiones. Una cifra correcta no garantiza identidad ni requisitos correctos. Se cumplió la regla p95 ≤10 s, aunque hubo turnos individuales más lentos. El diagnóstico anterior localizó demoras en llamadas individuales al proveedor, no en bucles de la aplicación; no demuestra la causa de cada demora v17.
+
+Alcance de latencia: una comprobación offline auxiliar breve coincidió con la segunda repetición del baseline y se detuvo; son tiempos observados, no un benchmark de carga aislado. El [informe de reparación](../../../reports/submission/P2-A.md) registra ese contexto.
+
+**Límites:** todavía falla, en promedio, cerca del **20 % de las conversaciones inéditas de varios turnos**; las repeticiones no son 180 conversaciones independientes. Las dos regresiones nuevas afectan un techo de torque retirado y el segundo miembro de una comparación; dos defectos compartidos afectan límites relativos de torque. Sus correcciones y pruebas offline se registran aparte de la medición real. Faltan comprobaciones manuales del reconocimiento de voz, permisos/servicio del micrófono y legibilidad en dispositivo físico.
+
+**Evidencia anterior:** v14 **32/45** y v15 **42/60** preceden a las últimas mejoras; v16 se usó para desarrollo y no es validación independiente. El ranking sintético obtuvo **NDCG@3 0,965 / cumplimiento 1,0**, no exactitud integral. El experimento de estado completo (SV2) **no fue adoptado**: 8/60 frente a 42/60. [Historial de pruebas](testing.md) · [Experimento rechazado](../../../reports/submission/SV2-experiment.md).
+
+**Límite de integridad:** la comprobación final contra SQL cubre tarjetas, comparaciones, ranking y prosa positiva, además de pertenencia al conjunto mostrado cuando se exige. Una selección inválida se elimina; los incumplidores informativos llevan etiquetas explícitas. Verifica requisitos representados, no comprensión perfecta ni idoneidad de instalación. [Invariante y pruebas (P1-F)](../../../reports/submission/P1-F.md).
+
+**Evidencia de entrega:** la auditoría ejecutable de texto público detectó **0 filtraciones en producción dentro de su alcance**; la revisión ciega v17 encontró después un token del baseline que el detector omitió, por lo que no es garantía universal. Quick start sin claves pasó en CI Linux; otro clon limpio en Windows pasó diez pasos. La aceptación en emulador Android pasó **8/8**, combinando HTTP/SQL reales sin claves con datos controlados para debug, errores, demora y voz. [Texto público (P2-B)](../../../reports/submission/P2-B.md) · [CI Linux (P2-C)](../../../reports/submission/P2-C.md) · [Clon Windows (T17)](../../../reports/submission/T17-final-clean-clone.md) · [Emulador (P2-D)](../../../reports/submission/P2-D.md).
+
+**Gasto OpenRouter registrado:** **USD 6,170259916 ≈ USD 6,17 de 10**, incluidos intentos fallidos y experimentos; es el registro liquidado de evaluación, no una consulta de saldo actual. [Registro de gasto](../../../reports/submission/P2-A.md#spend-and-excluded-attempt).
 
 ## Selección de modelo en OpenRouter
 
@@ -111,7 +130,7 @@ Cliente compatible OpenAI, medido a través de Google; esta selección históric
 
 El banco v7 guarda frases/interpretaciones y todos los IDs de origen, nunca las respuestas evaluadas ni cifras del catálogo como conocimiento. Usa un conjunto nuevo o `EMBEDDING_EXCLUDE_SOURCES` para excluir todas las asociaciones de casos retenidos antes de distancia/LIMIT. Las versiones/manifiestos inmutables impiden sustituir silenciosamente etiquetas; los conflictos se desactivan y la procedencia histórica se conserva. Al incorporar un caso fallido al replay/banco, pasa a ser regresión/calibración: no vuelve a contarse como aceptación inédita. El replay de ronda 9 conserva consultas/decisiones y hashes, no está cargado en el banco. [Detalle T9](../../../reports/submission/T9-embeddings.md).
 
-### Evidencia local vigente
+### Evidencia local histórica
 
 [T8](../../../reports/submission/T8-backend.md), [T8b](../../../reports/submission/T8b-backend.md), [T8c](../../../reports/submission/T8c-backend.md), [T8d](../../../reports/submission/T8d-backend.md), [T8e](../../../reports/submission/T8e-backend.md), [T8f](../../../reports/submission/T8f-backend.md), [T8g](../../../reports/submission/T8g-backend.md) y [T8h](../../../reports/submission/T8h-backend.md) documentan la evolución determinista, no una aprobación acumulada del modelo.
 
@@ -275,7 +294,7 @@ Método: congelar hashes de corpus/código/configuración/catálogo antes de inf
 
 ## CI
 
-El [workflow CI](../../../.github/workflows/ci.yml) prepara PostgreSQL, instala dependencias dev, migra, carga catálogo/glosario y ejecuta unittest; Android ejecuta pruebas JVM con JDK 17. No hace inferencia pagada, OCR completo ni instrumentación con emulador. Tener workflow demuestra implementación, no la última ejecución remota. Esta tarea solo corre controles locales.
+El [workflow CI](../../../.github/workflows/ci.yml) prepara PostgreSQL, instala dependencias dev, migra, carga catálogo/glosario y ejecuta unittest; Android ejecuta pruebas JVM con JDK 17. No hace inferencia pagada, OCR completo ni instrumentación con emulador. Tener workflow demuestra implementación, no la última ejecución remota. El [workflow separado de Quick start Linux sin claves](../../../reports/submission/P2-C.md) pasó en GitHub en su commit registrado; verificar los checks del commit final antes de entregar.
 
 ## Dónde está en el código
 
@@ -285,9 +304,9 @@ El [workflow CI](../../../.github/workflows/ci.yml) prepara PostgreSQL, instala 
 
 ## Límites conocidos
 
-Ninguna prueba automática acredita lenguaje arbitrario ni precisión OCR heterogénea. Las pruebas DB pueden crear registros acotados o revertir transacciones. Pendientes el recorrido Android → modelo real → SQL → Android y la prueba desde un clon limpio.
+Ninguna prueba automática acredita lenguaje arbitrario ni precisión OCR heterogénea. Las pruebas DB pueden crear registros acotados o revertir transacciones. El recorrido Android → modelo real → SQL → Android no queda acreditado por el emulador; las reproducciones Linux y Windows están documentadas arriba.
 
-**Límites conocidos:** v14 falló 13/45 conversaciones: persisten errores de intención, requisitos o partes omitidas y explicaciones incompletas. Los revisores comprobaron todas las cifras mostradas: cero valores individuales de producto incorrectos, pero **dos conteos agregados incorrectos**. Por tanto, no se afirma que v14 tenga cero errores numéricos. Quedan pendientes emulador, voz real e integración Android. [T16](../../../reports/submission/T16-clean-clone.md) verificó un clon y una DB nuevos sin claves, API/historial, gates offline y build/pruebas JVM; precede a P1-F y no verificó proveedor ni dispositivo. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**.
+**Límites históricos de v14:** v14 falló 13/45 conversaciones: persisten errores de intención, requisitos o partes omitidas y explicaciones incompletas. Los revisores comprobaron todas las cifras mostradas: cero valores individuales de producto incorrectos, pero **dos conteos agregados incorrectos**. Por tanto, no se afirma que v14 tenga cero errores numéricos. La cobertura en emulador está en [P2-D](../../../reports/submission/P2-D.md); queda pendiente reconocimiento real. [T16](../../../reports/submission/T16-clean-clone.md) verificó un clon y una DB nuevos sin claves, API/historial, gates offline y build/pruebas JVM; precede a P1-F y no verificó proveedor ni dispositivo. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**.
 
 ## Preflight del esquema antes de cualquier cohorte
 

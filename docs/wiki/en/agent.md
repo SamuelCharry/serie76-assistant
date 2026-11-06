@@ -89,9 +89,9 @@ Priority uses FLA, operating time, torque, motor power, duty or cycles as reques
 
 For `DC + 60 Hz`, ask which requirement is intended; retain compatible constraints. A follow-up `now 220 V` uses `refine=true` and only the voltage delta; `merge_filters` carries the rest. `remove` drops named constraints; `more` advances pagination. Changing service drops the incompatible old cycles/starts constraint with an explanation.
 
-Codes are canonicalised for case/spaces/missing hyphen, never completed with `/A` or a guessed suffix. Partial codes receive prefix candidates; well-formed absent codes return not found. Codes must be in the conversation or persisted context. Unstated filters are dropped and named; assumptions must quote actual user wording and are shown. T9 also checks quantity/unit coverage in both directions; semantic field assignment can still fail.
+Codes are canonicalised for case/spaces/missing hyphen. A uniquely matching catalogue prefix can resolve to the full code with a visible interpretation assumption; ambiguous prefixes ask the user to choose. No unverified suffix or absent code is invented. [Keyless reproduction evidence](../../../reports/submission/P2-C.md). Codes must be in the conversation or persisted context. Unstated filters are dropped and named; assumptions must quote actual user wording and are shown. T9 also checks quantity/unit coverage in both directions; semantic field assignment can still fail.
 
-SQL compares published columns, with AND filters, service/frequency scope and explicit absence states. Unknown values cannot satisfy thresholds. Templates render the resulting rows and literal glossary quotes; no second model writes the answer. One completed model decision per turn; failed 503, timeout and connection attempts may retry once per model, with an optional fallback model and a shared 60-second deadline. No 4xx is retried. A catalogue call plus an `explain_terms` call in the same response may be merged into one execution; other invalid call shapes produce a clarification.
+SQL compares published columns, with AND filters, service/frequency scope and explicit absence states. Unknown values cannot satisfy thresholds. Templates render the resulting rows and literal glossary quotes; no second model writes the answer. One completed model decision per turn; failed 503, timeout and connection attempts may retry once per model, with fallback disabled in the submitted configuration and a shared 60-second deadline. No 4xx is retried. A catalogue call plus an `explain_terms` call in the same response may be merged into one execution; other invalid call shapes produce a clarification.
 
 ## Runtime controls and tracing
 
@@ -235,7 +235,7 @@ The following approved behaviors are exercised in [T7 EC evidence](../../../repo
 
 ### Retry, fallback and deadline
 
-LangChain `.with_retry(stop_after_attempt=2)` retries only 503, timeout and connection errors; never 4xx. An optional `OPENROUTER_FALLBACK_MODEL` uses `.with_fallbacks` on the same endpoint. SDK retries stay disabled. Every actual attempt reserves the local call cap and is recorded; failed turns preserve safe attempt metadata without persisting half a conversation.
+LangChain `.with_retry(stop_after_attempt=2)` retries only 503, timeout and connection errors; never 4xx. The submitted configuration leaves `OPENROUTER_FALLBACK_MODEL` empty: no fallback model. The optional implementation remains available but was not used in v17. SDK retries stay disabled. Every actual attempt reserves the local call cap and is recorded; failed turns preserve safe attempt metadata without persisting half a conversation.
 
 The shared `AGENT_TURN_DEADLINE_S=60` covers primary retries and fallback. Each attempt uses `min(AGENT_TIMEOUT_S=45, remaining)`; less than `AGENT_RETRY_MIN_REMAINING_S=10` remaining records `deadline_skipped` without reserving a call. Defaults stay below Android's 70 s read/75 s call timeout. Keep-alive is separate: client pool 30 s, Uvicorn 75 s. [Operations](operations.md) documents configuration and the first-tap failure.
 

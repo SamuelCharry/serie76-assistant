@@ -40,13 +40,13 @@ flowchart LR
 
 ## Assessment status
 
-| Feature | Implemented and verified locally | Pending |
+| Feature | Verified evidence | Remaining limit |
 |---|---|---|
-| OCR and PostgreSQL catalogue | [941/941 primary checks](docs/evidence/ocr.md), idempotent loading | New layouts |
-| T8 interaction, recommendations, actions, deletion, planner and guards | [T8–T8h backend](docs/wiki/en/testing.md), [51 T8 JVM tests](reports/submission/T8-android.md) | Real device flow |
-| T9 additive embeddings | [484 Python tests, 2 skips; 446 scripted scenarios](reports/submission/T9-embeddings.md), Google smoke | Device validation; v14 32/45 and v15 v1 42/60 before P1-F |
-| T9 voice and per-answer debug | [74 JVM tests, debug/release APKs](reports/submission/T9-android.md) | Actual voice, UI and integrated backend on device |
-| Login, private history, Docker | [Authentication](docs/wiki/en/api.md), [reproducible startup](reports/submission/T2.md) | Public HTTPS and final reproduction |
+| OCR and PostgreSQL catalogue | [941/941 primary checks](docs/evidence/ocr.md), idempotent loading | New layouts need validation |
+| Multi-turn selection | [Paired v17 mean 79.4%, 0/18,792 wrong figures](reports/submission/P2-A.md) | About 20% of conversations fail; repairs are separate from measured results |
+| Public text and hidden debug | [Executable text audit](reports/submission/P2-B.md), [emulator checks](reports/submission/P2-D.md) | Detector coverage is finite; debug transport was controlled |
+| Android interaction and voice | [8/8 emulator tests](reports/submission/P2-D.md) | Real recognition and login/debug fault paths need checks |
+| Login, private history, Docker | [Linux CI](reports/submission/P2-C.md), [Windows clean clone](reports/submission/T17-final-clean-clone.md) | Final tag/access and physical-device validation |
 
 ## Setup and backend
 
@@ -185,36 +185,32 @@ Open Series 76 and use a test account. Emulator backend: `http://10.0.2.2:8000/`
 
 ## Models, design and limitations
 
-After a comparison or a shown list, ask `which one do you recommend and why?` or `¿cuál me recomiendas?`. Recommendations stay within those shown models, apply active and newly stated requirements before ranking, explain exclusions with catalogue values, and state the priority, advantages and runner-up trade-off. `Which should I buy?` asks for selection advice; it does not place an order. If none qualifies, the nearest shown model is explicitly described as failing, never recommended.
+**Models:** `google/gemini-3.6-flash` is the only chat model; fallback is disabled (`OPENROUTER_FALLBACK_MODEL=`). Embeddings use `google/gemini-embedding-2`. Flash was selected for the observed quality/latency balance in the [historical paired model comparison](docs/wiki/en/testing.md#openrouter-model-selection), not universal superiority. One completed tool decision per interpreted turn; deterministic routes make no model call. SQL and templates provide figures; retrieval only adds unresolved interpretation fields. [Architecture](docs/wiki/en/agent.md) · [Trade-offs](docs/wiki/en/patterns.md).
 
-**Historical OpenRouter v10/v11 acceptance (2026-11-05):** USD 1.17 spent from the USD 10 key. Blind strict review used three independent reviewers per round and shuffled variants per conversation: held-out v10 (41 conversations) + v11 (40), 81 total, including 74 in English. These are measured cohort results, not current price quotes or latency guarantees.
+**Adopted improvement:** the owner authorized the improved Flash version as an explicit exception to the pre-registered no-regression rule; the original absolute integrity target was not met. The [paired evaluation and repair record](reports/submission/P2-A.md) distinguishes the measured candidate from subsequent offline repairs. Both new regressions and the shared relative-bound defects were repaired with regression tests. Repaired source `1dda5f2` passed **797 tests (795 passed, 2 skipped)**, the **119/119** expanded oracle and all required offline gates. The paid scores below belong only to measured candidate `3ede96c`; v17 became regression material during repair, and the repaired source has no independent paid evaluation.
 
-| Model | English | All | p95 / max | Turns > 10 s | USD / 1,000 LLM turns |
-|---|---:|---:|---:|---:|---:|
-| gemini-3.6-flash | 63/74 | 69/81 | 5.9 / 8.9 s | 0 | 3.0 |
-| gpt-6-luna | 61/74 | 67/81 | 4.9 / 12.2 s | 1 | 0.8 |
-| deepseek-v4.1-flash | 59/74 | 65/81 | 8.8 / 10.8 s | 2 | 0.8 |
-| claude-haiku-5.5 | 50/74 | 55/81 | 3.1 / 8.7 s | 0 | 0.7 |
+Three paired runs on the same 60 previously unseen, multi-turn conversations (v17) used the same model, catalogue and retrieval:
 
-**Historical v10/v11 model-selection rule:** (1) English quality unless statistically tied, (2) no observed turn over 10 s, (3) cost, (4) licence for production only (DeepSeek has open weights; licence still needs verification). Flash vs Luna: McNemar p = 0.63 (3 vs 1 discordant); Flash vs DeepSeek: p = 0.125; Haiku is significantly worse (p < 0.001). Lack of significance does not establish equivalence.
+| Measure | Previous version | Improved version |
+|---|---:|---:|
+| Conversations passing, per run | 37/60, 35/60, 38/60 | 47/60, 46/60, 50/60 |
+| Mean conversation pass rate | 61.1% | 79.4% |
+| Passed in all three runs (pass^3) | 33/60 (55.0%) | 43/60 (71.7%) |
+| Turns meeting adjudicated integrity requirements | 410/438 | 429/438 |
+| Pooled client latency p95 / maximum | 6.06 / 11.23 s | 6.69 / 17.89 s |
+| Turns over 10 s | 1 | 3 |
 
-**Single-model default:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=` (disabled), `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. One tool decision per interpreted turn; code validates and SQL supplies figures. Plan B adds validated priority, unpublished request parts and requirement retention, with no additional agents or calls.
+Exact paired McNemar p-values were **0.013, 0.007 and 0.002**. The full structured audit found **0 wrong figures in 18,792 values** across both versions. Correct figures do not guarantee correct product identity or retained requirements. The p95 ≤10 s rule passed; individual turns still exceeded 10 s. Earlier slow-turn diagnosis found single provider calls, not application loops; that does not establish the cause of every v17 tail.
 
-**Plan B / T14 retained:** strict blind results are v12 **29/45**, v13 **23/45**, and new held-out v14 **32/45 (71%)**, followed by production v1 on v15 **42/60 (70%)**, before P1-F. These are different cohorts, so the difference is not a causal estimate. v13 is diagnostic only. The fixed T14 rule required at least 27/45, all offline gates green and p95 at most 10 s. v14 had 85 turns (66 interpreted), p95 **6.2 s**, maximum **9.3 s**, no turns above 10 s and no HTTP errors. In v13, two of 79 interpreted turns took 11–16 s in single provider calls, not code loops. Plan B spent **USD 0.236607225**; settled key usage at that historical checkpoint was **USD 1.919522541**.
+**Limits:** about **20% of novel multi-turn conversations still fail** on average; the three repeats are not 180 independent conversations. Two new regressions concerned a withdrawn torque ceiling and the second comparison member; two shared defects concerned relative torque bounds. Their offline repairs and tests are tracked in the linked report, separately from live measurements. Voice recognition, microphone permissions/service behavior and physical-device readability still need manual checks.
 
-**Verified on the final Plan B source:** 615 Python tests run (613 passed, two skipped); v7 453/453; T10 48/48 (8/48 before fixes); T12 47/47 (7/47 before); T14 42/42 (7/42 before). All required gates exited zero. Tool schema: **5,520 bytes / 108 enum values**; live preflight accepted. Ranking NDCG@3 **0.965378**, returned compliance **1.0 in the synthetic ranking evaluation**, not across live conversations. Recorded v13 decisions replayed without inference at 23/45 before and 28/45 after; this is diagnostic and old decisions lack the new fields. [T14 report](reports/submission/T14-plan-b.md).
+**Earlier evidence:** v14 **32/45** and v15 **42/60** predate the latest improvements; v16 was used for development and is not independent validation. Synthetic ranking achieved **NDCG@3 0.965 / compliance 1.0**, not end-to-end accuracy. The complete-state experiment (SV2) was **not adopted**: 8/60 versus 42/60. [Testing history](docs/wiki/en/testing.md) · [Rejected experiment](reports/submission/SV2-experiment.md).
 
-**SV2 experiment — not adopted:** on the same frozen v15, production v1 passed **42/60 (70%)** and complete-state v2 **8/60 (13.3%)** (discordants 35/1; McNemar p ≈ 1.1e-9). A smaller schema (108 → 6 enums) did not improve behavior. [Design, adoption rule and results](reports/submission/SV2-experiment.md).
+**Integrity boundary:** the SQL eligibility invariant checks cards, comparisons, rankings and positive prose, plus membership in the previously shown set when requested. Invalid selections are cleared; informational non-matches require explicit labels. It checks represented requirements, not perfect interpretation or installation suitability. [Invariant and tests (P1-F)](reports/submission/P1-F.md).
 
-**Final documented status:** P1-F: **669 tests (667 passed, 2 skipped)**; v7 **453/453**, T10 **48/48**, T12 **47/47**, T14 **42/42**. Recorded settled total usage: **USD 2.697095241 (about USD 2.70 of 10)**, including SV2; this is not a live balance check. [P1-F tests](reports/submission/P1-F.md#verification) · [SV2 spend](reports/submission/SV2-experiment.md#paired-held-out-v15-results).
+**Delivery evidence:** the executable public-text audit detected **0 production leaks in its recorded scope**; later v17 blind review found a baseline token that automation missed, so zero detected leaks is not a universal guarantee. Linux keyless Quick start passed in CI; a separate Windows clean clone passed its ten steps. Android emulator acceptance passed **8/8**, mixing real keyless HTTP/SQL with controlled debug, fault, delay and voice inputs. [Text audit (P2-B)](reports/submission/P2-B.md) · [Linux CI (P2-C)](reports/submission/P2-C.md) · [Windows clone (T17)](reports/submission/T17-final-clean-clone.md) · [Emulator (P2-D)](reports/submission/P2-D.md).
 
-**P1-F integrity invariant:** the final SQL eligibility check covers product cards, comparisons, rankings and positive product references in prose, including prior shown-set membership when requested. An invalid positive selection clears all selection channels; informational non-matches require explicit failure labels. v15 exposed **four technical violations**, now repaired and covered by local regressions, plus two shown-set violations. The historical 42/60 score predates this fix; no new live-model acceptance or deployment is claimed. This enforces represented requirements, not perfect interpretation, aggregate scope or installation suitability. [Implementation and verification](reports/submission/P1-F.md).
-
-**How:** the LLM never produces final numbers: one decision per interpreted turn, zero on deterministic routes. Retrieval only adds unresolved fields; it cannot replace explicit requirements. The final guard checks quantity and filter coverage; SQL/templates preserve units, N/A and provenance. Ranking declares its criterion, not suitability certification. **Code:** [agent](backend/conversation/agent.py), [coverage guard](backend/conversation/requirement_coverage.py), [ranking](backend/conversation/ranking.py); [architecture](docs/wiki/en/agent.md), [decisions and trade-offs](docs/wiki/en/patterns.md).
-
-**Historical Google quality (before T10):** On 41 unseen conversations (68 turns): 0 wrong catalogue numbers in 491 checked values, all replies under 10 s, 18 of 19 everyday conversations fully correct and 82 % of turns correct; weaker on unusual phrasing (12 of 22 adversarial conversations), mainly open/close or modulating needs written in plain or Spanish wording and site descriptions. [Turn-level results, intervals and scoring differences](docs/wiki/en/testing.md#turn-level-and-everyday-use-view).
-
-**Known limitations:** v14 failed 13/45 conversations: intent errors, dropped requirements or request parts, and incomplete explanations remain. Reviewers checked all displayed figures: zero incorrect individual product values, but **two aggregate-scope failures**. Therefore v14 does not support a claim of zero numeric errors. Emulator, actual voice and Android integration remain pending. The [T16 keyless clean-clone test](reports/submission/T16-clean-clone.md) covers isolated startup, deterministic API/history, offline gates and the Android JVM/debug build; it does not validate live-provider or device behavior. Engineers must confirm **active filters, service, enclosure and hazardous-area classification before ordering**. **2026-11-05 T15:** offline repairs cover DC compatibility (10 eligible, including 5 DC-only and 5 AC/DC) and Weatherproof counts (34 published plus 4 N/A); aggregates now declare their filters and N/A exclusions. No new inference or v14 rescoring. [Audit](reports/submission/T15-aggregate-counts.md).
+**Recorded OpenRouter spend:** **USD 6.170259916 ≈ USD 6.17 of 10**, including failed attempts and experiments; this is the settled evaluation ledger, not a live balance. [Spend record](reports/submission/P2-A.md#spend-and-excluded-attempt).
 
 ## Reproduction gates
 

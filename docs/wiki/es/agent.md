@@ -89,7 +89,7 @@ La prioridad utiliza FLA, tiempo de operación, torque, potencia, duty o ciclos 
 
 Ante `DC + 60 Hz`, pregunta qué requisito conservar y mantiene las restricciones compatibles. `Ahora 220 V` usa `refine=true` y solo el delta de tensión; `merge_filters` conserva el resto. `remove` retira filtros y `more` avanza la página. Cambiar servicio elimina la tasa incompatible anterior y lo explica.
 
-Los códigos normalizan mayúsculas/espacios/guion omitido, nunca completan `/A` ni sufijos supuestos. Los parciales reciben candidatos por prefijo; los completos inexistentes se informan como no encontrados. Deben figurar en conversación o contexto. Los filtros no expresados se descartan y nombran; los supuestos citan palabras reales y se muestran. T9 comprueba también cobertura de cantidades y unidades en ambas direcciones; todavía puede fallar la asignación semántica a un campo.
+Los códigos normalizan mayúsculas/espacios/guion omitido. Un prefijo con coincidencia única en el catálogo puede resolverse al código completo mostrando el supuesto; los ambiguos piden elegir. No se inventan sufijos sin verificar ni códigos ausentes. [Evidencia de reproducción sin claves](../../../reports/submission/P2-C.md). Deben figurar en conversación o contexto. Los filtros no expresados se descartan y nombran; los supuestos citan palabras reales y se muestran. T9 comprueba también cobertura de cantidades y unidades en ambas direcciones; todavía puede fallar la asignación semántica a un campo.
 
 SQL compara columnas publicadas con filtros AND, alcance por servicio/frecuencia y estados de ausencia. Lo desconocido no cumple umbrales. Las plantillas redactan filas y citas literales; ningún segundo modelo escribe la respuesta. Una decisión de modelo completada por turno; los fallos transitorios pueden reintentarse dentro del plazo compartido descrito abajo. Una llamada de catálogo más `explain_terms` en la misma respuesta se puede fusionar en una ejecución; otras formas inválidas producen aclaración.
 
@@ -235,7 +235,7 @@ Estas políticas aprobadas se ejercitan en [evidencia EC T7](../../../reports/su
 
 ### Retry, fallback y plazo total
 
-LangChain `.with_retry(stop_after_attempt=2)` reintenta solo 503, timeout y errores de conexión; nunca 4xx. `OPENROUTER_FALLBACK_MODEL` habilita opcionalmente `.with_fallbacks` en el mismo endpoint. Los retries propios del SDK permanecen apagados. Cada intento real reserva cuota local y queda registrado; los fallos conservan metadatos seguros sin persistir medio turno.
+LangChain `.with_retry(stop_after_attempt=2)` reintenta solo 503, timeout y errores de conexión; nunca 4xx. La configuración entregada deja `OPENROUTER_FALLBACK_MODEL` vacío: no hay modelo de respaldo. La implementación opcional existe, pero no se usó en v17. Los retries propios del SDK permanecen apagados. Cada intento real reserva cuota local y queda registrado; los fallos conservan metadatos seguros sin persistir medio turno.
 
 `AGENT_TURN_DEADLINE_S=60` es compartido por reintentos y fallback. Cada intento usa `min(AGENT_TIMEOUT_S=45, tiempo restante)`; con menos de `AGENT_RETRY_MIN_REMAINING_S=10` registra `deadline_skipped` sin reservar llamada. Los valores predeterminados quedan bajo los 70 s de lectura/75 s totales de Android. Keep-alive es independiente: pool cliente 30 s, Uvicorn 75 s. [Operación](operations.md) explica configuración y fallo del primer toque.
 
