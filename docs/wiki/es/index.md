@@ -39,4 +39,4 @@ Evidencia: [OCR](../../evidence/ocr.md), [PostgreSQL](../../evidence/postgres.md
 
 ## Límites conocidos
 
-La aceptación OpenRouter se completó el 2026-11-05; ver [Models](../../../README.md#models-design-and-limitations). Sigue pendiente el v12 reservado tras las correcciones. Android con LLM real sigue pendiente. T8 interacción y T9 embeddings/voz/debug oculto están implementados y probados localmente; falta voz real en dispositivo. Los checklists antiguos son históricos, no prueba vigente.
+La aceptación OpenRouter se completó el 2026-11-05; ver [Models](../../../README.md#models-design-and-limitations). v14 obtuvo 32/45 y v15 v1 obtuvo 42/60 antes de P1-F; sigue pendiente una cohorte nueva con proveedor tras P1-F. Android con LLM real sigue pendiente. T8 interacción y T9 embeddings/voz/debug oculto están implementados y probados localmente; falta voz real en dispositivo. Los checklists antiguos son históricos, no prueba vigente.

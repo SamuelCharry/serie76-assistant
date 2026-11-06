@@ -95,7 +95,7 @@ Prueba: [backend/conversation/agent.py](../../../backend/conversation/agent.py#L
 
 ## 15. ¿Está verificado OpenRouter?
 
-Sí: aceptación OpenRouter completada el 2026-11-05, con 81 conversaciones v10/v11 y USD 1.17 gastados. Modelo único: `google/gemini-3.6-flash`, sin fallback, y embeddings `google/gemini-embedding-2`. No se configura fallback porque basta una decisión simple de herramienta, se midieron 0 errores del proveedor y el retry ya permite dos intentos totales ante 503, timeout o conexión. La comparación final Flash frente a `qwen/qwen3.7-plus` en el conjunto reservado v12 y Android con modelo real siguen pendientes. [Models](../../../README.md#models-design-and-limitations).
+Sí: aceptación OpenRouter completada el 2026-11-05, con 81 conversaciones v10/v11 y USD 1.17 gastados. Modelo único: `google/gemini-3.6-flash`, sin fallback, y embeddings `google/gemini-embedding-2`. No se configura fallback porque basta una decisión simple de herramienta, se midieron 0 errores del proveedor y el retry ya permite dos intentos totales ante 503, timeout o conexión. Flash sigue como modelo único; v14 obtuvo 32/45 y v15 v1 obtuvo 42/60 antes de P1-F. SV2 no fue adoptado; siguen pendientes una cohorte nueva tras P1-F y Android con modelo real. [Models](../../../README.md#models-design-and-limitations).
 
 Prueba: [docs/evidence/agent_acceptance.md](../../../docs/evidence/agent_acceptance.md#L1).
 
@@ -211,7 +211,7 @@ Seis personas, conjuntos congelados y revisión independiente por conversación;
 
 ## 39. ¿Qué harías después?
 
-Congelaría una cohorte nueva para medir las reparaciones sin reutilizar entrenamiento, con revisión independiente y costes/latencia separados. Cerraría v12 reservado tras las correcciones y pruebas Android reales de voz, filtros y debug; después mediría carga, colas/cupos globales y recuperación. Mientras tanto, el ingeniero confirma filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar.
+Congelaría una cohorte nueva para medir las reparaciones sin reutilizar entrenamiento, con revisión independiente y costes/latencia separados. Completaría una cohorte nueva tras P1-F y pruebas Android reales de voz, filtros y debug; después mediría carga, colas/cupos globales y recuperación. Mientras tanto, el ingeniero confirma filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar.
 
 ## 40. ¿Es 73 % mejor que 71 %?
 
@@ -251,4 +251,4 @@ v15 se congeló con hash; se compararon el mismo modelo, catálogo y recuperaci�
 
 ## Límites conocidos
 
-La aceptación OpenRouter se completó el 2026-11-05; v12 tras las correcciones y Android con LLM real siguen pendientes; la voz está implementada con pruebas JVM, pendiente en dispositivo; no hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.
+La aceptación OpenRouter se completó el 2026-11-05; una cohorte nueva tras P1-F y Android con LLM real siguen pendientes; la voz está implementada con pruebas JVM, pendiente en dispositivo; no hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.

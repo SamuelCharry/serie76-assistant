@@ -128,7 +128,7 @@ docker compose exec -T backend python -m backend.catalog.cli load data/extracted
 
 **Qué:** 658 frases de usuario con interpretaciones y 100 anclas; nunca cifras del catálogo como conocimiento. La carga histórica Google costó aproximadamente **USD 0.005 estimados**. La recarga OpenRouter bajo `google/gemini-embedding-2` costó unos **USD 0.0015**; la recuperación filtra por ese nombre exacto. Son estimaciones de esas ejecuciones, no precios garantizados. **Cómo:** revisa el dry-run; la segunda orden hace inferencia y requiere autorización. El montaje aporta `config/`, ausente en la imagen. **Código:** [loader](scripts/load_example_bank.py), [embeddings](backend/conversation/embeddings.py); [carga, procedencia y comportamiento sin claves](docs/wiki/es/operations.md#example-bank).
 
-El banco es opcional para funcionar sin claves. Sin modelo configurado, `--dry-run` informa todos los ejemplos/anclas suministrados sin DB, clave ni inferencia (`scope: input_only`); no comprueba vectores existentes. Con un modelo explícito comprueba filas pendientes en la DB activa, también sin inferencia. El segundo comando carga vectores para el modelo indicado y exige autorización de inferencia pagada; configura ese mismo modelo para el retrieval del backend.
+El banco es opcional para funcionar sin claves. Sin modelo configurado, `--dry-run` informa todos los ejemplos/anclas suministrados sin DB, clave ni inferencia (`scope: input_only`); no comprueba vectores existentes. Con un modelo explícito comprueba filas pendientes en la DB activa, también sin inferencia. La plantilla `.env.example` nombra un modelo incluso con clave vacía: el dry-run predeterminado consulta la DB y devuelve `scope: model_pending`, sin inferencia. El segundo comando carga vectores para el modelo indicado y exige autorización de inferencia pagada; configura ese mismo modelo para el retrieval del backend.
 
 ```text
 docker compose run --rm --no-deps --entrypoint python -v ./config:/app/config:ro backend scripts/load_example_bank.py --dry-run
@@ -165,13 +165,13 @@ adb version
 
 ```sh
 # macOS/Linux; adb on PATH
-sh mobile/android/gradlew -p mobile/android assembleDebug
+sh mobile/android/gradlew -p mobile/android testDebugUnitTest assembleDebug
 adb install -r mobile/android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
 ```powershell
 # Windows PowerShell; adb on PATH
-./mobile/android/gradlew.bat -p mobile/android assembleDebug
+./mobile/android/gradlew.bat -p mobile/android testDebugUnitTest assembleDebug
 adb install -r mobile/android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
@@ -198,11 +198,13 @@ Después de una comparación o lista visible, pregunta `which one do you recomme
 
 **Modelo único predeterminado:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=` (desactivado), `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. Una decisión de herramienta por turno interpretado; el código valida y SQL aporta las cifras. Plan B añade prioridad validada, partes no publicadas y retención de requisitos, sin agentes ni llamadas adicionales.
 
-**Plan B / T14 conservado:** resultados ciegos estrictos: v12 **29/45**, v13 **23/45** y nuevo conjunto reservado v14 **32/45 (71 %)** y después v1 de producción en v15 **42/60 (70 %)**, antes de P1-F. Son cohortes distintas; la diferencia no estima un efecto causal. v13 queda solo como diagnóstico. La regla T14 exigía al menos 27/45, todos los gates verdes y p95 de hasta 10 s. v14 tuvo 85 turnos (66 interpretados), p95 **6,2 s**, máximo **9,3 s**, ningún turno superior a 10 s y ningún error HTTP. En v13, dos de 79 turnos interpretados tardaron 11–16 s en llamadas individuales al proveedor, no en bucles del código. Plan B gastó **USD 0,236607225**; uso total liquidado de la clave: **USD 1,919522541**.
+**Plan B / T14 conservado:** resultados ciegos estrictos: v12 **29/45**, v13 **23/45** y nuevo conjunto reservado v14 **32/45 (71 %)** y después v1 de producción en v15 **42/60 (70 %)**, antes de P1-F. Son cohortes distintas; la diferencia no estima un efecto causal. v13 queda solo como diagnóstico. La regla T14 exigía al menos 27/45, todos los gates verdes y p95 de hasta 10 s. v14 tuvo 85 turnos (66 interpretados), p95 **6,2 s**, máximo **9,3 s**, ningún turno superior a 10 s y ningún error HTTP. En v13, dos de 79 turnos interpretados tardaron 11–16 s en llamadas individuales al proveedor, no en bucles del código. Plan B gastó **USD 0,236607225**; uso liquidado en ese hito histórico: **USD 1,919522541**.
 
 **Verificado sobre el código final de Plan B:** 615 pruebas Python ejecutadas (613 aprobadas, dos omitidas); v7 453/453; T10 48/48 (8/48 antes); T12 47/47 (7/47 antes); T14 42/42 (7/42 antes). Todos los gates obligatorios terminaron con código cero. Esquema: **5.520 bytes / 108 valores enum**; preflight real aceptado. Ranking NDCG@3 **0,965378**, cumplimiento **1,0 en la evaluación sintética de ranking**, no en todas las conversaciones reales. Las decisiones grabadas de v13 se reprodujeron sin inferencia: 23/45 antes y 28/45 después; es diagnóstico y las decisiones antiguas no tienen los nuevos campos. [T14 report](reports/submission/T14-plan-b.md).
 
 **Experimento SV2 — no adoptado:** en el mismo v15 congelado, v1 de producción aprobó **42/60 (70 %)** y v2 de estado completo **8/60 (13,3 %)** (discordantes 35/1; McNemar p ≈ 1,1e-9). Reducir el esquema de 108 a 6 enums no mejoró el comportamiento. [Diseño, regla y resultados](reports/submission/SV2-experiment.md).
+
+**Estado final documentado:** P1-F: **669 pruebas (667 aprobadas, 2 omitidas)**; v7 **453/453**, T10 **48/48**, T12 **47/47**, T14 **42/42**. Uso total liquidado registrado: **USD 2,697095241 (aprox. USD 2,70 de 10)**, incluido SV2; no es una consulta de saldo actual. [Pruebas P1-F](reports/submission/P1-F.md#verification) · [Gasto SV2](reports/submission/SV2-experiment.md#paired-held-out-v15-results).
 
 **Invariante P1-F:** la comprobación final de elegibilidad contra SQL cubre tarjetas, comparaciones, rankings y referencias positivas a productos en la prosa, incluida la pertenencia al conjunto mostrado cuando se exige. Una selección positiva inválida elimina todos sus canales; los incumplidores informativos exigen etiquetas explícitas. v15 expuso **cuatro violaciones técnicas**, corregidas y cubiertas por regresiones locales, además de dos violaciones del conjunto mostrado. El 42/60 histórico precede al arreglo; no se afirma nueva aceptación con modelo real ni despliegue. Se verifican requisitos representados, no interpretación perfecta, alcance de agregados ni idoneidad de la instalación. [Implementación y verificación](reports/submission/P1-F.md).
 
@@ -210,11 +212,11 @@ Después de una comparación o lista visible, pregunta `which one do you recomme
 
 **Calidad histórica Google (antes de T10):** En 41 conversaciones inéditas (68 turnos): 0 cifras de catálogo incorrectas en 491 valores comprobados, todas las respuestas en menos de 10 s, 18 de 19 conversaciones cotidianas completamente correctas y 82 % de turnos correctos; menor acierto con formulaciones inusuales (12 de 22 conversaciones adversariales), principalmente requisitos de apertura/cierre o modulación expresados en lenguaje cotidiano o en español y descripciones del lugar. [Resultados por turno, intervalos y diferencias de puntuación](docs/wiki/es/testing.md#vista-por-turno-y-uso-cotidiano).
 
-**Límites conocidos:** v14 falló 13/45 conversaciones: persisten errores de intención, requisitos o partes omitidas y explicaciones incompletas. Los revisores comprobaron todas las cifras mostradas: cero valores individuales de producto incorrectos, pero **dos fallos de alcance en conteos agregados**. Por tanto, no se afirma que v14 tenga cero errores numéricos. Quedan pendientes emulador, voz real e integración Android y prueba desde un clon limpio. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**. **2026-11-05 T15:** las correcciones offline cubren compatibilidad DC (10 elegibles: 5 DC puros y 5 AC/DC) y Weatherproof (34 publicados y 4 N/A); los conteos declaran filtros y exclusiones N/A. Sin nueva inferencia ni cambio de la puntuación v14. [Auditoría](reports/submission/T15-aggregate-counts.md).
+**Límites conocidos:** v14 falló 13/45 conversaciones: persisten errores de intención, requisitos o partes omitidas y explicaciones incompletas. Los revisores comprobaron todas las cifras mostradas: cero valores individuales de producto incorrectos, pero **dos fallos de alcance en conteos agregados**. Por tanto, no se afirma que v14 tenga cero errores numéricos. Quedan pendientes emulador, voz real e integración Android. [T16](reports/submission/T16-clean-clone.md) verificó un clon y una DB nuevos sin claves, API/historial, gates offline y build/pruebas JVM; precede a P1-F y no verificó proveedor ni dispositivo. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**. **2026-11-05 T15:** las correcciones offline cubren compatibilidad DC (10 elegibles: 5 DC puros y 5 AC/DC) y Weatherproof (34 publicados y 4 N/A); los conteos declaran filtros y exclusiones N/A. Sin nueva inferencia ni cambio de la puntuación v14. [Auditoría](reports/submission/T15-aggregate-counts.md).
 
 ## Gates de reproducción
 
-Gate offline vigente: **v7, 453/453 escenarios programados**. En el entorno Python backend activado, después de iniciar Compose:
+Gate offline vigente: **v7, 453/453 escenarios programados**. Crea y activa primero el entorno Python 3.12 del backend e instala `requirements-dev.txt` según [Ejecutar localmente](docs/wiki/es/testing.md#ejecutar-localmente), donde está la orden unittest con DB. El entorno OCR es separado. Después de iniciar Compose:
 
 ```text
 python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --config config/agent_acceptance_v7.json

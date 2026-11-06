@@ -123,4 +123,4 @@ The HTTP contract is `{message_id,session_id,tool_calls,debug}`. A 404 displays 
 
 ## Known limits
 
-No offline DB/sync or guaranteed draft recovery after process death. Emulator/UI and controlled HTTP checks do not prove Android-to-real-LLM acceptance. OpenRouter acceptance completed on 2026-11-05; see [Models](../../../README.md#models-design-and-limitations). Post-fix held-out v12 remains pending. Physical-device measurement and public HTTPS deployment remain pending; [mobile evidence](../../evidence/mobile.md) describes verified scope.
+No offline DB/sync or guaranteed draft recovery after process death. Emulator/UI and controlled HTTP checks do not prove Android-to-real-LLM acceptance. OpenRouter acceptance completed on 2026-11-05; see [Models](../../../README.md#models-design-and-limitations). Held-out v14 scored 32/45 and v15 v1 scored 42/60 before P1-F; fresh post-P1-F provider validation remains pending. Physical-device measurement and public HTTPS deployment remain pending; [mobile evidence](../../evidence/mobile.md) describes verified scope.

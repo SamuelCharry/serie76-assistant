@@ -75,7 +75,7 @@ OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash
 docker compose up -d backend
 curl http://localhost:8000/ready
 ```
-La aceptación OpenRouter se completó el 2026-11-05; ver [Models](../../../README.md#models-design-and-limitations). Sigue pendiente el v12 reservado tras las correcciones. ready=200 comprueba catálogo/glosario, no credenciales, routing ni saldo. LangSmith permanece apagado salvo tracing=true y clave; activarlo envía prompts/texto/herramientas/filas externamente. Ver [agente](agent.md).
+La aceptación OpenRouter se completó el 2026-11-05; ver [Models](../../../README.md#models-design-and-limitations). v14 obtuvo 32/45 y v15 v1 obtuvo 42/60 antes de P1-F; sigue pendiente una cohorte nueva con proveedor tras P1-F. ready=200 comprueba catálogo/glosario, no credenciales, routing ni saldo. LangSmith permanece apagado salvo tracing=true y clave; activarlo envía prompts/texto/herramientas/filas externamente. Ver [agente](agent.md).
 
 La recarga del banco en OpenRouter usó `google/gemini-embedding-2`: 658 ejemplos + 100 anclas, unos USD 0.0015; ver [Models](../../../README.md#models-design-and-limitations).
 

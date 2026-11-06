@@ -1,51 +1,119 @@
-# Submission checklist
+# Submission audit
 
-Brief received Monday 2026-11-02; delivery due within one week (Sunday 2026-11-08) by replying to the assessment email with the GitHub link.
+Audited 2026-11-06 on `release/submission` against all six pages of the [assessment](assessment-en.pdf). Documentation/source/evidence review only: no inference, private `.env` read, merge, tag or settings change. Historical reports apply to their recorded source versions.
 
-## Done and verified
+## Requirement-by-requirement checklist
 
-- [x] Single repository with backend, ingestion pipeline, Android app and processed data (initial delivery: `main`, PR #8; current T8/T9 documentation: `release/submission`).
-- [x] Clean clone + empty database: `cp .env.example .env`, `docker compose up --build -d`, `/ready` 200, test-only demo login, idempotent restart.
-- [x] Historical GitHub CI passed for the initial delivery. T9 updates the pinned pgvector image and checks; a current remote T9 CI run is not established by the local reports.
-- [x] README (EN/ES), wiki (`docs/wiki/`), evidence (`docs/evidence/`), ADR, AI assistant configuration (`.claude/`, `.codex/`).
-- [x] No real keys in the repository; `.env` is ignored.
+Checklist totals: **47 items — 37 ✅ / 10 ⚠️**. Each row counts as one obligation, including optional features and delivery. ✅ means implemented/evidenced within the stated scope; ⚠️ means missing or weak acceptance evidence. Local tests do not establish device behavior or generalization.
 
-## T8/T9 implemented and locally verified
+### Backend and data: sections 1–5
 
-- [x] T8 questions in one review card, declared recommendations, structured actions, owner-scoped deletion and Undo; [backend](../reports/submission/T8-backend.md), [Android](../reports/submission/T8-android.md).
-- [x] T8b–T8h answer planner, quantity/filter integrity checks and contextual repairs; [evidence map](wiki/en/testing.md#current-local-evidence).
-- [x] T9 additive interpretation examples, provenance/versioning and exclusions, bounded retrieval and keyless fallback; [484 Python tests, 2 optional skips, 446 scripted scenarios](../reports/submission/T9-embeddings.md).
-- [x] Pinned pgvector PG17 trixie; backup, matching glibc/collation and preserved existing data recorded in the T9 report; no volume deletion.
-- [x] Voice transcript review and hidden per-answer debug in both APK variants; [74 JVM tests and APK assembly](../reports/submission/T9-android.md). Actual device recognition remains pending.
-- [x] README EN/ES and wiki document setup/defaults, Docker/API, ingestion outputs, app/backend URL, seven-tap debug, test users, voice fallback, model choice and trade-offs against assessment section 8.
-- [x] Strict behavior rounds disclosed: round 9 **30/41 ON (73%) versus 29/41 OFF (71%)**; round 10 retrieval ON after repairs **28/41 (68%)**. Observed held-out quality is **68–73%**, every response in rounds 9–10 under 10 s (p95 3.7–5.1 s), no wrong catalogue numbers in any round; figures do not establish correct intent/filters.
-- [x] Four remaining failure classes and engineer confirmation of active filters, service, enclosure and hazardous-area classification before ordering are disclosed in both READMEs.
+| ID | Requirement | Status and evidence |
+|---|---|---|
+| B01 | Python REST service with FastAPI | ✅ [Application](../backend/app/main.py), [API map](wiki/en/api.md#endpoint-map). |
+| B02 | LangChain agent and custom table-query Tool | ✅ [StructuredTool construction](../backend/conversation/agent.py#L285), `bind_tools` at line 370; [design](wiki/en/agent.md). |
+| B03 | Specific retrieval by full Base Part Number | ✅ [T16 steps 5a/5b](../reports/submission/T16-clean-clone.md#command--result): full-code 15 W lookup and comparison from SQL. |
+| B04 | Suitable recommendations from requirements | ⚠️ [Ranking](../backend/conversation/ranking.py) implemented; [P1-F scan](../reports/submission/P1-F.md#full-original-v15-scan) found four technical and two shown-set violations, locally repaired; interpretation remains imperfect. |
+| B05 | Ingest electrical PDF into tool data | ✅ [Script](../scripts/ingest.py), [pipeline](../catalog_ingest/), [941/941 primary checks](evidence/ocr.md). |
+| B06 | Electrical PDF sole numeric authority; summary for context | ✅ [PDF](../data/raw/series_76_electric_data.pdf), [ingestion](wiki/en/ingestion.md), [provenance/reference exclusion](evidence/ocr.md); full codes, units, N/A and notes preserved. |
+| B07 | Multi-turn session_id and follow-up references | ✅ [Store](../backend/conversation/store.py), [tests](../tests/test_conversations.py), [T10 48/48 scripted oracle scenarios](../reports/submission/P1-F.md#verification); natural-language limits remain B04/B10. |
+| B08 | History survives restart | ✅ [T16 step 8](../reports/submission/T16-clean-clone.md#command--result): history survived and resumed under same session. |
+| B09 | Invalid part numbers and missing data | ✅ [Policy tests](../tests/test_agent_policy.py), [scenarios](../tests/test_agent_scenarios.py), [source N/A checks](evidence/ocr.md). |
+| B10 | Ambiguity, impossible requirements, unexpected inputs | ⚠️ Clarification/no-match implemented; [v14](../reports/submission/T14-plan-b.md) failed 13/45, [v15 v1](../reports/submission/SV2-experiment.md#paired-held-out-v15-results) failed 18/60 before P1-F; intent, omitted requirements and aggregate scope remain limits. |
+| B11 | Fixed POST /api/conversation fields | ✅ [API](wiki/en/api.md#endpoint-map), [contracts](../backend/app/contracts.py): `{query,session_id?}` → `{session_id,answer,...}`. |
+| B12 | Omitted ID starts new; supplied ID continues | ✅ [API semantics](wiki/en/api.md#endpoint-map), [T16 steps 5a/7/8](../reports/submission/T16-clean-clone.md#command--result). |
+| B13 | App response structure, sessions/history routes | ✅ [T8/T9 contract](wiki/en/api.md#t8t9-contract): products/comparisons/debug; suggested session/history names retained. |
+| B14 | OpenRouter models, configurable names, explained choices | ✅ [README models](../README.md#models-design-and-limitations), [.env.example](../.env.example): `OPENROUTER_API_KEY`, `OPENROUTER_BASE_URL`, `OPENROUTER_CHAT_MODEL`, `OPENROUTER_EMBEDDING_MODEL`; Flash single chat model, fallback empty. |
+| B15 | USD 10 budget | ✅ [Settled usage](../reports/submission/SV2-experiment.md#paired-held-out-v15-results): USD 2.697095241, about USD 2.70/10; historical, not live balance. |
+| B16 | Local PostgreSQL; pgvector for vector search | ✅ [Compose](../docker-compose.yml), [database](wiki/en/database.md), [pgvector](wiki/en/operations.md#pgvector): PG17, additive interpretation retrieval. |
+| B17 | Technical numbers match tables, never LLM recall | ⚠️ [OCR](evidence/ocr.md) 941/941; [v15 audit](../reports/submission/SV2-experiment.md#integrity-and-subsequent-p1-f-repair) zero mismatches in 2,050 v1 card fields, but product/context can be wrong; [T15 aggregate repairs](../reports/submission/T15-aggregate-counts.md) are offline evidence. |
 
-- [x] Documentation gates: `python scripts/check_docs_links.py` checked 715 relative links/anchors, zero broken; `git diff --check` passed; README PowerShell and POSIX shell blocks parsed, bilingual commands/results matched. No provider calls, app test reruns or separate macOS/Linux runtime execution in this docs task.
+### Native app: section 6
 
-## Pending
+| ID | Requirement | Status and evidence |
+|---|---|---|
+| A01 | Native Kotlin/Compose | ✅ [Build](../mobile/android/app/build.gradle.kts), [Screens.kt](../mobile/android/app/src/main/java/com/serie76/assistant/ui/Screens.kt); [T16](../reports/submission/T16-clean-clone.md#command--result): JDK17 debug build, 74 JVM tests. |
+| A02 | Three screens: conversations, chat, debug | ⚠️ [Screen mapping](wiki/en/android.md#screens-and-state): conversations drawer, chat, developer sheet; functional surfaces exist, visual/device acceptance pending. |
+| A03 | List/open saved conversations with context; new chat | ✅ [Repository](../mobile/android/app/src/main/java/com/serie76/assistant/data/ConversationRepository.kt), [T8 tests](../reports/submission/T8-android.md). |
+| A04 | Chat retains session_id | ✅ [AppViewModel](../mobile/android/app/src/main/java/com/serie76/assistant/ui/AppViewModel.kt), [history contract](wiki/en/api.md#history-and-compatibility). |
+| A05 | Clear comparable product data, not paragraphs alone | ✅ [Comparison layout](wiki/en/android.md#t7-questions-suggestions-and-comparisons): cards/tables preserve decimals/notes; device readability remains A02. |
+| A06 | No tool names/internal details for end users | ⚠️ Public rendering and hidden debug implemented; [P1-F verification](../reports/submission/P1-F.md#verification) says standalone public-text command is import-only, not an audit. [SV2 leakage](../reports/submission/SV2-experiment.md#offline-evidence-and-failure-mechanism) belongs to rejected experiment. |
+| A07 | Debug per answer: tools, parameters, returned data | ✅ [Developer debug](wiki/en/android.md#developer-debug), [API trace contract](wiki/en/api.md#t8t9-contract), [T9 tests](../reports/submission/T9-android.md). |
+| A08 | Debug hidden; README explains opening | ✅ [README Android](../README.md#android): seven profile taps in three seconds, answer info icon; DEV_DEBUG, token/ownership required. |
+| A09 | Loading/errors on every screen | ⚠️ [Screens.kt](../mobile/android/app/src/main/java/com/serie76/assistant/ui/Screens.kt), [DebugDetails.kt](../mobile/android/app/src/main/java/com/serie76/assistant/ui/DebugDetails.kt), [T9 tests](../reports/submission/T9-android.md): state/retry covered locally, integrated emulator failure/rendering flow pending. |
 
-- [ ] OpenRouter acceptance with the provided key (issue #2). Readiness: `python scripts/check_openrouter.py`, then a capped cohort with `config/agent_acceptance_openrouter.json` (safety cap USD 1.00).
-- [x] OpenRouter acceptance completed on 2026-11-05; [README Models](../README.md#models-design-and-limitations) records provider results and provisional defaults; post-fix held-out v12 remains pending, and historical Google/scripted evidence is unchanged.
-- [ ] After future behavior changes, repeat a fresh frozen held-out cohort with provenance exclusions and independent strict review; preserve the disclosed round 9–10 results.
-- [ ] Verify Android on emulator/device against the merged backend: real voice services/permissions, transcript review, questions/actions/deletion and lazy debug for current/resumed answers with DEV_DEBUG true/false.
-- [ ] Confirm fresh-clone reproduction and current remote CI for the final commit; macOS/Linux commands are documented, not executed on a separate host by the docs task.
-- [ ] Give the evaluators access: the repository is **private**. Either invite their GitHub accounts (Settings > Collaborators) or make it public.
-- [ ] Send the email (below) and close issue #1.
+### Optional features: section 7
 
-## Email draft
+| ID | Requirement if implemented | Status and evidence |
+|---|---|---|
+| O01 | Email/password login returns token; hashed passwords | ✅ [Authentication](wiki/en/android.md#authentication), [auth tests](../tests/test_auth.py): salted PBKDF2 and hashed opaque tokens. |
+| O02 | Preloaded test users documented | ✅ [README accounts](../README.md#demo-users-test-only), [T16 provisioning/login](../reports/submission/T16-clean-clone.md#command--result); no password resets. |
+| O03 | Login screen, Bearer requests, backend identifies user | ✅ [Authentication.kt](../mobile/android/app/src/main/java/com/serie76/assistant/data/Authentication.kt), [API](wiki/en/api.md#endpoint-map); login adds fourth screen. |
+| O04 | Users see/use only their conversations | ✅ [Auth tests](../tests/test_auth.py), [ownership](wiki/en/api.md); sign-up/recovery/OAuth not required. |
+| O05 | Voice plus text, documented transcription decisions | ⚠️ [README](../README.md#android), [T9 voice](wiki/en/android.md#t9-voice): on-device preferred, service fallback may use network, transcript reviewed before send, no project speech key/audio upload. Fake recognizers tested; actual recognition pending. |
 
-> Subject: Series 76 Technical Assistant - submission
->
+### Deliverables/submission: sections 3, 8–9
+
+| ID | Requirement | Status and evidence |
+|---|---|---|
+| D01 | Single GitHub repo, all backend/app source | ✅ [Repository](https://github.com/SamuelCharry/serie76-assistant), [backend](../backend/), [Android](../mobile/android/); access remains S02. |
+| D02 | Python, Docker, Android Studio prerequisites | ✅ [Quick start](../README.md#quick-start), [Python environment](wiki/en/testing.md#run-locally), [T16 versions](../reports/submission/T16-clean-clone.md). |
+| D03 | Ingestion script/pipeline delivered | ✅ [ingest.py](../scripts/ingest.py), [catalog_ingest](../catalog_ingest/). |
+| D04 | Processed data or regeneration instructions | ✅ [Validated data](../data/extracted/series76/), [README ingestion](../README.md#ingestion); Docker load or per-document OCR output. |
+| D05 | Dockerfile and compose start backend/database | ✅ [Dockerfile](../Dockerfile), [Compose](../docker-compose.yml), [T16 startup](../reports/submission/T16-clean-clone.md#command--result). |
+| D06 | .env.example placeholders without real keys | ✅ [.env.example](../.env.example): empty API/tracing keys, local DB placeholder; private `.env` not read. |
+| D07 | README requirements and environment variables | ✅ [Quick start](../README.md#quick-start), [Setup](../README.md#setup-and-backend), [Spanish](../README.es.md#setup-y-backend). |
+| D08 | README Docker build/run and API access | ✅ [Setup/backend](../README.md#setup-and-backend), linked [API examples](wiki/en/api.md#curl). |
+| D09 | README ingestion command/output location | ✅ [Ingestion](../README.md#ingestion), [Spanish](../README.es.md#ingestión). |
+| D10 | README app build/run, backend URL, debug | ✅ [Android](../README.md#android), [Quick start](../README.md#quick-start): JDK17/SDK36, emulator 10.0.2.2, USB reverse, seven taps. |
+| D11 | README design/architecture/trade-offs | ✅ [Models/design/limits](../README.md#models-design-and-limitations), [patterns](wiki/en/patterns.md): single decision, SQL, additive retrieval, rejected SV2. |
+| D12 | README optional test users/voice decisions | ✅ [Accounts](../README.md#demo-users-test-only), [voice](../README.md#android). |
+| D13 | Real assistant configuration directory | ✅ [.claude](../.claude/), [guide](../.claude/README.md), [instructions](../.claude/CLAUDE.md). |
+| S01 | Complete reproducible instructions | ⚠️ [T16](../reports/submission/T16-clean-clone.md) reproduced `9816819`, fresh clone/DB, no key: 625 tests (623 passed, 2 skipped), 74 JVM tests/build. Predates P1-F; final-tag reproduction, device, separate macOS/Linux execution not established. |
+| S02 | Reply within one week with accessible repo link | ⚠️ Draft below; owner must grant access, merge/tag/send. Brief received 2026-11-02; owner target 2026-11-08. No email/access change here. |
+| S03 | Robust beyond supplied examples | ⚠️ [P1-F](../reports/submission/P1-F.md#verification): 669 tests, 1,280 seeded combinations, 108 entry-route calls; [v15](../reports/submission/SV2-experiment.md) remains 42/60 before fixes. Fresh held-out validation pending. |
+
+## Final metrics and open gaps
+
+- **Live:** v14 **32/45**, v15 v1 **42/60**, before P1-F; different cohorts are not causal evidence. [T14](../reports/submission/T14-plan-b.md), [SV2 results](../reports/submission/SV2-experiment.md#paired-held-out-v15-results).
+- **Ranking:** NDCG@3 **0.965378**, returned-item compliance **1.0**, 40 synthetic queries / 2,720 judgments, not all live conversations. [P1-F gates](../reports/submission/P1-F.md#verification).
+- **P1-F invariant:** final SQL eligibility across cards, comparisons, rankings and positive prose, plus requested shown-set membership; invalid selections clear all channels, informational failures require labels. Checks represented requirements, not perfect interpretation, aggregate scope or installation suitability. [Enforcement](../reports/submission/P1-F.md#final-enforcement).
+- **Offline:** 669 tests: 667 passed, 2 skipped; v7 453/453; T10 48/48; T12 47/47; T14 42/42. Historical v13 replay is still 28/45, exit 1, excluded from gate as diagnostic. No new provider run/deployment claim. [Verification](../reports/submission/P1-F.md#verification).
+- **Model/spend:** single chat model Flash, `google/gemini-3.6-flash`, fallback disabled; embeddings `google/gemini-embedding-2`. SV2 **not adopted**, 8/60 versus v1 42/60. Settled total **USD 2.697095241**, about **USD 2.70 of 10**, includes experiment. [Evidence](../reports/submission/SV2-experiment.md).
+
+Code/behavior gaps reported without code changes: remaining intent/requirement/aggregate-scope failures; public-text command is import-only, not an independent leakage audit. App state/voice tests do not replace integrated device acceptance. No missing mandatory source artifact identified; three-screen layout interpretation and final-version reproduction remain review risks. Historical reports do not establish current remote CI.
+
+## Final email draft
+
+Reply to the original email only after merge/tag/evaluator access. Branch/tag wording below is conditional until those owner actions finish.
+
 > Hello,
 >
-> Please find my submission here: https://github.com/SamuelCharry/serie76-assistant
+> Thank you for the assessment. My submission is at https://github.com/SamuelCharry/serie76-assistant on branch `main`, tagged `v1.0-submission`.
 >
-> The README explains how to run everything locally (`docker compose up --build -d`), the test-only demo users, the Android app and the debug screen. Architecture, decisions and trade-offs are in `docs/wiki/en/`, and verification evidence in `docs/evidence/`.
+> Please start with the README **Quick start**. TEST ONLY accounts: `demo@series76.test` / `Series76-Demo-1` and `reviewer@series76.test` / `Series76-Demo-2`.
 >
-> Summary: a FastAPI backend with a single LangChain tool-calling agent; the LLM only interprets the request, while catalogue values always come from PostgreSQL through typed tools and templates. The electrical PDF is extracted with a local OCR pipeline validated against the source (941/941 checks). The Android app is native Kotlin/Compose with login, saved conversations, reviewable voice input and hidden per-answer developer debug. Optional pgvector retrieval supplies interpretation examples only; technical figures remain SQL-rendered.
+> Highlights:
+> - Local OCR passed 941/941 primary checks; PostgreSQL supplies technical values.
+> - The single Flash/LangChain agent scored 32/45 on v14 and 42/60 on v15 before the final integrity repair; interpretation errors remain.
+> - Synthetic ranking achieved NDCG@3 0.965 and compliance 1.0, not an end-to-end accuracy guarantee.
+> - After the final SQL eligibility repair, 667 Python tests passed with 2 skips, plus 453/453 scripted scenarios; no new post-fix live acceptance is claimed.
+> - Native Android includes saved conversations, comparisons, login, hidden debug and reviewable voice; 74 JVM tests and a debug build passed, while integrated device/voice acceptance remains pending in the documented evidence.
 >
-> I look forward to discussing it.
+> Recorded OpenRouter spend was approximately USD 2.70 of USD 10, including the state-v2 experiment, which was not adopted. Reproduction steps, trade-offs and remaining limits are documented.
 >
 > Best regards,
 > Samuel
+
+## Final owner steps
+
+1. **Emulator test:** rebuild backend/app from submission source; test both users, new/resumed chats, comparison, loading/errors, voice permission/service failures, transcript review and hidden debug with DEV_DEBUG true/false. Record results; verify final-source reproduction and CI. Paid flows require budget authorization.
+2. **Merge PR #10:** review checks and merge [PR #10](https://github.com/SamuelCharry/serie76-assistant/pull/10) into `main`.
+3. **Tag:** create/push `v1.0-submission` at verified merged commit; confirm target.
+4. **Evaluator access:** private repository: **Settings → Collaborators**, or make public; verify evaluators can open it.
+5. **Send the email:** reply to original assessment; update device results only with evidence and confirm branch/tag exist.
+6. **Close issues #1 and #2:** link delivery/acceptance evidence, retaining explicit limitations.
+
+## Documentation validation
+
+Verified with `.venv/Scripts/python.exe scripts/check_docs_links.py`: **960 relative links/anchors, 0 broken**; `git diff --check` passed. Documentation only; no backend/app/OCR/provider suites rerun during this audit.

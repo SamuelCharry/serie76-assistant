@@ -20,6 +20,8 @@ Un modelo programado devuelve herramientas predeterminadas; las herramientas rea
 
 **Experimento SV2 — no adoptado:** en el mismo v15 congelado, v1 de producción aprobó **42/60 (70 %)** y v2 de estado completo **8/60 (13,3 %)** (discordantes 35/1; McNemar p ≈ 1,1e-9). Reducir el esquema de 108 a 6 enums no mejoró el comportamiento. [Diseño, regla y resultados](../../../reports/submission/SV2-experiment.md).
 
+**Estado final documentado:** P1-F: **669 pruebas (667 aprobadas, 2 omitidas)**; v7 **453/453**, T10 **48/48**, T12 **47/47**, T14 **42/42**. Uso total liquidado registrado: **USD 2,697095241 (aprox. USD 2,70 de 10)**, incluido SV2; no es una consulta de saldo actual. [Pruebas P1-F](../../../reports/submission/P1-F.md#verification) · [Gasto SV2](../../../reports/submission/SV2-experiment.md#paired-held-out-v15-results).
+
 **Invariante P1-F:** la comprobación final de elegibilidad contra SQL cubre tarjetas, comparaciones, rankings y referencias positivas a productos en la prosa, incluida la pertenencia al conjunto mostrado cuando se exige. Una selección positiva inválida elimina todos sus canales; los incumplidores informativos exigen etiquetas explícitas. v15 expuso **cuatro violaciones técnicas**, corregidas y cubiertas por regresiones locales, además de dos violaciones del conjunto mostrado. El 42/60 histórico precede al arreglo; no se afirma nueva aceptación con modelo real ni despliegue. Se verifican requisitos representados, no interpretación perfecta, alcance de agregados ni idoneidad de la instalación. [Implementación y verificación](../../../reports/submission/P1-F.md).
 
 La revisión pareada usó tres paquetes ciegos disjuntos de 20 conversaciones: un revisor por conversación, no tres votos. Mismo modelo, catálogo y recuperación; hashes congelados verificados antes y después. p95 de turnos LLM v1/v2: **5,11/6,25 s**; gasto **USD 0,32/0,46**; ejecuciones secuenciales, no ensayos repetidos. Verificación local P1-F: **669 pruebas (667 aprobadas, 2 omitidas)**, v7 **453/453**, T10 **48/48**, T12 **47/47**, T14 **42/42**. El comando directo de texto público solo importa definiciones; su salida cero no es una auditoría independiente. v15 pasa a diagnóstico/regresión; queda pendiente una nueva cohorte reservada con proveedor.
@@ -39,7 +41,7 @@ La revisión pareada usó tres paquetes ciegos disjuntos de 20 conversaciones: u
 
 **Modelo único predeterminado:** `OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash`, `OPENROUTER_FALLBACK_MODEL=` (desactivado), `OPENROUTER_EMBEDDING_MODEL=google/gemini-embedding-2`. Una decisión de herramienta por turno interpretado; el código valida y SQL aporta las cifras. Plan B añade prioridad validada, partes no publicadas y retención de requisitos, sin agentes ni llamadas adicionales.
 
-**Plan B / T14 conservado:** resultados ciegos estrictos: v12 **29/45**, v13 **23/45** y nuevo conjunto reservado v14 **32/45 (71 %)**. Son cohortes distintas; la diferencia no estima un efecto causal. v13 queda solo como diagnóstico. La regla T14 exigía al menos 27/45, todos los gates verdes y p95 de hasta 10 s. v14 tuvo 85 turnos (66 interpretados), p95 **6,2 s**, máximo **9,3 s**, ningún turno superior a 10 s y ningún error HTTP. En v13, dos de 79 turnos interpretados tardaron 11–16 s en llamadas individuales al proveedor, no en bucles del código. Plan B gastó **USD 0,236607225**; uso total liquidado de la clave: **USD 1,919522541**.
+**Plan B / T14 conservado:** resultados ciegos estrictos: v12 **29/45**, v13 **23/45** y nuevo conjunto reservado v14 **32/45 (71 %)**. Son cohortes distintas; la diferencia no estima un efecto causal. v13 queda solo como diagnóstico. La regla T14 exigía al menos 27/45, todos los gates verdes y p95 de hasta 10 s. v14 tuvo 85 turnos (66 interpretados), p95 **6,2 s**, máximo **9,3 s**, ningún turno superior a 10 s y ningún error HTTP. En v13, dos de 79 turnos interpretados tardaron 11–16 s en llamadas individuales al proveedor, no en bucles del código. Plan B gastó **USD 0,236607225**; uso liquidado en ese hito histórico: **USD 1,919522541**.
 
 **Verificado sobre el código final de Plan B:** 615 pruebas Python ejecutadas (613 aprobadas, dos omitidas); v7 453/453; T10 48/48 (8/48 antes); T12 47/47 (7/47 antes); T14 42/42 (7/42 antes). Todos los gates obligatorios terminaron con código cero. Esquema: **5.520 bytes / 108 valores enum**; preflight real aceptado. Ranking NDCG@3 **0,965378**, cumplimiento **1,0 en la evaluación sintética de ranking**, no en todas las conversaciones reales. Las decisiones grabadas de v13 se reprodujeron sin inferencia: 23/45 antes y 28/45 después; es diagnóstico y las decisiones antiguas no tienen los nuevos campos. [T14 report](../../../reports/submission/T14-plan-b.md).
 
@@ -193,7 +195,7 @@ $env:SERIES76_TEST_DB='1'
 python -m unittest discover -s tests
 ```
 
-Gate offline vigente: **v7, 453/453 escenarios programados**. En el entorno Python backend activado, después de iniciar Compose:
+Gate offline vigente: **v7, 453/453 escenarios programados**. Crea y activa primero el entorno Python 3.12 del backend e instala `requirements-dev.txt` según [Ejecutar localmente](testing.md#ejecutar-localmente), donde está la orden unittest con DB. El entorno OCR es separado. Después de iniciar Compose:
 
 ```text
 python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --config config/agent_acceptance_v7.json
@@ -285,7 +287,7 @@ El [workflow CI](../../../.github/workflows/ci.yml) prepara PostgreSQL, instala 
 
 Ninguna prueba automática acredita lenguaje arbitrario ni precisión OCR heterogénea. Las pruebas DB pueden crear registros acotados o revertir transacciones. Pendientes el recorrido Android → modelo real → SQL → Android y la prueba desde un clon limpio.
 
-**Límites conocidos:** v14 falló 13/45 conversaciones: persisten errores de intención, requisitos o partes omitidas y explicaciones incompletas. Los revisores comprobaron todas las cifras mostradas: cero valores individuales de producto incorrectos, pero **dos conteos agregados incorrectos**. Por tanto, no se afirma que v14 tenga cero errores numéricos. Quedan pendientes emulador, voz real e integración Android y prueba desde un clon limpio. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**.
+**Límites conocidos:** v14 falló 13/45 conversaciones: persisten errores de intención, requisitos o partes omitidas y explicaciones incompletas. Los revisores comprobaron todas las cifras mostradas: cero valores individuales de producto incorrectos, pero **dos conteos agregados incorrectos**. Por tanto, no se afirma que v14 tenga cero errores numéricos. Quedan pendientes emulador, voz real e integración Android. [T16](../../../reports/submission/T16-clean-clone.md) verificó un clon y una DB nuevos sin claves, API/historial, gates offline y build/pruebas JVM; precede a P1-F y no verificó proveedor ni dispositivo. El ingeniero debe confirmar **filtros activos, servicio, cerramiento y clasificación del área peligrosa antes de ordenar**.
 
 ## Preflight del esquema antes de cualquier cohorte
 

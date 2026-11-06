@@ -75,7 +75,7 @@ OPENROUTER_CHAT_MODEL=google/gemini-3.6-flash
 docker compose up -d backend
 curl http://localhost:8000/ready
 ```
-OpenRouter acceptance completed on 2026-11-05; see [Models](../../../README.md#models-design-and-limitations). Post-fix held-out v12 remains pending. A ready=200 response checks catalogue/glossary, not credentials, model routing or remaining balance. LangSmith remains off unless tracing=true and a key are both present; enabling it sends prompts/user text/tool data/catalogue rows externally. See [agent](agent.md).
+OpenRouter acceptance completed on 2026-11-05; see [Models](../../../README.md#models-design-and-limitations). Held-out v14 scored 32/45 and v15 v1 scored 42/60 before P1-F; fresh post-P1-F provider validation remains pending. A ready=200 response checks catalogue/glossary, not credentials, model routing or remaining balance. LangSmith remains off unless tracing=true and a key are both present; enabling it sends prompts/user text/tool data/catalogue rows externally. See [agent](agent.md).
 
 The OpenRouter bank reload used `google/gemini-embedding-2`: 658 examples + 100 anchors, about USD 0.0015; see [Models](../../../README.md#models-design-and-limitations).
 
