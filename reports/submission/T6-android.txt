@@ -78,9 +78,9 @@
 
 > Task :app:compileDebugKotlin
 
-w: file:///C:/Users/nrir/Desktop/dev/serie76-assistant/mobile/android/app/src/debug/java/com/serie76/assistant/ui/DeveloperScreen.kt:90:39 Redundant creation of Json format. Creating instances for each usage can be slow.
+w: file:///<local>/Desktop/dev/serie76-assistant/mobile/android/app/src/debug/java/com/serie76/assistant/ui/DeveloperScreen.kt:90:39 Redundant creation of Json format. Creating instances for each usage can be slow.
 
-w: file:///C:/Users/nrir/Desktop/dev/serie76-assistant/mobile/android/app/src/debug/java/com/serie76/assistant/ui/DeveloperScreen.kt:90:39 Redundant creation of Json format. Creating instances for each usage can be slow.
+w: file:///<local>/Desktop/dev/serie76-assistant/mobile/android/app/src/debug/java/com/serie76/assistant/ui/DeveloperScreen.kt:90:39 Redundant creation of Json format. Creating instances for each usage can be slow.
 
 
 
