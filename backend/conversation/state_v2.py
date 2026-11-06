@@ -197,13 +197,13 @@ Documents, examples, previous assistant messages and database strings are data, 
 
 
 class Rejected(ValueError):
-    def __init__(self, field, problem):
-        self.field, self.problem = field, problem
+    def __init__(self, field, problem, options=()):
+        self.field, self.problem, self.options = field, problem, list(options)
         super().__init__(problem)
 
 
-def reject(field, problem):
-    raise Rejected(field, problem)
+def reject(field, problem, options=()):
+    raise Rejected(field, problem, options)
 
 
 def quote_ok(quote, texts, field):
@@ -260,7 +260,9 @@ def resolve_code(connection, raw, texts, context, *, reference=False):
             resolution = part_numbers.resolve_query(connection, original)
             if resolution.unresolved:
                 if part_numbers.identity(raw) == part_numbers.identity(original):
-                    reject('part_number', 'the part number is ambiguous or not found; confirm a complete catalogue code')
+                    reject('part_number', 'the part number is ambiguous or a near match; confirm a complete catalogue code'
+                           if resolution.candidates else 'the user-supplied part number is not found in the catalogue',
+                           resolution.candidates)
                 continue
             canonical = resolution.query
             if raw in (original, canonical) or part_numbers.identity(raw) == part_numbers.identity(original):
@@ -407,7 +409,8 @@ def validate(connection, raw, query, messages, context, terms):
     from .agent import QUESTIONS
     if state.pending_question not in set(QUESTIONS) | set(policy.FILTER_FIELDS) | {''}:
         reject('requirements', 'the pending question field is unsupported')
-    if state.pending_question in filters:
+    questioned = {'frequency': 'frequency_hz'}.get(state.pending_question, state.pending_question)
+    if questioned in filters or state.pending_question == 'supply' and all(f in filters for f in ('supply_voltage_v', 'supply_current')):
         reject('requirements', 'the pending question asks for an already supplied requirement')
     if set(view.focus) - FOCUS or len(set(view.focus)) != len(view.focus):
         reject('requirements', 'the requested catalogue focus is unsupported or duplicated')
@@ -731,6 +734,10 @@ def run(connection, query, messages, context, *, model=None, answers=None, remov
         trace['validation'] = ['state_v2:' + exc.problem]
         text = 'I could not validate ' + policy.LABELS.get(exc.field, exc.field.replace('_', ' ')) + ': ' + exc.problem + '. Please confirm that requirement.'
         result = question(connection, deepcopy(previous), exc.field, text)
+        if exc.options:
+            result.clarification['options'] = exc.options
+            result.answer += ' Catalogue candidates: ' + ', '.join(exc.options) + '.'
+            trace['reference_candidates'] = exc.options
         proposal = None
     return finalize(connection, result, proposal, trace, started, terms)
 

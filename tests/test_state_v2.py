@@ -164,6 +164,7 @@ class StateValidators(unittest.TestCase):
     def test_pending_question_must_be_legal_and_unsupplied(self):
         self.rejected(proposal(pending_question='unknown'))
         self.rejected(proposal(filters=[constraint()], pending_question='min_torque_nm'))
+        self.rejected(proposal(filters=[constraint('frequency_hz', '60', 'eq', 'Hz', '60 Hz')], pending_question='frequency'), '60 Hz')
 
     def test_focus_topic_glossary_and_frequency_are_validated(self):
         for view in ({'focus': ['invented']}, {'focus': ['torque', 'torque']}, {'topic': 'invented'},
@@ -237,6 +238,16 @@ class StateDatabaseTests(unittest.TestCase):
         self.assertTrue(got[5])
         with self.assertRaises(v2.Rejected):
             self.validate(proposal(intent='lookup', references=['761A00-11300000']), 'show the actuator')
+
+    def test_ambiguous_and_near_codes_offer_only_real_candidates(self):
+        from backend.catalog.repository import get_actuator
+        for code in ('761A00', '761A00-11300001/A'):
+            result = self.run_decision(proposal(intent='lookup', references=[code]), code)
+            candidates = result.clarification['options']
+            self.assertTrue(0 < len(candidates) <= 3)
+            self.assertTrue(all(get_actuator(self.connection, c) for c in candidates))
+            self.assertFalse(result.products)
+            self.assertIsNone(result.recommendation)
 
     def test_assistant_only_code_cannot_ground_reference(self):
         with self.assertRaises(v2.Rejected):
