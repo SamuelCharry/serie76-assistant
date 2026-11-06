@@ -65,7 +65,7 @@ def limitations(query):
 
 def relative_operation(query):
     """Closed relative search phrasing, distinct from comparisons of displayed models."""
-    if not re.search(r'\b(?:find|search|need|busc\w*|necesito)\b', query, re.I):
+    if not re.search(r'\b(?:find|search|need|busc\w*|necesito)\b|\b(?:give|show)\s+me\b[^.!?;]*\bthan\b', query, re.I):
         return ''
     for operation, pattern in (
         ('stronger', r'\bstronger\b|\b(?:more|m[aá?]s)\b[^.!?;]*\b(?:torque|par)\b'),

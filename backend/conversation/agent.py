@@ -469,6 +469,10 @@ class Turn:
 
     def unresolved(self, fields):
         """Show concise ranked candidates while leaving unanswered choices open."""
+        written, issues = requirement_coverage.apply(self.query, {}, self.context.get('filters') or {})
+        if written and not issues and requirement_coverage.missing(written, self.context.get('filters') or {}):
+            # A clarification decision cannot discard a user's explicit correction.
+            return self.search(dict(written, refine=True, more=False, remove=[], explain_terms=[]), trusted=True)
         filters = self.context.get('filters') or {}
         codes = self.context.get('last_ranked_list') or []
         if not codes:
@@ -509,7 +513,12 @@ class Turn:
             self.context['last_comparison_models'] = codes[:]
         if policy.terms_not_in_glossary(self.query, self.terms):
             return self.clarify('requirements', 'The document does not define that rating; please confirm a published requirement before I recommend a model.')
-        merged, notes, issues = shown_recommendation.requirements(self.query, self.context.get('filters') or {})
+        previous = dict(self.context.get('filters') or {})
+        for spec in quality.normalized_focus(self.context.get('focus') or []):
+            for field in ('service', 'frequency_hz'):
+                if spec.get(field) is not None:
+                    previous.setdefault(field, spec[field])
+        merged, notes, issues = shown_recommendation.requirements(self.query, previous)
         if issues:
             self.trace['validation'] = ['unrepresented_quantity']
             return self.clarify('requirements', ' '.join(issues))
@@ -959,7 +968,11 @@ class Turn:
         focused = self.context.get('focused_model')
         if focused:
             known.add(focused)
-        code = args.get('reference_part_number') or focused or (next(iter(known)) if len(known) == 1 else None)
+        reference_codes = self.context.get('last_comparison_models') or self.context.get('last_shown_list') or []
+        position = re.search(r'\bthan\s+(?:the\s+)?(first|second|third|fourth)\b', self.query, re.I)
+        index = ('first', 'second', 'third', 'fourth').index(position.group(1).lower()) if position else -1
+        positioned = reference_codes[index] if 0 <= index < len(reference_codes) else None
+        code = args.get('reference_part_number') or positioned or focused or (next(iter(known)) if len(known) == 1 else None)
         code, _ = policy.canonical_code(code or '')
         if not code or code not in known:
             return self.clarify('which_product')
@@ -969,7 +982,9 @@ class Turn:
         explicit, _ = policy.colloquial_requirements(self.query)
         service = explicit.get('service') or self.context.get('reference_service') or (self.context.get('filters') or {}).get('service')
         if not service:
+            self.context['unresolved_reference'] = dict(part_number=code, operation=operation)
             return self.clarify('service')
+        self.context.pop('unresolved_reference', None)
         result = dict(service=service, enclosure=source['enclosure'], supply_voltage_v=source['supply_voltage_v'])
         scope = dict(self.context.get('filters') or {}, service=service)
         if operation == 'faster':
@@ -1010,6 +1025,15 @@ class Turn:
 
     def search(self, args, *, trusted=False):
         import re
+        pending_reference = self.context.get('unresolved_reference')
+        if pending_reference and not args.get('reference_operation'):
+            stated, _ = policy.colloquial_requirements(self.query)
+            if stated.get('service'):
+                self.context['reference_service'] = stated['service']
+                args = dict(args, reference_operation=pending_reference['operation'],
+                            reference_part_number=pending_reference['part_number'])
+            elif not args.get('refine') and not args.get('more'):
+                self.context.pop('unresolved_reference', None)
         reference = self.reference_constraints(args)
         if isinstance(reference, AgentResult):
             return reference
@@ -2204,7 +2228,22 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         use_ranked = bool(re.search(r'\b(results?|ranked|list|them|those|among)\b', bare_query))
         codes = ((turn.context.get('last_ranked_list') or compared_codes) if use_ranked else
                  compared_codes or turn.context.get('last_ranked_list') or turn.context.get('on_screen')) or []
+        if re.search(r'\b(?:shown|displayed|those two|these two|on screen)\b', bare_query):
+            codes = turn.context.get('on_screen') or compared_codes or []
         if len(codes) >= 2:
+            requirements, _, issues = shown_recommendation.requirements(query, turn.context.get('filters') or {})
+            if not issues and any(requirements.get(field) is not None for field in policy.NUMERIC_FIELDS
+                                  if field not in ('frequency_hz', 'supply_voltage_v')):
+                spec = metrics.intent(query)
+                if spec and spec[0] in interpretation.METRICS and not re.search(r'\b(?:how much|difference)\b', bare_query):
+                    metric, direction, hz, _ = spec
+                    turn.trace = dict(name='metric_verdict', parameters={}, raw_parameters={}, validation=['ok'],
+                                      context_before=context_before,
+                                      model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+                    priority = dict(metric=metric, direction='highest' if direction == 'higher' else 'lowest')
+                    if hz:
+                        priority['frequency_hz'] = hz
+                    return finish(turn, turn.recommend_shown(structured_priority=priority))
             rows = [get_actuator(connection, code) for code in codes]
             difference_requested = bool(re.search(r'\b(?:how much|difference)\b', bare_query))
             if difference_requested and len(rows) == 2:
@@ -2754,4 +2793,8 @@ def finish(turn, result):
         result.answer += '\nDC-only eligibility excludes AC/DC models.'
     elif supply_filters.get('supply_current') == 'DC':
         result.answer += '\nFor a DC supply, compatible AC/DC models remain eligible.'
+    # Every route, including deterministic prose, clarification reuse and UI actions,
+    # passes this postcondition after the last renderer has finished.
+    from .response_integrity import enforce
+    enforce(turn, result)
     return result

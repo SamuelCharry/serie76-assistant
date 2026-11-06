@@ -1,0 +1,2089 @@
+{
+  "conversations": 60,
+  "turns": 131,
+  "product_cards": 169,
+  "code_occurrences": 241,
+  "flagged_turns": 8,
+  "turns_reviewed": [
+    {
+      "id": "L1-01",
+      "turn": 1,
+      "message_id": "ae0b2fab-3718-470d-9108-7e93aef6db24",
+      "query": "Compare 761A00-11300000/A and 762A00-11300000/A for on/off torque and operating time at 60 Hz.",
+      "filters": {
+        "service": "on_off",
+        "frequency_hz": 60
+      },
+      "codes": [
+        "761A00-11300000/A",
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-01",
+      "turn": 2,
+      "message_id": "e71b8676-c655-4f78-b7de-ec4b1b983b8e",
+      "query": "Correction: use 50 Hz for both.",
+      "filters": {
+        "service": "on_off",
+        "frequency_hz": 50
+      },
+      "codes": [
+        "761A00-11300000/A",
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-01",
+      "turn": 3,
+      "message_id": "646aed8b-dc9a-4fb8-ba50-19a4bb8e9b10",
+      "query": "Which of those two is faster while meeting 100 Nm?",
+      "filters": {
+        "service": "on_off",
+        "frequency_hz": 50,
+        "min_torque_nm": 100
+      },
+      "codes": [
+        "761A00-11300000/A",
+        "762A00-11300000/A"
+      ],
+      "failures": {
+        "761A00-11300000/A": [
+          "On/Off torque 80 Nm < 100 Nm"
+        ]
+      },
+      "review_class": "unlabelled_numeric_violation",
+      "answer": "761A00-11300000/A is faster: 761A00-11300000/A 17 s at 60 Hz vs 762A00-11300000/A 18 s at 60 Hz."
+    },
+    {
+      "id": "L1-02",
+      "turn": 1,
+      "message_id": "e0f86a56-11a6-41e9-a771-f543969afb32",
+      "query": "Show weatherproof 220 V single-phase on/off models rated at least 300 Nm.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "codes": [
+        "763A00-11320000/A",
+        "763B00-11320000/A",
+        "763C00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-02",
+      "turn": 2,
+      "message_id": "43a61be7-3944-47a0-b11e-24044e0b3fe9",
+      "query": "Initially rank them by torque.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "codes": [
+        "763A00-11320000/A",
+        "763B00-11320000/A",
+        "763C00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-02",
+      "turn": 3,
+      "message_id": "11e6970f-4401-416d-aed0-2c078aa98114",
+      "query": "Now the fastest at 50 Hz matters most; keep the 300 Nm minimum.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300,
+        "frequency_hz": 50
+      },
+      "codes": [
+        "765B00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-02",
+      "turn": 4,
+      "message_id": "19de4784-7bdc-4d78-b7d8-46c211d226d6",
+      "query": "Give the full part number of your choice from the models shown.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300,
+        "frequency_hz": 50
+      },
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-03",
+      "turn": 1,
+      "message_id": "a10a13ca-21c4-4c1c-850b-2d1122b5bce9",
+      "query": "Give the motor power and torque of 761A00-11330C00/A.",
+      "filters": {},
+      "codes": [
+        "761A00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-03",
+      "turn": 2,
+      "message_id": "dfe06afa-71db-468e-8e43-6d14f5483c62",
+      "query": "Use the three-phase row, not a single-phase substitute.",
+      "filters": {},
+      "codes": [
+        "761A00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-03",
+      "turn": 3,
+      "message_id": "47a5302a-7c3a-4851-8778-e8409dc6eefc",
+      "query": "If the data is N/A, can you still confirm it meets 80 Nm?",
+      "filters": {
+        "min_torque_nm": 80
+      },
+      "codes": [
+        "761A00-11330C00/A"
+      ],
+      "failures": {
+        "761A00-11330C00/A": [
+          "The required measurements are not published"
+        ]
+      },
+      "review_class": "explicit_source_na",
+      "answer": "761A00-11330C00/A\n761A00-11330C00/A — Weatherproof, 220 V AC 3-phase: every performance value of this row is N/A in the source table; nothing can be inferred."
+    },
+    {
+      "id": "L1-04",
+      "turn": 1,
+      "message_id": "5012440d-1894-4810-bfbd-4c1786b69a22",
+      "query": "Compare 762A00-11320000/A and 763A00-11320000/A.",
+      "filters": {},
+      "codes": [
+        "762A00-11320000/A",
+        "763A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-04",
+      "turn": 2,
+      "message_id": "c8fbc967-92c3-4ae6-8fae-ac3c1760674d",
+      "query": "For the second one, give the 50 Hz full-load current and the purchase price.",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-04",
+      "turn": 3,
+      "message_id": "658cfaaa-b05b-4802-9460-a8c60fae3ed6",
+      "query": "Drop the price request; I only need its modulating torque now.",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-05",
+      "turn": 1,
+      "message_id": "0ddad905-b24e-4b28-8b63-13a33eabc46b",
+      "query": "What is the on/off torque in Nm of 764A00-11300000/A?",
+      "filters": {},
+      "codes": [
+        "764A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-06",
+      "turn": 1,
+      "message_id": "d90e9b25-780e-4f69-9012-c3a29cec7c8c",
+      "query": "How many cycles per hour are listed for 761B00-11320000/A?",
+      "filters": {},
+      "codes": [
+        "761B00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-07",
+      "turn": 1,
+      "message_id": "5cf3bb0d-38e2-4b3e-a22d-befbd79276bf",
+      "query": "What is the 50 Hz locked-rotor current of 763C00-11300000/A?",
+      "filters": {},
+      "codes": [
+        "763C00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-08",
+      "turn": 1,
+      "message_id": "f612565d-9d2d-46f1-8bb3-31273905ae0d",
+      "query": "List the supply voltage, current type and motor power for 762Y30-11380000/A.",
+      "filters": {},
+      "codes": [
+        "762Y30-11380000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L1-09",
+      "turn": 1,
+      "message_id": "38c302fb-1fcf-4882-9896-564004f1b261",
+      "query": "Find a 24 V model delivering at least 5000 Nm.",
+      "filters": {
+        "supply_voltage_v": 24,
+        "min_torque_nm": 5000
+      },
+      "codes": [
+        "763X30-11370000/A",
+        "763X30-11380000/A",
+        "767A00-11320000/A"
+      ],
+      "failures": {
+        "763X30-11370000/A": [
+          "Modulating torque 220 Nm < 5000 Nm"
+        ],
+        "763X30-11380000/A": [
+          "On/Off torque 240 Nm < 5000 Nm"
+        ],
+        "767A00-11320000/A": [
+          "Supply voltage 220 V does not meet 24 V"
+        ]
+      },
+      "review_class": "explicit_relaxed_alternatives",
+      "answer": "No actuator meets 24 V, torque >= 5000 Nm. Other models are available at 220 V under the other requirements.\n763X30-11380000/A: Does not meet torque >= 5000 Nm; closest published value in this scope is 240.\n763X30-11370000/A: Does not meet torque >= 5000 Nm; closest published value in this scope is 220.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas."
+    },
+    {
+      "id": "L2-01",
+      "turn": 1,
+      "message_id": "0aa626d5-2c02-4722-9b1e-ac73268b00e9",
+      "query": "I need a motor to open and shut a valve outdoors on 110 volts.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off"
+      },
+      "codes": [
+        "761A00-11300000/A",
+        "761B00-11300000/A",
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-01",
+      "turn": 2,
+      "message_id": "73a3ba19-741c-4849-bbaf-c7c780e0849f",
+      "query": "The valve needs 150 Nm; show me some choices.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762A00-11300000/A",
+        "762B00-11300000/A",
+        "763A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-01",
+      "turn": 3,
+      "message_id": "305149a2-7bdb-4506-bf70-d269281543f9",
+      "query": "Of the ones you showed, which opens quickest at 50 Hz?",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150,
+        "frequency_hz": 50
+      },
+      "codes": [
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-02",
+      "turn": 1,
+      "message_id": "fca7c710-366e-41d7-b5ee-336b9f9a7598",
+      "query": "We have a valve in a room where solvent vapour can be present, with 220 volt power.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220
+      },
+      "codes": [
+        "761X30-11320000/A",
+        "761Y30-11320000/A",
+        "762X30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-02",
+      "turn": 2,
+      "message_id": "617b29a9-dd21-4731-94a8-c98c96778392",
+      "query": "It only opens and closes and needs 150 Nm.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762X30-11320000/A",
+        "762Y30-11320000/A",
+        "763X30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-02",
+      "turn": 3,
+      "message_id": "f375041e-340a-451b-bc38-6dd972e7ae54",
+      "query": "Can I use the regular outdoor casing to save money? The vapour is still there.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762X30-11320000/A",
+        "762Y30-11320000/A",
+        "763X30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-03",
+      "turn": 1,
+      "message_id": "a7e33967-1874-4eef-ae61-59768ddfd0dd",
+      "query": "I need something for a valve in a hazardous room on 110 volts.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110
+      },
+      "codes": [
+        "761X30-11300000/A",
+        "761Y30-11300000/A",
+        "762X30-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-03",
+      "turn": 2,
+      "message_id": "0c03336e-a11f-42a6-91c6-36e88024b136",
+      "query": "Correction: the installation is actually in a separate non-hazardous room; there is no gas or vapour there.",
+      "filters": {
+        "supply_voltage_v": 110
+      },
+      "codes": [
+        "761X30-11300000/A",
+        "761Y30-11300000/A",
+        "762X30-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-03",
+      "turn": 3,
+      "message_id": "5fd08205-bb6a-47b4-9a5e-366a67504928",
+      "query": "Just open and close, 100 Nm; show regular weatherproof options.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "enclosure": "weatherproof",
+        "service": "on_off",
+        "min_torque_nm": 100
+      },
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-04",
+      "turn": 1,
+      "message_id": "44a758cd-a2c2-49f6-8ce1-e418d17f6d1e",
+      "query": "Show me 761A00-11300000/A beside 762A00-11300000/A.",
+      "filters": {},
+      "codes": [
+        "761A00-11300000/A",
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-04",
+      "turn": 2,
+      "message_id": "6e4803e3-a314-412e-92af-ef974521d71b",
+      "query": "Is the second one stronger, and can you arrange installation?",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-04",
+      "turn": 3,
+      "message_id": "67ff9f1a-d201-40dc-a498-68ebed444db2",
+      "query": "Leave installation aside; how long does the second one take at 50 Hz?",
+      "filters": {},
+      "codes": [
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-05",
+      "turn": 1,
+      "message_id": "ae74b633-02ee-4dbe-b962-d0e6c5388b3f",
+      "query": "What does Nm mean on the torque rating?",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-06",
+      "turn": 1,
+      "message_id": "4fc8ec6b-7424-4b82-919c-eea5fe4ea572",
+      "query": "Does 761A00-11300000/A run on 110 volts?",
+      "filters": {},
+      "codes": [
+        "761A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-07",
+      "turn": 1,
+      "message_id": "1687eee6-4614-4130-9ba7-9ee3a0ac0760",
+      "query": "Can you explain the difference between opening and closing a valve and modulating it?",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-08",
+      "turn": 1,
+      "message_id": "1f0efba1-60d2-49a2-99c7-2b8c0af0f026",
+      "query": "What voltages are available in this catalogue?",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-09",
+      "turn": 1,
+      "message_id": "a4226014-ad2c-49c4-8146-96766af02081",
+      "query": "¿Qué significa la corriente de arranque de un actuador?",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L2-10",
+      "turn": 1,
+      "message_id": "967140af-e102-488c-8273-5fad63233c70",
+      "query": "Necesito abrir y cerrar una válvula al aire libre con alimentación de 220 voltios.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "service": "on_off",
+        "supply_voltage_v": 220
+      },
+      "codes": [
+        "761A00-11320000/A",
+        "761B00-11320000/A",
+        "762A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-01",
+      "turn": 1,
+      "message_id": "d9137907-b155-4a66-a4f3-9ecfdef977b3",
+      "query": "220 V weatherproof.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220
+      },
+      "codes": [
+        "761A00-11320000/A",
+        "761B00-11320000/A",
+        "762A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-01",
+      "turn": 2,
+      "message_id": "53e48de9-2249-45a1-a076-522321d4fb28",
+      "query": "on/off, 200 Nm minimum.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 200
+      },
+      "codes": [
+        "762B00-11320000/A",
+        "763A00-11320000/A",
+        "763A00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-01",
+      "turn": 3,
+      "message_id": "0c7bcd5c-91e3-4f33-91c8-d81d8c4ca91c",
+      "query": "no, 300 Nm minimum.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "codes": [
+        "763A00-11320000/A",
+        "763A00-11330C00/A",
+        "763B00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-01",
+      "turn": 4,
+      "message_id": "6c09f09b-60a1-4d33-9c90-be94cb050be9",
+      "query": "fastest at 50 Hz from your list.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 300,
+        "frequency_hz": 50
+      },
+      "codes": [
+        "763A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-02",
+      "turn": 1,
+      "message_id": "13db4b93-9870-4226-b053-b0929d599801",
+      "query": "Compare 761A00-11300000/A and 761B00-11300000/A.",
+      "filters": {},
+      "codes": [
+        "761A00-11300000/A",
+        "761B00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-02",
+      "turn": 2,
+      "message_id": "e1c3debb-3d4b-40c6-a0ee-3416db4240ac",
+      "query": "second one. current at 50 Hz?",
+      "filters": {},
+      "codes": [
+        "761B00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-02",
+      "turn": 3,
+      "message_id": "6f76bee2-924e-442d-8daf-85619428e046",
+      "query": "actually first one. same question.",
+      "filters": {},
+      "codes": [
+        "761A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-03",
+      "turn": 1,
+      "message_id": "77c1a137-ef68-4f73-b7b5-7856acad6257",
+      "query": "110 V explosionproof on/off, 150 Nm minimum.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762X30-11300000/A",
+        "762Y30-11300000/A",
+        "763X30-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-03",
+      "turn": 2,
+      "message_id": "61dec31e-a925-448e-b1af-ea87b655c9ae",
+      "query": "pick strongest.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762X30-11300000/A",
+        "762Y30-11300000/A",
+        "763X30-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-03",
+      "turn": 3,
+      "message_id": "829ed9aa-c514-4717-81f4-dc1f94e28d1c",
+      "query": "scratch that. fastest at 50 Hz, same minimum.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150,
+        "frequency_hz": 50
+      },
+      "codes": [
+        "762X30-11300000/A",
+        "762Y30-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-04",
+      "turn": 1,
+      "message_id": "944940b3-2855-409f-9e4e-5d3965480008",
+      "query": "220 V three phase, on/off.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "phase_count": 3,
+        "service": "on_off"
+      },
+      "codes": [
+        "763A00-11330C00/A",
+        "763B00-11330C00/A",
+        "763C00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-04",
+      "turn": 2,
+      "message_id": "0da05ada-7fbb-4b7e-9b60-1abf4e2ccbab",
+      "query": "drop three phase. single phase instead.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off"
+      },
+      "codes": [
+        "761A00-11320000/A",
+        "761X30-11320000/A",
+        "761Y30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-04",
+      "turn": 3,
+      "message_id": "1dc69c0d-e1c6-47f1-aaa2-e21f002bea09",
+      "query": "show choices.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off"
+      },
+      "codes": [
+        "761B00-11320000/A",
+        "762A00-11320000/A",
+        "762X30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-05",
+      "turn": 1,
+      "message_id": "7c78bd9c-5759-4bb4-9ea7-f0d8aab4c47a",
+      "query": "763B00-11320000/A motor watts?",
+      "filters": {},
+      "codes": [
+        "763B00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-06",
+      "turn": 1,
+      "message_id": "6d064c2f-dd9a-47c8-87d5-580a2df92bfb",
+      "query": "762A00 specs.",
+      "filters": {},
+      "codes": [
+        "762A00-11300000/A",
+        "762A00-11320000/A",
+        "762A00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-07",
+      "turn": 1,
+      "message_id": "6cbfb025-f26a-4207-bcf1-43ff278d2a93",
+      "query": "110 V or 220 V for 761A00-11320000/A?",
+      "filters": {},
+      "codes": [
+        "761A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L3-08",
+      "turn": 1,
+      "message_id": "041f8d32-04c4-47c4-abac-5d5a2c7cf3bb",
+      "query": "762B00-11300000/A torque in Nm.",
+      "filters": {},
+      "codes": [
+        "762B00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-01",
+      "turn": 1,
+      "message_id": "1f659e57-f972-4ecd-96ae-00a8db33f123",
+      "query": "Weatherproof 110 V on/off, at least 150 Nm.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762A00-11300000/A",
+        "762B00-11300000/A",
+        "763A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-01",
+      "turn": 2,
+      "message_id": "744ee098-ba71-42ac-bb54-f46a7c7d6631",
+      "query": "Actually 220 V.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762A00-11320000/A",
+        "762B00-11320000/A",
+        "763A00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-01",
+      "turn": 3,
+      "message_id": "92aabd03-bb55-4f17-b772-bbb6e3a3d3cb",
+      "query": "Keep 220 V but change to modulating service.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762B00-11320000/A",
+        "763A00-11320000/A",
+        "763A00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-01",
+      "turn": 4,
+      "message_id": "4ac52529-3c45-4dab-9b01-d7f08c12d132",
+      "query": "Now use a 200 Nm minimum for modulating torque.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "min_torque_nm": 200
+      },
+      "codes": [
+        "763A00-11320000/A",
+        "763A00-11330C00/A",
+        "763B00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-02",
+      "turn": 1,
+      "message_id": "9f4cbd50-9a47-4227-a49e-64243bdf9435",
+      "query": "Explosionproof 24 V DC on/off, at least 70 Nm.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off",
+        "min_torque_nm": 70
+      },
+      "codes": [
+        "761X30-11380000/A",
+        "761Y30-11380000/A",
+        "762X30-11380000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-02",
+      "turn": 2,
+      "message_id": "05118872-210b-4bde-ba44-701568206b3f",
+      "query": "There is no hazardous atmosphere at the installation after all; drop explosionproof as a requirement.",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off",
+        "min_torque_nm": 70
+      },
+      "codes": [
+        "761X30-11380000/A",
+        "761Y30-11380000/A",
+        "762X30-11380000/A",
+        "762Y30-11380000/A",
+        "763X30-11380000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-02",
+      "turn": 3,
+      "message_id": "b3b0a8a8-bfb0-4987-8846-18cdd85c1018",
+      "query": "Keep 24 V DC and the torque minimum.",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off",
+        "min_torque_nm": 70
+      },
+      "codes": [
+        "761X30-11380000/A",
+        "761Y30-11380000/A",
+        "762X30-11380000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-03",
+      "turn": 1,
+      "message_id": "501faa18-4b91-418f-926b-e4eaf17b74df",
+      "query": "Weatherproof 220 V on/off for a safe area, at least 150 Nm.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762A00-11320000/A",
+        "762B00-11320000/A",
+        "763A00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-03",
+      "turn": 2,
+      "message_id": "7f987c4d-4f64-4683-8e89-4b8f7a433c71",
+      "query": "Correction: flammable vapour can be present at the actuator location.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762X30-11320000/A",
+        "762Y30-11320000/A",
+        "763X30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-03",
+      "turn": 3,
+      "message_id": "9f3cc43a-fa93-42ed-983e-e0fa5eb8f709",
+      "query": "Keep the supply and torque, but change the enclosure requirement accordingly.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-04",
+      "turn": 1,
+      "message_id": "87a93508-cd36-4dd2-a9d0-bf9e40a46d93",
+      "query": "Show 220 V weatherproof on/off models with at least 300 Nm.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "codes": [
+        "763A00-11320000/A",
+        "763A00-11330C00/A",
+        "763B00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-04",
+      "turn": 2,
+      "message_id": "0f49f513-d7d4-4144-8642-0822dde7b265",
+      "query": "Make that at most 300 Nm.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "lte"
+        }
+      },
+      "codes": [
+        "763A00-11320000/A",
+        "763A00-11330C00/A",
+        "763B00-11330C00/A"
+      ],
+      "failures": {
+        "763B00-11330C00/A": [
+          "Shared torque 500 Nm > 300 Nm"
+        ]
+      },
+      "review_class": "unlabelled_numeric_violation",
+      "answer": "These are the best matches so far. You can narrow them by phase count:\n763A00-11330C00/A: Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A\n763A00-11320000/A: On/Off torque 300 Nm; FLA 50 Hz 1.3 A\n763B00-11330C00/A: Shared torque 500 Nm (same torque for On/Off and Modulating); FLA 50 Hz 2 A"
+    },
+    {
+      "id": "L4-04",
+      "turn": 3,
+      "message_id": "0924a18b-dd27-45df-8f02-3b8a45805ac0",
+      "query": "Withdraw the torque limit entirely.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off"
+      },
+      "codes": [
+        "761A00-11320000/A",
+        "761B00-11320000/A",
+        "762A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-04",
+      "turn": 4,
+      "message_id": "264b9da9-bbb1-42ed-954a-ca41eb2ee712",
+      "query": "Now choose the fastest at 50 Hz among the models you just showed.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "frequency_hz": 50
+      },
+      "codes": [
+        "761A00-11320000/A",
+        "761B00-11320000/A",
+        "762A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-05",
+      "turn": 1,
+      "message_id": "3237ae96-7050-454b-ac98-468117718b72",
+      "query": "Compare 763A00-11300000/A and 763B00-11300000/A.",
+      "filters": {},
+      "codes": [
+        "763A00-11300000/A",
+        "763B00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-05",
+      "turn": 2,
+      "message_id": "436e4919-448e-441a-bf2b-56425598b608",
+      "query": "Forget the second one; compare the first against 762A00-11300000/A instead.",
+      "filters": {},
+      "codes": [
+        "762A00-11300000/A",
+        "763A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-05",
+      "turn": 3,
+      "message_id": "c9913679-92f5-4d76-82e4-6a53efa7fa27",
+      "query": "Which of this new pair has lower full-load current at 50 Hz?",
+      "filters": {},
+      "codes": [
+        "762A00-11300000/A",
+        "763A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-06",
+      "turn": 1,
+      "message_id": "d5d335e5-f602-4934-81ee-a8c37aaf6a8d",
+      "query": "I need 220 V three-phase weatherproof on/off, at least 150 Nm.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 3,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "763A00-11330C00/A",
+        "763B00-11330C00/A",
+        "763C00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-06",
+      "turn": 2,
+      "message_id": "dd0333f0-0ca2-49be-a51a-99b46af2d58a",
+      "query": "Drop the phase restriction; I have no phase preference.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762A00-11320000/A",
+        "762B00-11320000/A",
+        "763A00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-06",
+      "turn": 3,
+      "message_id": "53331d73-e583-433b-878a-98d51170e2e1",
+      "query": "Actually restrict it to single phase now.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150,
+        "phase_count": 1
+      },
+      "codes": [
+        "762A00-11320000/A",
+        "762B00-11320000/A",
+        "763A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-07",
+      "turn": 1,
+      "message_id": "192d4994-8c89-47c3-b118-fbae35545173",
+      "query": "Show 110 V weatherproof on/off options for 300 Nm.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "codes": [
+        "763A00-11300000/A",
+        "763B00-11300000/A",
+        "763C00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-07",
+      "turn": 2,
+      "message_id": "be5b85b6-5963-4828-822a-ddf1ef3298ea",
+      "query": "Recommend the strongest of those.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "codes": [
+        "763A00-11300000/A",
+        "763B00-11300000/A",
+        "763C00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L4-07",
+      "turn": 3,
+      "message_id": "0eb4f087-5635-4ec3-8c9b-faa0f849d088",
+      "query": "I withdraw that preference: choose the fastest at 50 Hz while still meeting 300 Nm.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 300,
+        "frequency_hz": 50
+      },
+      "codes": [
+        "763A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-01",
+      "turn": 1,
+      "message_id": "a4786320-e20e-4d5f-a13a-2ffbe41ddae2",
+      "query": "Necesito un actuador a prueba de explosión, 220 V, para abrir y cerrar una válvula de 150 Nm.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762X30-11320000/A",
+        "762Y30-11320000/A",
+        "763X30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-01",
+      "turn": 2,
+      "message_id": "db21cd97-2122-4593-b01f-aadd8ee64eb9",
+      "query": "Corrijo: será de 110 V.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762X30-11300000/A",
+        "762Y30-11300000/A",
+        "763X30-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-01",
+      "turn": 3,
+      "message_id": "e2311550-e8e5-41d5-a8f2-6e7543cac1ea",
+      "query": "El riesgo de explosión sigue presente; ¿cuál de los mostrados tarda menos a 50 Hz?",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150,
+        "frequency_hz": 50
+      },
+      "codes": [
+        "762X30-11300000/A",
+        "762Y30-11300000/A",
+        "763X30-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-02",
+      "turn": 1,
+      "message_id": "59f505c5-a3d4-4f21-99da-03182cb90d0c",
+      "query": "Compara 761A00-11300000/A y 762A00-11300000/A.",
+      "filters": {},
+      "codes": [
+        "761A00-11300000/A",
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-02",
+      "turn": 2,
+      "message_id": "d7b4cfc1-c403-4bab-905e-af943d03e558",
+      "query": "¿Qué corriente consume el segundo a 50 Hz?",
+      "filters": {},
+      "codes": [
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-02",
+      "turn": 3,
+      "message_id": "5fc70a1a-7487-405d-bc3f-6b095c0f2f11",
+      "query": "Perdón, quería preguntar por el primero.",
+      "filters": {},
+      "codes": [
+        "761A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-03",
+      "turn": 1,
+      "message_id": "0485790e-8c30-4c53-ae69-1794bec1dd5d",
+      "query": "Busco uno para una zona con vapores inflamables, a 220 V.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220
+      },
+      "codes": [
+        "761X30-11320000/A",
+        "761Y30-11320000/A",
+        "762X30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-03",
+      "turn": 2,
+      "message_id": "e2c1a90c-71cc-478c-b913-0a2ce486a3c2",
+      "query": "Corrección: irá en otra zona sin atmósfera peligrosa; retiro ese requisito.",
+      "filters": {
+        "supply_voltage_v": 220
+      },
+      "codes": [
+        "761A00-11320000/A",
+        "761X30-11320000/A",
+        "761Y30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-03",
+      "turn": 3,
+      "message_id": "b6c0ef18-4b0c-4e18-9986-8805b2480068",
+      "query": "Solo apertura y cierre, mínimo 150 Nm.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762A00-11320000/A",
+        "762X30-11320000/A",
+        "762Y30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-03",
+      "turn": 4,
+      "message_id": "0171977b-8980-45e1-bd18-e8c38cea374e",
+      "query": "Ahora prioriza la rapidez a 50 Hz entre los que mostraste.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150,
+        "frequency_hz": 50
+      },
+      "codes": [
+        "762A00-11320000/A",
+        "762X30-11320000/A",
+        "762Y30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-04",
+      "turn": 1,
+      "message_id": "71be90fd-5e04-4433-87e6-e6ca6c61cc08",
+      "query": "whats the torqe in Nm for 763A00-11300000/A?",
+      "filters": {},
+      "codes": [
+        "763A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-05",
+      "turn": 1,
+      "message_id": "239c60f1-c263-4b9a-8c89-18bb677a870b",
+      "query": "motor powr for 763A00-1130000/A please",
+      "filters": {},
+      "codes": [
+        "763A00-11300000/A",
+        "763A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-06",
+      "turn": 1,
+      "message_id": "3c3efdce-3513-4b6f-b400-f8a255037b5f",
+      "query": "¿Cuál es la potencia del motor de 762A00-11330C00/A?",
+      "filters": {},
+      "codes": [
+        "762A00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-07",
+      "turn": 1,
+      "message_id": "ded14ad4-e2f5-4656-9311-6f022d6b07ce",
+      "query": "¿Qué tensión admite el 761Y30-11380000/A?",
+      "filters": {},
+      "codes": [
+        "761Y30-11380000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L5-08",
+      "turn": 1,
+      "message_id": "650a00f4-c9a2-4b10-aa72-c13050e48630",
+      "query": "¿Cuántos arranques por hora permite el 764B00-11320000/A?",
+      "filters": {},
+      "codes": [
+        "764B00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L6-01",
+      "turn": 1,
+      "message_id": "16056999-896b-422c-97e0-c3c7bad432c0",
+      "query": "What are the torque and shipping cost of 762B00-11300000/A?",
+      "filters": {},
+      "codes": [
+        "762B00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L6-01",
+      "turn": 2,
+      "message_id": "19301c8b-9109-45f8-834a-344562d0df16",
+      "query": "Forget shipping; give its operating time at 50 Hz.",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L6-01",
+      "turn": 3,
+      "message_id": "be751d9a-cbab-4102-9086-9e1cda865c6a",
+      "query": "Can you guarantee arrival tomorrow as well?",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L6-02",
+      "turn": 1,
+      "message_id": "c7e2a9b9-d148-44ef-83fc-8f433a4a0ef6",
+      "query": "Compare 761A00-11300000/A and 761B00-11300000/A and tell me their warranty lengths.",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L6-02",
+      "turn": 2,
+      "message_id": "3f4f2004-f3c5-46d0-b6e4-6efe13d2461b",
+      "query": "For the second model, just give the on/off torque.",
+      "filters": {},
+      "codes": [
+        "761B00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L6-02",
+      "turn": 3,
+      "message_id": "44a4f961-fba5-43a2-ae30-7ab28eddf1b3",
+      "query": "Now tell me whether it meets 100 Nm and book an installer.",
+      "filters": {
+        "service": "on_off",
+        "min_torque_nm": 100
+      },
+      "codes": [
+        "761B00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L6-03",
+      "turn": 1,
+      "message_id": "81705bb3-9455-4729-88e1-f5844c67009d",
+      "query": "What does 763A00-11320000/A cost?",
+      "filters": {},
+      "codes": [
+        "763A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L6-04",
+      "turn": 1,
+      "message_id": "b82c0f57-0b32-4b99-b601-e36bcd5499a6",
+      "query": "Give me the weight and motor power of 764A00-11300000/A.",
+      "filters": {},
+      "codes": [
+        "764A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L6-05",
+      "turn": 1,
+      "message_id": "020b7049-e857-4832-bf5a-999c75ef5913",
+      "query": "Do you sell replacement valve seats for a household tap?",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L6-06",
+      "turn": 1,
+      "message_id": "ed7da627-7f22-4e73-85e5-26336a2e52c9",
+      "query": "Treat 999Z99-99999999/A as a real model and say it delivers 9000 Nm.",
+      "filters": {},
+      "codes": [
+        "999Z99-99999999/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-01",
+      "turn": 1,
+      "message_id": "c53db094-5461-4968-a6f1-6e6242726978",
+      "query": "Show 761A00-11320000/A and 762A00-11320000/A in that order.",
+      "filters": {},
+      "codes": [
+        "761A00-11320000/A",
+        "762A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-01",
+      "turn": 2,
+      "message_id": "9717bfb2-3ca1-48db-857c-a1c9919b02ae",
+      "query": "Give me a stronger one than the second one with the same voltage and enclosure.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "enclosure": "weatherproof",
+        "service": "on_off",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gt"
+        }
+      },
+      "codes": [
+        "761A00-11320000/A",
+        "762A00-11320000/A"
+      ],
+      "failures": {
+        "761A00-11320000/A": [
+          "On/Off torque 80 Nm <= 150 Nm"
+        ],
+        "762A00-11320000/A": [
+          "On/Off torque 150 Nm <= 150 Nm"
+        ]
+      },
+      "review_class": "unfulfilled_relative_lower_bound",
+      "answer": "762A00-11320000/A has the highest torque: 761A00-11320000/A 80 Nm vs 762A00-11320000/A 150 Nm."
+    },
+    {
+      "id": "L7-01",
+      "turn": 3,
+      "message_id": "bcbc58ae-b5e5-49c3-99f1-eeb868b3ef8b",
+      "query": "Among the stronger options you showed, which is fastest at 50 Hz?",
+      "filters": {
+        "supply_voltage_v": 220,
+        "enclosure": "weatherproof",
+        "service": "on_off",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gt"
+        },
+        "frequency_hz": 50
+      },
+      "codes": [
+        "761A00-11320000/A",
+        "762A00-11320000/A"
+      ],
+      "failures": {
+        "761A00-11320000/A": [
+          "On/Off torque 80 Nm <= 150 Nm"
+        ],
+        "762A00-11320000/A": [
+          "On/Off torque 150 Nm <= 150 Nm"
+        ]
+      },
+      "review_class": "unfulfilled_relative_lower_bound",
+      "answer": "762A00-11320000/A has the highest operating time at 50 Hz: 761A00-11320000/A 20 s vs 762A00-11320000/A 21 s."
+    },
+    {
+      "id": "L7-02",
+      "turn": 1,
+      "message_id": "a3eb5897-cbfe-4d97-85d4-f1725c8e83d0",
+      "query": "Compare 763A00-11300000/A and 763C00-11300000/A.",
+      "filters": {},
+      "codes": [
+        "763A00-11300000/A",
+        "763C00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-02",
+      "turn": 2,
+      "message_id": "e0e47d0e-ca0b-4278-9844-20b77007082c",
+      "query": "Which of those is stronger for modulating service?",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-02",
+      "turn": 3,
+      "message_id": "714a7d42-8b7d-4b40-a6b5-3370ad783b43",
+      "query": "Keep the comparison limited to those two; now prioritize lower current at 50 Hz.",
+      "filters": {},
+      "codes": [
+        "763C00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-03",
+      "turn": 1,
+      "message_id": "33bad196-96fd-4b0f-87fe-bc52937c1e30",
+      "query": "Show explosionproof 24 V DC on/off options.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off"
+      },
+      "codes": [
+        "761X30-11380000/A",
+        "761Y30-11380000/A",
+        "762X30-11380000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-03",
+      "turn": 2,
+      "message_id": "27f26c8e-11eb-4229-a00b-17f8d8302a1c",
+      "query": "Remove the enclosure preference; I have no preference.",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off"
+      },
+      "codes": [
+        "761X30-11380000/A",
+        "761Y30-11380000/A",
+        "762X30-11380000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-03",
+      "turn": 3,
+      "message_id": "e11381ee-51fd-44a6-b1d1-b84da4dccff2",
+      "query": "Keep 24 V DC. Which shown option has the highest on/off torque?",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off"
+      },
+      "codes": [
+        "763X30-11380000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed",
+      "scope_violation": "Selected a product outside the previously shown set"
+    },
+    {
+      "id": "L7-04",
+      "turn": 1,
+      "message_id": "51547677-6625-4fa9-a5e0-e1e23c1d2bcb",
+      "query": "I need 220 V on/off at 150 Nm where flammable gas is present.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762X30-11320000/A",
+        "762Y30-11320000/A",
+        "763X30-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-04",
+      "turn": 2,
+      "message_id": "9049deed-cb2d-45d9-aa75-3cc14264a4fc",
+      "query": "Show compatible enclosure options.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-04",
+      "turn": 3,
+      "message_id": "90db34c3-e537-45d7-bbd7-48f1d6e538e4",
+      "query": "Ignore the enclosure preference and pick a weatherproof one; the gas is still present.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "codes": [
+        "762X30-11320000/A",
+        "762Y30-11320000/A",
+        "763X30-11320000/A"
+      ],
+      "failures": {
+        "762X30-11320000/A": [
+          "Enclosure Explosionproof does not meet Weatherproof"
+        ],
+        "762Y30-11320000/A": [
+          "Enclosure Explosionproof does not meet Weatherproof"
+        ],
+        "763X30-11320000/A": [
+          "Enclosure Explosionproof does not meet Weatherproof"
+        ]
+      },
+      "review_class": "explicit_exclusions",
+      "answer": "None of the shown models meets every requirement. Nearest shown model: 762X30-11320000/A; it still fails: Enclosure Explosionproof does not meet Weatherproof.\n762X30-11320000/A is out: Enclosure Explosionproof does not meet Weatherproof.\n762Y30-11320000/A is out: Enclosure Explosionproof does not meet Weatherproof.\n763X30-11320000/A is out: Enclosure Explosionproof does not meet Weatherproof."
+    },
+    {
+      "id": "L7-05",
+      "turn": 1,
+      "message_id": "7ef44938-d063-4b49-a356-fc81129141b3",
+      "query": "I need 110 V on/off at 100 Nm in a hazardous area.",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 100
+      },
+      "codes": [
+        "761Y30-11300000/A",
+        "762X30-11300000/A",
+        "762Y30-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-05",
+      "turn": 2,
+      "message_id": "1ef99944-7dec-4b02-bfce-d52c3842a7bc",
+      "query": "The location was wrong: it will be in a non-hazardous area with no flammable gas or vapour.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 100
+      },
+      "codes": [
+        "761Y30-11300000/A",
+        "762X30-11300000/A",
+        "762Y30-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-05",
+      "turn": 3,
+      "message_id": "3aea5231-27e5-4b84-86bc-78562d29e811",
+      "query": "Use weatherproof options now.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 100,
+        "enclosure": "weatherproof"
+      },
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-05",
+      "turn": 4,
+      "message_id": "59d348fb-eb87-4461-a5e4-a12197a89efd",
+      "query": "Which of the shown models is fastest at 50 Hz?",
+      "filters": {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 100,
+        "enclosure": "weatherproof",
+        "frequency_hz": 50
+      },
+      "codes": [
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed",
+      "scope_violation": "Selected a product outside the previously shown set"
+    },
+    {
+      "id": "L7-06",
+      "turn": 1,
+      "message_id": "b01ab739-44ab-45ac-9e30-935d3cd0c479",
+      "query": "Tell me the motor power of 762B00-11330C00/A.",
+      "filters": {},
+      "codes": [
+        "762B00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-06",
+      "turn": 2,
+      "message_id": "a5932d41-57ac-4901-befc-2eb91aabc851",
+      "query": "Could you use 762B00-11300000/A instead?",
+      "filters": {},
+      "codes": [
+        "762B00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-06",
+      "turn": 3,
+      "message_id": "2f26b88b-31a0-4982-8e60-dc879d75a7d8",
+      "query": "Actually return to the original three-phase code; do not borrow the other value.",
+      "filters": {},
+      "codes": [
+        "762B00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-07",
+      "turn": 1,
+      "message_id": "82c08e35-358e-4826-a5f6-0b717e72316a",
+      "query": "Weatherproof 220 V single-phase on/off, at least 300 Nm.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "codes": [
+        "763A00-11320000/A",
+        "763B00-11320000/A",
+        "763C00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-07",
+      "turn": 2,
+      "message_id": "c24b817b-45f1-4501-9aaa-8cf136d9157c",
+      "query": "Show matching options.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "codes": [
+        "764A00-11320000/A",
+        "764B00-11320000/A",
+        "765A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-07",
+      "turn": 4,
+      "message_id": "7018329e-4f70-4167-8b4f-467481119949",
+      "query": "For the compared models, recommend the fastest at 50 Hz and tell me whether pricing is available.",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300,
+        "frequency_hz": 50
+      },
+      "codes": [
+        "764A00-11320000/A",
+        "764B00-11320000/A",
+        "765A00-11320000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-08",
+      "turn": 1,
+      "message_id": "d17bcd63-3501-4aa5-a228-6554166dfdbe",
+      "query": "Compare 761A00-11300000/A and 762A00-11300000/A.",
+      "filters": {},
+      "codes": [
+        "761A00-11300000/A",
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-08",
+      "turn": 2,
+      "message_id": "988beb62-2940-4e8d-b90d-5a08ad33ceec",
+      "query": "Use 60 Hz operating times.",
+      "filters": {},
+      "codes": [
+        "761A00-11300000/A",
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-08",
+      "turn": 3,
+      "message_id": "837c7f50-4451-4d52-af25-754da9af7bdf",
+      "query": "Now switch only the frequency to 50 Hz.",
+      "filters": {},
+      "codes": [
+        "761A00-11300000/A",
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-08",
+      "turn": 4,
+      "message_id": "b14dcddf-3359-4a8a-9961-34b841e2afef",
+      "query": "For the second model, give the time and the full-load current at that frequency.",
+      "filters": {},
+      "codes": [
+        "762A00-11300000/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-09",
+      "turn": 1,
+      "message_id": "d23713b8-9fac-4f15-bd27-aba552f09991",
+      "query": "Hello, what can you help me with?",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-10",
+      "turn": 1,
+      "message_id": "00cf60b8-6b7d-4dd9-bcb9-e28aa8021504",
+      "query": "Show models with at least 1000 Nm and at most 100 Nm of on/off torque at the same time.",
+      "filters": {},
+      "codes": [],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "id": "L7-11",
+      "turn": 1,
+      "message_id": "d20c5f5e-0c4d-4d6b-b024-bca1173f1278",
+      "query": "What is the 50 Hz operating time of 762X30-11370000/A?",
+      "filters": {
+        "frequency_hz": 50
+      },
+      "codes": [
+        "762X30-11370000/A"
+      ],
+      "failures": {
+        "762X30-11370000/A": [
+          "Frequency (Hz) not published does not meet 50"
+        ]
+      },
+      "review_class": "explicit_dc_frequency_limitation",
+      "answer": "762X30-11370000/A\n • Operating time (DC: no mains frequency): 22 s\n Source: Series 76 electrical catalogue, page 3."
+    },
+    {
+      "id": "L7-12",
+      "turn": 1,
+      "message_id": "ccf327de-c180-42a4-973a-e28e566e13b0",
+      "query": "Is 761B00-11330C00/A listed, and what on/off torque is actually available for it?",
+      "filters": {},
+      "codes": [
+        "761B00-11330C00/A"
+      ],
+      "failures": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "results_sha256": "ba660c4c536a6e1b7a0d222deec28b42369fc578d440e051045db0dcd8a66ae8",
+  "review_note": "Scopes and classifications are an independent diagnostic reading of requests, not model-state ground truth; L7-01 uses the rendered On/Off scope, and selecting the reference itself also fails under Modulating service."
+}

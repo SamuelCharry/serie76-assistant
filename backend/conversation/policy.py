@@ -564,7 +564,7 @@ def replaced_fields(query, delta):
     by filter state and the independent quantity ledger so their deltas agree.
     """
     from .requirement_coverage import apply
-    correction = r'\b(?:i meant|actually|instead|rather|no\s*[, ]\s*sorry|sorry|correction|correct(?:ion)?|revers(?:e|ed)|replace|quise decir|queria decir|rectifico|corrijo|en vez de|mejor dicho)\b'
+    correction = r'\b(?:make (?:that|it)|change (?:that|it) to|i meant|actually|instead|rather|no\s*[, ]\s*sorry|sorry|correction|correct(?:ion)?|revers(?:e|ed)|replace|quise decir|queria decir|rectifico|corrijo|en vez de|mejor dicho)\b'
     fields = set()
     for clause in re.split(r';|(?<!\d)\.(?!\d)|\b(?:but|pero)\b|\b(?:and|y)\s+(?=add\b|keep\b|also\b|conserva\b|agrega\b)', query, flags=re.I):
         if re.search(correction, clause, re.I):

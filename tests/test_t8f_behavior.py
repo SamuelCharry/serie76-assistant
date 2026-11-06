@@ -107,9 +107,9 @@ class RoundFiveScenarios(Base):
                            ('search_actuators', {'min_torque_nm': 400}))
         self.assertEqual(result.context['filters']['service'], 'on_off')
         self.assertEqual(int(result.context['filters']['supply_voltage_v']), 220)
-        # R9 explicitly preserves the opposite bound, including an equal-value range.
+        # "Make that" corrects the bound; an explicit addition still retains ranges.
         self.assertEqual(result.context['filters']['min_torque_nm'],
-                         [{'value': '400', 'op': 'gte'}, {'value': 400, 'op': 'lte'}])
+                         {'value': 400, 'op': 'lte'})
 
     def test_hazard_override_cannot_show_weatherproof(self):
         result = self.turn('on/off 220 V, solvent fumes, weatherproof',

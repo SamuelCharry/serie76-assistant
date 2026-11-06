@@ -1,0 +1,610 @@
+[
+  {
+    "id": "L1-01",
+    "turns": [
+      {
+        "query": "Compare 761A00-11300000/A and 762A00-11300000/A for on/off torque and operating time at 60 Hz.",
+        "message_id": "ae0b2fab-3718-470d-9108-7e93aef6db24",
+        "decision": {
+          "args": {
+            "focus": [
+              "torque",
+              "operating_time"
+            ],
+            "part_numbers": [
+              "761A00-11300000/A",
+              "762A00-11300000/A"
+            ],
+            "focus_service": "on_off",
+            "focus_frequency_hz": 60
+          },
+          "name": "get_actuator"
+        },
+        "context_before": {},
+        "original_route": "get_actuator"
+      },
+      {
+        "query": "Correction: use 50 Hz for both.",
+        "message_id": "e71b8676-c655-4f78-b7de-ec4b1b983b8e",
+        "decision": {
+          "args": {
+            "focus": [
+              "torque",
+              "operating_time"
+            ],
+            "part_numbers": [
+              "761A00-11300000/A",
+              "762A00-11300000/A"
+            ],
+            "focus_service": "on_off",
+            "focus_frequency_hz": 50
+          },
+          "name": "get_actuator"
+        },
+        "context_before": {
+          "focus": [
+            {
+              "field": "torque",
+              "service": "on_off",
+              "frequency_hz": null
+            },
+            {
+              "field": "operating_time",
+              "service": null,
+              "frequency_hz": 60
+            }
+          ],
+          "on_screen": [
+            "761A00-11300000/A",
+            "762A00-11300000/A"
+          ],
+          "part_numbers": [
+            "761A00-11300000/A",
+            "762A00-11300000/A"
+          ],
+          "last_shown_list": [
+            "761A00-11300000/A",
+            "762A00-11300000/A"
+          ],
+          "last_comparison_models": [
+            "761A00-11300000/A",
+            "762A00-11300000/A"
+          ]
+        },
+        "original_route": "get_actuator"
+      },
+      {
+        "query": "Which of those two is faster while meeting 100 Nm?",
+        "message_id": "646aed8b-dc9a-4fb8-ba50-19a4bb8e9b10",
+        "decision": null,
+        "context_before": {
+          "focus": [
+            {
+              "field": "torque",
+              "service": "on_off",
+              "frequency_hz": null
+            },
+            {
+              "field": "operating_time",
+              "service": null,
+              "frequency_hz": 50
+            }
+          ],
+          "on_screen": [
+            "761A00-11300000/A",
+            "762A00-11300000/A"
+          ],
+          "part_numbers": [
+            "761A00-11300000/A",
+            "762A00-11300000/A"
+          ],
+          "last_shown_list": [
+            "761A00-11300000/A",
+            "762A00-11300000/A"
+          ],
+          "last_comparison_models": [
+            "761A00-11300000/A",
+            "762A00-11300000/A"
+          ]
+        },
+        "original_route": "metric_verdict"
+      }
+    ]
+  },
+  {
+    "id": "L4-04",
+    "turns": [
+      {
+        "query": "Show 220 V weatherproof on/off models with at least 300 Nm.",
+        "message_id": "87a93508-cd36-4dd2-a9d0-bf9e40a46d93",
+        "decision": {
+          "args": {
+            "bounds": [
+              {
+                "op": "gte",
+                "field": "min_torque_nm",
+                "value": 300
+              }
+            ],
+            "refine": false,
+            "service": "on_off",
+            "enclosure": "weatherproof",
+            "supply_voltage_v": 220
+          },
+          "name": "search_actuators"
+        },
+        "context_before": {},
+        "original_route": "search_actuators"
+      },
+      {
+        "query": "Make that at most 300 Nm.",
+        "message_id": "0f49f513-d7d4-4144-8642-0822dde7b265",
+        "decision": {
+          "args": {
+            "field": "requirements"
+          },
+          "name": "ask_clarification"
+        },
+        "context_before": {
+          "focus": [
+            {
+              "field": "torque",
+              "service": "on_off"
+            }
+          ],
+          "filters": {
+            "limit": 5,
+            "offset": 0,
+            "service": "on_off",
+            "enclosure": "weatherproof",
+            "min_torque_nm": {
+              "op": "gte",
+              "value": "300"
+            },
+            "supply_voltage_v": 220
+          },
+          "rank_by": "closest_torque",
+          "on_screen": [
+            "763A00-11330C00/A",
+            "763A00-11320000/A",
+            "763B00-11330C00/A"
+          ],
+          "pagination": {
+            "has_more": false
+          },
+          "empty_search": false,
+          "part_numbers": [
+            "763A00-11330C00/A",
+            "763A00-11320000/A",
+            "763B00-11330C00/A"
+          ],
+          "last_shown_list": [
+            "763A00-11330C00/A",
+            "763A00-11320000/A",
+            "763B00-11330C00/A"
+          ],
+          "last_ranked_list": [
+            "763A00-11330C00/A",
+            "763A00-11320000/A",
+            "763B00-11330C00/A",
+            "763B00-11320000/A",
+            "763C00-11320000/A",
+            "763C00-11330C00/A",
+            "764A00-11320000/A",
+            "764A00-11330C00/A",
+            "764B00-11320000/A",
+            "764B00-11330C00/A",
+            "765A00-11320000/A",
+            "765A00-11330C00/A",
+            "765B00-11330C00/A",
+            "765B00-11320000/A",
+            "766A00-11320000/A",
+            "766B00-11320000/A",
+            "767A00-11320000/A",
+            "767B00-11320000/A",
+            "767C00-11320000/A"
+          ],
+          "withdrawn_fields": [],
+          "last_shown_offset": 3,
+          "pending_questions": [
+            {
+              "id": "phase_count",
+              "prompt": "How many phases?",
+              "options": [
+                {
+                  "count": 12,
+                  "label": "1 phase",
+                  "value": "1"
+                },
+                {
+                  "count": 7,
+                  "label": "3 phase",
+                  "value": "3"
+                }
+              ]
+            }
+          ],
+          "pending_clarification": "phase_count",
+          "quantity_requirements": {
+            "min_torque_nm": 300,
+            "supply_voltage_v": 220
+          }
+        },
+        "original_route": "ask_clarification"
+      },
+      {
+        "query": "Withdraw the torque limit entirely.",
+        "message_id": "0924a18b-dd27-45df-8f02-3b8a45805ac0",
+        "decision": {
+          "args": {
+            "refine": true,
+            "remove": [
+              "min_torque_nm"
+            ]
+          },
+          "name": "search_actuators"
+        },
+        "context_before": {
+          "focus": [
+            {
+              "field": "torque",
+              "service": "on_off"
+            }
+          ],
+          "filters": {
+            "limit": 5,
+            "offset": 0,
+            "service": "on_off",
+            "enclosure": "weatherproof",
+            "min_torque_nm": {
+              "op": "gte",
+              "value": "300"
+            },
+            "supply_voltage_v": 220
+          },
+          "rank_by": "closest_torque",
+          "on_screen": [
+            "763A00-11330C00/A",
+            "763A00-11320000/A",
+            "763B00-11330C00/A"
+          ],
+          "pagination": {
+            "has_more": false
+          },
+          "empty_search": false,
+          "part_numbers": [
+            "763A00-11330C00/A",
+            "763A00-11320000/A",
+            "763B00-11330C00/A"
+          ],
+          "last_shown_list": [
+            "763A00-11330C00/A",
+            "763A00-11320000/A",
+            "763B00-11330C00/A"
+          ],
+          "last_ranked_list": [
+            "763A00-11330C00/A",
+            "763A00-11320000/A",
+            "763B00-11330C00/A",
+            "763B00-11320000/A",
+            "763C00-11320000/A",
+            "763C00-11330C00/A",
+            "764A00-11320000/A",
+            "764A00-11330C00/A",
+            "764B00-11320000/A",
+            "764B00-11330C00/A",
+            "765A00-11320000/A",
+            "765A00-11330C00/A",
+            "765B00-11330C00/A",
+            "765B00-11320000/A",
+            "766A00-11320000/A",
+            "766B00-11320000/A",
+            "767A00-11320000/A",
+            "767B00-11320000/A",
+            "767C00-11320000/A"
+          ],
+          "withdrawn_fields": [],
+          "last_shown_offset": 3,
+          "quantity_requirements": {
+            "min_torque_nm": 300,
+            "supply_voltage_v": 220
+          }
+        },
+        "original_route": "search_actuators"
+      },
+      {
+        "query": "Now choose the fastest at 50 Hz among the models you just showed.",
+        "message_id": "264b9da9-bbb1-42ed-954a-ca41eb2ee712",
+        "decision": {
+          "args": {
+            "intent": "pick",
+            "refine": true,
+            "priority": {
+              "metric": "operating_time",
+              "direction": "lowest",
+              "frequency_hz": 50
+            }
+          },
+          "name": "search_actuators"
+        },
+        "context_before": {
+          "focus": [
+            {
+              "field": "torque",
+              "service": "on_off"
+            }
+          ],
+          "filters": {
+            "limit": 5,
+            "offset": 0,
+            "service": "on_off",
+            "enclosure": "weatherproof",
+            "supply_voltage_v": 220
+          },
+          "rank_by": "closest_torque",
+          "on_screen": [
+            "761A00-11320000/A",
+            "761B00-11320000/A",
+            "762A00-11320000/A"
+          ],
+          "pagination": {
+            "has_more": false
+          },
+          "empty_search": false,
+          "part_numbers": [
+            "761A00-11320000/A",
+            "761B00-11320000/A",
+            "762A00-11320000/A"
+          ],
+          "last_shown_list": [
+            "761A00-11320000/A",
+            "761B00-11320000/A",
+            "762A00-11320000/A"
+          ],
+          "last_ranked_list": [
+            "761A00-11320000/A",
+            "761B00-11320000/A",
+            "762A00-11320000/A",
+            "763A00-11330C00/A",
+            "762B00-11320000/A",
+            "763A00-11320000/A",
+            "763B00-11330C00/A",
+            "763C00-11330C00/A",
+            "763B00-11320000/A",
+            "763C00-11320000/A",
+            "764A00-11320000/A",
+            "765A00-11320000/A",
+            "764A00-11330C00/A",
+            "764B00-11330C00/A",
+            "765A00-11330C00/A",
+            "765B00-11330C00/A",
+            "764B00-11320000/A",
+            "765B00-11320000/A",
+            "767A00-11320000/A",
+            "767B00-11320000/A",
+            "767C00-11320000/A",
+            "766A00-11320000/A",
+            "766B00-11320000/A"
+          ],
+          "withdrawn_fields": [
+            "min_torque_in_lb",
+            "min_torque_nm"
+          ],
+          "last_shown_offset": 3,
+          "pending_questions": [
+            {
+              "id": "phase_count",
+              "prompt": "How many phases?",
+              "options": [
+                {
+                  "count": 16,
+                  "label": "1 phase",
+                  "value": "1"
+                },
+                {
+                  "count": 7,
+                  "label": "3 phase",
+                  "value": "3"
+                }
+              ]
+            }
+          ],
+          "pending_clarification": "phase_count",
+          "quantity_requirements": {
+            "supply_voltage_v": 220
+          }
+        },
+        "original_route": "search_actuators"
+      }
+    ]
+  },
+  {
+    "id": "L7-01",
+    "turns": [
+      {
+        "query": "Give me a stronger one than the second one with the same voltage and enclosure.",
+        "message_id": "9717bfb2-3ca1-48db-857c-a1c9919b02ae",
+        "decision": null,
+        "context_before": {
+          "focus": [
+            {
+              "field": "overview",
+              "service": null,
+              "frequency_hz": null
+            }
+          ],
+          "on_screen": [
+            "761A00-11320000/A",
+            "762A00-11320000/A"
+          ],
+          "part_numbers": [
+            "761A00-11320000/A",
+            "762A00-11320000/A"
+          ],
+          "last_shown_list": [
+            "761A00-11320000/A",
+            "762A00-11320000/A"
+          ],
+          "last_comparison_models": [
+            "761A00-11320000/A",
+            "762A00-11320000/A"
+          ]
+        },
+        "original_route": "metric_verdict"
+      }
+    ]
+  },
+  {
+    "id": "L7-03",
+    "turns": [
+      {
+        "query": "Keep 24 V DC. Which shown option has the highest on/off torque?",
+        "message_id": "e11381ee-51fd-44a6-b1d1-b84da4dccff2",
+        "decision": null,
+        "context_before": {
+          "focus": [
+            {
+              "field": "torque",
+              "service": "on_off"
+            }
+          ],
+          "filters": {
+            "limit": 5,
+            "offset": 0,
+            "service": "on_off",
+            "supply_current": "DC",
+            "supply_voltage_v": 24
+          },
+          "rank_by": "closest_torque",
+          "on_screen": [
+            "761X30-11380000/A",
+            "762X30-11380000/A",
+            "761Y30-11380000/A"
+          ],
+          "pagination": {
+            "has_more": false
+          },
+          "empty_search": false,
+          "part_numbers": [
+            "761X30-11380000/A",
+            "762X30-11380000/A",
+            "761Y30-11380000/A"
+          ],
+          "last_shown_list": [
+            "761X30-11380000/A",
+            "762X30-11380000/A",
+            "761Y30-11380000/A"
+          ],
+          "last_ranked_list": [
+            "761X30-11380000/A",
+            "762X30-11380000/A",
+            "761Y30-11380000/A",
+            "762Y30-11380000/A",
+            "763X30-11380000/A"
+          ],
+          "withdrawn_fields": [
+            "enclosure"
+          ],
+          "last_shown_offset": 3,
+          "quantity_requirements": {
+            "supply_voltage_v": 24
+          }
+        },
+        "original_route": "metric_verdict"
+      }
+    ]
+  },
+  {
+    "id": "L7-05",
+    "turns": [
+      {
+        "query": "Which of the shown models is fastest at 50 Hz?",
+        "message_id": "59d348fb-eb87-4461-a5e4-a12197a89efd",
+        "decision": null,
+        "context_before": {
+          "focus": [
+            {
+              "field": "torque",
+              "service": "on_off"
+            }
+          ],
+          "filters": {
+            "limit": 5,
+            "offset": 0,
+            "service": "on_off",
+            "min_torque_nm": 100,
+            "supply_voltage_v": 110
+          },
+          "rank_by": "closest_torque",
+          "on_screen": [
+            "761Y30-11300000/A",
+            "762X30-11300000/A",
+            "762Y30-11300000/A"
+          ],
+          "pagination": {
+            "has_more": false
+          },
+          "empty_search": false,
+          "part_numbers": [
+            "761Y30-11300000/A",
+            "761B00-11300000/A",
+            "762X30-11300000/A"
+          ],
+          "hazard_signal": true,
+          "last_shown_list": [
+            "761Y30-11300000/A",
+            "761B00-11300000/A",
+            "762X30-11300000/A"
+          ],
+          "last_ranked_list": [
+            "761Y30-11300000/A",
+            "761B00-11300000/A",
+            "762X30-11300000/A",
+            "762A00-11300000/A",
+            "762Y30-11300000/A",
+            "762B00-11300000/A",
+            "763X30-11300000/A",
+            "763A00-11300000/A",
+            "763Y30-11300000/A",
+            "763B00-11300000/A",
+            "763C00-11300000/A",
+            "764A00-11300000/A",
+            "764X30-11300000/A",
+            "764Y30-11300000/A",
+            "764B00-11300000/A",
+            "765X30-11300000/A",
+            "765A00-11300000/A",
+            "765Y30-11300000/A",
+            "765B00-11300000/A"
+          ],
+          "withdrawn_fields": [],
+          "last_shown_offset": 3,
+          "pending_questions": [
+            {
+              "id": "enclosure",
+              "prompt": "Which enclosure?",
+              "options": [
+                {
+                  "count": 9,
+                  "label": "Explosionproof",
+                  "value": "explosionproof"
+                },
+                {
+                  "count": 10,
+                  "label": "Weatherproof",
+                  "value": "weatherproof"
+                }
+              ]
+            }
+          ],
+          "pending_clarification": "enclosure",
+          "quantity_requirements": {
+            "min_torque_nm": 100,
+            "supply_voltage_v": 110
+          }
+        },
+        "original_route": "metric_verdict"
+      }
+    ]
+  }
+]

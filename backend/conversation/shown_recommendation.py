@@ -32,7 +32,7 @@ def requirements(query, previous):
     written, issues = requirement_coverage.apply(query, {}, dict(previous, **inferred))
     inferred.update(written)
     merged, merge_notes = policy.merge_filters(previous, inferred, refine=True,
-                                              remove=policy.removed_fields(query), more=False)
+                                              remove=policy.removed_fields(query), more=False, query=query)
     # Every quantity must be represented before any candidate can be recommended.
     if requirement_coverage.missing(written, merged):
         issues.append('Please restate the limits; I could not preserve every stated quantity.')
