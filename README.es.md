@@ -46,7 +46,7 @@ flowchart LR
 | Selección de varios turnos | [v17 pareado: media 79,4 %, 0/18.792 cifras incorrectas](reports/submission/P2-A.md) | Falla cerca del 20 %; las correcciones son posteriores a la medición |
 | Texto público y debug oculto | [Auditoría ejecutable](reports/submission/P2-B.md), [emulador](reports/submission/P2-D.md) | Cobertura limitada del detector; transporte debug controlado |
 | Interacción Android y voz | [8/8 pruebas en emulador](reports/submission/P2-D.md) | Reconocimiento real y fallos de login/debug por comprobar |
-| Login, historial privado, Docker | [CI Linux](reports/submission/P2-C.md), [clon Windows](reports/submission/T17-final-clean-clone.md) | Tag/acceso final y validación física |
+| Login, historial privado, Docker | [CI Linux](reports/submission/P2-C.md), [clon Windows](reports/submission/T18-tag-clean-clone.md) | Tag/acceso final y validación física |
 
 ## Setup y backend
 
@@ -206,7 +206,7 @@ McNemar exacto pareado: **p = 0,013, 0,007 y 0,002**. La auditoría estructurada
 
 **Límite de integridad:** la comprobación final contra SQL cubre tarjetas, comparaciones, ranking y prosa positiva, además de pertenencia al conjunto mostrado cuando se exige. Una selección inválida se elimina; los incumplidores informativos llevan etiquetas explícitas. Verifica requisitos representados, no comprensión perfecta ni idoneidad de instalación. [Invariante y pruebas (P1-F)](reports/submission/P1-F.md).
 
-**Evidencia de entrega:** la auditoría ejecutable de texto público detectó **0 filtraciones en producción dentro de su alcance**; la revisión ciega v17 encontró después un token del baseline que el detector omitió, por lo que no es garantía universal. Quick start sin claves pasó en CI Linux; otro clon limpio en Windows pasó diez pasos. La aceptación en emulador Android pasó **8/8**, combinando HTTP/SQL reales sin claves con datos controlados para debug, errores, demora y voz. [Texto público (P2-B)](reports/submission/P2-B.md) · [CI Linux (P2-C)](reports/submission/P2-C.md) · [Clon Windows (T17)](reports/submission/T17-final-clean-clone.md) · [Emulador (P2-D)](reports/submission/P2-D.md).
+**Evidencia de entrega:** la auditoría ejecutable de texto público detectó **0 filtraciones en producción dentro de su alcance**; la revisión ciega v17 encontró después un token del baseline que el detector omitió, por lo que no es garantía universal. Quick start sin claves pasó en CI Linux; otro clon limpio en Windows pasó diez pasos. La aceptación en emulador Android pasó **8/8**, combinando HTTP/SQL reales sin claves con datos controlados para debug, errores, demora y voz. [Texto público (P2-B)](reports/submission/P2-B.md) · [CI Linux (P2-C)](reports/submission/P2-C.md) · [Clon Windows (T18)](reports/submission/T18-tag-clean-clone.md) · [Emulador (P2-D)](reports/submission/P2-D.md).
 
 **Gasto OpenRouter registrado:** **USD 6,170259916 ≈ USD 6,17 de 10**, incluidos intentos fallidos y experimentos; es el registro liquidado de evaluación, no una consulta de saldo actual. [Registro de gasto](reports/submission/P2-A.md#spend-and-excluded-attempt).
 

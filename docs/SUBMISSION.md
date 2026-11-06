@@ -1,6 +1,6 @@
 # Submission audit
 
-Audited 2026-11-06 on `release/submission` against all six pages of the [assessment](assessment-en.pdf). Documentation/source/evidence review only: no inference, private `.env` read, merge, tag or settings change. Historical reports apply to their recorded source versions.
+Audited 2026-11-06 against all six pages of the [assessment](assessment-en.pdf). Delivery documentation now includes final-tag T18 evidence on `main`. PR #10 was merged at `ac56dee`; `v1.0-submission` remains fixed at that tested code. Subsequent changes are documentation only. Historical reports apply to their recorded source versions.
 
 ## Requirement-by-requirement checklist
 
@@ -70,7 +70,7 @@ Checklist totals: **47 items — 40 ✅ / 7 ⚠️**. Each row counts as one obl
 | D12 | README optional test users/voice decisions | ✅ [Accounts](../README.md#demo-users-test-only), [voice](../README.md#android). |
 | D13 | Real assistant configuration directory | ✅ [.claude](../.claude/), [guide](../.claude/README.md), [instructions](../.claude/CLAUDE.md). |
 | S01 | Complete reproducible instructions | ✅ [Linux keyless Quick start CI (P2-C)](../reports/submission/P2-C.md) passed on GitHub; [Windows final-tag clean clone (T18)](../reports/submission/T18-tag-clean-clone.md) passed all 10 steps on `v1.0-submission` (`ac56dee`), including keyless HTTP/history/restart, 797 Python tests (2 skipped), v7 453/453, catalogue SQL/HTTP verification and 126 Android JVM tests/debug build. No paid calls or emulator install; macOS and paid-model execution remain outside this evidence. |
-| S02 | Reply within one week with accessible repo link | ⚠️ Draft below; owner must grant access, merge/tag/send. Brief received 2026-11-02; owner target 2026-11-08. No email/access change here. |
+| S02 | Reply within one week with accessible repo link | ⚠️ Draft below; merge and tag complete; owner must grant evaluator access and send the email. Brief received 2026-11-02; owner target 2026-11-08. No email/access change here. |
 | S03 | Robust beyond supplied examples | ⚠️ [Independent v17 paired evaluation (P2-A)](../reports/submission/P2-A.md): mean 79.4% versus 61.1%, pass^3 71.7% versus 55%, McNemar p=0.013/0.007/0.002. User-authorized adoption is an exception to the pre-registered no-regression rule, not proof it passed; about 20% of novel conversations still fail. |
 
 ## Final metrics and open gaps
@@ -98,7 +98,7 @@ Remaining checklist warnings are **B04, B10, B17 and S03** (selection/interpreta
 
 ## Final email draft
 
-Reply to the original email only after merge/tag/evaluator access. Branch/tag wording below is conditional until those owner actions finish.
+Merge and tag are complete. Reply to the original email after granting and verifying evaluator access. The tag identifies the tested application; `main` also includes the final-tag reproduction report.
 
 > Hello,
 >
@@ -117,9 +117,9 @@ Reply to the original email only after merge/tag/evaluator access. Branch/tag wo
 
 ## Final owner steps
 
-1. **Verify the delivery commit:** confirm the final repair evidence and required CI checks at the intended commit; distinguish measured v17 source from later offline fixes. Recorded Linux/Windows runs predate final delivery. Manually check microphone permissions/service, real transcript review and Send, login/debug loading/errors and physical-device readability; injected voice is not recognition evidence.
-2. **Merge PR #10:** review checks and merge [PR #10](https://github.com/SamuelCharry/serie76-assistant/pull/10) into `main`.
-3. **Tag:** create/push `v1.0-submission` at verified merged commit; confirm target.
+1. **Verify the delivery commit:** confirm the final repair evidence and required CI checks at the intended commit; distinguish measured v17 source from later offline fixes. T18 verifies the final tag on Windows; later documentation changes do not alter the tested application. Manually check microphone permissions/service, real transcript review and Send, login/debug loading/errors and physical-device readability; injected voice is not recognition evidence.
+2. **Merge complete:** [PR #10](https://github.com/SamuelCharry/serie76-assistant/pull/10) merged into `main` at `ac56dee`. Final-tag evidence is included on `main`.
+3. **Tag complete:** `v1.0-submission` points to `ac56dee`, reproduced by [T18](../reports/submission/T18-tag-clean-clone.md). Keep this tested tag unchanged.
 4. **Evaluator access:** private repository: **Settings → Collaborators**, or make public; verify evaluators can open it.
 5. **Send the email:** reply to original assessment; update device results only with evidence and confirm branch/tag exist.
 6. **Close issues #1 and #2:** link delivery/acceptance evidence, retaining explicit limitations.
@@ -130,4 +130,4 @@ Final checks: **1,030 relative links/anchors, 0 broken** with the repository `.v
 
 Documentation cleanup inventoried 85 tracked Markdown files, removed the obsolete `.codex/README.md`, consolidated duplicated summaries and retained cited historical evidence. Local path prefixes were neutralized in 13 historical Markdown reports. By coordinator authorization, only the local-home path prefix was redacted in four JSON records: `docs/evidence/data/ocr-summary.json`, `reports/submission/T2-ocr-summary.json`, `reports/submission/p1e-evidence/verification.json` and `reports/submission/t9-r1-evidence/gates.json`; valid JSON and all other values were verified unchanged. P2-A is maintained separately by its owner.
 
- No inference, `.env` read, code/config/test modification, merge, tag or repository-settings change is part of this documentation task.
+ The delivery documentation update performs no inference, private `.env` read, code/config/test modification, tag movement or repository-settings change.

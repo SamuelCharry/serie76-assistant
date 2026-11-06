@@ -42,3 +42,7 @@ For backend tests, `API_PORT=18000` and `POSTGRES_PORT=55432` were set in the pr
 A harness-only interruption occurred on the first persistence capture: Windows PowerShell with `ErrorActionPreference=Stop` treated Docker's normal restart progress on stderr as `NativeCommandError`. The backend restarted successfully; repeating the capture without converting native stderr into a terminating exception completed persistence verification. This preference is not part of the README, so it is not a documentation or product finding. pip's upgrade notice and Gradle's native-library stripping warning were also nonfatal.
 
 No README/source fixes were applied. This evidence branch changes only this report and the S01 evidence row in `docs/SUBMISSION.md`. The immutable submission tag remains unchanged. This run establishes keyless Windows reproduction, not paid interpretation, physical-device behavior, new OCR-layout accuracy, or macOS execution.
+
+## Post-run cleanup status
+
+The cleanup row above records the original test-run outcome. A subsequent read-only check on 2026-11-06 confirmed that `C:\Users\nrir\Desktop\clean-test-tag` no longer exists. Folder cleanup is therefore no longer pending. This update does not claim a new volume or running-service verification.

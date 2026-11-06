@@ -46,7 +46,7 @@ flowchart LR
 | Multi-turn selection | [Paired v17 mean 79.4%, 0/18,792 wrong figures](reports/submission/P2-A.md) | About 20% of conversations fail; repairs are separate from measured results |
 | Public text and hidden debug | [Executable text audit](reports/submission/P2-B.md), [emulator checks](reports/submission/P2-D.md) | Detector coverage is finite; debug transport was controlled |
 | Android interaction and voice | [8/8 emulator tests](reports/submission/P2-D.md) | Real recognition and login/debug fault paths need checks |
-| Login, private history, Docker | [Linux CI](reports/submission/P2-C.md), [Windows clean clone](reports/submission/T17-final-clean-clone.md) | Final tag/access and physical-device validation |
+| Login, private history, Docker | [Linux CI](reports/submission/P2-C.md), [Windows clean clone](reports/submission/T18-tag-clean-clone.md) | Evaluator access and physical-device validation |
 
 ## Setup and backend
 
@@ -208,7 +208,7 @@ Exact paired McNemar p-values were **0.013, 0.007 and 0.002**. The full structur
 
 **Integrity boundary:** the SQL eligibility invariant checks cards, comparisons, rankings and positive prose, plus membership in the previously shown set when requested. Invalid selections are cleared; informational non-matches require explicit labels. It checks represented requirements, not perfect interpretation or installation suitability. [Invariant and tests (P1-F)](reports/submission/P1-F.md).
 
-**Delivery evidence:** the executable public-text audit detected **0 production leaks in its recorded scope**; later v17 blind review found a baseline token that automation missed, so zero detected leaks is not a universal guarantee. Linux keyless Quick start passed in CI; a separate Windows clean clone passed its ten steps. Android emulator acceptance passed **8/8**, mixing real keyless HTTP/SQL with controlled debug, fault, delay and voice inputs. [Text audit (P2-B)](reports/submission/P2-B.md) · [Linux CI (P2-C)](reports/submission/P2-C.md) · [Windows clone (T17)](reports/submission/T17-final-clean-clone.md) · [Emulator (P2-D)](reports/submission/P2-D.md).
+**Delivery evidence:** the executable public-text audit detected **0 production leaks in its recorded scope**; later v17 blind review found a baseline token that automation missed, so zero detected leaks is not a universal guarantee. Linux keyless Quick start passed in CI; a separate Windows clean clone passed its ten steps. Android emulator acceptance passed **8/8**, mixing real keyless HTTP/SQL with controlled debug, fault, delay and voice inputs. [Text audit (P2-B)](reports/submission/P2-B.md) · [Linux CI (P2-C)](reports/submission/P2-C.md) · [Windows clone (T18)](reports/submission/T18-tag-clean-clone.md) · [Emulator (P2-D)](reports/submission/P2-D.md).
 
 **Recorded OpenRouter spend:** **USD 6.170259916 ≈ USD 6.17 of 10**, including failed attempts and experiments; this is the settled evaluation ledger, not a live balance. [Spend record](reports/submission/P2-A.md#spend-and-excluded-attempt).
 
