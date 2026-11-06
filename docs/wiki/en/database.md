@@ -2,9 +2,9 @@
 
 [Wiki](index.md) · [English](../en/database.md) · [Español](../es/database.md)
 
-The relational schema, numeric authority and concrete rows behind the tools.
+The tools query this schema for catalogue data. Alongside the figures, the database keeps each entry's source and the history needed to continue a conversation.
 
-T9 adds `series76.example_bank`, `concept_anchor` and `example_dataset` through migrations 007/008: 768-dimensional vectors, phrasings/interpretations, provenance, active state and versioned manifests. They are not a source of technical figures. The diagram and queries below show the relational core; [glibc-compatible pgvector pin](operations.md#pgvector) and [bank loading](operations.md#example-bank).
+Migrations 007/008 added `series76.example_bank`, `concept_anchor` and `example_dataset`. They store interpretation examples, 768-dimensional vectors and their versions. Product figures still come from the catalogue tables. The diagram below shows the relational core; the [operations guide](operations.md#pgvector) explains the pgvector image and [example loading](operations.md#example-bank).
 
 ```mermaid
 erDiagram

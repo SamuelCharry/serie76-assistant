@@ -2,11 +2,13 @@
 
 [Wiki](index.md) · [English](../en/api.md) · [Español](../es/api.md)
 
-After login, `What is the motor power of 761A00-11300000/A?` works keyless and returns the published **15 W**. A single named field for one complete valid code (including `FLA of 761A00-11300000/A at 60 Hz` or `operating time of 761A00-11300000/A`), greetings and explicit code comparisons use SQL/templates with zero model calls. Ambiguous requests, extra conditions and free-language selection need `OPENROUTER_API_KEY` plus `OPENROUTER_CHAT_MODEL`; without them those interpretation requests return 503 `not_configured`. The field route uses the same answer planner as an equivalent LLM lookup decision.
+To try the API, log in and send `What is the motor power of 761A00-11300000/A?`. It should answer **15 W**. This works without an OpenRouter key because the backend can resolve it directly. Questions that need interpretation require a configured model; missing configuration returns `503 not_configured`.
 
-The complete HTTP surface and the failures a client must handle.
+This page covers routes, example requests and errors the app needs to handle. The [agent guide](agent.md) explains how the backend chooses between a direct lookup and a model call.
 
-All `/api/*` routes require `Authorization: Bearer <TOKEN>` except login. Tokens expire after 12 hours and logout revokes the current token. Ownership is checked before model invocation; foreign or quarantined conversations return 404. API responses use `Cache-Control: no-store`. Copy examples from the repository root; use `curl.exe` on Windows PowerShell (avoid the `curl` alias). TOKEN, SESSION_ID and MESSAGE_ID below are placeholders, never public credentials.
+All `/api/*` routes except login require `Authorization: Bearer <TOKEN>`. Tokens last 12 hours, and logout revokes the current token. The server checks conversation ownership before calling the model; another user's conversation or quarantined history returns 404. Responses use `Cache-Control: no-store`.
+
+Run the examples from the repository root. Use `curl.exe` in PowerShell to avoid the Windows alias. Replace TOKEN, SESSION_ID and MESSAGE_ID with values from your session; they are example placeholders, not credentials.
 
 ## Endpoint map
 

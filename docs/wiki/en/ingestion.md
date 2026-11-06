@@ -2,7 +2,7 @@
 
 [Wiki](index.md) · [English](../en/ingestion.md) · [Español](../es/ingestion.md)
 
-How the electrical PDF becomes a validated catalogue without an LLM.
+The first step was turning the PDF tables into queryable data without losing units, notes or context. This page explains the local OCR pipeline and the checks made before loading the catalogue.
 
 ```mermaid
 flowchart LR

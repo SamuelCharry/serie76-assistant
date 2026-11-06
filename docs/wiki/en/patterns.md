@@ -2,7 +2,7 @@
 
 [Wiki](index.md) · [English](../en/patterns.md) · [Español](../es/patterns.md)
 
-Pattern — where — why: decisions to defend in review.
+These are the implementation decisions, with links to the code and an explanation of their benefits and costs. For a shorter overview, start with the [main design decisions](https://github.com/SamuelCharry/serie76-assistant/wiki/Decisiones) (in Spanish).
 
 ### T8/T9: decisions and costs
 

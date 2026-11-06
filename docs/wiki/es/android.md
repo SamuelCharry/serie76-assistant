@@ -2,7 +2,7 @@
 
 [Wiki](index.md) · [English](../en/android.md) · [Español](../es/android.md)
 
-Compilar, recorrer y diagnosticar el cliente nativo Kotlin/Compose.
+La app está hecha en Kotlin y Compose. Esta guía explica cómo compilarla, qué hace cada pantalla y dónde buscar cuando falla una petición.
 
 ```mermaid
 flowchart LR
@@ -103,15 +103,17 @@ La escucha dura como máximo 60 s y espera final hasta 15 s después de parar. E
 
 Configura `DEV_DEBUG=true` en `.env` y ejecuta `docker compose up -d backend`. En el drawer toca el **nombre/email del perfil siete veces en tres segundos**; el toast `Developer mode on` confirma el modo. Repite para apagarlo. Se guarda localmente y empieza apagado; tocar el avatar abre el menú de cuenta, no el gesto. No existe entrada Developer debug en el menú.
 
-Cada respuesta del asistente muestra **ⓘ** (`Debug details`) cuando el modo está activo, también en conversaciones reabiertas. El sheet consulta perezosamente `GET /api/messages/{id}/debug`; comprueba el ID y permite expandir, seleccionar/copiar JSON y desplazar secciones. Muestra herramientas, parámetros crudos/validados/fusionados, filas, latencia, intentos, `llm_called`, ejemplos/similitudes/conceptos de retrieval. Los campos ausentes quedan `null`.
+Con el modo activo, cada respuesta muestra **ⓘ** (`Debug details`), también al reabrir una conversación. La app descarga la traza desde `GET /api/messages/{id}/debug` solo cuando la abres. Puedes expandir las secciones y copiar su JSON.
+
+Para empezar, mira la herramienta, los datos devueltos y `llm_called`. Los parámetros crudos son los originales registrados; los validados ya pasaron los controles; los fusionados incluyen requisitos anteriores. El contexto antes/después muestra qué cambió en el turno. Los campos que no se registraron quedan `null`.
 
 La respuesta HTTP es `{message_id,session_id,tool_calls,debug}`. Un 404 muestra `Backend debug is disabled (DEV_DEBUG=false)`, aunque también puede significar respuesta inexistente; otros fallos permiten Try again. Ambas variantes comparten el flujo: ocultarlo es presentación; token, propiedad y `DEV_DEBUG` son los controles de acceso.
 
 ## Verificación T8/T9
 
-Evidencia vigente en emulador: [8/8 pruebas de aceptación](../../../reports/submission/P2-D.md). Login/tarjetas/comparación reales sin claves se distinguen de debug, errores, demora y voz controlados. Reconocimiento real y fallos de login/debug siguen pendientes de comprobación manual. Los conteos JVM siguientes son históricos.
+Las [8/8 pruebas de emulador](../../../reports/submission/P2-D.md) combinan login, tarjetas y comparación contra el backend real sin claves con respuestas controladas para debug, errores, demora y voz. Además, el autor confirmó manualmente reconocimiento real con micrófono en el emulador el 2026-11-06, sin un artefacto automatizado adicional. La validación física y la cobertura completa de fallos de login/debug siguen pendientes. Los conteos JVM de abajo corresponden a versiones anteriores.
 
-[T8](../../../reports/submission/T8-android.md): 51 pruebas JVM; [T9 revisado](../../../reports/submission/T9-android.md): **74 pruebas JVM**, APK debug y release (sin firmar). Los dobles de reconocimiento verifican permiso, parcial/final, cancelación y callbacks tardíos; fixtures HTTP verifican trazas guardadas. La compilación de instrumentación no equivale a ejecutarla. Pendientes: voz real y sus servicios/idiomas, accesibilidad/rendering, backend fusionado y flujo con LLM real.
+[T8](../../../reports/submission/T8-android.md) registró 51 pruebas JVM y [T9](../../../reports/submission/T9-android.md), **74 pruebas JVM** y los APK debug y release sin firmar. El reconocedor simulado permite probar resultados parciales/finales, cancelación y callbacks tardíos; las respuestas HTTP controladas permiten comprobar trazas guardadas. Compilar las pruebas de instrumentación no significa haberlas ejecutado. La variedad de servicios/idiomas de voz, accesibilidad y el recorrido completo con un modelo real requieren pruebas aparte.
 
 ## Dónde está en el código
 

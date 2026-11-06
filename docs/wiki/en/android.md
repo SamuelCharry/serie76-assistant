@@ -2,7 +2,7 @@
 
 [Wiki](index.md) · [English](../en/android.md) · [Español](../es/android.md)
 
-Build, navigate and diagnose the native Kotlin/Compose client.
+The app is built with Kotlin and Compose. This guide covers building it, using its screens and finding the cause of a failed request.
 
 ```mermaid
 flowchart LR
@@ -109,9 +109,9 @@ The HTTP contract is `{message_id,session_id,tool_calls,debug}`. A 404 displays 
 
 ## T8/T9 verification
 
-Current emulator evidence: [8/8 acceptance tests](../../../reports/submission/P2-D.md). Real keyless login/cards/comparison are separate from controlled debug, fault, delay and voice inputs. Actual recognition and login/debug error paths remain manual checks. Older JVM counts below are historical snapshots.
+The [8/8 emulator checks](../../../reports/submission/P2-D.md) combine real backend login, cards and comparison without a model key with controlled responses for debug, errors, delays and voice. The author also confirmed real microphone recognition in the emulator on 2026-11-06, without an additional automated artifact. Physical-device validation and full login/debug error coverage remain pending. The JVM counts below refer to earlier versions.
 
-[T8](../../../reports/submission/T8-android.md): 51 JVM tests; [reviewed T9](../../../reports/submission/T9-android.md): **74 JVM tests**, debug and unsigned release APKs. Fake recognizers verify permission, partial/final text, cancellation and late callbacks; HTTP fixtures verify persisted traces. Compiling instrumentation does not mean executing it. Pending: actual recognition services/languages, accessibility/rendering, merged backend and real-model flow.
+[T8](../../../reports/submission/T8-android.md) recorded 51 JVM tests; [T9](../../../reports/submission/T9-android.md) recorded **74 JVM tests** and debug/unsigned release APKs. Fake recognizers make partial/final text, cancellation and late callbacks testable; controlled HTTP responses check saved traces. Compiling instrumentation tests does not mean running them. Different voice services/languages, accessibility and the full flow with a real model need separate tests.
 
 ## Where in the code
 

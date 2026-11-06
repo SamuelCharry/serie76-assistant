@@ -2,7 +2,7 @@
 
 [Wiki](index.md) · [English](../en/index.md) · [Español](../es/index.md)
 
-A reading map for someone opening the repository for the first time.
+Start with the README if you want to run the app. These pages go into more detail about each part. The published wiki provides a shorter walkthrough organized around the assessment.
 
 ```mermaid
 flowchart LR

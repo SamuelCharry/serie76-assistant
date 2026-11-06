@@ -2,9 +2,9 @@
 
 [Wiki](index.md) · [English](../en/testing.md) · [Español](../es/testing.md)
 
-What each suite proves, and what still requires real-provider acceptance.
+Different tests answer different questions. Some check the code; others measure how the model interprets a conversation. This page lists the commands and explains the scope of each group.
 
-A scripted model returns predetermined tool calls; the real tools then execute validation, SQL and rendering. That proves deterministic behavior and persistence, not language understanding. Real-provider cohorts test interpretation separately. No test command below authorizes paid inference.
+In scripted tests, the model decision is fixed in advance. The real tools, SQL and answer-building code then run from that decision. This helps find code defects without paying for each attempt, but it does not measure language understanding. Real-provider evaluations cover that separately. Commands that perform paid inference require authorization before running.
 
 - [test_reviewed_catalog.py](../../../tests/test_reviewed_catalog.py): Evaluation-only manual reference and exact correction fixtures.
 - [test_dynamic_geometry.py](../../../tests/test_dynamic_geometry.py): Novel rows, shifts and table reconstruction.

@@ -2,9 +2,11 @@
 
 [Wiki](index.md) · [English](../en/operations.md) · [Español](../es/operations.md)
 
-Configuration defaults and recovery without destroying catalogue or history.
+This page collects configuration options and steps for fixing startup or connection problems while keeping the catalogue and history intact.
 
-Docker Compose is the supported backend path. Copy the example only when no local configuration exists; do not overwrite a working .env. Startup migrates, imports the validated catalogue/glossary and provisions TEST ONLY users idempotently before Uvicorn. The PostgreSQL volume persists across restart and ordinary compose down; never run `docker compose down -v`.
+Use Docker Compose to start the backend. Copy `.env.example` only if you do not already have a `.env`. Before starting Uvicorn, the entrypoint applies migrations, loads the validated data and creates any missing TEST ONLY accounts.
+
+The PostgreSQL volume keeps its data across restarts and `docker compose down`. Do not add `-v`: that would remove the volume containing the catalogue and history.
 
 For an independent second checkout, add `COMPOSE_PROJECT_NAME=serie76-clean`, `POSTGRES_PORT=55432` and `API_PORT=18000` to its `.env` before running Compose. Use `http://localhost:18000` in HTTP examples and `-PbackendUrl=http://10.0.2.2:18000/` for its emulator build. These names and ports isolate this checkout; keep its database password consistent with its own volume.
 

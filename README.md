@@ -1,6 +1,10 @@
 # Series 76 Technical Assistant
 [English](README.md) · [Español](README.es.md)
 
+An Android app for looking up Series 76 actuators, comparing models and continuing a conversation without repeating every requirement. The model helps interpret the question; product values come from the PostgreSQL catalogue.
+
+Use the steps below to try it. For the story behind the implementation, see the [wiki](https://github.com/SamuelCharry/serie76-assistant/wiki), [design decisions](https://github.com/SamuelCharry/serie76-assistant/wiki/Decisiones) and [development timeline with AI](https://github.com/SamuelCharry/serie76-assistant/wiki/Como-use-IA) (in Spanish).
+
 ## Quick start
 
 1. **Requirements:** Git, Docker running Linux containers; Android Studio, **JDK 17**, SDK Platform 36 and a running API 26+ emulator. Run commands from the repository root; set `JAVA_HOME` to JDK 17 and `ANDROID_HOME` to your Android SDK.
@@ -24,7 +28,7 @@ Without a key, login/history and deterministic queries work; free-language inter
 
 ## Overview
 
-Native Android assistant for selecting Series 76 actuators: FastAPI, one LangChain decision and PostgreSQL. The LLM interprets; SQL and templates produce the numbers. Answers are English-only; input may also be Spanish.
+The app uses Kotlin and Compose. It connects to a FastAPI backend, which uses LangChain when a question needs language interpretation and PostgreSQL to look up the data. You can write in English or Spanish; the app replies in English.
 
 ```mermaid
 flowchart LR
@@ -40,17 +44,15 @@ flowchart LR
 
 ## Assessment status
 
-| Feature | Verified evidence | Remaining limit |
-|---|---|---|
-| OCR and PostgreSQL catalogue | [941/941 primary checks](docs/evidence/ocr.md), idempotent loading | New layouts need validation |
-| Multi-turn selection | [Paired v17 mean 79.4%, 0/18,792 wrong figures](reports/submission/P2-A.md) | About 20% of conversations fail; repairs are separate from measured results |
-| Public text and hidden debug | [Executable text audit](reports/submission/P2-B.md), [emulator checks](reports/submission/P2-D.md) | Detector coverage is finite; debug transport was controlled |
-| Android interaction and voice | [8/8 emulator tests](reports/submission/P2-D.md) | Physical-device voice and login/debug fault paths need checks |
-| Login, private history, Docker | [Linux CI](reports/submission/P2-C.md), [Windows clean clone](reports/submission/T18-tag-clean-clone.md) | Evaluator access and physical-device validation |
+The setup was tested from a [fresh clone of the submission tag](reports/submission/T18-tag-clean-clone.md). The repository also records [catalogue checks](docs/evidence/ocr.md) and [Android emulator tests](reports/submission/P2-D.md).
+
+The hardest part is still interpreting every condition in a conversation. The measured candidate passed **79.4%** of conversations on average. Later repairs passed offline tests but do not have a new model score. The results section below explains that distinction and links to the full evidence.
 
 ## Setup and backend
 
-**What:** Git and Docker with Linux containers; 64-bit Python 3.12 only for local OCR/tests. **How:** from the repository root, run your platform block; preserve an existing `.env`. Startup migrates, loads catalogue/glossary and provisions test users without resetting passwords. **Code:** [Compose](docker-compose.yml), [entrypoint](docker/entrypoint.sh); [operations](docs/wiki/en/operations.md).
+You need Git and Docker with Linux containers to run the backend. Install 64-bit Python 3.12 only if you want to run OCR or tests outside Docker.
+
+Run your platform's block from the repository root. Keep an existing `.env`: startup applies migrations, loads the catalogue and glossary, and creates any missing test accounts without changing existing passwords. Those steps live in [Compose](docker-compose.yml) and the [entrypoint](docker/entrypoint.sh). The [operations guide](docs/wiki/en/operations.md) covers ports and configuration problems.
 
 For an independent second checkout, add `COMPOSE_PROJECT_NAME=serie76-clean`, `POSTGRES_PORT=55432` and `API_PORT=18000` to its `.env` before running Compose. Use `http://localhost:18000` in HTTP examples and `-PbackendUrl=http://10.0.2.2:18000/` for its emulator build. These names and ports isolate this checkout; keep its database password consistent with its own volume.
 
@@ -96,11 +98,11 @@ This table covers the added embedding/debug settings. [.env.example](.env.exampl
 | demo@series76.test | Series76-Demo-1 |
 | reviewer@series76.test | Series76-Demo-2 |
 
-**What/how:** test use only; `DEMO_USERS_JSON=[]` disables new provisioning, never resets passwords. **Code:** [auth CLI](backend/auth/cli.py); [login and isolation](docs/wiki/en/api.md).
+These public accounts are only for trying the app. Set `DEMO_USERS_JSON=[]` if you do not want startup to create demo accounts. Existing passwords are never reset. [Account creation](backend/auth/cli.py) · [Login and private history](docs/wiki/en/api.md).
 
 ## Ingestion
 
-**What:** local OCR of the electrical PDF; evaluation references are excluded. **How:** install a separate environment and generate a new output. **Code:** [ingest.py](scripts/ingest.py); [pipeline, validation and loading](docs/wiki/en/ingestion.md).
+The extracted catalogue is included in the repository. To repeat the PDF extraction, use a separate environment and a new output folder. OCR runs locally and does not read the transcriptions used to evaluate its output. [Ingestion script](scripts/ingest.py) · [Validation and loading](docs/wiki/en/ingestion.md).
 
 ```sh
 # macOS/Linux
@@ -128,7 +130,11 @@ docker compose exec -T backend python -m backend.catalog.cli load data/extracted
 
 ## Example bank
 
-**What:** 658 user phrasings with interpretations and 100 anchors; never catalogue figures as knowledge. The historical Google load cost about **USD 0.005 estimated**. The OpenRouter reload under `google/gemini-embedding-2` cost about **USD 0.0015**; retrieval filters by this exact model name. These are run estimates, not guaranteed prices. **How:** inspect the dry-run; the second command performs inference and requires authorization. The mount supplies `config/`, absent from the image. **Code:** [loader](scripts/load_example_bank.py), [embeddings](backend/conversation/embeddings.py); [loading, provenance and keyless behavior](docs/wiki/en/operations.md#example-bank).
+The bank contains 658 ways of asking for information, their interpretations, and 100 concept anchors. It helps interpret a phrase; product values still come from SQL.
+
+The historical Google load cost about **USD 0.005 estimated**, and the OpenRouter reload with `google/gemini-embedding-2` cost about **USD 0.0015**. These are costs from those runs, not guaranteed prices. Retrieval filters by the exact model name to avoid mixing vectors.
+
+Check the dry-run first. The second command creates embeddings and spends credit, so it requires authorization. The mount supplies `config/`, which is not included in the image. [Loader](scripts/load_example_bank.py) · [Retrieval](backend/conversation/embeddings.py) · [Configuration details](docs/wiki/en/operations.md#example-bank).
 
 The bank is optional for keyless operation. With no model configured, `--dry-run` reports all supplied examples/anchors without a database, API key or inference (`scope: input_only`); it does not check existing vectors. With an explicit model it checks pending rows in the running DB, still without inference. The default `.env.example` already names an embedding model, even with an empty API key, so the first command below checks the running database and reports `scope: model_pending`; keyless does not mean model-less. The second command below loads vectors for the named model and must wait for paid-inference authorization; configure that same model for backend retrieval.
 
@@ -141,7 +147,9 @@ Without a model retrieval is disabled; missing keys, timeout or SQL failure omit
 
 ## Android
 
-**What:** Kotlin/Compose, one question card, recommendations, actions and deletion with Undo. **How:** Android Studio, JDK 17, SDK Platform 36, API 26+ emulator/device; open `mobile/android`, select app/debug and Run, or use your block from the root. **Code:** [app](mobile/android/app/src/main/java/com/serie76/assistant), [build](mobile/android/app/build.gradle.kts); [Android guide](docs/wiki/en/android.md).
+Open `mobile/android` in Android Studio, select `app/debug` and press Run. You need JDK 17, SDK Platform 36 and an API 26+ emulator or device. You can also build from the repository root with the commands below.
+
+The app displays questions, product cards and comparisons. It also lets you reopen conversations and undo a pending deletion. [App source](mobile/android/app/src/main/java/com/serie76/assistant) · [Build configuration](mobile/android/app/build.gradle.kts) · [Android guide](docs/wiki/en/android.md).
 
 Before building, run `java -version` and confirm **JDK 17**. Set `JAVA_HOME` to that JDK installation and put its `bin` first on PATH; set `ANDROID_HOME` to the SDK folder containing `platforms/android-36`. Android Studio's SDK Manager installs SDK Platform 36. Add the SDK's `platform-tools` to PATH before using `adb`. JDK 17 is the documented validation baseline; success on another JDK does not establish that baseline.
 
@@ -187,7 +195,9 @@ Open Series 76 and use a test account. Emulator backend: `http://10.0.2.2:8000/`
 
 **Models:** `google/gemini-3.6-flash` is the only chat model; fallback is disabled (`OPENROUTER_FALLBACK_MODEL=`). Embeddings use `google/gemini-embedding-2`. Flash was selected for the observed quality/latency balance in the [historical paired model comparison](docs/wiki/en/testing.md#openrouter-model-selection), not universal superiority. One completed tool decision per interpreted turn; deterministic routes make no model call. SQL and templates provide figures; retrieval only adds unresolved interpretation fields. [Architecture](docs/wiki/en/agent.md) · [Trade-offs](docs/wiki/en/patterns.md).
 
-**Adopted improvement:** the owner authorized the improved Flash version as an explicit exception to the pre-registered no-regression rule; the original absolute integrity target was not met. The [paired evaluation and repair record](reports/submission/P2-A.md) distinguishes the measured candidate from subsequent offline repairs. Both new regressions and the shared relative-bound defects were repaired with regression tests. Repaired source `1dda5f2` passed **797 tests (795 passed, 2 skipped)**, the **119/119** expanded oracle and all required offline gates. The paid scores below belong only to measured candidate `3ede96c`; v17 became regression material during repair, and the repaired source has no independent paid evaluation.
+The improved version handled more conversations but introduced two regressions. I accepted it as an exception to the original no-new-regressions rule; it had not met the absolute integrity target either. The new errors and relative-bound defects shared by both versions were fixed afterwards.
+
+These are two separate stages. The table below describes candidate `3ede96c`. Repaired source `1dda5f2` passed **795 Python tests, with 2 skipped**, **119/119** controlled-decision cases and the other required offline checks. It did not receive a new independent paid evaluation: once v17 was used to fix bugs, it became regression material. The [full report](reports/submission/P2-A.md) records both stages.
 
 Three paired runs on the same 60 previously unseen, multi-turn conversations (v17) used the same model, catalogue and retrieval:
 

@@ -2,7 +2,7 @@
 
 [Wiki](index.md) · [English](../en/patterns.md) · [Español](../es/patterns.md)
 
-Patrón — dónde — por qué: decisiones que defender en revisión.
+Estas son las decisiones de implementación, con enlaces al código y una explicación de lo que aportan y lo que complican. Para una lectura más corta, empieza por [las decisiones principales](https://github.com/SamuelCharry/serie76-assistant/wiki/Decisiones).
 
 ### T8/T9: decisiones y costes
 

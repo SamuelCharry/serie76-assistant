@@ -1,10 +1,12 @@
 # Submission audit
 
-Audited 2026-11-06 against all six pages of the [assessment](assessment-en.pdf). Delivery documentation now includes final-tag T18 evidence on `main`. PR #10 was merged at `ac56dee`; `v1.0-submission` remains fixed at that tested code. Subsequent changes are documentation only. Historical reports apply to their recorded source versions.
+This checklist follows the six-page [assessment](assessment-en.pdf). Each requirement links to the code or test that supports it, and notes where the evidence is still incomplete.
+
+The application was merged in PR #10 at `ac56dee` and tagged `v1.0-submission`. The later changes on `main` add documentation, including the T18 test of a fresh clone of that tag. Older reports describe the versions they tested.
 
 ## Requirement-by-requirement checklist
 
-Checklist totals: **47 items — 40 ✅ / 7 ⚠️**. Each row counts as one obligation, including optional features and delivery. ✅ means implemented/evidenced within the stated scope; ⚠️ means missing or weak acceptance evidence. Local tests do not establish device behavior or generalization.
+There are **47 items: 40 ✅ and 7 ⚠️**, including optional features and delivery. A check means the feature is implemented with the evidence described in that row. A warning means some verification is still missing or limited. Passing local tests alone does not prove device behavior or performance on new conversations.
 
 ### Backend and data: sections 1–5
 
@@ -106,11 +108,11 @@ Merge and tag are complete. Reply to the original email after granting and verif
 >
 > Please start with the README **Quick start**. TEST ONLY accounts: `demo@series76.test` / `Series76-Demo-1` and `reviewer@series76.test` / `Series76-Demo-2`.
 >
-> Local OCR passed 941/941 primary checks. Before the final offline repairs, the single-model assistant averaged 79.4% versus 61.1% in three paired runs on 60 unseen multi-turn conversations, with no wrong figures among 18,792 checked values; roughly 20% of conversations still failed. Adoption was an explicit exception to the original no-regression rule, with subsequent repairs passing 797 tests (two skipped) and a 119-case oracle; the repaired source has no new paid score. Synthetic ranking reached NDCG@3 0.965 and compliance 1.0.
+> The repository includes the backend, Android app, PDF ingestion pipeline and processed catalogue. The wiki explains the architecture, the main decisions and how I used AI during development.
 >
-> Linux keyless Quick start, Windows clean-clone reproduction and 8/8 Android emulator checks passed in the documented runs. Real voice recognition in the emulator was subsequently confirmed manually by the author; physical-device validation remains pending. Improved-version client latency was p95 6.69 s, with three turns over 10 s. Recorded OpenRouter spend was approximately USD 6.17 of USD 10.
+> I tested the setup from a fresh clone and included the results and known limitations. The measured model candidate passed 79.4% of conversations on average; later fixes have offline tests but no new independent model score. I also tested voice recognition manually in the emulator, though I have not validated it on a physical device. Recorded OpenRouter spend was approximately USD 6.17 of the USD 10 budget.
 >
-> The repository documents reproduction steps, trade-offs, repair evidence and remaining limitations.
+> The README should provide everything needed to run the project. The detailed checklist and reports are linked from the wiki.
 >
 > Best regards,
 > Samuel

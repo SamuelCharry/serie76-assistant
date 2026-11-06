@@ -2,11 +2,13 @@
 
 [Wiki](index.md) · [English](../en/agent.md) · [Español](../es/agent.md)
 
-Después del login, `What is the motor power of 761A00-11300000/A?` funciona sin clave y devuelve los **15 W** publicados. Un campo explícito para un único código completo válido (incluidos `FLA of 761A00-11300000/A at 60 Hz` y `operating time of 761A00-11300000/A`), los saludos y las comparaciones explícitas de códigos usan SQL/plantillas sin llamadas al modelo. Las consultas ambiguas, condiciones adicionales y selección en lenguaje libre requieren `OPENROUTER_API_KEY` y `OPENROUTER_CHAT_MODEL`; sin ellos esas consultas de interpretación devuelven 503 `not_configured`. La ruta de campo usa el mismo planificador de respuesta que una decisión LLM de consulta equivalente.
+Una forma sencilla de seguir el flujo es preguntar `What is the motor power of 761A00-11300000/A?`. El código y el campo están claros, así que el backend consulta SQL y responde **15 W** sin llamar al modelo.
 
-Cómo una decisión LangChain se convierte en respuesta técnica validada y reproducible.
+Lo mismo ocurre con un campo concreto de un código válido, los saludos y las comparaciones explícitas. Si la pregunta es ambigua, añade condiciones o pide una selección libre, hace falta interpretar el lenguaje. Esa ruta usa `OPENROUTER_API_KEY` y `OPENROUTER_CHAT_MODEL`; sin configuración devuelve `503 not_configured`. Ambas rutas comparten el planificador que construye la respuesta.
 
-Las respuestas, mensajes fijos y sugerencias son solo en inglés por decisión de producto; la entrada puede ser española. El LLM interpreta una herramienta por turno y nunca redacta texto, tablas ni sugerencias.
+Esta guía sigue ese recorrido y explica dónde se comprueban los requisitos, los datos y la respuesta final.
+
+La app responde en inglés, aunque el usuario puede escribir en español. En los turnos que necesitan interpretación, el modelo elige una herramienta y sus argumentos. El texto final, las tablas y las sugerencias se construyen en código.
 
 ```mermaid
 sequenceDiagram

@@ -2,9 +2,9 @@
 
 [Wiki](index.md) · [English](../en/testing.md) · [Español](../es/testing.md)
 
-Qué prueba cada suite y qué necesita todavía aceptación con proveedor real.
+No todas las pruebas responden la misma pregunta. Algunas comprueban el código; otras miden cómo interpreta el modelo una conversación. Aquí están los comandos y el alcance de cada grupo.
 
-Un modelo programado devuelve herramientas predeterminadas; las herramientas reales ejecutan validación, SQL y renderizado. Prueba comportamiento determinista y persistencia, no comprensión del lenguaje. Las cohortes reales prueban interpretación aparte. Ningún comando siguiente autoriza inferencia pagada.
+En las pruebas programadas, la decisión del modelo ya está fijada. A partir de ella se ejecutan las herramientas reales, SQL y la construcción de la respuesta. Esto permite encontrar errores del código sin gastar en cada intento, pero no mide comprensión del lenguaje. Para eso están las evaluaciones con el proveedor real. Los comandos que hacen inferencia pagada necesitan autorización antes de ejecutarse.
 
 - [test_reviewed_catalog.py](../../../tests/test_reviewed_catalog.py): Referencia manual y correcciones exactas, solo evaluación.
 - [test_dynamic_geometry.py](../../../tests/test_dynamic_geometry.py): Filas nuevas, desplazamientos y reconstrucción de tablas.

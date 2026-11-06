@@ -2,7 +2,7 @@
 
 [Wiki](index.md) · [English](../en/ingestion.md) · [Español](../es/ingestion.md)
 
-Cómo el PDF eléctrico se convierte en catálogo validado sin un LLM.
+El primer paso fue convertir las tablas del PDF en datos que se pudieran consultar sin perder unidades, notas ni contexto. Aquí se explica cómo lo hace el OCR local y qué se revisa antes de cargar el catálogo.
 
 ```mermaid
 flowchart LR

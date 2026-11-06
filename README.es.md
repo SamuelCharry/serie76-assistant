@@ -1,12 +1,16 @@
 # Series 76 Technical Assistant
 [English](README.md) · [Español](README.es.md)
 
+Una app para consultar las tablas de actuadores Series 76, comparar modelos y continuar una conversación sin repetir todo. El modelo ayuda a entender la pregunta; las cifras salen del catálogo en PostgreSQL.
+
+Abajo están los pasos para probarla. Para conocer el proyecto, puedes empezar por la [wiki](https://github.com/SamuelCharry/serie76-assistant/wiki), las [decisiones de diseño](https://github.com/SamuelCharry/serie76-assistant/wiki/Decisiones) o la [cronología del trabajo con IA](https://github.com/SamuelCharry/serie76-assistant/wiki/Como-use-IA).
+
 ## Inicio rápido
 
 1. **Requisitos:** Git, Docker con contenedores Linux; Android Studio, **JDK 17**, SDK Platform 36 y un emulador API 26+ encendido. Ejecuta desde la raíz del repositorio; configura `JAVA_HOME` con JDK 17 y `ANDROID_HOME` con tu SDK Android.
 2. **Configurar:** `cp .env.example .env` (Windows: `copy .env.example .env`), solo si no existe `.env`. Pega tu clave OpenRouter en `OPENROUTER_API_KEY` para interpretación de pago; déjala vacía para arrancar sin clave. Para ver detalles de debug local, configura `DEV_DEBUG=true` antes de arrancar.
 3. **Arrancar:** `docker compose up -d --build` (ambos sistemas). El arranque carga el catálogo y crea las cuentas TEST ONLY de abajo sin restablecer contraseñas existentes.
-4. **Salud:** abre [http://localhost:8000/ready](http://localhost:8000/ready); espera HTTP 200 tras compilar/cargar. [API / Swagger](http://localhost:8000/docs). Comprueba base de datos/catálogo/glosario, no OpenRouter.
+4. **Comprobar el arranque:** abre [http://localhost:8000/ready](http://localhost:8000/ready) y espera una respuesta HTTP 200. Esto confirma que la base de datos, el catálogo y el glosario están listos. Para explorar la API, abre [Swagger](http://localhost:8000/docs). La disponibilidad de OpenRouter se comprueba por separado.
 5. **Login:** usa cualquiera de estas cuentas públicas **TEST ONLY**:
 
 | Correo | Contraseña pública de prueba |
@@ -24,7 +28,7 @@ Sin clave funcionan login/historial y consultas deterministas; la interpretació
 
 ## Descripción
 
-Asistente Android nativo para seleccionar actuadores Series 76: FastAPI, una decisión LangChain y PostgreSQL. El LLM interpreta; SQL y plantillas producen las cifras. Respuestas en inglés, entrada también en español.
+La app está hecha en Kotlin y Compose. Se conecta a un backend FastAPI que usa LangChain cuando necesita interpretar lenguaje y PostgreSQL para consultar los datos. Puedes escribir en español o inglés; las respuestas de la app están en inglés.
 
 ```mermaid
 flowchart LR
@@ -40,17 +44,15 @@ flowchart LR
 
 ## Estado
 
-| Función | Evidencia verificada | Límite pendiente |
-|---|---|---|
-| OCR y catálogo PostgreSQL | [941/941 comprobaciones primarias](docs/evidence/ocr.md), carga idempotente | Validar diseños nuevos |
-| Selección de varios turnos | [v17 pareado: media 79,4 %, 0/18.792 cifras incorrectas](reports/submission/P2-A.md) | Falla cerca del 20 %; las correcciones son posteriores a la medición |
-| Texto público y debug oculto | [Auditoría ejecutable](reports/submission/P2-B.md), [emulador](reports/submission/P2-D.md) | Cobertura limitada del detector; transporte debug controlado |
-| Interacción Android y voz | [8/8 pruebas en emulador](reports/submission/P2-D.md) | Reconocimiento real y fallos de login/debug por comprobar |
-| Login, historial privado, Docker | [CI Linux](reports/submission/P2-C.md), [clon Windows](reports/submission/T18-tag-clean-clone.md) | Tag/acceso final y validación física |
+El recorrido completo de instalación se probó desde un [clon de la etiqueta de entrega](reports/submission/T18-tag-clean-clone.md). También están registrados los [controles del catálogo](docs/evidence/ocr.md) y las [pruebas de Android en emulador](reports/submission/P2-D.md).
+
+La parte más difícil sigue siendo interpretar bien todas las condiciones de una conversación. El candidato medido aprobó una media de **79,4 %** de los casos; las correcciones posteriores se probaron offline y no tienen una nueva puntuación del modelo. Más abajo explico esa diferencia y enlazo los resultados completos.
 
 ## Setup y backend
 
-**Qué:** Git y Docker con contenedores Linux; Python 3.12 de 64 bits solo para OCR/pruebas locales. **Cómo:** desde la raíz, ejecuta el bloque de tu sistema; conserva cualquier `.env` existente. El arranque migra, carga catálogo/glosario y crea usuarios de prueba sin cambiar contraseñas. **Código:** [Compose](docker-compose.yml), [entrypoint](docker/entrypoint.sh); [operaciones](docs/wiki/es/operations.md).
+Para arrancar el backend necesitas Git y Docker con contenedores Linux. Python 3.12 de 64 bits solo hace falta si vas a ejecutar el OCR o las pruebas fuera de Docker.
+
+Ejecuta el bloque de tu sistema desde la raíz del repositorio. Conserva tu `.env` si ya existe: el arranque aplica las migraciones, carga el catálogo y el glosario, y crea las cuentas de prueba que falten sin cambiar sus contraseñas. Puedes ver esos pasos en [Compose](docker-compose.yml) y el [script de arranque](docker/entrypoint.sh). La [guía de operaciones](docs/wiki/es/operations.md) cubre puertos y problemas de configuración.
 
 Para un segundo checkout independiente, añade `COMPOSE_PROJECT_NAME=serie76-clean`, `POSTGRES_PORT=55432` y `API_PORT=18000` a su `.env` antes de ejecutar Compose. Usa `http://localhost:18000` en los ejemplos HTTP y `-PbackendUrl=http://10.0.2.2:18000/` al compilar para su emulador. Estos nombres y puertos aíslan el checkout; conserva la contraseña de su propio volumen.
 
@@ -94,11 +96,11 @@ Esta tabla cubre las variables añadidas de embeddings/debug. [.env.example](.en
 | demo@series76.test | Series76-Demo-1 |
 | reviewer@series76.test | Series76-Demo-2 |
 
-**Qué/cómo:** solo pruebas; `DEMO_USERS_JSON=[]` desactiva nuevas altas, nunca restablece contraseñas. **Código:** [CLI auth](backend/auth/cli.py); [login y aislamiento](docs/wiki/es/api.md).
+Estas cuentas son públicas y sirven solo para probar la app. Si no quieres que el arranque cree cuentas demo, configura `DEMO_USERS_JSON=[]`. Las contraseñas de cuentas existentes no se restablecen. [Creación de usuarios](backend/auth/cli.py) · [Login e historial por usuario](docs/wiki/es/api.md).
 
 ## Ingestión
 
-**Qué:** OCR local del PDF eléctrico; no usa referencias de evaluación. **Cómo:** instala el entorno separado y genera una salida nueva. **Código:** [ingest.py](scripts/ingest.py); [pipeline, validación y carga](docs/wiki/es/ingestion.md).
+El repositorio incluye el catálogo ya extraído. Si quieres repetir la extracción del PDF, usa un entorno separado y una carpeta de salida nueva. El OCR corre localmente y no consulta las transcripciones usadas para evaluar sus resultados. [Script de ingesta](scripts/ingest.py) · [Cómo se validan y cargan los datos](docs/wiki/es/ingestion.md).
 
 ```sh
 # macOS/Linux
@@ -126,7 +128,11 @@ docker compose exec -T backend python -m backend.catalog.cli load data/extracted
 
 ## Banco de ejemplos
 
-**Qué:** 658 frases de usuario con interpretaciones y 100 anclas; nunca cifras del catálogo como conocimiento. La carga histórica Google costó aproximadamente **USD 0.005 estimados**. La recarga OpenRouter bajo `google/gemini-embedding-2` costó unos **USD 0.0015**; la recuperación filtra por ese nombre exacto. Son estimaciones de esas ejecuciones, no precios garantizados. **Cómo:** revisa el dry-run; la segunda orden hace inferencia y requiere autorización. El montaje aporta `config/`, ausente en la imagen. **Código:** [loader](scripts/load_example_bank.py), [embeddings](backend/conversation/embeddings.py); [carga, procedencia y comportamiento sin claves](docs/wiki/es/operations.md#example-bank).
+El banco contiene 658 formas de pedir información, sus interpretaciones y 100 anclas de conceptos. Sirve para ayudar al modelo a entender una frase; las cifras de los productos siguen saliendo de SQL.
+
+La carga histórica con Google costó unos **USD 0.005 estimados** y la recarga por OpenRouter, con `google/gemini-embedding-2`, unos **USD 0.0015**. Son costes de esas ejecuciones, no una tarifa garantizada. La recuperación usa el nombre exacto del modelo para no mezclar vectores.
+
+Revisa primero el dry-run. El segundo comando genera embeddings y consume crédito; requiere autorización. El montaje añade `config/`, que no está dentro de la imagen. [Carga del banco](scripts/load_example_bank.py) · [Recuperación](backend/conversation/embeddings.py) · [Detalles de configuración](docs/wiki/es/operations.md#example-bank).
 
 El banco es opcional para funcionar sin claves. Sin modelo configurado, `--dry-run` informa todos los ejemplos/anclas suministrados sin DB, clave ni inferencia (`scope: input_only`); no comprueba vectores existentes. Con un modelo explícito comprueba filas pendientes en la DB activa, también sin inferencia. La plantilla `.env.example` nombra un modelo incluso con clave vacía: el dry-run predeterminado consulta la DB y devuelve `scope: model_pending`, sin inferencia. El segundo comando carga vectores para el modelo indicado y exige autorización de inferencia pagada; configura ese mismo modelo para el retrieval del backend.
 
@@ -139,7 +145,9 @@ Sin modelo no hay retrieval; sin clave, con timeout o fallo SQL, se omiten las a
 
 ## Android
 
-**Qué:** Kotlin/Compose, preguntas en una tarjeta, recomendaciones, acciones y borrado con Undo. **Cómo:** Android Studio, JDK 17, SDK Platform 36, emulador/dispositivo API 26+; abre `mobile/android`, selecciona app/debug y Run, o usa tu bloque desde la raíz. **Código:** [app](mobile/android/app/src/main/java/com/serie76/assistant), [build](mobile/android/app/build.gradle.kts); [guía Android](docs/wiki/es/android.md).
+Abre `mobile/android` en Android Studio, selecciona `app/debug` y pulsa Run. Necesitas JDK 17, SDK Platform 36 y un emulador o dispositivo API 26+. También puedes compilar desde la raíz con los comandos de abajo.
+
+La app muestra preguntas, tarjetas de producto y comparaciones; permite retomar conversaciones y deshacer un borrado pendiente. [Código de la app](mobile/android/app/src/main/java/com/serie76/assistant) · [Configuración de compilación](mobile/android/app/build.gradle.kts) · [Guía Android](docs/wiki/es/android.md).
 
 Antes de compilar, ejecuta `java -version` y confirma **JDK 17**. Configura `JAVA_HOME` con esa instalación y pon su `bin` primero en PATH; configura `ANDROID_HOME` con la carpeta SDK que contiene `platforms/android-36`. SDK Manager de Android Studio instala SDK Platform 36. Añade `platform-tools` del SDK a PATH antes de usar `adb`. JDK 17 es la base de validación documentada; compilar con otro JDK no acredita esa base.
 
@@ -185,7 +193,9 @@ Abre Series 76 y usa una cuenta de prueba. Backend del emulador: `http://10.0.2.
 
 **Modelos:** `google/gemini-3.6-flash` es el único modelo de chat; fallback desactivado (`OPENROUTER_FALLBACK_MODEL=`). Embeddings: `google/gemini-embedding-2`. Flash se eligió por el equilibrio observado de calidad/latencia en la [comparación histórica pareada](docs/wiki/es/testing.md#selección-de-modelo-en-openrouter), no por superioridad universal. Una decisión completada por turno interpretado; las rutas deterministas no llaman al modelo. SQL y plantillas aportan cifras; la recuperación sólo añade campos de interpretación no resueltos. [Arquitectura](docs/wiki/es/agent.md) · [Decisiones](docs/wiki/es/patterns.md).
 
-**Mejora adoptada:** el propietario autorizó la versión mejorada de Flash como excepción explícita a la regla preinscrita de no introducir regresiones; tampoco se cumplió el objetivo original de integridad absoluta. El [informe de evaluación y reparación](reports/submission/P2-A.md) distingue el candidato medido de las correcciones offline posteriores. Las dos regresiones nuevas y los defectos compartidos de límites relativos se corrigieron con pruebas de regresión. El código reparado `1dda5f2` pasó **797 pruebas (795 aprobadas, 2 omitidas)**, el oráculo ampliado **119/119** y todos los controles offline obligatorios. Las puntuaciones pagadas siguientes pertenecen sólo al candidato medido `3ede96c`; v17 pasó a ser material de regresión durante las reparaciones y el código reparado no tiene evaluación pagada independiente.
+La versión mejorada resolvió más conversaciones, pero introdujo dos regresiones. Decidí adoptarla como una excepción a la regla inicial de no aceptar regresiones nuevas; tampoco había alcanzado el objetivo de integridad absoluta. Los errores nuevos y los límites relativos que fallaban en ambas versiones se corrigieron después.
+
+Conviene separar esas dos etapas. Las cifras de la tabla corresponden al candidato `3ede96c`. El código reparado `1dda5f2` pasó **795 pruebas Python, con 2 omitidas**, el conjunto de decisiones controladas **119/119** y los demás controles offline obligatorios. No se repitió una evaluación pagada independiente: después de usar v17 para corregir fallos, ya era material de regresión. El [informe completo](reports/submission/P2-A.md) conserva ambas etapas.
 
 Tres ejecuciones pareadas sobre las mismas 60 conversaciones inéditas de varios turnos (v17) mantuvieron modelo, catálogo y recuperación:
 

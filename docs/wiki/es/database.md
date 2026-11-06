@@ -2,9 +2,9 @@
 
 [Wiki](index.md) · [English](../en/database.md) · [Español](../es/database.md)
 
-Esquema relacional, autoridad numérica y filas concretas detrás de las herramientas.
+Las herramientas consultan este esquema para obtener los datos del catálogo. Además de las cifras, la base conserva de dónde salió cada entrada y el historial que permite continuar una conversación.
 
-T9 añade `series76.example_bank`, `concept_anchor` y `example_dataset` mediante migraciones 007/008: vectores de 768 dimensiones, frases/interpretaciones, procedencia, actividad y manifiestos versionados. No son fuente de cifras técnicas. El diagrama y consultas siguientes muestran el núcleo relacional; [pin pgvector compatible con glibc](operations.md#pgvector) y [carga del banco](operations.md#example-bank).
+Las migraciones 007/008 añadieron `series76.example_bank`, `concept_anchor` y `example_dataset`. Guardan ejemplos de interpretación, vectores de 768 dimensiones y sus versiones. No aportan cifras técnicas: esas siguen en las tablas del catálogo. El diagrama de abajo muestra el núcleo relacional; la [guía de operaciones](operations.md#pgvector) explica la imagen de pgvector y la [carga de ejemplos](operations.md#example-bank).
 
 ```mermaid
 erDiagram
