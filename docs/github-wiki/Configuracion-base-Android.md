@@ -13,4 +13,4 @@ Base verificada: **JDK 17, SDK Platform 36**; app para API 26+. En el emulador, 
 
 No hace falta dispositivo físico para demostrar compilación, pruebas JVM, navegación y HTTP en emulador. Eso no acredita reconocimiento de micrófono ni legibilidad física.
 
-[Quick start](https://github.com/SamuelCharry/serie76-assistant/blob/main/README.es.md#quick-start) · [Código Android](https://github.com/SamuelCharry/serie76-assistant/tree/main/mobile/android/app/src/main/java/com/serie76/assistant) · [Resultados](https://github.com/SamuelCharry/serie76-assistant/wiki/Resultados-y-limites)
+[Quick start](https://github.com/SamuelCharry/serie76-assistant/blob/main/README.es.md) · [Código Android](https://github.com/SamuelCharry/serie76-assistant/tree/main/mobile/android/app/src/main/java/com/serie76/assistant) · [Resultados](https://github.com/SamuelCharry/serie76-assistant/wiki/Resultados-y-limites)
