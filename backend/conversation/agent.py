@@ -641,6 +641,7 @@ class Turn:
 
     # --- tools -------------------------------------------------------------------------
     def lookup(self, args):
+        import re
         self.context.pop("pagination", None)
         notes, codes, missing, products, partial = [], [], [], [], []
         known = set(self.context.get("part_numbers", []))
@@ -654,6 +655,10 @@ class Turn:
                                context=self.context, lead='Ranked by ' + by + '.')
         selected = []
         reference = args.get('reference_kind', 'none')
+        ordinal = re.search(r'\b(first|second|third|fourth)\s+(?:one|model|actuator|unit)\b', self.query, re.I)
+        if reference == 'none' and ordinal and not policy.codes_in_text(self.query):
+            reference = 'shown_position'
+            args = dict(args, reference_index=('first', 'second', 'third', 'fourth').index(ordinal.group(1).lower()) + 1)
         if reference != 'none':
             shown = self.context.get('last_shown_list') or []
             compared = self.context.get('last_comparison_models') or []
@@ -1309,13 +1314,25 @@ class Turn:
             return self.clarify("requirements", message, conflict=dict(kind=kind, fields=fields))
         if args.get('intent') == 'pick' and not reference:
             try:
-                SearchFilters.model_validate(merged)
+                eligible_scope = SearchFilters.model_validate(merged)
             except ValidationError:
                 return self.clarify('requirements', 'The requirements conflict; please clarify the supply and service.')
             self.context['filters'] = merged
-            signalled = self.contextual_intent('pick', args.get('sort_by') or (), priority)
-            if signalled is not None:
-                return signalled
+            shown_only = re.search(r'\b(?:among|shown|displayed|those|these|on screen)\b', self.query, re.I)
+            has_shown = self.context.get('on_screen') or self.context.get('last_comparison_models')
+            compared = self.context.get('last_comparison_models') or []
+            comparison_pick = (compared and self.context.get('on_screen') == compared
+                               and not re.search(r'\b(?:find|search|all eligible|alternatives?)\b', self.query, re.I))
+            excluded = {'limit', 'offset', 'sort_by'}
+            same_scope = (SearchFilters.model_validate(previous).model_dump(exclude=excluded)
+                          == eligible_scope.model_dump(exclude=excluded))
+            # A changed search domain/objective must query the catalogue again.
+            # An active comparison remains a closed set unless a new search is
+            # requested; an ordinary search list can expand after scope changes.
+            if shown_only or comparison_pick or has_shown and same_scope and not (priority or requested_sort):
+                signalled = self.contextual_intent('pick', args.get('sort_by') or (), priority)
+                if signalled is not None:
+                    return signalled
         explicit_enclosure = re.search(r'\b(explosionproof|weatherproof)\b', self.query, re.I)
         if (scenario and merged.get('enclosure') is None and
                 (hazard or (not explicit_enclosure and 'enclosure' not in inferred))):
@@ -1960,7 +1977,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             args = models['search_actuators'].model_validate(dict(
                 refine=True, reference_operation=relative, reference_part_number=named[0] if len(named) == 1 else '')).model_dump(mode='json')
             return finish(turn, turn.search(args))
-        preference = re.search(r'\b(?:prefer|preference|rank|sort|prioriti[sz]e|prefiero|prioriza|ordena)\b', query, re.I)
+        preference = re.search(r'\b(?:prefer|preference|priority|rank|sort|prioriti[sz]e|prefiero|prioriza|ordena)\b', query, re.I)
         objectives = [key for key in ('fastest', 'lowest_power', 'highest_torque', 'lowest_current')
                       if policy.sort_grounded(key, query)]
         global_search = re.search(r'\b(?:find|search|re-rank|rerank|all eligible|change the priority)\b', query, re.I)
@@ -2264,6 +2281,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             return finish(turn, AgentResult(answer, context=turn.context, lead=answer))
     if (action is None and not answers and not remove_filters and
             (answer_planner.plan(query).shape == 'verdict' or re.search(r'\bdifference\b', bare_query))
+            and not policy.removed_fields(query)
             and not policy.codes_in_text(query)):
         use_ranked = bool(re.search(r'\b(results?|ranked|list|them|those|among)\b', bare_query))
         codes = ((turn.context.get('last_ranked_list') or compared_codes) if use_ranked else

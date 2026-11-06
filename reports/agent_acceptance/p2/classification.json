@@ -903,5 +903,134 @@
     "covers_conversations": [
       "L3-07"
     ]
+  },
+  {
+    "id": "ordinal_starts",
+    "source": "L1-02",
+    "turn": 3,
+    "message_id": "3c5c333d-2131-405f-9d2c-26b24d6370cf",
+    "classification": "code",
+    "diagnosis": "Recorded valid tool selection is intercepted by stale shown-candidate handling or an ordinal ambiguity guard.",
+    "route": "get_actuator",
+    "raw_parameters": {
+      "focus": [
+        "overview"
+      ],
+      "part_numbers": [
+        "761B00-11300000/A"
+      ]
+    },
+    "covers_conversations": [
+      "L1-02"
+    ]
+  },
+  {
+    "id": "ordinal_time",
+    "source": "L6-02",
+    "turn": 3,
+    "message_id": "cde6d639-02de-4133-b99d-8bea6c015e8b",
+    "classification": "code",
+    "diagnosis": "Recorded valid tool selection is intercepted by stale shown-candidate handling or an ordinal ambiguity guard.",
+    "route": "get_actuator",
+    "raw_parameters": {
+      "focus": [
+        "operating_time"
+      ],
+      "part_numbers": [
+        "762B00-11300000/A"
+      ],
+      "focus_frequency_hz": 50,
+      "unsupported_requests": "delivery date"
+    },
+    "covers_conversations": [
+      "L6-02"
+    ]
+  },
+  {
+    "id": "pick_after_removal",
+    "source": "L4-07",
+    "turn": 2,
+    "message_id": "df9e2f42-f12e-4a29-87a5-059765a5aeeb",
+    "classification": "code",
+    "diagnosis": "Recorded valid tool selection is intercepted by stale shown-candidate handling or an ordinal ambiguity guard.",
+    "route": "search_actuators",
+    "raw_parameters": {
+      "bounds": [],
+      "intent": "pick",
+      "refine": true,
+      "remove": [
+        "min_torque_nm"
+      ],
+      "service": "on_off",
+      "sort_by": [
+        "highest_torque"
+      ],
+      "priority": {
+        "metric": "torque",
+        "direction": "lowest"
+      },
+      "enclosure": "explosionproof",
+      "supply_voltage_v": 220
+    },
+    "covers_conversations": [
+      "L4-07"
+    ]
+  },
+  {
+    "id": "pick_new_objective",
+    "source": "L7-06",
+    "turn": 2,
+    "message_id": "0c0b0261-7be8-4f1b-a3fc-c16693e2270d",
+    "classification": "code",
+    "diagnosis": "Recorded valid tool selection is intercepted by stale shown-candidate handling or an ordinal ambiguity guard.",
+    "route": "search_actuators",
+    "raw_parameters": {
+      "intent": "pick",
+      "refine": true,
+      "service": "on_off",
+      "sort_by": [
+        "highest_torque"
+      ],
+      "priority": {
+        "metric": "torque",
+        "direction": "highest"
+      },
+      "enclosure": "explosionproof",
+      "supply_voltage_v": 220
+    },
+    "covers_conversations": [
+      "L7-06"
+    ]
+  },
+  {
+    "id": "pick_initial",
+    "source": "L2-07",
+    "turn": 1,
+    "message_id": "c0e94cb9-5de0-4e1c-bd65-d99977593739",
+    "classification": "code",
+    "diagnosis": "Recorded valid tool selection is intercepted by stale shown-candidate handling or an ordinal ambiguity guard.",
+    "route": "search_actuators",
+    "raw_parameters": {
+      "bounds": [
+        {
+          "op": "gte",
+          "field": "min_torque_nm",
+          "value": 100
+        }
+      ],
+      "intent": "pick",
+      "service": "on_off",
+      "enclosure": "weatherproof",
+      "assumptions": {
+        "service": "open/close",
+        "enclosure": "outdoor"
+      },
+      "phase_count": 1,
+      "supply_current": "AC",
+      "supply_voltage_v": 110
+    },
+    "covers_conversations": [
+      "L2-07"
+    ]
   }
 ]

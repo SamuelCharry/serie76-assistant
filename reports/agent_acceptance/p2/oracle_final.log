@@ -1,3 +1,18 @@
+test_P2_code_ordinal_starts_1 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_1) ... ok
+test_P2_code_ordinal_starts_2 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_2) ... ok
+test_P2_code_ordinal_starts_3 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_3) ... ok
+test_P2_code_ordinal_time_1 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_time_1) ... ok
+test_P2_code_ordinal_time_2 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_time_2) ... ok
+test_P2_code_ordinal_time_3 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_time_3) ... ok
+test_P2_code_pick_after_removal_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_1) ... ok
+test_P2_code_pick_after_removal_2 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_2) ... ok
+test_P2_code_pick_after_removal_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_3) ... ok
+test_P2_code_pick_initial_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_1) ... ok
+test_P2_code_pick_initial_2 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_2) ... ok
+test_P2_code_pick_initial_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_3) ... ok
+test_P2_code_pick_new_objective_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_new_objective_1) ... ok
+test_P2_code_pick_new_objective_2 (test_p2_oracle.P2Oracle.test_P2_code_pick_new_objective_2) ... ok
+test_P2_code_pick_new_objective_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_new_objective_3) ... ok
 test_P2_comparison_scope_1 (test_p2_oracle.P2Oracle.test_P2_comparison_scope_1) ... ok
 test_P2_comparison_scope_2 (test_p2_oracle.P2Oracle.test_P2_comparison_scope_2) ... ok
 test_P2_comparison_scope_3 (test_p2_oracle.P2Oracle.test_P2_comparison_scope_3) ... ok
@@ -85,6 +100,6 @@ test_numeric_arguments_cannot_license_their_own_missing_dimension (test_p2_oracl
 test_unitless_correction_requires_one_prior_dimension (test_p2_oracle.QuantityGrounding.test_unitless_correction_requires_one_prior_dimension) ... ok
 
 ----------------------------------------------------------------------
-Ran 85 tests in 10.524s
+Ran 100 tests in 11.884s
 
 OK

@@ -1,0 +1,279 @@
+test_P2_code_ordinal_starts_1 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_1) ... FAIL
+test_P2_code_ordinal_starts_2 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_2) ... FAIL
+test_P2_code_ordinal_starts_3 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_3) ... FAIL
+test_P2_code_ordinal_time_1 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_time_1) ... FAIL
+test_P2_code_ordinal_time_2 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_time_2) ... FAIL
+test_P2_code_ordinal_time_3 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_time_3) ... ok
+test_P2_code_pick_after_removal_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_1) ... FAIL
+test_P2_code_pick_after_removal_2 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_2) ... FAIL
+test_P2_code_pick_after_removal_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_3) ... FAIL
+test_P2_code_pick_initial_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_1) ... FAIL
+test_P2_code_pick_initial_2 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_2) ... FAIL
+test_P2_code_pick_initial_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_3) ... FAIL
+test_P2_code_pick_new_objective_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_new_objective_1) ... FAIL
+test_P2_code_pick_new_objective_2 (test_p2_oracle.P2Oracle.test_P2_code_pick_new_objective_2) ... ok
+test_P2_code_pick_new_objective_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_new_objective_3) ... FAIL
+test_P2_comparison_scope_1 (test_p2_oracle.P2Oracle.test_P2_comparison_scope_1) ... ok
+test_P2_comparison_scope_2 (test_p2_oracle.P2Oracle.test_P2_comparison_scope_2) ... ok
+test_P2_comparison_scope_3 (test_p2_oracle.P2Oracle.test_P2_comparison_scope_3) ... ok
+test_P2_compound_booking_1 (test_p2_oracle.P2Oracle.test_P2_compound_booking_1) ... ok
+test_P2_compound_booking_2 (test_p2_oracle.P2Oracle.test_P2_compound_booking_2) ... ok
+test_P2_compound_booking_3 (test_p2_oracle.P2Oracle.test_P2_compound_booking_3) ... ok
+test_P2_compound_certification_1 (test_p2_oracle.P2Oracle.test_P2_compound_certification_1) ... ok
+test_P2_compound_certification_2 (test_p2_oracle.P2Oracle.test_P2_compound_certification_2) ... ok
+test_P2_compound_certification_3 (test_p2_oracle.P2Oracle.test_P2_compound_certification_3) ... ok
+test_P2_compound_lookup_1 (test_p2_oracle.P2Oracle.test_P2_compound_lookup_1) ... ok
+test_P2_compound_lookup_2 (test_p2_oracle.P2Oracle.test_P2_compound_lookup_2) ... ok
+test_P2_compound_lookup_3 (test_p2_oracle.P2Oracle.test_P2_compound_lookup_3) ... ok
+test_P2_compound_search_1 (test_p2_oracle.P2Oracle.test_P2_compound_search_1) ... ok
+test_P2_compound_search_2 (test_p2_oracle.P2Oracle.test_P2_compound_search_2) ... ok
+test_P2_compound_search_3 (test_p2_oracle.P2Oracle.test_P2_compound_search_3) ... ok
+test_P2_contextual_enclosure_1 (test_p2_oracle.P2Oracle.test_P2_contextual_enclosure_1) ... ok
+test_P2_contextual_enclosure_2 (test_p2_oracle.P2Oracle.test_P2_contextual_enclosure_2) ... ok
+test_P2_contextual_enclosure_3 (test_p2_oracle.P2Oracle.test_P2_contextual_enclosure_3) ... ok
+test_P2_directional_removal_1 (test_p2_oracle.P2Oracle.test_P2_directional_removal_1) ... ok
+test_P2_directional_removal_2 (test_p2_oracle.P2Oracle.test_P2_directional_removal_2) ... ok
+test_P2_directional_removal_3 (test_p2_oracle.P2Oracle.test_P2_directional_removal_3) ... ok
+test_P2_elliptical_limit_1 (test_p2_oracle.P2Oracle.test_P2_elliptical_limit_1) ... ok
+test_P2_elliptical_limit_2 (test_p2_oracle.P2Oracle.test_P2_elliptical_limit_2) ... ok
+test_P2_elliptical_limit_3 (test_p2_oracle.P2Oracle.test_P2_elliptical_limit_3) ... ok
+test_P2_enclosure_replacement_1 (test_p2_oracle.P2Oracle.test_P2_enclosure_replacement_1) ... ok
+test_P2_enclosure_replacement_2 (test_p2_oracle.P2Oracle.test_P2_enclosure_replacement_2) ... ok
+test_P2_enclosure_replacement_3 (test_p2_oracle.P2Oracle.test_P2_enclosure_replacement_3) ... ok
+test_P2_equal_comparison_field_1 (test_p2_oracle.P2Oracle.test_P2_equal_comparison_field_1) ... ok
+test_P2_equal_comparison_field_2 (test_p2_oracle.P2Oracle.test_P2_equal_comparison_field_2) ... ok
+test_P2_equal_comparison_field_3 (test_p2_oracle.P2Oracle.test_P2_equal_comparison_field_3) ... ok
+test_P2_global_rerank_1 (test_p2_oracle.P2Oracle.test_P2_global_rerank_1) ... ok
+test_P2_global_rerank_2 (test_p2_oracle.P2Oracle.test_P2_global_rerank_2) ... ok
+test_P2_global_rerank_3 (test_p2_oracle.P2Oracle.test_P2_global_rerank_3) ... ok
+test_P2_glossary_routing_1 (test_p2_oracle.P2Oracle.test_P2_glossary_routing_1) ... ok
+test_P2_glossary_routing_2 (test_p2_oracle.P2Oracle.test_P2_glossary_routing_2) ... ok
+test_P2_glossary_routing_3 (test_p2_oracle.P2Oracle.test_P2_glossary_routing_3) ... ok
+test_P2_identifier_quantity_1 (test_p2_oracle.P2Oracle.test_P2_identifier_quantity_1) ... ok
+test_P2_identifier_quantity_2 (test_p2_oracle.P2Oracle.test_P2_identifier_quantity_2) ... ok
+test_P2_identifier_quantity_3 (test_p2_oracle.P2Oracle.test_P2_identifier_quantity_3) ... ok
+test_P2_inclusive_bound_1 (test_p2_oracle.P2Oracle.test_P2_inclusive_bound_1) ... ok
+test_P2_inclusive_bound_2 (test_p2_oracle.P2Oracle.test_P2_inclusive_bound_2) ... ok
+test_P2_inclusive_bound_3 (test_p2_oracle.P2Oracle.test_P2_inclusive_bound_3) ... ok
+test_P2_motor_total_1 (test_p2_oracle.P2Oracle.test_P2_motor_total_1) ... ok
+test_P2_motor_total_2 (test_p2_oracle.P2Oracle.test_P2_motor_total_2) ... ok
+test_P2_motor_total_3 (test_p2_oracle.P2Oracle.test_P2_motor_total_3) ... ok
+test_P2_numeric_alternatives_1 (test_p2_oracle.P2Oracle.test_P2_numeric_alternatives_1) ... ok
+test_P2_numeric_alternatives_2 (test_p2_oracle.P2Oracle.test_P2_numeric_alternatives_2) ... ok
+test_P2_numeric_alternatives_3 (test_p2_oracle.P2Oracle.test_P2_numeric_alternatives_3) ... ok
+test_P2_phase_grounding_1 (test_p2_oracle.P2Oracle.test_P2_phase_grounding_1) ... ok
+test_P2_phase_grounding_2 (test_p2_oracle.P2Oracle.test_P2_phase_grounding_2) ... ok
+test_P2_phase_grounding_3 (test_p2_oracle.P2Oracle.test_P2_phase_grounding_3) ... ok
+test_P2_published_alternative_1 (test_p2_oracle.P2Oracle.test_P2_published_alternative_1) ... ok
+test_P2_published_alternative_2 (test_p2_oracle.P2Oracle.test_P2_published_alternative_2) ... ok
+test_P2_published_alternative_3 (test_p2_oracle.P2Oracle.test_P2_published_alternative_3) ... ok
+test_P2_quantity_words_1 (test_p2_oracle.P2Oracle.test_P2_quantity_words_1) ... ok
+test_P2_quantity_words_2 (test_p2_oracle.P2Oracle.test_P2_quantity_words_2) ... ok
+test_P2_quantity_words_3 (test_p2_oracle.P2Oracle.test_P2_quantity_words_3) ... ok
+test_P2_range_bounds_1 (test_p2_oracle.P2Oracle.test_P2_range_bounds_1) ... ok
+test_P2_range_bounds_2 (test_p2_oracle.P2Oracle.test_P2_range_bounds_2) ... ok
+test_P2_range_bounds_3 (test_p2_oracle.P2Oracle.test_P2_range_bounds_3) ... ok
+test_P2_reference_position_1 (test_p2_oracle.P2Oracle.test_P2_reference_position_1) ... ok
+test_P2_reference_position_2 (test_p2_oracle.P2Oracle.test_P2_reference_position_2) ... ok
+test_P2_reference_position_3 (test_p2_oracle.P2Oracle.test_P2_reference_position_3) ... ok
+test_P2_relative_search_1 (test_p2_oracle.P2Oracle.test_P2_relative_search_1) ... ok
+test_P2_relative_search_2 (test_p2_oracle.P2Oracle.test_P2_relative_search_2) ... ok
+test_P2_relative_search_3 (test_p2_oracle.P2Oracle.test_P2_relative_search_3) ... ok
+test_P2_same_turn_correction_1 (test_p2_oracle.P2Oracle.test_P2_same_turn_correction_1) ... ok
+test_P2_same_turn_correction_2 (test_p2_oracle.P2Oracle.test_P2_same_turn_correction_2) ... ok
+test_P2_same_turn_correction_3 (test_p2_oracle.P2Oracle.test_P2_same_turn_correction_3) ... ok
+test_P2_source_na_meaning_1 (test_p2_oracle.P2Oracle.test_P2_source_na_meaning_1) ... ok
+test_P2_source_na_meaning_2 (test_p2_oracle.P2Oracle.test_P2_source_na_meaning_2) ... ok
+test_P2_source_na_meaning_3 (test_p2_oracle.P2Oracle.test_P2_source_na_meaning_3) ... ok
+test_P2_unsupported_coverage_1 (test_p2_oracle.P2Oracle.test_P2_unsupported_coverage_1) ... ok
+test_P2_unsupported_coverage_2 (test_p2_oracle.P2Oracle.test_P2_unsupported_coverage_2) ... ok
+test_P2_unsupported_coverage_3 (test_p2_oracle.P2Oracle.test_P2_unsupported_coverage_3) ... ok
+test_P2_visible_limit_1 (test_p2_oracle.P2Oracle.test_P2_visible_limit_1) ... ok
+test_P2_visible_limit_2 (test_p2_oracle.P2Oracle.test_P2_visible_limit_2) ... ok
+test_P2_visible_limit_3 (test_p2_oracle.P2Oracle.test_P2_visible_limit_3) ... ok
+test_P2_withdrawn_unsupported_1 (test_p2_oracle.P2Oracle.test_P2_withdrawn_unsupported_1) ... ok
+test_P2_withdrawn_unsupported_2 (test_p2_oracle.P2Oracle.test_P2_withdrawn_unsupported_2) ... ok
+test_P2_withdrawn_unsupported_3 (test_p2_oracle.P2Oracle.test_P2_withdrawn_unsupported_3) ... ok
+test_range_addition_then_upper_withdrawal_retains_floor (test_p2_oracle.P2Oracle.test_range_addition_then_upper_withdrawal_retains_floor) ... ok
+test_all_catalogue_identifiers_are_never_physical_quantities (test_p2_oracle.QuantityGrounding.test_all_catalogue_identifiers_are_never_physical_quantities) ... ok
+test_numeric_arguments_cannot_license_their_own_missing_dimension (test_p2_oracle.QuantityGrounding.test_numeric_arguments_cannot_license_their_own_missing_dimension) ... ok
+test_unitless_correction_requires_one_prior_dimension (test_p2_oracle.QuantityGrounding.test_unitless_correction_requires_one_prior_dimension) ... ok
+
+======================================================================
+FAIL: test_P2_code_ordinal_starts_1 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
+    self.assertRegex(result.answer.lower(), pattern.lower())
+AssertionError: Regex didn't match: '960' not found in 'which of the previously listed actuators do you mean? please give its complete part number.'
+
+======================================================================
+FAIL: test_P2_code_ordinal_starts_2 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
+    self.assertRegex(result.answer.lower(), pattern.lower())
+AssertionError: Regex didn't match: '960' not found in 'which of the previously listed actuators do you mean? please give its complete part number.'
+
+======================================================================
+FAIL: test_P2_code_ordinal_starts_3 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
+    self.assertRegex(result.answer.lower(), pattern.lower())
+AssertionError: Regex didn't match: '960' not found in 'which of the previously listed actuators do you mean? please give its complete part number.'
+
+======================================================================
+FAIL: test_P2_code_ordinal_time_1 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_time_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
+    self.assertRegex(result.answer.lower(), pattern.lower())
+AssertionError: Regex didn't match: '30 s' not found in 'which of the previously listed actuators do you mean? please give its complete part number.\nthe catalogue does not publish delivery date.\nthe catalogue does not publish delivery times or lead times.'
+
+======================================================================
+FAIL: test_P2_code_ordinal_time_2 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_time_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
+    self.assertRegex(result.answer.lower(), pattern.lower())
+AssertionError: Regex didn't match: '30 s' not found in 'which of the previously listed actuators do you mean? please give its complete part number.\nthe catalogue does not publish delivery date.\nthe catalogue does not publish delivery times or lead times.'
+
+======================================================================
+FAIL: test_P2_code_pick_after_removal_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
+    self.assertEqual(ranked[:1], [expected['first']], result.answer)
+AssertionError: Lists differ: ['764Y30-11320000/A'] != ['761X30-11320000/A']
+
+First differing element 0:
+'764Y30-11320000/A'
+'761X30-11320000/A'
+
+- ['764Y30-11320000/A']
+?     ^^
+
++ ['761X30-11320000/A']
+?     ^^
+ : I recommend 764Y30-11320000/A: lowest torque 940 Nm; meets Explosionproof, On/Off service, 220 V. Ranked by lowest torque, then lowest FLA, then shortest operating time, then part number. Versus 765X30-11320000/A: Operating time at 50 Hz: 41 s vs 112 s; Operating time at 60 Hz: 34 s vs 93 s; On/Off cycles: 140 /h vs 50 /h. Choose 765X30-11320000/A only if its On/Off torque advantage (17500 in-lb / 2000 Nm vs 8300 in-lb / 940 Nm) matters more than the stated priority. Assumes no torque requirement; tell me the torque you need.
+
+======================================================================
+FAIL: test_P2_code_pick_after_removal_2 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check_case
+    self.assertNotIn(field, filters, result.answer)
+AssertionError: 'min_torque_nm' unexpectedly found in {'limit': 5, 'offset': 0, 'service': 'on_off', 'enclosure': 'explosionproof', 'min_torque_nm': {'op': 'gte', 'value': '940'}, 'supply_voltage_v': 220} : 764Y30-11320000/A has the lowest torque: 940 Nm.
+
+======================================================================
+FAIL: test_P2_code_pick_after_removal_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
+    self.assertEqual(ranked[:1], [expected['first']], result.answer)
+AssertionError: Lists differ: ['764Y30-11320000/A'] != ['761X30-11320000/A']
+
+First differing element 0:
+'764Y30-11320000/A'
+'761X30-11320000/A'
+
+- ['764Y30-11320000/A']
+?     ^^
+
++ ['761X30-11320000/A']
+?     ^^
+ : I recommend 764Y30-11320000/A: lowest torque 940 Nm; meets Explosionproof, On/Off service, 220 V. Ranked by lowest torque, then lowest FLA, then shortest operating time, then part number. Versus 765X30-11320000/A: Operating time at 50 Hz: 41 s vs 112 s; Operating time at 60 Hz: 34 s vs 93 s; On/Off cycles: 140 /h vs 50 /h. Choose 765X30-11320000/A only if its On/Off torque advantage (17500 in-lb / 2000 Nm vs 8300 in-lb / 940 Nm) matters more than the stated priority. Assumes no torque requirement; tell me the torque you need.
+
+======================================================================
+FAIL: test_P2_code_pick_initial_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 108, in check_case
+    self.assertTrue(visible, result.answer)
+AssertionError: set() is not true : Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.
+
+======================================================================
+FAIL: test_P2_code_pick_initial_2 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 108, in check_case
+    self.assertTrue(visible, result.answer)
+AssertionError: set() is not true : Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.
+
+======================================================================
+FAIL: test_P2_code_pick_initial_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 108, in check_case
+    self.assertTrue(visible, result.answer)
+AssertionError: set() is not true : Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.
+
+======================================================================
+FAIL: test_P2_code_pick_new_objective_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_new_objective_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
+    self.assertEqual(ranked[:1], [expected['first']], result.answer)
+AssertionError: Lists differ: ['765X30-11320000/A'] != ['765Y30-11320000/A']
+
+First differing element 0:
+'765X30-11320000/A'
+'765Y30-11320000/A'
+
+- ['765X30-11320000/A']
+?      ^
+
++ ['765Y30-11320000/A']
+?      ^
+ : I recommend 765X30-11320000/A: On/Off torque 2000 Nm; meets Explosionproof, On/Off service, 220 V, torque >= 800 Nm. Ranked by most torque, then lowest FLA, then shortest operating time, then part number. Versus 764Y30-11320000/A: On/Off torque: 17500 in-lb / 2000 Nm vs 8300 in-lb / 940 Nm; FLA at 50 Hz: 2.2 A vs 3.3 A; FLA at 60 Hz: 2.4 A vs 3.4 A. Choose 764Y30-11320000/A only if its Operating time at 50 Hz advantage (41 s vs 112 s) matters more than the stated priority.
+
+======================================================================
+FAIL: test_P2_code_pick_new_objective_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_new_objective_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+    self.check_case(scenario)
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
+    self.assertEqual(ranked[:1], [expected['first']], result.answer)
+AssertionError: Lists differ: ['765X30-11320000/A'] != ['765Y30-11320000/A']
+
+First differing element 0:
+'765X30-11320000/A'
+'765Y30-11320000/A'
+
+- ['765X30-11320000/A']
+?      ^
+
++ ['765Y30-11320000/A']
+?      ^
+ : I recommend 765X30-11320000/A: On/Off torque 2000 Nm; meets Explosionproof, On/Off service, 220 V, torque >= 800 Nm. Ranked by most torque, then lowest FLA, then shortest operating time, then part number. Versus 764Y30-11320000/A: On/Off torque: 17500 in-lb / 2000 Nm vs 8300 in-lb / 940 Nm; FLA at 50 Hz: 2.2 A vs 3.3 A; FLA at 60 Hz: 2.4 A vs 3.4 A. Choose 764Y30-11320000/A only if its Operating time at 50 Hz advantage (41 s vs 112 s) matters more than the stated priority.
+
+----------------------------------------------------------------------
+Ran 100 tests in 11.759s
+
+FAILED (failures=13)

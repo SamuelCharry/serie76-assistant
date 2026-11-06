@@ -1,6 +1,6 @@
 # P2-A - Final Flash improvement loop
 
-Status: Phase 2 candidate passes required offline gates; Phase 3 measurement pending. No P2-A lever adopted and no final validation claimed.
+Status: Corrected final candidate passes all required offline gates; freezing for v17 validation. No P2-A lever adopted and no final validation claimed.
 
 ## Frozen protocol
 
@@ -66,3 +66,39 @@ Oracle classification and regressions; measured code/bank/prompt levers on v16; 
 - P2 oracle: **85/85**, exit **0**. Runtime hashes match the passing oracle; no source edits followed it.
 - Historical recorded-model replay: **28/45**, exit **1**; the existing runner deliberately excludes this diagnostic from its final exit rule. It is not reported as a passing gate.
 - Exact logs, exit codes and source manifest: [candidate gates](../agent_acceptance/p2/gates_code/summary.json). Complete regenerated raw gate outputs are archived as `SCRATCH/p2a_candidate_gates`; historical tracked T14 artifacts are preserved.
+
+## Phase 3(a): code and guidance
+
+- Candidate commit: `2a99818606827acc45ad3157fdc016074344fd20`; backend rebuilt, v1 Flash, empty fallback, baseline retrieval bank, no additional prompt variant.
+- Run `v16code`: **60 conversations / 131 turns**, all **HTTP 200**, no skipped turns, exit **0**, wall **423 s**.
+- Client latency: p95 **6.92 s**, maximum **16.80 s**, **one** turn above 10 seconds.
+- Exact spend: **USD 0.373012275**; key usage **3.058293541 -> 3.431305816**. Total P2-A run spend **USD 0.711076675**; headroom to unchanged phase ceiling **USD 0.865789425**, including the shared-key difference.
+- Structured audit: **2,781 values checked**, **0 wrong figures**, **0 eligibility flags**, **0 invented-filter flags**, screening compliance **1.0**. Two empty recommendation payload flags remain under the existing zero-result contract; prose/intent review remains pending.
+- Blind packs `pack_v16code_1.md`, `pack_v16code_2.md`, `pack_v16code_3.md` prepared, 20 conversations each. No adoption decision before review.
+
+- Shared-key attribution confirmed by coordinator (`msg_1ef1b63c5db1`): the **USD 0.023133900** difference came from the user's emulator test against the shared backend. It is separate from P2-A run spend; absolute ceilings remain unchanged. Three v16code reviewers are running; no further paid work before their verdicts.
+
+## v16code blind verdict and bounded follow-up
+
+- Blind score **54/60 (90%)**, partitions **17/20, 19/20, 18/20**, no missing verdicts; initial baseline **34/60**. Retain code provisionally; v16 is now development evidence and the gain is optimistic.
+- Paired v16 counts: baseline-only **3**, code-only **23**, exact McNemar **8.797645568847656e-05**.
+- Six failures: two ordinal references, one initial pick with complete requirements, two stale candidate/objective domains, and one 16.8-second latency failure. SQL traces by message ID classify the five functional failures as deterministic code defects.
+- Added **15 scenarios** (each original plus two new paraphrases); expanded P2 suite before correction **87/100**, after correction **100/100**. Explicit ordinal references resolve against displayed order; initial or changed-domain/objective picks query SQL again; metric shortcuts do not swallow requirement withdrawals.
+- Complete regression rerun in progress. Only **USD 0.865789425** remains below the unchanged phase ceiling: two more comparable v16 runs fit, three do not. Allocation clarification pending before further paid work.
+
+## Coordinator freeze decision
+
+Coordinator `run:run_5b1fa6a364dd` instructed in `msg_e0f26dbb46aa` to stop v16 measurement, omit the contrastive-bank and prompt levers, and validate the corrected candidate directly on v17 after offline gates pass. The prepared contrastive bank and prompt variants were **not measured or adopted**; their individual effects are unknown. This avoids another development-set optimization and additional confounding within the hard spend limits. The final corrected code has oracle evidence but no additional real-model v16 score; **54/60 belongs only to commit 2a99818**.
+
+- Corrected-candidate regression attempt: 778 tests, one active-comparison scope failure, two skips. The scope boundary was repaired without changing the existing assertion; targeted shown-set tests **16/16** and P2 **100/100** pass. A fresh full run is active.
+- Isolated baseline worktree: `SCRATCH/p2a-baseline-worktree`, detached at `2f28b71`; baseline Docker image `serie76-p2a-baseline:2f28b71`. The main checkout remains on `release/submission`.
+- Retrieval snapshots are identical for all three tables (1,956 examples, 200 anchors, two dataset rows); canonical SHA-256 **7c1aca561c181800d8c0790fb6ac65c33ac9a7880406a15f754e308993f478d1**. No bank lever was loaded.
+- Pre-final metadata usage **USD 3.441210316**, including a further **USD 0.009904500** shared-key difference since v16code; coordinator notified. Phase 4 has not started.
+
+## Final candidate freeze gates
+
+- Complete suite: **778 tests**, **zero failures**, **two skips**, exit **0**, **429.442 s**.
+- T14 runner exit **0**; v7, T10, T12, T14, schema, public text and ranking each exit **0**. Public-text coverage: **1,060 responses / 32,396 strings**, zero issues and errors.
+- P2 oracle **100/100**, exit **0**. Runtime hashes match both passing manifests.
+- Historical replay remains diagnostic: **28/45**, exit **1**, excluded by the unchanged runner exit rule.
+- Frozen-code gate evidence: [final gate summary](../agent_acceptance/p2/gates_final/summary.json); full raw outputs archived in `SCRATCH/p2a_final_gates`.

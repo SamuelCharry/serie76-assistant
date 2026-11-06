@@ -1,9 +1,9 @@
 {
   "exit": 0,
-  "scenarios": 81,
+  "scenarios": 96,
   "provider_inference": false,
   "manifest": {
-    "backend\\conversation\\agent.py": "b3d32dd1660e9454f6e5fb6f839a2b7ead61dbaf6648fdd2d7d8cc2eb6521e9e",
+    "backend\\conversation\\agent.py": "1e5834c0ff23b8c33e42aa5393316c13cdf3cf4c0579ded2891693c911068810",
     "backend\\conversation\\answer_planner.py": "ddc7538250ef5045c49da669d5850e155edca81fa33b9c119905f9010c6344bd",
     "backend\\conversation\\api.py": "6c54bd2778fc28faaaba93ad4e246fdae77972400915440e53e0ec6be7b6d9f9",
     "backend\\conversation\\catalogue_answers.py": "3bd9f8757aa8a75f39ea74627e57d74de0a96ded14e426b947787c204fd407c0",
@@ -28,7 +28,7 @@
     "backend\\conversation\\__init__.py": "d04eaf47060731343d2c537787eb4acd888afa4279e8ff66731ebddc2d8883f3",
     "config\\agent_acceptance.json": "d7006a66481d8ede8791fd3101e2793c8a49c75ba05113483b37d57d557b1ed7",
     "config\\agent_acceptance_cases.json": "0dffd85739eab4616ef77604799f9e0de94cbe57e77d1c0e5ed9e55a8b7055e5",
-    "config\\agent_acceptance_cases_p2.json": "8239bb2f45ab60a8d405fbd49d135c699f66d4c6c95e5caa4ea3cfea12d8aa0c",
+    "config\\agent_acceptance_cases_p2.json": "2136c58b95617ce18d01dac536d66a492033d272e098c08bade92a8f989ffa1a",
     "config\\agent_acceptance_cases_t10.json": "d14ea1284b7663425c93a3a27d4622f8f1372cd533651b8a339e9bc54a305d0f",
     "config\\agent_acceptance_cases_t12.json": "93aecb61916865c02455a6b32615109eb277b96ac7b96af0d95d20e43ca13194",
     "config\\agent_acceptance_cases_t14.json": "b678783cbcde9c6b87d45e48a5bee586089bece8e8c9c2c102db51dda41ef8af",
