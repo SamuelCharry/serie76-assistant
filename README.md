@@ -3,6 +3,12 @@
 
 Look up Series 76 actuators, compare models and resume previous conversations from a native Android app. The model interprets questions; PostgreSQL supplies the technical values.
 
+Start with [Quick start](README.md#quick-start). To review the assessment:
+
+- **Part A:** [Backend](README.md#setup-and-backend), [ingestion](README.md#ingestion) and [agent design](README.md#models-design-and-limitations).
+- **Part B:** [Android, developer debug and voice](README.md#android).
+- **Part C:** [Test accounts](README.md#demo-users-test-only), [checks](README.md#reproduction-gates) and [source code](README.md#repository-map).
+
 ## Quick start
 
 1. **Requirements:** Git, Docker running Linux containers; Android Studio, **JDK 17**, SDK Platform 36 and a running API 26+ emulator. Run commands from the repository root; set `JAVA_HOME` to JDK 17 and `ANDROID_HOME` to your Android SDK.
@@ -39,6 +45,8 @@ The full template is [.env.example](.env.example). The main settings are:
 
 Apply configuration changes with `docker compose up -d backend`. For a second isolated checkout or port conflicts, follow [operations](docs/wiki/en/operations.md). [API requests and responses](docs/wiki/en/api.md#curl).
 
+**API contract:** `POST /api/conversation` accepts `{"query":"...","session_id":"..."}` and returns `{session_id, answer, ...}` with structured product cards/comparisons. Omit `session_id` to start; reuse it for follow-ups. PostgreSQL stores history and context across backend restarts. The suggested session/history routes are retained. Login returns `access_token`; send it as `Authorization: Bearer <access_token>` on subsequent API requests. Passwords are hashed and conversations are user-scoped.
+
 ## Demo users (TEST ONLY)
 
 The two public accounts in Quick start are for testing only. Each sees its own conversations. Startup creates missing accounts without resetting passwords; `DEMO_USERS_JSON=[]` disables creation of new demo accounts.
@@ -46,6 +54,8 @@ The two public accounts in Quick start are for testing only. Each sees its own c
 ## Android
 
 Use **JDK 17**, SDK Platform 36 and an API 26+ emulator. Check `java -version` before building. The emulator reaches the host at `http://10.0.2.2:8000/`; change the address with `-PbackendUrl=https://your-host/` and rebuild. [SDK setup, USB devices and build commands](docs/wiki/en/android.md).
+
+The app has conversations, chat, developer debug and login. Compose observes ViewModel state through StateFlow; a repository separates API access from the UI. This makes loading/error behavior testable with fake responses. Product cards and comparison tables make specifications easier to scan; structured actions avoid retyping choices. [Mobile design and trade-offs](https://github.com/SamuelCharry/serie76-assistant/wiki/Diseno-de-la-app).
 
 **Debug:** enable `DEV_DEBUG=true`, tap the profile name/email seven times in three seconds, then open **ⓘ** on an answer. It shows tools, parameters and returned data; `llm_called` tells you whether the model was used.
 
@@ -76,6 +86,8 @@ The first run downloads public OCR weights; recognition then runs locally. CSV/J
 ## Models, design and limitations
 
 Android uses Kotlin/Compose and calls FastAPI. LangChain makes one completed tool decision when interpretation is needed; direct lookups and structured actions skip the model. Code validates arguments, queries SQL and builds the answer. This keeps figures tied to the PDF, but requires explicit rules and does not eliminate interpretation errors.
+
+Custom LangChain tools query the catalogue for lookups and recommendations. The electrical PDF is the only numeric source; the summary supplies glossary/context. Missing values remain N/A, and the backend has invalid-code, clarification and no-match responses. Their limitations are covered in the results below.
 
 Flash was retained for the quality/latency balance observed in the [model comparison](docs/wiki/en/testing.md#openrouter-model-selection). There is no fallback model. pgvector retrieves interpretation examples; it does not supply product figures. [Architecture](https://github.com/SamuelCharry/serie76-assistant/wiki/Arquitectura) · [Design decisions](https://github.com/SamuelCharry/serie76-assistant/wiki/Decisiones).
 

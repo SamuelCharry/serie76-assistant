@@ -3,6 +3,12 @@
 
 Una app Android para consultar actuadores Series 76, comparar modelos y retomar conversaciones. El modelo interpreta las preguntas; PostgreSQL aporta los valores técnicos.
 
+Empieza por [Inicio rápido](README.es.md#inicio-rápido). Para revisar el assessment:
+
+- **Parte A:** [Backend](README.es.md#setup-y-backend), [ingestión](README.es.md#ingestión) y [diseño del agente](README.es.md#modelos-diseño-y-límites).
+- **Parte B:** [Android, debug y voz](README.es.md#android).
+- **Parte C:** [Usuarios de prueba](README.es.md#usuarios-demo-test-only), [pruebas](README.es.md#pruebas-de-reproducción) y [código fuente](README.es.md#mapa-del-repositorio).
+
 ## Inicio rápido
 
 1. **Requisitos:** Git, Docker con contenedores Linux; Android Studio, **JDK 17**, SDK Platform 36 y un emulador API 26+ encendido. Ejecuta desde la raíz del repositorio; configura `JAVA_HOME` con JDK 17 y `ANDROID_HOME` con tu SDK Android.
@@ -39,6 +45,8 @@ La plantilla completa está en [.env.example](.env.example). Las opciones princi
 
 Aplica cambios con `docker compose up -d backend`. Para otro checkout aislado o conflictos de puertos, sigue la [guía de operaciones](docs/wiki/es/operations.md). [Peticiones y respuestas de la API](docs/wiki/es/api.md#curl).
 
+**Contrato API:** `POST /api/conversation` recibe `{"query":"...","session_id":"..."}` y devuelve `{session_id, answer, ...}` con productos y comparaciones estructurados. Omite `session_id` para empezar; reutilízalo para continuar. PostgreSQL conserva historial y contexto al reiniciar el backend. Se mantienen las rutas sugeridas de sesiones e historial. El login devuelve `access_token`; envíalo como `Authorization: Bearer <access_token>` en las siguientes peticiones API. Las contraseñas se guardan con hash y las conversaciones se aíslan por usuario.
+
 ## Usuarios demo (TEST ONLY)
 
 Las dos cuentas públicas del inicio rápido son solo para pruebas. Cada una ve sus propias conversaciones. El arranque crea las que falten sin restablecer contraseñas; `DEMO_USERS_JSON=[]` desactiva nuevas cuentas demo.
@@ -46,6 +54,8 @@ Las dos cuentas públicas del inicio rápido son solo para pruebas. Cada una ve 
 ## Android
 
 Usa **JDK 17**, SDK Platform 36 y un emulador API 26+. Comprueba `java -version` antes de compilar. El emulador accede al equipo en `http://10.0.2.2:8000/`; para otra dirección, compila con `-PbackendUrl=https://tu-host/`. [Configuración del SDK, dispositivos USB y compilación](docs/wiki/es/android.md).
+
+La app tiene conversaciones, chat, debug y login. Compose observa el estado del ViewModel mediante StateFlow; un repositorio separa la API de la interfaz. Esto permite probar carga y errores con respuestas simuladas. Las tarjetas y tablas facilitan comparar especificaciones; las acciones estructuradas evitan volver a escribir elecciones. [Diseño móvil y decisiones](https://github.com/SamuelCharry/serie76-assistant/wiki/Diseno-de-la-app).
 
 **Debug:** activa `DEV_DEBUG=true`, toca el nombre/correo del perfil siete veces en tres segundos y abre **ⓘ** en una respuesta. Muestra herramientas, parámetros y datos; `llm_called` indica si se usó el modelo.
 
@@ -76,6 +86,8 @@ La primera ejecución descarga pesos públicos; después el OCR corre localmente
 ## Modelos, diseño y límites
 
 Android usa Kotlin/Compose y llama a FastAPI. LangChain toma una decisión de herramienta cuando hace falta interpretar lenguaje; las consultas directas y acciones estructuradas omiten el modelo. El código valida, consulta SQL y construye la respuesta. Así las cifras siguen ligadas al PDF, a cambio de mantener reglas explícitas; aún puede haber errores de interpretación.
+
+Las herramientas propias de LangChain consultan el catálogo para búsquedas y recomendaciones. El PDF eléctrico es la única fuente numérica; el resumen aporta glosario y contexto. Los valores ausentes siguen como N/A y hay respuestas para códigos inválidos, aclaraciones y búsquedas sin resultados. Sus límites están en los resultados de abajo.
 
 Se conservó Flash por el equilibrio de calidad y latencia observado en la [comparación de modelos](docs/wiki/es/testing.md#selección-de-modelo-en-openrouter). No hay modelo de respaldo. pgvector recupera ejemplos de interpretación, no cifras de productos. [Arquitectura](https://github.com/SamuelCharry/serie76-assistant/wiki/Arquitectura) · [Decisiones de diseño](https://github.com/SamuelCharry/serie76-assistant/wiki/Decisiones).
 
