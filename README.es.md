@@ -99,7 +99,7 @@ Los ejemplos semánticos son opcionales y ayudan a interpretar frases. El arranq
 
 ## Pruebas de reproducción
 
-[T18](reports/submission/T18-tag-clean-clone.md) registra la prueba de un clon de `v1.0-submission`: 10/10 pasos, 795 pruebas Python aprobadas con 2 omitidas y 126 pruebas JVM Android aprobadas. Son comprobaciones acotadas, no una garantía para cualquier entrada o dispositivo.
+El [informe de reproducción desde un clon limpio](reports/submission/T18-tag-clean-clone.md) registra la prueba de un clon de `v1.0-submission`: 10/10 pasos, 795 pruebas Python aprobadas con 2 omitidas y 126 pruebas JVM Android aprobadas. Son comprobaciones acotadas, no una garantía para cualquier entrada o dispositivo.
 
 Para ejecutar pruebas locales, prepara primero el [entorno Python](docs/wiki/es/testing.md). Con Compose encendido:
 
@@ -113,4 +113,4 @@ python scripts/verify_catalog_db.py
 
 [Backend](backend/) · [Android](mobile/android/) · [OCR](catalog_ingest/) · [Pruebas](tests/) · [Configuración del asistente IA](.claude/)
 
-[Wiki](https://github.com/SamuelCharry/serie76-assistant/wiki) · [Checklist del assessment](docs/SUBMISSION.md) · [Enunciado](docs/assessment-en.pdf)
+[Wiki](https://github.com/SamuelCharry/serie76-assistant/wiki) · [Requisitos y evidencia del assessment](docs/requirements.md) · [Enunciado](docs/assessment-en.pdf)

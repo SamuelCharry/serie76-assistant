@@ -27,7 +27,7 @@ Arrows show data access and requests; the agent runs inside the backend process.
 - [Testing](testing.md)
 - [Operations](operations.md)
 
-Start with the [README](../../../README.md), then follow one turn: `POST /api/conversation` → model tool decision → validation → SQL → template → saved turn. Try `What is the motor power of 761A00-11300000/A?`; T8 resolves this complete-code lookup without a model. Free-language interpretation without configuration returns 503 `not_configured`.
+Start with the [README](../../../README.md), then follow one turn: `POST /api/conversation` → model tool decision → validation → SQL → template → saved turn. Try `What is the motor power of 761A00-11300000/A?`; this complete-code lookup uses a deterministic route without a model. Free-language interpretation without configuration returns 503 `not_configured`.
 
 Evidence: [OCR](../../evidence/ocr.md), [PostgreSQL](../../evidence/postgres.md), [agent](../../evidence/agent_acceptance.md), [Android](../../evidence/mobile.md), [comparison](../../evidence/architecture_comparison.md). The [brief](../../assessment-en.pdf) defines the requirements; [ADR 0001](../../adr/0001-arquitectura-agente.md) records the decision.
 
@@ -40,7 +40,7 @@ Evidence: [OCR](../../evidence/ocr.md), [PostgreSQL](../../evidence/postgres.md)
 
 The single chat model is `google/gemini-3.6-flash`, with no fallback; embeddings use `google/gemini-embedding-2`. The adopted improvement averaged **79.4% versus 61.1%** in three paired v17 runs; pass^3 was **71.7% versus 55%**. About **20% of novel multi-turn conversations still fail**. [Measurements, authorized exception and offline repairs](../../../reports/submission/P2-A.md).
 
-[Public-text audit](../../../reports/submission/P2-B.md), [Linux Quick start CI](../../../reports/submission/P2-C.md), [Windows clean clone](../../../reports/submission/T18-tag-clean-clone.md) and [8/8 emulator tests](../../../reports/submission/P2-D.md) establish their stated scopes. The author confirmed real voice recognition in the emulator on 2026-11-06; this is a manual report without an additional automated artifact. Physical-device voice remains unverified. Android-to-real-LLM acceptance and physical-device readability are not established by controlled emulator inputs. Recorded OpenRouter spend is about **USD 6.17 of 10**.
+[Public-text audit](../../../reports/submission/P2-B.md), [Linux Quick start CI](../../../reports/submission/P2-C.md), [Windows clean clone](../../../reports/submission/T18-tag-clean-clone.md) and [8/8 emulator tests](../../../reports/submission/P2-D.md) establish their stated scopes. Real voice recognition was manually confirmed in the emulator on 2026-11-06; this is a manual report without an additional automated artifact. Physical-device voice remains unverified. Android-to-real-LLM acceptance and physical-device readability are not established by controlled emulator inputs. Recorded OpenRouter spend is about **USD 6.17 of 10**.
 
 Report labels such as P2-A or T18 identify evidence records, not product features. Historical records retain their original versions and must not be treated as current universal guarantees.
 

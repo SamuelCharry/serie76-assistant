@@ -5,7 +5,7 @@ Secciones 8–9 del assessment. La entrega evaluable está en **`main`**. PR #10
 | Entregable solicitado | Ubicación y uso |
 |---|---|
 | [README](https://github.com/SamuelCharry/serie76-assistant/blob/main/README.es.md) | Instalación, cuentas TEST ONLY y arranque |
-| [Checklist](https://github.com/SamuelCharry/serie76-assistant/blob/main/docs/SUBMISSION.md) | 47 obligaciones, evidencia y límites |
+| [Checklist](https://github.com/SamuelCharry/serie76-assistant/blob/main/docs/requirements.md) | 46 requisitos, evidencia y límites |
 | [T18](https://github.com/SamuelCharry/serie76-assistant/blob/main/reports/submission/T18-tag-clean-clone.md) | 10/10 pasos desde un clon de la etiqueta final |
 | [Resultados](https://github.com/SamuelCharry/serie76-assistant/wiki/Resultados-y-limites) | Calidad, latencia, gasto y alcance |
 | Código backend y app | [Backend](https://github.com/SamuelCharry/serie76-assistant/tree/main/backend) · [Android](https://github.com/SamuelCharry/serie76-assistant/tree/main/mobile/android) |

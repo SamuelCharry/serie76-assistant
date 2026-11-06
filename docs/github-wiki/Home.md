@@ -35,4 +35,4 @@ La idea que guía el backend es sencilla: el modelo ayuda a entender la pregunta
 - [Pruebas, resultados y límites](https://github.com/SamuelCharry/serie76-assistant/wiki/Resultados-y-limites)
 - [Archivos de entrega y cómo ejecutar el proyecto](https://github.com/SamuelCharry/serie76-assistant/wiki/Documentacion-y-entrega)
 
-Para probarlo, el punto de entrada es el [README](https://github.com/SamuelCharry/serie76-assistant/blob/main/README.md). La [checklist detallada](https://github.com/SamuelCharry/serie76-assistant/blob/main/docs/SUBMISSION.md) relaciona cada requisito del assessment con su implementación.
+Para probarlo, el punto de entrada es el [README](https://github.com/SamuelCharry/serie76-assistant/blob/main/README.md). La [checklist detallada](https://github.com/SamuelCharry/serie76-assistant/blob/main/docs/requirements.md) relaciona cada requisito del assessment con su implementación.

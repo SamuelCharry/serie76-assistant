@@ -99,7 +99,7 @@ Optional semantic examples help interpret phrasing. Startup does not generate th
 
 ## Reproduction gates
 
-[T18](reports/submission/T18-tag-clean-clone.md) records a fresh-clone test of `v1.0-submission`: 10/10 steps, 795 Python tests passed with 2 skipped, and 126 Android JVM tests passed. These are scoped checks, not proof of every input or device.
+The [fresh-clone reproduction report](reports/submission/T18-tag-clean-clone.md) records a fresh-clone test of `v1.0-submission`: 10/10 steps, 795 Python tests passed with 2 skipped, and 126 Android JVM tests passed. These are scoped checks, not proof of every input or device.
 
 For local tests, first follow the [Python environment setup](docs/wiki/en/testing.md#run-locally). With Compose running:
 
@@ -113,4 +113,4 @@ python scripts/verify_catalog_db.py
 
 [Backend](backend/) · [Android](mobile/android/) · [OCR](catalog_ingest/) · [Tests](tests/) · [AI assistant configuration](.claude/)
 
-[Wiki](https://github.com/SamuelCharry/serie76-assistant/wiki) · [Assessment checklist](docs/SUBMISSION.md) · [Assessment](docs/assessment-en.pdf)
+[Wiki](https://github.com/SamuelCharry/serie76-assistant/wiki) · [Assessment requirements and evidence](docs/requirements.md) · [Assessment](docs/assessment-en.pdf)
