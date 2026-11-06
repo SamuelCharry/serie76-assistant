@@ -1,0 +1,35 @@
+{
+  "base": "503d25e8ec04ad4478d76f87ad60e06d2709b1d1",
+  "implementation_commit": "e93ec78321fdb6a455a5cec0f55e3838b849c91b",
+  "unchanged_v1_nodes": {
+    "SYSTEM": true,
+    "PLAN_B_GUIDANCE": true,
+    "system_prompt": true,
+    "schemas": true,
+    "declarations": true,
+    "create_model_client": true,
+    "Turn": true,
+    "_turn": true,
+    "finish": true
+  },
+  "unchanged_v1_node_source": {
+    "SYSTEM": true,
+    "PLAN_B_GUIDANCE": true,
+    "system_prompt": true,
+    "schemas": true,
+    "declarations": true,
+    "create_model_client": true,
+    "Turn": true,
+    "_turn": true,
+    "finish": true
+  },
+  "unchanged_files": {
+    "backend/conversation/tool_wire.py": true,
+    "backend/conversation/policy.py": true,
+    "backend/conversation/requirement_coverage.py": true,
+    "backend/conversation/integrity.py": true,
+    "backend/catalog/models.py": true,
+    "backend/catalog/repository.py": true
+  },
+  "line_endings": "CRLF/LF normalized for source comparison"
+}

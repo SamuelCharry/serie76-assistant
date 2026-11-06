@@ -1,0 +1,16 @@
+{
+  "started_at": "2026-11-06T02:11:52.204142+00:00",
+  "gates": {
+    "v1_t14_gates": 0,
+    "v2_validators": 0,
+    "v2_oracle": 0,
+    "v2_schema": 0,
+    "v2_public_text": 0,
+    "v2_ranking": 0,
+    "v2_v7_target": 1
+  },
+  "ranking_target_met": true,
+  "completed_at": "2026-11-06T02:23:08.840820+00:00",
+  "mandatory_gates_passed": true,
+  "v7_target_met": false
+}

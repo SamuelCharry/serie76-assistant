@@ -1,0 +1,9 @@
+{
+  "mode": "scripted full-state oracle; no inference",
+  "scenarios": 453,
+  "passed": 353,
+  "failed": 100,
+  "baseline_passed": 453,
+  "target_95_percent_met": false,
+  "strict_selfcheck_exit": 1
+}

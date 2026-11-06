@@ -1,0 +1,26 @@
+{
+  "reports/agent_acceptance/sv2_final/oracle.json": {
+    "bytes": 8028891,
+    "sha256": "8c0ae67d044766340f7b73020795ebba6581ffbca5fb4564f1e9fc6a3f39a186",
+    "committed": false,
+    "regenerate": "python scripts/sv2_offline.py scripts/run_sv2_gates.py"
+  },
+  "reports/agent_acceptance/sv2_v7/results.json": {
+    "bytes": 17748412,
+    "sha256": "65a2b766b819592f0c453233edca9413691858273a801464f4ae5c12cbe7f305",
+    "committed": false,
+    "regenerate": "python scripts/sv2_offline.py scripts/run_sv2_gates.py"
+  },
+  "reports/agent_acceptance/sv2_v7/cases.json": {
+    "bytes": 1234535,
+    "sha256": "93a14c5e1cb3071f33cba35bb83256eb09242281f22048cad70b3fd70fa3724b",
+    "committed": false,
+    "regenerate": "python scripts/sv2_offline.py scripts/run_sv2_gates.py"
+  },
+  "reports/agent_acceptance/sv2_v7/v1_snapshots.json": {
+    "bytes": 15680840,
+    "sha256": "785fa284fb94d9b0999b2168efa6a388834d19bfff3c185913e33a1788d8dac2",
+    "committed": false,
+    "regenerate": "python scripts/sv2_offline.py scripts/run_sv2_gates.py"
+  }
+}
