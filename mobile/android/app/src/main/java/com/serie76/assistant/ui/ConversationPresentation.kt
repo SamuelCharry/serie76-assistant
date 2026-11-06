@@ -23,7 +23,6 @@ data class QuestionStepper(
     fun choose(value: String): QuestionStepper {
         val question = current ?: return this
         if (question.options.none { it.value == value }) return this
-        val updated = answers + (question.id to value)
         return copy(answers = answers + (question.id to value))
     }
 

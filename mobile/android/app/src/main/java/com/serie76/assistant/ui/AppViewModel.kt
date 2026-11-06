@@ -61,6 +61,9 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     private var threadGeneration = 0
     private var deleteJob: Job? = null
     private var voiceCancellation: (() -> Unit)? = null
+    private var failedRequest: ConversationRequest? = null
+    private var retrySessionsMore = false
+    private var retryHistoryOlder = false
 
     /** The composed screen owns the recognizer; navigation cancels it before mutating the draft. */
     fun bindVoiceInput(cancel: () -> Unit): () -> Unit {
@@ -93,13 +96,20 @@ class AppViewModel(private val repository: ConversationRepository, private val s
                     .filterNot { session -> session.id == it.pendingDelete?.id || session.id in it.committingDeleteIds },
                     sessionsHaveMore = page.sessions.size == page.limit, sessionsLoading = false) }
             } catch (error: CancellationException) { throw error }
-            catch (error: Exception) { mutable.update { it.copy(sessionsLoading = false, sessionsError = failureMessage(error)) } }
+            catch (error: Exception) {
+                retrySessionsMore = more
+                mutable.update { it.copy(sessionsLoading = false, sessionsError = failureMessage(error)) }
+            }
         }
     }
+
+    fun retrySessions() = refreshSessions(retrySessionsMore)
+    fun retryHistory() = loadHistory(older = retryHistoryOlder)
 
     fun newConversation() {
         if (state.value.sending) return
         cancelVoiceInput()
+        failedRequest = null
         historyJob?.cancel()
         threadGeneration++
         saved["sessionId"] = null
@@ -114,6 +124,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     fun open(session: Session) {
         if (state.value.sending) return
         cancelVoiceInput()
+        failedRequest = null
         threadGeneration++
         saved["sessionId"] = session.id
         saved["screen"] = "chat"
@@ -141,7 +152,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     }
 
     fun draft(value: String) {
-        if (value.length > 4000) return
+        if (value.length > 4000 || state.value.sending) return
         saved["draft"] = value
         mutable.update { it.copy(draft = value, suggestionsDismissed = it.suggestionsDismissed || value.isNotEmpty(),
             composerActive = it.composerActive || value.isNotEmpty()) }
@@ -227,7 +238,10 @@ class AppViewModel(private val repository: ConversationRepository, private val s
                     composerActive = if (older) it.composerActive else it.draft.isNotEmpty(),
                     suggestionsDismissed = if (older) it.suggestionsDismissed else false) }
             } catch (error: CancellationException) { throw error }
-            catch (error: Exception) { mutable.update { it.copy(historyLoading = false, historyError = failureMessage(error)) } }
+            catch (error: Exception) {
+                retryHistoryOlder = older
+                mutable.update { it.copy(historyLoading = false, historyError = failureMessage(error)) }
+            }
         }
     }
 
@@ -241,8 +255,9 @@ class AppViewModel(private val repository: ConversationRepository, private val s
         if (query.isBlank() || !current.canSend) return
         val generation = threadGeneration
         saved["inFlight"] = true
-        saved["draft"] = query
-        mutable.update { it.copy(sending = true, sendError = null, draft = query,
+        val retainedDraft = if (current.draft.trim() == query) current.draft else query
+        saved["draft"] = retainedDraft
+        mutable.update { it.copy(sending = true, sendError = null, draft = retainedDraft,
             question = null, questionError = null, suggestionsDismissed = true, composerActive = false) }
         viewModelScope.launch {
             try {
@@ -251,6 +266,7 @@ class AppViewModel(private val repository: ConversationRepository, private val s
                     saved["sessionId"] = response.sessionId
                     saved["draft"] = ""
                     saved["inFlight"] = false
+                    failedRequest = null
                     val message = Message(response.messageId, "assistant", response.answer, response.products,
                         suggestedReplies = response.suggestedReplies, comparison = response.comparison, lead = response.lead,
                         interaction = response.interaction, suggestions = response.suggestions,
@@ -268,7 +284,12 @@ class AppViewModel(private val repository: ConversationRepository, private val s
                     saved["draft"] = ""
                     mutable.update { it.copy(sending = false, draft = "", question = current.question,
                         questionError = combination, needsReconcile = false) }
-                } else mutable.update { it.copy(sending = false, sendError = failureMessage(error), needsReconcile = true) }
+                } else {
+                    failedRequest = request
+                    val reconcile = requiresReconciliation(error)
+                    saved["inFlight"] = reconcile
+                    mutable.update { it.copy(sending = false, sendError = failureMessage(error), needsReconcile = reconcile) }
+                }
             }
         }
     }
@@ -276,6 +297,23 @@ class AppViewModel(private val repository: ConversationRepository, private val s
     fun reconcile() {
         val id = state.value.sessionId
         if (id != null) loadHistory(id) else back()
+    }
+
+    /** Retry is always a user gesture; never replay a POST as a side effect of a failed response. */
+    fun retrySend() {
+        val current = state.value
+        if (current.sending || current.historyLoading) return
+        if (current.needsReconcile && current.sessionId != null) {
+            loadHistory()
+            return
+        }
+        // For a first turn the response may have lost its new session ID. The UI warns about
+        // duplicates and offers saved conversations before an explicit retry in a new session.
+        saved["inFlight"] = false
+        mutable.update { it.copy(needsReconcile = false) }
+        val request = failedRequest?.takeIf { it.query == current.draft.trim() }
+            ?: ConversationRequest(current.draft.trim(), current.sessionId)
+        sendRequest(request)
     }
 
 }

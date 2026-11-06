@@ -98,18 +98,18 @@ private fun SeriesAppContent(viewModel: AppViewModel) {
                 drawerContainerColor = MaterialTheme.colorScheme.background,
                 drawerShape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp)) {
                 ConversationsScreen(state, viewModel::newConversation, viewModel::open,
-                    { viewModel.refreshSessions() }, { viewModel.refreshSessions(more = true) },
+                    viewModel::retrySessions, { viewModel.refreshSessions(more = true) },
                     viewModel::dismissConversations, viewModel::requestDelete)
             }
         }
     ) {
         ChatScreen(state, viewModel::showConversations, viewModel::draft, viewModel::send,
-                { viewModel.loadHistory() }, { viewModel.loadHistory(older = true) },
+                viewModel::retryHistory, { viewModel.loadHistory(older = true) },
                 viewModel::reconcile, viewModel::newConversation,
                 viewModel::chooseAnswer, viewModel::editAnswer, viewModel::submitAnswers,
                 viewModel::cancelQuestion, viewModel::activateComposer, viewModel::removeFilter,
                 viewModel::nextQuestion, viewModel::previousQuestion, viewModel::sendSuggestion,
-                bindVoiceInput = bindVoiceInput)
+                bindVoiceInput = bindVoiceInput, onRetrySend = viewModel::retrySend)
     }
     SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
     state.deleteCandidate?.let { session ->
@@ -147,7 +147,7 @@ fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) ->
             style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             if (state.sessionsLoading) item { LoadingLine("Loading conversations") }
-            state.sessionsError?.let { error -> item { ErrorPanel(error, "Try again", onRefresh) } }
+            state.sessionsError?.let { error -> item { ErrorPanel(error, "Retry", onRefresh) } }
             if (!state.sessionsLoading && state.sessionsError == null && state.sessions.isEmpty()) item {
                 Column(Modifier.fillMaxWidth().padding(top = 28.dp, bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Icon(HistoryLines, null, Modifier.size(28.dp), tint = MaterialTheme.colorScheme.primary)
@@ -183,7 +183,7 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
                onChoose: (String) -> Unit = {}, onEditAnswer: (Int) -> Unit = {}, onSubmitAnswers: () -> Unit = {},
                onCancelQuestion: () -> Unit = {}, onActivateComposer: () -> Unit = {}, onRemoveFilter: (ActiveFilter) -> Unit = {},
                onNextQuestion: () -> Unit = {}, onPreviousQuestion: () -> Unit = {}, onSuggestion: (Suggestion) -> Unit = {},
-               bindVoiceInput: BindVoiceInput? = null) {
+               bindVoiceInput: BindVoiceInput? = null, onRetrySend: () -> Unit = onSend) {
     val listState = rememberLazyListState()
     val focus = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
@@ -215,9 +215,19 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
         bottomBar = {
             Surface(color = Color.Transparent) {
                 Column(Modifier.navigationBarsPadding().imePadding().padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    state.sendError?.let { ErrorPanel(it, if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile) }
+                    state.sendError?.let {
+                        ErrorPanel(it, if (state.needsReconcile && state.sessionId != null) "Reload conversation" else "Retry", onRetrySend)
+                        if (state.needsReconcile && state.sessionId == null) {
+                            Text("Your message may already be saved. Check conversations before retrying to avoid sending it twice.",
+                                style = MaterialTheme.typography.bodySmall)
+                            TextButton(onClick = onReconcile) { Text("Check conversations") }
+                        }
+                    }
                     if (state.needsReconcile && state.sendError == null) ErrorPanel("A previous request may have completed. Check saved messages before sending again.",
                         if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile)
+                    if (state.needsReconcile && state.sendError == null && state.sessionId == null) {
+                        TextButton(onClick = onRetrySend) { Text("Retry") }
+                    }
                     state.question?.let { QuestionCard(it, state.canSend, onChoose, onEditAnswer,
                         onNextQuestion, onPreviousQuestion, onSubmitAnswers, onCancelQuestion,
                         state.questionError, Modifier.weight(1f, fill = false)) }
@@ -263,7 +273,7 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
             if (state.historyBefore != null) item { TextButton(colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onPrimaryContainer), onClick = onOlder, enabled = !state.historyLoading) { Text("Load earlier messages") } }
             if (state.historyLoading) item { LoadingLine("Loading messages") }
-            state.historyError?.let { item { ErrorPanel(it, "Try again", onReload) } }
+            state.historyError?.let { item { ErrorPanel(it, "Retry", onReload) } }
             items(state.messages, key = Message::id) { message ->
                 MessageContent(message)
                 if (showDebugDetails(developer.enabled, message)) {

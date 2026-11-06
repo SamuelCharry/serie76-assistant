@@ -2,6 +2,9 @@ package com.serie76.assistant.data
 
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.io.IOException
+import java.io.InterruptedIOException
+import java.net.ConnectException
+import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
@@ -48,9 +51,9 @@ class ApiConversationRepository(private val api: ConversationApi) : Conversation
     }
 }
 
-fun createRetrofit(url: String, bearer: () -> String? = { null }, expired: (String) -> Unit = {}): Retrofit = Retrofit.Builder()
-    .baseUrl(url)
-    .client(OkHttpClient.Builder()
+// The backend has a 60 s agent deadline; allow time for connection and the final error response.
+internal fun conversationHttpClient(bearer: () -> String? = { null }, expired: (String) -> Unit = {}): OkHttpClient =
+    OkHttpClient.Builder()
         .connectionPool(ConnectionPool(5, 30, TimeUnit.SECONDS))
         .followRedirects(false)
         .followSslRedirects(false)
@@ -65,28 +68,49 @@ fun createRetrofit(url: String, bearer: () -> String? = { null }, expired: (Stri
         .readTimeout(70, TimeUnit.SECONDS)
         .callTimeout(75, TimeUnit.SECONDS)
         .retryOnConnectionFailure(false)
-        .build())
+        .build()
+
+fun createRetrofit(url: String, bearer: () -> String? = { null }, expired: (String) -> Unit = {}): Retrofit = Retrofit.Builder()
+    .baseUrl(url)
+    .client(conversationHttpClient(bearer, expired))
     .addConverterFactory(wireJson.asConverterFactory("application/json".toMediaType()))
     .build()
+
+private fun errorCode(error: HttpException): String? = runCatching {
+    // Reading a copy keeps classification and message rendering independent.
+    val source = error.response()?.errorBody()?.source() ?: return@runCatching null
+    source.request(Long.MAX_VALUE)
+    wireJson.parseToJsonElement(source.buffer.clone().readUtf8()).jsonObject["error_code"]?.jsonPrimitive?.contentOrNull
+}.getOrNull()
+
+fun requiresReconciliation(error: Throwable): Boolean = when (error) {
+    is UnknownHostException, is ConnectException -> false
+    is HttpException -> error.code() == 409 || (error.code() >= 500 && errorCode(error) != "not_configured")
+    else -> true // A lost or invalid response does not prove the server failed to save the turn.
+}
 
 fun failureMessage(error: Throwable): String = when (error) {
     is HttpException -> when (error.code()) {
         401 -> "Your session has expired. Please sign in again."
+        402 -> "The assistant's service budget has run out. Please contact the administrator and try again later."
         404 -> "This conversation could not be found. Return to Conversations and refresh."
         409 -> "A response is already being prepared. Reload the conversation before sending again."
         422 -> "The request could not be accepted. Check your message and try again."
         429 -> "Too many requests. Please wait before trying again."
         503 -> {
-            val code = runCatching {
-                error.response()?.errorBody()?.string()?.let {
-                    wireJson.parseToJsonElement(it).jsonObject["error_code"]?.jsonPrimitive?.contentOrNull
-                }
-            }.getOrNull()
-            if (code == "not_configured") "The assistant is not configured on the server."
-            else "The assistant is temporarily unavailable. Please try again."
+            val code = errorCode(error)
+            when (code) {
+                "not_configured" -> "The assistant is not configured on the server."
+                "database_unavailable" -> "Saved conversations are temporarily unavailable. Please try again shortly."
+                else -> "The assistant is temporarily unavailable. Please try again."
+            }
         }
+        500 -> "The server could not complete the request. Please try again shortly."
+        502 -> "The assistant's service could not respond. Please try again shortly."
+        504 -> "The assistant's service took too long to respond. Please try again shortly."
         else -> "The assistant is unavailable. Check that the backend is running and configured."
     }
+    is InterruptedIOException -> "The server took too long to respond. Please try again shortly."
     is IOException -> "Cannot reach the backend. Check your connection and the backend address."
     else -> "The response could not be loaded. Please try again."
 }
