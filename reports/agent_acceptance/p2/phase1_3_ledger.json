@@ -1,0 +1,104 @@
+{
+  "task": "P2-A",
+  "initial_usage_usd": "2.697095241",
+  "total_hard_cap_usd": "7.60",
+  "phase_1_3_budget_usd": "1.60",
+  "phase_1_3_stop_at_usd": "4.297095241",
+  "phase_4_budget_usd": "2.40",
+  "baseline_v17_commit": "2f28b71",
+  "v16base_commit": "400d5c2",
+  "v16_hash_verified": true,
+  "v17_opened": true,
+  "runs": [
+    {
+      "tag": "v16base",
+      "model": "google/gemini-3.6-flash",
+      "status": "reviewed",
+      "guard_per_turn": true,
+      "usage_before_usd": "2.697095241",
+      "usage_after_usd": "3.035159641",
+      "spend_usd": "0.338064400",
+      "metrics": {
+        "conversations": 60,
+        "turns": 131,
+        "http_statuses": {
+          "200": 131
+        },
+        "latency_p95_nearest_rank_s": 6.77,
+        "latency_max_s": 12.62,
+        "turns_gt_10s": 2,
+        "set_sha256": "839ca70286e77afb0a98dc4567ba68240edd88bae03d61ed35733c9aad38e4cf"
+      },
+      "packs": [
+        "pack_v16base_1.md",
+        "pack_v16base_2.md",
+        "pack_v16base_3.md"
+      ],
+      "passes": 34,
+      "conversations": 60,
+      "review_partitions": [
+        12,
+        13,
+        9
+      ]
+    },
+    {
+      "tag": "v16code",
+      "model": "google/gemini-3.6-flash",
+      "commit": "2a99818606827acc45ad3157fdc016074344fd20",
+      "status": "reviewed",
+      "guard_per_turn": true,
+      "usage_before_usd": "3.058293541",
+      "bank": "baseline snapshot",
+      "prompt_variant": "",
+      "fallback": "",
+      "usage_after_usd": "3.431305816",
+      "spend_usd": "0.373012275",
+      "wall_s": 423,
+      "exit": 0,
+      "metrics": {
+        "source": "behavior\\out_v16code_google_gemini-3.6-flash\\results.json",
+        "conversations": 60,
+        "turns": 131,
+        "skipped": 0,
+        "http_statuses": {
+          "200": 131
+        },
+        "latency_p95_nearest_rank_s": 6.92,
+        "latency_max_s": 16.8,
+        "turns_gt_10s": 1
+      },
+      "packs": [
+        "pack_v16code_1.md",
+        "pack_v16code_2.md",
+        "pack_v16code_3.md"
+      ],
+      "passes": 54,
+      "review_partitions": [
+        17,
+        19,
+        18
+      ],
+      "paired_vs_baseline": {
+        "only_baseline": 3,
+        "only_code": 23,
+        "mcnemar_exact": 8.797645568847656e-05
+      },
+      "decision": "retain provisionally; v17 decides"
+    }
+  ],
+  "current_usage_usd": "3.441210316",
+  "phase_1_3_spend_usd": "0.711076675",
+  "headroom_to_phase_stop_usd": "0.865789425",
+  "shared_user_emulator_usage_usd": "0.023133900",
+  "shared_usage_attribution": "Coordinator run:run_5b1fa6a364dd confirmed user emulator test in msg_1ef1b63c5db1.",
+  "additional_shared_usage_unattributed_usd": "0.009904500",
+  "omitted_levers": [
+    "contrastive bank",
+    "AGENT_PROMPT_VARIANT"
+  ],
+  "omission_authorization": "msg_e0f26dbb46aa",
+  "v17_hash_verified": true,
+  "v17_sha256": "12f5bba6c28798062f1eff671e0effda849c94ac5b787bc8bce5a04ccbb10786",
+  "final_candidate_commit": "3ede96cb371c39e4fd6988dc098a47c46dee3a5f"
+}

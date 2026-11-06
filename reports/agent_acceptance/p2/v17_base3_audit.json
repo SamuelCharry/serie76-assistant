@@ -1,0 +1,385 @@
+{
+  "turns": 146,
+  "values_checked": 3317,
+  "wrong_figures": [],
+  "eligibility_flags": [
+    {
+      "conversation": "L2-10",
+      "turn": 3,
+      "message_id": "06d44b2f-61a9-44ed-beb1-39317de82f10",
+      "code": "763A00-11330C00/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gt"
+        }
+      },
+      "answer": "I recommend 763A00-11330C00/A: Shared torque 300 Nm; meets Weatherproof, On/Off service, 220 V, torque >= 200 Nm. Ranked by most torque, then lowest FLA, then shortest operating time, then part number. It is the only shown model meeting every requirement. Assumes no preference on phase count; tell me if that matters."
+    },
+    {
+      "conversation": "L2-10",
+      "turn": 4,
+      "message_id": "d8fc7676-f9db-41f6-91f8-df930abb043a",
+      "code": "763A00-11330C00/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gt"
+        },
+        "frequency_hz": 50
+      },
+      "answer": "763A00-11330C00/A\n \u2022 Operating time at 50 Hz: 32 s\n Source: Series 76 electrical catalogue, page 2."
+    },
+    {
+      "conversation": "L4-01",
+      "turn": 3,
+      "message_id": "9374a1f9-4d51-427b-9211-802ae83929d7",
+      "code": "761A00-11320000/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      },
+      "answer": "23 actuators meet: Weatherproof, Modulating service, 220 V; with published electrical data. 4 more models within Weatherproof, Modulating service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: Modulating torque 65 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: Modulating torque 130 Nm; FLA 50 Hz 1 A"
+    },
+    {
+      "conversation": "L4-01",
+      "turn": 3,
+      "message_id": "9374a1f9-4d51-427b-9211-802ae83929d7",
+      "code": "762A00-11320000/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      },
+      "answer": "23 actuators meet: Weatherproof, Modulating service, 220 V; with published electrical data. 4 more models within Weatherproof, Modulating service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: Modulating torque 65 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: Modulating torque 130 Nm; FLA 50 Hz 1 A"
+    },
+    {
+      "conversation": "L4-01",
+      "turn": 3,
+      "message_id": "9374a1f9-4d51-427b-9211-802ae83929d7",
+      "code": "761B00-11320000/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      },
+      "answer": "23 actuators meet: Weatherproof, Modulating service, 220 V; with published electrical data. 4 more models within Weatherproof, Modulating service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: Modulating torque 65 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: Modulating torque 130 Nm; FLA 50 Hz 1 A"
+    },
+    {
+      "conversation": "L5-01",
+      "turn": 1,
+      "message_id": "085a8304-a924-4183-bae6-44e3041b689e",
+      "code": "763A00-11330C00/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        },
+        "phase_count": 1
+      },
+      "answer": "21 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nPlease confirm phase count if it matters for your choice.\nInterpretation: 'apertura y cierre' read as On/Off service.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 1 A\n762B00-11320000/A: On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n763A00-11330C00/A: Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A"
+    },
+    {
+      "conversation": "L7-02",
+      "turn": 1,
+      "message_id": "47bddce4-9417-4b6b-9e94-75373f5e0f9c",
+      "code": "761A00-11320000/A",
+      "expected": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "frequency_hz": 50,
+        "max_operating_time_s": {
+          "value": 0,
+          "op": "lte"
+        }
+      },
+      "answer": "23 actuators meet: Weatherproof, 220 V, 50 Hz; with published electrical data. 4 more models within Weatherproof, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nPlease confirm maximum operating time if it matters for your choice.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: On/Off torque 100 Nm; Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 1 A"
+    },
+    {
+      "conversation": "L7-02",
+      "turn": 1,
+      "message_id": "47bddce4-9417-4b6b-9e94-75373f5e0f9c",
+      "code": "762A00-11320000/A",
+      "expected": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "frequency_hz": 50,
+        "max_operating_time_s": {
+          "value": 0,
+          "op": "lte"
+        }
+      },
+      "answer": "23 actuators meet: Weatherproof, 220 V, 50 Hz; with published electrical data. 4 more models within Weatherproof, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nPlease confirm maximum operating time if it matters for your choice.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: On/Off torque 100 Nm; Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 1 A"
+    },
+    {
+      "conversation": "L7-02",
+      "turn": 1,
+      "message_id": "47bddce4-9417-4b6b-9e94-75373f5e0f9c",
+      "code": "761B00-11320000/A",
+      "expected": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "frequency_hz": 50,
+        "max_operating_time_s": {
+          "value": 0,
+          "op": "lte"
+        }
+      },
+      "answer": "23 actuators meet: Weatherproof, 220 V, 50 Hz; with published electrical data. 4 more models within Weatherproof, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nPlease confirm maximum operating time if it matters for your choice.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: On/Off torque 80 Nm; Modulating torque 65 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: On/Off torque 100 Nm; Modulating torque 70 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: On/Off torque 150 Nm; Modulating torque 130 Nm; FLA 50 Hz 1 A"
+    },
+    {
+      "conversation": "L7-06",
+      "turn": 4,
+      "message_id": "394e35e3-c0ff-4b3c-9a3d-3aa8a2298c75",
+      "code": "764B00-11330C00/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gt"
+        },
+        "phase_count": 1,
+        "frequency_hz": 50
+      },
+      "answer": "11 actuators meet: Weatherproof, On/Off service, 220 V, torque \u2265 1100 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nUsing 763B00-11320000/A as the reference; keeping its published voltage, enclosure and service.\nRanked by closest torque at or above 1100 Nm, then lowest FLA.\n764B00-11320000/A: On/Off torque 1100 Nm; FLA 50 Hz 3.5 A\n764B00-11330C00/A: Shared torque 1200 Nm (same torque for On/Off and Modulating); FLA 50 Hz 3.4 A\n765A00-11320000/A: On/Off torque 2000 Nm; FLA 50 Hz 3.2 A\n763B00-11320000/A does not meet the active requirements: On/Off torque 500 Nm < 1100 Nm."
+    },
+    {
+      "conversation": "L7-10",
+      "turn": 3,
+      "message_id": "5f3299ec-1a74-49b1-9821-79ec9b6b85f1",
+      "code": "761A00-11320000/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gte"
+        }
+      },
+      "answer": "23 actuators meet: Weatherproof, On/Off service, 220 V; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nPlease confirm minimum torque if it matters for your choice.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 1 A"
+    },
+    {
+      "conversation": "L7-10",
+      "turn": 3,
+      "message_id": "5f3299ec-1a74-49b1-9821-79ec9b6b85f1",
+      "code": "762A00-11320000/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gte"
+        }
+      },
+      "answer": "23 actuators meet: Weatherproof, On/Off service, 220 V; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nPlease confirm minimum torque if it matters for your choice.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 1 A"
+    },
+    {
+      "conversation": "L7-10",
+      "turn": 3,
+      "message_id": "5f3299ec-1a74-49b1-9821-79ec9b6b85f1",
+      "code": "761B00-11320000/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gte"
+        }
+      },
+      "answer": "23 actuators meet: Weatherproof, On/Off service, 220 V; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nPlease confirm minimum torque if it matters for your choice.\nRanked by lowest FLA, then shortest operating time.\n761A00-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.7 A\n761B00-11320000/A: On/Off torque 100 Nm; FLA 50 Hz 0.7 A\n762A00-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 1 A"
+    },
+    {
+      "conversation": "L7-10",
+      "turn": 4,
+      "message_id": "57a2037d-64c0-45df-9bf3-d0a6fa2372e1",
+      "code": "761A00-11320000/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      },
+      "answer": "I recommend 761A00-11320000/A: Operating time at 50 Hz 20 s; meets Weatherproof, On/Off service, 220 V, 50 Hz. Ranked by fastest operating time, then lowest FLA, then part number. Versus 762A00-11320000/A: Operating time at 50 Hz: 20 s vs 21 s; FLA at 50 Hz: 0.7 A vs 1 A; Motor power: 15 W vs 40 W. Choose 762A00-11320000/A only if its On/Off torque advantage (1330 in-lb / 150 Nm vs 700 in-lb / 80 Nm) matters more than the stated priority. Assumes no torque requirement and no preference on phase count; tell me if that matters."
+    },
+    {
+      "conversation": "L7-10",
+      "turn": 4,
+      "message_id": "57a2037d-64c0-45df-9bf3-d0a6fa2372e1",
+      "code": "762A00-11320000/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      },
+      "answer": "I recommend 761A00-11320000/A: Operating time at 50 Hz 20 s; meets Weatherproof, On/Off service, 220 V, 50 Hz. Ranked by fastest operating time, then lowest FLA, then part number. Versus 762A00-11320000/A: Operating time at 50 Hz: 20 s vs 21 s; FLA at 50 Hz: 0.7 A vs 1 A; Motor power: 15 W vs 40 W. Choose 762A00-11320000/A only if its On/Off torque advantage (1330 in-lb / 150 Nm vs 700 in-lb / 80 Nm) matters more than the stated priority. Assumes no torque requirement and no preference on phase count; tell me if that matters."
+    },
+    {
+      "conversation": "L7-10",
+      "turn": 4,
+      "message_id": "57a2037d-64c0-45df-9bf3-d0a6fa2372e1",
+      "code": "761B00-11320000/A",
+      "expected": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      },
+      "answer": "I recommend 761A00-11320000/A: Operating time at 50 Hz 20 s; meets Weatherproof, On/Off service, 220 V, 50 Hz. Ranked by fastest operating time, then lowest FLA, then part number. Versus 762A00-11320000/A: Operating time at 50 Hz: 20 s vs 21 s; FLA at 50 Hz: 0.7 A vs 1 A; Motor power: 15 W vs 40 W. Choose 762A00-11320000/A only if its On/Off torque advantage (1330 in-lb / 150 Nm vs 700 in-lb / 80 Nm) matters more than the stated priority. Assumes no torque requirement and no preference on phase count; tell me if that matters."
+    }
+  ],
+  "invented_filter_flags": [
+    {
+      "conversation": "L1-01",
+      "turn": 1,
+      "message_id": "a85150f1-59b2-4700-b64c-2f8f33de481f",
+      "field": "max_fla_a",
+      "label": "FLA <= 762 A"
+    },
+    {
+      "conversation": "L7-09",
+      "turn": 2,
+      "message_id": "58bdbc60-4130-4653-95fc-480cbb851aba",
+      "field": "min_torque_nm",
+      "label": "torque >= 10000 Nm"
+    },
+    {
+      "conversation": "L7-09",
+      "turn": 3,
+      "message_id": "f14ae240-73f8-40a6-bbb1-2cb3e6a87d5f",
+      "field": "min_torque_nm",
+      "label": "torque >= 10000 Nm"
+    }
+  ],
+  "layout_flags": [
+    {
+      "conversation": "L1-06",
+      "turn": 2,
+      "message_id": "3042c9e4-9ba7-4b74-b61c-2e638e0419be",
+      "cards": [
+        "762A00-11320000/A",
+        "762B00-11320000/A",
+        "763A00-11320000/A",
+        "763B00-11320000/A"
+      ],
+      "ranked": [
+        "762A00-11320000/A",
+        "762B00-11320000/A",
+        "763A00-11320000/A"
+      ]
+    },
+    {
+      "conversation": "L3-07",
+      "turn": 3,
+      "message_id": "6b757ed1-91e8-44a1-badf-3cbf174d12df",
+      "cards": [
+        "762B00-11320000/A",
+        "762A00-11320000/A",
+        "761B00-11320000/A",
+        "761A00-11320000/A"
+      ],
+      "ranked": [
+        "762B00-11320000/A",
+        "762A00-11320000/A",
+        "761B00-11320000/A"
+      ]
+    },
+    {
+      "conversation": "L4-03",
+      "turn": 1,
+      "message_id": "13de341d-dcc4-4b7e-b34c-a1df1e11bd8e",
+      "cards": [
+        "764A00-11330C00/A",
+        "764B00-11330C00/A",
+        "765A00-11330C00/A",
+        "765B00-11330C00/A"
+      ],
+      "ranked": [
+        "764A00-11330C00/A",
+        "764B00-11330C00/A",
+        "765A00-11330C00/A"
+      ]
+    },
+    {
+      "conversation": "L4-03",
+      "turn": 2,
+      "message_id": "388ef800-19b0-4fbf-a12f-07481d429f29",
+      "cards": [
+        "764A00-11330C00/A",
+        "763C00-11330C00/A",
+        "763B00-11330C00/A",
+        "763A00-11330C00/A"
+      ],
+      "ranked": [
+        "764A00-11330C00/A",
+        "763C00-11330C00/A",
+        "763B00-11330C00/A"
+      ]
+    },
+    {
+      "conversation": "L7-01",
+      "turn": 1,
+      "message_id": "ff3d7876-1b04-4c4a-bb1e-6af7262a4d76",
+      "error": "empty recommendation payload"
+    },
+    {
+      "conversation": "L7-10",
+      "turn": 1,
+      "message_id": "f5a68911-6095-4ad2-bc14-b39697785f80",
+      "cards": [
+        "762A00-11320000/A",
+        "762B00-11320000/A",
+        "763A00-11330C00/A",
+        "763A00-11320000/A"
+      ],
+      "ranked": [
+        "762A00-11320000/A",
+        "762B00-11320000/A",
+        "763A00-11330C00/A"
+      ]
+    }
+  ],
+  "flagged_integrity_turns": 11,
+  "screening_compliance": 0.9246575342465754,
+  "note": "All flags require adjudication against the complete saved answer; prose aggregates and reference drift remain part of blind/human review.",
+  "results_sha256": "963629c9c8cda3ec7b71e27c8c86db22343596bcbe4c8f23ad62e411b17b725d"
+}

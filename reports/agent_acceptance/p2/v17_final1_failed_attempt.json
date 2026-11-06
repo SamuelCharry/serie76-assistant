@@ -1,0 +1,16 @@
+{
+  "run": "v17_final1",
+  "status": "failed_incomplete_excluded_before_any_candidate_response_review",
+  "completed_conversations": 57,
+  "completed_server_turns": 135,
+  "expected_conversations": 60,
+  "expected_turns": 146,
+  "results_file_exists": false,
+  "exact_client_latencies_recoverable": false,
+  "wrapper_exit": 0,
+  "screen_exit": 1,
+  "spend_usd": "0.357069350",
+  "usage_after_usd": "4.188678041",
+  "phase_usage_delta_usd": "0.747467725",
+  "cause": "Unconfirmed; termination before L7-09 after all logged API calls returned 200 suggests a transient budget-metadata GET failure; original wrapper discarded child stderr."
+}

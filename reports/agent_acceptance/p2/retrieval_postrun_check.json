@@ -1,0 +1,9 @@
+{
+  "unchanged": true,
+  "tables": {
+    "example_bank": 1956,
+    "concept_anchor": 200,
+    "example_dataset": 2
+  },
+  "canonical_sha256": "7c1aca561c181800d8c0790fb6ac65c33ac9a7880406a15f754e308993f478d1"
+}

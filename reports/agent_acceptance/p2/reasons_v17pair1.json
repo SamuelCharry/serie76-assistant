@@ -1,0 +1,42 @@
+{
+ "base1_google_gemini-3.6-flash": [
+  "L1-01: Item 1, turn 1: invents an active FLA <= 762 A limit from the part number.",
+  "L1-04: Items 1 and 2, turn 1: returns duty percentages instead of the requested starts per hour.",
+  "L1-07: Item 2, turn 1: hides the identical modulating duty rating, omitting the specifically requested comparison.",
+  "L2-02: Item 2, turn 1: explains operating time but omits starts per hour and the requested distinction.",
+  "L2-03: Items 1 and 5, turn 1: unrelated model-verification failure does not explain where phase information appears.",
+  "L2-05: Items 1 and 2, turn 1: defines motor power without answering whether higher watts necessarily mean faster operation.",
+  "L2-08: Item 2, turn 1: asks again for service, voltage and torque already explicitly supplied.",
+  "L2-10: Items 1 and 2, turn 3: recommends the same 300 Nm model instead of finding a stronger option.",
+  "L3-08: Items 1 and 2, turn 3: ignores withdrawal of price and delivery, refusing instead of comparing 50 Hz operating times.",
+  "L4-01: Items 2 and 3, turn 3: removing the maximum also drops the retained 150 Nm minimum and presents undersized models.",
+  "L5-01: Items 1 and 2, turn 1: misses monofasico, asks for phase again and includes a three-phase model.",
+  "L5-04: Item 2, turn 1: shows three candidates despite the explicit request for two.",
+  "L5-06: Items 1 and 5, turn 2: generic capability prompt fails to explain whether N/A means zero or unavailable.",
+  "L5-08: Items 1 and 2, turn 2: lists catalogue-wide voltage counts instead of matching complete part numbers.",
+  "L6-01: Item 2, turn 1: price refusal suppresses the requested published modulating torque.",
+  "L6-04: Items 1 and 2, turn 2: ignores stock withdrawal and omits the requested on/off torque availability.",
+  "L6-05: Item 2, turn 1: does not provide or explicitly decline the requested actuator quotation; only installation labour is declined.",
+  "L7-02: Items 2 and 3, turn 1: drops the explicit zero-second limit, asks for it again and presents nonmatching actuators.",
+  "L7-04: Items 1 and 5, turn 1: gives model counts instead of explaining on/off and modulating torque ratings.",
+  "L7-06: Items 2 and 3, turn 4: drops single-phase, includes a three-phase model and replaces stronger-than-500 with a 1100 Nm minimum.",
+  "L7-08: Items 2 and 3, turn 3: fastest ranking retains the 34-second model while omitting an eligible 32-second model.",
+  "L7-09: Items 2 and 6, turns 1-2: leaks mintorquenm and asks again for already supplied service, voltage and torque.",
+  "L7-10: Items 2 and 3, turn 3: removing only the maximum drops the retained 500 Nm minimum and presents undersized models."
+ ],
+ "final1_retry_google_gemini-3.6-flash": [
+  "L2-02: Items 1 and 2, turn 1: substitutes duty-cycle percentage for starts per hour; does not explain the requested distinction.",
+  "L2-03: Items 1 and 5, turn 1: generic capability prompt ignores the explicit phase-information question.",
+  "L2-05: Items 1 and 2, turn 1: defines motor power without answering whether higher watts necessarily mean faster operation.",
+  "L2-10: Item 7, turn 2: latency is 17.89 seconds; turn 3 also repeats the reference model instead of finding a stronger option.",
+  "L3-08: Items 1 and 2, turn 3: ignores withdrawal of price and delivery, refusing instead of comparing 50 Hz operating times.",
+  "L4-08: Items 2 and 5, turn 4: does not show the requested motor-power tie; returns torque/current descriptions instead.",
+  "L5-08: Items 1 and 2, turn 2: lists catalogue-wide voltage counts instead of matching complete part numbers.",
+  "L6-04: Items 1 and 5, turn 3: answers warranty terms instead of addressing suitability without valve-sizing data.",
+  "L6-05: Item 2, turn 1: does not provide or explicitly decline the requested actuator quotation; only installation labour is declined.",
+  "L6-06: Item 1, turn 2: responds to discarding the invented identifier with unrelated supply and enclosure descriptions.",
+  "L7-04: Items 1 and 5, turn 1: generic capability prompt ignores the explicit torque-rating explanation request.",
+  "L7-06: Item 2, turn 4: retains the withdrawn 1100 Nm ceiling and invents a matching 1100 Nm minimum.",
+  "L7-10: Items 1 and 5, turn 3: cannot apply the explicit maximum removal and asks for an unspecified missing limit."
+ ]
+}

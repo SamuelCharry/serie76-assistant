@@ -1,0 +1,297 @@
+{
+  "scope": "All six completed v17 runs; all three blind reviews complete; flags manually adjudicated against full saved answers.",
+  "criterion_note": "Absolute compliance includes selected-model eligibility and changed/omitted/invented requirements; no-match stale-filter issues without positive choices are disclosed separately.",
+  "runs": {
+    "v17_base1": {
+      "integrity_failure_turns": [
+        [
+          "L1-01",
+          1
+        ],
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L2-10",
+          4
+        ],
+        [
+          "L4-01",
+          3
+        ],
+        [
+          "L5-01",
+          1
+        ],
+        [
+          "L7-02",
+          1
+        ],
+        [
+          "L7-06",
+          4
+        ],
+        [
+          "L7-10",
+          3
+        ],
+        [
+          "L7-10",
+          4
+        ]
+      ],
+      "absolute_compliance": 0.9383561643835616,
+      "wrong_structured_figures": 0,
+      "additional_to_automated_screen": [
+        "L7-06 turn4 replaces the >500 Nm reference threshold with >=1100 Nm; final also retains the withdrawn <=1100 ceiling."
+      ],
+      "excluded_raw_flag": {
+        "L7-09/2": "Retains prior 10000 Nm filter, but recommends no model; stale context/quality defect, not a new invented requirement."
+      }
+    },
+    "v17_final1_retry": {
+      "integrity_failure_turns": [
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L2-10",
+          4
+        ],
+        [
+          "L7-06",
+          4
+        ]
+      ],
+      "absolute_compliance": 0.9794520547945206,
+      "wrong_structured_figures": 0,
+      "additional_to_automated_screen": [
+        "L7-06 turn4 replaces the >500 Nm reference threshold with >=1100 Nm; final also retains the withdrawn <=1100 ceiling."
+      ],
+      "excluded_raw_flag": {
+        "L7-09/2": "Retains prior 10000 Nm filter, but recommends no model; stale context/quality defect, not a new invented requirement."
+      }
+    },
+    "v17_base2": {
+      "integrity_failure_turns": [
+        [
+          "L1-01",
+          1
+        ],
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L2-10",
+          4
+        ],
+        [
+          "L3-07",
+          2
+        ],
+        [
+          "L4-01",
+          3
+        ],
+        [
+          "L5-01",
+          1
+        ],
+        [
+          "L7-02",
+          1
+        ],
+        [
+          "L7-06",
+          4
+        ],
+        [
+          "L7-10",
+          3
+        ],
+        [
+          "L7-10",
+          4
+        ]
+      ],
+      "absolute_compliance": 0.9315068493150684,
+      "wrong_structured_figures": 0,
+      "additional_to_automated_screen": [
+        "L7-06 turn4 replaces the >500 Nm reference threshold with >=1100 Nm; final also retains the withdrawn <=1100 ceiling."
+      ],
+      "excluded_raw_flag": {
+        "L7-09/2": "Retains prior 10000 Nm filter, but recommends no model; stale context/quality defect, not a new invented requirement."
+      }
+    },
+    "v17_final2": {
+      "integrity_failure_turns": [
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L3-06",
+          2
+        ],
+        [
+          "L3-07",
+          2
+        ],
+        [
+          "L7-06",
+          4
+        ]
+      ],
+      "absolute_compliance": 0.9726027397260274,
+      "wrong_structured_figures": 0,
+      "additional_to_automated_screen": [
+        "L7-06 turn4 replaces the >500 Nm reference threshold with >=1100 Nm; final also retains the withdrawn <=1100 ceiling.",
+        "L3-06 turn2 returns 761A00-11320000/A instead of explicitly requested second model 761B00-11320000/A; same numeric current does not make the identity correct."
+      ],
+      "excluded_raw_flag": {
+        "L7-09/2": "Retains prior 10000 Nm filter, but recommends no model; stale context/quality defect, not a new invented requirement."
+      }
+    },
+    "v17_base3": {
+      "integrity_failure_turns": [
+        [
+          "L1-01",
+          1
+        ],
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L2-10",
+          4
+        ],
+        [
+          "L4-01",
+          3
+        ],
+        [
+          "L5-01",
+          1
+        ],
+        [
+          "L7-02",
+          1
+        ],
+        [
+          "L7-06",
+          4
+        ],
+        [
+          "L7-10",
+          3
+        ],
+        [
+          "L7-10",
+          4
+        ]
+      ],
+      "absolute_compliance": 0.9383561643835616,
+      "wrong_structured_figures": 0,
+      "excluded_raw_flags": {
+        "L7-09/2": "Prior retained floor without positive choice.",
+        "L7-09/3": "Prior retained floor during reference clarification, no positive choice."
+      },
+      "additional_to_automated_screen": [
+        "L7-06 same erroneous 1100 Nm minimum; phase dropped; ceiling removed."
+      ]
+    },
+    "v17_final3": {
+      "integrity_failure_turns": [
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L7-06",
+          4
+        ]
+      ],
+      "absolute_compliance": 0.9863013698630136,
+      "wrong_structured_figures": 0,
+      "excluded_raw_flag": {
+        "L7-09/2": "Prior retained floor without positive choice."
+      },
+      "additional_to_automated_screen": [
+        "L7-06 erroneous >=1100 minimum and retained withdrawn <=1100 ceiling."
+      ]
+    }
+  },
+  "paired_field_findings": [
+    {
+      "case": "L7-06/4",
+      "pairs": [
+        1,
+        2,
+        3
+      ],
+      "shared": "Invented >=1100 Nm minimum instead of >500 Nm.",
+      "baseline": "Drops retained single-phase requirement and removes the former ceiling.",
+      "final": "Preserves phase but retains the explicitly withdrawn <=1100 Nm ceiling.",
+      "regression_status": "New ceiling-retention defect compared with paired baseline; cannot claim zero new field-level regressions."
+    },
+    {
+      "case": "L2-10/3",
+      "pairs": [
+        1,
+        2,
+        3
+      ],
+      "shared": "Recommends the same 300 Nm reference instead of a strictly stronger model."
+    },
+    {
+      "case": "L3-07/2",
+      "pairs": [
+        2
+      ],
+      "shared": "Phase replacement loses required single phase and positively shows three-phase models."
+    },
+    {
+      "case": "L3-06/2",
+      "pairs": [
+        2
+      ],
+      "baseline": "Correctly resolves second comparison member 761B00-11320000/A.",
+      "final": "Returns first member 761A00-11320000/A despite explicit second-one request.",
+      "regression_status": "New grounded-reference identity failure; wrong figures remain zero because both models publish equal currents."
+    }
+  ],
+  "aggregate": {
+    "base": {
+      "turns": 438,
+      "failure_turns": 28,
+      "absolute_compliance": 0.9360730593607306
+    },
+    "final": {
+      "turns": 438,
+      "failure_turns": 9,
+      "absolute_compliance": 0.9794520547945206
+    }
+  },
+  "strict_relative_reference_failure_counts": {
+    "L2-10/3_same_300_Nm_reference": {
+      "base": 3,
+      "final": 3
+    },
+    "L7-06/4_invented_1100_Nm_minimum": {
+      "base": 3,
+      "final": 3
+    },
+    "L7-06/4_withdrawn_ceiling_retention": {
+      "base": 0,
+      "final": 3
+    },
+    "L3-06/2_wrong_second_comparison_member": {
+      "base": 0,
+      "final": 1
+    }
+  }
+}

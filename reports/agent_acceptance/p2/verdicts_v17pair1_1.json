@@ -1,0 +1,602 @@
+{
+  "L1-01": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 1, turn 1: invents an active FLA <= 762 A limit from the part number."
+    }
+  },
+  "L1-02": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L1-03": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L1-04": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 1: returns duty percentages instead of the requested starts per hour."
+    }
+  },
+  "L1-05": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L1-06": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L1-07": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: hides the identical modulating duty rating, omitting the specifically requested comparison."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L1-08": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L1-09": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L2-01": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L2-02": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: explains operating time but omits starts per hour and the requested distinction."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 1: substitutes duty-cycle percentage for starts per hour; does not explain the requested distinction."
+    }
+  },
+  "L2-03": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 1: unrelated model-verification failure does not explain where phase information appears."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 1: generic capability prompt ignores the explicit phase-information question."
+    }
+  },
+  "L2-04": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L2-05": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 1: defines motor power without answering whether higher watts necessarily mean faster operation."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 1: defines motor power without answering whether higher watts necessarily mean faster operation."
+    }
+  },
+  "L2-06": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L2-07": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L2-08": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 2, turn 1: asks again for service, voltage and torque already explicitly supplied."
+    }
+  },
+  "L2-09": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L2-10": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 3: recommends the same 300 Nm model instead of finding a stronger option."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 7, turn 2: latency is 17.89 seconds; turn 3 also repeats the reference model instead of finding a stronger option."
+    }
+  },
+  "L3-01": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L3-02": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L3-03": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L3-04": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L3-05": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L3-06": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L3-07": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L3-08": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 3: ignores withdrawal of price and delivery, refusing instead of comparing 50 Hz operating times."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 3: ignores withdrawal of price and delivery, refusing instead of comparing 50 Hz operating times."
+    }
+  },
+  "L4-01": {
+    "A": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 3: removing the maximum also drops the retained 150 Nm minimum and presents undersized models."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L4-02": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L4-03": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L4-04": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L4-05": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L4-06": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L4-07": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L4-08": {
+    "A": {
+      "v": 0,
+      "why": "Items 2 and 5, turn 4: does not show the requested motor-power tie; returns torque/current descriptions instead."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L5-01": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 1: misses monofasico, asks for phase again and includes a three-phase model."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L5-02": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L5-03": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L5-04": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 2, turn 1: shows three candidates despite the explicit request for two."
+    }
+  },
+  "L5-05": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L5-06": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 2: generic capability prompt fails to explain whether N/A means zero or unavailable."
+    }
+  },
+  "L5-07": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L5-08": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 2: lists catalogue-wide voltage counts instead of matching complete part numbers."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 2: lists catalogue-wide voltage counts instead of matching complete part numbers."
+    }
+  },
+  "L6-01": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: price refusal suppresses the requested published modulating torque."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L6-02": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L6-03": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L6-04": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 2: ignores stock withdrawal and omits the requested on/off torque availability."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 3: answers warranty terms instead of addressing suitability without valve-sizing data."
+    }
+  },
+  "L6-05": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: does not provide or explicitly decline the requested actuator quotation; only installation labour is declined."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 2, turn 1: does not provide or explicitly decline the requested actuator quotation; only installation labour is declined."
+    }
+  },
+  "L6-06": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 1, turn 2: responds to discarding the invented identifier with unrelated supply and enclosure descriptions."
+    }
+  },
+  "L7-01": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L7-02": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 1: drops the explicit zero-second limit, asks for it again and presents nonmatching actuators."
+    }
+  },
+  "L7-03": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L7-04": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 1: gives model counts instead of explaining on/off and modulating torque ratings."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 1: generic capability prompt ignores the explicit torque-rating explanation request."
+    }
+  },
+  "L7-05": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L7-06": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 4: retains the withdrawn 1100 Nm ceiling and invents a matching 1100 Nm minimum."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 4: drops single-phase, includes a three-phase model and replaces stronger-than-500 with a 1100 Nm minimum."
+    }
+  },
+  "L7-07": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L7-08": {
+    "A": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 3: fastest ranking retains the 34-second model while omitting an eligible 32-second model."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  },
+  "L7-09": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2 and 6, turns 1-2: leaks mintorquenm and asks again for already supplied service, voltage and torque."
+    }
+  },
+  "L7-10": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 3: cannot apply the explicit maximum removal and asks for an unspecified missing limit."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 3: removing only the maximum drops the retained 500 Nm minimum and presents undersized models."
+    }
+  },
+  "L7-11": {
+    "A": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    },
+    "B": {
+      "v": 1,
+      "why": "All turns meet the rubric; catalogue figures and active requirements checked."
+    }
+  }
+}

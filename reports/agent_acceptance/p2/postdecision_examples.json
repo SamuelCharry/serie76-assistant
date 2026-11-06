@@ -1,0 +1,320 @@
+{
+  "provider_calls": 0,
+  "sql_read_only": true,
+  "examples": [
+    {
+      "case": "P2_post_ordinal_1",
+      "query": "Second one. 50 Hz current?",
+      "answer": "761B00-11320000/A\n \u2022 FLA at 50 Hz: 0.7 A\n \u2022 LRA at 50 Hz: 0.7 A\n Source: Series 76 electrical catalogue, page 1.",
+      "filters": null,
+      "focused": "761B00-11320000/A",
+      "products": [
+        "761B00-11320000/A"
+      ],
+      "recommendation": null
+    },
+    {
+      "case": "P2_post_strict_relative_1",
+      "query": "Is there a stronger one than that on the same supply?",
+      "answer": "17 actuators meet: Weatherproof, On/Off service, 220 V, torque > 300 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nUsing 763A00-11330C00/A as the reference; keeping its published voltage, enclosure and service.\nRanked by closest torque above 300 Nm, then lowest FLA.\n763B00-11330C00/A: Shared torque 500 Nm (same torque for On/Off and Modulating); FLA 50 Hz 2 A\n763B00-11320000/A: On/Off torque 500 Nm; FLA 50 Hz 2.1 A\n763C00-11320000/A: On/Off torque 550 Nm; FLA 50 Hz 2.1 A\n763A00-11330C00/A does not meet the active requirements: Shared torque 300 Nm <= 300 Nm.",
+      "filters": {
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gt"
+        },
+        "supply_voltage_v": 220,
+        "limit": 5,
+        "offset": 0
+      },
+      "focused": "763A00-11330C00/A",
+      "products": [
+        "763B00-11330C00/A",
+        "763B00-11320000/A",
+        "763C00-11320000/A"
+      ],
+      "recommendation": {
+        "ranked_by": "closest torque above 300 Nm, then lowest FLA",
+        "total": 17,
+        "shown": 3,
+        "items": [
+          {
+            "part_number": "763B00-11330C00/A",
+            "reason": "Shared torque 500 Nm (same torque for On/Off and Modulating); FLA 50 Hz 2 A",
+            "key_values": [
+              {
+                "label": "Shared torque",
+                "value": "500 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "2 A"
+              }
+            ]
+          },
+          {
+            "part_number": "763B00-11320000/A",
+            "reason": "On/Off torque 500 Nm; FLA 50 Hz 2.1 A",
+            "key_values": [
+              {
+                "label": "On/Off torque",
+                "value": "500 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "2.1 A"
+              }
+            ]
+          },
+          {
+            "part_number": "763C00-11320000/A",
+            "reason": "On/Off torque 550 Nm; FLA 50 Hz 2.1 A",
+            "key_values": [
+              {
+                "label": "On/Off torque",
+                "value": "550 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "2.1 A"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "P2_post_relative_withdrawal_1",
+      "query": "Now find a stronger one than the second, retaining voltage, phase and enclosure but removing the 1100 Nm ceiling.",
+      "answer": "10 actuators meet: Weatherproof, AC, 1-phase, On/Off service, 220 V, torque > 500 Nm (including AC/DC models); with published electrical data. Here are the leading published models.\nUsing 763B00-11320000/A as the reference; keeping its published voltage, enclosure and service.\nRanked by closest torque above 500 Nm, then lowest FLA.\n763C00-11320000/A: On/Off torque 550 Nm; FLA 50 Hz 2.1 A\n764A00-11320000/A: On/Off torque 750 Nm; FLA 50 Hz 3 A\n764B00-11320000/A: On/Off torque 1100 Nm; FLA 50 Hz 3.5 A\n763B00-11320000/A does not meet the active requirements: On/Off torque 500 Nm <= 500 Nm.",
+      "filters": {
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "supply_current": "AC",
+        "supply_voltage_v": 220,
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gt"
+        },
+        "limit": 5,
+        "offset": 0
+      },
+      "focused": null,
+      "products": [
+        "763C00-11320000/A",
+        "764A00-11320000/A",
+        "764B00-11320000/A"
+      ],
+      "recommendation": {
+        "ranked_by": "closest torque above 500 Nm, then lowest FLA",
+        "total": 10,
+        "shown": 3,
+        "items": [
+          {
+            "part_number": "763C00-11320000/A",
+            "reason": "On/Off torque 550 Nm; FLA 50 Hz 2.1 A",
+            "key_values": [
+              {
+                "label": "On/Off torque",
+                "value": "550 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "2.1 A"
+              }
+            ]
+          },
+          {
+            "part_number": "764A00-11320000/A",
+            "reason": "On/Off torque 750 Nm; FLA 50 Hz 3 A",
+            "key_values": [
+              {
+                "label": "On/Off torque",
+                "value": "750 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "3 A"
+              }
+            ]
+          },
+          {
+            "part_number": "764B00-11320000/A",
+            "reason": "On/Off torque 1100 Nm; FLA 50 Hz 3.5 A",
+            "key_values": [
+              {
+                "label": "On/Off torque",
+                "value": "1100 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "3.5 A"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "P2_post_withdrawn_quantity_1",
+      "query": "Remove the 1100 Nm ceiling.",
+      "answer": "12 actuators meet: Weatherproof, AC, 1-phase, On/Off service, 220 V, torque >= 300 Nm (including AC/DC models); with published electrical data. Here are the leading published models.\nRanked by closest torque at or above 300 Nm, then lowest FLA.\n763A00-11320000/A: On/Off torque 300 Nm; FLA 50 Hz 1.3 A\n763B00-11320000/A: On/Off torque 500 Nm; FLA 50 Hz 2.1 A\n763C00-11320000/A: On/Off torque 550 Nm; FLA 50 Hz 2.1 A",
+      "filters": {
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "supply_current": "AC",
+        "supply_voltage_v": 220,
+        "min_torque_nm": {
+          "value": "300",
+          "op": "gte"
+        },
+        "limit": 5,
+        "offset": 0
+      },
+      "focused": null,
+      "products": [
+        "763A00-11320000/A",
+        "763B00-11320000/A",
+        "763C00-11320000/A"
+      ],
+      "recommendation": {
+        "ranked_by": "closest torque at or above 300 Nm, then lowest FLA",
+        "total": 12,
+        "shown": 3,
+        "items": [
+          {
+            "part_number": "763A00-11320000/A",
+            "reason": "On/Off torque 300 Nm; FLA 50 Hz 1.3 A",
+            "key_values": [
+              {
+                "label": "On/Off torque",
+                "value": "300 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "1.3 A"
+              }
+            ]
+          },
+          {
+            "part_number": "763B00-11320000/A",
+            "reason": "On/Off torque 500 Nm; FLA 50 Hz 2.1 A",
+            "key_values": [
+              {
+                "label": "On/Off torque",
+                "value": "500 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "2.1 A"
+              }
+            ]
+          },
+          {
+            "part_number": "763C00-11320000/A",
+            "reason": "On/Off torque 550 Nm; FLA 50 Hz 2.1 A",
+            "key_values": [
+              {
+                "label": "On/Off torque",
+                "value": "550 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "2.1 A"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case": "P2_post_strict_faster_1",
+      "query": "Is there a faster one than that at 50 Hz?",
+      "answer": "2 actuators meet: Weatherproof, On/Off service, 220 V, 50 Hz, torque >= 200 Nm, operating time < 32 s; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified.\nUsing 763A00-11330C00/A as the reference; keeping its published voltage, enclosure and service.\n762B00-11320000/A \u2014 Operating time at 50 Hz: 29 s\n763A00-11320000/A \u2014 Operating time at 50 Hz: 29 s\nRanked by closest faster operating time, then lowest FLA, then shortest operating time.\n763A00-11330C00/A does not meet the active requirements: Operating time at 50 Hz 32 s >= 32 s.",
+      "filters": {
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "op": "gte",
+          "value": "200"
+        },
+        "supply_voltage_v": 220,
+        "frequency_hz": 50,
+        "max_operating_time_s": {
+          "value": 32,
+          "op": "lt"
+        },
+        "limit": 5,
+        "offset": 0
+      },
+      "focused": "763A00-11330C00/A",
+      "products": [
+        "762B00-11320000/A",
+        "763A00-11320000/A"
+      ],
+      "recommendation": {
+        "ranked_by": "closest faster operating time, then lowest FLA, then shortest operating time",
+        "total": 2,
+        "shown": 2,
+        "items": [
+          {
+            "part_number": "762B00-11320000/A",
+            "reason": "On/Off torque 200 Nm; FLA 50 Hz 1.1 A",
+            "key_values": [
+              {
+                "label": "On/Off torque",
+                "value": "200 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "1.1 A"
+              }
+            ]
+          },
+          {
+            "part_number": "763A00-11320000/A",
+            "reason": "On/Off torque 300 Nm; FLA 50 Hz 1.3 A",
+            "key_values": [
+              {
+                "label": "On/Off torque",
+                "value": "300 Nm"
+              },
+              {
+                "label": "FLA 50 Hz",
+                "value": "1.3 A"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "source_manifest": {
+    "backend\\conversation\\agent.py": "39fa69c4a82cd4a7c1307a2279a8c9accae96fd5033a6a341d013ec2502e5af8",
+    "backend\\conversation\\answer_planner.py": "ddc7538250ef5045c49da669d5850e155edca81fa33b9c119905f9010c6344bd",
+    "backend\\conversation\\api.py": "6c54bd2778fc28faaaba93ad4e246fdae77972400915440e53e0ec6be7b6d9f9",
+    "backend\\conversation\\catalogue_answers.py": "8b51229945115e817e6a63bfc68181d82d242424dc84d4e9c1cc9af1d7a8f013",
+    "backend\\conversation\\context_fallback.py": "eeaa8203bb6016cc6bb1c1aa19b915ecf166199de86b301f26960aa71553c953",
+    "backend\\conversation\\embeddings.py": "7ba6e618de22f36315b63529653d8e8f3838b880a6e9003e20ac1dbe6b8913fb",
+    "backend\\conversation\\integrity.py": "5b841ff305b67e04c2bfc10966118a09a41ebda00caf9fbc6cb808047039ebf4",
+    "backend\\conversation\\interactions.py": "1b72df9a5b46483dc07966f50ad06ded73268976fe72d06ea948022bb20538a5",
+    "backend\\conversation\\interpretation.py": "b67fc2e8a76d33144ad1872c69bf78ceb0fde8d2741d0727450d5289cb02dcba",
+    "backend\\conversation\\metrics.py": "c0fd8005aa626db8ccd95d3a41e1a99fc95f395072b17b313083bb5e54f5a57b",
+    "backend\\conversation\\part_numbers.py": "6a65891b8a718404bbf010e5c2ebd56d9b9d8eb1498bf4e713958773e914b53c",
+    "backend\\conversation\\policy.py": "d4b39c3e640fbab5bd1cfc28c02ddaadeeabe718ca376c17e05491dce1af8c24",
+    "backend\\conversation\\prompt_variants.py": "62b8243222d47f09cccc9d85df7aba5c946d7a5fbf9ae38605c0e9a7c57a4efc",
+    "backend\\conversation\\quality.py": "3344e1da840dd5e68653d1e8e6b2c95350a7d8d3146b7d2efccf6e555dbe7650",
+    "backend\\conversation\\ranking.py": "2aa64cf4b6953450901e68e79b3e311769f54c068f5282c9a5615fb0788e724e",
+    "backend\\conversation\\rendering.py": "97dc794ff5b2a464caee3b1b10ae0a82d434e7465615e1df907e1d97bc064334",
+    "backend\\conversation\\requirement_coverage.py": "0d891a712b63cfc46777f82f99700595d028e1c17cde06a62cee1799c4cccbb0",
+    "backend\\conversation\\response_integrity.py": "8981b9dc1202704f5977d798d1a15ec23063f1e9eebee8512674f32b40cade5c",
+    "backend\\conversation\\retrieval_ranking.py": "186003860ee222fedd6c2a112845c2b91b4a7f55153ae85f6e9eca5577e387f8",
+    "backend\\conversation\\shown_recommendation.py": "d459d64bd85ec4524a4ec793e4e98c21271d9665b5c5ea35a59e63e476bae5f2",
+    "backend\\conversation\\store.py": "52fea66978efb1c9f56c359206b79fcbe71262194c3d9fac8d6619033596339d",
+    "backend\\conversation\\tool_wire.py": "bd9edce726e61a3826fa2a6b3fb4418ad964e57343265662cfe0927adab63c59",
+    "backend\\conversation\\__init__.py": "d04eaf47060731343d2c537787eb4acd888afa4279e8ff66731ebddc2d8883f3"
+  }
+}

@@ -64,6 +64,21 @@ test_P2_numeric_alternatives_3 (test_p2_oracle.P2Oracle.test_P2_numeric_alternat
 test_P2_phase_grounding_1 (test_p2_oracle.P2Oracle.test_P2_phase_grounding_1) ... ok
 test_P2_phase_grounding_2 (test_p2_oracle.P2Oracle.test_P2_phase_grounding_2) ... ok
 test_P2_phase_grounding_3 (test_p2_oracle.P2Oracle.test_P2_phase_grounding_3) ... ok
+test_P2_post_ordinal_1 (test_p2_oracle.P2Oracle.test_P2_post_ordinal_1) ... ok
+test_P2_post_ordinal_2 (test_p2_oracle.P2Oracle.test_P2_post_ordinal_2) ... ok
+test_P2_post_ordinal_3 (test_p2_oracle.P2Oracle.test_P2_post_ordinal_3) ... ok
+test_P2_post_relative_withdrawal_1 (test_p2_oracle.P2Oracle.test_P2_post_relative_withdrawal_1) ... ok
+test_P2_post_relative_withdrawal_2 (test_p2_oracle.P2Oracle.test_P2_post_relative_withdrawal_2) ... ok
+test_P2_post_relative_withdrawal_3 (test_p2_oracle.P2Oracle.test_P2_post_relative_withdrawal_3) ... ok
+test_P2_post_strict_faster_1 (test_p2_oracle.P2Oracle.test_P2_post_strict_faster_1) ... ok
+test_P2_post_strict_faster_2 (test_p2_oracle.P2Oracle.test_P2_post_strict_faster_2) ... ok
+test_P2_post_strict_faster_3 (test_p2_oracle.P2Oracle.test_P2_post_strict_faster_3) ... ok
+test_P2_post_strict_relative_1 (test_p2_oracle.P2Oracle.test_P2_post_strict_relative_1) ... ok
+test_P2_post_strict_relative_2 (test_p2_oracle.P2Oracle.test_P2_post_strict_relative_2) ... ok
+test_P2_post_strict_relative_3 (test_p2_oracle.P2Oracle.test_P2_post_strict_relative_3) ... ok
+test_P2_post_withdrawn_quantity_1 (test_p2_oracle.P2Oracle.test_P2_post_withdrawn_quantity_1) ... ok
+test_P2_post_withdrawn_quantity_2 (test_p2_oracle.P2Oracle.test_P2_post_withdrawn_quantity_2) ... ok
+test_P2_post_withdrawn_quantity_3 (test_p2_oracle.P2Oracle.test_P2_post_withdrawn_quantity_3) ... ok
 test_P2_published_alternative_1 (test_p2_oracle.P2Oracle.test_P2_published_alternative_1) ... ok
 test_P2_published_alternative_2 (test_p2_oracle.P2Oracle.test_P2_published_alternative_2) ... ok
 test_P2_published_alternative_3 (test_p2_oracle.P2Oracle.test_P2_published_alternative_3) ... ok
@@ -95,11 +110,15 @@ test_P2_withdrawn_unsupported_1 (test_p2_oracle.P2Oracle.test_P2_withdrawn_unsup
 test_P2_withdrawn_unsupported_2 (test_p2_oracle.P2Oracle.test_P2_withdrawn_unsupported_2) ... ok
 test_P2_withdrawn_unsupported_3 (test_p2_oracle.P2Oracle.test_P2_withdrawn_unsupported_3) ... ok
 test_range_addition_then_upper_withdrawal_retains_floor (test_p2_oracle.P2Oracle.test_range_addition_then_upper_withdrawal_retains_floor) ... ok
+test_every_route_excludes_equal_reference_for_stronger_or_faster (test_p2_oracle.PostDecisionBoundary.test_every_route_excludes_equal_reference_for_stronger_or_faster) ... ok
+test_reference_measurement_is_not_hidden_or_converted_by_prior_bounds (test_p2_oracle.PostDecisionBoundary.test_reference_measurement_is_not_hidden_or_converted_by_prior_bounds) ... ok
+test_withdrawn_ceiling_and_its_number_cannot_reappear_at_output (test_p2_oracle.PostDecisionBoundary.test_withdrawn_ceiling_and_its_number_cannot_reappear_at_output) ... ok
+test_wrong_ordinal_identity_is_rejected_even_for_equal_currents (test_p2_oracle.PostDecisionBoundary.test_wrong_ordinal_identity_is_rejected_even_for_equal_currents) ... ok
 test_all_catalogue_identifiers_are_never_physical_quantities (test_p2_oracle.QuantityGrounding.test_all_catalogue_identifiers_are_never_physical_quantities) ... ok
 test_numeric_arguments_cannot_license_their_own_missing_dimension (test_p2_oracle.QuantityGrounding.test_numeric_arguments_cannot_license_their_own_missing_dimension) ... ok
 test_unitless_correction_requires_one_prior_dimension (test_p2_oracle.QuantityGrounding.test_unitless_correction_requires_one_prior_dimension) ... ok
 
 ----------------------------------------------------------------------
-Ran 100 tests in 11.884s
+Ran 119 tests in 15.140s
 
 OK

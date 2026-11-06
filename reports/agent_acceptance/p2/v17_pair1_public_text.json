@@ -1,0 +1,17 @@
+{
+  "sources": {
+    "<local scratch>\\behavior\\out_v17_base1_google_gemini-3.6-flash\\results.json": {
+      "responses": 146,
+      "strings": 4442,
+      "issues": 0
+    },
+    "<local scratch>\\behavior\\out_v17_final1_retry_google_gemini-3.6-flash\\results.json": {
+      "responses": 146,
+      "strings": 4073,
+      "issues": 0
+    }
+  },
+  "findings": [],
+  "errors": [],
+  "note": "Stored responses only; no SQL, inference or network."
+}
