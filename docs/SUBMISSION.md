@@ -33,14 +33,14 @@ Checklist totals: **47 items — 37 ✅ / 10 ⚠️**. Each row counts as one ob
 | ID | Requirement | Status and evidence |
 |---|---|---|
 | A01 | Native Kotlin/Compose | ✅ [Build](../mobile/android/app/build.gradle.kts), [Screens.kt](../mobile/android/app/src/main/java/com/serie76/assistant/ui/Screens.kt); [T16](../reports/submission/T16-clean-clone.md#command--result): JDK17 debug build, 74 JVM tests. |
-| A02 | Three screens: conversations, chat, debug | ⚠️ [Screen mapping](wiki/en/android.md#screens-and-state): conversations drawer, chat, developer sheet; functional surfaces exist, visual/device acceptance pending. |
+| A02 | Three screens: conversations, chat, debug | ✅ [P2-D emulator acceptance](../reports/submission/P2-D.md): Android 15 conversations/new chat, real keyless card/comparison and seven-tap developer sheet passed; JUnit and UIAutomator XML retained. Debug uses controlled HTTP data; physical-device/visual acceptance remains separate. |
 | A03 | List/open saved conversations with context; new chat | ✅ [Repository](../mobile/android/app/src/main/java/com/serie76/assistant/data/ConversationRepository.kt), [T8 tests](../reports/submission/T8-android.md). |
 | A04 | Chat retains session_id | ✅ [AppViewModel](../mobile/android/app/src/main/java/com/serie76/assistant/ui/AppViewModel.kt), [history contract](wiki/en/api.md#history-and-compatibility). |
 | A05 | Clear comparable product data, not paragraphs alone | ✅ [Comparison layout](wiki/en/android.md#t7-questions-suggestions-and-comparisons): cards/tables preserve decimals/notes; device readability remains A02. |
 | A06 | No tool names/internal details for end users | ⚠️ Public rendering and hidden debug implemented; [P1-F verification](../reports/submission/P1-F.md#verification) says standalone public-text command is import-only, not an audit. [SV2 leakage](../reports/submission/SV2-experiment.md#offline-evidence-and-failure-mechanism) belongs to rejected experiment. |
 | A07 | Debug per answer: tools, parameters, returned data | ✅ [Developer debug](wiki/en/android.md#developer-debug), [API trace contract](wiki/en/api.md#t8t9-contract), [T9 tests](../reports/submission/T9-android.md). |
 | A08 | Debug hidden; README explains opening | ✅ [README Android](../README.md#android): seven profile taps in three seconds, answer info icon; DEV_DEBUG, token/ownership required. |
-| A09 | Loading/errors on every screen | ⚠️ [Screens.kt](../mobile/android/app/src/main/java/com/serie76/assistant/ui/Screens.kt), [DebugDetails.kt](../mobile/android/app/src/main/java/com/serie76/assistant/ui/DebugDetails.kt), [T9 tests](../reports/submission/T9-android.md): state/retry covered locally, integrated emulator failure/rendering flow pending. |
+| A09 | Loading/errors on every screen | ⚠️ [P2-D](../reports/submission/P2-D.md): emulator history/chat connection errors, Retry, responsive editing/navigation and 15-second chat loading passed. Login/debug fault paths were not instrumented here; [T9 local coverage](../reports/submission/T9-android.md) remains separate. |
 
 ### Optional features: section 7
 
@@ -50,7 +50,7 @@ Checklist totals: **47 items — 37 ✅ / 10 ⚠️**. Each row counts as one ob
 | O02 | Preloaded test users documented | ✅ [README accounts](../README.md#demo-users-test-only), [T16 provisioning/login](../reports/submission/T16-clean-clone.md#command--result); no password resets. |
 | O03 | Login screen, Bearer requests, backend identifies user | ✅ [Authentication.kt](../mobile/android/app/src/main/java/com/serie76/assistant/data/Authentication.kt), [API](wiki/en/api.md#endpoint-map); login adds fourth screen. |
 | O04 | Users see/use only their conversations | ✅ [Auth tests](../tests/test_auth.py), [ownership](wiki/en/api.md); sign-up/recovery/OAuth not required. |
-| O05 | Voice plus text, documented transcription decisions | ⚠️ [README](../README.md#android), [T9 voice](wiki/en/android.md#t9-voice): on-device preferred, service fallback may use network, transcript reviewed before send, no project speech key/audio upload. Fake recognizers tested; actual recognition pending. |
+| O05 | Voice plus text, documented transcription decisions | ⚠️ [P2-D emulator test](../reports/submission/P2-D.md): injected partial/final transcript reaches the composer, late callbacks are ignored and no auto-send occurs. [Voice decisions](wiki/en/android.md#t9-voice) documented; microphone-button/permission integration and actual recognition remain manual checks. |
 
 ### Deliverables/submission: sections 3, 8–9
 

@@ -1,0 +1,250 @@
+Window root 0
+Printing with useUnmergedTree = 'true'
+Node #899 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ |-Node #908 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ | IsContainer = 'true'
+ |  |-Node #979 at (l=0.0, t=304.0, r=1080.0, b=2079.0)px
+ |  | CollectionInfo = 'androidx.compose.ui.semantics.CollectionInfo@7d1bbcd'
+ |  | IsTraversalGroup = 'true'
+ |  | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+ |  | Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+ |  |  |-Node #1000 at (l=683.0, t=346.0, r=1027.0, b=485.0)px
+ |  |  | IsContainer = 'true'
+ |  |  |  |-Node #1001 at (l=725.0, t=388.0, r=985.0, b=443.0)px
+ |  |  |    Text = '[Debug fixture]'
+ |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |  |-Node #1004 at (l=53.0, t=548.0, r=205.0, b=595.0)px
+ |  |  | Text = '[Assistant]'
+ |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |  |-Node #1005 at (l=53.0, t=627.0, r=405.0, b=682.0)px
+ |  |  | Text = '[Controlled answer]'
+ |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |  |-Node #1013 at (l=54.0, t=683.0, r=117.0, b=746.0)px
+ |  |    ContentDescription = '[Debug details]'
+ |  |    Focused = 'false'
+ |  |    Role = 'Button'
+ |  |    Actions = [OnClick, RequestFocus]
+ |  |    MergeDescendants = 'true'
+ |  |     |-Node #1014 at (l=70.0, t=693.0, r=101.0, b=736.0)px
+ |  |       Text = '[ⓘ]'
+ |  |       Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |-Node #943 at (l=0.0, t=0.0, r=1080.0, b=304.0)px
+ |  | IsTraversalGroup = 'true'
+ |  |  |-Node #944 at (l=0.0, t=136.0, r=1080.0, b=304.0)px
+ |  |     |-Node #946 at (l=22.0, t=168.0, r=127.0, b=273.0)px
+ |  |     | Focused = 'false'
+ |  |     | Role = 'Button'
+ |  |     | Actions = [OnClick, RequestFocus]
+ |  |     | MergeDescendants = 'true'
+ |  |     |  |-Node #947 at (l=43.0, t=189.0, r=106.0, b=252.0)px
+ |  |     |    ContentDescription = '[Open conversation history]'
+ |  |     |    Role = 'Image'
+ |  |     |-Node #948 at (l=148.0, t=182.0, r=495.0, b=257.0)px
+ |  |     |  |-Node #949 at (l=148.0, t=182.0, r=495.0, b=257.0)px
+ |  |     |    Text = '[Debug fixture]'
+ |  |     |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |     |-Node #952 at (l=954.0, t=168.0, r=1059.0, b=273.0)px
+ |  |       Focused = 'false'
+ |  |       Role = 'Button'
+ |  |       Actions = [OnClick, RequestFocus]
+ |  |       MergeDescendants = 'true'
+ |  |        |-Node #953 at (l=975.0, t=189.0, r=1038.0, b=252.0)px
+ |  |          ContentDescription = '[New conversation]'
+ |  |          Role = 'Image'
+ |  |-Node #960 at (l=0.0, t=2079.0, r=1080.0, b=2400.0)px
+ |    IsContainer = 'true'
+ |     |-Node #962 at (l=42.0, t=2111.0, r=1038.0, b=2305.0)px
+ |       IsContainer = 'true'
+ |        |-Node #964 at (l=95.0, t=2161.0, r=718.0, b=2279.0)px
+ |        | ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+ |        | ContentDescription = '[Message]'
+ |        | EditableText = ''
+ |        | Focused = 'false'
+ |        | ImeAction = 'Send'
+ |        | InputText = ''
+ |        | IsEditable = 'true'
+ |        | TextSelectionRange = 'TextRange(0, 0)'
+ |        | Actions = [GetTextLayoutResult, InsertTextAtCursor, OnAutofillText, OnClick, OnLongClick, PasteText, PerformImeAction, RequestFocus, SetSelection, SetText]
+ |        | MergeDescendants = 'true'
+ |        |  |-Node #994 at (l=95.0, t=2161.0, r=381.0, b=2216.0)px
+ |        |  | Text = '[Ask a question]'
+ |        |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |        |  |-Node #968 at (l=95.0, t=2161.0, r=385.0, b=2279.0)px
+ |        |-Node #995 at (l=739.0, t=2153.0, r=865.0, b=2279.0)px
+ |        | Focused = 'false'
+ |        | Role = 'Button'
+ |        | Actions = [OnClick, RequestFocus]
+ |        | MergeDescendants = 'true'
+ |        |  |-Node #996 at (l=771.0, t=2185.0, r=834.0, b=2248.0)px
+ |        |    ContentDescription = '[Voice input]'
+ |        |    Role = 'Image'
+ |        |-Node #972 at (l=886.0, t=2153.0, r=1012.0, b=2279.0)px
+ |          Role = 'Button'
+ |          [Disabled]
+ |          Actions = [OnClick]
+ |          MergeDescendants = 'true'
+ |           |-Node #974 at (l=918.0, t=2185.0, r=981.0, b=2248.0)px
+ |             ContentDescription = '[Send message]'
+ |             Role = 'Image'
+ |-Node #911 at (l=-907.0, t=0.0, r=0.0, b=2400.0)px
+   PaneTitle = 'Navigation menu'
+    |-Node #912 at (l=-907.0, t=0.0, r=0.0, b=2400.0)px
+      IsContainer = 'true'
+       |-Node #913 at (l=-907.0, t=136.0, r=0.0, b=2337.0)px
+          |-Node #914 at (l=-854.0, t=136.0, r=-53.0, b=2337.0)px
+             |-Node #916 at (l=-854.0, t=183.0, r=-179.0, b=258.0)px
+             | Text = '[Conversations]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #917 at (l=-168.0, t=168.0, r=-63.0, b=273.0)px
+             | Focused = 'false'
+             | Role = 'Button'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |  |-Node #918 at (l=-147.0, t=189.0, r=-84.0, b=252.0)px
+             |    ContentDescription = '[Close conversation history]'
+             |    Role = 'Image'
+             |-Node #921 at (l=-854.0, t=381.0, r=-53.0, b=518.0)px
+             | Focused = 'false'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |  |-Node #925 at (l=-728.0, t=426.0, r=-147.0, b=473.0)px
+             |    Text = '[New chat]'
+             |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #927 at (l=-854.0, t=592.0, r=-729.0, b=643.0)px
+             | Text = '[Recent]'
+             | [Heading]
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #928 at (l=-854.0, t=675.0, r=-53.0, b=2102.0)px
+             | CollectionInfo = 'androidx.compose.ui.semantics.CollectionInfo@9139c82'
+             | IsTraversalGroup = 'true'
+             | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+             | Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+             |  |-Node #1011 at (l=-854.0, t=855.0, r=-405.0, b=917.0)px
+             |  | Text = '[No conversations yet]'
+             |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |-Node #1012 at (l=-854.0, t=949.0, r=-53.0, b=1052.0)px
+             |    Text = '[Start a chat. Your saved conversations will appear here.]'
+             |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #931 at (l=-854.0, t=2105.0, r=-53.0, b=2305.0)px
+               IsContainer = 'true'
+                |-Node #933 at (l=-843.0, t=2142.0, r=-717.0, b=2268.0)px
+                | ContentDescription = '[Open profile menu]'
+                | Focused = 'false'
+                | Role = 'Button'
+                | Actions = [OnClick, RequestFocus]
+                | MergeDescendants = 'true'
+                |-Node #935 at (l=-685.0, t=2142.0, r=-64.0, b=2268.0)px
+                  Focused = 'false'
+                  Actions = [OnClick, RequestFocus]
+                  MergeDescendants = 'true'
+                   |-Node #936 at (l=-685.0, t=2159.0, r=-573.0, b=2210.0)px
+                   | Text = '[Profile]'
+                   | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                   |-Node #937 at (l=-685.0, t=2210.0, r=-508.0, b=2251.0)px
+                     Text = '[Local profile]'
+                     Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+
+Window root 1
+Printing with useUnmergedTree = 'true'
+Node #1015 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ |-Node #1016 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+   [IsDialog]
+    |-Node #1017 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+      IsTraversalGroup = 'true'
+       |-Node #1018 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+       | ContentDescription = '[Close sheet]'
+       | TraversalIndex = '1.0'
+       | Actions = [OnClick]
+       | MergeDescendants = 'true'
+       |-Node #1019 at (l=0.0, t=707.0, r=1080.0, b=2400.0)px
+         IsContainer = 'true'
+         PaneTitle = 'Bottom Sheet'
+         TraversalIndex = '0.0'
+          |-Node #1020 at (l=0.0, t=707.0, r=1080.0, b=2337.0)px
+             |-Node #1023 at (l=498.0, t=707.0, r=582.0, b=834.0)px
+             | Actions = [OnLongClick]
+             | MergeDescendants = 'true'
+             |  |-Node #1025 at (l=498.0, t=707.0, r=582.0, b=834.0)px
+             |    Focused = 'false'
+             |    Actions = [Dismiss, OnClick, RequestFocus]
+             |    MergeDescendants = 'true'
+             |     |-Node #1026 at (l=498.0, t=765.0, r=582.0, b=776.0)px
+             |       ContentDescription = '[Drag handle]'
+             |       IsContainer = 'true'
+             |-Node #1028 at (l=0.0, t=834.0, r=1080.0, b=2337.0)px
+               CollectionInfo = 'androidx.compose.ui.semantics.CollectionInfo@5956f93'
+               IsTraversalGroup = 'true'
+               VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+               Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+                |-Node #1030 at (l=53.0, t=887.0, r=410.0, b=962.0)px
+                | Text = '[Debug details]'
+                | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                |-Node #1032 at (l=53.0, t=994.0, r=316.0, b=1035.0)px
+                | Text = '[Controlled answer]'
+                | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                |-Node #1035 at (l=53.0, t=1078.0, r=1027.0, b=1183.0)px
+                | Focused = 'false'
+                | Role = 'Button'
+                | Actions = [OnClick, RequestFocus]
+                | MergeDescendants = 'true'
+                |  |-Node #1037 at (l=85.0, t=1106.0, r=995.0, b=1155.0)px
+                |    Text = '[▾ Tools called]'
+                |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                |-Node #1062 at (l=53.0, t=1204.0, r=306.0, b=1309.0)px
+                | Focused = 'false'
+                | Role = 'Button'
+                | Actions = [OnClick, RequestFocus]
+                | MergeDescendants = 'true'
+                |  |-Node #1064 at (l=85.0, t=1230.0, r=274.0, b=1283.0)px
+                |    Text = '[Copy JSON]'
+                |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                |-Node #1065 at (l=53.0, t=1319.0, r=1027.0, b=1494.0)px
+                | Focused = 'false'
+                | Actions = [RequestFocus]
+                |  |-Node #1067 at (l=53.0, t=1319.0, r=1027.0, b=1494.0)px
+                |    HorizontalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+                |    IsTraversalGroup = 'true'
+                |    Text = '[[
+    "get_actuator"
+]]'
+                |    Actions = [ClearTextSubstitution, GetTextLayoutResult, ScrollBy, ScrollByOffset, SetTextSubstitution, ShowTextSubstitution]
+                |-Node #1040 at (l=53.0, t=1537.0, r=1027.0, b=1642.0)px
+                | Focused = 'false'
+                | Role = 'Button'
+                | Actions = [OnClick, RequestFocus]
+                | MergeDescendants = 'true'
+                |  |-Node #1042 at (l=85.0, t=1565.0, r=995.0, b=1614.0)px
+                |    Text = '[▸ 1. get_actuator · Raw parameters]'
+                |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                |-Node #1045 at (l=53.0, t=1695.0, r=1027.0, b=1800.0)px
+                | Focused = 'false'
+                | Role = 'Button'
+                | Actions = [OnClick, RequestFocus]
+                | MergeDescendants = 'true'
+                |  |-Node #1047 at (l=85.0, t=1723.0, r=995.0, b=1772.0)px
+                |    Text = '[▸ 1. get_actuator · Validated parameters]'
+                |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                |-Node #1050 at (l=53.0, t=1853.0, r=1027.0, b=1958.0)px
+                | Focused = 'false'
+                | Role = 'Button'
+                | Actions = [OnClick, RequestFocus]
+                | MergeDescendants = 'true'
+                |  |-Node #1052 at (l=85.0, t=1881.0, r=995.0, b=1930.0)px
+                |    Text = '[▸ 1. get_actuator · Returned data]'
+                |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                |-Node #1055 at (l=53.0, t=2011.0, r=1027.0, b=2116.0)px
+                | Focused = 'false'
+                | Role = 'Button'
+                | Actions = [OnClick, RequestFocus]
+                | MergeDescendants = 'true'
+                |  |-Node #1057 at (l=85.0, t=2039.0, r=995.0, b=2088.0)px
+                |    Text = '[▸ Execution]'
+                |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                |-Node #1059 at (l=53.0, t=2169.0, r=210.0, b=2274.0)px
+                  Focused = 'false'
+                  Role = 'Button'
+                  Actions = [OnClick, RequestFocus]
+                  MergeDescendants = 'true'
+                   |-Node #1061 at (l=85.0, t=2195.0, r=178.0, b=2248.0)px
+                     Text = '[Close]'
+                     Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]

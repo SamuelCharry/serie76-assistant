@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.serie76.assistant.P2LiveDeviceAcceptanceTest" tests="1" failures="1" errors="0" skipped="0" time="31.449" timestamp="2026-11-06T14:49:06" hostname="localhost">
+  <properties>
+    <property name="device" value="Series76_API35(AVD) - 15" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="demoLoginConversationsAndNewChat" classname="com.serie76.assistant.P2LiveDeviceAcceptanceTest" time="17.794">
+    <failure></failure>
+  </testcase>
+  <system-err>Test run failed to complete. Instrumentation run failed due to Process crashed.
+</system-err>
+</testsuite>

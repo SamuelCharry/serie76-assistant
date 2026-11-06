@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.serie76.assistant.P2LiveDeviceAcceptanceTest" tests="8" failures="2" errors="0" skipped="0" time="97.484" timestamp="2026-11-06T14:52:28" hostname="localhost">
+  <properties>
+    <property name="device" value="Series76_API35(AVD) - 15" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="demoLoginConversationsAndNewChat" classname="com.serie76.assistant.P2LiveDeviceAcceptanceTest" time="21.76" />
+  <testcase name="keylessTwoCodeComparisonHasTableWithoutInternalNames" classname="com.serie76.assistant.P2LiveDeviceAcceptanceTest" time="13.503" />
+  <testcase name="keylessProductCardHasFiguresWithoutInternalNames" classname="com.serie76.assistant.P2LiveDeviceAcceptanceTest" time="9.465" />
+  <testcase name="closedPortShowsFriendlyErrorRetryAndResponsiveNavigation" classname="com.serie76.assistant.P2ControlledDeviceAcceptanceTest" time="11.276" />
+  <testcase name="fakeVoiceTranscriptReachesComposerAndNeverAutoSends" classname="com.serie76.assistant.P2ControlledDeviceAcceptanceTest" time="3.761" />
+  <testcase name="deleteUndoRestoresConversationWithoutBackendDelete" classname="com.serie76.assistant.P2ControlledDeviceAcceptanceTest" time="5.878">
+    <failure>java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but found '2' nodes that satisfy: (isRoot)
+Nodes found:
+1) Node #785 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+Has 3 children
+2) Node #878 at (l=0.0, t=0.0, r=735.0, b=496.0)px
+Has 1 child
+
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode$default(SemanticsNodeInteraction.kt:83)
+at androidx.compose.ui.test.OutputKt.printToString(Output.kt:45)
+at androidx.compose.ui.test.OutputKt.printToString$default(Output.kt:41)
+at com.serie76.assistant.P2DeviceHarness.dump(P2DeviceAcceptanceTest.kt:86)
+at com.serie76.assistant.P2ControlledDeviceAcceptanceTest.deleteUndoRestoresConversationWithoutBackendDelete(P2DeviceAcceptanceTest.kt:305)
+</failure>
+  </testcase>
+  <testcase name="sevenProfileTapsUnlockAnswerToolsParametersAndData" classname="com.serie76.assistant.P2ControlledDeviceAcceptanceTest" time="9.856">
+    <failure>java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but found '2' nodes that satisfy: (isRoot)
+Nodes found:
+1) Node #895 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+Has 2 children
+2) Node #1011 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+Has 1 child
+
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode$default(SemanticsNodeInteraction.kt:83)
+at androidx.compose.ui.test.OutputKt.printToString(Output.kt:45)
+at androidx.compose.ui.test.OutputKt.printToString$default(Output.kt:41)
+at com.serie76.assistant.P2DeviceHarness.dump(P2DeviceAcceptanceTest.kt:86)
+at com.serie76.assistant.P2ControlledDeviceAcceptanceTest.sevenProfileTapsUnlockAnswerToolsParametersAndData(P2DeviceAcceptanceTest.kt:285)
+</failure>
+  </testcase>
+  <testcase name="fifteenSecondResponseKeepsVisibleLoadingUntilCompletion" classname="com.serie76.assistant.P2ControlledDeviceAcceptanceTest" time="19.277" />
+</testsuite>

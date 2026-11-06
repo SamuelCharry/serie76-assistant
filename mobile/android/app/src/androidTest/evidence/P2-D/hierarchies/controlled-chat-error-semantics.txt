@@ -1,0 +1,136 @@
+Window root 0
+Printing with useUnmergedTree = 'true'
+Node #548 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ |-Node #557 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ | IsContainer = 'true'
+ |  |-Node #628 at (l=0.0, t=304.0, r=1080.0, b=914.0)px
+ |  | CollectionInfo = 'androidx.compose.ui.semantics.CollectionInfo@9681997'
+ |  | IsTraversalGroup = 'true'
+ |  | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+ |  | Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+ |  |-Node #592 at (l=0.0, t=0.0, r=1080.0, b=304.0)px
+ |  | IsTraversalGroup = 'true'
+ |  |  |-Node #593 at (l=0.0, t=136.0, r=1080.0, b=304.0)px
+ |  |     |-Node #595 at (l=22.0, t=168.0, r=127.0, b=273.0)px
+ |  |     | Focused = 'false'
+ |  |     | Role = 'Button'
+ |  |     | Actions = [OnClick, RequestFocus]
+ |  |     | MergeDescendants = 'true'
+ |  |     |  |-Node #596 at (l=43.0, t=189.0, r=106.0, b=252.0)px
+ |  |     |    ContentDescription = '[Open conversation history]'
+ |  |     |    Role = 'Image'
+ |  |     |-Node #597 at (l=148.0, t=182.0, r=148.0, b=257.0)px
+ |  |     |  |-Node #598 at (l=148.0, t=182.0, r=148.0, b=257.0)px
+ |  |     |    Text = '[]'
+ |  |     |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |     |-Node #601 at (l=954.0, t=168.0, r=1059.0, b=273.0)px
+ |  |       Focused = 'false'
+ |  |       Role = 'Button'
+ |  |       Actions = [OnClick, RequestFocus]
+ |  |       MergeDescendants = 'true'
+ |  |        |-Node #602 at (l=975.0, t=189.0, r=1038.0, b=252.0)px
+ |  |          ContentDescription = '[New conversation]'
+ |  |          Role = 'Image'
+ |  |-Node #609 at (l=0.0, t=914.0, r=1080.0, b=2400.0)px
+ |    IsContainer = 'true'
+ |     |-Node #674 at (l=42.0, t=946.0, r=1038.0, b=1270.0)px
+ |     | IsContainer = 'true'
+ |     |  |-Node #676 at (l=84.0, t=988.0, r=996.0, b=1091.0)px
+ |     |  | Text = '[Cannot reach the backend. Check your connection and the backend address.]'
+ |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |     |  |-Node #677 at (l=84.0, t=1113.0, r=236.0, b=1218.0)px
+ |     |    Focused = 'false'
+ |     |    Role = 'Button'
+ |     |    Actions = [OnClick, RequestFocus]
+ |     |    MergeDescendants = 'true'
+ |     |     |-Node #679 at (l=117.0, t=1139.0, r=204.0, b=1192.0)px
+ |     |       Text = '[Retry]'
+ |     |       Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |     |-Node #611 at (l=42.0, t=1291.0, r=1038.0, b=1485.0)px
+ |       IsContainer = 'true'
+ |        |-Node #613 at (l=95.0, t=1341.0, r=718.0, b=1459.0)px
+ |        | ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+ |        | ContentDescription = '[Message]'
+ |        | EditableText = 'Still responsive'
+ |        | Focused = 'true'
+ |        | ImeAction = 'Send'
+ |        | InputText = 'Still responsive'
+ |        | IsEditable = 'true'
+ |        | TextSelectionRange = 'TextRange(16, 16)'
+ |        | Actions = [GetTextLayoutResult, InsertTextAtCursor, OnAutofillText, OnClick, OnLongClick, PasteText, PerformImeAction, RequestFocus, SetSelection, SetText]
+ |        | MergeDescendants = 'true'
+ |        |  |-Node #617 at (l=95.0, t=1341.0, r=385.0, b=1459.0)px
+ |        |    Actions = [MagnifierPositionInRoot]
+ |        |-Node #680 at (l=739.0, t=1333.0, r=865.0, b=1459.0)px
+ |        | Focused = 'false'
+ |        | Role = 'Button'
+ |        | Actions = [OnClick, RequestFocus]
+ |        | MergeDescendants = 'true'
+ |        |  |-Node #681 at (l=771.0, t=1365.0, r=834.0, b=1428.0)px
+ |        |    ContentDescription = '[Voice input]'
+ |        |    Role = 'Image'
+ |        |-Node #621 at (l=886.0, t=1333.0, r=1012.0, b=1459.0)px
+ |          Focused = 'false'
+ |          Role = 'Button'
+ |          Actions = [OnClick, RequestFocus]
+ |          MergeDescendants = 'true'
+ |           |-Node #623 at (l=918.0, t=1365.0, r=981.0, b=1428.0)px
+ |             ContentDescription = '[Send message]'
+ |             Role = 'Image'
+ |-Node #560 at (l=-907.0, t=0.0, r=0.0, b=2400.0)px
+   PaneTitle = 'Navigation menu'
+    |-Node #561 at (l=-907.0, t=0.0, r=0.0, b=2400.0)px
+      IsContainer = 'true'
+       |-Node #562 at (l=-907.0, t=136.0, r=0.0, b=2337.0)px
+          |-Node #563 at (l=-854.0, t=136.0, r=-53.0, b=2337.0)px
+             |-Node #565 at (l=-854.0, t=183.0, r=-179.0, b=258.0)px
+             | Text = '[Conversations]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #566 at (l=-168.0, t=168.0, r=-63.0, b=273.0)px
+             | Focused = 'false'
+             | Role = 'Button'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |  |-Node #567 at (l=-147.0, t=189.0, r=-84.0, b=252.0)px
+             |    ContentDescription = '[Close conversation history]'
+             |    Role = 'Image'
+             |-Node #570 at (l=-854.0, t=381.0, r=-53.0, b=518.0)px
+             | Focused = 'false'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |  |-Node #574 at (l=-728.0, t=426.0, r=-147.0, b=473.0)px
+             |    Text = '[New chat]'
+             |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #576 at (l=-854.0, t=592.0, r=-729.0, b=643.0)px
+             | Text = '[Recent]'
+             | [Heading]
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #577 at (l=-854.0, t=675.0, r=-53.0, b=2102.0)px
+             | CollectionInfo = 'androidx.compose.ui.semantics.CollectionInfo@ae91784'
+             | IsTraversalGroup = 'true'
+             | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+             | Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+             |  |-Node #652 at (l=-854.0, t=855.0, r=-405.0, b=917.0)px
+             |  | Text = '[No conversations yet]'
+             |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |-Node #653 at (l=-854.0, t=949.0, r=-53.0, b=1052.0)px
+             |    Text = '[Start a chat. Your saved conversations will appear here.]'
+             |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #580 at (l=-854.0, t=2105.0, r=-53.0, b=2305.0)px
+               IsContainer = 'true'
+                |-Node #582 at (l=-843.0, t=2142.0, r=-717.0, b=2268.0)px
+                | ContentDescription = '[Open profile menu]'
+                | Focused = 'false'
+                | Role = 'Button'
+                | Actions = [OnClick, RequestFocus]
+                | MergeDescendants = 'true'
+                |-Node #584 at (l=-685.0, t=2142.0, r=-64.0, b=2268.0)px
+                  Focused = 'false'
+                  Actions = [OnClick, RequestFocus]
+                  MergeDescendants = 'true'
+                   |-Node #585 at (l=-685.0, t=2159.0, r=-573.0, b=2210.0)px
+                   | Text = '[Profile]'
+                   | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                   |-Node #586 at (l=-685.0, t=2210.0, r=-508.0, b=2251.0)px
+                     Text = '[Local profile]'
+                     Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
