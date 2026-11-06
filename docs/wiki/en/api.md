@@ -66,7 +66,7 @@ Remove-Item login.json, query.json
 With a valid token but no configured model, a turn requiring language interpretation returns HTTP 503; greetings and valid structured submissions do not need the model:
 
 ```json
-{"detail":"Conversation service unavailable. Check backend configuration and try again.","error_code":"not_configured"}
+{"detail":"The assistant is not configured yet. Please contact the service administrator.","error_code":"not_configured"}
 ```
 
 The T7 examples below are historical; the T8/T9 contract above adds the current fields.
