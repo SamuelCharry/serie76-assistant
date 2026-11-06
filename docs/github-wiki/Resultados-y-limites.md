@@ -13,6 +13,7 @@ Cada resultado corresponde a una versión y tipo de prueba. Una suite programada
 | Fuente reparada, offline | 795 pruebas Python aprobadas, 2 omitidas; oráculo 119/119 | Regresiones cubiertas en ese alcance |
 | Etiqueta final, T18 | 10/10 pasos; v7 453/453; 126 pruebas JVM y APK | Reproducción Windows sin inferencia pagada |
 | Emulador, P2-D | 8/8 pruebas seleccionadas | HTTP real sin LLM y datos controlados para fallos/debug/voz |
+| Voz, prueba manual del autor (2026-11-06) | Micrófono y reconocimiento real confirmados en emulador | Confirmación del usuario; sin artefacto automatizado adicional ni validación física |
 
 ## La distinción que no se debe omitir
 
@@ -24,6 +25,6 @@ La comparación pareada reportó McNemar p=0,013 / 0,007 / 0,002. Son tres ejecu
 
 ## Pendientes reales
 
-Reconocimiento de voz y permisos reales; legibilidad física; cobertura manual de fallos de login/debug; medición de carga y futura evaluación independiente del código reparado. El catálogo no permite inventar precio, stock, dimensiones ni certificar una instalación.
+Validación física de voz y cobertura completa de permisos/errores; legibilidad física; cobertura manual de fallos de login/debug; medición de carga y futura evaluación independiente del código reparado. El catálogo no permite inventar precio, stock, dimensiones ni certificar una instalación.
 
 [Evaluación y reparaciones](https://github.com/SamuelCharry/serie76-assistant/blob/main/reports/submission/P2-A.md) · [T18](https://github.com/SamuelCharry/serie76-assistant/blob/main/reports/submission/T18-tag-clean-clone.md) · [Emulador](https://github.com/SamuelCharry/serie76-assistant/blob/main/reports/submission/P2-D.md) · [OCR](https://github.com/SamuelCharry/serie76-assistant/blob/main/docs/evidence/ocr.md)

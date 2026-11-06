@@ -16,10 +16,9 @@ Se prefiere reconocimiento on-device en API 31+ cuando está disponible. El serv
 
 - **Implementado:** permiso, resultados parciales/finales, errores y cancelación del reconocedor.
 - **Verificado con entradas controladas:** el texto llega al editor, no se envía solo y se ignoran callbacks tardíos tras cancelar.
-- **Pendiente:** micrófono y reconocimiento reales, integración de permisos y comportamiento físico. El autor no dispone actualmente de un Android físico.
+- **Confirmado manualmente por el autor (2026-11-06):** el micrófono y el reconocimiento real funcionaron en el emulador. Esta confirmación no añade una ejecución automatizada ni una grabación al informe P2-D.
+- **Pendiente:** validación en dispositivo físico y cobertura completa de permisos, cancelación y errores del servicio.
 
-Un emulador con servicio de reconocimiento y micrófono del equipo podría permitir una prueba adicional; no se registra como aprobada sin ejecutarla. Sin servicio, se demuestra el manejo de indisponibilidad y se mantiene pendiente la transcripción real.
-
-**Para la sustentación:** «Implementé el flujo y probé su estado con transcripciones controladas; no tengo evidencia de reconocimiento real en un dispositivo físico».
+La prueba manual acredita ese recorrido concreto. No establece funcionamiento offline, precisión en todos los idiomas ni comportamiento en teléfonos físicos.
 
 [Reconocedor](https://github.com/SamuelCharry/serie76-assistant/blob/main/mobile/android/app/src/main/java/com/serie76/assistant/ui/AndroidVoiceRecognizer.kt) · [Evidencia P2-D](https://github.com/SamuelCharry/serie76-assistant/blob/main/reports/submission/P2-D.md)

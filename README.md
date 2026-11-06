@@ -45,7 +45,7 @@ flowchart LR
 | OCR and PostgreSQL catalogue | [941/941 primary checks](docs/evidence/ocr.md), idempotent loading | New layouts need validation |
 | Multi-turn selection | [Paired v17 mean 79.4%, 0/18,792 wrong figures](reports/submission/P2-A.md) | About 20% of conversations fail; repairs are separate from measured results |
 | Public text and hidden debug | [Executable text audit](reports/submission/P2-B.md), [emulator checks](reports/submission/P2-D.md) | Detector coverage is finite; debug transport was controlled |
-| Android interaction and voice | [8/8 emulator tests](reports/submission/P2-D.md) | Real recognition and login/debug fault paths need checks |
+| Android interaction and voice | [8/8 emulator tests](reports/submission/P2-D.md) | Physical-device voice and login/debug fault paths need checks |
 | Login, private history, Docker | [Linux CI](reports/submission/P2-C.md), [Windows clean clone](reports/submission/T18-tag-clean-clone.md) | Evaluator access and physical-device validation |
 
 ## Setup and backend
@@ -202,7 +202,7 @@ Three paired runs on the same 60 previously unseen, multi-turn conversations (v1
 
 Exact paired McNemar p-values were **0.013, 0.007 and 0.002**. The full structured audit found **0 wrong figures in 18,792 values** across both versions. Correct figures do not guarantee correct product identity or retained requirements. The p95 ≤10 s rule passed; individual turns still exceeded 10 s. Earlier slow-turn diagnosis found single provider calls, not application loops; that does not establish the cause of every v17 tail.
 
-**Limits:** about **20% of novel multi-turn conversations still fail** on average; the three repeats are not 180 independent conversations. Two new regressions concerned a withdrawn torque ceiling and the second comparison member; two shared defects concerned relative torque bounds. Their offline repairs and tests are tracked in the linked report, separately from live measurements. Voice recognition, microphone permissions/service behavior and physical-device readability still need manual checks.
+**Limits:** about **20% of novel multi-turn conversations still fail** on average; the three repeats are not 180 independent conversations. Two new regressions concerned a withdrawn torque ceiling and the second comparison member; two shared defects concerned relative torque bounds. Their offline repairs and tests are tracked in the linked report, separately from live measurements. The author confirmed real microphone recognition in the emulator on 2026-11-06 (manual report, no additional automated artifact). Full microphone permission/service coverage and physical-device validation remain pending.
 
 **Earlier evidence:** v14 **32/45** and v15 **42/60** predate the latest improvements; v16 was used for development and is not independent validation. Synthetic ranking achieved **NDCG@3 0.965 / compliance 1.0**, not end-to-end accuracy. The complete-state experiment (SV2) was **not adopted**: 8/60 versus 42/60. [Testing history](docs/wiki/en/testing.md) · [Rejected experiment](reports/submission/SV2-experiment.md).
 
@@ -232,4 +232,4 @@ The v6 selfcheck is historical: its presentation expectations predate T8 and it 
 
 [Wiki map](docs/wiki/en/index.md) · [Tests and commands](docs/wiki/en/testing.md) · [Interview defense](docs/wiki/es/defensa-entrevista.md) · [Checklist](docs/SUBMISSION.md) · [Brief](docs/assessment-en.pdf)
 
-[Published wiki and defense guide](https://github.com/SamuelCharry/serie76-assistant/wiki) ? [Wiki publication](docs/WIKI-PUBLISHING.md)
+[Wiki organized by assessment requirements](https://github.com/SamuelCharry/serie76-assistant/wiki) ? [Wiki publication](docs/WIKI-PUBLISHING.md)

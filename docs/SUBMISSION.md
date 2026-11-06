@@ -50,7 +50,7 @@ Checklist totals: **47 items — 40 ✅ / 7 ⚠️**. Each row counts as one obl
 | O02 | Preloaded test users documented | ✅ [README accounts](../README.md#demo-users-test-only), [T16 provisioning/login](../reports/submission/T16-clean-clone.md#command--result); no password resets. |
 | O03 | Login screen, Bearer requests, backend identifies user | ✅ [Authentication.kt](../mobile/android/app/src/main/java/com/serie76/assistant/data/Authentication.kt), [API](wiki/en/api.md#endpoint-map); login adds fourth screen. |
 | O04 | Users see/use only their conversations | ✅ [Auth tests](../tests/test_auth.py), [ownership](wiki/en/api.md); sign-up/recovery/OAuth not required. |
-| O05 | Voice plus text, documented transcription decisions | ⚠️ [P2-D emulator test](../reports/submission/P2-D.md): 8/8 selected tests passed; injected partial/final transcript reaches the composer, late callbacks are ignored and no auto-send occurs. [Voice decisions](wiki/en/android.md#t9-voice) documented; microphone-button/permission integration and actual recognition remain manual checks. |
+| O05 | Voice plus text, documented transcription decisions | ⚠️ [P2-D emulator test](../reports/submission/P2-D.md): 8/8 selected tests passed; injected partial/final transcript reaches the composer, late callbacks are ignored and no auto-send occurs. [Voice decisions](wiki/en/android.md#t9-voice) documented; Real microphone recognition in the emulator was confirmed manually by the owner on 2026-11-06, without an additional automated artifact. Full permission/error coverage and physical-device validation remain pending. |
 
 ### Deliverables/submission: sections 3, 8–9
 
@@ -94,7 +94,7 @@ The owner authorized adoption of the improved single-model version as an **expli
 
 About **20% of novel multi-turn conversations still fail** on average. Two new regressions (withdrawn torque ceiling and second comparison member), plus two shared relative-bound defects, are fixed with tests in the repaired source, separately from the measured candidate. Earlier slow-turn diagnosis found single provider calls rather than application loops; it does not identify the cause of each v17 tail. Historical recorded-model replay remains diagnostic at 28/45, exit 1, and is not a passing required gate.
 
-Remaining checklist warnings are **B04, B10, B17 and S03** (selection/interpretation quality and integrity are imperfect), **A09** (login/debug fault coverage), **O05** (manual voice recognition check), and **S02** (owner delivery actions). No missing mandatory source artifact was identified; partial evidence does not establish universal acceptance.
+Remaining checklist warnings are **B04, B10, B17 and S03** (selection/interpretation quality and integrity are imperfect), **A09** (login/debug fault coverage), **O05** (full voice permission/error and physical-device validation), and **S02** (owner delivery actions). No missing mandatory source artifact was identified; partial evidence does not establish universal acceptance.
 
 ## Final email draft
 
@@ -108,7 +108,7 @@ Merge and tag are complete. Reply to the original email after granting and verif
 >
 > Local OCR passed 941/941 primary checks. Before the final offline repairs, the single-model assistant averaged 79.4% versus 61.1% in three paired runs on 60 unseen multi-turn conversations, with no wrong figures among 18,792 checked values; roughly 20% of conversations still failed. Adoption was an explicit exception to the original no-regression rule, with subsequent repairs passing 797 tests (two skipped) and a 119-case oracle; the repaired source has no new paid score. Synthetic ranking reached NDCG@3 0.965 and compliance 1.0.
 >
-> Linux keyless Quick start, Windows clean-clone reproduction and 8/8 Android emulator checks passed in the documented runs. Real voice recognition still needs a manual check. Improved-version client latency was p95 6.69 s, with three turns over 10 s. Recorded OpenRouter spend was approximately USD 6.17 of USD 10.
+> Linux keyless Quick start, Windows clean-clone reproduction and 8/8 Android emulator checks passed in the documented runs. Real voice recognition in the emulator was subsequently confirmed manually by the author; physical-device validation remains pending. Improved-version client latency was p95 6.69 s, with three turns over 10 s. Recorded OpenRouter spend was approximately USD 6.17 of USD 10.
 >
 > The repository documents reproduction steps, trade-offs, repair evidence and remaining limitations.
 >

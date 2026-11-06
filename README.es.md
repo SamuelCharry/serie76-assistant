@@ -200,7 +200,7 @@ Tres ejecuciones pareadas sobre las mismas 60 conversaciones inéditas de varios
 
 McNemar exacto pareado: **p = 0,013, 0,007 y 0,002**. La auditoría estructurada completa encontró **0 cifras incorrectas en 18.792 valores** de ambas versiones. Una cifra correcta no garantiza identidad ni requisitos correctos. Se cumplió la regla p95 ≤10 s, aunque hubo turnos individuales más lentos. El diagnóstico anterior localizó demoras en llamadas individuales al proveedor, no en bucles de la aplicación; no demuestra la causa de cada demora v17.
 
-**Límites:** todavía falla, en promedio, cerca del **20 % de las conversaciones inéditas de varios turnos**; las repeticiones no son 180 conversaciones independientes. Las dos regresiones nuevas afectan un techo de torque retirado y el segundo miembro de una comparación; dos defectos compartidos afectan límites relativos de torque. Sus correcciones y pruebas offline se registran aparte de la medición real. Faltan comprobaciones manuales del reconocimiento de voz, permisos/servicio del micrófono y legibilidad en dispositivo físico.
+**Límites:** todavía falla, en promedio, cerca del **20 % de las conversaciones inéditas de varios turnos**; las repeticiones no son 180 conversaciones independientes. Las dos regresiones nuevas afectan un techo de torque retirado y el segundo miembro de una comparación; dos defectos compartidos afectan límites relativos de torque. Sus correcciones y pruebas offline se registran aparte de la medición real. El autor confirmó reconocimiento real con micrófono en el emulador el 2026-11-06 (reporte manual, sin artefacto automatizado adicional). Siguen pendientes la cobertura completa de permisos/errores y la validación física.
 
 **Evidencia anterior:** v14 **32/45** y v15 **42/60** preceden a las últimas mejoras; v16 se usó para desarrollo y no es validación independiente. El ranking sintético obtuvo **NDCG@3 0,965 / cumplimiento 1,0**, no exactitud integral. El experimento de estado completo (SV2) **no fue adoptado**: 8/60 frente a 42/60. [Historial de pruebas](docs/wiki/es/testing.md) · [Experimento rechazado](reports/submission/SV2-experiment.md).
 
@@ -230,4 +230,4 @@ El selfcheck v6 es histórico: sus expectativas de presentación son anteriores 
 
 [Mapa wiki](docs/wiki/es/index.md) · [Pruebas y comandos](docs/wiki/es/testing.md) · [Defensa](docs/wiki/es/defensa-entrevista.md) · [Checklist](docs/SUBMISSION.md) · [Enunciado](docs/assessment-en.pdf)
 
-[Wiki publicada y gu?a de sustentaci?n](https://github.com/SamuelCharry/serie76-assistant/wiki) ? [Wiki publication](docs/WIKI-PUBLISHING.md)
+[Wiki organizada por requisitos del assessment](https://github.com/SamuelCharry/serie76-assistant/wiki) · [Publicación de la wiki](docs/WIKI-PUBLISHING.md)

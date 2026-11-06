@@ -1,26 +1,26 @@
 # Documentación y entrega
 
-La entrega evaluable está en **`main`**. PR #10 integró la aplicación en `ac56dee`; **`v1.0-submission`** conserva ese código. `main` también contiene el informe posterior que reproduce esa etiqueta y esta documentación de sustentación.
+Secciones 8–9 del assessment. La entrega evaluable está en **`main`**. PR #10 integró la aplicación en `ac56dee`; **`v1.0-submission`** conserva ese código. `main` también contiene la evidencia posterior de reproducción y esta documentación técnica.
 
-| Recurso | Uso |
+| Entregable solicitado | Ubicación y uso |
 |---|---|
 | [README](https://github.com/SamuelCharry/serie76-assistant/blob/main/README.es.md) | Instalación, cuentas TEST ONLY y arranque |
 | [Checklist](https://github.com/SamuelCharry/serie76-assistant/blob/main/docs/SUBMISSION.md) | 47 obligaciones, evidencia y límites |
 | [T18](https://github.com/SamuelCharry/serie76-assistant/blob/main/reports/submission/T18-tag-clean-clone.md) | 10/10 pasos desde un clon de la etiqueta final |
 | [Resultados](https://github.com/SamuelCharry/serie76-assistant/wiki/Resultados-y-limites) | Calidad, latencia, gasto y alcance |
-| [Guion](https://github.com/SamuelCharry/serie76-assistant/wiki/Guion-de-sustentacion) | Orden de exposición y demostración |
+| Código backend y app | [Backend](https://github.com/SamuelCharry/serie76-assistant/tree/main/backend) · [Android](https://github.com/SamuelCharry/serie76-assistant/tree/main/mobile/android) |
+| Pipeline y datos procesados | [ingest.py](https://github.com/SamuelCharry/serie76-assistant/blob/main/scripts/ingest.py) · [Catálogo validado](https://github.com/SamuelCharry/serie76-assistant/tree/main/data/extracted/series76) |
+| Contenedores | [Dockerfile](https://github.com/SamuelCharry/serie76-assistant/blob/main/Dockerfile) · [Compose](https://github.com/SamuelCharry/serie76-assistant/blob/main/docker-compose.yml) |
+| Variables sin claves reales | [.env.example](https://github.com/SamuelCharry/serie76-assistant/blob/main/.env.example) |
+| Configuración del asistente de desarrollo | [.claude](https://github.com/SamuelCharry/serie76-assistant/tree/main/.claude) |
 
-## Qué falta para entregar
+## Cómo evaluar
 
-- [x] Código y datos publicados en `main`.
-- [x] Etiqueta de la aplicación y evidencia de reproducción.
-- [x] Arquitectura, decisiones y limitaciones documentadas.
-- [ ] Recibir usuarios GitHub de evaluadores y concederles acceso.
-- [ ] Verificar acceso y responder el correo original con el enlace.
-- [ ] Completar pruebas manuales disponibles; mantener voz física pendiente si no hay dispositivo.
+1. Seguir el Quick start del README para arrancar Docker, iniciar sesión y ejecutar Android.
+2. Probar consulta por código, comparación e historial. La interpretación libre requiere clave configurada y consume presupuesto.
+3. Revisar debug por respuesta y casos límite según los criterios del assessment.
+4. Contrastar resultados con la checklist y los límites documentados. La reproducción T18 es Windows sin inferencia pagada; no prueba macOS ni dispositivos físicos.
 
 Las cuentas de la app no conceden acceso al repositorio privado. El gasto registrado es USD 6,17; no es saldo consultado en vivo.
 
-## Mantener esta wiki
-
-GitHub Wiki es un repositorio independiente de `main`. Su fuente editorial se conserva en [docs/github-wiki](https://github.com/SamuelCharry/serie76-assistant/tree/main/docs/github-wiki): actualizar `main` por sí solo no publica estas páginas. Las páginas antiguas conservan sus URLs para no romper enlaces.
+Las fuentes de esta wiki se conservan en [docs/github-wiki](https://github.com/SamuelCharry/serie76-assistant/tree/main/docs/github-wiki).

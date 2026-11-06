@@ -8,6 +8,6 @@ Permite explicar **una respuesta concreta**: herramienta, parámetros, validacio
 
 La traza se carga a demanda y está disponible para respuestas guardadas. El gesto solo oculta la interfaz: la protección real es el token, la comprobación del propietario y la configuración del servidor.
 
-Para sustentar, usa primero la consulta de 15 W y muestra su ruta determinista. No afirmes que llamó al modelo solo porque existe una traza.
+Para verificarlo, consultar la potencia del código completo y revisar su ruta determinista. La presencia de una traza no implica que se llamó al modelo; `llm_called` distingue ese caso.
 
 [Endpoint](https://github.com/SamuelCharry/serie76-assistant/blob/main/backend/conversation/api.py) · [Evidencia de emulador](https://github.com/SamuelCharry/serie76-assistant/blob/main/reports/submission/P2-D.md)

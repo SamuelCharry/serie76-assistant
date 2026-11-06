@@ -6,7 +6,7 @@
 2. **Arquitectura — 60 s.** Muestra [el diagrama](https://github.com/SamuelCharry/serie76-assistant/wiki/Arquitectura): Android → FastAPI → interpretación o ruta determinista → SQL → validación/plantillas → historial.
 3. **Demostración — 90 s.** Consulta potencia por código completo, compara dos códigos, reabre historial y muestra debug. Estas consultas concretas funcionan sin LLM.
 4. **Decisiones — 60 s.** Explica un agente, datos relacionales, recuperación de ejemplos y estado controlado por código.
-5. **Evidencia y límites — 60 s.** Presenta 79,4 % frente a 61,1 %, distingue candidato medido y reparación offline, y declara pendiente la voz real.
+5. **Evidencia y límites — 60 s.** Presenta 79,4 % frente a 61,1 %, distingue candidato medido y reparación offline. La voz real funcionó en tu prueba manual del emulador; la validación física sigue pendiente.
 
 ## Preguntas que conviene preparar
 
@@ -22,7 +22,7 @@
 | ¿Qué pasa sin OpenRouter? | Login, historial y rutas deterministas funcionan; interpretación libre devuelve un error de configuración/disponibilidad. |
 | ¿Y con 100 veces más tráfico? | No está probado. Hay límites por proceso y transacción durante el turno; mediría contención y cuotas distribuidas. |
 | ¿Qué harías después? | Evaluación independiente de reparaciones, pruebas manuales pendientes y carga medida antes de añadir complejidad. |
-| ¿La voz funciona? | Flujo implementado y probado con transcripciones controladas; reconocimiento real y dispositivo físico pendientes. |
+| ¿La voz funciona? | Flujo automatizado con transcripciones controladas y reconocimiento real confirmado manualmente en emulador; dispositivo físico pendiente. |
 
 ## Preparar la demostración
 

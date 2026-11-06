@@ -1,11 +1,10 @@
-### Sustentación
+### Assessment
 
 - [Inicio](https://github.com/SamuelCharry/serie76-assistant/wiki/Home)
 - [Arquitectura](https://github.com/SamuelCharry/serie76-assistant/wiki/Arquitectura)
 - [Resultados y límites](https://github.com/SamuelCharry/serie76-assistant/wiki/Resultados-y-limites)
-- [Guion y demo](https://github.com/SamuelCharry/serie76-assistant/wiki/Guion-de-sustentacion)
 
-### Backend
+### Part A · Backend
 
 - [Ingesta OCR](https://github.com/SamuelCharry/serie76-assistant/wiki/Pipeline-de-ingesta)
 - [Base de datos y Docker](https://github.com/SamuelCharry/serie76-assistant/wiki/Base-de-datos-y-Docker)
@@ -13,15 +12,18 @@
 - [Agente LangChain](https://github.com/SamuelCharry/serie76-assistant/wiki/Agente-LangChain)
 - [API REST](https://github.com/SamuelCharry/serie76-assistant/wiki/API-REST-FastAPI)
 
-### Android
+### Part B · Mobile App
 
 - [Configuración](https://github.com/SamuelCharry/serie76-assistant/wiki/Configuracion-base-Android)
 - [Conversaciones](https://github.com/SamuelCharry/serie76-assistant/wiki/Pantalla-Conversaciones)
 - [Chat](https://github.com/SamuelCharry/serie76-assistant/wiki/Pantalla-Chat-activo)
 - [Debug](https://github.com/SamuelCharry/serie76-assistant/wiki/Pantalla-Developer-Debug)
+
+### Part C · Optional Features
+
 - [Login](https://github.com/SamuelCharry/serie76-assistant/wiki/Parte-C1-Login)
 - [Voz y sus límites](https://github.com/SamuelCharry/serie76-assistant/wiki/Parte-C2-Mensajes-de-voz)
 
-### Entrega
+### Entregables · Secciones 8–9
 
 - [Documentación y acceso](https://github.com/SamuelCharry/serie76-assistant/wiki/Documentacion-y-entrega)
