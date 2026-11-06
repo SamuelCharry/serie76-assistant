@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelStore
 import com.serie76.assistant.data.*
 import com.serie76.assistant.ui.AppViewModel
 import java.net.UnknownHostException
+import java.net.InetAddress
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicBoolean
@@ -108,7 +109,9 @@ class ResilienceTest(private val operation: String, private val scenario: String
                     return if (target(path) && failing.get()) response(path) else success(path)
                 }
             }
-            server.start()
+            // Pin one route: after a failed connection OkHttp can try another localhost
+            // address (IPv4/IPv6), on which this single-address test server is not listening.
+            server.start(InetAddress.getByName("127.0.0.1"), 0)
             val client = conversationHttpClient().newBuilder().apply {
                 addInterceptor { chain ->
                     if (Thread.currentThread() === caller) networkOnCaller.set(true)
@@ -123,7 +126,8 @@ class ResilienceTest(private val operation: String, private val scenario: String
                     chain.proceed(chain.request())
                 }
             }.build()
-            val api = Retrofit.Builder().baseUrl(server.url("/")).client(client)
+            val serverUrl = server.url("/").newBuilder().host("127.0.0.1").build()
+            val api = Retrofit.Builder().baseUrl(serverUrl).client(client)
                 .addConverterFactory(wireJson.asConverterFactory("application/json".toMediaType())).build()
                 .create(ConversationApi::class.java)
             val saved = SavedStateHandle(mapOf("draft" to "  Keep my exact text  "))
