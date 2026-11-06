@@ -231,3 +231,5 @@ The v6 selfcheck is historical: its presentation expectations predate T8 and it 
 [backend](backend/) · [Android](mobile/android/) · [OCR](catalog_ingest/) · [data](data/) · [config](config/) · [scripts](scripts/) · [tests](tests/) · [reports](reports/) · [Docker](docker/) · [CI](.github/) · [assistant config](.claude/) / [.codex](.codex/)
 
 [Wiki map](docs/wiki/en/index.md) · [Tests and commands](docs/wiki/en/testing.md) · [Interview defense](docs/wiki/es/defensa-entrevista.md) · [Checklist](docs/SUBMISSION.md) · [Brief](docs/assessment-en.pdf)
+
+[Published wiki and defense guide](https://github.com/SamuelCharry/serie76-assistant/wiki) ? [Wiki publication](docs/WIKI-PUBLISHING.md)

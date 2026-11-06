@@ -44,3 +44,5 @@ El único modelo de chat es `google/gemini-3.6-flash`, sin fallback; embeddings:
 La [auditoría de texto público](../../../reports/submission/P2-B.md), [CI Linux](../../../reports/submission/P2-C.md), [clon Windows](../../../reports/submission/T18-tag-clean-clone.md) y [8/8 pruebas de emulador](../../../reports/submission/P2-D.md) acreditan sus alcances concretos. El reconocimiento de voz todavía necesita una comprobación manual. Las entradas controladas del emulador no acreditan el recorrido Android-modelo real ni legibilidad física. Gasto OpenRouter registrado: aproximadamente **USD 6,17 de 10**.
 
 Las etiquetas P2-A o T18 identifican informes de evidencia, no funciones del producto. Los informes históricos conservan sus versiones originales y no son garantías universales vigentes.
+
+[GitHub Wiki: arquitectura y sustentaci?n](https://github.com/SamuelCharry/serie76-assistant/wiki)

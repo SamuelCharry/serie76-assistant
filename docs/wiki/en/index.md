@@ -43,3 +43,5 @@ The single chat model is `google/gemini-3.6-flash`, with no fallback; embeddings
 [Public-text audit](../../../reports/submission/P2-B.md), [Linux Quick start CI](../../../reports/submission/P2-C.md), [Windows clean clone](../../../reports/submission/T18-tag-clean-clone.md) and [8/8 emulator tests](../../../reports/submission/P2-D.md) establish their stated scopes. Actual voice recognition still needs a manual check. Android-to-real-LLM acceptance and physical-device readability are not established by controlled emulator inputs. Recorded OpenRouter spend is about **USD 6.17 of 10**.
 
 Report labels such as P2-A or T18 identify evidence records, not product features. Historical records retain their original versions and must not be treated as current universal guarantees.
+
+[GitHub Wiki: arquitectura y sustentaci?n](https://github.com/SamuelCharry/serie76-assistant/wiki)
