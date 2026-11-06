@@ -237,6 +237,18 @@ La revisión por turno aprobó 56/68 (82,4%): 18/19 conversaciones cotidianas y 
 Todas las respuestas tardaron menos de 10 s, con un máximo de 5,03 s.
 Esa revisión aceptó algunos casos dudosos y llegó a 30/41 conversaciones; no sustituye el 28/41 estricto ni demuestra que las cifras nunca puedan fallar. [Detalle](testing.md#vista-por-turno-y-uso-cotidiano).
 
+## 45. ¿Por qué falló v2 si el esquema era más pequeño?
+
+Bajó de 108 a 6 enums, pero trasladó responsabilidad al prompt y a validadores que rechazaban estados en vez de recuperar una respuesta o pedir una aclaración útil. Hubo respuestas de validación en 93/131 turnos y rutas internas expuestas en 51 turnos; v2 aprobó 8/60 frente a 42/60 de v1. Es evidencia contra esta implementación, no contra todo diseño de estado completo. [Experimento SV2](../../../reports/submission/SV2-experiment.md).
+
+## 46. ¿Qué garantiza el arreglo P1-F?
+
+La postcondición verifica contra SQL los productos de tarjetas, comparaciones, rankings y prosa positiva respecto de los requisitos representados y del conjunto visible exigido. Bloquea la selección inválida en todos esos canales; los incumplidores informativos deben identificarse. Corrigió cuatro violaciones técnicas observadas y dos del conjunto mostrado, con regresiones locales; no garantiza entender cualquier petición ni corrige por sí sola agregados o intención. No se volvió a puntuar v15 con inferencia. [P1-F](../../../reports/submission/P1-F.md).
+
+## 47. ¿Cómo acotas el sesgo de medición?
+
+v15 se congeló con hash; se compararon el mismo modelo, catálogo y recuperación, con variantes mezcladas y revisión ciega de tres paquetes disjuntos: un revisor por conversación. McNemar usa los 35/1 desacuerdos pareados; una auditoría separada revisó campos completos omitidos por el formato de revisión. Esto limita sesgos, no los elimina: una ejecución secuencial por sistema, sin medir acuerdo entre revisores, y v15 pasa a regresión tras usar sus fallos para reparar. [Método y límites](../../../reports/submission/SV2-experiment.md).
+
 ## Límites conocidos
 
 La aceptación OpenRouter se completó el 2026-11-05; v12 tras las correcciones y Android con LLM real siguen pendientes; la voz está implementada con pruebas JVM, pendiente en dispositivo; no hay sincronización offline ni evidencia de carga masiva. [Pruebas](testing.md) delimita el alcance.

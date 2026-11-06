@@ -16,6 +16,14 @@ A scripted model returns predetermined tool calls; the real tools then execute v
 - [test_auth.py](../../../tests/test_auth.py): Hashed auth, revocation, owner isolation and Android-facing auth contract.
 - [test_submission_readiness.py](../../../tests/test_submission_readiness.py): Routing require_parameters, process call guard and idempotent demo users.
 
+## v15 / SV2 and P1-F
+
+**SV2 experiment — not adopted:** on the same frozen v15, production v1 passed **42/60 (70%)** and complete-state v2 **8/60 (13.3%)** (discordants 35/1; McNemar p ≈ 1.1e-9). A smaller schema (108 → 6 enums) did not improve behavior. [Design, adoption rule and results](../../../reports/submission/SV2-experiment.md).
+
+**P1-F integrity invariant:** the final SQL eligibility check covers product cards, comparisons, rankings and positive product references in prose, including prior shown-set membership when requested. An invalid positive selection clears all selection channels; informational non-matches require explicit failure labels. v15 exposed **four technical violations**, now repaired and covered by local regressions, plus two shown-set violations. The historical 42/60 score predates this fix; no new live-model acceptance or deployment is claimed. This enforces represented requirements, not perfect interpretation, aggregate scope or installation suitability. [Implementation and verification](../../../reports/submission/P1-F.md).
+
+The paired review used three disjoint blind packs of 20 conversations: one reviewer per conversation, not three votes. Same model, catalogue and retrieval content; frozen dataset hashes checked before and after. v1/v2 LLM-turn p95 was **5.11/6.25 s**, spend **USD 0.32/0.46**; runs were sequential, not repeated performance trials. P1-F local verification: **669 tests (667 passed, 2 skipped)**, v7 **453/453**, T10 **48/48**, T12 **47/47**, T14 **42/42**. The direct public-text command is import-only; its exit zero is not a standalone audit. v15 is now diagnostic/regression material; fresh held-out provider validation remains pending.
+
 ## OpenRouter model selection
 
 **Historical OpenRouter v10/v11 acceptance (2026-11-05):** USD 1.17 spent from the USD 10 key. Blind strict review used three independent reviewers per round and shuffled variants per conversation: held-out v10 (41 conversations) + v11 (40), 81 total, including 74 in English. These are measured cohort results, not current price quotes or latency guarantees.
@@ -33,7 +41,7 @@ A scripted model returns predetermined tool calls; the real tools then execute v
 
 **Plan B / T14 retained:** strict blind results are v12 **29/45**, v13 **23/45**, and new held-out v14 **32/45 (71%)**. These are different cohorts, so the difference is not a causal estimate. v13 is diagnostic only. The fixed T14 rule required at least 27/45, all offline gates green and p95 at most 10 s. v14 had 85 turns (66 interpreted), p95 **6.2 s**, maximum **9.3 s**, no turns above 10 s and no HTTP errors. In v13, two of 79 interpreted turns took 11–16 s in single provider calls, not code loops. Plan B spent **USD 0.236607225**; settled total key usage was **USD 1.919522541**.
 
-**Verified on the final Plan B source:** 615 Python tests run (613 passed, two skipped); v7 453/453; T10 48/48 (8/48 before fixes); T12 47/47 (7/47 before); T14 42/42 (7/42 before). All required gates exited zero. Tool schema: **5,520 bytes / 108 enum values**; live preflight accepted. Ranking NDCG@3 **0.965378**, returned compliance **1.0**. Recorded v13 decisions replayed without inference at 23/45 before and 28/45 after; this is diagnostic and old decisions lack the new fields. [T14 report](../../../reports/submission/T14-plan-b.md).
+**Verified on the final Plan B source:** 615 Python tests run (613 passed, two skipped); v7 453/453; T10 48/48 (8/48 before fixes); T12 47/47 (7/47 before); T14 42/42 (7/42 before). All required gates exited zero. Tool schema: **5,520 bytes / 108 enum values**; live preflight accepted. Ranking NDCG@3 **0.965378**, returned compliance **1.0 in the synthetic ranking evaluation**, not across live conversations. Recorded v13 decisions replayed without inference at 23/45 before and 28/45 after; this is diagnostic and old decisions lack the new fields. [T14 report](../../../reports/submission/T14-plan-b.md).
 
 Schema preflight passed for gemini-3.6-flash, gemini-3.8-flash, gpt-6-luna, deepseek-v4.1-flash and gpt-6-sol. claude-haiku-5.5 passes only with `OPENROUTER_REQUIRE_PARAMETERS=false`: OpenRouter does not route `tool_choice=required` to Anthropic with `require_parameters`. claude-sonnet-5.5 rejects `tool_choice=required`. This records the tested routing, not future availability.
 

@@ -46,6 +46,12 @@ The model supplies a delta; code owns the carried state. In [policy.py](../../..
 `stronger` adds torque strictly greater than the reference; `faster` adds operating time strictly less than the reference in the selected frequency scope (asking when multiple frequencies are unresolved). `smaller` requires an explicit lower-torque meaning; physical dimensions are not published. Missing measurements trigger clarification, never guessed thresholds. The derived constraints carry SQL values, not model-generated numbers.
 
 
+## Final response eligibility (P1-F)
+
+**P1-F integrity invariant:** the final SQL eligibility check covers product cards, comparisons, rankings and positive product references in prose, including prior shown-set membership when requested. An invalid positive selection clears all selection channels; informational non-matches require explicit failure labels. v15 exposed **four technical violations**, now repaired and covered by local regressions, plus two shown-set violations. The historical 42/60 score predates this fix; no new live-model acceptance or deployment is claimed. This enforces represented requirements, not perfect interpretation, aggregate scope or installation suitability. [Implementation and verification](../../../reports/submission/P1-F.md).
+
+`finish()` calls [response_integrity.enforce](../../../backend/conversation/response_integrity.py) after rendering. It reloads SQL rows and applies `integrity.satisfies`, including the independent quantity ledger and missing written quantities. A valid card cannot mask an invalid prose recommendation. Cached selections are cleared with invalid positive outputs. Full-state v2 remains an [unadopted experiment](../../../reports/submission/SV2-experiment.md); v1 keeps its delta-based state handling.
+
 ## T8/T9: current flow
 
 The model makes one decision on turns requiring language interpretation; it writes neither figures nor final answers. Greetings, Submit, filter removal, structured actions and closed lookups of complete codes use deterministic routes without chat or embeddings. Transport attempts are not additional completed decisions.

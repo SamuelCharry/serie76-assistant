@@ -46,6 +46,12 @@ El modelo aporta el delta; el código conserva el estado anterior. En [policy.py
 `stronger` exige torque estrictamente mayor al de referencia; `faster`, tiempo estrictamente menor en la frecuencia seleccionada (pregunta si hay varias sin resolver). `smaller` exige que se indique menor torque; las dimensiones físicas no están publicadas. Si falta una medición, pregunta y nunca inventa el umbral. Las restricciones derivadas contienen valores SQL, no cifras generadas por el modelo.
 
 
+## Elegibilidad de la respuesta final (P1-F)
+
+**Invariante P1-F:** la comprobación final de elegibilidad contra SQL cubre tarjetas, comparaciones, rankings y referencias positivas a productos en la prosa, incluida la pertenencia al conjunto mostrado cuando se exige. Una selección positiva inválida elimina todos sus canales; los incumplidores informativos exigen etiquetas explícitas. v15 expuso **cuatro violaciones técnicas**, corregidas y cubiertas por regresiones locales, además de dos violaciones del conjunto mostrado. El 42/60 histórico precede al arreglo; no se afirma nueva aceptación con modelo real ni despliegue. Se verifican requisitos representados, no interpretación perfecta, alcance de agregados ni idoneidad de la instalación. [Implementación y verificación](../../../reports/submission/P1-F.md).
+
+`finish()` llama a [response_integrity.enforce](../../../backend/conversation/response_integrity.py) después de renderizar. Recarga filas SQL y aplica `integrity.satisfies`, incluido el registro independiente de cantidades y cantidades escritas ausentes. Una tarjeta válida no oculta una recomendación inválida en prosa. Las selecciones guardadas se limpian junto con salidas positivas inválidas. v2 de estado completo sigue como [experimento no adoptado](../../../reports/submission/SV2-experiment.md); v1 conserva el manejo de deltas.
+
 ## T8/T9: flujo actual
 
 El modelo interpreta una decisión por turno que requiere lenguaje; no redacta cifras ni respuestas. Saludos, Submit, retirada de filtros, acciones estructuradas y consultas cerradas de códigos completos usan rutas deterministas sin chat ni embeddings. Los intentos de transporte no equivalen a decisiones adicionales completadas.
