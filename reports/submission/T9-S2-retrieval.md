@@ -79,7 +79,7 @@ Executed with `.venv-chat/Scripts/python.exe`: `-m unittest discover -s tests` w
 Required rebuild command, executed exactly:
 
 ```text
-python C:\Users\nrir\AppData\Roaming\orca\chat-scratch\97d6b63f2a41ae2054d3f6922c392659\start_emb.py on build
+python <local-scratch>\start_emb.py on build
 ```
 
 [Ranking code](../../backend/conversation/retrieval_ranking.py), [variant evaluator](../../scripts/eval_retrieval_variants.py), [bounded Google loader](../../scripts/embed_masked_bank.py), [known-answer tests](../../tests/test_retrieval_ranking.py), [v7 additive replay](../../tests/test_retrieval_v7_additive.py).

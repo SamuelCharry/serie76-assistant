@@ -1,6 +1,6 @@
 # T9-A1 Android: voice input and hidden per-answer debug
 
-Date: 2026-11-04 (America/Bogota). Worktree: `C:\Users\nrir\orca\workspaces\serie76-assistant\t9-android`. Branch: `SamuelCharry/t9-android`, based on `release/submission`. Implementation commits: `9dfc488` (voice) and `3e5afbc` (hidden debug, additional regression tests and Android README).
+Date: 2026-11-04 (America/Bogota). Worktree: `<local-home>\orca\workspaces\serie76-assistant\t9-android`. Branch: `SamuelCharry/t9-android`, based on `release/submission`. Implementation commits: `9dfc488` (voice) and `3e5afbc` (hidden debug, additional regression tests and Android README).
 
 ## Implemented
 

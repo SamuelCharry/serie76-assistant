@@ -42,7 +42,7 @@ No paid inference was executed. Build used `COMPOSE_ENV_FILES=.env.example` to a
 
 ## README clean clone
 
-Clone retained for coordinator deletion: `C:\Users\nrir\Desktop\dev\serie76-clean-p1d-20261105`.
+Clone retained for coordinator deletion: `<local-home>\Desktop\dev\serie76-clean-p1d-20261105`.
 
 Created with local Git clone of the committed release branch (no working-tree files or existing environment copied). Copied its tracked `.env.example` to a new `.env`, then appended only the README isolation settings: `COMPOSE_PROJECT_NAME=serie76-clean`, `POSTGRES_PORT=55432`, `API_PORT=18000`. Keys stayed empty. Docker consumed the new configuration; the audit did not open any `.env`. No migrations, catalogue fixes or manual provisioning beyond README startup were necessary. HTTP API calls substitute for the Android UI in this backend smoke scope.
 

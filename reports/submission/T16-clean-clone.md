@@ -1,6 +1,6 @@
 # T16 — clean-clone, keyless reproduction
 
-Date: 2026-11-05. Tested source: `98168191488bb23bcd2c86e225ebd6a7aba187ae` on `release/submission`, cloned from GitHub into `C:\Users\nrir\Desktop\clean-test-T16`. Windows PowerShell, Git 2.54.0, Docker Compose 5.3.1, Python 3.12.10, Microsoft OpenJDK 17.0.21.0.2, Android SDK Platform 36. Docker layers, pip downloads and the host Gradle cache could be reused: this is a fresh checkout and database, not a cache-free or offline installation test.
+Date: 2026-11-05. Tested source: `98168191488bb23bcd2c86e225ebd6a7aba187ae` on `release/submission`, cloned from GitHub into `<local-home>\Desktop\clean-test-T16`. Windows PowerShell, Git 2.54.0, Docker Compose 5.3.1, Python 3.12.10, Microsoft OpenJDK 17.0.21.0.2, Android SDK Platform 36. Docker layers, pip downloads and the host Gradle cache could be reused: this is a fresh checkout and database, not a cache-free or offline installation test.
 
 The evaluation followed the clone's English README and its explicit API/testing links. Required workspace guidance was read before cloning, but no working-checkout code, environment, credentials or data were copied into the test. Retained processed data was selected as the README's documented ingestion alternative; OCR was not rerun. No provider keys were supplied, no paid inference was invoked, and no APK was installed. Tests used the isolated database only.
 
@@ -10,8 +10,8 @@ Commands below run from the clone root unless stated otherwise. `TOKEN` means th
 
 | Step | Command / action | Result |
 |---|---|---|
-| Preflight | `Test-Path C:\Users\nrir\Desktop\clean-test-T16`; `docker ps --format '{{.Names}} {{.Ports}}'` | Clone path absent; original `serie76-assistant` containers on 5432/8000. No original stack mutation. |
-| Clone | `git clone --branch release/submission --single-branch https://github.com/SamuelCharry/serie76-assistant C:\Users\nrir\Desktop\clean-test-T16`; `git rev-parse HEAD`; `git status --short` | PASS: requested SHA, clean checkout. |
+| Preflight | `Test-Path <local-home>\Desktop\clean-test-T16`; `docker ps --format '{{.Names}} {{.Ports}}'` | Clone path absent; original `serie76-assistant` containers on 5432/8000. No original stack mutation. |
+| Clone | `git clone --branch release/submission --single-branch https://github.com/SamuelCharry/serie76-assistant <local-home>\Desktop\clean-test-T16`; `git rev-parse HEAD`; `git status --short` | PASS: requested SHA, clean checkout. |
 | Configuration | `Copy-Item .env.example .env`; set `COMPOSE_PROJECT_NAME=serie76-clean`, `POSTGRES_PORT=55432`, `API_PORT=18000` in that file | PASS: `OPENROUTER_API_KEY` and `EMBEDDING_API_KEY` remained empty. Process checks also found no OpenRouter, Google, embedding or LangSmith credentials. Model-name defaults retained. |
 | 1, preliminary | `docker compose up --build -d`; `docker compose logs --no-color backend` | Exit 0, but **discarded as fresh-database evidence**: startup said `already_loaded`, zero users created. |
 | Isolation correction | `docker volume ls --filter label=com.docker.compose.project=serie76-clean`; `docker volume inspect serie76-clean_postgres_data`; `docker compose -p serie76-clean down -v` | Found an old test volume dated 2026-11-04, verified its `serie76-clean` project label, removed only that project's containers/network/volume under the task's explicit authorization. An initial inspection of guessed `serie76-clean_pgdata` returned “no such volume”; the listed actual volume name was then used. |
@@ -34,7 +34,7 @@ Commands below run from the clone root unless stated otherwise. `TOKEN` means th
 | 10 | `./mobile/android/gradlew.bat -p mobile/android testDebugUnitTest assembleDebug -PbackendUrl=http://10.0.2.2:18000/` | PASS: BUILD SUCCESSFUL in 2m 2s, 45 tasks executed; XML totals 74 tests, zero failures/errors/skips; debug APK generated, not installed. |
 | Documentation validation | `python scripts/check_docs_links.py`; `git diff --check` | PASS: 819 relative links/anchors checked, zero broken links; no whitespace errors. |
 | Cleanup | `docker compose -p serie76-clean down -v`; `docker ps`; `docker volume ls --filter label=com.docker.compose.project=serie76-clean` | PASS for Docker: test containers/network/volume removed; original containers still running on 5432/8000; no test volumes remain. |
-| Clone deletion | Coordinator removed the verified GitHub clone; worker checked `Test-Path -LiteralPath C:\Users\nrir\Desktop\clean-test-T16` | PASS: coordinator confirmed removal and the worker independently observed `False`. The earlier worker deletion attempt was rejected by execution policy; coordinator cleanup resolved that blocker. |
+| Clone deletion | Coordinator removed the verified GitHub clone; worker checked `Test-Path -LiteralPath <local-home>\Desktop\clean-test-T16` | PASS: coordinator confirmed removal and the worker independently observed `False`. The earlier worker deletion attempt was rejected by execution policy; coordinator cleanup resolved that blocker. |
 
 ## Findings, ordered by impact
 
@@ -53,4 +53,4 @@ Windows PowerShell surfaced native stderr from pip/Docker as `NativeCommandError
 
 Functional steps 1–10 and final cleanup are complete. The isolated test containers, network, volume and clone folder were removed; the original stack was not modified.
 
-Only README documentation and this report changed. After test-stack teardown, these two files were copied to the unchanged source checkout for publication; the runtime evaluation used the independent clone throughout. Local token-free execution logs remain outside the clone in `C:\Users\nrir\Desktop\T16-evidence`. Fresh-container startup, retained-data loading, authentication, deterministic HTTP, expected keyless failure, persisted history and Android JVM/build verification are measured here. Fresh OCR, cold dependency downloads, production HTTPS, emulator/device integration, voice and real-provider interpretation remain outside this run. Existing historical model-quality findings are not resolved by these checks.
+Only README documentation and this report changed. After test-stack teardown, these two files were copied to the unchanged source checkout for publication; the runtime evaluation used the independent clone throughout. Local token-free execution logs remain outside the clone in `<local-home>\Desktop\T16-evidence`. Fresh-container startup, retained-data loading, authentication, deterministic HTTP, expected keyless failure, persisted history and Android JVM/build verification are measured here. Fresh OCR, cold dependency downloads, production HTTPS, emulator/device integration, voice and real-provider interpretation remain outside this run. Existing historical model-quality findings are not resolved by these checks.

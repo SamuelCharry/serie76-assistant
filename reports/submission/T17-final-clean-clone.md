@@ -1,6 +1,6 @@
 # T17 — Final clean-clone reproduction
 
-Date: 2026-11-06. Evaluated `release/submission` at `a0484891f9becb7fe22a878718f1359b13512aca` (includes P1-F), cloned from GitHub into `C:\Users\nrir\Desktop\clean-test-final-t17`. Windows PowerShell, Python 3.12, Docker Linux containers, Temurin JDK 17.0.21+9 and installed Android SDK Platform 36. Commands came from the English README and its explicitly linked API examples and testing setup. No application source was consulted to invent setup steps or modified.
+Date: 2026-11-06. Evaluated `release/submission` at `a0484891f9becb7fe22a878718f1359b13512aca` (includes P1-F), cloned from GitHub into `<local-home>\Desktop\clean-test-final-t17`. Windows PowerShell, Python 3.12, Docker Linux containers, Temurin JDK 17.0.21+9 and installed Android SDK Platform 36. Commands came from the English README and its explicitly linked API examples and testing setup. No application source was consulted to invent setup steps or modified.
 
 The database volume was newly created: `serie76-clean_postgres_data`. Configuration was copied from `.env.example`, with `COMPOSE_PROJECT_NAME=serie76-clean`, `POSTGRES_PORT=55432`, `API_PORT=18000`, and API keys left empty. No paid inference or vector loading was executed. Existing Docker layers, pip downloads, Gradle caches and the installed SDK were reusable host prerequisites; this was a fresh checkout/database test, not a cache-free machine or offline dependency-installation test.
 
@@ -10,8 +10,8 @@ Commands below run from the clean clone unless explicitly stated. HTTP examples 
 
 | Step | Command / action | Observed result | Verdict |
 |---|---|---|---|
-| Preparation | `git clone --branch release/submission https://github.com/SamuelCharry/serie76-assistant C:\Users\nrir\Desktop\clean-test-final` | Full-history download took several minutes without a usable checkout at the first checks; it ultimately completed at the same SHA. A combined stop/delete/retry command was rejected by automatic policy and did not execute. | Host/tool limitation; no product failure |
-| Preparation | `git clone --depth 1 --single-branch --branch release/submission https://github.com/SamuelCharry/serie76-assistant C:\Users\nrir\Desktop\clean-test-final-t17`; `git rev-parse HEAD` | New shallow clone at `a0484891f9becb7fe22a878718f1359b13512aca`. | PASS |
+| Preparation | `git clone --branch release/submission https://github.com/SamuelCharry/serie76-assistant <local-home>\Desktop\clean-test-final` | Full-history download took several minutes without a usable checkout at the first checks; it ultimately completed at the same SHA. A combined stop/delete/retry command was rejected by automatic policy and did not execute. | Host/tool limitation; no product failure |
+| Preparation | `git clone --depth 1 --single-branch --branch release/submission https://github.com/SamuelCharry/serie76-assistant <local-home>\Desktop\clean-test-final-t17`; `git rev-parse HEAD` | New shallow clone at `a0484891f9becb7fe22a878718f1359b13512aca`. | PASS |
 | Configuration | `Copy-Item .env.example .env`; set the three documented isolation values above | Empty provider keys preserved; original stack remained on 5432/8000. No existing volume/password was changed. | PASS |
 | 1. Build/start | `docker compose up --build -d` | Exit 0; built `serie76-clean-backend`; created clean network, volume, DB and backend. | PASS |
 | 2. Retained catalogue | `curl.exe -sS http://localhost:18000/ready` | HTTP 200, `status: ready`, catalogue import 1, 68 rows, 16 context terms. Used the README's retained validated data route; fresh OCR was not required or rerun. | PASS |

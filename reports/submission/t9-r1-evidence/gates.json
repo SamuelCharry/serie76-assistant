@@ -2,7 +2,7 @@
   "ready_url": "http://127.0.0.1:8000/ready",
   "http_status": 200,
   "checked_at_utc": "2026-11-05T00:15:02.848897+00:00",
-  "build_command": "python C:\\Users\\nrir\\AppData\\Roaming\\orca\\chat-scratch\\97d6b63f2a41ae2054d3f6922c392659\\start_emb.py on build",
+  "build_command": "python <local>\\AppData\\Roaming\\orca\\chat-scratch\\97d6b63f2a41ae2054d3f6922c392659\\start_emb.py on build",
   "build_exit_code": 0,
   "python_suite": {
     "tests": 507,

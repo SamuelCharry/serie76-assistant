@@ -53,7 +53,7 @@ The required `.venv-model-eval\Scripts\python.exe reports/agent_acceptance/run_t
 
 The runner's explicitly non-gating historical replay remains **28/45**, exit 1; this is not a new live-model score and is not claimed as passing. Focused suites passed: P1 35/35, T7 live regressions 12/12, reproduction 7/7, agent scenarios 46/46. The runner-generated artifacts were copied to a local temporary evidence folder before restoring the tracked historical artifacts; only P1-C source, tests and this report are committed.
 
-Local evidence archive: `C:\Users\nrir\AppData\Local\Temp\series76-p1-c-final-9uc68keu` (direct unittest log plus the complete final runner outputs). All 16 changed Python file hashes matched the runner's final code manifest before archival.
+Local evidence archive: `<local-home>\AppData\Local\Temp\series76-p1-c-final-9uc68keu` (direct unittest log plus the complete final runner outputs). All 16 changed Python file hashes matched the runner's final code manifest before archival.
 
 Source identity for the 16 changed Python files: SHA-256 of the sorted JSON map from repository-relative path to file SHA-256 is `08f0cb835581e9ee88a233f5e3a2c101a874335e498d203992f2a8e22dfdaf66`. This covers the 11 backend files, two cleanup scripts and three test files; the report is excluded.
 

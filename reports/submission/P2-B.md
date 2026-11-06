@@ -8,7 +8,7 @@ Install the backend/test dependencies and provide the existing PostgreSQL catalo
 
 ```powershell
 python scripts/check_public_text.py
-python scripts/check_public_text.py --outputs 'C:/Users/nrir/AppData/Roaming/orca/chat-scratch/97d6b63f2a41ae2054d3f6922c392659/behavior/out_*/results.json' --report "$env:TEMP/public-text.json"
+python scripts/check_public_text.py --outputs '<local-scratch>/behavior/out_*/results.json' --report "$env:TEMP/public-text.json"
 ```
 
 This run used `.venv-chat/Scripts/python.exe reports/agent_acceptance/run_t12_no_env.py scripts/check_public_text.py` with that outputs glob and a temporary JSON report. The existing wrapper reads only DB settings from the running container and installs a guard refusing `.env` opens. No backend, catalogue, frozen scenarios or database volumes were modified.

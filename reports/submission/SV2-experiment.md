@@ -10,7 +10,7 @@ v2 bypassed v1 intent fast paths, state repair/merge rules and semantic field in
 
 ## Pre-registered adoption rule
 
-The coordinator's local plan `C:/Users/nrir/.claude/plans/evaluator-experience-p1.md`, section “Experimento paralelo SV2”, dated 2026-11-06, records this rule. The coordinator confirmed it was written before v15 existed and before the A/B run (Orca message `msg_fb0f35dd9d69`). Adoption into `release/submission` required **all** of:
+The coordinator's local plan `<local-home>/.claude/plans/evaluator-experience-p1.md`, section “Experimento paralelo SV2”, dated 2026-11-06, records this rule. The coordinator confirmed it was written before v15 existed and before the A/B run (Orca message `msg_fb0f35dd9d69`). Adoption into `release/submission` required **all** of:
 
 1. v2 passes at least **v1 + 5 conversations** on v15, **or** McNemar p < 0.05 **in v2's favour**.
 2. Zero integrity regressions: returned compliance 1.0 and no wrong figures.
@@ -59,4 +59,4 @@ Three disjoint blind packs each contained 20 conversations with shuffled A/B var
 
 Matching inputs, frozen hashes, paired scoring and blind variants bound several sources of bias. They do not establish inter-reviewer agreement, eliminate sequential provider effects, or prove generalization beyond this cohort. No post-hoc v2 repairs or scoring changes were applied. P1-F needs a new frozen cohort to measure post-fix live quality; replays and synthetic compliance cannot substitute for it.
 
-The source A/B report and raw evidence remain local under `C:/Users/nrir/AppData/Roaming/orca/chat-scratch/97d6b63f2a41ae2054d3f6922c392659/`: `SV2-AB-report.md`, `sv2_ab_ledger.json`, `sv2_ab_provenance.json`, `sv2_ab_audit.json`, `sv2_ab_score_summary.json`, the `behavior/out_v15_v1` and `behavior/out_v15_v2` results and `blind/` verdicts. These are provenance locators, not files included in a fresh repository clone. This report preserves the summary; the experimental branch contains the offline implementation evidence.
+The source A/B report and raw evidence remain local under `<local-scratch>/`: `SV2-AB-report.md`, `sv2_ab_ledger.json`, `sv2_ab_provenance.json`, `sv2_ab_audit.json`, `sv2_ab_score_summary.json`, the `behavior/out_v15_v1` and `behavior/out_v15_v2` results and `blind/` verdicts. These are provenance locators, not files included in a fresh repository clone. This report preserves the summary; the experimental branch contains the offline implementation evidence.

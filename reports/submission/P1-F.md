@@ -148,7 +148,7 @@ Reproduce the source recovery and audit with the existing no-dotenv wrapper:
 
 ```text
 .venv-model-eval/Scripts/python.exe reports/agent_acceptance/run_t12_no_env.py reports/agent_acceptance/p1_f_recover.py
-.venv-model-eval/Scripts/python.exe reports/agent_acceptance/run_t12_no_env.py reports/agent_acceptance/p1_f_scan.py --source C:/Users/nrir/AppData/Roaming/orca/chat-scratch/97d6b63f2a41ae2054d3f6922c392659
+.venv-model-eval/Scripts/python.exe reports/agent_acceptance/run_t12_no_env.py reports/agent_acceptance/p1_f_scan.py --source <local-scratch>
 .venv-model-eval/Scripts/python.exe reports/agent_acceptance/p1_f_final_gates.py
 ```
 

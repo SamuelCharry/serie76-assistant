@@ -1,8 +1,8 @@
-# Suite mediana de casos límite — propuesta v1
+# Especificación histórica de 40 casos límite
 
-Estado: diseño de evaluación, sin ejecutar. Fecha: 2026-11-03.
+Estado: especificación histórica del 2026-11-03, incorporada después a la suite v6; conservada porque los informes de reparación la citan. No es un plan pendiente ni el criterio de aceptación vigente.
 
-Esta batería complementa `config/agent_acceptance_cases_v5.json`; no sustituye los 63 escenarios históricos ni modifica sus resultados. Es una especificación de prompts y criterios observables, todavía no un archivo ejecutable por `agent_acceptance.py`.
+Los [casos ejecutables v6](../../config/agent_acceptance_cases_v6.json) incorporaron esta batería junto a los 63 escenarios anteriores. Sus expectativas de presentación son históricas; las [pruebas vigentes](../wiki/es/testing.md) distinguen regresiones, evaluación v17 y aceptación Android. Las decisiones posteriores del [contrato del agente](../wiki/es/agent.md) prevalecen sobre las alternativas exploratorias originales que se conservan abajo.
 
 ## Alcance y reglas
 

@@ -173,7 +173,7 @@ The two verification commands used the main checkout and the same code:
 ```
 
 Raw replay outputs, logs and the complete fresh runner artifacts are retained
-locally at `C:\Users\nrir\AppData\Local\Temp\series76-p1e-evidence-20261105-1938`.
+locally at `<local-home>\AppData\Local\Temp\series76-p1e-evidence-20261105-1938`.
 The [verification manifest](p1e-evidence/verification.json) records source
 commits, input/output hashes, exit codes and gate summaries. Historical tracked
 T14 artifacts are restored after archival, rather than replaced by this run.

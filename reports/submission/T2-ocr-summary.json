@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "original_output": "C:\\Users\\nrir\\Desktop\\dev\\serie76-assistant\\data\\processed\\acceptance-isolated\\doc-series_76_electric_data-4c28023929183df8-9882bf8659",
+  "original_output": "<local>\\Desktop\\dev\\serie76-assistant\\data\\processed\\acceptance-isolated\\doc-series_76_electric_data-4c28023929183df8-9882bf8659",
   "original_evaluation": {
     "status": "passed",
     "actual_rows": 68,

@@ -41,7 +41,7 @@ Removed unused direct dependencies `androidx.compose.material:material-icons-cor
 Final validation completed on Microsoft OpenJDK 17.0.21.0.2, Android SDK 36:
 
 ```powershell
-$env:JAVA_HOME='C:\Users\nrir\Desktop\T16-evidence\jdk17\jdk-17.0.21.0.2+1'
+$env:JAVA_HOME='<local-home>\Desktop\T16-evidence\jdk17\jdk-17.0.21.0.2+1'
 $env:Path="$env:JAVA_HOME\bin;$env:Path"
 java -version
 .\mobile\android\gradlew.bat -p mobile/android testDebugUnitTest assembleDebug --no-daemon --max-workers=2

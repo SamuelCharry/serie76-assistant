@@ -1,6 +1,6 @@
 # T8-W2 Android
 
-Date: 2026-11-04 (America/Bogota). Worktree: `C:\Users\nrir\orca\workspaces\serie76-assistant\t8-android`. Branch: `SamuelCharry/t8-android`. Based on `release/submission`; code commit: `82e4407`.
+Date: 2026-11-04 (America/Bogota). Worktree: `<local-home>\orca\workspaces\serie76-assistant\t8-android`. Branch: `SamuelCharry/t8-android`. Based on `release/submission`; code commit: `82e4407`.
 
 ## Implemented slices and screen states
 
