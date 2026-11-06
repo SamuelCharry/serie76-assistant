@@ -1,0 +1,33 @@
+name: README Quick start
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  quickstart-e2e:
+    name: Quick start / Linux keyless
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      COMPOSE_PROJECT_NAME: serie76-ci
+      OPENROUTER_API_KEY: ''
+      EMBEDDING_API_KEY: ''
+      LANGSMITH_TRACING: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Copy README configuration (empty API key)
+        run: cp .env.example .env
+      - name: Start README Compose stack
+        run: docker compose up -d --build
+      - name: Wait for readiness HTTP 200
+        run: python scripts/quickstart_smoke.py --wait-only
+      - name: Verify keyless HTTP flow and restart persistence
+        run: python scripts/quickstart_smoke.py
+      - name: Container diagnostics on failure
+        if: failure()
+        run: docker compose logs --no-color --tail=150
+      - name: Remove disposable CI stack and volume
+        if: always()
+        run: docker compose down -v
