@@ -77,6 +77,10 @@ def colloquial_requirements(query, semantic=None):
         result['enclosure'] = 'weatherproof'
     if re.search(r'\b(?:[13])[-\s]*(?:phase|phases|fases)\b', text):
         result['phase_count'] = int(re.search(r'\b([13])[-\s]*(?:phase|phases|fases)\b', text).group(1))
+    phase_text = _evidence_text(text)
+    for stem, count in (('monofas', 1), ('trifas', 3)):
+        if stem in phase_text:
+            result['phase_count'] = count
     if not nonhazard_signal(text) and re.search(r'\b(?:classified as hazardous|hazardous (?:area|room|zone)|(?:area|room|zone) is hazardous)\b', text):
         result['enclosure'] = 'explosionproof'
         notes.append('Interpreted the explicit hazardous-area requirement as Explosionproof.')
@@ -148,6 +152,13 @@ def enclosure_withdrawal(text):
     text = canonical_enclosures(text)
     withdrawal = bool(re.search(r'\b(?:remove|drop|withdraw|retract|clear|forget|elimina|quita|retira|olvida)\b[^.;!?]*\b(?:enclosure|explosionproof|weatherproof|envolvente|carcasa|antiexplos\w*)\b', text, re.I))
     explicit_constraint = re.search(r'\b(?:restriction|requirement|constraint|filter|restricci[óo]n|requisito|filtro)\b', text, re.I)
+    # Removing one enclosure and affirming its replacement is a replacement,
+    # not a request to discard the whole categorical field.
+    clauses = re.split(r'[.;]|\b(?:and|y|instead|replace|busca)\b', text, flags=re.I)
+    if withdrawal and any(re.search(r'\b(?:weatherproof|explosionproof|intemperie)\b', c, re.I)
+                          and not re.search(r'\b(?:remove|drop|withdraw|retract|clear|forget|elimina|quita|retira|olvida)\b', c, re.I)
+                          for c in clauses[1:]):
+        return False
     # Explicitly withdrawing a filter means no enclosure preference even when
     # site context is supplied. A generic site correction retains T10 clearance.
     return withdrawal and (bool(explicit_constraint) or not nonhazard_signal(text))
@@ -542,7 +553,27 @@ def _has_word(corpus, word):
 
 
 def _evidence_text(text):
-    return ' '.join(unicodedata.normalize('NFKC', text).lower().split())
+    text = ''.join(c for c in unicodedata.normalize('NFKD', text).lower() if not unicodedata.combining(c))
+    text = re.sub(r'\b(monof|trif)\?sic', r'\1asic', text)
+    return ' '.join(text.split())
+
+
+def removed_bound_sides(query, fields):
+    """A named floor/ceiling withdrawal removes one direction of a range."""
+    result = {}
+    bounded = [field for field in fields if field.startswith(('min_', 'max_'))]
+    for clause in re.split(r'[.;]|\b(?:but|keep|retain|retaining)\b', query, flags=re.I):
+        if not re.search(r'\b(?:remove|drop|withdraw|clear|forget|quita|elimina)\b', clause, re.I):
+            continue
+        lower = bool(re.search(r'\b(?:minimum|lower|floor)\b', clause, re.I))
+        upper = bool(re.search(r'\b(?:maximum|upper|ceiling)\b', clause, re.I))
+        if lower == upper:
+            continue
+        for field in bounded:
+            if (re.search(REMOVE_WORDS.get(field, r'(?!)'), clause, re.I)
+                    or len(bounded) == 1 and re.search(r'\b(?:bound|limit|floor|ceiling)\b', clause, re.I)):
+                result[field] = 'g' if lower else 'l'
+    return result
 
 
 def _dual_current(text):

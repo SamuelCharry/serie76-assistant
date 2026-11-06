@@ -257,6 +257,13 @@ Use assumptions quoting actual user wording for service/enclosure interpretation
 For conversational questions use ask_clarification: requirements for capabilities; topic=source_na,
 enclosure_guidance, supply_overview, catalogue_overview or supply_services for those catalogue topics.
 If AC operation and DC-only are both required, ask_clarification field=supply; never choose one silently.
+Changing the requested field or service of a comparison retains all compared codes. Use those codes
+or from_results_items; compared_winner is ONLY a request for one winner, never a comparison selector.
+A request for a reported alternative starts a search, not a lookup of the unavailable focused row.
+Missing, blank and N/A measurements are not zero: ask_clarification topic=source_na explains this.
+For compound requests include every supported focus and every unsupported request label. Distinguish
+booking, certification or ordering actions from requests for maintenance intervals or diagrams.
+Withdrawn commercial requests must not suppress the remaining supported request.
 """
 
 DESCRIPTIONS = {
@@ -819,7 +826,7 @@ class Turn:
                     focus.append(spec)
         self.context["focus"] = focus
         public = [public_product(p) | {"frequencies": p.get("frequencies", [])} for p in products]
-        comparison_focus = ['overview']
+        comparison_focus = focus if len(public) == 2 else ['overview']
         compared = quality.comparison(public, comparison_focus, self.context.get('filters')) if len(public) >= 2 else None
         if compared:
             if len(public) > 2 and any(spec['field'] != 'overview' for spec in focus):
@@ -843,7 +850,7 @@ class Turn:
                 answer += f"\nFor {code}, — means not published for this model."
             if not compared["rows"]:
                 answer += "No published differences in comparable fields."
-            if args.get('explain_terms'):
+            if args.get('explain_terms') or any(spec['field'] != 'overview' for spec in focus):
                 # A combined factual request includes equal values too (e.g. identical LRA).
                 answer += '\n' + '\n'.join(row['label'] + ': ' + ' vs '.join(row['values']) for row in compared['hidden_rows'])
         elif public:
@@ -851,6 +858,9 @@ class Turn:
             if len(products) == 1 and re.search(r'\b(?:enclosure|carcasa|envolvente)\b', self.query, re.I):
                 answer += '\nEnclosure: ' + products[0]['enclosure'].capitalize() + '.'
             if any(spec['field'] == 'motor_power' for spec in focus):
+                aggregate = answer_planner.motor_total(products[0], self.query) if len(products) == 1 else None
+                if aggregate:
+                    answer += '\n' + aggregate
                 answer += "\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption."
         else:
             answer = render_lookup([], "overview", missing, notes)
@@ -968,9 +978,14 @@ class Turn:
         focused = self.context.get('focused_model')
         if focused:
             known.add(focused)
-        reference_codes = self.context.get('last_comparison_models') or self.context.get('last_shown_list') or []
-        position = re.search(r'\bthan\s+(?:the\s+)?(first|second|third|fourth)\b', self.query, re.I)
+        reference_codes = self.context.get('last_shown_list') or self.context.get('last_comparison_models') or []
+        position = re.search(r'\b(?:than\s+)?(?:the\s+)?(first|second|third|fourth)\b', self.query, re.I)
         index = ('first', 'second', 'third', 'fourth').index(position.group(1).lower()) if position else -1
+        numbered = re.search(r'\b(?:item|model|position)\s*#?\s*([1-9]\d*)\b', self.query, re.I)
+        if numbered:
+            index = int(numbered.group(1)) - 1
+        if index >= len(reference_codes):
+            reference_codes = self.context.get('last_ranked_list') or reference_codes
         positioned = reference_codes[index] if 0 <= index < len(reference_codes) else None
         code = args.get('reference_part_number') or positioned or focused or (next(iter(known)) if len(known) == 1 else None)
         code, _ = policy.canonical_code(code or '')
@@ -1066,11 +1081,9 @@ class Turn:
                 {'hazard', 'safe_area'} if 'enclosure' in protected else set())
             self.retrieval.accepted = self.semantic - blocked
         inferred, interpretation_notes = policy.colloquial_requirements(self.query, self.semantic)
-        explicit_voltage = re.search(r'\b(\d+(?:[.,]\d+)?)\s*(?:v|volts?)\b', self.query, re.I)
-        if explicit_voltage:
-            from decimal import Decimal
-            volts = Decimal(explicit_voltage.group(1).replace(',', '.'))
-            delta['supply_voltage_v'] = int(volts) if volts == int(volts) else volts
+        stated_quantities, _ = requirement_coverage.apply(self.query, {}, self.context.get('filters') or {})
+        if 'supply_voltage_v' in stated_quantities:
+            delta['supply_voltage_v'] = stated_quantities['supply_voltage_v']
             inferred.pop('supply_voltage_v', None)
             if not re.search(r'\b(?:dc|ac)\b', self.query, re.I) and re.search(r'\bbattery (?:room|storage)\b', self.query, re.I):
                 delta.pop('supply_current', None)
@@ -1083,7 +1096,7 @@ class Turn:
             # requirement; absent fresh evidence, refinement carries prior state.
             delta.pop('dc_only', None)
         written, coverage_issues = requirement_coverage.apply(
-            self.query, {}, dict(self.context.get('filters') or {}, **delta))
+            self.query, {}, self.context.get('filters') or {})
         for field, claim in written.items():
             if field not in delta or requirement_coverage.missing({field: claim}, {field: delta[field]}):
                 delta[field] = claim
@@ -1121,7 +1134,8 @@ class Turn:
                 self.query, {k: v for k, v in delta.items()
                              if not self.carried_value(k, v, args) and k not in reference and k not in policy.removed_fields(self.query)
                              and str(v) != str((self.context.get('filters') or {}).get(k))
-                             and not (k == 'supply_voltage_v' and v == inferred.get(k) == 24)})))
+                             and not (k == 'supply_voltage_v' and v == inferred.get(k) == 24)},
+                self.context.get('filters') or {})))
         dropped = []
         if bad or ungrounded:
             # A value the user never expressed is NOT applied (it would be an invented
@@ -1160,17 +1174,32 @@ class Turn:
         if policy.enclosure_withdrawal(self.query):
             removals.add('enclosure')
             delta.pop('enclosure', None)
+        elif delta.get('enclosure') and (policy.explicit_context_values(self.query).get('enclosure') == delta['enclosure']
+                                       or policy.weather_exposure(self.query) and delta['enclosure'] == 'weatherproof'):
+            removals.discard('enclosure')
         if 'enclosure' in removals and delta.get('enclosure') == 'weatherproof' and policy.nonhazard_signal(self.query) and not policy.enclosure_withdrawal(self.query):
             removals.remove('enclosure')
         if 'supply_current' in removals:
             removals.add('dc_only')
         if policy.removed_fields(self.query) and 'enclosure' in policy.removed_fields(self.query):
             self.context.pop('hazard_signal', None)
+        from backend.catalog.models import bounds, bound_operator, bound_value
+        partial_removals = policy.removed_bound_sides(self.query, previous)
+        for field, side in partial_removals.items():
+            remaining = [dict(value=bound_value(b), op=bound_operator(b, 'gte' if field.startswith('min_') else 'lte'))
+                         for b in bounds(previous[field])
+                         if not bound_operator(b, 'gte' if field.startswith('min_') else 'lte').startswith(side)]
+            if remaining:
+                delta[field] = remaining[0] if len(remaining) == 1 else remaining
+                removals.discard(field)
         same_performance = re.search(r'\bsame performance\b', self.query, re.I) and args.get('refine') and delta.get('service')
         change_only = bool(previous and re.match(r'^\s*(?:and |actually |make (?:that|it) |no wait[, ]*|instead\b)',
                                                  self.query, re.I))
         merged, notes = policy.merge_filters(previous, delta, refine=args["refine"] or bool(kept) or change_only or negated,
                                              remove=sorted(removals), more=args["more"], query=self.query)
+        for field in partial_removals:
+            if field not in removals:
+                merged[field] = delta[field]
         withdrawn = set(self.context.get('withdrawn_fields', [])) if args['refine'] or kept or change_only or negated or args['more'] else set()
         withdrawn.update(removals)
         withdrawn.difference_update(k for k in delta if k not in removals)
@@ -1182,6 +1211,12 @@ class Turn:
                               if field in carried and field not in ('supply_voltage_v', 'frequency_hz') else value)
         for field in removals:
             carried.pop(field, None)
+        for field in partial_removals:
+            if field in merged:
+                carried[field] = merged[field]
+        for field, value in reference.items():
+            if field in policy.NUMERIC_FIELDS:
+                carried[field] = merged[field]
         missing_quantities = requirement_coverage.missing(carried, merged)
         if missing_quantities:
             self.trace['validation'] = ['unrepresented_quantity:' + field for field in missing_quantities]
@@ -1538,7 +1573,7 @@ class Turn:
         self.context['last_shown_list'] = [item['part_number'] for item in rec['items']]
         self.context['last_shown_offset'] = len(rec['items'])
         products = [public_product(p) | {'frequencies': p.get('frequencies', [])}
-                    for p in ranking.rank(result['products'], merged, by)]
+                    for p in ranking.rank(all_rows, merged, by)[:rec['shown']]]
         answer, products, narrowing, options, focus = quality.search_presentation(dict(result, count_sentence=count_sentence), products, merged, notes, shown)
         if unscoped_superlative:
             narrowing = None
@@ -1599,7 +1634,7 @@ class Turn:
                 item['part_number'] + ': ' + item['reason'] for item in rec['items'])
             products = ([] if merged.get('sort_by') else
                         [quality.focused_product(public_product(p) | {'frequencies': p.get('frequencies', [])}, focus)
-                         for p in ranking.rank(all_rows, merged, by)[:3]])
+                         for p in ranking.rank(all_rows, merged, by)[:rec['shown']]])
         else:
             answer += '\nRanked by ' + rec['ranked_by'] + '.'
         if 'lowest_power' in (merged.get('sort_by') or []):
@@ -1894,7 +1929,8 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         declined = catalogue_answers.limitations(query)
         named = policy.codes_in_text(query)
         purchase = policy.purchase_request(query) and re.search(r'\b(?:buy|purchase|order|comprar|compra)\b', query, re.I)
-        if (declined and not turn.context.get('filters') or named and policy.hazard_signal(query) and not answer_planner.plan(query).metrics) and not purchase:
+        if (declined and named and catalogue_answers.covered_clauses(query)
+                or named and policy.hazard_signal(query) and not answer_planner.plan(query).metrics) and not purchase:
             supported = bool(answer_planner.plan(query).metrics) or bool(re.search(
                 r'\b(?:specs|specifications|especificaciones|published data|voltage|voltaje|supply|enclosure|carcasa|CSA)\b', query, re.I))
             lookup = named and (supported or policy.hazard_signal(query))
@@ -1922,12 +1958,14 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                               context_before=context_before,
                               model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
             args = models['search_actuators'].model_validate(dict(
-                reference_operation=relative, reference_part_number=named[0] if len(named) == 1 else '')).model_dump(mode='json')
+                refine=True, reference_operation=relative, reference_part_number=named[0] if len(named) == 1 else '')).model_dump(mode='json')
             return finish(turn, turn.search(args))
         preference = re.search(r'\b(?:prefer|preference|rank|sort|prioriti[sz]e|prefiero|prioriza|ordena)\b', query, re.I)
         objectives = [key for key in ('fastest', 'lowest_power', 'highest_torque', 'lowest_current')
                       if policy.sort_grounded(key, query)]
-        if preference and objectives and turn.context.get('filters'):
+        global_search = re.search(r'\b(?:find|search|re-rank|rerank|all eligible|change the priority)\b', query, re.I)
+        shown_only = re.search(r'\b(?:shown|displayed|those|these|among|on screen)\b', query, re.I)
+        if (preference or global_search) and objectives and turn.context.get('filters') and not shown_only:
             turn.trace = dict(name='search_actuators', parameters={}, raw_parameters={}, validation=['ok'],
                               context_before=context_before,
                               model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
@@ -2121,7 +2159,9 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
             return finish(turn, AgentResult('I only cover the Series 76 catalogue. I can compare its published models.',
                                             context=turn.context))
         topic = policy.unpublished_topic(query, asked_only=True)
-        if topic and not re.search(r'\b(?:IP\s*\d+|NEMA\s*\d+)\b', query, re.I):
+        if (topic and not answer_planner.plan(query).metrics
+                and not re.search(r'\b(?:and|plus|also|y)\b', query, re.I)
+                and not re.search(r'\b(?:IP\s*\d+|NEMA\s*\d+)\b', query, re.I)):
             turn.trace = dict(name='document_limitation', parameters={}, raw_parameters={}, validation=['ok'],
                               context_before=context_before,
                               model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
@@ -2335,7 +2375,9 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         limitation = None
         if re.search(r'\b(are you chatgpt|are you an ai)\b', bare_query):
             limitation = "I'm the Series 76 catalogue assistant. I can help compare published models."
-        if limitation is None and not re.search(r'\b(buy|order|purchase)\b', bare_query) and re.search(r'\b(delivery|lead time|ship(?:ping)?)\b', bare_query):
+        if (limitation is None and not answer_planner.plan(query).metrics
+                and not re.search(r'\b(buy|order|purchase)\b', bare_query)
+                and any('delivery' in note for note in catalogue_answers.limitations(query))):
             limitation = 'The catalogue does not publish delivery times. I can show the published model specifications.'
         if limitation is None and not answer_planner.plan(query).metrics and re.search(r'\b(warranty|guarantee)\b', bare_query):
             limitation = 'The catalogue does not publish warranty terms. I can show the published model specifications.'
@@ -2359,7 +2401,11 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
                          if n.get('kind') == 'footnote' and n.get('text')]
                 limitation = (f"The catalogue footnote for {codes[0]} says: {notes[0]}." if notes else
                               "The catalogue does not explain a footnote for that model. I can show its published specifications.")
-        if limitation is None and re.search(r'\b(cost|price|prices)\b', bare_query) and not re.search(r'\b(cheapest|cheap one)\b', bare_query):
+        if (limitation is None and (not answer_planner.plan(query).metrics
+                or re.search(r'\b(?:weighted|twice as much|score)\b', query, re.I))
+                and not policy.colloquial_requirements(query)[0]
+                and any('prices' in note for note in catalogue_answers.limitations(query))
+                and not re.search(r'\b(cheapest|cheap one)\b', bare_query)):
             limitation = "The catalogue doesn't publish prices. A weighted price score is unavailable; I can compare published motor power or torque as a proxy only."
         if limitation is None and re.search(r'\b(rotork|other brands?)\b', bare_query):
             limitation = 'The catalogue covers Series 76 actuators only. I can compare its published models.'
@@ -2376,7 +2422,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         if limitation is None and re.search(r'\b(how strong is strong enough|size (?:my|a|the) valve|valve sizing)\b', bare_query):
             limitation = 'The catalogue does not size valves. Tell me the required torque and I can find actuators that meet it.'
         named_codes = policy.codes_in_text(query)
-        if limitation is None and len(named_codes) == 1:
+        if limitation is None and len(named_codes) == 1 and not re.search(r'\b(?:and|plus|also|y)\b', query, re.I):
             attribute = policy.unsupported_lookup_attribute(query, named_codes[0], turn.terms)
             if attribute:
                 limitation = ((f"The catalogue doesn't publish {attribute} for {named_codes[0]}. "
@@ -2426,7 +2472,7 @@ def _turn(connection, query, messages, context, *, model=None, answers=None, rem
         return finish(turn, AgentResult('I ranked the models by ' + criterion + '. Those are catalogue measurements, not an overall suitability or price score.',
                                         context=turn.context))
     pick = (not re.search(r'\bcompare\b', bare_query) and bool(re.search(r'\b(best|(?:just )?pick one|just tell me|which one should i buy|which is best|the cheap one|this doesn.t help|too many questions)\b', bare_query)))
-    cheap = bool(re.search(r'\b(cheap|cheapest|price|cost)\b', bare_query))
+    cheap = bool(re.search(r'\b(cheap|cheapest)\b', bare_query))
     if action is None and not answers and not remove_filters and (pick or cheap):
         turn.trace = dict(name='ranked_pick', parameters={}, raw_parameters={}, validation=['ok'],
                           context_before=context_before,
@@ -2715,7 +2761,8 @@ def finish(turn, result):
             result.recommendation = None
             result.products = []
             result.comparison = None
-    if re.search(r'\b(price|prices|precio|precios|cheapest|cheap)\b', turn.query, re.I) and not result.answer.startswith(("The catalogue doesn't publish prices.", 'The catalogue does not publish prices.')):
+    if (any('prices' in note for note in catalogue_answers.limitations(turn.query))
+            or re.search(r'\b(?:cheapest|cheap)\b', turn.query, re.I)) and not result.answer.startswith(("The catalogue doesn't publish prices.", 'The catalogue does not publish prices.')):
         limitation = 'The supplied catalogue has no prices. I cannot calculate a weighted overall score involving price; I can compare published torque, operating time, current and motor power.'
         if re.search(r'\b(?:cheapest|cheap)\b', turn.query, re.I) and result.recommendation:
             limitation = "The catalogue doesn't publish prices. Lowest motor power is a proxy for comparison, not a price estimate."

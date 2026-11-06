@@ -60,21 +60,39 @@ def limitations(query):
         (r'\b(?:installation instructions|how to install|install it)\b', "The catalogue does not publish installation instructions."),
         (r'\b(?:series?|serie)\s+(?!76\b)\d+\b', "Other series are outside this catalogue; I only cover the Series 76 catalogue."),
     )
-    return [message for pattern, message in patterns if re.search(pattern, query, re.I)]
+    # A withdrawal is not a fresh request. Strip only the withdrawn clause so
+    # supported clauses and other independently requested limitations survive.
+    clauses = re.split(r'[.;!?]|\b(?:and|but|then)\b', query, flags=re.I)
+    active = ' '.join(c for c in clauses if not re.match(
+        r'^\s*(?:forget|ignore|drop|withdraw|omit|disregard|olvida|quita)\b', c, re.I))
+    return [message for pattern, message in patterns if re.search(pattern, active, re.I)]
 
 
 def relative_operation(query):
     """Closed relative search phrasing, distinct from comparisons of displayed models."""
-    if not re.search(r'\b(?:find|search|need|busc\w*|necesito)\b|\b(?:give|show)\s+me\b[^.!?;]*\bthan\b', query, re.I):
+    if not re.search(r'\b(?:find|search|need|get|want|use|alternative|another|quiero|busc\w*|necesito)\b|\b(?:give|show)\s+[^.!?;]*\b(?:than|alternative)\b', query, re.I):
         return ''
     for operation, pattern in (
-        ('stronger', r'\bstronger\b|\b(?:more|m[aá?]s)\b[^.!?;]*\b(?:torque|par)\b'),
+        ('stronger', r'\bstronger\b|\b(?:more|greater|m[aá?]s)\b[^.!?;]*\b(?:torque|par|fuerte)\b'),
         ('faster', r'\bfaster\b|\bm[aá?]s\s+r[aá?]pid[oa]\b'),
         ('smaller', r'\bsmaller\b|\bmenor\s+(?:torque|par)\b'),
     ):
         if re.search(pattern, query, re.I):
             return operation
     return ''
+
+
+def covered_clauses(query):
+    """Use a deterministic limitation only when each request clause is covered.
+
+    Unknown conjunctions go through the normal decision so unsupported_requests
+    can name the remaining attributes instead of silently dropping them.
+    """
+    from .answer_planner import plan
+    clauses = re.split(r'\b(?:and|plus|also|y)\b', query, flags=re.I)
+    return all(limitations(clause) or plan(clause).metrics or re.search(
+        r'\b(?:specs|specifications|especificaciones|published data|voltage|voltaje|supply|enclosure|carcasa|CSA)\b',
+        clause, re.I) for clause in clauses if clause.strip())
 
 
 def answer(connection, query):
@@ -93,7 +111,9 @@ def answer(connection, query):
         from .rendering import supplies_text
         return supplies_text(published_supplies(connection))
     # A request for products with a property is not a request for facet statistics.
-    product_search = bool(re.search(r'\b(?:models?|actuators?|modelos?|actuadores?)\b', text))
+    product_search = bool(re.search(r'\b(?:models?|actuators?|candidates?|modelos?|actuadores?)\b', text))
+    if re.search(r'\b(?:explain|means?|meaning|define|definition|explica|significa)\b', text):
+        return None
     if re.search(r'\btorque range\b.*\b(?:catalogue|series 76)\b|\b(?:catalogue|series 76)\b.*\btorque range\b', text):
         rows = connection.execute(
             "SELECT s.service,min(s.torque_nm) AS low,max(s.torque_nm) AS high "

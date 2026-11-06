@@ -1,0 +1,907 @@
+[
+  {
+    "id": "comparison_scope",
+    "source": "L4-04",
+    "turn": 3,
+    "message_id": "310e78e3-f3f5-4e02-a846-1a2835250b05",
+    "classification": "interpretation",
+    "diagnosis": "Flash uses compared_winner for a two-product comparison; ideal explicit codes preserve the set.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "focus": [
+            "torque"
+          ],
+          "focus_service": "modulating",
+          "reference_kind": "compared_winner"
+        },
+        "name": "get_actuator"
+      }
+    ],
+    "route": "get_actuator",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {
+      "focus": [
+        "torque"
+      ],
+      "focus_service": "modulating",
+      "reference_kind": "compared_winner"
+    },
+    "covers_conversations": [
+      "L1-02",
+      "L4-04"
+    ]
+  },
+  {
+    "id": "inclusive_bound",
+    "source": "L1-03",
+    "turn": 1,
+    "message_id": "c6096afb-3800-4e87-8664-8f41e5726362",
+    "classification": "code",
+    "diagnosis": "Correct gte model argument overwritten by deterministic above matcher.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "bounds": [
+            {
+              "op": "gte",
+              "field": "min_torque_nm",
+              "value": 800
+            }
+          ],
+          "service": "on_off",
+          "enclosure": "explosionproof",
+          "phase_count": 1,
+          "supply_current": "AC",
+          "supply_voltage_v": 220
+        },
+        "name": "search_actuators"
+      }
+    ],
+    "route": "search_actuators",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {
+      "bounds": [
+        {
+          "op": "gte",
+          "field": "min_torque_nm",
+          "value": 800
+        }
+      ],
+      "service": "on_off",
+      "enclosure": "explosionproof",
+      "phase_count": 1,
+      "supply_current": "AC",
+      "supply_voltage_v": 220
+    },
+    "covers_conversations": [
+      "L1-03",
+      "L7-02"
+    ]
+  },
+  {
+    "id": "range_bounds",
+    "source": "L7-03",
+    "turn": 1,
+    "message_id": "7496e96b-7f45-4c53-8da5-fedcd769f58e",
+    "classification": "code",
+    "diagnosis": "Coverage emits scalar and dict in one range; SearchFilters rejects mixed list.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "bounds": [
+            {
+              "op": "gte",
+              "field": "min_torque_nm",
+              "value": 100
+            },
+            {
+              "op": "lte",
+              "field": "min_torque_nm",
+              "value": 200
+            }
+          ],
+          "refine": false,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "phase_count": 1,
+          "supply_voltage_v": 220
+        },
+        "name": "search_actuators"
+      }
+    ],
+    "route": "search_actuators",
+    "recorded_validation": [
+      "decimal_type:min_torque_nm.decimal",
+      "model_type:min_torque_nm.NumericBound",
+      "model_type:min_torque_nm.list[NumericBound].0"
+    ],
+    "raw_parameters": {
+      "bounds": [
+        {
+          "op": "gte",
+          "field": "min_torque_nm",
+          "value": 100
+        },
+        {
+          "op": "lte",
+          "field": "min_torque_nm",
+          "value": 200
+        }
+      ],
+      "refine": false,
+      "service": "on_off",
+      "enclosure": "weatherproof",
+      "phase_count": 1,
+      "supply_voltage_v": 220
+    },
+    "covers_conversations": [
+      "L7-03"
+    ]
+  },
+  {
+    "id": "directional_removal",
+    "source": "L7-03",
+    "turn": 2,
+    "message_id": "7e79b1c4-e8a0-4cab-aa38-5e5391ad460e",
+    "classification": "code",
+    "diagnosis": "Field-wide removal erases upper and lower bounds even when only the lower end is withdrawn.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "bounds": [
+            {
+              "op": "lte",
+              "field": "min_torque_nm",
+              "value": 200
+            }
+          ],
+          "refine": true,
+          "remove": [
+            "min_torque_nm"
+          ],
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "phase_count": 1,
+          "supply_current": "AC",
+          "supply_voltage_v": 220
+        },
+        "name": "search_actuators"
+      }
+    ],
+    "route": "search_actuators",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {
+      "bounds": [
+        {
+          "op": "lte",
+          "field": "min_torque_nm",
+          "value": 200
+        }
+      ],
+      "refine": true,
+      "remove": [
+        "min_torque_nm"
+      ],
+      "service": "on_off",
+      "enclosure": "weatherproof",
+      "phase_count": 1,
+      "supply_current": "AC",
+      "supply_voltage_v": 220
+    },
+    "covers_conversations": [
+      "L1-03",
+      "L7-03"
+    ]
+  },
+  {
+    "id": "published_alternative",
+    "source": "L1-04",
+    "turn": 3,
+    "message_id": "5475ce8e-853c-41b5-8ace-dedc91452db4",
+    "classification": "interpretation",
+    "diagnosis": "Flash repeats focused N/A row instead of selecting a published alternative.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "focus": [
+            "overview"
+          ],
+          "reference_kind": "focused"
+        },
+        "name": "get_actuator"
+      }
+    ],
+    "route": "get_actuator",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {
+      "focus": [
+        "overview"
+      ],
+      "reference_kind": "focused"
+    },
+    "covers_conversations": [
+      "L1-04"
+    ]
+  },
+  {
+    "id": "identifier_quantity",
+    "source": "L1-07",
+    "turn": 1,
+    "message_id": "c8553bc1-9411-4999-b403-f36e6e50cb5b",
+    "classification": "code",
+    "diagnosis": "Quantity scanner reads the 764A prefix inside a part identifier as 764 amperes.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "focus": [
+            "motor_power",
+            "fla"
+          ],
+          "part_numbers": [
+            "764A00-11300000/A"
+          ],
+          "focus_frequency_hz": 50
+        },
+        "name": "get_actuator"
+      }
+    ],
+    "route": "get_actuator",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {
+      "focus": [
+        "motor_power",
+        "fla"
+      ],
+      "part_numbers": [
+        "764A00-11300000/A"
+      ],
+      "focus_frequency_hz": 50
+    },
+    "covers_conversations": [
+      "L1-07"
+    ]
+  },
+  {
+    "id": "visible_limit",
+    "source": "L2-02",
+    "turn": 1,
+    "message_id": "9a70007f-2cd5-4fcd-8f6e-741d3628e437",
+    "classification": "code",
+    "diagnosis": "Ranking and cards hard-code three despite validated limit=2.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "limit": 2,
+          "bounds": [
+            {
+              "op": "gte",
+              "field": "min_torque_nm",
+              "value": 150
+            }
+          ],
+          "refine": false,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "assumptions": {
+            "service": "opening and closing",
+            "enclosure": "outdoor"
+          },
+          "supply_voltage_v": 110
+        },
+        "name": "search_actuators"
+      }
+    ],
+    "route": "search_actuators",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {
+      "limit": 2,
+      "bounds": [
+        {
+          "op": "gte",
+          "field": "min_torque_nm",
+          "value": 150
+        }
+      ],
+      "refine": false,
+      "service": "on_off",
+      "enclosure": "weatherproof",
+      "assumptions": {
+        "service": "opening and closing",
+        "enclosure": "outdoor"
+      },
+      "supply_voltage_v": 110
+    },
+    "covers_conversations": [
+      "L2-02",
+      "L5-02",
+      "L6-02",
+      "L7-02",
+      "L7-06",
+      "L4-01"
+    ]
+  },
+  {
+    "id": "relative_search",
+    "source": "L2-02",
+    "turn": 3,
+    "message_id": "d49c5237-28d2-4f88-b258-cc6ce14eaad3",
+    "classification": "code",
+    "diagnosis": "Relative request falls into metric verdict; independent ledger rejects legitimate SQL reference bound.",
+    "recorded_model_calls": null,
+    "route": "metric_verdict",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L2-02",
+      "L5-02"
+    ]
+  },
+  {
+    "id": "reference_position",
+    "source": "L7-01",
+    "turn": 3,
+    "message_id": "61816be8-d581-4e01-9df9-6b782be7cb39",
+    "classification": "code",
+    "diagnosis": "Comparison overwrites visible ordinal frame; third reference becomes unresolved despite prior ranked list.",
+    "recorded_model_calls": null,
+    "route": "search_actuators",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L7-01"
+    ]
+  },
+  {
+    "id": "contextual_enclosure",
+    "source": "L2-03",
+    "turn": 3,
+    "message_id": "c9bd6f71-94b7-41da-bdb4-73f58bdb7573",
+    "classification": "code",
+    "diagnosis": "Broad catalogue overview bypass ignores active hazard and selection intent.",
+    "recorded_model_calls": null,
+    "route": "catalogue_answer",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L2-03"
+    ]
+  },
+  {
+    "id": "glossary_routing",
+    "source": "L2-06",
+    "turn": 1,
+    "message_id": "cc24fa52-52c8-4895-a6c3-ca5199e520db",
+    "classification": "code",
+    "diagnosis": "Service overview shortcut intercepts a definition request before any interpreter.",
+    "recorded_model_calls": null,
+    "route": "catalogue_answer",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L2-06"
+    ]
+  },
+  {
+    "id": "elliptical_limit",
+    "source": "L3-01",
+    "turn": 2,
+    "message_id": "09e9064c-69f7-445f-b0a8-059ea811fe06",
+    "classification": "code",
+    "diagnosis": "Correct 750 Nm decision rejected because follow-up omits a unit already present in unique active numeric field.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "bounds": [
+            {
+              "op": "gte",
+              "field": "min_torque_nm",
+              "value": 750
+            }
+          ],
+          "refine": true
+        },
+        "name": "search_actuators"
+      }
+    ],
+    "route": "search_actuators",
+    "recorded_validation": [
+      "ungrounded:min_torque_nm"
+    ],
+    "raw_parameters": {
+      "bounds": [
+        {
+          "op": "gte",
+          "field": "min_torque_nm",
+          "value": 750
+        }
+      ],
+      "refine": true
+    },
+    "covers_conversations": [
+      "L3-01"
+    ]
+  },
+  {
+    "id": "equal_comparison_field",
+    "source": "L3-02",
+    "turn": 4,
+    "message_id": "81d7f69d-4696-4e88-afd3-eedea7a1208a",
+    "classification": "code",
+    "diagnosis": "Lookup forces overview and hides equal requested frequency-specific fields.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "focus": [
+            "operating_time"
+          ],
+          "focus_frequency_hz": 50,
+          "from_results_items": "1,2"
+        },
+        "name": "get_actuator"
+      }
+    ],
+    "route": "get_actuator",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {
+      "focus": [
+        "operating_time"
+      ],
+      "focus_frequency_hz": 50,
+      "from_results_items": "1,2"
+    },
+    "covers_conversations": [
+      "L3-02"
+    ]
+  },
+  {
+    "id": "withdrawn_unsupported",
+    "source": "L3-03",
+    "turn": 2,
+    "message_id": "3ed795b5-8c30-4cdf-a357-dc2ab0b92cec",
+    "classification": "code",
+    "diagnosis": "Presence-only price limitation ignores retraction and preempts supported lookup.",
+    "recorded_model_calls": null,
+    "route": "document_limitation",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L3-03",
+      "L6-04"
+    ]
+  },
+  {
+    "id": "same_turn_correction",
+    "source": "L4-05",
+    "turn": 1,
+    "message_id": "b95adc9a-8e16-4c2a-88f4-3bb0b2814117",
+    "classification": "code",
+    "diagnosis": "First voltage wins, then reverse grounding rejects the correctly interpreted correction.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "bounds": [
+            {
+              "op": "gte",
+              "field": "min_torque_nm",
+              "value": 80
+            }
+          ],
+          "refine": false,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "assumptions": {
+            "service": "on/off"
+          },
+          "phase_count": 1,
+          "supply_voltage_v": 110
+        },
+        "name": "search_actuators"
+      }
+    ],
+    "route": "search_actuators",
+    "recorded_validation": [
+      "ungrounded:supply_voltage_v",
+      "response_integrity_exclusions"
+    ],
+    "raw_parameters": {
+      "bounds": [
+        {
+          "op": "gte",
+          "field": "min_torque_nm",
+          "value": 80
+        }
+      ],
+      "refine": false,
+      "service": "on_off",
+      "enclosure": "weatherproof",
+      "assumptions": {
+        "service": "on/off"
+      },
+      "phase_count": 1,
+      "supply_voltage_v": 110
+    },
+    "covers_conversations": [
+      "L4-05"
+    ]
+  },
+  {
+    "id": "phase_grounding",
+    "source": "L5-01",
+    "turn": 1,
+    "message_id": "2ae86471-f5a6-4a4f-9bd4-8bcf18790d6c",
+    "classification": "code",
+    "diagnosis": "Phase evidence rejects Spanish accented or damaged accented words despite correct phase decision.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "bounds": [
+            {
+              "op": "gte",
+              "field": "min_torque_nm",
+              "value": 150
+            }
+          ],
+          "refine": false,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "assumptions": {
+            "service": "abrir y cerrar",
+            "enclosure": "a la intemperie"
+          },
+          "phase_count": 1,
+          "supply_current": "AC",
+          "supply_voltage_v": 220
+        },
+        "name": "search_actuators"
+      }
+    ],
+    "route": "search_actuators",
+    "recorded_validation": [
+      "ungrounded:supply_current",
+      "ungrounded:phase_count"
+    ],
+    "raw_parameters": {
+      "bounds": [
+        {
+          "op": "gte",
+          "field": "min_torque_nm",
+          "value": 150
+        }
+      ],
+      "refine": false,
+      "service": "on_off",
+      "enclosure": "weatherproof",
+      "assumptions": {
+        "service": "abrir y cerrar",
+        "enclosure": "a la intemperie"
+      },
+      "phase_count": 1,
+      "supply_current": "AC",
+      "supply_voltage_v": 220
+    },
+    "covers_conversations": [
+      "L5-01"
+    ]
+  },
+  {
+    "id": "enclosure_replacement",
+    "source": "L5-03",
+    "turn": 3,
+    "message_id": "2eb86a6a-232b-4edf-9dcd-402f8d37da0c",
+    "classification": "code",
+    "diagnosis": "Enclosure withdrawal wins over explicitly supplied replacement enclosure.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "refine": true,
+          "enclosure": "weatherproof",
+          "assumptions": {
+            "enclosure": "intemperie"
+          }
+        },
+        "name": "search_actuators"
+      }
+    ],
+    "route": "search_actuators",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {
+      "refine": true,
+      "enclosure": "weatherproof",
+      "assumptions": {
+        "enclosure": "intemperie"
+      }
+    },
+    "covers_conversations": [
+      "L5-03"
+    ]
+  },
+  {
+    "id": "compound_lookup",
+    "source": "L6-02",
+    "turn": 3,
+    "message_id": "10c12ea5-948b-4a48-8133-fcb01d85417f",
+    "classification": "code",
+    "diagnosis": "Unsupported-only deterministic route discards supported field and prior positional reference.",
+    "recorded_model_calls": null,
+    "route": "document_limitation",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L6-02"
+    ]
+  },
+  {
+    "id": "compound_certification",
+    "source": "L6-03",
+    "turn": 3,
+    "message_id": "b7f12427-f90b-4f42-8ce8-3fc6676320b8",
+    "classification": "code",
+    "diagnosis": "Unpublished wiring shortcut substitutes a diagram request and omits supported FLA.",
+    "recorded_model_calls": null,
+    "route": "document_limitation",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L6-03"
+    ]
+  },
+  {
+    "id": "compound_search",
+    "source": "L6-04",
+    "turn": 1,
+    "message_id": "17633e5c-fc2f-4a86-933f-7a56da957756",
+    "classification": "code",
+    "diagnosis": "Unsupported price shortcut swallows an actuator selection without a named part.",
+    "recorded_model_calls": null,
+    "route": "document_limitation",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L6-04"
+    ]
+  },
+  {
+    "id": "unsupported_coverage",
+    "source": "L6-05",
+    "turn": 1,
+    "message_id": "bd5b41c5-0e3f-4e31-93a9-b43a5d036800",
+    "classification": "code",
+    "diagnosis": "One recognized unsupported clause preempts the remaining unknown clause.",
+    "recorded_model_calls": null,
+    "route": "document_limitation",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L6-05"
+    ]
+  },
+  {
+    "id": "compound_booking",
+    "source": "L6-06",
+    "turn": 1,
+    "message_id": "2c7c8987-7b9c-4b0b-8f9f-97a474a92f26",
+    "classification": "code",
+    "diagnosis": "Maintenance keyword shortcut substitutes intervals for booking and omits requested current.",
+    "recorded_model_calls": null,
+    "route": "document_limitation",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L6-06"
+    ]
+  },
+  {
+    "id": "global_rerank",
+    "source": "L7-06",
+    "turn": 3,
+    "message_id": "39536a64-ac93-4211-a41b-84b3c4953e4b",
+    "classification": "code",
+    "diagnosis": "A new global objective reuses a truncated shown set and excludes the true lower-current tie winner.",
+    "recorded_model_calls": null,
+    "route": "metric_verdict",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {},
+    "covers_conversations": [
+      "L7-02",
+      "L7-06"
+    ]
+  },
+  {
+    "id": "source_na_meaning",
+    "source": "L7-05",
+    "turn": 2,
+    "message_id": "f57b86ef-6391-487c-ab1e-69fb617634cc",
+    "classification": "interpretation",
+    "diagnosis": "Flash invents an unsupported topic instead of supported source_na metadata.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "field": "term_not_in_summary",
+          "topic": "blank current value"
+        },
+        "name": "ask_clarification"
+      }
+    ],
+    "route": "ask_clarification",
+    "recorded_validation": [
+      "schema:value_error:topic"
+    ],
+    "raw_parameters": {
+      "field": "term_not_in_summary",
+      "topic": "blank current value"
+    },
+    "covers_conversations": [
+      "L7-05"
+    ]
+  },
+  {
+    "id": "quantity_words",
+    "source": "L7-08",
+    "turn": 1,
+    "message_id": "c3de55e2-9bd9-4edb-a665-65544327b138",
+    "classification": "code",
+    "diagnosis": "Correct one-second limit rejected by digits-only reverse grounding; unsafe relaxed selection follows.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "bounds": [
+            {
+              "op": "gte",
+              "field": "min_torque_nm",
+              "value": 3000
+            },
+            {
+              "op": "lt",
+              "field": "max_operating_time_s",
+              "value": 1
+            }
+          ],
+          "service": "on_off",
+          "enclosure": "explosionproof",
+          "frequency_hz": 50,
+          "supply_voltage_v": 220
+        },
+        "name": "search_actuators"
+      }
+    ],
+    "route": "search_actuators",
+    "recorded_validation": [
+      "ungrounded:max_operating_time_s"
+    ],
+    "raw_parameters": {
+      "bounds": [
+        {
+          "op": "gte",
+          "field": "min_torque_nm",
+          "value": 3000
+        },
+        {
+          "op": "lt",
+          "field": "max_operating_time_s",
+          "value": 1
+        }
+      ],
+      "service": "on_off",
+      "enclosure": "explosionproof",
+      "frequency_hz": 50,
+      "supply_voltage_v": 220
+    },
+    "covers_conversations": [
+      "L7-08"
+    ]
+  },
+  {
+    "id": "motor_total",
+    "source": "L7-06",
+    "turn": 4,
+    "message_id": "50dd40b6-f5ad-454b-a2dc-55098cbb804a",
+    "classification": "code",
+    "diagnosis": "Lookup renders per-unit motor watts but has no requested quantity aggregate.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "focus": [
+            "motor_power"
+          ],
+          "reference_kind": "focused"
+        },
+        "name": "get_actuator"
+      }
+    ],
+    "route": "get_actuator",
+    "recorded_validation": [
+      "ok"
+    ],
+    "raw_parameters": {
+      "focus": [
+        "motor_power"
+      ],
+      "reference_kind": "focused"
+    },
+    "covers_conversations": [
+      "L7-06"
+    ]
+  },
+  {
+    "id": "numeric_alternatives",
+    "source": "L3-07",
+    "turn": 1,
+    "message_id": "bb637f37-98e7-438a-a54c-fa916769bcd6",
+    "classification": "regression_guard",
+    "diagnosis": "Baseline already discloses numeric nearest models in prose; preserve their exclusion from positive recommendation items, as required by T10.",
+    "recorded_model_calls": [
+      {
+        "args": {
+          "bounds": [
+            {
+              "op": "gte",
+              "field": "min_torque_nm",
+              "value": 50000
+            }
+          ],
+          "service": "on_off",
+          "supply_voltage_v": 220
+        },
+        "name": "search_actuators"
+      }
+    ],
+    "route": "search_actuators",
+    "recorded_validation": [
+      "ok",
+      "response_integrity_exclusions"
+    ],
+    "raw_parameters": {
+      "bounds": [
+        {
+          "op": "gte",
+          "field": "min_torque_nm",
+          "value": 50000
+        }
+      ],
+      "service": "on_off",
+      "supply_voltage_v": 220
+    },
+    "covers_conversations": [
+      "L3-07"
+    ]
+  }
+]

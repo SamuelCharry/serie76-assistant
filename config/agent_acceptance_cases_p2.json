@@ -1,0 +1,5589 @@
+{
+  "version": "p2-oracle",
+  "cohort": "p2",
+  "scenarios": [
+    {
+      "id": "P2_comparison_scope_1",
+      "p2_class": "comparison_scope",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "part_numbers": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_shown_list": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_comparison_models": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ]
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Compare 764X30-11320000/A with 764Y30-11320000/A."
+        },
+        {
+          "role": "assistant",
+          "content": "Comparing 764X30-11320000/A vs 764Y30-11320000/A. 13 identical fields hidden.\nOn/Off torque: 6900 in-lb / 800 Nm vs 8300 in-lb / 940 Nm\nModulating torque: 5520 in-lb / 640 Nm vs 6640 in-lb / 750 Nm\nFLA at 50 Hz: 2.2 A vs 3.3 A\nFLA at 60 Hz: 2.4 A vs 3.4 A"
+        },
+        {
+          "role": "user",
+          "content": "Replace the first code with 763Y30-11320000/A."
+        },
+        {
+          "role": "assistant",
+          "content": "Comparing 763Y30-11320000/A vs 764Y30-11320000/A. 7 identical fields hidden.\nMotor power: 90 W vs 180 W\nOn/Off torque: 3980 in-lb / 450 Nm vs 8300 in-lb / 940 Nm\nModulating torque: 3180 in-lb / 360 Nm vs 6640 in-lb / 750 Nm\nOn/Off cycles: 170 /h vs 140 /h\nOperating time at 50 Hz: 35 s vs 41 s\nFLA at 50 Hz: 1.5 A vs 3.3 A\nLRA at 50 Hz: 2.5 A vs 3.9 A\nOperating time at 60 Hz: 29 s vs 34 s\nFLA at 60 Hz: 1.9 A vs 3.4 A\nLRA at 60 Hz: 2.4 A vs 3.8 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Now compare only their modulating torque.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763Y30-11320000/A",
+                "764Y30-11320000/A"
+              ],
+              "focus": [
+                "torque"
+              ],
+              "focus_service": "modulating"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "comparison": [
+                "763Y30-11320000/A",
+                "764Y30-11320000/A"
+              ],
+              "text": [
+                "360 Nm",
+                "750 Nm"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_comparison_scope_2",
+      "p2_class": "comparison_scope",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "part_numbers": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_shown_list": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_comparison_models": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ]
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Compare 764X30-11320000/A with 764Y30-11320000/A."
+        },
+        {
+          "role": "assistant",
+          "content": "Comparing 764X30-11320000/A vs 764Y30-11320000/A. 13 identical fields hidden.\nOn/Off torque: 6900 in-lb / 800 Nm vs 8300 in-lb / 940 Nm\nModulating torque: 5520 in-lb / 640 Nm vs 6640 in-lb / 750 Nm\nFLA at 50 Hz: 2.2 A vs 3.3 A\nFLA at 60 Hz: 2.4 A vs 3.4 A"
+        },
+        {
+          "role": "user",
+          "content": "Replace the first code with 763Y30-11320000/A."
+        },
+        {
+          "role": "assistant",
+          "content": "Comparing 763Y30-11320000/A vs 764Y30-11320000/A. 7 identical fields hidden.\nMotor power: 90 W vs 180 W\nOn/Off torque: 3980 in-lb / 450 Nm vs 8300 in-lb / 940 Nm\nModulating torque: 3180 in-lb / 360 Nm vs 6640 in-lb / 750 Nm\nOn/Off cycles: 170 /h vs 140 /h\nOperating time at 50 Hz: 35 s vs 41 s\nFLA at 50 Hz: 1.5 A vs 3.3 A\nLRA at 50 Hz: 2.5 A vs 3.9 A\nOperating time at 60 Hz: 29 s vs 34 s\nFLA at 60 Hz: 1.9 A vs 3.4 A\nLRA at 60 Hz: 2.4 A vs 3.8 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Retain both compared products and show their modulating torque.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763Y30-11320000/A",
+                "764Y30-11320000/A"
+              ],
+              "focus": [
+                "torque"
+              ],
+              "focus_service": "modulating"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "comparison": [
+                "763Y30-11320000/A",
+                "764Y30-11320000/A"
+              ],
+              "text": [
+                "360 Nm",
+                "750 Nm"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_comparison_scope_3",
+      "p2_class": "comparison_scope",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "part_numbers": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_shown_list": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_comparison_models": [
+          "763Y30-11320000/A",
+          "764Y30-11320000/A"
+        ]
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Compare 764X30-11320000/A with 764Y30-11320000/A."
+        },
+        {
+          "role": "assistant",
+          "content": "Comparing 764X30-11320000/A vs 764Y30-11320000/A. 13 identical fields hidden.\nOn/Off torque: 6900 in-lb / 800 Nm vs 8300 in-lb / 940 Nm\nModulating torque: 5520 in-lb / 640 Nm vs 6640 in-lb / 750 Nm\nFLA at 50 Hz: 2.2 A vs 3.3 A\nFLA at 60 Hz: 2.4 A vs 3.4 A"
+        },
+        {
+          "role": "user",
+          "content": "Replace the first code with 763Y30-11320000/A."
+        },
+        {
+          "role": "assistant",
+          "content": "Comparing 763Y30-11320000/A vs 764Y30-11320000/A. 7 identical fields hidden.\nMotor power: 90 W vs 180 W\nOn/Off torque: 3980 in-lb / 450 Nm vs 8300 in-lb / 940 Nm\nModulating torque: 3180 in-lb / 360 Nm vs 6640 in-lb / 750 Nm\nOn/Off cycles: 170 /h vs 140 /h\nOperating time at 50 Hz: 35 s vs 41 s\nFLA at 50 Hz: 1.5 A vs 3.3 A\nLRA at 50 Hz: 2.5 A vs 3.9 A\nOperating time at 60 Hz: 29 s vs 34 s\nFLA at 60 Hz: 1.9 A vs 3.4 A\nLRA at 60 Hz: 2.4 A vs 3.8 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Compare the modulating torque values of these same two units.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763Y30-11320000/A",
+                "764Y30-11320000/A"
+              ],
+              "focus": [
+                "torque"
+              ],
+              "focus_service": "modulating"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "comparison": [
+                "763Y30-11320000/A",
+                "764Y30-11320000/A"
+              ],
+              "text": [
+                "360 Nm",
+                "750 Nm"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_inclusive_bound_1",
+      "p2_class": "inclusive_bound",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Find explosionproof 220 V single-phase on/off models at or above 800 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "explosionproof",
+              "phase_count": 1,
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 800
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": 800
+              },
+              "first": "764X30-11320000/A"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_inclusive_bound_2",
+      "p2_class": "inclusive_bound",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "List explosionproof 220 V single-phase on/off actuators at or above 800 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "explosionproof",
+              "phase_count": 1,
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 800
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": 800
+              },
+              "first": "764X30-11320000/A"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_inclusive_bound_3",
+      "p2_class": "inclusive_bound",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "On/off, explosionproof, single phase, 220 V: torque 800 Nm or more.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "explosionproof",
+              "phase_count": 1,
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 800
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": 800
+              },
+              "first": "764X30-11320000/A"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_range_bounds_1",
+      "p2_class": "range_bounds",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Look for weatherproof 220 V single-phase on/off models with at least 100 Nm and no more than 200 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "phase_count": 1,
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 100
+                },
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": [
+                  {
+                    "value": 100,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 200,
+                    "op": "lte"
+                  }
+                ]
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": [
+                  {
+                    "value": 100,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 200,
+                    "op": "lte"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_range_bounds_2",
+      "p2_class": "range_bounds",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Find weatherproof 220 V single-phase on/off models, torque at least 100 Nm and at most 200 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "phase_count": 1,
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 100
+                },
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": [
+                  {
+                    "value": 100,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 200,
+                    "op": "lte"
+                  }
+                ]
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": [
+                  {
+                    "value": 100,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 200,
+                    "op": "lte"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_range_bounds_3",
+      "p2_class": "range_bounds",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Weatherproof, 220 V single phase, on/off: minimum 100 Nm plus maximum 200 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "phase_count": 1,
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 100
+                },
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": [
+                  {
+                    "value": 100,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 200,
+                    "op": "lte"
+                  }
+                ]
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": [
+                  {
+                    "value": 100,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 200,
+                    "op": "lte"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_directional_removal_1",
+      "p2_class": "directional_removal",
+      "context": {
+        "filters": {
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "supply_voltage_v": 220,
+          "phase_count": 1,
+          "min_torque_nm": [
+            {
+              "value": 100,
+              "op": "gte"
+            },
+            {
+              "value": 200,
+              "op": "lte"
+            }
+          ]
+        },
+        "quantity_requirements": {
+          "min_torque_nm": [
+            {
+              "value": 100,
+              "op": "gte"
+            },
+            {
+              "value": 200,
+              "op": "lte"
+            }
+          ],
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Look for weatherproof 220 V single-phase on/off models with at least 100 Nm and no more than 200 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "These requirements could not be applied together. Please restate the supply, service and limits you need."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Remove the minimum torque only.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "lte"
+                }
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "lte"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_directional_removal_2",
+      "p2_class": "directional_removal",
+      "context": {
+        "filters": {
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "supply_voltage_v": 220,
+          "phase_count": 1,
+          "min_torque_nm": [
+            {
+              "value": 100,
+              "op": "gte"
+            },
+            {
+              "value": 200,
+              "op": "lte"
+            }
+          ]
+        },
+        "quantity_requirements": {
+          "min_torque_nm": [
+            {
+              "value": 100,
+              "op": "gte"
+            },
+            {
+              "value": 200,
+              "op": "lte"
+            }
+          ],
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Look for weatherproof 220 V single-phase on/off models with at least 100 Nm and no more than 200 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "These requirements could not be applied together. Please restate the supply, service and limits you need."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Withdraw the lower torque bound, retaining the upper bound.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "lte"
+                }
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "lte"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_directional_removal_3",
+      "p2_class": "directional_removal",
+      "context": {
+        "filters": {
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "supply_voltage_v": 220,
+          "phase_count": 1,
+          "min_torque_nm": [
+            {
+              "value": 100,
+              "op": "gte"
+            },
+            {
+              "value": 200,
+              "op": "lte"
+            }
+          ]
+        },
+        "quantity_requirements": {
+          "min_torque_nm": [
+            {
+              "value": 100,
+              "op": "gte"
+            },
+            {
+              "value": 200,
+              "op": "lte"
+            }
+          ],
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Look for weatherproof 220 V single-phase on/off models with at least 100 Nm and no more than 200 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "These requirements could not be applied together. Please restate the supply, service and limits you need."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Drop only the torque floor; keep its ceiling.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "lte"
+                }
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "lte"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_published_alternative_1",
+      "p2_class": "published_alternative",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "762A00-11330C00/A"
+        ],
+        "part_numbers": [
+          "762A00-11330C00/A"
+        ],
+        "focused_model": "762A00-11330C00/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Give the available electrical data for 762A00-11330C00/A."
+        },
+        {
+          "role": "assistant",
+          "content": "762A00-11330C00/A\n762A00-11330C00/A â€” Weatherproof, 220 V AC 3-phase: every performance value of this row is N/A in the source table; nothing can be inferred."
+        },
+        {
+          "role": "user",
+          "content": "Could you fill its missing current using the single-phase model?"
+        },
+        {
+          "role": "assistant",
+          "content": "I cannot fill, infer or transfer N/A values from another model. Each part number keeps its own published values; N/A remains N/A."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Leave unavailable entries as N/A and show a reported 220 V alternative.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 220,
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "supply_voltage_v": 220
+              },
+              "not_text": [
+                "every performance value of this row is N/A"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_published_alternative_2",
+      "p2_class": "published_alternative",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "762A00-11330C00/A"
+        ],
+        "part_numbers": [
+          "762A00-11330C00/A"
+        ],
+        "focused_model": "762A00-11330C00/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Give the available electrical data for 762A00-11330C00/A."
+        },
+        {
+          "role": "assistant",
+          "content": "762A00-11330C00/A\n762A00-11330C00/A â€” Weatherproof, 220 V AC 3-phase: every performance value of this row is N/A in the source table; nothing can be inferred."
+        },
+        {
+          "role": "user",
+          "content": "Could you fill its missing current using the single-phase model?"
+        },
+        {
+          "role": "assistant",
+          "content": "I cannot fill, infer or transfer N/A values from another model. Each part number keeps its own published values; N/A remains N/A."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Keep unknown entries unknown; find a 220 V on/off alternative with published values.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 220,
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "supply_voltage_v": 220
+              },
+              "not_text": [
+                "every performance value of this row is N/A"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_published_alternative_3",
+      "p2_class": "published_alternative",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "762A00-11330C00/A"
+        ],
+        "part_numbers": [
+          "762A00-11330C00/A"
+        ],
+        "focused_model": "762A00-11330C00/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Give the available electrical data for 762A00-11330C00/A."
+        },
+        {
+          "role": "assistant",
+          "content": "762A00-11330C00/A\n762A00-11330C00/A â€” Weatherproof, 220 V AC 3-phase: every performance value of this row is N/A in the source table; nothing can be inferred."
+        },
+        {
+          "role": "user",
+          "content": "Could you fill its missing current using the single-phase model?"
+        },
+        {
+          "role": "assistant",
+          "content": "I cannot fill, infer or transfer N/A values from another model. Each part number keeps its own published values; N/A remains N/A."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Look for another 220 V on/off actuator whose electrical measurements are reported.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 220,
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "supply_voltage_v": 220
+              },
+              "not_text": [
+                "every performance value of this row is N/A"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_identifier_quantity_1",
+      "p2_class": "identifier_quantity",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "List the motor power and 50 Hz full-load current for 764A00-11300000/A.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "764A00-11300000/A"
+              ],
+              "focus": [
+                "motor_power",
+                "fla"
+              ],
+              "focus_frequency_hz": 50
+            }
+          ],
+          "expect": {
+            "p2": {
+              "absent_filters": [
+                "max_fla_a",
+                "max_lra_a",
+                "max_motor_power_w"
+              ],
+              "text": [
+                "180 W",
+                "6.5 A"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_identifier_quantity_2",
+      "p2_class": "identifier_quantity",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "For 764A00-11300000/A report the motor watts and FLA at 50 Hz.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "764A00-11300000/A"
+              ],
+              "focus": [
+                "motor_power",
+                "fla"
+              ],
+              "focus_frequency_hz": 50
+            }
+          ],
+          "expect": {
+            "p2": {
+              "absent_filters": [
+                "max_fla_a",
+                "max_lra_a",
+                "max_motor_power_w"
+              ],
+              "text": [
+                "180 W",
+                "6.5 A"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_identifier_quantity_3",
+      "p2_class": "identifier_quantity",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "State 50 Hz full-load current and motor power for part 764A00-11300000/A.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "764A00-11300000/A"
+              ],
+              "focus": [
+                "motor_power",
+                "fla"
+              ],
+              "focus_frequency_hz": 50
+            }
+          ],
+          "expect": {
+            "p2": {
+              "absent_filters": [
+                "max_fla_a",
+                "max_lra_a",
+                "max_motor_power_w"
+              ],
+              "text": [
+                "180 W",
+                "6.5 A"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_visible_limit_1",
+      "p2_class": "visible_limit",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Show two outdoor 110 V valve motors for opening and closing, at least 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "limit": 2,
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 150
+                }
+              ],
+              "assumptions": {
+                "enclosure": "outdoor",
+                "service": "opening and closing"
+              }
+            }
+          ],
+          "expect": {
+            "p2": {
+              "visible_count": 2,
+              "aligned": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_visible_limit_2",
+      "p2_class": "visible_limit",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Find two weatherproof 110 V on/off models with torque at least 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "limit": 2,
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 150
+                }
+              ],
+              "assumptions": {
+                "enclosure": "outdoor",
+                "service": "opening and closing"
+              }
+            }
+          ],
+          "expect": {
+            "p2": {
+              "visible_count": 2,
+              "aligned": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_visible_limit_3",
+      "p2_class": "visible_limit",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Give me 2 outdoor opening-and-closing actuators, 110 V and minimum 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "limit": 2,
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 150
+                }
+              ],
+              "assumptions": {
+                "enclosure": "outdoor",
+                "service": "opening and closing"
+              }
+            }
+          ],
+          "expect": {
+            "p2": {
+              "visible_count": 2,
+              "aligned": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_relative_search_1",
+      "p2_class": "relative_search",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "150"
+          },
+          "supply_voltage_v": 110
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762B00-11300000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "762B00-11300000/A"
+        ],
+        "focused_model": "762B00-11300000/A",
+        "last_shown_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A",
+          "763B00-11300000/A",
+          "763C00-11300000/A",
+          "764A00-11300000/A",
+          "764B00-11300000/A",
+          "765A00-11300000/A",
+          "765B00-11300000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": 150,
+          "supply_voltage_v": 110
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Show two outdoor 110 V valve motors for opening and closing, at least 150 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nInterpretation: 'outdoor' read as Weatherproof; 'opening and closing' read as On/Off service.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A"
+        },
+        {
+          "role": "user",
+          "content": "Tell me more about the second one."
+        },
+        {
+          "role": "assistant",
+          "content": "762B00-11300000/A\n â€¢ On/Off torque: 1750 in-lb / 200 Nm\n â€¢ Modulating torque: 1330 in-lb / 150 Nm\n â€¢ Duty S4 On/Off: 35%\n â€¢ Duty S4 Modulating: 40%\n â€¢ On/Off cycles per hour: 21\n â€¢ Modulating starts per hour: 960\n â€¢ Operating time at 50 Hz: 30 s\n â€¢ Operating time at 60 Hz: 25 s\n â€¢ FLA at 50 Hz: 2.3 A\n â€¢ FLA at 60 Hz: 2.3 A\n â€¢ LRA at 50 Hz: 2.4 A\n â€¢ LRA at 60 Hz: 2.5 A\n â€¢ Motor power: 40 W\n Source: Series 76 electrical catalogue, page 1."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Can I get a stronger one than that on the same power?",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "reference_operation": "stronger",
+              "reference_part_number": "762B00-11300000/A"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "gt"
+                },
+                "supply_voltage_v": 110,
+                "enclosure": "weatherproof"
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "gt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_relative_search_2",
+      "p2_class": "relative_search",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "150"
+          },
+          "supply_voltage_v": 110
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762B00-11300000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "762B00-11300000/A"
+        ],
+        "focused_model": "762B00-11300000/A",
+        "last_shown_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A",
+          "763B00-11300000/A",
+          "763C00-11300000/A",
+          "764A00-11300000/A",
+          "764B00-11300000/A",
+          "765A00-11300000/A",
+          "765B00-11300000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": 150,
+          "supply_voltage_v": 110
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Show two outdoor 110 V valve motors for opening and closing, at least 150 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nInterpretation: 'outdoor' read as Weatherproof; 'opening and closing' read as On/Off service.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A"
+        },
+        {
+          "role": "user",
+          "content": "Tell me more about the second one."
+        },
+        {
+          "role": "assistant",
+          "content": "762B00-11300000/A\n â€¢ On/Off torque: 1750 in-lb / 200 Nm\n â€¢ Modulating torque: 1330 in-lb / 150 Nm\n â€¢ Duty S4 On/Off: 35%\n â€¢ Duty S4 Modulating: 40%\n â€¢ On/Off cycles per hour: 21\n â€¢ Modulating starts per hour: 960\n â€¢ Operating time at 50 Hz: 30 s\n â€¢ Operating time at 60 Hz: 25 s\n â€¢ FLA at 50 Hz: 2.3 A\n â€¢ FLA at 60 Hz: 2.3 A\n â€¢ LRA at 50 Hz: 2.4 A\n â€¢ LRA at 60 Hz: 2.5 A\n â€¢ Motor power: 40 W\n Source: Series 76 electrical catalogue, page 1."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Please find a stronger actuator than that one, with the same supply.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "reference_operation": "stronger",
+              "reference_part_number": "762B00-11300000/A"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "gt"
+                },
+                "supply_voltage_v": 110,
+                "enclosure": "weatherproof"
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "gt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_relative_search_3",
+      "p2_class": "relative_search",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "150"
+          },
+          "supply_voltage_v": 110
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762B00-11300000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "762B00-11300000/A"
+        ],
+        "focused_model": "762B00-11300000/A",
+        "last_shown_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A",
+          "763B00-11300000/A",
+          "763C00-11300000/A",
+          "764A00-11300000/A",
+          "764B00-11300000/A",
+          "765A00-11300000/A",
+          "765B00-11300000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": 150,
+          "supply_voltage_v": 110
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Show two outdoor 110 V valve motors for opening and closing, at least 150 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nInterpretation: 'outdoor' read as Weatherproof; 'opening and closing' read as On/Off service.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A"
+        },
+        {
+          "role": "user",
+          "content": "Tell me more about the second one."
+        },
+        {
+          "role": "assistant",
+          "content": "762B00-11300000/A\n â€¢ On/Off torque: 1750 in-lb / 200 Nm\n â€¢ Modulating torque: 1330 in-lb / 150 Nm\n â€¢ Duty S4 On/Off: 35%\n â€¢ Duty S4 Modulating: 40%\n â€¢ On/Off cycles per hour: 21\n â€¢ Modulating starts per hour: 960\n â€¢ Operating time at 50 Hz: 30 s\n â€¢ Operating time at 60 Hz: 25 s\n â€¢ FLA at 50 Hz: 2.3 A\n â€¢ FLA at 60 Hz: 2.3 A\n â€¢ LRA at 50 Hz: 2.4 A\n â€¢ LRA at 60 Hz: 2.5 A\n â€¢ Motor power: 40 W\n Source: Series 76 electrical catalogue, page 1."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Show an alternative with greater torque than the focused model, keeping the supply.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "reference_operation": "stronger",
+              "reference_part_number": "762B00-11300000/A"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "gt"
+                },
+                "supply_voltage_v": 110,
+                "enclosure": "weatherproof"
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 200,
+                  "op": "gt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_reference_position_1",
+      "p2_class": "reference_position",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 3,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "150"
+          },
+          "supply_voltage_v": 110
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_shown_list": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A",
+          "763B00-11300000/A",
+          "763C00-11300000/A",
+          "764A00-11300000/A",
+          "764B00-11300000/A",
+          "765A00-11300000/A",
+          "765B00-11300000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": 150,
+          "supply_voltage_v": 110
+        },
+        "last_comparison_models": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ]
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Show three weatherproof 110 V on/off models with at least 150 Nm, sorted by increasing torque."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A"
+        },
+        {
+          "role": "user",
+          "content": "Compare the first and third."
+        },
+        {
+          "role": "assistant",
+          "content": "Comparing 762A00-11300000/A vs 763A00-11300000/A. 8 identical fields hidden.\nOn/Off torque: 1330 in-lb / 150 Nm vs 2650 in-lb / 300 Nm\nModulating torque: 1150 in-lb / 130 Nm vs 1950 in-lb / 220 Nm\nOn/Off cycles: 42 /h vs 29 /h\nOperating time at 50 Hz: 21 s vs 31 s\nFLA at 50 Hz: 2.3 A vs 2.5 A\nLRA at 50 Hz: 2.4 A vs 3 A\nOperating time at 60 Hz: 18 s vs 25 s\nFLA at 60 Hz: 2.3 A vs 2.6 A\nLRA at 60 Hz: 2.5 A vs 2.9 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Use the third as the baseline; find a stronger one with the same supply and enclosure.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "reference_operation": "stronger",
+              "reference_part_number": "763A00-11300000/A"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                },
+                "supply_voltage_v": 110
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_reference_position_2",
+      "p2_class": "reference_position",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 3,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "150"
+          },
+          "supply_voltage_v": 110
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_shown_list": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A",
+          "763B00-11300000/A",
+          "763C00-11300000/A",
+          "764A00-11300000/A",
+          "764B00-11300000/A",
+          "765A00-11300000/A",
+          "765B00-11300000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": 150,
+          "supply_voltage_v": 110
+        },
+        "last_comparison_models": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ]
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Show three weatherproof 110 V on/off models with at least 150 Nm, sorted by increasing torque."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A"
+        },
+        {
+          "role": "user",
+          "content": "Compare the first and third."
+        },
+        {
+          "role": "assistant",
+          "content": "Comparing 762A00-11300000/A vs 763A00-11300000/A. 8 identical fields hidden.\nOn/Off torque: 1330 in-lb / 150 Nm vs 2650 in-lb / 300 Nm\nModulating torque: 1150 in-lb / 130 Nm vs 1950 in-lb / 220 Nm\nOn/Off cycles: 42 /h vs 29 /h\nOperating time at 50 Hz: 21 s vs 31 s\nFLA at 50 Hz: 2.3 A vs 2.5 A\nLRA at 50 Hz: 2.4 A vs 3 A\nOperating time at 60 Hz: 18 s vs 25 s\nFLA at 60 Hz: 2.3 A vs 2.6 A\nLRA at 60 Hz: 2.5 A vs 2.9 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Find an actuator stronger than the third item in the original list, using the same supply and enclosure.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "reference_operation": "stronger",
+              "reference_part_number": "763A00-11300000/A"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                },
+                "supply_voltage_v": 110
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_reference_position_3",
+      "p2_class": "reference_position",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 3,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "150"
+          },
+          "supply_voltage_v": 110
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_shown_list": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A",
+          "763B00-11300000/A",
+          "763C00-11300000/A",
+          "764A00-11300000/A",
+          "764B00-11300000/A",
+          "765A00-11300000/A",
+          "765B00-11300000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": 150,
+          "supply_voltage_v": 110
+        },
+        "last_comparison_models": [
+          "762A00-11300000/A",
+          "763A00-11300000/A"
+        ]
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Show three weatherproof 110 V on/off models with at least 150 Nm, sorted by increasing torque."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A"
+        },
+        {
+          "role": "user",
+          "content": "Compare the first and third."
+        },
+        {
+          "role": "assistant",
+          "content": "Comparing 762A00-11300000/A vs 763A00-11300000/A. 8 identical fields hidden.\nOn/Off torque: 1330 in-lb / 150 Nm vs 2650 in-lb / 300 Nm\nModulating torque: 1150 in-lb / 130 Nm vs 1950 in-lb / 220 Nm\nOn/Off cycles: 42 /h vs 29 /h\nOperating time at 50 Hz: 21 s vs 31 s\nFLA at 50 Hz: 2.3 A vs 2.5 A\nLRA at 50 Hz: 2.4 A vs 3 A\nOperating time at 60 Hz: 18 s vs 25 s\nFLA at 60 Hz: 2.3 A vs 2.6 A\nLRA at 60 Hz: 2.5 A vs 2.9 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Use item 3 of the listed results as the reference for a stronger alternative.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "reference_operation": "stronger",
+              "reference_part_number": "763A00-11300000/A"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                },
+                "supply_voltage_v": 110
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_contextual_enclosure_1",
+      "p2_class": "contextual_enclosure",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "explosionproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "260"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "hazard_signal": true,
+        "last_shown_list": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A",
+          "764Y30-11320000/A",
+          "765X30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": 260,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "The valve is in a room where flammable solvent vapour can occur; we have 220 V and need 260 Nm for open/close."
+        },
+        {
+          "role": "assistant",
+          "content": "6 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 260 Nm; with published electrical data. Here are the leading published models.\nInterpretation: 'room where flammable solvent vapour can occur' read as Explosionproof; 'open/close' read as On/Off service.\nRanked by closest torque at or above 260 Nm, then lowest FLA.\n763X30-11320000/A: On/Off torque 260 Nm; FLA 50 Hz 1.3 A\n763Y30-11320000/A: On/Off torque 450 Nm; FLA 50 Hz 1.5 A\n764X30-11320000/A: On/Off torque 800 Nm; FLA 50 Hz 2.2 A"
+        },
+        {
+          "role": "user",
+          "content": "The motor will be under a roof, so can I use the ordinary outdoor casing?"
+        },
+        {
+          "role": "assistant",
+          "content": "Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards). [Series 76 summary, p. 1]\nGeneral description from the summary; whether a specific part carries a certification mark comes from its electrical-catalogue table."
+        }
+      ],
+      "turns": [
+        {
+          "query": "The vapour risk is still there; show only suitable enclosure candidates.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "enclosure": "explosionproof"
+              },
+              "eligible": {
+                "enclosure": "explosionproof"
+              },
+              "not_text": [
+                "across the whole catalogue"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_contextual_enclosure_2",
+      "p2_class": "contextual_enclosure",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "explosionproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "260"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "hazard_signal": true,
+        "last_shown_list": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A",
+          "764Y30-11320000/A",
+          "765X30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": 260,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "The valve is in a room where flammable solvent vapour can occur; we have 220 V and need 260 Nm for open/close."
+        },
+        {
+          "role": "assistant",
+          "content": "6 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 260 Nm; with published electrical data. Here are the leading published models.\nInterpretation: 'room where flammable solvent vapour can occur' read as Explosionproof; 'open/close' read as On/Off service.\nRanked by closest torque at or above 260 Nm, then lowest FLA.\n763X30-11320000/A: On/Off torque 260 Nm; FLA 50 Hz 1.3 A\n763Y30-11320000/A: On/Off torque 450 Nm; FLA 50 Hz 1.5 A\n764X30-11320000/A: On/Off torque 800 Nm; FLA 50 Hz 2.2 A"
+        },
+        {
+          "role": "user",
+          "content": "The motor will be under a roof, so can I use the ordinary outdoor casing?"
+        },
+        {
+          "role": "assistant",
+          "content": "Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards). [Series 76 summary, p. 1]\nGeneral description from the summary; whether a specific part carries a certification mark comes from its electrical-catalogue table."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Retain the solvent hazard; show candidates with the appropriate enclosure.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "enclosure": "explosionproof"
+              },
+              "eligible": {
+                "enclosure": "explosionproof"
+              },
+              "not_text": [
+                "across the whole catalogue"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_contextual_enclosure_3",
+      "p2_class": "contextual_enclosure",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "explosionproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "260"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "hazard_signal": true,
+        "last_shown_list": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A",
+          "764Y30-11320000/A",
+          "765X30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": 260,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "The valve is in a room where flammable solvent vapour can occur; we have 220 V and need 260 Nm for open/close."
+        },
+        {
+          "role": "assistant",
+          "content": "6 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 260 Nm; with published electrical data. Here are the leading published models.\nInterpretation: 'room where flammable solvent vapour can occur' read as Explosionproof; 'open/close' read as On/Off service.\nRanked by closest torque at or above 260 Nm, then lowest FLA.\n763X30-11320000/A: On/Off torque 260 Nm; FLA 50 Hz 1.3 A\n763Y30-11320000/A: On/Off torque 450 Nm; FLA 50 Hz 1.5 A\n764X30-11320000/A: On/Off torque 800 Nm; FLA 50 Hz 2.2 A"
+        },
+        {
+          "role": "user",
+          "content": "The motor will be under a roof, so can I use the ordinary outdoor casing?"
+        },
+        {
+          "role": "assistant",
+          "content": "Weatherproof: Designed for general industrial use, protected against dust, rain, and environmental elements (compliant with CSA, CE, & UKCA standards). [Series 76 summary, p. 1]\nGeneral description from the summary; whether a specific part carries a certification mark comes from its electrical-catalogue table."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Only list enclosure candidates for the same flammable-vapour area.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "enclosure": "explosionproof"
+              },
+              "eligible": {
+                "enclosure": "explosionproof"
+              },
+              "not_text": [
+                "across the whole catalogue"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_glossary_routing_1",
+      "p2_class": "glossary_routing",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Can you explain what modulating service means in everyday words?",
+          "scripted_decision": [
+            "explain_terms",
+            {
+              "term_keys": [
+                "modulating"
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "modulat"
+              ],
+              "not_text": [
+                "actuators meet",
+                "published-data count"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_glossary_routing_2",
+      "p2_class": "glossary_routing",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Explain what modulating service means simply.",
+          "scripted_decision": [
+            "explain_terms",
+            {
+              "term_keys": [
+                "modulating"
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "modulat"
+              ],
+              "not_text": [
+                "actuators meet",
+                "published-data count"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_glossary_routing_3",
+      "p2_class": "glossary_routing",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "What does modulating service mean for an actuator?",
+          "scripted_decision": [
+            "explain_terms",
+            {
+              "term_keys": [
+                "modulating"
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "modulat"
+              ],
+              "not_text": [
+                "actuators meet",
+                "published-data count"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_elliptical_limit_1",
+      "p2_class": "elliptical_limit",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "500"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A"
+        ],
+        "last_shown_list": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 11,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 6,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 500,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "220 V. weatherproof. on/off. 500 Nm minimum."
+        },
+        {
+          "role": "assistant",
+          "content": "17 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 500 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nRanked by closest torque at or above 500 Nm, then lowest FLA.\n763B00-11330C00/A: Shared torque 500 Nm (same torque for On/Off and Modulating); FLA 50 Hz 2 A\n763B00-11320000/A: On/Off torque 500 Nm; FLA 50 Hz 2.1 A\n763C00-11320000/A: On/Off torque 550 Nm; FLA 50 Hz 2.1 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "make it 750 minimum",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 750
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": 750
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": 750
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_elliptical_limit_2",
+      "p2_class": "elliptical_limit",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "500"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A"
+        ],
+        "last_shown_list": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 11,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 6,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 500,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "220 V. weatherproof. on/off. 500 Nm minimum."
+        },
+        {
+          "role": "assistant",
+          "content": "17 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 500 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nRanked by closest torque at or above 500 Nm, then lowest FLA.\n763B00-11330C00/A: Shared torque 500 Nm (same torque for On/Off and Modulating); FLA 50 Hz 2 A\n763B00-11320000/A: On/Off torque 500 Nm; FLA 50 Hz 2.1 A\n763C00-11320000/A: On/Off torque 550 Nm; FLA 50 Hz 2.1 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Change that minimum to 750.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 750
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": 750
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": 750
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_elliptical_limit_3",
+      "p2_class": "elliptical_limit",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "500"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A"
+        ],
+        "last_shown_list": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 11,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 6,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 500,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "220 V. weatherproof. on/off. 500 Nm minimum."
+        },
+        {
+          "role": "assistant",
+          "content": "17 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 500 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nRanked by closest torque at or above 500 Nm, then lowest FLA.\n763B00-11330C00/A: Shared torque 500 Nm (same torque for On/Off and Modulating); FLA 50 Hz 2 A\n763B00-11320000/A: On/Off torque 500 Nm; FLA 50 Hz 2.1 A\n763C00-11320000/A: On/Off torque 550 Nm; FLA 50 Hz 2.1 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Actually, make the minimum 750.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 750
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": 750
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": 750
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_equal_comparison_field_1",
+      "p2_class": "equal_comparison_field",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "explosionproof",
+          "supply_voltage_v": "220"
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A"
+        ],
+        "last_shown_list": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A",
+          "762Y30-11320000/A",
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "withdrawn_fields": [
+          "min_torque_in_lb",
+          "min_torque_nm"
+        ],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "110 V explosionproof on/off. 150 Nm minimum."
+        },
+        {
+          "role": "assistant",
+          "content": "8 actuators meet: Explosionproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762X30-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 1.9 A\n762Y30-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.2 A\n763X30-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2 A"
+        },
+        {
+          "role": "user",
+          "content": "no, 220 V"
+        },
+        {
+          "role": "assistant",
+          "content": "8 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762Y30-11320000/A: On/Off torque 180 Nm; FLA 50 Hz 1 A\n763X30-11320000/A: On/Off torque 260 Nm; FLA 50 Hz 1.3 A"
+        },
+        {
+          "role": "user",
+          "content": "drop torque minimum"
+        },
+        {
+          "role": "assistant",
+          "content": "10 actuators meet: Explosionproof, On/Off service, 220 V; with published electrical data. Here are the leading published models.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "show two. compare their 50 Hz times.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "from_results_items": "1,2",
+              "focus": [
+                "operating_time"
+              ],
+              "focus_frequency_hz": 50
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "Operating time at 50 Hz",
+                "23 s"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_equal_comparison_field_2",
+      "p2_class": "equal_comparison_field",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "explosionproof",
+          "supply_voltage_v": "220"
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A"
+        ],
+        "last_shown_list": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A",
+          "762Y30-11320000/A",
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "withdrawn_fields": [
+          "min_torque_in_lb",
+          "min_torque_nm"
+        ],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "110 V explosionproof on/off. 150 Nm minimum."
+        },
+        {
+          "role": "assistant",
+          "content": "8 actuators meet: Explosionproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762X30-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 1.9 A\n762Y30-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.2 A\n763X30-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2 A"
+        },
+        {
+          "role": "user",
+          "content": "no, 220 V"
+        },
+        {
+          "role": "assistant",
+          "content": "8 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762Y30-11320000/A: On/Off torque 180 Nm; FLA 50 Hz 1 A\n763X30-11320000/A: On/Off torque 260 Nm; FLA 50 Hz 1.3 A"
+        },
+        {
+          "role": "user",
+          "content": "drop torque minimum"
+        },
+        {
+          "role": "assistant",
+          "content": "10 actuators meet: Explosionproof, On/Off service, 220 V; with published electrical data. Here are the leading published models.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Compare the first two models for operating time at 50 Hz.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "from_results_items": "1,2",
+              "focus": [
+                "operating_time"
+              ],
+              "focus_frequency_hz": 50
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "Operating time at 50 Hz",
+                "23 s"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_equal_comparison_field_3",
+      "p2_class": "equal_comparison_field",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "explosionproof",
+          "supply_voltage_v": "220"
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A"
+        ],
+        "last_shown_list": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "761X30-11320000/A",
+          "761Y30-11320000/A",
+          "762X30-11320000/A",
+          "762Y30-11320000/A",
+          "763X30-11320000/A",
+          "763Y30-11320000/A",
+          "764X30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "withdrawn_fields": [
+          "min_torque_in_lb",
+          "min_torque_nm"
+        ],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "110 V explosionproof on/off. 150 Nm minimum."
+        },
+        {
+          "role": "assistant",
+          "content": "8 actuators meet: Explosionproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762X30-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 1.9 A\n762Y30-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.2 A\n763X30-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2 A"
+        },
+        {
+          "role": "user",
+          "content": "no, 220 V"
+        },
+        {
+          "role": "assistant",
+          "content": "8 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762Y30-11320000/A: On/Off torque 180 Nm; FLA 50 Hz 1 A\n763X30-11320000/A: On/Off torque 260 Nm; FLA 50 Hz 1.3 A"
+        },
+        {
+          "role": "user",
+          "content": "drop torque minimum"
+        },
+        {
+          "role": "assistant",
+          "content": "10 actuators meet: Explosionproof, On/Off service, 220 V; with published electrical data. Here are the leading published models.\nRanked by lowest FLA, then shortest operating time.\n761X30-11320000/A: On/Off torque 80 Nm; FLA 50 Hz 0.6 A\n761Y30-11320000/A: On/Off torque 90 Nm; FLA 50 Hz 0.6 A\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Show the 50 Hz travel times for items 1 and 2, even if they match.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "from_results_items": "1,2",
+              "focus": [
+                "operating_time"
+              ],
+              "focus_frequency_hz": 50
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "Operating time at 50 Hz",
+                "23 s"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_withdrawn_unsupported_1",
+      "p2_class": "withdrawn_unsupported",
+      "context": {
+        "focus": [
+          {
+            "field": "torque"
+          }
+        ],
+        "on_screen": [
+          "763Y30-11320000/A"
+        ],
+        "part_numbers": [
+          "763Y30-11320000/A"
+        ],
+        "focused_model": "763Y30-11320000/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "763Y30-11320000/A. torque and price."
+        },
+        {
+          "role": "assistant",
+          "content": "The catalogue doesn't publish prices. A weighted price score is unavailable.\n763Y30-11320000/A\n â€¢ On/Off torque: 3980 in-lb / 450 Nm\n â€¢ Modulating torque: 3180 in-lb / 360 Nm\n Source: Series 76 electrical catalogue, page 4."
+        }
+      ],
+      "turns": [
+        {
+          "query": "forget price. modulating torque.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763Y30-11320000/A"
+              ],
+              "focus": [
+                "torque"
+              ],
+              "focus_service": "modulating"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "360 Nm"
+              ],
+              "not_text": [
+                "publish prices",
+                "weighted price"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_withdrawn_unsupported_2",
+      "p2_class": "withdrawn_unsupported",
+      "context": {
+        "focus": [
+          {
+            "field": "torque"
+          }
+        ],
+        "on_screen": [
+          "763Y30-11320000/A"
+        ],
+        "part_numbers": [
+          "763Y30-11320000/A"
+        ],
+        "focused_model": "763Y30-11320000/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "763Y30-11320000/A. torque and price."
+        },
+        {
+          "role": "assistant",
+          "content": "The catalogue doesn't publish prices. A weighted price score is unavailable.\n763Y30-11320000/A\n â€¢ On/Off torque: 3980 in-lb / 450 Nm\n â€¢ Modulating torque: 3180 in-lb / 360 Nm\n Source: Series 76 electrical catalogue, page 4."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Drop the price request and give modulating torque.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763Y30-11320000/A"
+              ],
+              "focus": [
+                "torque"
+              ],
+              "focus_service": "modulating"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "360 Nm"
+              ],
+              "not_text": [
+                "publish prices",
+                "weighted price"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_withdrawn_unsupported_3",
+      "p2_class": "withdrawn_unsupported",
+      "context": {
+        "focus": [
+          {
+            "field": "torque"
+          }
+        ],
+        "on_screen": [
+          "763Y30-11320000/A"
+        ],
+        "part_numbers": [
+          "763Y30-11320000/A"
+        ],
+        "focused_model": "763Y30-11320000/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "763Y30-11320000/A. torque and price."
+        },
+        {
+          "role": "assistant",
+          "content": "The catalogue doesn't publish prices. A weighted price score is unavailable.\n763Y30-11320000/A\n â€¢ On/Off torque: 3980 in-lb / 450 Nm\n â€¢ Modulating torque: 3180 in-lb / 360 Nm\n Source: Series 76 electrical catalogue, page 4."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Ignore the price; show only modulating torque.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763Y30-11320000/A"
+              ],
+              "focus": [
+                "torque"
+              ],
+              "focus_service": "modulating"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "360 Nm"
+              ],
+              "not_text": [
+                "publish prices",
+                "weighted price"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_same_turn_correction_1",
+      "p2_class": "same_turn_correction",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "I wrote 220 V on the request, but it should be 110 V single-phase weatherproof on/off, at least 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "phase_count": 1,
+              "supply_voltage_v": 110,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 80
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "supply_voltage_v": 110
+              },
+              "eligible": {
+                "supply_voltage_v": 110,
+                "phase_count": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_same_turn_correction_2",
+      "p2_class": "same_turn_correction",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Correction: not 220 V but 110 V, single-phase weatherproof on/off and minimum 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "phase_count": 1,
+              "supply_voltage_v": 110,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 80
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "supply_voltage_v": 110
+              },
+              "eligible": {
+                "supply_voltage_v": 110,
+                "phase_count": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_same_turn_correction_3",
+      "p2_class": "same_turn_correction",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "220 V was incorrect; use 110 V single-phase weatherproof on/off, at least 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "phase_count": 1,
+              "supply_voltage_v": 110,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 80
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "supply_voltage_v": 110
+              },
+              "eligible": {
+                "supply_voltage_v": 110,
+                "phase_count": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_phase_grounding_1",
+      "p2_class": "phase_grounding",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Necesito opciones de 220 V monof?sicos, a la intemperie, para abrir y cerrar con al menos 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "phase_count": 1,
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 150
+                }
+              ],
+              "assumptions": {
+                "service": "abrir y cerrar",
+                "enclosure": "a la intemperie"
+              }
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "phase_count": 1
+              },
+              "eligible": {
+                "phase_count": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_phase_grounding_2",
+      "p2_class": "phase_grounding",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Busco actuadores monofásicos de 220 V weatherproof on/off, al menos 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "phase_count": 1,
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 150
+                }
+              ],
+              "assumptions": {
+                "service": "abrir y cerrar",
+                "enclosure": "a la intemperie"
+              }
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "phase_count": 1
+              },
+              "eligible": {
+                "phase_count": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_phase_grounding_3",
+      "p2_class": "phase_grounding",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Necesito 220 V monofasico, weatherproof on/off y mínimo 150 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "phase_count": 1,
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 150
+                }
+              ],
+              "assumptions": {
+                "service": "abrir y cerrar",
+                "enclosure": "a la intemperie"
+              }
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "phase_count": 1
+              },
+              "eligible": {
+                "phase_count": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_enclosure_replacement_1",
+      "p2_class": "enclosure_replacement",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "150"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_shown_list": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A",
+          "763A00-11320000/A",
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 14,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 7,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 150,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Busco un actuador de 220 V para una sala con vapores inflamables, apertura y cierre, 150 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "8 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nInterpretation: 'sala con vapores inflamables' read as Explosionproof; 'apertura y cierre' read as On/Off service.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762Y30-11320000/A: On/Off torque 180 Nm; FLA 50 Hz 1 A\n763X30-11320000/A: On/Off torque 260 Nm; FLA 50 Hz 1.3 A"
+        },
+        {
+          "role": "user",
+          "content": "Ya confirmaron que la nueva ubicaci?n no es peligrosa."
+        },
+        {
+          "role": "assistant",
+          "content": "21 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nInterpretation: 'no es peligrosa' read as Weatherproof.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 1 A\n762B00-11320000/A: On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n763A00-11330C00/A: Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Quita la exigencia antiexplosi?n y busca uno para intemperie.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof",
+              "assumptions": {
+                "enclosure": "intemperie"
+              }
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "enclosure": "weatherproof"
+              },
+              "eligible": {
+                "enclosure": "weatherproof"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_enclosure_replacement_2",
+      "p2_class": "enclosure_replacement",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "150"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_shown_list": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A",
+          "763A00-11320000/A",
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 14,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 7,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 150,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Busco un actuador de 220 V para una sala con vapores inflamables, apertura y cierre, 150 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "8 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nInterpretation: 'sala con vapores inflamables' read as Explosionproof; 'apertura y cierre' read as On/Off service.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762Y30-11320000/A: On/Off torque 180 Nm; FLA 50 Hz 1 A\n763X30-11320000/A: On/Off torque 260 Nm; FLA 50 Hz 1.3 A"
+        },
+        {
+          "role": "user",
+          "content": "Ya confirmaron que la nueva ubicaci?n no es peligrosa."
+        },
+        {
+          "role": "assistant",
+          "content": "21 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nInterpretation: 'no es peligrosa' read as Weatherproof.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 1 A\n762B00-11320000/A: On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n763A00-11330C00/A: Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Remove the explosionproof requirement and select weatherproof instead.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof",
+              "assumptions": {
+                "enclosure": "intemperie"
+              }
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "enclosure": "weatherproof"
+              },
+              "eligible": {
+                "enclosure": "weatherproof"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_enclosure_replacement_3",
+      "p2_class": "enclosure_replacement",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "150"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_shown_list": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11320000/A",
+          "762B00-11320000/A",
+          "763A00-11330C00/A",
+          "763A00-11320000/A",
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 14,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 7,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 150,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Busco un actuador de 220 V para una sala con vapores inflamables, apertura y cierre, 150 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "8 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 150 Nm; with published electrical data. Here are the leading published models.\nInterpretation: 'sala con vapores inflamables' read as Explosionproof; 'apertura y cierre' read as On/Off service.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762X30-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 0.9 A\n762Y30-11320000/A: On/Off torque 180 Nm; FLA 50 Hz 1 A\n763X30-11320000/A: On/Off torque 260 Nm; FLA 50 Hz 1.3 A"
+        },
+        {
+          "role": "user",
+          "content": "Ya confirmaron que la nueva ubicaci?n no es peligrosa."
+        },
+        {
+          "role": "assistant",
+          "content": "21 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases.\nInterpretation: 'no es peligrosa' read as Weatherproof.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 1 A\n762B00-11320000/A: On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n763A00-11330C00/A: Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Withdraw explosionproof; replace it with weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof",
+              "assumptions": {
+                "enclosure": "intemperie"
+              }
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "enclosure": "weatherproof"
+              },
+              "eligible": {
+                "enclosure": "weatherproof"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_lookup_1",
+      "p2_class": "compound_lookup",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gt",
+            "value": "100"
+          },
+          "supply_voltage_v": 110
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_shown_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A",
+          "763B00-11300000/A",
+          "763C00-11300000/A",
+          "764A00-11300000/A",
+          "764B00-11300000/A",
+          "765A00-11300000/A",
+          "765B00-11300000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": {
+            "op": "gt",
+            "value": 100
+          },
+          "supply_voltage_v": 110
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Find weatherproof 110 V on/off models above 100 Nm and arrange installation tomorrow."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque > 100 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque above 100 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A\nThe catalogue does not publish installation."
+        },
+        {
+          "role": "user",
+          "content": "Ignore installation; show two catalogue choices."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque > 100 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque above 100 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Give the second model a delivery date and its 50 Hz operating time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "shown_position",
+              "reference_index": 2,
+              "focus": [
+                "operating_time"
+              ],
+              "focus_frequency_hz": 50,
+              "unsupported_requests": "delivery date"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "Operating time at 50 Hz",
+                "30 s",
+                "deliver"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_lookup_2",
+      "p2_class": "compound_lookup",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gt",
+            "value": "100"
+          },
+          "supply_voltage_v": 110
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_shown_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A",
+          "763B00-11300000/A",
+          "763C00-11300000/A",
+          "764A00-11300000/A",
+          "764B00-11300000/A",
+          "765A00-11300000/A",
+          "765B00-11300000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": {
+            "op": "gt",
+            "value": 100
+          },
+          "supply_voltage_v": 110
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Find weatherproof 110 V on/off models above 100 Nm and arrange installation tomorrow."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque > 100 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque above 100 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A\nThe catalogue does not publish installation."
+        },
+        {
+          "role": "user",
+          "content": "Ignore installation; show two catalogue choices."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque > 100 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque above 100 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "Report the second actuator operating time at 50 Hz, and give its delivery date.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "shown_position",
+              "reference_index": 2,
+              "focus": [
+                "operating_time"
+              ],
+              "focus_frequency_hz": 50,
+              "unsupported_requests": "delivery date"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "Operating time at 50 Hz",
+                "30 s",
+                "deliver"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_lookup_3",
+      "p2_class": "compound_lookup",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gt",
+            "value": "100"
+          },
+          "supply_voltage_v": 110
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "pagination": {
+          "has_more": false
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_shown_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A"
+        ],
+        "last_ranked_list": [
+          "762A00-11300000/A",
+          "762B00-11300000/A",
+          "763A00-11300000/A",
+          "763B00-11300000/A",
+          "763C00-11300000/A",
+          "764A00-11300000/A",
+          "764B00-11300000/A",
+          "765A00-11300000/A",
+          "765B00-11300000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": {
+            "op": "gt",
+            "value": 100
+          },
+          "supply_voltage_v": 110
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Find weatherproof 110 V on/off models above 100 Nm and arrange installation tomorrow."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque > 100 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque above 100 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A\nThe catalogue does not publish installation."
+        },
+        {
+          "role": "user",
+          "content": "Ignore installation; show two catalogue choices."
+        },
+        {
+          "role": "assistant",
+          "content": "9 actuators meet: Weatherproof, On/Off service, 110 V, torque > 100 Nm; with published electrical data. Here are the leading published models.\nRanked by closest torque above 100 Nm, then lowest FLA.\n762A00-11300000/A: On/Off torque 150 Nm; FLA 50 Hz 2.3 A\n762B00-11300000/A: On/Off torque 200 Nm; FLA 50 Hz 2.3 A\n763A00-11300000/A: On/Off torque 300 Nm; FLA 50 Hz 2.5 A"
+        }
+      ],
+      "turns": [
+        {
+          "query": "For item 2, provide a delivery estimate plus operating time at 50 Hz.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "shown_position",
+              "reference_index": 2,
+              "focus": [
+                "operating_time"
+              ],
+              "focus_frequency_hz": 50,
+              "unsupported_requests": "delivery date"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "Operating time at 50 Hz",
+                "30 s",
+                "deliver"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_certification_1",
+      "p2_class": "compound_certification",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "763C00-11300000/A"
+        ],
+        "part_numbers": [
+          "763C00-11300000/A"
+        ],
+        "focused_model": "763C00-11300000/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "What are the dimensions and motor watts for 763C00-11300000/A?"
+        },
+        {
+          "role": "assistant",
+          "content": "The catalogue does not publish mounting dimensions.\n763C00-11300000/A\n â€¢ Motor power: 90 W\n Source: Series 76 electrical catalogue, page 1.\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption."
+        },
+        {
+          "role": "user",
+          "content": "Only the electrical data, then."
+        },
+        {
+          "role": "assistant",
+          "content": "763C00-11300000/A\n â€¢ On/Off torque: 4800 in-lb / 550 Nm\n â€¢ Modulating torque: 3540 in-lb / 400 Nm\n â€¢ Duty S4 On/Off: 30%\n â€¢ Duty S4 Modulating: 40%\n â€¢ On/Off cycles per hour: 13\n â€¢ Modulating starts per hour: 960\n â€¢ Operating time at 50 Hz: 39 s\n â€¢ Operating time at 60 Hz: 33 s\n â€¢ FLA at 50 Hz: 4.6 A\n â€¢ FLA at 60 Hz: 4.8 A\n â€¢ LRA at 50 Hz: 4.9 A\n â€¢ LRA at 60 Hz: 5 A\n â€¢ Motor power: 90 W\n Source: Series 76 electrical catalogue, page 1."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Add its 50 Hz current, and tell me whether you can certify my wiring design.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "focused",
+              "focus": [
+                "fla"
+              ],
+              "focus_frequency_hz": 50,
+              "unsupported_requests": "wiring design certification"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "4.6 A",
+                "certif"
+              ],
+              "not_text": [
+                "publish wiring diagram"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_certification_2",
+      "p2_class": "compound_certification",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "763C00-11300000/A"
+        ],
+        "part_numbers": [
+          "763C00-11300000/A"
+        ],
+        "focused_model": "763C00-11300000/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "What are the dimensions and motor watts for 763C00-11300000/A?"
+        },
+        {
+          "role": "assistant",
+          "content": "The catalogue does not publish mounting dimensions.\n763C00-11300000/A\n â€¢ Motor power: 90 W\n Source: Series 76 electrical catalogue, page 1.\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption."
+        },
+        {
+          "role": "user",
+          "content": "Only the electrical data, then."
+        },
+        {
+          "role": "assistant",
+          "content": "763C00-11300000/A\n â€¢ On/Off torque: 4800 in-lb / 550 Nm\n â€¢ Modulating torque: 3540 in-lb / 400 Nm\n â€¢ Duty S4 On/Off: 30%\n â€¢ Duty S4 Modulating: 40%\n â€¢ On/Off cycles per hour: 13\n â€¢ Modulating starts per hour: 960\n â€¢ Operating time at 50 Hz: 39 s\n â€¢ Operating time at 60 Hz: 33 s\n â€¢ FLA at 50 Hz: 4.6 A\n â€¢ FLA at 60 Hz: 4.8 A\n â€¢ LRA at 50 Hz: 4.9 A\n â€¢ LRA at 60 Hz: 5 A\n â€¢ Motor power: 90 W\n Source: Series 76 electrical catalogue, page 1."
+        }
+      ],
+      "turns": [
+        {
+          "query": "State its FLA at 50 Hz and certify my wiring design.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "focused",
+              "focus": [
+                "fla"
+              ],
+              "focus_frequency_hz": 50,
+              "unsupported_requests": "wiring design certification"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "4.6 A",
+                "certif"
+              ],
+              "not_text": [
+                "publish wiring diagram"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_certification_3",
+      "p2_class": "compound_certification",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "763C00-11300000/A"
+        ],
+        "part_numbers": [
+          "763C00-11300000/A"
+        ],
+        "focused_model": "763C00-11300000/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "What are the dimensions and motor watts for 763C00-11300000/A?"
+        },
+        {
+          "role": "assistant",
+          "content": "The catalogue does not publish mounting dimensions.\n763C00-11300000/A\n â€¢ Motor power: 90 W\n Source: Series 76 electrical catalogue, page 1.\nMotor power is the rated power of the internal motor; the catalogue does not publish total electrical consumption."
+        },
+        {
+          "role": "user",
+          "content": "Only the electrical data, then."
+        },
+        {
+          "role": "assistant",
+          "content": "763C00-11300000/A\n â€¢ On/Off torque: 4800 in-lb / 550 Nm\n â€¢ Modulating torque: 3540 in-lb / 400 Nm\n â€¢ Duty S4 On/Off: 30%\n â€¢ Duty S4 Modulating: 40%\n â€¢ On/Off cycles per hour: 13\n â€¢ Modulating starts per hour: 960\n â€¢ Operating time at 50 Hz: 39 s\n â€¢ Operating time at 60 Hz: 33 s\n â€¢ FLA at 50 Hz: 4.6 A\n â€¢ FLA at 60 Hz: 4.8 A\n â€¢ LRA at 50 Hz: 4.9 A\n â€¢ LRA at 60 Hz: 5 A\n â€¢ Motor power: 90 W\n Source: Series 76 electrical catalogue, page 1."
+        }
+      ],
+      "turns": [
+        {
+          "query": "For that model give 50 Hz current; can you approve the wiring design?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "focused",
+              "focus": [
+                "fla"
+              ],
+              "focus_frequency_hz": 50,
+              "unsupported_requests": "wiring design certification"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "4.6 A",
+                "certif"
+              ],
+              "not_text": [
+                "publish wiring diagram"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_search_1",
+      "p2_class": "compound_search",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "I need an explosionproof 220 V on/off actuator above 260 Nm and a matching valve price.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gt",
+                  "value": 260
+                }
+              ],
+              "unsupported_requests": "valve price"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 260,
+                  "op": "gt"
+                },
+                "supply_voltage_v": 220
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 260,
+                  "op": "gt"
+                }
+              },
+              "text": [
+                "price"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_search_2",
+      "p2_class": "compound_search",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Find explosionproof 220 V on/off actuators above 260 Nm and quote the valve price.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gt",
+                  "value": 260
+                }
+              ],
+              "unsupported_requests": "valve price"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 260,
+                  "op": "gt"
+                },
+                "supply_voltage_v": 220
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 260,
+                  "op": "gt"
+                }
+              },
+              "text": [
+                "price"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_search_3",
+      "p2_class": "compound_search",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "I require explosionproof 220 V on/off above 260 Nm; also give a price.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gt",
+                  "value": 260
+                }
+              ],
+              "unsupported_requests": "valve price"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 260,
+                  "op": "gt"
+                },
+                "supply_voltage_v": 220
+              },
+              "eligible": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 260,
+                  "op": "gt"
+                }
+              },
+              "text": [
+                "price"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_unsupported_coverage_1",
+      "p2_class": "unsupported_coverage",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "What colour options and mounting dimensions are offered for 761B00-11300000/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ],
+              "unsupported_requests": "colour options,mounting dimensions"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "colou?r",
+                "dimensions"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_unsupported_coverage_2",
+      "p2_class": "unsupported_coverage",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Which colours and mounting dimensions are available for 761B00-11300000/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ],
+              "unsupported_requests": "colour options,mounting dimensions"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "colou?r",
+                "dimensions"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_unsupported_coverage_3",
+      "p2_class": "unsupported_coverage",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Give the colour choices and the dimensions for 761B00-11300000/A.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                "overview"
+              ],
+              "unsupported_requests": "colour options,mounting dimensions"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "colou?r",
+                "dimensions"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_booking_1",
+      "p2_class": "compound_booking",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Tell me the 50 Hz current of 763Y30-11320000/A and book a maintenance visit.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763Y30-11320000/A"
+              ],
+              "focus": [
+                "fla"
+              ],
+              "focus_frequency_hz": 50,
+              "unsupported_requests": "maintenance booking"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "1.5 A",
+                "booking"
+              ],
+              "not_text": [
+                "publish maintenance interval"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_booking_2",
+      "p2_class": "compound_booking",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Report FLA at 50 Hz for 763Y30-11320000/A and schedule a maintenance visit.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763Y30-11320000/A"
+              ],
+              "focus": [
+                "fla"
+              ],
+              "focus_frequency_hz": 50,
+              "unsupported_requests": "maintenance booking"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "1.5 A",
+                "booking"
+              ],
+              "not_text": [
+                "publish maintenance interval"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_compound_booking_3",
+      "p2_class": "compound_booking",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "For 763Y30-11320000/A give 50 Hz current and reserve a maintenance appointment.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "763Y30-11320000/A"
+              ],
+              "focus": [
+                "fla"
+              ],
+              "focus_frequency_hz": 50,
+              "unsupported_requests": "maintenance booking"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "1.5 A",
+                "booking"
+              ],
+              "not_text": [
+                "publish maintenance interval"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_global_rerank_1",
+      "p2_class": "global_rerank",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 3,
+          "offset": 0,
+          "service": "on_off",
+          "sort_by": [
+            "highest_torque"
+          ],
+          "enclosure": "explosionproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "800"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "most_torque",
+        "on_screen": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": true
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_shown_list": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "selection_priority": {
+          "metric": "torque",
+          "direction": "highest",
+          "frequency_hz": null
+        },
+        "quantity_requirements": {
+          "min_torque_nm": 800,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Find explosionproof 220 V on/off options rated at least 800 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data.\n764X30-11320000/A â€” On/Off torque: 6900 in-lb / 800 Nm\n764Y30-11320000/A â€” On/Off torque: 8300 in-lb / 940 Nm\n765X30-11320000/A â€” On/Off torque: 17500 in-lb / 2000 Nm\n765Y30-11320000/A â€” On/Off torque: 25900 in-lb / 3000 Nm\nChoose two models to compare their differences.\nRanked by closest torque at or above 800 Nm, then lowest FLA."
+        },
+        {
+          "role": "user",
+          "content": "Prioritize greatest torque first."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data. Top 3 shown matches ranked by highest torque.\n\n765Y30-11320000/A\n â€¢ On/Off torque: 25900 in-lb / 3000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n765X30-11320000/A\n â€¢ On/Off torque: 17500 in-lb / 2000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n764Y30-11320000/A\n â€¢ On/Off torque: 8300 in-lb / 940 Nm\n Source: Series 76 electrical catalogue, page 4.\nRanked by most torque, then lowest FLA, then shortest operating time."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Change the priority: now the fastest at 50 Hz, keeping the 800 Nm floor.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "priority": {
+                "metric": "operating_time",
+                "direction": "lowest",
+                "frequency_hz": 50
+              },
+              "frequency_hz": 50
+            }
+          ],
+          "expect": {
+            "p2": {
+              "first": "764X30-11320000/A",
+              "filters": {
+                "min_torque_nm": 800
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_global_rerank_2",
+      "p2_class": "global_rerank",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 3,
+          "offset": 0,
+          "service": "on_off",
+          "sort_by": [
+            "highest_torque"
+          ],
+          "enclosure": "explosionproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "800"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "most_torque",
+        "on_screen": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": true
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_shown_list": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "selection_priority": {
+          "metric": "torque",
+          "direction": "highest",
+          "frequency_hz": null
+        },
+        "quantity_requirements": {
+          "min_torque_nm": 800,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Find explosionproof 220 V on/off options rated at least 800 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data.\n764X30-11320000/A â€” On/Off torque: 6900 in-lb / 800 Nm\n764Y30-11320000/A â€” On/Off torque: 8300 in-lb / 940 Nm\n765X30-11320000/A â€” On/Off torque: 17500 in-lb / 2000 Nm\n765Y30-11320000/A â€” On/Off torque: 25900 in-lb / 3000 Nm\nChoose two models to compare their differences.\nRanked by closest torque at or above 800 Nm, then lowest FLA."
+        },
+        {
+          "role": "user",
+          "content": "Prioritize greatest torque first."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data. Top 3 shown matches ranked by highest torque.\n\n765Y30-11320000/A\n â€¢ On/Off torque: 25900 in-lb / 3000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n765X30-11320000/A\n â€¢ On/Off torque: 17500 in-lb / 2000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n764Y30-11320000/A\n â€¢ On/Off torque: 8300 in-lb / 940 Nm\n Source: Series 76 electrical catalogue, page 4.\nRanked by most torque, then lowest FLA, then shortest operating time."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Re-rank all eligible options by fastest at 50 Hz, keeping the 800 Nm minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "priority": {
+                "metric": "operating_time",
+                "direction": "lowest",
+                "frequency_hz": 50
+              },
+              "frequency_hz": 50
+            }
+          ],
+          "expect": {
+            "p2": {
+              "first": "764X30-11320000/A",
+              "filters": {
+                "min_torque_nm": 800
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_global_rerank_3",
+      "p2_class": "global_rerank",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "limit": 3,
+          "offset": 0,
+          "service": "on_off",
+          "sort_by": [
+            "highest_torque"
+          ],
+          "enclosure": "explosionproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "800"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "most_torque",
+        "on_screen": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": true
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_shown_list": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A",
+          "764X30-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "selection_priority": {
+          "metric": "torque",
+          "direction": "highest",
+          "frequency_hz": null
+        },
+        "quantity_requirements": {
+          "min_torque_nm": 800,
+          "supply_voltage_v": 220
+        }
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Find explosionproof 220 V on/off options rated at least 800 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data.\n764X30-11320000/A â€” On/Off torque: 6900 in-lb / 800 Nm\n764Y30-11320000/A â€” On/Off torque: 8300 in-lb / 940 Nm\n765X30-11320000/A â€” On/Off torque: 17500 in-lb / 2000 Nm\n765Y30-11320000/A â€” On/Off torque: 25900 in-lb / 3000 Nm\nChoose two models to compare their differences.\nRanked by closest torque at or above 800 Nm, then lowest FLA."
+        },
+        {
+          "role": "user",
+          "content": "Prioritize greatest torque first."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data. Top 3 shown matches ranked by highest torque.\n\n765Y30-11320000/A\n â€¢ On/Off torque: 25900 in-lb / 3000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n765X30-11320000/A\n â€¢ On/Off torque: 17500 in-lb / 2000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n764Y30-11320000/A\n â€¢ On/Off torque: 8300 in-lb / 940 Nm\n Source: Series 76 electrical catalogue, page 4.\nRanked by most torque, then lowest FLA, then shortest operating time."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Now search for the quickest 50 Hz option meeting the same 800 Nm floor.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "priority": {
+                "metric": "operating_time",
+                "direction": "lowest",
+                "frequency_hz": 50
+              },
+              "frequency_hz": 50
+            }
+          ],
+          "expect": {
+            "p2": {
+              "first": "764X30-11320000/A",
+              "filters": {
+                "min_torque_nm": 800
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_source_na_meaning_1",
+      "p2_class": "source_na_meaning",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "761B00-11330C00/A"
+        ],
+        "part_numbers": [
+          "761B00-11330C00/A"
+        ],
+        "focused_model": "761B00-11330C00/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Show the available data for 761B00-11330C00/A."
+        },
+        {
+          "role": "assistant",
+          "content": "761B00-11330C00/A\n761B00-11330C00/A â€” Weatherproof, 220 V AC 3-phase: every performance value of this row is N/A in the source table; nothing can be inferred."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Is a blank current value the same as zero amps?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "source_na"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "not zero"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_source_na_meaning_2",
+      "p2_class": "source_na_meaning",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "761B00-11330C00/A"
+        ],
+        "part_numbers": [
+          "761B00-11330C00/A"
+        ],
+        "focused_model": "761B00-11330C00/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Show the available data for 761B00-11330C00/A."
+        },
+        {
+          "role": "assistant",
+          "content": "761B00-11330C00/A\n761B00-11330C00/A â€” Weatherproof, 220 V AC 3-phase: every performance value of this row is N/A in the source table; nothing can be inferred."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Does N/A mean the current is zero?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "source_na"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "not zero"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_source_na_meaning_3",
+      "p2_class": "source_na_meaning",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "on_screen": [
+          "761B00-11330C00/A"
+        ],
+        "part_numbers": [
+          "761B00-11330C00/A"
+        ],
+        "focused_model": "761B00-11330C00/A"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Show the available data for 761B00-11330C00/A."
+        },
+        {
+          "role": "assistant",
+          "content": "761B00-11330C00/A\n761B00-11330C00/A â€” Weatherproof, 220 V AC 3-phase: every performance value of this row is N/A in the source table; nothing can be inferred."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Is an unavailable current measurement equivalent to zero amperes?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "source_na"
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "not zero"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_quantity_words_1",
+      "p2_class": "quantity_words",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "I need 220 V explosionproof on/off, at least 3000 Nm, with an operating time below one second at 50 Hz.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 220,
+              "frequency_hz": 50,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 3000
+                },
+                {
+                  "field": "max_operating_time_s",
+                  "op": "lt",
+                  "value": 1
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "max_operating_time_s": {
+                  "value": 1,
+                  "op": "lt"
+                }
+              },
+              "no_positive_selection": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_quantity_words_2",
+      "p2_class": "quantity_words",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Find 220 V explosionproof on/off at least 3000 Nm with operating time under one second at 50 Hz.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 220,
+              "frequency_hz": 50,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 3000
+                },
+                {
+                  "field": "max_operating_time_s",
+                  "op": "lt",
+                  "value": 1
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "max_operating_time_s": {
+                  "value": 1,
+                  "op": "lt"
+                }
+              },
+              "no_positive_selection": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_quantity_words_3",
+      "p2_class": "quantity_words",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Explosionproof, 220 V, on/off, minimum 3000 Nm; operating time less than one second, 50 Hz.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "explosionproof",
+              "supply_voltage_v": 220,
+              "frequency_hz": 50,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 3000
+                },
+                {
+                  "field": "max_operating_time_s",
+                  "op": "lt",
+                  "value": 1
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "filters": {
+                "max_operating_time_s": {
+                  "value": 1,
+                  "op": "lt"
+                }
+              },
+              "no_positive_selection": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_motor_total_1",
+      "p2_class": "motor_total",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "service": "on_off",
+          "sort_by": [
+            "fastest"
+          ],
+          "enclosure": "explosionproof",
+          "csa_required": false,
+          "frequency_hz": 50,
+          "min_torque_nm": 800,
+          "supply_voltage_v": 220
+        },
+        "rank_by": "fastest",
+        "on_screen": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": true
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "focused_model": "764Y30-11320000/A",
+        "last_shown_list": [
+          "764Y30-11320000/A",
+          "765X30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "764Y30-11320000/A",
+          "765X30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "selection_priority": {
+          "metric": "torque",
+          "direction": "highest",
+          "frequency_hz": null
+        },
+        "quantity_requirements": {
+          "min_torque_nm": 800,
+          "supply_voltage_v": 220
+        },
+        "recommendation_open_choices": []
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Find explosionproof 220 V on/off options rated at least 800 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data.\n764X30-11320000/A â€” On/Off torque: 6900 in-lb / 800 Nm\n764Y30-11320000/A â€” On/Off torque: 8300 in-lb / 940 Nm\n765X30-11320000/A â€” On/Off torque: 17500 in-lb / 2000 Nm\n765Y30-11320000/A â€” On/Off torque: 25900 in-lb / 3000 Nm\nChoose two models to compare their differences.\nRanked by closest torque at or above 800 Nm, then lowest FLA."
+        },
+        {
+          "role": "user",
+          "content": "Prioritize greatest torque first."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data. Top 3 shown matches ranked by highest torque.\n\n765Y30-11320000/A\n â€¢ On/Off torque: 25900 in-lb / 3000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n765X30-11320000/A\n â€¢ On/Off torque: 17500 in-lb / 2000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n764Y30-11320000/A\n â€¢ On/Off torque: 8300 in-lb / 940 Nm\n Source: Series 76 electrical catalogue, page 4.\nRanked by most torque, then lowest FLA, then shortest operating time."
+        },
+        {
+          "role": "user",
+          "content": "Change the priority: now the fastest at 50 Hz, keeping the 800 Nm floor."
+        },
+        {
+          "role": "assistant",
+          "content": "I recommend 764Y30-11320000/A: Operating time at 50 Hz 41 s; meets Explosionproof, On/Off service, 220 V, 50 Hz, torque â‰¥ 800 Nm. Ranked by fastest operating time, then lowest FLA, then part number. Versus 765X30-11320000/A: Operating time at 50 Hz: 41 s vs 112 s; On/Off cycles: 140 /h vs 50 /h. Choose 765X30-11320000/A only if its FLA at 50 Hz advantage (2.2 A vs 3.3 A) matters more than the stated priority."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Give the selected model motor watts and the total listed motor watts for three identical units.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "focused",
+              "focus": [
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "180 W",
+                "540 W"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_motor_total_2",
+      "p2_class": "motor_total",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "service": "on_off",
+          "sort_by": [
+            "fastest"
+          ],
+          "enclosure": "explosionproof",
+          "csa_required": false,
+          "frequency_hz": 50,
+          "min_torque_nm": 800,
+          "supply_voltage_v": 220
+        },
+        "rank_by": "fastest",
+        "on_screen": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": true
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "focused_model": "764Y30-11320000/A",
+        "last_shown_list": [
+          "764Y30-11320000/A",
+          "765X30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "764Y30-11320000/A",
+          "765X30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "selection_priority": {
+          "metric": "torque",
+          "direction": "highest",
+          "frequency_hz": null
+        },
+        "quantity_requirements": {
+          "min_torque_nm": 800,
+          "supply_voltage_v": 220
+        },
+        "recommendation_open_choices": []
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Find explosionproof 220 V on/off options rated at least 800 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data.\n764X30-11320000/A â€” On/Off torque: 6900 in-lb / 800 Nm\n764Y30-11320000/A â€” On/Off torque: 8300 in-lb / 940 Nm\n765X30-11320000/A â€” On/Off torque: 17500 in-lb / 2000 Nm\n765Y30-11320000/A â€” On/Off torque: 25900 in-lb / 3000 Nm\nChoose two models to compare their differences.\nRanked by closest torque at or above 800 Nm, then lowest FLA."
+        },
+        {
+          "role": "user",
+          "content": "Prioritize greatest torque first."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data. Top 3 shown matches ranked by highest torque.\n\n765Y30-11320000/A\n â€¢ On/Off torque: 25900 in-lb / 3000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n765X30-11320000/A\n â€¢ On/Off torque: 17500 in-lb / 2000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n764Y30-11320000/A\n â€¢ On/Off torque: 8300 in-lb / 940 Nm\n Source: Series 76 electrical catalogue, page 4.\nRanked by most torque, then lowest FLA, then shortest operating time."
+        },
+        {
+          "role": "user",
+          "content": "Change the priority: now the fastest at 50 Hz, keeping the 800 Nm floor."
+        },
+        {
+          "role": "assistant",
+          "content": "I recommend 764Y30-11320000/A: Operating time at 50 Hz 41 s; meets Explosionproof, On/Off service, 220 V, 50 Hz, torque â‰¥ 800 Nm. Ranked by fastest operating time, then lowest FLA, then part number. Versus 765X30-11320000/A: Operating time at 50 Hz: 41 s vs 112 s; On/Off cycles: 140 /h vs 50 /h. Choose 765X30-11320000/A only if its FLA at 50 Hz advantage (2.2 A vs 3.3 A) matters more than the stated priority."
+        }
+      ],
+      "turns": [
+        {
+          "query": "For the selected model, give motor power per unit and sum it for three identical units.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "focused",
+              "focus": [
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "180 W",
+                "540 W"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_motor_total_3",
+      "p2_class": "motor_total",
+      "context": {
+        "focus": [
+          {
+            "field": "torque",
+            "service": "on_off"
+          }
+        ],
+        "filters": {
+          "service": "on_off",
+          "sort_by": [
+            "fastest"
+          ],
+          "enclosure": "explosionproof",
+          "csa_required": false,
+          "frequency_hz": 50,
+          "min_torque_nm": 800,
+          "supply_voltage_v": 220
+        },
+        "rank_by": "fastest",
+        "on_screen": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "pagination": {
+          "has_more": true
+        },
+        "empty_search": false,
+        "part_numbers": [
+          "765Y30-11320000/A",
+          "765X30-11320000/A",
+          "764Y30-11320000/A"
+        ],
+        "focused_model": "764Y30-11320000/A",
+        "last_shown_list": [
+          "764Y30-11320000/A",
+          "765X30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "last_ranked_list": [
+          "764Y30-11320000/A",
+          "765X30-11320000/A",
+          "765Y30-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "selection_priority": {
+          "metric": "torque",
+          "direction": "highest",
+          "frequency_hz": null
+        },
+        "quantity_requirements": {
+          "min_torque_nm": 800,
+          "supply_voltage_v": 220
+        },
+        "recommendation_open_choices": []
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Find explosionproof 220 V on/off options rated at least 800 Nm."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data.\n764X30-11320000/A â€” On/Off torque: 6900 in-lb / 800 Nm\n764Y30-11320000/A â€” On/Off torque: 8300 in-lb / 940 Nm\n765X30-11320000/A â€” On/Off torque: 17500 in-lb / 2000 Nm\n765Y30-11320000/A â€” On/Off torque: 25900 in-lb / 3000 Nm\nChoose two models to compare their differences.\nRanked by closest torque at or above 800 Nm, then lowest FLA."
+        },
+        {
+          "role": "user",
+          "content": "Prioritize greatest torque first."
+        },
+        {
+          "role": "assistant",
+          "content": "4 actuators meet: Explosionproof, On/Off service, 220 V, torque >= 800 Nm; with published electrical data. Top 3 shown matches ranked by highest torque.\n\n765Y30-11320000/A\n â€¢ On/Off torque: 25900 in-lb / 3000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n765X30-11320000/A\n â€¢ On/Off torque: 17500 in-lb / 2000 Nm\n Source: Series 76 electrical catalogue, page 4.\n\n764Y30-11320000/A\n â€¢ On/Off torque: 8300 in-lb / 940 Nm\n Source: Series 76 electrical catalogue, page 4.\nRanked by most torque, then lowest FLA, then shortest operating time."
+        },
+        {
+          "role": "user",
+          "content": "Change the priority: now the fastest at 50 Hz, keeping the 800 Nm floor."
+        },
+        {
+          "role": "assistant",
+          "content": "I recommend 764Y30-11320000/A: Operating time at 50 Hz 41 s; meets Explosionproof, On/Off service, 220 V, 50 Hz, torque â‰¥ 800 Nm. Ranked by fastest operating time, then lowest FLA, then part number. Versus 765X30-11320000/A: Operating time at 50 Hz: 41 s vs 112 s; On/Off cycles: 140 /h vs 50 /h. Choose 765X30-11320000/A only if its FLA at 50 Hz advantage (2.2 A vs 3.3 A) matters more than the stated priority."
+        }
+      ],
+      "turns": [
+        {
+          "query": "Report the selected actuator motor watts and the total for 3 identical actuators.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "reference_kind": "focused",
+              "focus": [
+                "motor_power"
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "text": [
+                "180 W",
+                "540 W"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_numeric_alternatives_1",
+      "p2_class": "numeric_alternatives",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "220 V on/off. Need 50000 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 50000
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "alternatives": true,
+              "no_positive_selection": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_numeric_alternatives_2",
+      "p2_class": "numeric_alternatives",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "Find a 220 V on/off model with at least 50000 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 50000
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "alternatives": true,
+              "no_positive_selection": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_numeric_alternatives_3",
+      "p2_class": "numeric_alternatives",
+      "context": {},
+      "history": [],
+      "turns": [
+        {
+          "query": "On/off, 220 V and minimum torque 50000 Nm; show what is available.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_voltage_v": 220,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 50000
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "p2": {
+              "alternatives": true,
+              "no_positive_selection": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -212,5 +212,8 @@ def item(product, filters, reason=None):
 
 def recommendation(products, filters, by='closest_torque', *, total=None):
     ordered = rank(products, filters, by)
+    # The compact client list displays at most three; honor a smaller requested
+    # limit and let show-all/pagination expose the rest of the ranked set.
+    count = min(len(ordered), filters.get('limit', 3), 3)
     return dict(ranked_by=ranked_by(filters, by), total=len(ordered) if total is None else total,
-                shown=min(3, len(ordered)), items=[item(p, dict(filters, rank_by=by)) for p in ordered[:3]])
+                shown=count, items=[item(p, dict(filters, rank_by=by)) for p in ordered[:count]])

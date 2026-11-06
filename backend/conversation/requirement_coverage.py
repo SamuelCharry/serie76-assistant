@@ -5,9 +5,10 @@ from decimal import Decimal
 import re
 
 NUMBER = r'(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:[.,]\d+)?)'
+NUMBER_WORDS = dict(zip(('zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty').split(), range(21)))
 UNIT = r'k\s*n\s*-?\s*m|n\s*-?\s*m|m\s*n|in\s*-?\s*lbs?|volts?|v(?:ac|dc)?|hz|seconds?|sec|s|amps?|a|watts?|w|%'
 RANGE = re.compile(rf'(?<![\w-])(?:between\s+)?({NUMBER})\s*(?:to|and|–|-)\s*({NUMBER})\s*({UNIT})(?![a-z])', re.I)
-SINGLE = re.compile(rf'(?<![\w-])({NUMBER})\s*({UNIT})(?![a-z])', re.I)
+SINGLE = re.compile(rf'(?<![\w-])({NUMBER})\s*({UNIT})(?![\w/-])', re.I)
 POSSIBLE_UNIT = re.compile(rf'(?<![\w-])({NUMBER})\s*([a-z]{{1,8}})(?![\w/-])', re.I)
 
 
@@ -61,8 +62,7 @@ def _field(unit, nearby, context=None):
             return relevant[0]
         return None
     if unit == 's':
-        return ('max_operating_time_s' if re.search(r'\b(?:operating time|time|speed|faster|seconds?)\b', nearby)
-                or (context or {}).get('max_operating_time_s') is not None else None)
+        return 'max_operating_time_s'
     return None
 
 
@@ -70,8 +70,8 @@ def _operator(prefix, field, suffix=''):
     # The nearest operator belongs to this quantity. A trailing "maximum" is
     # common in additions; inspecting only the prefix reversed that constraint.
     operators = (
-        ('lte', r'no more than|not more than|at most|up to|max(?:imum)?|upper(?:\s+\w+){0,2}\s+limit|hasta|m[aá?]xim[oa]|no m[aá?]s de|<=|≤'),
-        ('gte', r'at least|no less than|not less than|min(?:imum)?|lower(?:\s+\w+){0,2}\s+limit|al menos|m[ií?]nim[oa]|como poco|>=|≥'),
+        ('lte', r'at or below|no more than|not more than|at most|up to|max(?:imum)?|upper(?:\s+\w+){0,2}\s+limit|hasta|m[aá?]xim[oa]|no m[aá?]s de|<=|≤'),
+        ('gte', r'at or above|at least|no less than|not less than|min(?:imum)?|lower(?:\s+\w+){0,2}\s+limit|al menos|m[ií?]nim[oa]|como poco|>=|≥'),
         ('lt', r'below|under|less than|menor\s+(?:a|que)|menos de|por debajo de|<'),
         ('gt', r'more than|above|over|mayor\s+(?:a|que)|m[aá?]s de|por encima de|>'),
     )
@@ -81,6 +81,10 @@ def _operator(prefix, field, suffix=''):
     trailing = re.match(r'^\s*(?:as\s+(?:a\s+)?)?(maximum|minimum|max|min|m[aá?]xim[oa]|m[ií?]nim[oa])\b', suffix, re.I)
     if trailing:
         return 'lte' if re.match(r'max|m[aá?]x', trailing.group(1), re.I) else 'gte'
+    if re.match(r'^\s+or\s+(?:more|greater|higher)\b', suffix, re.I):
+        return 'gte'
+    if re.match(r'^\s+or\s+(?:less|lower|fewer)\b', suffix, re.I):
+        return 'lte'
     if matches:
         return matches[-1].lastgroup
     return 'gte' if field.startswith('min_') else 'lte'
@@ -93,7 +97,13 @@ def apply(query, filters, context=None):
     units are reported instead of turning into a guess or silently vanishing.
     """
     updated, issues = dict(filters), []
-    text = re.sub(r'(?<=\d)-(?=[a-zA-Z])', ' ', query.lower())
+    from .policy import CODE_IN_TEXT
+    # Identifiers are not quantities, even when a prefix looks like "764 A".
+    text = CODE_IN_TEXT.sub(lambda m: ' ' * len(m.group()), query.lower())
+    text = re.sub(r'(?<=\d)-(?=[a-zA-Z])', ' ', text)
+    words = '|'.join(NUMBER_WORDS)
+    text = re.sub(rf'\b({words})(?=\s+(?:{UNIT})(?![\w/-]))',
+                  lambda m: str(NUMBER_WORDS[m.group()]), text)
     occupied = []
     found = {}
     named_rates = re.compile(rf'\b(cycles?|ciclos?|starts?|arranques?)\s*(>=|<=|>|<|at least|at most|minimum|maximum)?\s*({NUMBER})\s*(?:/\s*h(?:our)?|per\s+hour|por\s+hora)\b', re.I)
@@ -127,6 +137,7 @@ def apply(query, filters, context=None):
         factor = 1000 if unit == 'knm' else 1
         lower, upper = _number(match.group(1)) * factor, _number(match.group(2)) * factor
         found[field] = [{'value': lower, 'op': 'gte'}, {'value': upper, 'op': 'lte'}]
+    last_position = {}
     for match in SINGLE.finditer(text):
         if any(start <= match.start() < end for start, end in occupied):
             continue
@@ -145,10 +156,15 @@ def apply(query, filters, context=None):
         if field in ('supply_voltage_v', 'frequency_hz'):
             previous = found.get(field)
             if previous is not None and previous != value:
-                found.pop(field, None)
-                issues.append(f'I couldn\'t apply both stated {"voltages" if unit == "v" else "frequencies"}; choose one.')
+                between = text[last_position.get(field, 0):match.start()]
+                if re.search(r'\b(?:but|instead|rather|should be|correction|incorrect|wrong|use|pero|sino|quise decir)\b', between):
+                    found[field] = value
+                else:
+                    found.pop(field, None)
+                    issues.append(f'I couldn\'t apply both stated {"voltages" if unit == "v" else "frequencies"}; choose one.')
             elif not any('both stated' in issue for issue in issues):
                 found[field] = value
+            last_position[field] = match.end()
         else:
             prefix_start = max((end for start, end in occupied if end <= match.start()), default=0)
             op = _operator(text[max(prefix_start, match.start()-60):match.start()], field, text[match.end():])
@@ -185,11 +201,29 @@ def apply(query, filters, context=None):
             if not any(start <= m.start() < end for start, end in occupied)]
     if len(set(bare)) == 1 and 'supply_voltage_v' not in found:
         found['supply_voltage_v'] = bare[0]
+    # A unitless correction may inherit exactly one active bounded dimension;
+    # multiple possible dimensions remain ambiguous rather than guessed.
+    active = [k for k, v in (context or {}).items() if k.startswith(('min_', 'max_')) and v is not None]
+    remaining = [m for m in re.finditer(rf'(?<![\w/-]){NUMBER}(?![\w/-]|\.\d)', text)
+                 if not any(start <= m.start() < end for start, end in occupied)]
+    if (len(active) == 1 and len(remaining) == 1 and active[0] not in found
+            and re.search(r'\b(?:minimum|maximum|limit|floor|ceiling)\b', text)
+            and re.search(r'\b(?:make|change|actually|instead|replace|correct)\b', text)):
+        match = remaining[0]
+        field = active[0]
+        found[field] = dict(value=_number(match.group()), op=_operator(text[:match.start()], field, text[match.end():]))
+    # SearchFilters accepts a bound object or a list of bound objects, not a
+    # mixed list of scalars and objects.
+    from backend.catalog.models import bound_value, bound_operator
+    for field, value in found.items():
+        if isinstance(value, list):
+            found[field] = [dict(value=bound_value(item), op=bound_operator(item, 'gte' if field.startswith('min_') else 'lte'))
+                            for item in value]
     updated.update(found)
     return updated, list(dict.fromkeys(issues))
 
 
-def unsupported(query, filters):
+def unsupported(query, filters, context=None):
     """Reverse coverage: each numeric argument needs compatible quantity evidence.
 
     Operators are handled by apply/merge; a repeated number in another physical
@@ -197,7 +231,7 @@ def unsupported(query, filters):
     """
     from backend.catalog.models import bound_value, bounds
     from .policy import NUMERIC_FIELDS
-    evidence, _ = apply(query, {}, filters)
+    evidence, _ = apply(query, {}, filters if context is None else context)
     for kind in ('cycles', 'starts'):
         values = re.findall(rf'({NUMBER})\s*{kind}\s*(?:/\s*h(?:our)?|per\s+hour|an?\s+hour)', query, re.I)
         if values and f'min_{kind}_per_hour' not in evidence:

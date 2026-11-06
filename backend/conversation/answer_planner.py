@@ -47,6 +47,7 @@ def plan(query):
     found = tuple(name for name, pattern in METRICS if re.search(pattern, text))
     direction = 'higher' if re.search(r'\b(?:more|higher|highest|most|stronger|strongest|mayor|m[aá]s)\b', text) else 'lower'
     verdict_text = re.sub(r'\b(?:at least|at most|more than|less than|no more than|mayor (?:a|que)|menor (?:a|que))\b', '', text)
+    verdict_text = re.sub(r'\bor (?:more|less|higher|lower)\b', '', verdict_text)
     plural_selection = re.search(r'\b(?:which|list|show)\b[^?]*\b(?:units|models|actuators)\b', text)
     explicit_superlative = re.search(r'\b(?:lowest|highest|least|most|fastest|strongest|quickest|better|faster|stronger)\b', verdict_text)
     if found and VERDICT.search(verdict_text) and (not plural_selection or explicit_superlative):
@@ -80,3 +81,21 @@ def difference(product, frequency_hz):
             return (f'{product["base_part_number"]}: LRA {_num(lra)} A and FLA {_num(fla)} A '
                     f'at {hz} Hz differ by {_num(delta)} A.')
     return f'The catalogue does not publish comparable LRA and FLA for {product["base_part_number"]}.'
+
+
+def motor_total(product, query):
+    """Explicit identical-unit arithmetic; no inferred fleet size or energy use."""
+    if not re.search(r'\b(?:total|sum|combined)\b', query, re.I) or 'motor_power' not in plan(query).metrics:
+        return None
+    from .requirement_coverage import NUMBER_WORDS
+    numbers = r'\d+|' + '|'.join(NUMBER_WORDS)
+    match = re.search(rf'\b({numbers})\s+(?:identical\s+)?(?:units|actuators|motors)\b', query, re.I)
+    if not match:
+        return None
+    token = match.group(1).lower()
+    count = int(token) if token.isdigit() else NUMBER_WORDS[token]
+    watts = product['measurements'].get('motor_power_w')
+    if count < 1 or watts is None:
+        return 'The total cannot be calculated without a positive unit count and published motor power.'
+    total = Decimal(str(watts)) * count
+    return f'Total listed motor power for {count} identical units: {count} × {_num(watts)} W = {_num(total)} W.'
