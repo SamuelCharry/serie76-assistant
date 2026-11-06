@@ -19,6 +19,7 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import okhttp3.mockwebserver.SocketPolicy
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -59,7 +60,7 @@ class ResilienceTest(private val operation: String, private val scenario: String
 
     private fun response(path: String): MockResponse = when (scenario) {
         "delay15" -> success(path).setBodyDelay(15, TimeUnit.SECONDS)
-        "timeout" -> success(path).setBodyDelay(500, TimeUnit.MILLISECONDS)
+        "timeout" -> MockResponse().setSocketPolicy(SocketPolicy.NO_RESPONSE)
         "malformed" -> MockResponse().setBody("{private internal trace")
         "empty" -> MockResponse().setBody("")
         "missing" -> MockResponse().setBody("{}")
@@ -109,12 +110,15 @@ class ResilienceTest(private val operation: String, private val scenario: String
             }
             server.start()
             val client = conversationHttpClient().newBuilder().apply {
-                if (scenario == "timeout") readTimeout(150, TimeUnit.MILLISECONDS)
                 addInterceptor { chain ->
                     if (Thread.currentThread() === caller) networkOnCaller.set(true)
                     if (target(chain.request().url.encodedPath + "?" + chain.request().url.encodedQuery.orEmpty()) && failing.get()) {
                         check(release.await(5, TimeUnit.SECONDS))
                         if (scenario == "offline") throw UnknownHostException("private internal host")
+                        // Only the failing request gets a short deadline. NO_RESPONSE cannot race
+                        // a delayed successful body, and setup/recovery retain production timeouts.
+                        if (scenario == "timeout") return@addInterceptor chain
+                            .withReadTimeout(150, TimeUnit.MILLISECONDS).proceed(chain.request())
                     }
                     chain.proceed(chain.request())
                 }

@@ -32,7 +32,7 @@ An ambiguous send means the server may already have saved the turn: 409, server 
 
 ## Timeout policy and cleanup
 
-The production client remains at **10 s connect / 70 s read / 75 s total call**, leaving margin above `AGENT_TURN_DEADLINE_S=60`. Connection-failure retry and redirects remain disabled; the existing 5-connection / 30 s pool is unchanged. Tests assert these production values. Timeout integration cases shorten only the test client's read timeout to 150 ms against a 500 ms delayed body; they do not claim a real 75 s timeout measurement. Offline cases inject `UnknownHostException` inside the OkHttp worker interceptor, without changing the host network.
+The production client remains at **10 s connect / 70 s read / 75 s total call**, leaving margin above `AGENT_TURN_DEADLINE_S=60`. Connection-failure retry and redirects remain disabled; the existing 5-connection / 30 s pool is unchanged. Tests assert these production values. Timeout integration cases inject a 150 ms read timeout only for the deliberately failing request against MockWebServer `SocketPolicy.NO_RESPONSE`; setup and recovery requests retain production timeouts. These cases do not claim a real 75 s timeout measurement. Offline cases inject `UnknownHostException` inside the OkHttp worker interceptor, without changing the host network.
 
 Removed unused direct dependencies `androidx.compose.material:material-icons-core` and `androidx.compose.ui:ui-tooling-preview`: no imports, icon usages or preview annotations were present. Retained `ui-tooling` for debug inspection and all dependencies used by runtime/test code. Removed an unused local variable from question selection. Source scans found no test `Log.*`, `println`, `System.out` calls or commented-out implementation blocks to delete; explanatory comments remain.
 
@@ -53,3 +53,11 @@ The first run on the default JDK 21 lost its Gradle daemon before results and is
 Evidence is generated under `mobile/android/app/build/test-results/testDebugUnitTest/` and `mobile/android/app/build/outputs/apk/debug/app-debug.apk`; build outputs are intentionally not committed. The two new suites are `ResilienceTest` (45 cases) and `RecoveryStateTest` (seven cases).
 
 The gate validates JVM repository/ViewModel behaviour and APK compilation. Physical-device rendering, accessibility layout, actual radio loss, voice and Android-to-live-backend behaviour were not exercised; no such acceptance is claimed.
+
+## CI timeout-fixture correction
+
+Ubuntu runs `42137036228` and `42137043570` failed the `sessions: timeout` case despite the initial local pass. The old fixture raced a 150 ms read timeout against a successful response body delayed by 500 ms: if the reader was scheduled late enough, the body could already be available. It also imposed the short timeout on setup and recovery requests, making unrelated successful requests sensitive to runner scheduling.
+
+The corrected fixture uses `SocketPolicy.NO_RESPONSE`, so the timeout request can never receive a successful body. An OkHttp interceptor applies the injected 150 ms read timeout only while the target request is deliberately failing; the recovery path uses the unchanged production timeout. All 45 scenario cases and their existing assertions remain, including the exact timeout message, loading state, retained draft and successful explicit Retry. No production source or CI workflow changed.
+
+Repeat validation: three consecutive forced full local runs with JDK 17 using `testDebugUnitTest assembleDebug --rerun-tasks --no-daemon --max-workers=2` all passed: **126 tests per run, zero failures/errors/skips, assembleDebug successful**. Durations were **2m 35s**, **2m 32s**, and **2m 29s**; each run executed all 45 Gradle tasks. `--rerun-tasks` ensures the tests execute on every run rather than reporting UP-TO-DATE. `git diff --check` passed. Post-push GitHub `android` check verification is recorded in the coordinator handoff.
