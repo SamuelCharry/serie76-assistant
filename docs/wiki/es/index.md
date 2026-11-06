@@ -26,7 +26,6 @@ Las flechas muestran consultas y solicitudes; el agente se ejecuta dentro del ba
 - [Patrones](patterns.md)
 - [Pruebas](testing.md)
 - [Operación](operations.md)
-- [Defensa de entrevista](defensa-entrevista.md)
 
 Empieza por el [README](../../../README.es.md) y sigue un turno: `POST /api/conversation` → herramienta elegida por el modelo → validación → SQL → plantilla → turno guardado. Prueba `What is the motor power of 761A00-11300000/A?`; T8 resuelve esta consulta de código completo sin modelo. La interpretación libre sin configuración devuelve 503 `not_configured`.
 

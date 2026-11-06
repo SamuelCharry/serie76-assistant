@@ -1,6 +1,6 @@
 # GitHub Wiki publication
 
-`docs/github-wiki/*.md` is the editorial source for the separate GitHub Wiki repository. Organize it by assessment requirements for evaluators. The personal defense guide at `docs/wiki/es/defensa-entrevista.md` is separate and is not published as a Wiki page.
+`docs/github-wiki/*.md` is the editorial source for the separate GitHub Wiki repository. Organize it by assessment requirements for evaluators.
 
 1. Review the current implementation and evidence before changing claims.
 2. Edit the source pages. Use absolute Wiki links so navigation works both in `main` and in the published Wiki; retain existing page names.
