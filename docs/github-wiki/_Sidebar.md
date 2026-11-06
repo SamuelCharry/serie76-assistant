@@ -1,4 +1,4 @@
-### Assessment
+### Series 76
 
 - [Inicio](https://github.com/SamuelCharry/serie76-assistant/wiki/Home)
 - [Arquitectura](https://github.com/SamuelCharry/serie76-assistant/wiki/Arquitectura)
@@ -24,6 +24,11 @@
 - [Login](https://github.com/SamuelCharry/serie76-assistant/wiki/Parte-C1-Login)
 - [Voz y sus límites](https://github.com/SamuelCharry/serie76-assistant/wiki/Parte-C2-Mensajes-de-voz)
 
-### Entregables · Secciones 8–9
+### Cómo lo construí
+
+- [Decisiones y motivos](https://github.com/SamuelCharry/serie76-assistant/wiki/Decisiones)
+- [Cómo usé IA](https://github.com/SamuelCharry/serie76-assistant/wiki/Como-use-IA)
+
+### Entrega
 
 - [Documentación y acceso](https://github.com/SamuelCharry/serie76-assistant/wiki/Documentacion-y-entrega)

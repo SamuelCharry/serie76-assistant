@@ -1,6 +1,6 @@
 # Arquitectura
 
-Tres piezas en ejecución: **Android**, **FastAPI** y **PostgreSQL 17 con pgvector**. OpenRouter es el proveedor externo de modelos. La ingesta OCR prepara el catálogo antes de atender consultas.
+La app habla con una API y la API consulta el catálogo en PostgreSQL. Cuando la pregunta necesita interpretación, el backend llama al modelo por OpenRouter. El PDF se procesa antes, durante la ingesta; no se vuelve a leer en cada conversación.
 
 ```mermaid
 flowchart TB
@@ -24,22 +24,19 @@ flowchart TB
     API --> APP
 ```
 
-Son responsabilidades, no microservicios: enrutamiento, recuperación, herramientas y renderizado viven en el mismo backend. Catálogo, glosario, vectores e historial comparten PostgreSQL.
+Las cajas muestran pasos del proceso, no servidores separados. El enrutamiento, las herramientas y la construcción de respuestas viven en el mismo backend FastAPI. El catálogo, el glosario, los vectores y el historial comparten PostgreSQL 17.
 
-| Componente | Responsabilidad |
-|---|---|
-| Android | Capturar texto, mostrar preguntas/tarjetas, conservar sesión y presentar errores |
-| FastAPI | Autenticar, comprobar propietario, limitar capacidad y guardar el turno |
-| LLM | Elegir herramienta y proponer argumentos; no genera SQL ni respuesta final |
-| Código | Validar, conservar/corregir filtros, resolver referencias y comprobar elegibilidad |
-| SQL | Seleccionar filas y devolver cifras publicadas con su ámbito |
-| Plantillas | Presentar valores, unidades, N/A, comparaciones y aclaraciones |
+## Una consulta de principio a fin
+
+Por ejemplo, al preguntar la potencia de `761A00-11300000/A`, Android envía el texto y la sesión. FastAPI comprueba quién está preguntando. Como el código y el campo están claros, el backend consulta SQL directamente y devuelve **15 W** en una respuesta construida por código. Después guarda el turno para poder retomarlo.
+
+Una petición abierta de selección sí puede necesitar el modelo. Este elige una herramienta y propone argumentos; el código los comprueba, conserva los requisitos anteriores y consulta SQL. Antes de devolver los productos se revisa que cumplan los requisitos representados.
 
 **Una decisión completada por turno interpretado** no significa necesariamente una petición de red: puede haber embeddings y reintentos de transporte. Las rutas deterministas no llaman chat ni embeddings. No hay un segundo agente revisor.
 
 ## Decisiones y coste
 
-Un agente reduce llamadas y hace visible el flujo, a cambio de mantener reglas y plantillas. El estado se actualiza mediante cambios de filtros; el experimento de estado completo no fue adoptado. pgvector recupera ejemplos de interpretación y solo completa campos no resueltos: no es autoridad numérica.
+Elegí acotar la tarea del modelo y mantener las cifras en SQL. Esto reduce llamadas, pero deja más reglas y plantillas por mantener. Los motivos y las alternativas descartadas están en [Decisiones](https://github.com/SamuelCharry/serie76-assistant/wiki/Decisiones).
 
 **Escalabilidad pendiente:** hay un límite de cuatro solicitudes de conversación simultáneas por proceso. La transacción permanece abierta durante el turno, incluida la espera al proveedor. No hay evidencia a 100× tráfico; habría que medir contención, conexiones, cuotas distribuidas y coste.
 
