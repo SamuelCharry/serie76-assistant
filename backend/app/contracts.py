@@ -13,7 +13,7 @@ class ConversationRequest(BaseModel):
     @field_validator("query")
     @classmethod
     def nonblank_query(cls, value: str) -> str:
-        if not value.strip():
+        if not value.strip() or '\x00' in value:
             raise ValueError("query must not be blank")
         return value
 

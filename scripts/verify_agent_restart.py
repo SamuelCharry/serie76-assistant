@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.agent_acceptance import Ledger, google_key, append  # noqa: E402
+from scripts.agent_acceptance import Ledger, google_key  # noqa: E402
 import scripts.agent_acceptance as acceptance  # noqa: E402
 
 API = "http://127.0.0.1:8000"

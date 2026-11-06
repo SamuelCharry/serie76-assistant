@@ -10,6 +10,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, SecretStr
 
 from backend.catalog.db import connect
+from backend.app.errors import DatabaseUnavailable
 from .security import DUMMY_HASH, token_hash, verify_password
 
 router = APIRouter(prefix="/api/auth", tags=["authentication"])
@@ -30,7 +31,7 @@ def require_user(credentials: HTTPAuthorizationCredentials | None = Depends(bear
                 JOIN series76.users u ON u.id=s.user_id WHERE s.token_hash=%s
                 AND s.expires_at>clock_timestamp() AND u.active""", (token_hash(credentials.credentials),)).fetchone()
     except psycopg.Error:
-        raise HTTPException(503, "Authentication service unavailable") from None
+        raise DatabaseUnavailable() from None
     if user is None:
         raise unauthorized()
     return user
@@ -81,7 +82,7 @@ def login(body: LoginRequest, request: Request, response: Response):
             return {"access_token": token, "token_type": "bearer", "expires_at": expiry["expires_at"],
                     "user": {key: user[key] for key in ("id", "email", "name")}}
     except psycopg.Error:
-        raise HTTPException(503, "Authentication service unavailable") from None
+        raise DatabaseUnavailable() from None
     finally:
         HASH_CAPACITY.release()
 
@@ -98,5 +99,5 @@ def logout(user=Depends(require_user), credentials=Depends(bearer)):
         with connect() as connection:
             connection.execute("DELETE FROM series76.auth_sessions WHERE token_hash=%s AND user_id=%s", (token_hash(credentials.credentials), user["id"]))
     except psycopg.Error:
-        raise HTTPException(503, "Could not revoke session. Try again.") from None
+        raise DatabaseUnavailable() from None
     return Response(status_code=204, headers={"Cache-Control": "no-store"})

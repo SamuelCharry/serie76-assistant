@@ -31,8 +31,9 @@ from . import interpretation
 from . import policy, quality, tool_wire, interactions, ranking, metrics, integrity, answer_planner, catalogue_answers, requirement_coverage
 from . import embeddings
 from . import shown_recommendation
+from . import part_numbers
 from .interactions import InvalidInteraction
-from .rendering import render_lookup, render_search, render_terms, supplies_text
+from .rendering import render_lookup, render_terms, supplies_text
 
 Focus = Literal["overview", "motor_power", "torque", "operating_time", "fla", "lra", "duty", "rates", "certification"]
 FilterName = Literal[policy.FILTER_FIELDS]
@@ -43,7 +44,7 @@ ClarifyField = Literal["part_number", "service", "frequency", "supply", "require
 class AgentUnavailable(Exception):
     """Provider/configuration failure. `code` is safe to expose; no private details."""
 
-    def __init__(self, code="provider_error"):
+    def __init__(self, code="service_unavailable"):
         super().__init__(code)
         self.code = code
 
@@ -398,13 +399,13 @@ def invoke_decision(client, tools, chat, *, fallback=True):
 
 def provider_error_code(exc):
     import openai
-    if isinstance(exc, openai.APITimeoutError):
+    if isinstance(exc, (openai.APITimeoutError, TimeoutError)):
         return "timeout"
     if isinstance(exc, openai.RateLimitError):
         return "rate_limited"
     if isinstance(exc, openai.APIStatusError):
         return {402: "budget_exhausted", 401: "not_configured", 403: "not_configured"}.get(exc.status_code, "provider_error")
-    if isinstance(exc, openai.APIConnectionError):
+    if isinstance(exc, (openai.APIConnectionError, ConnectionError)):
         return "provider_unreachable"
     return "provider_error"
 
@@ -756,17 +757,10 @@ class Turn:
             rows = self.connection.execute(
                 """SELECT DISTINCT e.base_part_number FROM series76.entries e
                 JOIN series76.catalog_state c ON c.active_import_id=e.import_id
-                WHERE e.base_part_number LIKE %s ESCAPE '\\' ORDER BY 1""",
+                WHERE e.base_part_number LIKE %s ESCAPE '\\' ORDER BY 1 LIMIT 3""",
                 (prefix.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%",),
             ).fetchall() if prefix else []
             options = [r["base_part_number"] for r in rows]
-            if (len(options) == 1 and re.fullmatch(r'[A-Z0-9]{6}-[A-Z0-9]{8}', prefix)
-                    and options[0] == prefix + '/A'):
-                code = options[0]
-                self.context['part_numbers'] = [code]
-                result = self.lookup(dict(part_numbers=[code], focus=['overview'], explain_terms=[]))
-                result.answer = f'Interpreted {prefix} as {code}.\n' + result.answer
-                return result
             self.trace["data"] = dict(status="partial_part_number", prefix=prefix, candidates=options)
             if options:
                 message = (f"'{prefix}' is not a complete Base Part Number. Catalogue codes starting with it: "
@@ -1751,12 +1745,14 @@ def single_field_code(query):
     if planned.frequency_hz:
         text = re.sub(r'\s+at\s+(?:50|60)\s*hz$', '', text, count=1)
     metric_pattern = dict(answer_planner.METRICS)[planned.metrics[0]]
+    if planned.metrics[0] == 'motor_power':
+        metric_pattern = rf'(?:potencia del motor|{metric_pattern})'
     field = rf'(?:{metric_pattern})'
     if planned.service:
         service = r'(?:on\s*/?\s*off|open.close)' if planned.service == 'on_off' else r'modulating'
         field = rf'(?:{service}\s+)?{field}'
     prefix = r'(?:(?:what is|what\x27s|show(?: me)?|tell me|give me)\s+)?(?:the\s+)?'
-    if re.fullmatch(prefix + field + r'\s+(?:(?:of|for)\s+)?#', text):
+    if re.fullmatch(prefix + field + r'\s+(?:(?:of|for|de|del)\s+)?#', text):
         return matches[0].upper()
     return None
 
@@ -1769,6 +1765,8 @@ def fast_path_codes(query):
     if not 1 <= len(matches) <= 4 or any(not policy.CODE_RE.fullmatch(c) for c in matches):
         return None
     masked = re.sub(code, '#', query.strip())
+    if masked.rstrip('.!?') == '#':
+        return matches
     if len(matches) >= 2 and re.fullmatch(r'(?i:compare)\s+#(?:\s*(?i:vs|and|,)\s*#){1,3}[.!?]?', masked):
         return matches
     if len(matches) == 1 and re.fullmatch(r'(?i:show|look up|lookup|get|specs for|specifications for)\s+#(?:\s+specs)?[.!?]?', masked):
@@ -1789,12 +1787,50 @@ def run_agent(connection, query, messages, context, *, model=None, answers=None,
            process_outputs=lambda result: {"answer": result.answer, "clarification": result.clarification,
                                            "products": [p["base_part_number"] for p in result.products],
                                            "tool": result.tool_calls[0].get("name") if result.tool_calls else None,
-                                           "validation": result.tool_calls[0].get("validation") if result.tool_calls else None})
+                                           "validation": result.tool_calls[0].get("validation") if result.tool_calls else None}
+                           if result is not None else {})
 def _turn(connection, query, messages, context, *, model=None, answers=None, remove_filters=None, user_name=None, action=None):
     turn = Turn(connection, query, messages, context)
     models = schemas([t["term_key"] for t in turn.terms])
     context_before = dict(turn.context)
     import re
+    if action is None and not answers and not remove_filters:
+        resolution = part_numbers.resolve_query(connection, query)
+        if resolution.unresolved:
+            turn.trace = dict(name='get_actuator', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            if policy.CODE_RE.fullmatch(resolution.unresolved):
+                turn.trace['overrides'] = ['well_formed_code_lookup']
+                turn.trace['parameters'] = {'part_numbers': [resolution.unresolved]}
+            raw, options = resolution.unresolved, resolution.candidates
+            if options:
+                prefix = (f"'{raw}' is not a complete Base Part Number." if resolution.partial else
+                          f"'{raw}' was not found in the catalogue.")
+                message = prefix + ' Did you mean ' + ', '.join(options) + '? Please choose a complete code.'
+            else:
+                message = (f"{raw} is not in the supplied Series 76 electrical catalogue (not found). "
+                           'Please check the Base Part Number; another code may be used for comparison, not as a substitute.')
+            return finish(turn, turn.clarify('part_number', message, options=options))
+        # Resolving a label does not authorize an inferred item in an order request.
+        ordering = policy.purchase_request(query) and re.search(r'\b(?:buy|purchase|order)\b', query, re.I)
+        if not ordering:
+            query = turn.query = resolution.query
+        turn.texts[-1] = query
+        turn.code_assumptions = resolution.assumptions
+        meaningless = not any(c.isalnum() for c in query)
+        numbers_only = query.strip().isdecimal() and not turn.context.get('pending_questions')
+        hostile = re.search(r"\b(?:drop\s+table|union\s+select|ignore\s+(?:all\s+)?(?:previous\s+|prior\s+)?instructions)\b|['\"]\s*or\s+1\s*=\s*1", query, re.I)
+        if meaningless or numbers_only or hostile:
+            turn.trace = dict(name='ask_clarification', parameters={}, raw_parameters={}, validation=['ok'],
+                              context_before=context_before,
+                              model={'attempts': [], 'decision_calls': 0, 'llm_called': False})
+            if meaningless:
+                turn.trace['name'] = 'search_actuators'
+                args = models['search_actuators'].model_validate({}).model_dump(mode='json')
+                return finish(turn, turn.search(args, trusted=True))
+            return finish(turn, turn.clarify('requirements',
+                'Please send a Series 76 part number or describe the actuator requirements you want to check.'))
     if not answers and not remove_filters and turn.context.get('empty_search') and (turn.context.get('filters') or {}).get('dc_only'):
         refers_to_results = ((isinstance(action, dict) and action.get('type') in ('compare_top', 'show_all')) or
                              re.search(r'\b(?:that|this|the|eligible)\s+(?:list|comparison|results?|models?)\b|\b(?:compare|choose|recommend)\s+(?:them|those)\b', query, re.I))
@@ -2687,6 +2723,12 @@ def finish(turn, result):
     for sentence in catalogue_answers.limitations(turn.query):
         if sentence not in result.answer:
             result.answer += '\n' + sentence
+    for assumption in getattr(turn, 'code_assumptions', []):
+        result.assumptions.append(assumption)
+        raw = assumption['user_phrase']
+        displayed = raw if assumption['value'] == raw + '/A' else repr(raw)
+        result.answer = (f"Interpreted {displayed} as {assumption['value']} "
+                         '(the unique matching catalogue code).\n' + result.answer)
     result.tool_calls = [trace]
     model_meta = trace.get('model') or {}
     result.debug = dict(latency_ms=round((time.perf_counter() - turn.started) * 1000),

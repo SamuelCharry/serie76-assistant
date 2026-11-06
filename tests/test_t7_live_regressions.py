@@ -70,12 +70,15 @@ class RecordedFailureTests(Base):
         self.assertEqual(result.products[0]['base_part_number'], A)
         self.assertIn('cannot process orders', result.answer)
 
-    def test_explicit_user_prefix_is_never_completed(self):
+    def test_explicit_user_prefix_with_unique_sql_match_is_resolved_visibly(self):
         for query in ('Show 761A00-11300', f'Compare {A} and 761A00-11300'):
-            with self.subTest(query=query), patch('backend.conversation.agent.get_actuator', side_effect=AssertionError('partial lookup')):
+            with self.subTest(query=query):
                 result = self.turn(query, ('get_actuator', {'part_numbers': ['761A00-11300']}))
-            self.assertEqual(result.clarification['field'], 'part_number')
-            self.assertIsNone(result.comparison)
+                self.assertEqual([p['base_part_number'] for p in result.products], [A])
+                self.assertIn("Interpreted '761A00-11300' as " + A, result.answer)
+                self.assertIn(dict(field='part_number', user_phrase='761A00-11300', value=A), result.assumptions)
+                self.assertIsNone(result.clarification)
+                self.assertIsNone(result.comparison)
 
     def test_model_prefix_without_unique_current_full_code_stays_incomplete(self):
         for query, prefix in ((f'Show {A}', '761Z00-11300'),

@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 from backend.auth.api import require_user
 
 from backend.app.contracts import ConversationRequest, ConversationResponse
+from backend.app.errors import DatabaseUnavailable, error_response
 from backend.catalog.db import connect
 from .agent import AgentUnavailable, InvalidInteraction, run_agent
 from . import store
@@ -19,7 +20,7 @@ CAPACITY = BoundedSemaphore(4)
 
 
 def unavailable():
-    return HTTPException(503, "Conversation service unavailable. Check backend configuration and try again.")
+    return DatabaseUnavailable()
 
 
 @router.get("/sessions")
@@ -61,7 +62,7 @@ def delete_session(session_id: UUID, user=Depends(require_user)):
 @router.post("/conversation", response_model=ConversationResponse)
 def conversation(request: ConversationRequest, user=Depends(require_user)):
     if not CAPACITY.acquire(blocking=False):
-        raise HTTPException(503, "The assistant is busy. Please try again shortly.")
+        return error_response('service_busy')
     try:
         session_id = request.session_id or uuid4()
         with connect() as connection:
@@ -90,12 +91,10 @@ def conversation(request: ConversationRequest, user=Depends(require_user)):
     except store.MissingSession:
         raise HTTPException(404, "Conversation not found") from None
     except store.BusySession:
-        raise HTTPException(409, "A response is already being prepared for this conversation.") from None
+        return error_response('session_busy')
     except AgentUnavailable as exc:
         # Nothing was persisted: the transaction rolled back with the failed turn.
-        return JSONResponse(status_code=503, content={
-            "detail": "Conversation service unavailable. Check backend configuration and try again.",
-            "error_code": exc.code})
+        return error_response(exc.code)
     except psycopg.Error:
         raise unavailable() from None
     finally:

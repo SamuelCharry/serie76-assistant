@@ -1,6 +1,4 @@
 """Metric intent and winner rendering over published SQL product rows."""
-import re
-
 from . import ranking, answer_planner
 from .rendering import _num
 

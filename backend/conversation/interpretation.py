@@ -1,7 +1,6 @@
 """Bounded interpreter metadata. SQL remains the only catalogue value source."""
 import re
-from typing import Annotated
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 METRICS = {'torque', 'operating_time', 'fla', 'motor_power', 'duty', 'cycles', 'starts'}
 KNOWN_KEYS = {('torque', 'highest'): 'most_torque', ('operating_time', 'lowest'): 'fastest',

@@ -20,6 +20,8 @@ from .repository import export_rows, get_actuator, search_actuators
 
 def local_environment(path=Path(".env")):
     """CLI-only .env handling. Never print secrets; existing process env wins."""
+    if os.environ.get('SERIES76_SKIP_DOTENV') == '1':
+        return
     if not path.is_file():
         return
     values = {}

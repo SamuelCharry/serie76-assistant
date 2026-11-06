@@ -106,10 +106,13 @@ class SingleFieldScenarioTests(Base):
                 if query.startswith('What is'):
                     self.assertIn('15 W', keyless.answer)
 
-    def test_ambiguous_and_unknown_code_reach_model(self):
-        for query in ['power and torque of 761A00-11300000/A',
-                      'motor power of 999Z99-99999999/A']:
-            model = Scripted(('get_actuator', {'part_numbers': ['761A00-11300000/A']}))
-            with patch('backend.conversation.agent.create_model_client', return_value=model):
-                run_agent(self.connection, query, [], {})
-            self.assertIsNotNone(model.seen)
+    def test_multi_field_request_reaches_model_but_unknown_code_is_keyless(self):
+        model = Scripted(('get_actuator', {'part_numbers': ['761A00-11300000/A']}))
+        with patch('backend.conversation.agent.create_model_client', return_value=model):
+            run_agent(self.connection, 'power and torque of 761A00-11300000/A', [], {})
+        self.assertIsNotNone(model.seen)
+        with patch('backend.conversation.agent.create_model_client', side_effect=AssertionError('unknown code called provider')):
+            result = run_agent(self.connection, 'motor power of 999Z99-99999999/A', [], {})
+        self.assertIn('not found', result.answer)
+        self.assertFalse(result.products)
+        self.assertFalse(result.debug['llm_called'])

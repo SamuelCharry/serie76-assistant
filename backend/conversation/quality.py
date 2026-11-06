@@ -281,7 +281,6 @@ def search_presentation(raw, products, filters, notes, assumptions):
 
 def render_impossible(filters, closest):
     from .policy import describe
-    from backend.catalog.models import bound_value
     text = "No actuator in the supplied catalogue meets all of: " + describe(filters) + "."
     for row in closest:
         field = row["field"]
