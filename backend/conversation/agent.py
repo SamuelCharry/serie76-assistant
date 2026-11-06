@@ -655,10 +655,10 @@ class Turn:
                                context=self.context, lead='Ranked by ' + by + '.')
         selected = []
         reference = args.get('reference_kind', 'none')
-        ordinal = re.search(r'\b(first|second|third|fourth)\s+(?:one|model|actuator|unit)\b', self.query, re.I)
-        if reference == 'none' and ordinal and not policy.codes_in_text(self.query):
+        ordinal = policy.ordinal_position(self.query)
+        if ordinal:
             reference = 'shown_position'
-            args = dict(args, reference_index=('first', 'second', 'third', 'fourth').index(ordinal.group(1).lower()) + 1)
+            args = dict(args, reference_index=ordinal)
         if reference != 'none':
             shown = self.context.get('last_shown_list') or []
             compared = self.context.get('last_comparison_models') or []
@@ -1114,6 +1114,9 @@ class Turn:
                     # a new quantity that must be restated in the current turn.
                     delta[field] = claim
         interpretation_notes.extend(issue for issue in coverage_issues if issue.startswith('Modulating service'))
+        for field, value in reference.items():
+            if field.startswith(('min_', 'max_')):
+                delta[field] = policy.intersect_bounds(field, value, written.get(field))
         undisclosed = [issue for issue in coverage_issues
                        if 'both stated' not in issue and not issue.startswith('Modulating service')]
         if undisclosed:
@@ -1150,7 +1153,7 @@ class Turn:
             assumptions = [a for a in assumptions if a["field"] not in ungrounded]
             if not delta and not args["refine"] and not args["more"] and not args["remove"]:
                 return self.clarify("requirements")
-        previous = self.context.get("filters") or {}
+        previous = dict(self.context.get("filters") or {})
         import re
         removals = policy.removed_fields(self.query, self.context.get('pending_questions') or [])
         if re.search(r'\b(?:remove|drop|withdraw|forget)\b.*\bcurrent limit\b', self.query, re.I):
@@ -1191,20 +1194,24 @@ class Turn:
         from backend.catalog.models import bounds, bound_operator, bound_value
         partial_removals = policy.removed_bound_sides(self.query, previous)
         for field, side in partial_removals.items():
-            remaining = [dict(value=bound_value(b), op=bound_operator(b, 'gte' if field.startswith('min_') else 'lte'))
-                         for b in bounds(previous[field])
-                         if not bound_operator(b, 'gte' if field.startswith('min_') else 'lte').startswith(side)]
-            if remaining:
-                delta[field] = remaining[0] if len(remaining) == 1 else remaining
-                removals.discard(field)
+            remaining = policy.prune_bound_side(previous[field], field, side)
+            previous.pop(field)
+            if remaining is not None:
+                previous[field] = remaining
+            # Model-carried ranges cannot reintroduce the withdrawn end. A new
+            # limit in a separate affirmative clause remains valid evidence.
+            if field in delta and field not in written:
+                remaining_delta = policy.prune_bound_side(delta[field], field, side)
+                if remaining_delta is None:
+                    delta.pop(field)
+                else:
+                    delta[field] = remaining_delta
+            removals.discard(field)
         same_performance = re.search(r'\bsame performance\b', self.query, re.I) and args.get('refine') and delta.get('service')
         change_only = bool(previous and re.match(r'^\s*(?:and |actually |make (?:that|it) |no wait[, ]*|instead\b)',
                                                  self.query, re.I))
         merged, notes = policy.merge_filters(previous, delta, refine=args["refine"] or bool(kept) or change_only or negated,
                                              remove=sorted(removals), more=args["more"], query=self.query)
-        for field in partial_removals:
-            if field not in removals:
-                merged[field] = delta[field]
         withdrawn = set(self.context.get('withdrawn_fields', [])) if args['refine'] or kept or change_only or negated or args['more'] else set()
         withdrawn.update(removals)
         withdrawn.difference_update(k for k in delta if k not in removals)
@@ -1219,6 +1226,8 @@ class Turn:
         for field in partial_removals:
             if field in merged:
                 carried[field] = merged[field]
+            else:
+                carried.pop(field, None)
         for field, value in reference.items():
             if field in policy.NUMERIC_FIELDS:
                 carried[field] = merged[field]

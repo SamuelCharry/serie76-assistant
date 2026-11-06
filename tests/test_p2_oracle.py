@@ -116,3 +116,71 @@ for case in CASES['scenarios']:
     def check(self, scenario=case):
         self.check_case(scenario)
     setattr(P2Oracle, 'test_' + case['id'], check)
+
+
+class PostDecisionBoundary(Base):
+    """Injected faulty outputs must fail even when the route bypasses its checks."""
+
+    def boundary(self, query, before, code, filters, route='ranked_pick'):
+        from types import SimpleNamespace
+        from backend.conversation.agent import AgentResult
+        from backend.conversation.response_integrity import enforce
+        row = get_actuator(self.connection, code)
+        context = dict(filters=deepcopy(filters), on_screen=[code], focused_model=code)
+        result = AgentResult('Catalogue specifications for ' + code if route == 'get_actuator'
+                             else 'I recommend ' + code, products=[row], context=context)
+        turn = SimpleNamespace(query=query, connection=self.connection,
+                               trace=dict(name=route, context_before=deepcopy(before)))
+        enforce(turn, result)
+        return result
+
+    def test_every_route_excludes_equal_reference_for_stronger_or_faster(self):
+        code = '763A00-11330C00/A'
+        filters = dict(service='on_off', enclosure='weatherproof', supply_voltage_v=220, frequency_hz=50)
+        before = dict(filters=filters, focused_model=code, last_shown_list=[code])
+        for route in ('ranked_pick', 'get_actuator', 'search_actuators', 'ask_clarification'):
+            for operation, field, bound in [('stronger','min_torque_nm',(300.0,'gt')),
+                                             ('faster','max_operating_time_s',(32.0,'lt'))]:
+                with self.subTest(route=route, operation=operation):
+                    for routed_filters in (filters, dict(filters, **{field:dict(value=bound[0],op=bound[1])})):
+                        result = self.boundary(f'Is there a {operation} one than that at 50 Hz?', before, code, routed_filters, route)
+                        self.assertFalse(result.products or result.recommendation)
+                        self.assertNotIn('I recommend ' + code, result.answer)
+                        self.assertEqual(canonical(field, result.context['filters'][field]), [bound])
+
+    def test_wrong_ordinal_identity_is_rejected_even_for_equal_currents(self):
+        first, second = '761A00-11320000/A', '761B00-11320000/A'
+        before = dict(last_shown_list=[first,second], last_comparison_models=[first,second])
+        for query in ('Second one. 50 Hz current?', 'Show current for the second model.',
+                      'Current of the second actuator at 50 Hz, please.'):
+            with self.subTest(query=query):
+                result = self.boundary(query,before,first,{},'get_actuator')
+                self.assertFalse(result.products)
+                self.assertNotIn('focused_model',result.context)
+                self.assertIn('requested displayed model',result.answer)
+
+    def test_reference_measurement_is_not_hidden_or_converted_by_prior_bounds(self):
+        code = '763A00-11330C00/A'
+        for old in (dict(min_torque_nm=1000),dict(min_torque_in_lb=3000)):
+            with self.subTest(old=old):
+                filters = dict(service='on_off',enclosure='weatherproof',supply_voltage_v=220,**old)
+                before = dict(filters=filters,focused_model=code,last_shown_list=[code])
+                result = self.boundary('Is there a stronger one than that?',before,code,filters)
+                self.assertFalse(result.products)
+                self.assertEqual(canonical('min_torque_nm',result.context['filters']['min_torque_nm']),[(300.0,'gt')])
+
+    def test_withdrawn_ceiling_and_its_number_cannot_reappear_at_output(self):
+        first, second = '763A00-11320000/A','763B00-11320000/A'
+        for ceiling in (900,1100,1800):
+            filters = dict(service='on_off',enclosure='weatherproof',supply_voltage_v=220,phase_count=1,
+                           min_torque_nm=[dict(value=300,op='gte'),dict(value=ceiling,op='lte')])
+            before = dict(filters=filters,last_shown_list=[first,second])
+            for relative in (False,True):
+                with self.subTest(ceiling=ceiling,relative=relative):
+                    query = (f'Find a stronger one than the second; removing the {ceiling} Nm ceiling.' if relative
+                             else f'Remove the {ceiling} Nm ceiling.')
+                    corrupted = dict(filters,min_torque_nm=[dict(value=ceiling,op='lte'),dict(value=ceiling,op='gte')])
+                    result = self.boundary(query,before,'764B00-11320000/A',corrupted)
+                    self.assertFalse(result.products or result.recommendation)
+                    self.assertEqual(canonical('min_torque_nm',result.context['filters']['min_torque_nm']),
+                                     [(500.0,'gt')] if relative else [(300.0,'gte')])

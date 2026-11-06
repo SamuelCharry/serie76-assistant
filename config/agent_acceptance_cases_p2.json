@@ -6658,6 +6658,1443 @@
           }
         }
       ]
+    },
+    {
+      "id": "P2_post_ordinal_1",
+      "p2_class": "ordinal",
+      "source_message_id": "94b52237-1d39-4f56-a96a-b90fcb30a8ba",
+      "context": {
+        "focus": [
+          {
+            "field": "overview"
+          }
+        ],
+        "on_screen": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ],
+        "part_numbers": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ],
+        "last_shown_list": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ],
+        "last_comparison_models": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ]
+      },
+      "turns": [
+        {
+          "query": "Second one. 50 Hz current?",
+          "expect": {
+            "p2": {
+              "focused": "761B00-11320000/A",
+              "text": [
+                "761B00-11320000/A",
+                "0.7 A"
+              ],
+              "not_text": [
+                "761A00-11320000/A"
+              ]
+            }
+          },
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "focus": [
+                "fla",
+                "lra"
+              ],
+              "reference_kind": "compared_winner",
+              "reference_index": 2,
+              "focus_frequency_hz": 50
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2_post_ordinal_2",
+      "p2_class": "ordinal",
+      "source_message_id": "94b52237-1d39-4f56-a96a-b90fcb30a8ba",
+      "context": {
+        "focus": [
+          {
+            "field": "overview"
+          }
+        ],
+        "on_screen": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ],
+        "part_numbers": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ],
+        "last_shown_list": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ],
+        "last_comparison_models": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ]
+      },
+      "turns": [
+        {
+          "query": "For the second model, show current at 50 Hz.",
+          "expect": {
+            "p2": {
+              "focused": "761B00-11320000/A",
+              "text": [
+                "761B00-11320000/A",
+                "0.7 A"
+              ],
+              "not_text": [
+                "761A00-11320000/A"
+              ]
+            }
+          },
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "focus": [
+                "fla",
+                "lra"
+              ],
+              "reference_kind": "compared_winner",
+              "reference_index": 2,
+              "focus_frequency_hz": 50
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2_post_ordinal_3",
+      "p2_class": "ordinal",
+      "source_message_id": "94b52237-1d39-4f56-a96a-b90fcb30a8ba",
+      "context": {
+        "focus": [
+          {
+            "field": "overview"
+          }
+        ],
+        "on_screen": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ],
+        "part_numbers": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ],
+        "last_shown_list": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ],
+        "last_comparison_models": [
+          "761A00-11320000/A",
+          "761B00-11320000/A"
+        ]
+      },
+      "turns": [
+        {
+          "query": "Current at 50 Hz for the second actuator, please.",
+          "expect": {
+            "p2": {
+              "focused": "761B00-11320000/A",
+              "text": [
+                "761B00-11320000/A",
+                "0.7 A"
+              ],
+              "not_text": [
+                "761A00-11320000/A"
+              ]
+            }
+          },
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "focus": [
+                "fla",
+                "lra"
+              ],
+              "reference_kind": "compared_winner",
+              "reference_index": 2,
+              "focus_frequency_hz": 50
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2_post_strict_relative_1",
+      "p2_class": "strict_relative",
+      "source_message_id": "e10ed954-08cb-41c8-ba68-c99423ad09e4",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "200"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11330C00/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11330C00/A"
+        ],
+        "focused_model": "763A00-11330C00/A",
+        "last_shown_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_ranked_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A",
+          "763A00-11320000/A",
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 2,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 13,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 7,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 200,
+          "supply_voltage_v": 220
+        }
+      },
+      "turns": [
+        {
+          "query": "Is there a stronger one than that on the same supply?",
+          "expect": {
+            "p2": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                }
+              },
+              "eligible": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_post_strict_relative_2",
+      "p2_class": "strict_relative",
+      "source_message_id": "e10ed954-08cb-41c8-ba68-c99423ad09e4",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "200"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11330C00/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11330C00/A"
+        ],
+        "focused_model": "763A00-11330C00/A",
+        "last_shown_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_ranked_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A",
+          "763A00-11320000/A",
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 2,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 13,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 7,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 200,
+          "supply_voltage_v": 220
+        }
+      },
+      "turns": [
+        {
+          "query": "Could another model provide more torque than that one on the same supply?",
+          "expect": {
+            "p2": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                }
+              },
+              "eligible": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_post_strict_relative_3",
+      "p2_class": "strict_relative",
+      "source_message_id": "e10ed954-08cb-41c8-ba68-c99423ad09e4",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "200"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11330C00/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11330C00/A"
+        ],
+        "focused_model": "763A00-11330C00/A",
+        "last_shown_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_ranked_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A",
+          "763A00-11320000/A",
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 2,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 13,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 7,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 200,
+          "supply_voltage_v": 220
+        }
+      },
+      "turns": [
+        {
+          "query": "Any alternative stronger than the focused model?",
+          "expect": {
+            "p2": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                }
+              },
+              "eligible": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_post_relative_withdrawal_1",
+      "p2_class": "relative_withdrawal",
+      "source_message_id": "fbe2e1ca-fce7-4a0b-987d-93ffa0690199",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "phase_count": 1,
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": "300"
+            },
+            {
+              "op": "lte",
+              "value": "1100"
+            }
+          ],
+          "supply_current": "AC",
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_shown_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "764A00-11320000/A",
+          "764B00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": 300
+            },
+            {
+              "op": "lte",
+              "value": 1100
+            }
+          ],
+          "supply_voltage_v": 220
+        },
+        "last_comparison_models": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ]
+      },
+      "turns": [
+        {
+          "query": "Now find a stronger one than the second, retaining voltage, phase and enclosure but removing the 1100 Nm ceiling.",
+          "expect": {
+            "p2": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 500,
+                  "op": "gt"
+                },
+                "phase_count": 1
+              },
+              "eligible": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 500,
+                  "op": "gt"
+                },
+                "phase_count": 1
+              },
+              "first": "763C00-11320000/A"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_post_relative_withdrawal_2",
+      "p2_class": "relative_withdrawal",
+      "source_message_id": "fbe2e1ca-fce7-4a0b-987d-93ffa0690199",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "phase_count": 1,
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": "300"
+            },
+            {
+              "op": "lte",
+              "value": "1100"
+            }
+          ],
+          "supply_current": "AC",
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_shown_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "764A00-11320000/A",
+          "764B00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": 300
+            },
+            {
+              "op": "lte",
+              "value": 1100
+            }
+          ],
+          "supply_voltage_v": 220
+        },
+        "last_comparison_models": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ]
+      },
+      "turns": [
+        {
+          "query": "Find a stronger model than the second; drop the upper limit of 1100 Nm and keep voltage, phase and enclosure.",
+          "expect": {
+            "p2": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 500,
+                  "op": "gt"
+                },
+                "phase_count": 1
+              },
+              "eligible": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 500,
+                  "op": "gt"
+                },
+                "phase_count": 1
+              },
+              "first": "763C00-11320000/A"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_post_relative_withdrawal_3",
+      "p2_class": "relative_withdrawal",
+      "source_message_id": "fbe2e1ca-fce7-4a0b-987d-93ffa0690199",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "phase_count": 1,
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": "300"
+            },
+            {
+              "op": "lte",
+              "value": "1100"
+            }
+          ],
+          "supply_current": "AC",
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_shown_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "764A00-11320000/A",
+          "764B00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": 300
+            },
+            {
+              "op": "lte",
+              "value": 1100
+            }
+          ],
+          "supply_voltage_v": 220
+        },
+        "last_comparison_models": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ]
+      },
+      "turns": [
+        {
+          "query": "Keep supply, phase and enclosure; withdraw the 1100 Nm maximum, then show an alternative stronger than the second model.",
+          "expect": {
+            "p2": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 500,
+                  "op": "gt"
+                },
+                "phase_count": 1
+              },
+              "eligible": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": {
+                  "value": 500,
+                  "op": "gt"
+                },
+                "phase_count": 1
+              },
+              "first": "763C00-11320000/A"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_post_withdrawn_quantity_1",
+      "p2_class": "withdrawn_quantity",
+      "source_message_id": "fbe2e1ca-fce7-4a0b-987d-93ffa0690199",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "phase_count": 1,
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": "300"
+            },
+            {
+              "op": "lte",
+              "value": "1100"
+            }
+          ],
+          "supply_current": "AC",
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_shown_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "764A00-11320000/A",
+          "764B00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": 300
+            },
+            {
+              "op": "lte",
+              "value": 1100
+            }
+          ],
+          "supply_voltage_v": 220
+        },
+        "last_comparison_models": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ]
+      },
+      "turns": [
+        {
+          "query": "Remove the 1100 Nm ceiling.",
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gte"
+                },
+                "phase_count": 1
+              }
+            }
+          },
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2_post_withdrawn_quantity_2",
+      "p2_class": "withdrawn_quantity",
+      "source_message_id": "fbe2e1ca-fce7-4a0b-987d-93ffa0690199",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "phase_count": 1,
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": "300"
+            },
+            {
+              "op": "lte",
+              "value": "1100"
+            }
+          ],
+          "supply_current": "AC",
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_shown_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "764A00-11320000/A",
+          "764B00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": 300
+            },
+            {
+              "op": "lte",
+              "value": 1100
+            }
+          ],
+          "supply_voltage_v": 220
+        },
+        "last_comparison_models": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ]
+      },
+      "turns": [
+        {
+          "query": "Drop the maximum torque limit of 1100 Nm.",
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gte"
+                },
+                "phase_count": 1
+              }
+            }
+          },
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2_post_withdrawn_quantity_3",
+      "p2_class": "withdrawn_quantity",
+      "source_message_id": "fbe2e1ca-fce7-4a0b-987d-93ffa0690199",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 5,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "phase_count": 1,
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": "300"
+            },
+            {
+              "op": "lte",
+              "value": "1100"
+            }
+          ],
+          "supply_current": "AC",
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_shown_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ],
+        "last_ranked_list": [
+          "763A00-11320000/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "764A00-11320000/A",
+          "764B00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 3,
+        "quantity_requirements": {
+          "min_torque_nm": [
+            {
+              "op": "gte",
+              "value": 300
+            },
+            {
+              "op": "lte",
+              "value": 1100
+            }
+          ],
+          "supply_voltage_v": 220
+        },
+        "last_comparison_models": [
+          "763A00-11320000/A",
+          "763B00-11320000/A"
+        ]
+      },
+      "turns": [
+        {
+          "query": "Withdraw the upper bound of 1100 Nm; retain the minimum.",
+          "expect": {
+            "p2": {
+              "filters": {
+                "min_torque_nm": {
+                  "value": 300,
+                  "op": "gte"
+                },
+                "phase_count": 1
+              }
+            }
+          },
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2_post_strict_faster_1",
+      "p2_class": "strict_faster",
+      "source_message_id": "e10ed954-08cb-41c8-ba68-c99423ad09e4",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "200"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11330C00/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11330C00/A"
+        ],
+        "focused_model": "763A00-11330C00/A",
+        "last_shown_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_ranked_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A",
+          "763A00-11320000/A",
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 2,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 13,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 7,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 200,
+          "supply_voltage_v": 220
+        }
+      },
+      "turns": [
+        {
+          "query": "Is there a faster one than that at 50 Hz?",
+          "expect": {
+            "p2": {
+              "filters": {
+                "max_operating_time_s": {
+                  "value": 32,
+                  "op": "lt"
+                },
+                "frequency_hz": 50
+              },
+              "eligible": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": 200,
+                "frequency_hz": 50,
+                "max_operating_time_s": {
+                  "value": 32,
+                  "op": "lt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_post_strict_faster_2",
+      "p2_class": "strict_faster",
+      "source_message_id": "e10ed954-08cb-41c8-ba68-c99423ad09e4",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "200"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11330C00/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11330C00/A"
+        ],
+        "focused_model": "763A00-11330C00/A",
+        "last_shown_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_ranked_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A",
+          "763A00-11320000/A",
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 2,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 13,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 7,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 200,
+          "supply_voltage_v": 220
+        }
+      },
+      "turns": [
+        {
+          "query": "Find an alternative faster than that model at 50 Hz.",
+          "expect": {
+            "p2": {
+              "filters": {
+                "max_operating_time_s": {
+                  "value": 32,
+                  "op": "lt"
+                },
+                "frequency_hz": 50
+              },
+              "eligible": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": 200,
+                "frequency_hz": 50,
+                "max_operating_time_s": {
+                  "value": 32,
+                  "op": "lt"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "P2_post_strict_faster_3",
+      "p2_class": "strict_faster",
+      "source_message_id": "e10ed954-08cb-41c8-ba68-c99423ad09e4",
+      "context": {
+        "focus": [
+          {
+            "field": "overview",
+            "service": null,
+            "frequency_hz": null
+          }
+        ],
+        "filters": {
+          "limit": 2,
+          "offset": 0,
+          "service": "on_off",
+          "enclosure": "weatherproof",
+          "min_torque_nm": {
+            "op": "gte",
+            "value": "200"
+          },
+          "supply_voltage_v": 220
+        },
+        "rank_by": "closest_torque",
+        "on_screen": [
+          "763A00-11330C00/A"
+        ],
+        "empty_search": false,
+        "part_numbers": [
+          "763A00-11330C00/A"
+        ],
+        "focused_model": "763A00-11330C00/A",
+        "last_shown_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A"
+        ],
+        "last_ranked_list": [
+          "762B00-11320000/A",
+          "763A00-11330C00/A",
+          "763A00-11320000/A",
+          "763B00-11330C00/A",
+          "763B00-11320000/A",
+          "763C00-11320000/A",
+          "763C00-11330C00/A",
+          "764A00-11320000/A",
+          "764A00-11330C00/A",
+          "764B00-11320000/A",
+          "764B00-11330C00/A",
+          "765A00-11320000/A",
+          "765A00-11330C00/A",
+          "765B00-11330C00/A",
+          "765B00-11320000/A",
+          "766A00-11320000/A",
+          "766B00-11320000/A",
+          "767A00-11320000/A",
+          "767B00-11320000/A",
+          "767C00-11320000/A"
+        ],
+        "withdrawn_fields": [],
+        "last_shown_offset": 2,
+        "pending_questions": [
+          {
+            "id": "phase_count",
+            "prompt": "How many phases?",
+            "options": [
+              {
+                "count": 13,
+                "label": "1 phase",
+                "value": "1"
+              },
+              {
+                "count": 7,
+                "label": "3 phase",
+                "value": "3"
+              }
+            ]
+          }
+        ],
+        "pending_clarification": "phase_count",
+        "quantity_requirements": {
+          "min_torque_nm": 200,
+          "supply_voltage_v": 220
+        }
+      },
+      "turns": [
+        {
+          "query": "Could another unit operate faster than the focused model at 50 Hz?",
+          "expect": {
+            "p2": {
+              "filters": {
+                "max_operating_time_s": {
+                  "value": 32,
+                  "op": "lt"
+                },
+                "frequency_hz": 50
+              },
+              "eligible": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220,
+                "min_torque_nm": 200,
+                "frequency_hz": 50,
+                "max_operating_time_s": {
+                  "value": 32,
+                  "op": "lt"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 }

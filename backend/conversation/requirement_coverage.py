@@ -90,6 +90,13 @@ def _operator(prefix, field, suffix=''):
     return 'gte' if field.startswith('min_') else 'lte'
 
 
+def without_withdrawn_quantities(query):
+    """A number naming a withdrawn limit is evidence of removal, not a new bound."""
+    withdrawal = r'\b(?:remov(?:e|ing)|drop(?:ping)?|withdraw(?:ing)?|clear(?:ing)?|forget(?:ting)?|quita|elimina)\b[^.;!?]*?(?=$|[.;!?]|\b(?:and|but|then)\b)'
+    number = rf'\b(?:{NUMBER}|{"|".join(NUMBER_WORDS)})\b'
+    return re.sub(withdrawal, lambda m: re.sub(number, lambda n: ' ' * len(n.group()), m.group(), flags=re.I), query, flags=re.I)
+
+
 def apply(query, filters, context=None):
     """Return an updated filter delta and plain-language disclosures.
 
@@ -99,7 +106,7 @@ def apply(query, filters, context=None):
     updated, issues = dict(filters), []
     from .policy import CODE_IN_TEXT
     # Identifiers are not quantities, even when a prefix looks like "764 A".
-    text = CODE_IN_TEXT.sub(lambda m: ' ' * len(m.group()), query.lower())
+    text = CODE_IN_TEXT.sub(lambda m: ' ' * len(m.group()), without_withdrawn_quantities(query.lower()))
     text = re.sub(r'(?<=\d)-(?=[a-zA-Z])', ' ', text)
     words = '|'.join(NUMBER_WORDS)
     text = re.sub(rf'\b({words})(?=\s+(?:{UNIT})(?![\w/-]))',

@@ -2,9 +2,86 @@
 import re
 from pydantic import ValidationError
 
-from backend.catalog.models import SearchFilters
+from backend.catalog.models import SearchFilters, bounds, bound_value, bound_operator
 from backend.catalog.repository import get_actuator
-from . import integrity, interactions, policy, requirement_coverage, shown_recommendation
+from . import catalogue_answers, integrity, interactions, policy, ranking, requirement_coverage, shown_recommendation
+
+
+def _bounds_equal(field, left, right):
+    def canonical(value):
+        reduced = policy.intersect_bounds(field, value)
+        return sorted((float(bound_value(b)), bound_operator(b, 'gte' if field.startswith('min_') else 'lte')) for b in bounds(reduced)) if reduced is not None else []
+    return canonical(left) == canonical(right)
+
+
+def _reference_postcondition(turn, filters):
+    """Re-derive obligations from the prior display and SQL, not route arguments."""
+    previous = turn.trace.get('context_before') or {}
+    prior_filters = dict(previous.get('filters') or {})
+    written, _ = requirement_coverage.apply(turn.query, {}, prior_filters)
+    changed = set()
+    for field, side in policy.removed_bound_sides(turn.query, prior_filters).items():
+        remaining = policy.prune_bound_side(prior_filters[field], field, side)
+        if remaining is None:
+            prior_filters.pop(field)
+        else:
+            prior_filters[field] = remaining
+        changed.add(field)
+    expected, _ = policy.merge_filters(prior_filters, written, refine=True, remove=[], more=False, query=turn.query)
+    operation = catalogue_answers.relative_operation(turn.query)
+    ordinal = policy.ordinal_position(turn.query)
+    order = previous.get('last_shown_list') or previous.get('last_comparison_models') or previous.get('on_screen') or []
+    requested = order[ordinal-1] if ordinal and ordinal <= len(order) else None
+    issues, reference = [], None
+    if operation:
+        named = policy.codes_in_text(turn.query)
+        position = re.search(r'\b(?:the\s+)?(first|second|third|fourth)\b', turn.query, re.I)
+        index = ('first', 'second', 'third', 'fourth').index(position.group(1).lower()) if position else -1
+        numbered = re.search(r'\b(?:item|model|position)\s*#?\s*([1-9]\d*)\b', turn.query, re.I)
+        if numbered:
+            index = int(numbered.group(1)) - 1
+        if index >= len(order):
+            order = previous.get('last_ranked_list') or order
+        reference = (named[0] if len(named) == 1 else
+                     order[index] if 0 <= index < len(order) else
+                     previous.get('focused_model') or (order[0] if len(order) == 1 else None))
+        row = get_actuator(turn.connection, reference) if reference else None
+        scope = dict(prior_filters, **{k:v for k,v in written.items() if k in ('service','frequency_hz')})
+        if previous.get('reference_service'):
+            scope['service'] = previous['reference_service']
+        explicit, _ = policy.colloquial_requirements(turn.query)
+        scope.update({k:v for k,v in explicit.items() if k in ('service','frequency_hz')})
+        if row and scope.get('service'):
+            if operation == 'faster' and not scope.get('frequency_hz'):
+                frequencies = {f.get('frequency_hz') for f in row.get('frequencies', []) if f.get('frequency_hz')}
+                if len(frequencies) > 1:
+                    issues.append('Confirm the frequency for the relative operating-time requirement')
+            field = 'max_operating_time_s' if operation == 'faster' else 'min_torque_nm'
+            metric = 'operating_time' if operation == 'faster' else 'torque'
+            # An existing selection bound must neither hide the reference value
+            # nor switch an Nm obligation to the separately published in-lb column.
+            measurement_scope = {k:v for k,v in scope.items() if k not in ('min_torque_nm','min_torque_in_lb')}
+            value = ranking.measurement(row, metric, measurement_scope)
+            if value is not None:
+                requirement = dict(value=value, op='gt' if operation == 'stronger' else 'lt')
+                expected[field] = policy.merge_bounds(field, prior_filters[field], requirement) if field in prior_filters else requirement
+                # A separately written numeric condition is also an obligation.
+                if field in written:
+                    expected[field] = policy.intersect_bounds(field, expected[field], written[field])
+                changed.add(field)
+            else:
+                issues.append('The reference has no published value for this relative requirement')
+        else:
+            issues.append('Confirm the reference model and service for the relative requirement')
+    mismatched = [field for field in changed if not _bounds_equal(field, expected.get(field), filters.get(field))]
+    for field in changed:
+        if field in expected:
+            filters[field] = expected[field]
+        else:
+            filters.pop(field, None)
+    if mismatched:
+        issues.append('The presented selection did not preserve the requested relative or withdrawn limits')
+    return requested if not operation else None, reference, changed, issues
 
 
 def enforce(turn, result):
@@ -56,6 +133,27 @@ def enforce(turn, result):
                                            remove=policy.removed_fields(turn.query), query=turn.query)
     if not informational and result.context.get('unresolved_reference'):
         issues.append('The service for the relative torque or speed requirement has not been confirmed')
+    requested, reference, changed, contract_issues = _reference_postcondition(turn, filters)
+    issues.extend(contract_issues)
+    if reference:
+        # A search for a stronger/faster alternative is a selection even if a
+        # faulty interpreter routes it through informational product lookup.
+        informational = False
+    # Identity is part of the contract even when two catalogue rows happen to
+    # publish identical figures. Do not keep a wrong informational lookup.
+    wrong_identity = bool(requested and (selected | mentioned) - {requested})
+    if wrong_identity or contract_issues:
+        informational = False
+        if wrong_identity:
+            issues.append('The response does not identify the requested displayed model')
+        turn.trace.setdefault('validation', []).append('reference_postcondition_failed')
+    if changed:
+        ledger = result.context.setdefault('quantity_requirements', {})
+        for field in changed:
+            if field in filters:
+                ledger[field] = filters[field]
+            else:
+                ledger.pop(field, None)
     try:
         validated = SearchFilters.model_validate(filters)
     except ValidationError:

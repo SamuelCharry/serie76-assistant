@@ -24,6 +24,14 @@ CATEGORICAL_FIELDS = ("enclosure", "supply_current", "phase_count", "service", "
 FILTER_FIELDS = CATEGORICAL_FIELDS + NUMERIC_FIELDS
 
 
+def ordinal_position(query):
+    """Return an explicit singular displayed position, independent of model args."""
+    matches = list(re.finditer(r'\b(first|second|third|fourth)\s+(?:one|model|actuator|unit)\b', query, re.I))
+    if len(matches) == 1 and not codes_in_text(query):
+        return ('first', 'second', 'third', 'fourth').index(matches[0].group(1).lower()) + 1
+    return None
+
+
 def sort_grounded(sort_key, query):
     """Ignore a model-supplied ranking preference the user never requested."""
     text = query.lower()
@@ -57,7 +65,8 @@ LEXICON = {
 
 def colloquial_requirements(query, semantic=None):
     """Explicit constraints plus optional semantic suggestions; None preserves fallback."""
-    text = canonical_enclosures(query.lower())
+    from .requirement_coverage import without_withdrawn_quantities
+    text = canonical_enclosures(without_withdrawn_quantities(query.lower()))
     result, notes = {}, []
     for phrase, name in (('indoors', 'indoor'), ('indoor', 'indoor'),
                          ('quiet', 'quiet'), ('compact', 'compact')):
@@ -150,7 +159,7 @@ def colloquial_requirements(query, semantic=None):
 
 def enclosure_withdrawal(text):
     text = canonical_enclosures(text)
-    withdrawal = bool(re.search(r'\b(?:remove|drop|withdraw|retract|clear|forget|elimina|quita|retira|olvida)\b[^.;!?]*\b(?:enclosure|explosionproof|weatherproof|envolvente|carcasa|antiexplos\w*)\b', text, re.I))
+    withdrawal = bool(re.search(r'\b(?:remove|drop|withdraw|retract|clear|forget|elimina|quita|retira|olvida)\b(?:(?!\b(?:keep|retain|retaining|preserve)\b)[^.;!?])*\b(?:enclosure|explosionproof|weatherproof|envolvente|carcasa|antiexplos\w*)\b', text, re.I))
     explicit_constraint = re.search(r'\b(?:restriction|requirement|constraint|filter|restricci[óo]n|requisito|filtro)\b', text, re.I)
     # Removing one enclosure and affirming its replacement is a replacement,
     # not a request to discard the whole categorical field.
@@ -561,9 +570,9 @@ def _evidence_text(text):
 def removed_bound_sides(query, fields):
     """A named floor/ceiling withdrawal removes one direction of a range."""
     result = {}
-    bounded = [field for field in fields if field.startswith(('min_', 'max_'))]
+    bounded = [field for field, value in fields.items() if field.startswith(('min_', 'max_')) and value is not None]
     for clause in re.split(r'[.;]|\b(?:but|keep|retain|retaining)\b', query, flags=re.I):
-        if not re.search(r'\b(?:remove|drop|withdraw|clear|forget|quita|elimina)\b', clause, re.I):
+        if not re.search(r'\b(?:remov(?:e|ing)|drop(?:ping)?|withdraw(?:ing)?|clear(?:ing)?|forget(?:ting)?|quita|elimina)\b', clause, re.I):
             continue
         lower = bool(re.search(r'\b(?:minimum|lower|floor)\b', clause, re.I))
         upper = bool(re.search(r'\b(?:maximum|upper|ceiling)\b', clause, re.I))
@@ -574,6 +583,13 @@ def removed_bound_sides(query, fields):
                     or len(bounded) == 1 and re.search(r'\b(?:bound|limit|floor|ceiling)\b', clause, re.I)):
                 result[field] = 'g' if lower else 'l'
     return result
+
+
+def prune_bound_side(value, field, side):
+    """Remove exactly one inequality direction; preserve its opposite bound."""
+    remaining = [dict(value=bound_value(b), op=bound_operator(b, 'gte' if field.startswith('min_') else 'lte'))
+                 for b in bounds(value) if not bound_operator(b, 'gte' if field.startswith('min_') else 'lte').startswith(side)]
+    return remaining[0] if len(remaining) == 1 else remaining or None
 
 
 def _dual_current(text):
@@ -643,6 +659,23 @@ def merge_bounds(field, previous, incoming, *, replace=False):
     combined = [item for item in bounds(previous) if direction(item) not in replaced] + bounds(incoming)
     return combined[0] if len(combined) == 1 else [
         {'value': bound_value(item), 'op': bound_operator(item, default)} for item in combined]
+
+
+def intersect_bounds(field, *values):
+    """Keep the strongest bound on each side of simultaneous obligations."""
+    default = 'gte' if field.startswith('min_') else 'lte'
+    lower, upper = [], []
+    for value in values:
+        if value is None:
+            continue
+        for item in bounds(value):
+            op = bound_operator(item, default)
+            pair = (Decimal(str(bound_value(item))), op)
+            (lower if op.startswith('g') else upper).append(pair)
+    selected = ([max(lower, key=lambda x:(x[0], x[1]=='gt'))] if lower else [])
+    selected += [min(upper, key=lambda x:(x[0], x[1]=='lte'))] if upper else []
+    result = [dict(value=int(v) if v==int(v) else float(v), op=op) for v,op in selected]
+    return result[0] if len(result)==1 else result or None
 
 
 def conflicts(filters):
