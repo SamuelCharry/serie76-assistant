@@ -44,7 +44,22 @@ The final local smoke exited zero. No application code or validated data changed
 
 ## GitHub verification
 
-Pending workflow execution on PR #10; the run link and result will be recorded
-after GitHub completes the new job. Local Docker execution alone is not evidence
-of a GitHub-hosted Ubuntu run. Android, device, macOS and real-provider acceptance
-remain outside this test.
+Verified implementation commit: `400d5c22daec9030e9bd8b6afe01bbcbd5306cc5`.
+PR #10 [Ubuntu pull-request run](https://github.com/SamuelCharry/serie76-assistant/actions/runs/42234532660)
+passed in 1m06s; the [push run](https://github.com/SamuelCharry/serie76-assistant/actions/runs/42234523930)
+also passed (58s). `gh pr checks 10` reports **Quick start / Linux keyless: pass**
+for both events. Other pre-existing CI jobs were still pending at that observation;
+this is not a claim that every PR check passed.
+
+| GitHub workflow step | Result |
+|---|---|
+| Checkout and Python 3.12 setup | PASS |
+| Copy README configuration with empty key | PASS |
+| Docker Compose build/start | PASS |
+| Readiness HTTP 200 | PASS |
+| Smoke: both logins, isolation, CSV value, unknown code, partial/lowercase assumptions, documented error JSON, history, restart/resume | PASS (each assertion group printed PASS in the run log) |
+| Failure diagnostics | SKIPPED (no failure) |
+| Disposable containers/network/volume teardown | PASS |
+
+This establishes GitHub-hosted Ubuntu keyless backend reproduction. Android,
+device, macOS and real-provider acceptance remain outside this test.
