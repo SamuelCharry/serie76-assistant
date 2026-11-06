@@ -1,0 +1,19 @@
+# Isolated, disposable TEST ONLY database. No host .env or provider configuration.
+services:
+  db:
+    image: pgvector/pgvector:pg17-trixie@sha256:01215e09bd4bd582d20230e025b6c971deeeffee49ceef1aae167e839cb62a7e
+    environment:
+      POSTGRES_DB: series76
+      POSTGRES_USER: series76
+      POSTGRES_PASSWORD: sv2-local-test-only
+    ports:
+      - "127.0.0.1:55433:5432"
+    volumes:
+      - sv2_catalog:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U series76 -d series76"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+volumes:
+  sv2_catalog:

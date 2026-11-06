@@ -1777,6 +1777,10 @@ def fast_path_codes(query):
 def run_agent(connection, query, messages, context, *, model=None, answers=None, remove_filters=None, user_name=None, action=None):
     # One LangSmith trace per turn (parent run) when explicitly enabled; nothing is sent otherwise.
     with tracing_context(enabled=tracing_enabled()):
+        if os.environ.get('AGENT_STATE_MODE', 'v1') == 'v2':
+            from .state_v2 import run
+            return run(connection, query, messages, context, model=model, answers=answers,
+                       remove_filters=remove_filters, user_name=user_name, action=action)
         return _turn(connection, query, messages, context, model=model, answers=answers,
                      remove_filters=remove_filters, user_name=user_name, action=action)
 

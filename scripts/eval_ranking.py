@@ -88,6 +88,10 @@ def verify_collection(connection, rows):
 
 
 def backend_ranking(connection, query, term_keys):
+    import os
+    if os.environ.get('AGENT_STATE_MODE', 'v1') == 'v2':
+        from scripts.sv2_ranking import backend_ranking as state_ranking
+        return state_ranking(connection, query, term_keys)
     from backend.catalog.models import SearchFilters
     from backend.catalog.repository import search_actuators
     from backend.conversation.agent import schemas

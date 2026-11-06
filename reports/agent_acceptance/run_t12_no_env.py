@@ -12,9 +12,11 @@ os.chdir(root)
 # No .env file, no Docker inspect of provider credentials, no secret output.
 code = "import os,json; print(json.dumps({k:os.environ[k] for k in ['PGDATABASE','PGUSER','PGPASSWORD']}))"
 import json
-settings = json.loads(subprocess.check_output(['docker','exec','serie76-assistant-backend-1','python','-c',code], text=True))
-os.environ.update(settings)
-os.environ.update(PGHOST='127.0.0.1', PGPORT='5432', SERIES76_TEST_DB='1', LANGSMITH_TRACING='false', EMBEDDINGS_ENABLED='false')
+if os.environ.get('SERIES76_OFFLINE_DB_EXPLICIT') != '1':
+    settings = json.loads(subprocess.check_output(['docker','exec','serie76-assistant-backend-1','python','-c',code], text=True))
+    os.environ.update(settings)
+    os.environ.update(PGHOST='127.0.0.1', PGPORT='5432')
+os.environ.update(SERIES76_TEST_DB='1', LANGSMITH_TRACING='false', EMBEDDINGS_ENABLED='false')
 for key in ('DATABASE_URL','OPENROUTER_API_KEY','GOOGLE_API_KEY','OPENAI_API_KEY','EMBEDDING_API_KEY','LANGSMITH_API_KEY'):
     os.environ.pop(key, None)
 # Refuse every actual .env file read, including accidental reads by test helpers.

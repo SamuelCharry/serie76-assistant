@@ -7,7 +7,7 @@ import subprocess
 import sys
 
 root=Path.cwd()
-out=root/'reports/agent_acceptance/t14_final'
+out=root/os.environ.get('SERIES76_GATE_OUTPUT', 'reports/agent_acceptance/t14_final')
 out.mkdir(parents=True,exist_ok=True)
 wrapper='reports/agent_acceptance/run_t12_no_env.py'
 gates=[('unittest',['-m','unittest','discover','-s','tests'])]

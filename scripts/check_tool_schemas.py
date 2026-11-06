@@ -15,10 +15,15 @@ NUMERIC_RANGES = {"minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", 
 
 
 def production_tools():
+    import os
     from backend.conversation import agent
     from langchain_core.utils.function_calling import convert_to_openai_tool
     terms = json.loads((ROOT / "data/extracted/series76_summary/terms.json").read_text(encoding="utf-8"))["terms"]
-    tools = agent.declarations(agent.schemas([term["term_key"] for term in terms]))
+    if os.environ.get('AGENT_STATE_MODE', 'v1') == 'v2':
+        from backend.conversation.state_v2 import declarations
+        tools = declarations()
+    else:
+        tools = agent.declarations(agent.schemas([term["term_key"] for term in terms]))
     return [convert_to_openai_tool(tool) for tool in tools]
 
 
@@ -49,6 +54,7 @@ def metrics(tools):
 
 
 def live_preflight():
+    import os
     from backend.conversation import agent
     from langchain_core.messages import HumanMessage, SystemMessage
     from langsmith import tracing_context
@@ -59,12 +65,16 @@ def live_preflight():
         agent.reserve_agent_call()
         terms = json.loads((ROOT / "data/extracted/series76_summary/terms.json").read_text(encoding="utf-8"))["terms"]
         with tracing_context(enabled=False):
-            response = client.invoke([SystemMessage(content=agent.SYSTEM + "\n" + agent.PLAN_B_GUIDANCE + "\n" + agent.glossary_block(terms)),
+            prompt = agent.SYSTEM + "\n" + agent.PLAN_B_GUIDANCE
+            if os.environ.get('AGENT_STATE_MODE', 'v1') == 'v2':
+                from backend.conversation.state_v2 import system_prompt
+                prompt = system_prompt()
+            response = client.invoke([SystemMessage(content=prompt + "\n" + agent.glossary_block(terms)),
                                       HumanMessage(content="Explain FLA.")])
         if len(response.tool_calls) != 1:
             print("FAIL: provider accepted the request but did not return exactly one tool decision")
             return 1
-        print("Live preflight: accepted all four tools; one decision received (not executed)")
+        print(f"Live preflight: accepted {len(tools)} tools; one decision received (not executed)")
         return 0
     except Exception as exc:
         # Status only; provider bodies may contain prompt fragments or credentials.
