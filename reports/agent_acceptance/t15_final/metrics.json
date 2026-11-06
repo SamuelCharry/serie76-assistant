@@ -1,0 +1,60 @@
+{
+  "completed_utc": "2026-11-05T23:13:20.067859+00:00",
+  "runner_exit": 0,
+  "unittest": {
+    "run": 625,
+    "passed": 623,
+    "skipped": 2
+  },
+  "selfchecks": {
+    "v7": {
+      "scenarios": 453,
+      "passed": 453,
+      "failing": []
+    },
+    "t10": {
+      "scenarios": 48,
+      "passed": 48,
+      "failing": []
+    },
+    "t12": {
+      "scenarios": 47,
+      "passed": 47,
+      "failing": []
+    },
+    "t14": {
+      "scenarios": 42,
+      "passed": 42,
+      "failing": []
+    },
+    "replay": {
+      "scenarios": 45,
+      "passed": 28,
+      "failing": [
+        "T14_REPLAY_L2-02",
+        "T14_REPLAY_L2-09",
+        "T14_REPLAY_L3-02",
+        "T14_REPLAY_L3-03",
+        "T14_REPLAY_L3-04",
+        "T14_REPLAY_L4-03",
+        "T14_REPLAY_L5-02",
+        "T14_REPLAY_L5-05",
+        "T14_REPLAY_L6-03",
+        "T14_REPLAY_L6-04",
+        "T14_REPLAY_L7-01",
+        "T14_REPLAY_L7-02",
+        "T14_REPLAY_L7-03",
+        "T14_REPLAY_L7-04",
+        "T14_REPLAY_L7-07",
+        "T14_REPLAY_L7-08",
+        "T14_REPLAY_L7-09"
+      ]
+    }
+  },
+  "ranking": {
+    "ndcg_at_3": 0.965377944025286,
+    "returned_compliance_at_3": 1.0
+  },
+  "verified_source_files": 188,
+  "code_manifest_sha256": "9ce0c55f2ded00ce893a25fcb10a07629b8fb3ec04a0b5eb61bbafc17ad58cc9"
+}

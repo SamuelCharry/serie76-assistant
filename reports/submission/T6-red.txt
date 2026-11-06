@@ -1,0 +1,95 @@
+.venv-model-eval\Scripts\python.exe : FFFFFFFF
+At line:2 char:28
++ ... EST_DB='1'; .venv-model-eval\Scripts\python.exe -m unittest discover  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (FFFFFFFF:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+======================================================================
+FAIL: test_01_multi_focus_60hz (test_conversation_quality.ManualQualityTests.test_01_multi_focus_60hz)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_conversation_quality.py", line 27, in
+test_01_multi_focus_60hz
+    self.assertIn("700 in-lb / 80 Nm", result.answer)
+AssertionError: '700 in-lb / 80 Nm' not found in 'I could not apply that request. Please restate the part number or
+the supply, service and limits you need.'
+
+======================================================================
+FAIL: test_02_strict_torque (test_conversation_quality.ManualQualityTests.test_02_strict_torque)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_conversation_quality.py", line 37, in
+test_02_strict_torque
+    self.assertEqual(len(result.products), 3)
+AssertionError: 0 != 3
+
+======================================================================
+FAIL: test_03_preference_ranking (test_conversation_quality.ManualQualityTests.test_03_preference_ranking)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_conversation_quality.py", line 45, in
+test_03_preference_ranking
+    self.assertEqual(len(result.products), 3)
+AssertionError: 0 != 3
+
+======================================================================
+FAIL: test_04_impossible_before_clarification
+(test_conversation_quality.ManualQualityTests.test_04_impossible_before_clarification)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_conversation_quality.py", line 65, in
+test_04_impossible_before_clarification
+    self.impossible(QUERIES[3])
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_conversation_quality.py", line 56, in impossible
+    self.assertIsNone(result.clarification)
+AssertionError: {'field': 'requirements', 'message': 'I could not apply that request. Please restate the part number
+or the supply, service and limits you need.'} is not None
+
+======================================================================
+FAIL: test_05_decline_does_not_repeat (test_conversation_quality.ManualQualityTests.test_05_decline_does_not_repeat)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_conversation_quality.py", line 74, in
+test_05_decline_does_not_repeat
+    self.assertIsNone(result.clarification)
+AssertionError: {'field': 'requirements', 'message': 'I could not apply that request. Please restate the part number
+or the supply, service and limits you need.'} is not None
+
+======================================================================
+FAIL: test_06_cancel_clears_context_without_catalogue_tool
+(test_conversation_quality.ManualQualityTests.test_06_cancel_clears_context_without_catalogue_tool)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_conversation_quality.py", line 84, in
+test_06_cancel_clears_context_without_catalogue_tool
+    self.assertFalse(result.context.get("filters"))
+AssertionError: {'min_torque_nm': '70', 'limit': 5, 'offset': 0} is not false
+
+======================================================================
+FAIL: test_07_cancel_and_out_of_scope (test_conversation_quality.ManualQualityTests.test_07_cancel_and_out_of_scope)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_conversation_quality.py", line 92, in
+test_07_cancel_and_out_of_scope
+    self.assertIn("Cancelled", result.answer)
+AssertionError: 'Cancelled' not found in 'I could not apply that request. Please restate the part number or the
+supply, service and limits you need.'
+
+======================================================================
+FAIL: test_08_cancel_then_impossible (test_conversation_quality.ManualQualityTests.test_08_cancel_then_impossible)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_conversation_quality.py", line 99, in
+test_08_cancel_then_impossible
+    result = self.impossible(QUERIES[7], cancel=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_conversation_quality.py", line 56, in impossible
+    self.assertIsNone(result.clarification)
+AssertionError: {'field': 'requirements', 'message': 'I could not apply that request. Please restate the part number
+or the supply, service and limits you need.'} is not None
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.581s
+
+FAILED (failures=8)

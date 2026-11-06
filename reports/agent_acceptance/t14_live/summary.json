@@ -1,0 +1,18 @@
+{
+  "source_commit": "4906b6254a8568a05326ca776483220c7ccd2a02",
+  "pass_count": 32,
+  "total": 45,
+  "decision": "retain",
+  "turns": 85,
+  "llm_turns": 66,
+  "p95_s": 6.17,
+  "max_s": 9.32,
+  "http_errors": 0,
+  "usage_start": 1.682915316,
+  "usage_final": 1.919522541,
+  "plan_spend_usd": 0.236607225,
+  "review_product_value_errors": 0,
+  "review_aggregate_count_errors": 2,
+  "reviewers": 3,
+  "review_design": "Three independent reviewers, disjoint packs of 15; one verdict per conversation, not three votes each."
+}

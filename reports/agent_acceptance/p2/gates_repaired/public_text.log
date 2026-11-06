@@ -1,0 +1,19 @@
+SCANNING selfcheck/v7: 453 scenarios
+SCANNING selfcheck/t10: 48 scenarios
+SCANNING selfcheck/t12: 47 scenarios
+SCANNING selfcheck/t14: 42 scenarios
+selfcheck/v7 {"responses": 760, "strings": 24358, "issues": 0}
+selfcheck/t10 {"responses": 66, "strings": 3088, "issues": 0}
+selfcheck/t12 {"responses": 87, "strings": 2742, "issues": 0}
+selfcheck/t14 {"responses": 62, "strings": 1818, "issues": 0}
+<repo>\reports\agent_acceptance\t14_live\failure_reasons.json {"responses": 0, "strings": 0, "issues": 0}
+<repo>\reports\agent_acceptance\t14_live\heldout_v14.json {"responses": 0, "strings": 0, "issues": 0}
+<repo>\reports\agent_acceptance\t14_live\pack_v14or_1.md {"responses": 19, "strings": 48, "issues": 0}
+<repo>\reports\agent_acceptance\t14_live\pack_v14or_2.md {"responses": 32, "strings": 103, "issues": 0}
+<repo>\reports\agent_acceptance\t14_live\pack_v14or_3.md {"responses": 34, "strings": 79, "issues": 0}
+<repo>\reports\agent_acceptance\t14_live\screen_v14or.jsonl {"responses": 0, "strings": 0, "issues": 0}
+<repo>\reports\agent_acceptance\t14_live\summary.json {"responses": 0, "strings": 0, "issues": 0}
+<repo>\reports\agent_acceptance\t14_live\verdicts_v14or_1.json {"responses": 0, "strings": 0, "issues": 0}
+<repo>\reports\agent_acceptance\t14_live\verdicts_v14or_2.json {"responses": 0, "strings": 0, "issues": 0}
+<repo>\reports\agent_acceptance\t14_live\verdicts_v14or_3.json {"responses": 0, "strings": 0, "issues": 0}
+TOTAL responses=1060 strings=32236 issues=0 errors=0

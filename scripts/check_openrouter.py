@@ -18,6 +18,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--models-only", action="store_true", help="Skip the optional authenticated key GET")
     args = parser.parse_args()
+    print("Before any cohort: python scripts/check_tool_schemas.py (offline), then --live (one paid request; explicit approval required). Metadata support alone does not prove schema acceptance.")
     model_id = os.environ.get("OPENROUTER_CHAT_MODEL", "").strip() or "google/gemini-3.6-flash"
     try:
         model = next((m for m in fetch("models") if m["id"] == model_id), None)

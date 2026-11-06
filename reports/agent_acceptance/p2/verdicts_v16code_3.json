@@ -1,0 +1,122 @@
+{
+  "L5-06": {
+    "A": {
+      "v": 1,
+      "why": "Motor power and product identity match the catalogue."
+    }
+  },
+  "L5-07": {
+    "A": {
+      "v": 1,
+      "why": "Rejects the incomplete code and asks confirmation of the valid near match."
+    }
+  },
+  "L6-01": {
+    "A": {
+      "v": 1,
+      "why": "Correct torque comparison and motor power; quote and warranty remain unavailable."
+    }
+  },
+  "L6-02": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 3: asks which actuator despite the unambiguous second-model reference; omits its requested 50 Hz operating time."
+    }
+  },
+  "L6-03": {
+    "A": {
+      "v": 1,
+      "why": "Published electrical figures match; unsupported dimensions and certification are declined."
+    }
+  },
+  "L6-04": {
+    "A": {
+      "v": 1,
+      "why": "Retains constraints, selects the fastest qualifying model, and reports correct torque without promising reservation."
+    }
+  },
+  "L6-05": {
+    "A": {
+      "v": 1,
+      "why": "Declines unpublished colour and dimensions; additional catalogue figures are accurate."
+    }
+  },
+  "L6-06": {
+    "A": {
+      "v": 1,
+      "why": "Both 50 Hz currents match; maintenance booking is not fabricated."
+    }
+  },
+  "L7-01": {
+    "A": {
+      "v": 1,
+      "why": "Resolves ordinal references, raises the torque floor, retains supply and enclosure, and reports correct frequency-specific times."
+    }
+  },
+  "L7-02": {
+    "A": {
+      "v": 1,
+      "why": "Resolves the second model, switches service, and correctly identifies the fastest modulating tie."
+    }
+  },
+  "L7-03": {
+    "A": {
+      "v": 1,
+      "why": "Removes only the minimum, retains the maximum and supply, and correctly selects the fastest qualifying model."
+    }
+  },
+  "L7-04": {
+    "A": {
+      "v": 1,
+      "why": "Warns before a hazardous-site enclosure downgrade and restores explosionproof selection after confirmation."
+    }
+  },
+  "L7-05": {
+    "A": {
+      "v": 1,
+      "why": "Preserves source N/A, rejects zero inference, and retrieves the replacement model current correctly."
+    }
+  },
+  "L7-06": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/3, turn 2: greatest-torque recommendation is 2000 Nm, overlooking qualifying 765Y30-11320000/A at 3000 Nm."
+    }
+  },
+  "L7-07": {
+    "A": {
+      "v": 1,
+      "why": "States 12 V impossibility and explicitly identifies the 24 V alternative as outside the active voltage requirement."
+    }
+  },
+  "L7-08": {
+    "A": {
+      "v": 1,
+      "why": "Explains incompatible constraints and accurately labels the 112-second alternative as failing the requested time."
+    }
+  },
+  "L7-09": {
+    "A": {
+      "v": 1,
+      "why": "Correctly reports the nonexistent part number as not found."
+    }
+  },
+  "L7-10": {
+    "A": {
+      "v": 1,
+      "why": "Does not infer voltage from an incomplete code; requests selection of a complete valid part number."
+    }
+  },
+  "L7-11": {
+    "A": {
+      "v": 1,
+      "why": "Published on/off and additional modulating duty ratings match the catalogue."
+    }
+  },
+  "L7-12": {
+    "A": {
+      "v": 1,
+      "why": "The 50 Hz locked-rotor current matches the exact catalogue model."
+    }
+  }
+}

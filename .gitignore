@@ -1,4 +1,5 @@
 .env
+backups/
 .env.*
 !.env.example
 .venv/
@@ -28,3 +29,10 @@ data/processed/*
 # Generated verification runs; submission reports are retained.
 reports/*
 !reports/submission/
+!reports/behavior/
+reports/behavior/*
+!reports/behavior/verdicts.json
+!reports/behavior/stats.json
+!reports/behavior/retrieval.json
+!reports/behavior/retrieval-variants.json
+!reports/behavior/masked-v1-manifest.json

@@ -76,7 +76,7 @@ class RequestTests(unittest.TestCase):
                 local_environment()
                 with connect() as connection:
                     result = run_agent(connection, "Need torque", [], {})
-            self.assertIn("On/Off", result.answer)
+            self.assertIn("On/Off", [o["label"] for o in result.interaction["questions"][0]["options"]])
             self.assertEqual(received[0]["tool_choice"], "required")
             self.assertEqual(len(received), 1)
         finally:
@@ -106,13 +106,17 @@ class ConversationIntegrationTests(unittest.TestCase):
 
     def run_tool(self, name, args, context=None):
         # The scripted decision must be grounded in the user's words, as a real model's must be.
-        return run_agent(self.connection, "technical query " + json.dumps(args), [], context or {}, model=RouterFixture(name, args))
+        # R9 requires physical units, not merely numeric tokens in a JSON fixture.
+        from backend.conversation.policy import describe
+        return run_agent(self.connection, "technical query " + json.dumps(args) + ' ' + describe(args),
+                         [], context or {}, model=RouterFixture(name, args))
 
     def test_exact_lookup_and_focus_use_published_numbers(self):
         result = self.run_tool("get_actuator", {"part_numbers": ["761A00-11300000/A"], "focus": "motor_power"})
         self.assertIn("15 W", result.answer)
         self.assertIn("does not publish total electrical consumption", result.answer)
-        self.assertEqual(result.products[0]["measurements"]["on_off_torque_nm"], 80)
+        self.assertNotIn("on_off_torque_nm", result.products[0]["measurements"])
+        self.assertEqual(result.products[0]["measurements"]["motor_power_w"], 15)
         self.assertEqual(result.tool_calls[0]["name"], "get_actuator")
         self.assertNotIn("evidence", result.products[0])
         self.assertNotIn("provenance", result.products[0])
@@ -135,7 +139,10 @@ class ConversationIntegrationTests(unittest.TestCase):
         self.assertFalse(empty.products)
         self.assertEqual(empty.context["part_numbers"], [])
         found = self.run_tool("search_actuators", {"service": "on_off", "min_torque_nm": 70, "supply_voltage_v": 24})
-        self.assertTrue(found.products)
+        self.assertEqual(len(found.products), 3)
+        self.assertEqual(found.recommendation['total'], 5)
+        self.assertEqual(found.tool_calls[0]["data"]["total"], 5)
+        self.assertIsNone(found.interaction)  # T7: no invented options when SQL has no splitting facet.
         self.assertEqual(found.tool_calls[0]["parameters"]["min_torque_nm"], "70")
 
     def test_saved_context_and_snapshots_round_trip(self):
@@ -158,7 +165,7 @@ class ConversationIntegrationTests(unittest.TestCase):
             yield self.connection
 
         fixture = RouterFixture("get_actuator", {"part_numbers": ["761A00-11300000/A"]})
-        def agent(connection, query, history, context):
+        def agent(connection, query, history, context, **kwargs):
             return run_agent(connection, query, history, context, model=fixture)
 
         with patch("backend.conversation.api.connect", connection_fixture), patch("backend.conversation.api.run_agent", side_effect=agent):

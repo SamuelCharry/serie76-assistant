@@ -1,0 +1,1966 @@
+{
+  "version": "t10-contrastive-prepared-1",
+  "purpose": "Training candidates only; not held-out evaluation. Each text includes necessary context. No catalogue numeric knowledge. Load explicitly with --cases; never loaded by this task.",
+  "scenarios": [
+    {
+      "id": "T10_CONTRAST_bounds_01",
+      "operation": "bounds",
+      "interpretation_note": "Addition preserves lower bound; correction removes old bound before adding upper. Values are user requirements, not product facts.",
+      "turns": [
+        {
+          "query": "I previously requested at least 100 Nm torque. And at most 600 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 600
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "query": "I previously requested at least 100 Nm torque. I meant at most 600 Nm; replace the minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 600
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_bounds_02",
+      "operation": "bounds",
+      "interpretation_note": "Addition preserves lower bound; correction removes old bound before adding upper. Values are user requirements, not product facts.",
+      "turns": [
+        {
+          "query": "I previously requested at least 100 Nm torque. And at most 610 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 610
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "query": "I previously requested at least 100 Nm torque. I meant at most 610 Nm; replace the minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 610
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_bounds_03",
+      "operation": "bounds",
+      "interpretation_note": "Addition preserves lower bound; correction removes old bound before adding upper. Values are user requirements, not product facts.",
+      "turns": [
+        {
+          "query": "I previously requested at least 100 Nm torque. And at most 620 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 620
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "query": "I previously requested at least 100 Nm torque. I meant at most 620 Nm; replace the minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 620
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_bounds_04",
+      "operation": "bounds",
+      "interpretation_note": "Addition preserves lower bound; correction removes old bound before adding upper. Values are user requirements, not product facts.",
+      "turns": [
+        {
+          "query": "I previously requested at least 100 Nm torque. And at most 630 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 630
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "query": "I previously requested at least 100 Nm torque. I meant at most 630 Nm; replace the minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 630
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_bounds_05",
+      "operation": "bounds",
+      "interpretation_note": "Addition preserves lower bound; correction removes old bound before adding upper. Values are user requirements, not product facts.",
+      "turns": [
+        {
+          "query": "I previously requested at least 100 Nm torque. And at most 640 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 640
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "query": "I previously requested at least 100 Nm torque. I meant at most 640 Nm; replace the minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 640
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_bounds_06",
+      "operation": "bounds",
+      "interpretation_note": "Addition preserves lower bound; correction removes old bound before adding upper. Values are user requirements, not product facts.",
+      "turns": [
+        {
+          "query": "I previously requested at least 100 Nm torque. And at most 650 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 650
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "query": "I previously requested at least 100 Nm torque. I meant at most 650 Nm; replace the minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 650
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_bounds_07",
+      "operation": "bounds",
+      "interpretation_note": "Addition preserves lower bound; correction removes old bound before adding upper. Values are user requirements, not product facts.",
+      "turns": [
+        {
+          "query": "I previously requested at least 100 Nm torque. And at most 660 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 660
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "query": "I previously requested at least 100 Nm torque. I meant at most 660 Nm; replace the minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 660
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_bounds_08",
+      "operation": "bounds",
+      "interpretation_note": "Addition preserves lower bound; correction removes old bound before adding upper. Values are user requirements, not product facts.",
+      "turns": [
+        {
+          "query": "I previously requested at least 100 Nm torque. And at most 670 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 670
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "query": "I previously requested at least 100 Nm torque. I meant at most 670 Nm; replace the minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 670
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_bounds_09",
+      "operation": "bounds",
+      "interpretation_note": "Addition preserves lower bound; correction removes old bound before adding upper. Values are user requirements, not product facts.",
+      "turns": [
+        {
+          "query": "Antes ped? al menos 100 Nm de torque. Adem?s, como m?ximo 680 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 680
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Antes ped? al menos 100 Nm de torque. Quise decir como m?ximo 680 Nm, sustituye el m?nimo.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 680
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_bounds_10",
+      "operation": "bounds",
+      "interpretation_note": "Addition preserves lower bound; correction removes old bound before adding upper. Values are user requirements, not product facts.",
+      "turns": [
+        {
+          "query": "Antes ped? al menos 100 Nm de torque. Adem?s, como m?ximo 690 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 690
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Antes ped? al menos 100 Nm de torque. Quise decir como m?ximo 690 Nm, sustituye el m?nimo.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "min_torque_nm"
+              ],
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "lte",
+                  "value": 690
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_remove_negate_01",
+      "operation": "remove_negate",
+      "interpretation_note": "Dropping the field leaves current unconstrained; negating AC with explicit DC replaces its value.",
+      "turns": [
+        {
+          "query": "Drop the AC supply current requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "supply_current"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Drop AC: I want DC, not AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_remove_negate_02",
+      "operation": "remove_negate",
+      "interpretation_note": "Dropping the field leaves current unconstrained; negating AC with explicit DC replaces its value.",
+      "turns": [
+        {
+          "query": "Remove the AC supply current requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "supply_current"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Remove AC: I want DC, not AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_remove_negate_03",
+      "operation": "remove_negate",
+      "interpretation_note": "Dropping the field leaves current unconstrained; negating AC with explicit DC replaces its value.",
+      "turns": [
+        {
+          "query": "Forget the AC supply current requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "supply_current"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Forget AC: I want DC, not AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_remove_negate_04",
+      "operation": "remove_negate",
+      "interpretation_note": "Dropping the field leaves current unconstrained; negating AC with explicit DC replaces its value.",
+      "turns": [
+        {
+          "query": "Discard the AC supply current requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "supply_current"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Discard AC: I want DC, not AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_remove_negate_05",
+      "operation": "remove_negate",
+      "interpretation_note": "Dropping the field leaves current unconstrained; negating AC with explicit DC replaces its value.",
+      "turns": [
+        {
+          "query": "Clear the AC supply current requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "supply_current"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Clear AC: I want DC, not AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_remove_negate_06",
+      "operation": "remove_negate",
+      "interpretation_note": "Dropping the field leaves current unconstrained; negating AC with explicit DC replaces its value.",
+      "turns": [
+        {
+          "query": "Stop applying the AC supply current requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "supply_current"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Stop applying AC: I want DC, not AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_remove_negate_07",
+      "operation": "remove_negate",
+      "interpretation_note": "Dropping the field leaves current unconstrained; negating AC with explicit DC replaces its value.",
+      "turns": [
+        {
+          "query": "Do not retain the AC supply current requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "supply_current"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Do not retain AC: I want DC, not AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_remove_negate_08",
+      "operation": "remove_negate",
+      "interpretation_note": "Dropping the field leaves current unconstrained; negating AC with explicit DC replaces its value.",
+      "turns": [
+        {
+          "query": "Please remove the AC supply current requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "supply_current"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Please remove AC: I want DC, not AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_remove_negate_09",
+      "operation": "remove_negate",
+      "interpretation_note": "Dropping the field leaves current unconstrained; negating AC with explicit DC replaces its value.",
+      "turns": [
+        {
+          "query": "Quita el requisito de corriente AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "supply_current"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Quita AC: quiero DC, no AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_remove_negate_10",
+      "operation": "remove_negate",
+      "interpretation_note": "Dropping the field leaves current unconstrained; negating AC with explicit DC replaces its value.",
+      "turns": [
+        {
+          "query": "Elimina el requisito de corriente AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "supply_current"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Elimina AC: quiero DC, no AC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_current": "DC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_hazard_01",
+      "operation": "hazard",
+      "interpretation_note": "Explicit enclosure choice follows cleared versus present hazard; no certification inferred.",
+      "turns": [
+        {
+          "query": "The room is no longer hazardous; use weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ]
+        },
+        {
+          "query": "The room is still hazardous; use explosionproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_hazard_02",
+      "operation": "hazard",
+      "interpretation_note": "Explicit enclosure choice follows cleared versus present hazard; no certification inferred.",
+      "turns": [
+        {
+          "query": "The area is no longer hazardous; use weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ]
+        },
+        {
+          "query": "The area is still hazardous; use explosionproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_hazard_03",
+      "operation": "hazard",
+      "interpretation_note": "Explicit enclosure choice follows cleared versus present hazard; no certification inferred.",
+      "turns": [
+        {
+          "query": "The zone is no longer hazardous; use weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ]
+        },
+        {
+          "query": "The zone is still hazardous; use explosionproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_hazard_04",
+      "operation": "hazard",
+      "interpretation_note": "Explicit enclosure choice follows cleared versus present hazard; no certification inferred.",
+      "turns": [
+        {
+          "query": "The workshop is no longer hazardous; use weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ]
+        },
+        {
+          "query": "The workshop is still hazardous; use explosionproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_hazard_05",
+      "operation": "hazard",
+      "interpretation_note": "Explicit enclosure choice follows cleared versus present hazard; no certification inferred.",
+      "turns": [
+        {
+          "query": "The building is no longer hazardous; use weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ]
+        },
+        {
+          "query": "The building is still hazardous; use explosionproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_hazard_06",
+      "operation": "hazard",
+      "interpretation_note": "Explicit enclosure choice follows cleared versus present hazard; no certification inferred.",
+      "turns": [
+        {
+          "query": "The installation is no longer hazardous; use weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ]
+        },
+        {
+          "query": "The installation is still hazardous; use explosionproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_hazard_07",
+      "operation": "hazard",
+      "interpretation_note": "Explicit enclosure choice follows cleared versus present hazard; no certification inferred.",
+      "turns": [
+        {
+          "query": "The site is no longer hazardous; use weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ]
+        },
+        {
+          "query": "The site is still hazardous; use explosionproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_hazard_08",
+      "operation": "hazard",
+      "interpretation_note": "Explicit enclosure choice follows cleared versus present hazard; no certification inferred.",
+      "turns": [
+        {
+          "query": "The storage area is no longer hazardous; use weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ]
+        },
+        {
+          "query": "The storage area is still hazardous; use explosionproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_hazard_09",
+      "operation": "hazard",
+      "interpretation_note": "Explicit enclosure choice follows cleared versus present hazard; no certification inferred.",
+      "turns": [
+        {
+          "query": "La sala ya no es peligrosa; usa weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ]
+        },
+        {
+          "query": "La sala sigue siendo peligrosa; usa explosionproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_hazard_10",
+      "operation": "hazard",
+      "interpretation_note": "Explicit enclosure choice follows cleared versus present hazard; no certification inferred.",
+      "turns": [
+        {
+          "query": "La zona ya no es peligrosa; usa weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ]
+        },
+        {
+          "query": "La zona sigue siendo peligrosa; usa explosionproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "explosionproof"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_objective_01",
+      "operation": "objective",
+      "interpretation_note": "Explicit objective change replaces ranking; supply refinement omits ranking to preserve it.",
+      "turns": [
+        {
+          "query": "My current preference is lowest motor power. Now prefer the fastest, only 220 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 220,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "My current preference is lowest motor power. Keep that preference, only 220 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 220
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_objective_02",
+      "operation": "objective",
+      "interpretation_note": "Explicit objective change replaces ranking; supply refinement omits ranking to preserve it.",
+      "turns": [
+        {
+          "query": "My current preference is lowest motor power. Now prefer the fastest, only 230 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 230,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "My current preference is lowest motor power. Keep that preference, only 230 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 230
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_objective_03",
+      "operation": "objective",
+      "interpretation_note": "Explicit objective change replaces ranking; supply refinement omits ranking to preserve it.",
+      "turns": [
+        {
+          "query": "My current preference is lowest motor power. Now prefer the fastest, only 240 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 240,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "My current preference is lowest motor power. Keep that preference, only 240 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 240
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_objective_04",
+      "operation": "objective",
+      "interpretation_note": "Explicit objective change replaces ranking; supply refinement omits ranking to preserve it.",
+      "turns": [
+        {
+          "query": "My current preference is lowest motor power. Now prefer the fastest, only 250 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 250,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "My current preference is lowest motor power. Keep that preference, only 250 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 250
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_objective_05",
+      "operation": "objective",
+      "interpretation_note": "Explicit objective change replaces ranking; supply refinement omits ranking to preserve it.",
+      "turns": [
+        {
+          "query": "My current preference is lowest motor power. Now prefer the fastest, only 260 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 260,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "My current preference is lowest motor power. Keep that preference, only 260 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 260
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_objective_06",
+      "operation": "objective",
+      "interpretation_note": "Explicit objective change replaces ranking; supply refinement omits ranking to preserve it.",
+      "turns": [
+        {
+          "query": "My current preference is lowest motor power. Now prefer the fastest, only 270 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 270,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "My current preference is lowest motor power. Keep that preference, only 270 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 270
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_objective_07",
+      "operation": "objective",
+      "interpretation_note": "Explicit objective change replaces ranking; supply refinement omits ranking to preserve it.",
+      "turns": [
+        {
+          "query": "My current preference is lowest motor power. Now prefer the fastest, only 280 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 280,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "My current preference is lowest motor power. Keep that preference, only 280 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 280
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_objective_08",
+      "operation": "objective",
+      "interpretation_note": "Explicit objective change replaces ranking; supply refinement omits ranking to preserve it.",
+      "turns": [
+        {
+          "query": "My current preference is lowest motor power. Now prefer the fastest, only 290 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 290,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "My current preference is lowest motor power. Keep that preference, only 290 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 290
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_objective_09",
+      "operation": "objective",
+      "interpretation_note": "Explicit objective change replaces ranking; supply refinement omits ranking to preserve it.",
+      "turns": [
+        {
+          "query": "Mi prioridad actual es la menor potencia de motor. Ahora prioriza el m?s r?pido, solo 300 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 300,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Mi prioridad actual es la menor potencia de motor. Mant?n esa prioridad, solo 300 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 300
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_objective_10",
+      "operation": "objective",
+      "interpretation_note": "Explicit objective change replaces ranking; supply refinement omits ranking to preserve it.",
+      "turns": [
+        {
+          "query": "Mi prioridad actual es la menor potencia de motor. Ahora prioriza el m?s r?pido, solo 310 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 310,
+              "sort_by": [
+                "fastest"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Mi prioridad actual es la menor potencia de motor. Mant?n esa prioridad, solo 310 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 310
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_reference_01",
+      "operation": "reference",
+      "interpretation_note": "Relative search uses SQL reference_operation, comparison looks up explicit complete codes; no reference performance is embedded.",
+      "turns": [
+        {
+          "query": "Find a stronger one than 761A00-11300000/A.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "stronger",
+              "reference_part_number": "761A00-11300000/A"
+            }
+          ]
+        },
+        {
+          "query": "Compare 761A00-11300000/A with 761A00-21300000/A Show torque.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-21300000/A"
+              ],
+              "focus": [
+                "torque"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_reference_02",
+      "operation": "reference",
+      "interpretation_note": "Relative search uses SQL reference_operation, comparison looks up explicit complete codes; no reference performance is embedded.",
+      "turns": [
+        {
+          "query": "Find a faster one than 761A00-11300000/A.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "faster",
+              "reference_part_number": "761A00-11300000/A"
+            }
+          ]
+        },
+        {
+          "query": "Compare 761A00-11300000/A with 761A00-21300000/A Show operating time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-21300000/A"
+              ],
+              "focus": [
+                "operating_time"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_reference_03",
+      "operation": "reference",
+      "interpretation_note": "Relative search uses SQL reference_operation, comparison looks up explicit complete codes; no reference performance is embedded.",
+      "turns": [
+        {
+          "query": "More torque than 761A00-11300000/A.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "stronger",
+              "reference_part_number": "761A00-11300000/A"
+            }
+          ]
+        },
+        {
+          "query": "Compare 761A00-11300000/A with 761A00-21300000/A Focus on torque.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-21300000/A"
+              ],
+              "focus": [
+                "torque"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_reference_04",
+      "operation": "reference",
+      "interpretation_note": "Relative search uses SQL reference_operation, comparison looks up explicit complete codes; no reference performance is embedded.",
+      "turns": [
+        {
+          "query": "Less operating time than 761A00-11300000/A.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "faster",
+              "reference_part_number": "761A00-11300000/A"
+            }
+          ]
+        },
+        {
+          "query": "Compare 761A00-11300000/A with 761A00-21300000/A Focus on operating time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-21300000/A"
+              ],
+              "focus": [
+                "operating_time"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_reference_05",
+      "operation": "reference",
+      "interpretation_note": "Relative search uses SQL reference_operation, comparison looks up explicit complete codes; no reference performance is embedded.",
+      "turns": [
+        {
+          "query": "A stronger alternative to 761A00-11300000/A.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "stronger",
+              "reference_part_number": "761A00-11300000/A"
+            }
+          ]
+        },
+        {
+          "query": "Compare 761A00-11300000/A with 761A00-21300000/A Compare their torque.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-21300000/A"
+              ],
+              "focus": [
+                "torque"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_reference_06",
+      "operation": "reference",
+      "interpretation_note": "Relative search uses SQL reference_operation, comparison looks up explicit complete codes; no reference performance is embedded.",
+      "turns": [
+        {
+          "query": "A faster alternative to 761A00-11300000/A.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "faster",
+              "reference_part_number": "761A00-11300000/A"
+            }
+          ]
+        },
+        {
+          "query": "Compare 761A00-11300000/A with 761A00-21300000/A Compare their operating time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-21300000/A"
+              ],
+              "focus": [
+                "operating_time"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_reference_07",
+      "operation": "reference",
+      "interpretation_note": "Relative search uses SQL reference_operation, comparison looks up explicit complete codes; no reference performance is embedded.",
+      "turns": [
+        {
+          "query": "Find the next stronger model than 761A00-11300000/A.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "stronger",
+              "reference_part_number": "761A00-11300000/A"
+            }
+          ]
+        },
+        {
+          "query": "Compare 761A00-11300000/A with 761A00-21300000/A I want the torque comparison.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-21300000/A"
+              ],
+              "focus": [
+                "torque"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_reference_08",
+      "operation": "reference",
+      "interpretation_note": "Relative search uses SQL reference_operation, comparison looks up explicit complete codes; no reference performance is embedded.",
+      "turns": [
+        {
+          "query": "Find something faster than 761A00-11300000/A.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "faster",
+              "reference_part_number": "761A00-11300000/A"
+            }
+          ]
+        },
+        {
+          "query": "Compare 761A00-11300000/A with 761A00-21300000/A I want the operating-time comparison.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-21300000/A"
+              ],
+              "focus": [
+                "operating_time"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_reference_09",
+      "operation": "reference",
+      "interpretation_note": "Relative search uses SQL reference_operation, comparison looks up explicit complete codes; no reference performance is embedded.",
+      "turns": [
+        {
+          "query": "Busca uno m?s fuerte que 761A00-11300000/A.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "stronger",
+              "reference_part_number": "761A00-11300000/A"
+            }
+          ]
+        },
+        {
+          "query": "Compara 761A00-11300000/A con 761A00-21300000/A Solo torque.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-21300000/A"
+              ],
+              "focus": [
+                "torque"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_reference_10",
+      "operation": "reference",
+      "interpretation_note": "Relative search uses SQL reference_operation, comparison looks up explicit complete codes; no reference performance is embedded.",
+      "turns": [
+        {
+          "query": "Busca uno m?s r?pido que 761A00-11300000/A.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "faster",
+              "reference_part_number": "761A00-11300000/A"
+            }
+          ]
+        },
+        {
+          "query": "Compara 761A00-11300000/A con 761A00-21300000/A Solo tiempo de operaci?n.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-21300000/A"
+              ],
+              "focus": [
+                "operating_time"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_compound_01",
+      "operation": "compound",
+      "interpretation_note": "Supported compound includes glossary definition; mixed scope retains published lookup while server declines price and delivery, never fabricated fields.",
+      "turns": [
+        {
+          "query": "For 761A00-11300000/A, give torque and explain FLA.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "torque"
+              ],
+              "explain_terms": "fla"
+            }
+          ]
+        },
+        {
+          "query": "For 761A00-11300000/A, give torque, price and lead time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "torque"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_compound_02",
+      "operation": "compound",
+      "interpretation_note": "Supported compound includes glossary definition; mixed scope retains published lookup while server declines price and delivery, never fabricated fields.",
+      "turns": [
+        {
+          "query": "For 761A00-11300000/A, give motor power and explain FLA.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "motor_power"
+              ],
+              "explain_terms": "fla"
+            }
+          ]
+        },
+        {
+          "query": "For 761A00-11300000/A, give motor power, price and lead time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "motor_power"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_compound_03",
+      "operation": "compound",
+      "interpretation_note": "Supported compound includes glossary definition; mixed scope retains published lookup while server declines price and delivery, never fabricated fields.",
+      "turns": [
+        {
+          "query": "For 761A00-11300000/A, give FLA and explain FLA.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "fla"
+              ],
+              "explain_terms": "fla"
+            }
+          ]
+        },
+        {
+          "query": "For 761A00-11300000/A, give FLA, price and lead time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "fla"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_compound_04",
+      "operation": "compound",
+      "interpretation_note": "Supported compound includes glossary definition; mixed scope retains published lookup while server declines price and delivery, never fabricated fields.",
+      "turns": [
+        {
+          "query": "For 761A00-11300000/A, give LRA and explain FLA.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "lra"
+              ],
+              "explain_terms": "fla"
+            }
+          ]
+        },
+        {
+          "query": "For 761A00-11300000/A, give LRA, price and lead time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "lra"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_compound_05",
+      "operation": "compound",
+      "interpretation_note": "Supported compound includes glossary definition; mixed scope retains published lookup while server declines price and delivery, never fabricated fields.",
+      "turns": [
+        {
+          "query": "For 761A00-11300000/A, give duty and explain FLA.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "duty"
+              ],
+              "explain_terms": "fla"
+            }
+          ]
+        },
+        {
+          "query": "For 761A00-11300000/A, give duty, price and lead time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "duty"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_compound_06",
+      "operation": "compound",
+      "interpretation_note": "Supported compound includes glossary definition; mixed scope retains published lookup while server declines price and delivery, never fabricated fields.",
+      "turns": [
+        {
+          "query": "For 761A00-11300000/A, give operating time and explain FLA.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "operating_time"
+              ],
+              "explain_terms": "fla"
+            }
+          ]
+        },
+        {
+          "query": "For 761A00-11300000/A, give operating time, price and lead time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "operating_time"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_compound_07",
+      "operation": "compound",
+      "interpretation_note": "Supported compound includes glossary definition; mixed scope retains published lookup while server declines price and delivery, never fabricated fields.",
+      "turns": [
+        {
+          "query": "For 761A00-11300000/A, give cycle and start rates and explain FLA.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "rates"
+              ],
+              "explain_terms": "fla"
+            }
+          ]
+        },
+        {
+          "query": "For 761A00-11300000/A, give cycle and start rates, price and lead time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "rates"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_compound_08",
+      "operation": "compound",
+      "interpretation_note": "Supported compound includes glossary definition; mixed scope retains published lookup while server declines price and delivery, never fabricated fields.",
+      "turns": [
+        {
+          "query": "For 761A00-11300000/A, give certification and explain FLA.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "certification"
+              ],
+              "explain_terms": "fla"
+            }
+          ]
+        },
+        {
+          "query": "For 761A00-11300000/A, give certification, price and lead time.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "certification"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_compound_09",
+      "operation": "compound",
+      "interpretation_note": "Supported compound includes glossary definition; mixed scope retains published lookup while server declines price and delivery, never fabricated fields.",
+      "turns": [
+        {
+          "query": "Para 761A00-11300000/A, indica torque y explica FLA.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "torque"
+              ],
+              "explain_terms": "fla"
+            }
+          ]
+        },
+        {
+          "query": "Para 761A00-11300000/A, indica torque, precio y plazo de entrega.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "torque"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "T10_CONTRAST_compound_10",
+      "operation": "compound",
+      "interpretation_note": "Supported compound includes glossary definition; mixed scope retains published lookup while server declines price and delivery, never fabricated fields.",
+      "turns": [
+        {
+          "query": "Para 761A00-11300000/A, indica potencia del motor y explica FLA.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "motor_power"
+              ],
+              "explain_terms": "fla"
+            }
+          ]
+        },
+        {
+          "query": "Para 761A00-11300000/A, indica potencia del motor, precio y plazo de entrega.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "motor_power"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

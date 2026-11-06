@@ -1,0 +1,105 @@
+[
+  {
+    "query": "Compare 761A00-11300000/A and 761B00-11300000/A",
+    "scripted_call": [
+      "get_actuator",
+      {
+        "part_numbers": [
+          "761A00-11300000/A",
+          "761B00-11300000/A"
+        ]
+      }
+    ],
+    "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
+    "comparison": {
+      "models": [
+        "761A00-11300000/A",
+        "761B00-11300000/A"
+      ],
+      "rows": [
+        {
+          "field": "on_off_torque",
+          "label": "On/Off torque",
+          "a": "700 in-lb / 80 Nm",
+          "b": "880 in-lb / 100 Nm",
+          "better": "b"
+        },
+        {
+          "field": "modulating_torque",
+          "label": "Modulating torque",
+          "a": "580 in-lb / 65 Nm",
+          "b": "620 in-lb / 70 Nm",
+          "better": "b"
+        },
+        {
+          "field": "cycles_per_hour",
+          "label": "On/Off cycles",
+          "a": "36 /h",
+          "b": "31 /h",
+          "better": null
+        },
+        {
+          "field": "operating_time_50hz_s",
+          "label": "Operating time at 50 Hz",
+          "a": "20 s",
+          "b": "23 s",
+          "better": "a"
+        },
+        {
+          "field": "fla_50hz_a",
+          "label": "FLA at 50 Hz",
+          "a": "1.1 A",
+          "b": "1.2 A",
+          "better": "a"
+        },
+        {
+          "field": "operating_time_60hz_s",
+          "label": "Operating time at 60 Hz",
+          "a": "17 s",
+          "b": "19 s",
+          "better": "a"
+        },
+        {
+          "field": "fla_60hz_a",
+          "label": "FLA at 60 Hz",
+          "a": "1.2 A",
+          "b": "1.3 A",
+          "better": "a"
+        }
+      ],
+      "identical_fields_hidden": 10
+    },
+    "suggested_replies": [
+      "Compare 761A00-11300000/A vs 761B00-11300000/A",
+      "Find an actuator for my requirements",
+      "Explain Base Part Number"
+    ],
+    "clarification": null
+  },
+  {
+    "query": "what is its LRA?",
+    "scripted_call": [
+      "get_actuator",
+      {
+        "focus": [
+          "lra"
+        ],
+        "part_numbers": [
+          "761A00-11300000/A",
+          "761B00-11300000/A"
+        ]
+      }
+    ],
+    "answer": "Which of the previously listed actuators do you mean? Please give its complete part number.",
+    "comparison": null,
+    "suggested_replies": [
+      "Compare 761A00-11300000/A vs 761B00-11300000/A",
+      "Cancel",
+      "Find an actuator for my requirements"
+    ],
+    "clarification": {
+      "field": "which_product",
+      "message": "Which of the previously listed actuators do you mean? Please give its complete part number."
+    }
+  }
+]

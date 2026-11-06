@@ -1,0 +1,875 @@
+{
+  "version": "T11-B-level-1",
+  "scope": "Oracle filters and stated objective; no LLM or natural-language interpretation. Synthetic plant requests, not a sampled user population.",
+  "judgment_rule": "scripts/ranking_judgments.py module docstring; fixed before backend scoring",
+  "binary_relevant": "grade >= 1 (hard compliant); graded utility evaluated by NDCG",
+  "queries": [
+    {
+      "id": "T11-R01",
+      "request": "Recommend an actuator for an outdoor isolation valve, weatherproof, 110 V single-phase AC at 60 Hz, on/off, at least 90 Nm.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 90
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R02",
+      "request": "Our weatherproof 110 V single-phase AC on/off damper needs at least 150 Nm at 50 Hz; recommend the fastest option.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 150
+          }
+        ]
+      },
+      "objective": "fastest"
+    },
+    {
+      "id": "T11-R03",
+      "request": "For a weatherproof 110 V single-phase AC throttling valve at 60 Hz, modulating service and at least 100 Nm, minimize full-load current.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 100
+          }
+        ]
+      },
+      "objective": "lowest_current"
+    },
+    {
+      "id": "T11-R04",
+      "request": "Select for a weatherproof 110 V single-phase AC modulating valve at 50 Hz, minimum 200 Nm; prioritize lowest motor power.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 200
+          }
+        ]
+      },
+      "objective": "lowest_power"
+    },
+    {
+      "id": "T11-R05",
+      "request": "Recommend for a weatherproof 110 V single-phase AC on/off process valve at 60 Hz, minimum 400 Nm and travel no longer than 40 seconds.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 400
+          },
+          {
+            "field": "max_operating_time_s",
+            "op": "lte",
+            "value": 40
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R06",
+      "request": "For a weatherproof 110 V single-phase AC on/off valve at 50 Hz, at least 70 Nm and no more than 3 A FLA, maximize torque.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 70
+          },
+          {
+            "field": "max_fla_a",
+            "op": "lte",
+            "value": 3
+          }
+        ]
+      },
+      "objective": "highest_torque"
+    },
+    {
+      "id": "T11-R07",
+      "request": "Recommend for weatherproof 110 V single-phase AC modulating service at 60 Hz, at least 120 Nm and at least 40 percent S4 duty.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 120
+          },
+          {
+            "field": "min_duty_s4_percent",
+            "op": "gte",
+            "value": 40
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R08",
+      "request": "A weatherproof 110 V single-phase AC on/off line valve at 60 Hz needs at least 150 Nm and at least 30 cycles per hour; choose minimum motor power.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 150
+          },
+          {
+            "field": "min_cycles_per_hour",
+            "op": "gte",
+            "value": 30
+          }
+        ]
+      },
+      "objective": "lowest_power"
+    },
+    {
+      "id": "T11-R09",
+      "request": "Recommend for a weatherproof 220 V single-phase AC on/off cooling-water valve at 60 Hz, minimum 80 Nm.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 80
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R10",
+      "request": "A weatherproof 220 V single-phase AC on/off bypass at 50 Hz needs minimum 180 Nm; choose the shortest travel time.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 180
+          }
+        ]
+      },
+      "objective": "fastest"
+    },
+    {
+      "id": "T11-R11",
+      "request": "Select a weatherproof 220 V single-phase AC modulating actuator at 60 Hz for at least 65 Nm with lowest full-load current.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 65
+          }
+        ]
+      },
+      "objective": "lowest_current"
+    },
+    {
+      "id": "T11-R12",
+      "request": "A weatherproof 220 V single-phase AC modulating damper at 50 Hz needs minimum 250 Nm and lowest motor power.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 250
+          }
+        ]
+      },
+      "objective": "lowest_power"
+    },
+    {
+      "id": "T11-R13",
+      "request": "Recommend weatherproof 220 V single-phase AC on/off service at 60 Hz, at least 100 Nm, motor power no greater than 90 W.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 100
+          },
+          {
+            "field": "max_motor_power_w",
+            "op": "lte",
+            "value": 90
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R14",
+      "request": "For weatherproof 220 V single-phase AC on/off service at 50 Hz, at least 200 Nm, maximize torque within 4 A locked-rotor current.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 200
+          },
+          {
+            "field": "max_lra_a",
+            "op": "lte",
+            "value": 4
+          }
+        ]
+      },
+      "objective": "highest_torque"
+    },
+    {
+      "id": "T11-R15",
+      "request": "Recommend for a weatherproof 220 V single-phase AC modulating valve at 60 Hz, at least 130 Nm and 960 starts per hour.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 130
+          },
+          {
+            "field": "min_starts_per_hour",
+            "op": "gte",
+            "value": 960
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R16",
+      "request": "For a weatherproof 220 V single-phase AC on/off actuator at 60 Hz, torque must be above 100 Nm and below 800 Nm; recommend a fit.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gt",
+            "value": 100
+          },
+          {
+            "field": "min_torque_nm",
+            "op": "lt",
+            "value": 800
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R17",
+      "request": "Recommend a weatherproof 220 V three-phase AC on/off actuator at 60 Hz, minimum 250 Nm.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 3,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 250
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R18",
+      "request": "Select the fastest weatherproof 220 V three-phase AC modulating actuator at 50 Hz with minimum 400 Nm.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "phase_count": 3,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 400
+          }
+        ]
+      },
+      "objective": "fastest"
+    },
+    {
+      "id": "T11-R19",
+      "request": "Our weatherproof 220 V three-phase AC on/off valve at 60 Hz needs 500 Nm minimum; select lowest full-load current.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 3,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 500
+          }
+        ]
+      },
+      "objective": "lowest_current"
+    },
+    {
+      "id": "T11-R20",
+      "request": "Recommend lowest motor power for weatherproof 220 V three-phase AC modulating service at 60 Hz, minimum 300 Nm and 70 percent S4 duty.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "phase_count": 3,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 300
+          },
+          {
+            "field": "min_duty_s4_percent",
+            "op": "gte",
+            "value": 70
+          }
+        ]
+      },
+      "objective": "lowest_power"
+    },
+    {
+      "id": "T11-R21",
+      "request": "Recommend weatherproof 220 V three-phase AC on/off service at 50 Hz, minimum 750 Nm and travel time no more than 45 seconds.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 3,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 750
+          },
+          {
+            "field": "max_operating_time_s",
+            "op": "lte",
+            "value": 45
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R22",
+      "request": "Maximize torque for a weatherproof 220 V three-phase AC modulating actuator at 60 Hz with at least 300 Nm and at least 1200 starts per hour.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "phase_count": 3,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 300
+          },
+          {
+            "field": "min_starts_per_hour",
+            "op": "gte",
+            "value": 1200
+          }
+        ]
+      },
+      "objective": "highest_torque"
+    },
+    {
+      "id": "T11-R23",
+      "request": "Recommend an explosionproof 110 V single-phase AC on/off actuator at 60 Hz with at least 75 Nm for a plant isolation valve.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 75
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R24",
+      "request": "Select fastest travel for an explosionproof 110 V single-phase AC modulating valve at 50 Hz, minimum 120 Nm.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 120
+          }
+        ]
+      },
+      "objective": "fastest"
+    },
+    {
+      "id": "T11-R25",
+      "request": "Recommend minimum full-load current for explosionproof 110 V single-phase AC on/off service at 60 Hz, minimum 200 Nm.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 200
+          }
+        ]
+      },
+      "objective": "lowest_current"
+    },
+    {
+      "id": "T11-R26",
+      "request": "An explosionproof 110 V single-phase AC modulating valve at 60 Hz needs minimum 600 Nm; minimize motor power.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 600
+          }
+        ]
+      },
+      "objective": "lowest_power"
+    },
+    {
+      "id": "T11-R27",
+      "request": "Recommend explosionproof 110 V single-phase AC on/off service at 50 Hz, minimum 150 Nm and no more than 40 seconds travel.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 150
+          },
+          {
+            "field": "max_operating_time_s",
+            "op": "lte",
+            "value": 40
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R28",
+      "request": "An explosionproof 110 V single-phase AC on/off actuator at 60 Hz must supply at least 100 Nm within 6 A FLA; maximize torque.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 100
+          },
+          {
+            "field": "max_fla_a",
+            "op": "lte",
+            "value": 6
+          }
+        ]
+      },
+      "objective": "highest_torque"
+    },
+    {
+      "id": "T11-R29",
+      "request": "Recommend explosionproof 220 V single-phase AC on/off service at 60 Hz, at least 140 Nm for a plant valve.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 140
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R30",
+      "request": "Select the fastest explosionproof 220 V single-phase AC modulating actuator at 50 Hz with at least 200 Nm.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 200
+          }
+        ]
+      },
+      "objective": "fastest"
+    },
+    {
+      "id": "T11-R31",
+      "request": "Recommend lowest full-load current for explosionproof 220 V single-phase AC on/off service at 60 Hz, minimum 700 Nm.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 700
+          }
+        ]
+      },
+      "objective": "lowest_current"
+    },
+    {
+      "id": "T11-R32",
+      "request": "Choose lowest motor power for explosionproof 220 V single-phase AC modulating service at 60 Hz, at least 65 Nm and at least 960 starts per hour.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 65
+          },
+          {
+            "field": "min_starts_per_hour",
+            "op": "gte",
+            "value": 960
+          }
+        ]
+      },
+      "objective": "lowest_power"
+    },
+    {
+      "id": "T11-R33",
+      "request": "Recommend explosionproof 24 V DC on/off service with at least 70 Nm for a battery-fed isolation valve.",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 70
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R34",
+      "request": "For an explosionproof 24 V DC on/off actuator with minimum 150 Nm, select the shortest published travel time.",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 150
+          }
+        ]
+      },
+      "objective": "fastest"
+    },
+    {
+      "id": "T11-R35",
+      "request": "Recommend lowest full-load current for an explosionproof 24 V DC on/off valve requiring at least 200 Nm and no more than 10 A FLA.",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 200
+          },
+          {
+            "field": "max_fla_a",
+            "op": "lte",
+            "value": 10
+          }
+        ]
+      },
+      "objective": "lowest_current"
+    },
+    {
+      "id": "T11-R36",
+      "request": "Recommend an explosionproof 24 V DC on/off actuator for minimum 400 Nm, prioritizing lowest published motor power.",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 400
+          }
+        ]
+      },
+      "objective": "lowest_power"
+    },
+    {
+      "id": "T11-R37",
+      "request": "Recomienda un actuador weatherproof de 110 V AC monofasico, 60 Hz, servicio on/off, minimo 1300 in-lb para una valvula de planta.",
+      "filters": {
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_in_lb",
+            "op": "gte",
+            "value": 1300
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R38",
+      "request": "Para una valvula modulante explosionproof de 220 V AC monofasico, 50 Hz, minimo 130 Nm y S4 de al menos 40 por ciento, recomienda un modelo.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "gte",
+            "value": 130
+          },
+          {
+            "field": "min_duty_s4_percent",
+            "op": "gte",
+            "value": 40
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R39",
+      "request": "Recomienda un actuador weatherproof 220 V AC trifasico a 60 Hz, on/off; el torque debe ser como maximo 800 Nm.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 3,
+        "frequency_hz": 60,
+        "bounds": [
+          {
+            "field": "min_torque_nm",
+            "op": "lte",
+            "value": 800
+          }
+        ]
+      },
+      "objective": null
+    },
+    {
+      "id": "T11-R40",
+      "request": "Recomienda un actuador explosionproof 220 V AC monofasico, 60 Hz, on/off, con CSA; aun no hay un torque minimo especificado.",
+      "filters": {
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "phase_count": 1,
+        "frequency_hz": 60,
+        "bounds": [],
+        "csa_required": true
+      },
+      "objective": null
+    }
+  ]
+}

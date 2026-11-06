@@ -1,0 +1,2388 @@
+{
+  "version": "t10-oracle-pre-fix",
+  "cohort": "t10_oracle_pre_fix",
+  "frozen_note": "48 independent conversations: 3 variants for each D1-D16; scripted ideal tool decisions, no inference. User limits are inputs, reference catalogue quantities resolve from validated CSV.",
+  "scoring": "Every turn must meet state and result assertions; a nonzero selfcheck diagnoses code/contract failures. Semantic patterns check declines and labels only where no typed result exists.",
+  "scenarios": [
+    {
+      "id": "T10_D1_01",
+      "t10_defect": "D1",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find modulating actuators with at least 50 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "modulating",
+              "min_torque_nm": {
+                "value": 50,
+                "op": "gte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "gte"
+                }
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "gte"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_nm"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Correction: I meant a maximum of 50 Nm, not a minimum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": {
+                "value": 50,
+                "op": "lte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "lte"
+                }
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "lte"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_nm"
+              ]
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "The existing schema has no replace-bound operation; the ideal delta states the corrected upper bound and code must apply the correction semantics."
+    },
+    {
+      "id": "T10_D1_02",
+      "t10_defect": "D1",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find modulating actuators with at least 50 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "modulating",
+              "min_torque_nm": {
+                "value": 50,
+                "op": "gte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "gte"
+                }
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "gte"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_nm"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Sorry, reverse that torque limit: no more than 50 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": {
+                "value": 50,
+                "op": "lte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "lte"
+                }
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "lte"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_nm"
+              ]
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "The existing schema has no replace-bound operation; the ideal delta states the corrected upper bound and code must apply the correction semantics."
+    },
+    {
+      "id": "T10_D1_03",
+      "t10_defect": "D1",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find modulating actuators with at least 50 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "modulating",
+              "min_torque_nm": {
+                "value": 50,
+                "op": "gte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "gte"
+                }
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "gte"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_nm"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Rectifico: como m?ximo 50 Nm, no como m?nimo.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": {
+                "value": 50,
+                "op": "lte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "lte"
+                }
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_nm": {
+                  "value": 50,
+                  "op": "lte"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_nm"
+              ]
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "The existing schema has no replace-bound operation; the ideal delta states the corrected upper bound and code must apply the correction semantics."
+    },
+    {
+      "id": "T10_D2_01",
+      "t10_defect": "D2",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find modulating models with at least 300 in-lb.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "modulating",
+              "min_torque_in_lb": {
+                "value": 300,
+                "op": "gte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_in_lb": {
+                  "value": 300,
+                  "op": "gte"
+                }
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_in_lb": {
+                  "value": 300,
+                  "op": "gte"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_in_lb"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Also set the upper torque limit to 600 in-lb.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_in_lb": {
+                "value": 600,
+                "op": "lte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_in_lb": [
+                  {
+                    "value": 300,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 600,
+                    "op": "lte"
+                  }
+                ]
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_in_lb": [
+                  {
+                    "value": 300,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 600,
+                    "op": "lte"
+                  }
+                ]
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_in_lb"
+              ],
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D2_02",
+      "t10_defect": "D2",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find modulating models with at least 300 in-lb.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "modulating",
+              "min_torque_in_lb": {
+                "value": 300,
+                "op": "gte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_in_lb": {
+                  "value": 300,
+                  "op": "gte"
+                }
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_in_lb": {
+                  "value": 300,
+                  "op": "gte"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_in_lb"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Keep that minimum and add a 600 in-lb maximum.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_in_lb": {
+                "value": 600,
+                "op": "lte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_in_lb": [
+                  {
+                    "value": 300,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 600,
+                    "op": "lte"
+                  }
+                ]
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_in_lb": [
+                  {
+                    "value": 300,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 600,
+                    "op": "lte"
+                  }
+                ]
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_in_lb"
+              ],
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D2_03",
+      "t10_defect": "D2",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find modulating models with at least 300 in-lb.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "modulating",
+              "min_torque_in_lb": {
+                "value": 300,
+                "op": "gte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_in_lb": {
+                  "value": 300,
+                  "op": "gte"
+                }
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_in_lb": {
+                  "value": 300,
+                  "op": "gte"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_in_lb"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Conserva el m?nimo y limita el par a un m?ximo de 600 in-lb.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_in_lb": {
+                "value": 600,
+                "op": "lte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "modulating",
+                "min_torque_in_lb": [
+                  {
+                    "value": 300,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 600,
+                    "op": "lte"
+                  }
+                ]
+              },
+              "products_satisfy": {
+                "service": "modulating",
+                "min_torque_in_lb": [
+                  {
+                    "value": 300,
+                    "op": "gte"
+                  },
+                  {
+                    "value": 600,
+                    "op": "lte"
+                  }
+                ]
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_in_lb"
+              ],
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D3_01",
+      "t10_defect": "D3",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find three-phase AC on/off actuators.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "phase_count": 3,
+              "supply_current": "AC",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "phase_count": 3,
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "phase_count": 3,
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "phase_count",
+                "supply_current",
+                "service"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Remove my three-phase constraint; either phase arrangement will do.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "phase_count"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "supply_current",
+                "service",
+                "phase_count"
+              ],
+              "absent": [
+                "phase_count"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D3_02",
+      "t10_defect": "D3",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find three-phase AC on/off actuators.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "phase_count": 3,
+              "supply_current": "AC",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "phase_count": 3,
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "phase_count": 3,
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "phase_count",
+                "supply_current",
+                "service"
+              ]
+            }
+          }
+        },
+        {
+          "query": "The three phase requirement is no longer needed.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "phase_count"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "supply_current",
+                "service",
+                "phase_count"
+              ],
+              "absent": [
+                "phase_count"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D3_03",
+      "t10_defect": "D3",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find three-phase AC on/off actuators.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "phase_count": 3,
+              "supply_current": "AC",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "phase_count": 3,
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "phase_count": 3,
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "phase_count",
+                "supply_current",
+                "service"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Elimina el requisito trif?sico; no tengo preferencia de fases.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "remove": [
+                "phase_count"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "supply_current": "AC",
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "supply_current",
+                "service",
+                "phase_count"
+              ],
+              "absent": [
+                "phase_count"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D4_01",
+      "t10_defect": "D4",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find an on/off actuator for solvent storage.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "hazard_confirmation": true
+            }
+          }
+        },
+        {
+          "query": "There is no fuel stored here; a regular enclosure is acceptable.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "enclosure"
+              ],
+              "hazard_clear": true,
+              "nonempty": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "Hazard context is not an explicit enclosure selection; the ideal model supplies service only and leaves enclosure confirmation to code."
+    },
+    {
+      "id": "T10_D4_02",
+      "t10_defect": "D4",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find an on/off actuator for solvent storage.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "hazard_confirmation": true
+            }
+          }
+        },
+        {
+          "query": "Correction: it is an ordinary room and a normal enclosure will do.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "enclosure"
+              ],
+              "hazard_clear": true,
+              "nonempty": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "Hazard context is not an explicit enclosure selection; the ideal model supplies service only and leaves enclosure confirmation to code."
+    },
+    {
+      "id": "T10_D4_03",
+      "t10_defect": "D4",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find an on/off actuator for solvent storage.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "hazard_confirmation": true
+            }
+          }
+        },
+        {
+          "query": "It is not hazardous after all; a regular enclosure is fine.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "enclosure": "weatherproof"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "enclosure"
+              ],
+              "hazard_clear": true,
+              "nonempty": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "Hazard context is not an explicit enclosure selection; the ideal model supplies service only and leaves enclosure confirmation to code."
+    },
+    {
+      "id": "T10_D5_01",
+      "t10_defect": "D5",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find an on/off actuator for the solvent storage area.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "hazard_confirmation": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "Hazard context is not an explicit enclosure selection; the ideal model supplies service only and leaves enclosure confirmation to code."
+    },
+    {
+      "id": "T10_D5_02",
+      "t10_defect": "D5",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "The on/off actuator will be beside a paint booth.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "hazard_confirmation": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "Hazard context is not an explicit enclosure selection; the ideal model supplies service only and leaves enclosure confirmation to code."
+    },
+    {
+      "id": "T10_D5_03",
+      "t10_defect": "D5",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "I need an on/off actuator positioned near a gas line.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "hazard_confirmation": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "Hazard context is not an explicit enclosure selection; the ideal model supplies service only and leaves enclosure confirmation to code."
+    },
+    {
+      "id": "T10_D6_01",
+      "t10_defect": "D6",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find an on/off actuator that accepts both AC and DC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_current": "AC/DC"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "supply_current": "AC/DC"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "supply_current": "AC/DC"
+              },
+              "questions_absent": [
+                "service",
+                "supply_current"
+              ],
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D6_02",
+      "t10_defect": "D6",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "I need an on/off unit that runs on AC and DC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_current": "AC/DC"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "supply_current": "AC/DC"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "supply_current": "AC/DC"
+              },
+              "questions_absent": [
+                "service",
+                "supply_current"
+              ],
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D6_03",
+      "t10_defect": "D6",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Busco un actuador on/off que funcione con AC y DC.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "supply_current": "AC/DC"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "supply_current": "AC/DC"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "supply_current": "AC/DC"
+              },
+              "questions_absent": [
+                "service",
+                "supply_current"
+              ],
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D7_01",
+      "t10_defect": "D7",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Necesito que abra y cierre una v?lvula en el exterior.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "assumptions": [
+                {
+                  "field": "service",
+                  "user_phrase": "abra y cierre"
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "enclosure"
+              ],
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D7_02",
+      "t10_defect": "D7",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Busco uno que abra o cierre la v?lvula a la intemperie.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "assumptions": [
+                {
+                  "field": "service",
+                  "user_phrase": "abra o cierre"
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "enclosure"
+              ],
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D7_03",
+      "t10_defect": "D7",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "En el exterior necesito un actuador para abrir y cerrar por completo.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "assumptions": [
+                {
+                  "field": "service",
+                  "user_phrase": "abrir y cerrar por completo"
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "enclosure"
+              ],
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D8_01",
+      "t10_defect": "D8",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find on/off actuators using the least electricity.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "sort_by": [
+                "lowest_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "service"
+              ],
+              "objective": "lowest_power",
+              "rank": "lowest_power"
+            }
+          }
+        },
+        {
+          "query": "It also needs to work outdoors at 220 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 220,
+              "enclosure": "weatherproof"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "supply_voltage_v": 220,
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "supply_voltage_v": 220,
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "supply_voltage_v",
+                "enclosure"
+              ],
+              "objective": "lowest_power",
+              "rank": "lowest_power",
+              "ranking_label": true,
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D8_02",
+      "t10_defect": "D8",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find on/off actuators using the least electricity.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "sort_by": [
+                "lowest_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "service"
+              ],
+              "objective": "lowest_power",
+              "rank": "lowest_power"
+            }
+          }
+        },
+        {
+          "query": "Keep that preference; use 220 V and an outdoor enclosure.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 220,
+              "enclosure": "weatherproof"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "supply_voltage_v": 220,
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "supply_voltage_v": 220,
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "supply_voltage_v",
+                "enclosure"
+              ],
+              "objective": "lowest_power",
+              "rank": "lowest_power",
+              "ranking_label": true,
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D8_03",
+      "t10_defect": "D8",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find on/off actuators using the least electricity.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "sort_by": [
+                "lowest_power"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "service"
+              ],
+              "objective": "lowest_power",
+              "rank": "lowest_power"
+            }
+          }
+        },
+        {
+          "query": "Adem?s debe ser para exterior y funcionar a 220 V.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "supply_voltage_v": 220,
+              "enclosure": "weatherproof"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "supply_voltage_v": 220,
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "supply_voltage_v": 220,
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "supply_voltage_v",
+                "enclosure"
+              ],
+              "objective": "lowest_power",
+              "rank": "lowest_power",
+              "ranking_label": true,
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D9_01",
+      "t10_defect": "D9",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Show the full on/off specifications of {{reference}}.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "published": true
+            }
+          }
+        },
+        {
+          "query": "Find the next stronger on/off model with that same voltage and enclosure.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "stronger",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": {
+                  "catalogue_value": "enclosure"
+                },
+                "supply_voltage_v": {
+                  "catalogue_value": "supply_voltage_v"
+                },
+                "min_torque_nm": {
+                  "value": {
+                    "catalogue_value": "on_off_torque_nm"
+                  },
+                  "op": "gt"
+                }
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": {
+                  "catalogue_value": "enclosure"
+                },
+                "supply_voltage_v": {
+                  "catalogue_value": "supply_voltage_v"
+                },
+                "min_torque_nm": {
+                  "value": {
+                    "catalogue_value": "on_off_torque_nm"
+                  },
+                  "op": "gt"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "enclosure",
+                "supply_voltage_v",
+                "min_torque_nm"
+              ],
+              "rank": "closest_stronger",
+              "nonempty": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "Reference quantities for the ideal search are resolved from the CSV, never literal technical fixtures; grounding may reject them because the current search schema has no reference-operation field."
+    },
+    {
+      "id": "T10_D9_02",
+      "t10_defect": "D9",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Show the full on/off specifications of {{reference}}.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "published": true
+            }
+          }
+        },
+        {
+          "query": "I need more on/off torque than that one, keeping its enclosure and supply voltage.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "stronger",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": {
+                  "catalogue_value": "enclosure"
+                },
+                "supply_voltage_v": {
+                  "catalogue_value": "supply_voltage_v"
+                },
+                "min_torque_nm": {
+                  "value": {
+                    "catalogue_value": "on_off_torque_nm"
+                  },
+                  "op": "gt"
+                }
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": {
+                  "catalogue_value": "enclosure"
+                },
+                "supply_voltage_v": {
+                  "catalogue_value": "supply_voltage_v"
+                },
+                "min_torque_nm": {
+                  "value": {
+                    "catalogue_value": "on_off_torque_nm"
+                  },
+                  "op": "gt"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "enclosure",
+                "supply_voltage_v",
+                "min_torque_nm"
+              ],
+              "rank": "closest_stronger",
+              "nonempty": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "Reference quantities for the ideal search are resolved from the CSV, never literal technical fixtures; grounding may reject them because the current search schema has no reference-operation field."
+    },
+    {
+      "id": "T10_D9_03",
+      "t10_defect": "D9",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Show the full on/off specifications of {{reference}}.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "published": true
+            }
+          }
+        },
+        {
+          "query": "Busca uno con m?s par on/off, conservando el voltaje y la protecci?n del anterior.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "reference_operation": "stronger",
+              "service": "on_off"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": {
+                  "catalogue_value": "enclosure"
+                },
+                "supply_voltage_v": {
+                  "catalogue_value": "supply_voltage_v"
+                },
+                "min_torque_nm": {
+                  "value": {
+                    "catalogue_value": "on_off_torque_nm"
+                  },
+                  "op": "gt"
+                }
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": {
+                  "catalogue_value": "enclosure"
+                },
+                "supply_voltage_v": {
+                  "catalogue_value": "supply_voltage_v"
+                },
+                "min_torque_nm": {
+                  "value": {
+                    "catalogue_value": "on_off_torque_nm"
+                  },
+                  "op": "gt"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "enclosure",
+                "supply_voltage_v",
+                "min_torque_nm"
+              ],
+              "rank": "closest_stronger",
+              "nonempty": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "Reference quantities for the ideal search are resolved from the CSV, never literal technical fixtures; grounding may reject them because the current search schema has no reference-operation field."
+    },
+    {
+      "id": "T10_D10_01",
+      "t10_defect": "D10",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "What are the price and lead time for {{reference}}?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "declined": [
+                "price",
+                "lead_time"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D10_02",
+      "t10_defect": "D10",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Give me pricing and the expected delivery time of {{reference}}.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "declined": [
+                "price",
+                "lead_time"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D10_03",
+      "t10_defect": "D10",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "For {{reference}}, tell me its cost and how soon it ships.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "declined": [
+                "price",
+                "lead_time"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D11_01",
+      "t10_defect": "D11",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "What SIL rating does {{reference}} have?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "declined": [
+                "sil"
+              ]
+            },
+            "no_products": true,
+            "contains": [
+              "show published specs for {{reference}}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D11_02",
+      "t10_defect": "D11",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "How much does {{reference}} weigh?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "declined": [
+                "weight"
+              ]
+            },
+            "no_products": true,
+            "contains": [
+              "show published specs for {{reference}}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D11_03",
+      "t10_defect": "D11",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Give the weight and SIL certification of {{reference}}.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "declined": [
+                "weight",
+                "sil"
+              ]
+            },
+            "no_products": true,
+            "contains": [
+              "show published specs for {{reference}}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D12_01",
+      "t10_defect": "D12",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Give me every weatherproof on/off model.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "service": "on_off",
+              "limit": 20
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "enclosure": "weatherproof",
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "enclosure": "weatherproof",
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "enclosure",
+                "service"
+              ],
+              "all_or_cap": true,
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D12_02",
+      "t10_defect": "D12",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "List all the on/off actuators with weatherproof enclosures.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "service": "on_off",
+              "limit": 20
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "enclosure": "weatherproof",
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "enclosure": "weatherproof",
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "enclosure",
+                "service"
+              ],
+              "all_or_cap": true,
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D12_03",
+      "t10_defect": "D12",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Quiero todos los modelos on/off con protecci?n weatherproof.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "service": "on_off",
+              "limit": 20
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "enclosure": "weatherproof",
+                "service": "on_off"
+              },
+              "products_satisfy": {
+                "enclosure": "weatherproof",
+                "service": "on_off"
+              },
+              "questions_absent": [
+                "enclosure",
+                "service"
+              ],
+              "all_or_cap": true,
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D13_01",
+      "t10_defect": "D13",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "How many different supply voltages are in this catalogue?",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "limit": 20
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "voltage_facts": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "No aggregate-voltage tool exists; search is the widest legal catalogue decision and the existing deterministic SQL overview route must handle the requested aggregate."
+    },
+    {
+      "id": "T10_D13_02",
+      "t10_defect": "D13",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Count the distinct voltage options across Series 76.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "limit": 20
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "voltage_facts": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "No aggregate-voltage tool exists; search is the widest legal catalogue decision and the existing deterministic SQL overview route must handle the requested aggregate."
+    },
+    {
+      "id": "T10_D13_03",
+      "t10_defect": "D13",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "?Cu?ntos voltajes diferentes aparecen en el cat?logo?",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "limit": 20
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "voltage_facts": true
+            }
+          }
+        }
+      ],
+      "oracle_boundary": "No aggregate-voltage tool exists; search is the widest legal catalogue decision and the existing deterministic SQL overview route must handle the requested aggregate."
+    },
+    {
+      "id": "T10_D14_01",
+      "t10_defect": "D14",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Is {{reference}} suitable beside a gas line?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "weatherproof_suitability": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D14_02",
+      "t10_defect": "D14",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Can {{reference}} operate near solvent storage safely?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "weatherproof_suitability": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D14_03",
+      "t10_defect": "D14",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Would {{reference}} be acceptable next to a paint booth?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "{{reference}}"
+              ],
+              "focus": "overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "weatherproof_suitability": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D15_01",
+      "t10_defect": "D15",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find on/off actuators with no more than 100 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "min_torque_nm": {
+                "value": 100,
+                "op": "lte"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 100,
+                  "op": "lte"
+                }
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 100,
+                  "op": "lte"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_nm"
+              ],
+              "ranking_label": true,
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D15_02",
+      "t10_defect": "D15",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find on/off actuators with strictly less than 100 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "min_torque_nm": {
+                "value": 100,
+                "op": "lt"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 100,
+                  "op": "lt"
+                }
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 100,
+                  "op": "lt"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_nm"
+              ],
+              "ranking_label": true,
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D15_03",
+      "t10_defect": "D15",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find on/off actuators with strictly more than 100 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "min_torque_nm": {
+                "value": 100,
+                "op": "gt"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 100,
+                  "op": "gt"
+                }
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "min_torque_nm": {
+                  "value": 100,
+                  "op": "gt"
+                }
+              },
+              "questions_absent": [
+                "service",
+                "min_torque_nm"
+              ],
+              "ranking_label": true,
+              "nonempty": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D16_01",
+      "t10_defect": "D16",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find weatherproof on/off actuators; CSA approval is not required.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "csa_required": false,
+              "assumptions": [
+                {
+                  "field": "csa_required",
+                  "user_phrase": "CSA approval is not required"
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "enclosure"
+              ],
+              "interpretation": true,
+              "absent": [
+                "csa_required"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D16_02",
+      "t10_defect": "D16",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find weatherproof on/off actuators; No CSA certification is necessary.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "csa_required": false,
+              "assumptions": [
+                {
+                  "field": "csa_required",
+                  "user_phrase": "No CSA certification is necessary"
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "enclosure"
+              ],
+              "interpretation": true,
+              "absent": [
+                "csa_required"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T10_D16_03",
+      "t10_defect": "D16",
+      "category": "post_decision_oracle",
+      "set": "t10_oracle_pre_fix",
+      "turns": [
+        {
+          "query": "Find weatherproof on/off actuators; CSA listing does not matter.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "service": "on_off",
+              "enclosure": "weatherproof",
+              "csa_required": false,
+              "assumptions": [
+                {
+                  "field": "csa_required",
+                  "user_phrase": "CSA listing does not matter"
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t10_oracle": {
+              "filters": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "products_satisfy": {
+                "service": "on_off",
+                "enclosure": "weatherproof"
+              },
+              "questions_absent": [
+                "service",
+                "enclosure"
+              ],
+              "interpretation": true,
+              "absent": [
+                "csa_required"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

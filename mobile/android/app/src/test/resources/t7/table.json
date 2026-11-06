@@ -1,0 +1,18 @@
+{
+  "session_id": "s", "message_id": "table", "answer": "Full plain text comparison for API clients.",
+  "lead": "Comparison ready.", "products": [], "interaction": null,
+  "suggestions": ["Show source notes"], "suggested_replies": ["Show source notes"],
+  "active_filters": [{"field": "supply_voltage_v", "label": "110 V"}],
+  "comparison": {
+    "layout": "table", "models": ["761A00-11300000/A", "761B00-11300000/A"],
+    "summary": "Synthetic fixture: B has more torque; A has lower current.",
+    "assumptions": "More is better for torque; less is better for current.",
+    "rows": [
+      {"field": "on_off_torque", "label": "On/Off torque", "values": ["700 in-lb / 80 Nm", "880 in-lb / 100 Nm"], "better": 1},
+      {"field": "fla_60hz_a", "label": "FLA · 60 Hz", "values": ["1.20 A", "2.50 A"], "better": 0},
+      {"field": "motor_power_w", "label": "Motor power", "values": ["N/A", "25 W"], "better": null}
+    ],
+    "hidden_rows": [{"field": "supply_voltage_v", "label": "Supply", "values": ["110 V", "110 V"]}],
+    "key_fields": []
+  }
+}

@@ -1,0 +1,1265 @@
+{
+  "L1-01": [
+    {
+      "turn": 1,
+      "message_id": "ae0b2fab-3718-470d-9108-7e93aef6db24",
+      "filters": {
+        "service": "on_off",
+        "frequency_hz": 60
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "e71b8676-c655-4f78-b7de-ec4b1b983b8e",
+      "filters": {
+        "service": "on_off",
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "646aed8b-dc9a-4fb8-ba50-19a4bb8e9b10",
+      "filters": {
+        "service": "on_off",
+        "frequency_hz": 50,
+        "min_torque_nm": 100
+      },
+      "review_class": "unlabelled_numeric_violation"
+    }
+  ],
+  "L1-02": [
+    {
+      "turn": 1,
+      "message_id": "e0f86a56-11a6-41e9-a771-f543969afb32",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "43a61be7-3944-47a0-b11e-24044e0b3fe9",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "11e6970f-4401-416d-aed0-2c078aa98114",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300,
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 4,
+      "message_id": "19de4784-7bdc-4d78-b7d8-46c211d226d6",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300,
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L1-03": [
+    {
+      "turn": 1,
+      "message_id": "a10a13ca-21c4-4c1c-850b-2d1122b5bce9",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "dfe06afa-71db-468e-8e43-6d14f5483c62",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "47a5302a-7c3a-4851-8778-e8409dc6eefc",
+      "filters": {
+        "min_torque_nm": 80
+      },
+      "review_class": "explicit_source_na"
+    }
+  ],
+  "L1-04": [
+    {
+      "turn": 1,
+      "message_id": "5012440d-1894-4810-bfbd-4c1786b69a22",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "c8fbc967-92c3-4ae6-8fae-ac3c1760674d",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "658cfaaa-b05b-4802-9460-a8c60fae3ed6",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L1-05": [
+    {
+      "turn": 1,
+      "message_id": "0ddad905-b24e-4b28-8b63-13a33eabc46b",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L1-06": [
+    {
+      "turn": 1,
+      "message_id": "d90e9b25-780e-4f69-9012-c3a29cec7c8c",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L1-07": [
+    {
+      "turn": 1,
+      "message_id": "5cf3bb0d-38e2-4b3e-a22d-befbd79276bf",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L1-08": [
+    {
+      "turn": 1,
+      "message_id": "f612565d-9d2d-46f1-8bb3-31273905ae0d",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L1-09": [
+    {
+      "turn": 1,
+      "message_id": "38c302fb-1fcf-4882-9896-564004f1b261",
+      "filters": {
+        "supply_voltage_v": 24,
+        "min_torque_nm": 5000
+      },
+      "review_class": "explicit_relaxed_alternatives"
+    }
+  ],
+  "L2-01": [
+    {
+      "turn": 1,
+      "message_id": "0aa626d5-2c02-4722-9b1e-ac73268b00e9",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off"
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "73a3ba19-741c-4849-bbaf-c7c780e0849f",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "305149a2-7bdb-4506-bf70-d269281543f9",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150,
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L2-02": [
+    {
+      "turn": 1,
+      "message_id": "fca7c710-366e-41d7-b5ee-336b9f9a7598",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "617b29a9-dd21-4731-94a8-c98c96778392",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "f375041e-340a-451b-bc38-6dd972e7ae54",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L2-03": [
+    {
+      "turn": 1,
+      "message_id": "a7e33967-1874-4eef-ae61-59768ddfd0dd",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "0c03336e-a11f-42a6-91c6-36e88024b136",
+      "filters": {
+        "supply_voltage_v": 110
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "5fd08205-bb6a-47b4-9a5e-366a67504928",
+      "filters": {
+        "supply_voltage_v": 110,
+        "enclosure": "weatherproof",
+        "service": "on_off",
+        "min_torque_nm": 100
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L2-04": [
+    {
+      "turn": 1,
+      "message_id": "44a758cd-a2c2-49f6-8ce1-e418d17f6d1e",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "6e4803e3-a314-412e-92af-ef974521d71b",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "67ff9f1a-d201-40dc-a498-68ebed444db2",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L2-05": [
+    {
+      "turn": 1,
+      "message_id": "ae74b633-02ee-4dbe-b962-d0e6c5388b3f",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L2-06": [
+    {
+      "turn": 1,
+      "message_id": "4fc8ec6b-7424-4b82-919c-eea5fe4ea572",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L2-07": [
+    {
+      "turn": 1,
+      "message_id": "1687eee6-4614-4130-9ba7-9ee3a0ac0760",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L2-08": [
+    {
+      "turn": 1,
+      "message_id": "1f0efba1-60d2-49a2-99c7-2b8c0af0f026",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L2-09": [
+    {
+      "turn": 1,
+      "message_id": "a4226014-ad2c-49c4-8146-96766af02081",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L2-10": [
+    {
+      "turn": 1,
+      "message_id": "967140af-e102-488c-8273-5fad63233c70",
+      "filters": {
+        "enclosure": "weatherproof",
+        "service": "on_off",
+        "supply_voltage_v": 220
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L3-01": [
+    {
+      "turn": 1,
+      "message_id": "d9137907-b155-4a66-a4f3-9ecfdef977b3",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "53e48de9-2249-45a1-a076-522321d4fb28",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 200
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "0c7bcd5c-91e3-4f33-91c8-d81d8c4ca91c",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 4,
+      "message_id": "6c09f09b-60a1-4d33-9c90-be94cb050be9",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 300,
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L3-02": [
+    {
+      "turn": 1,
+      "message_id": "13db4b93-9870-4226-b053-b0929d599801",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "e1c3debb-3d4b-40c6-a0ee-3416db4240ac",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "6f76bee2-924e-442d-8daf-85619428e046",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L3-03": [
+    {
+      "turn": 1,
+      "message_id": "77c1a137-ef68-4f73-b7b5-7856acad6257",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "61dec31e-a925-448e-b1af-ea87b655c9ae",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "829ed9aa-c514-4717-81f4-dc1f94e28d1c",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150,
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L3-04": [
+    {
+      "turn": 1,
+      "message_id": "944940b3-2855-409f-9e4e-5d3965480008",
+      "filters": {
+        "supply_voltage_v": 220,
+        "phase_count": 3,
+        "service": "on_off"
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "0da05ada-7fbb-4b7e-9b60-1abf4e2ccbab",
+      "filters": {
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off"
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "1dc69c0d-e1c6-47f1-aaa2-e21f002bea09",
+      "filters": {
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off"
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L3-05": [
+    {
+      "turn": 1,
+      "message_id": "7c78bd9c-5759-4bb4-9ea7-f0d8aab4c47a",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L3-06": [
+    {
+      "turn": 1,
+      "message_id": "6d064c2f-dd9a-47c8-87d5-580a2df92bfb",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L3-07": [
+    {
+      "turn": 1,
+      "message_id": "6cbfb025-f26a-4207-bcf1-43ff278d2a93",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L3-08": [
+    {
+      "turn": 1,
+      "message_id": "041f8d32-04c4-47c4-abac-5d5a2c7cf3bb",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L4-01": [
+    {
+      "turn": 1,
+      "message_id": "1f659e57-f972-4ecd-96ae-00a8db33f123",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "744ee098-ba71-42ac-bb54-f46a7c7d6631",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "92aabd03-bb55-4f17-b772-bbb6e3a3d3cb",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 4,
+      "message_id": "4ac52529-3c45-4dab-9b01-d7f08c12d132",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "min_torque_nm": 200
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L4-02": [
+    {
+      "turn": 1,
+      "message_id": "9f4cbd50-9a47-4227-a49e-64243bdf9435",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off",
+        "min_torque_nm": 70
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "05118872-210b-4bde-ba44-701568206b3f",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off",
+        "min_torque_nm": 70
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "b3b0a8a8-bfb0-4987-8846-18cdd85c1018",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off",
+        "min_torque_nm": 70
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L4-03": [
+    {
+      "turn": 1,
+      "message_id": "501faa18-4b91-418f-926b-e4eaf17b74df",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "7f987c4d-4f64-4683-8e89-4b8f7a433c71",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "9f3cc43a-fa93-42ed-983e-e0fa5eb8f709",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L4-04": [
+    {
+      "turn": 1,
+      "message_id": "87a93508-cd36-4dd2-a9d0-bf9e40a46d93",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "0f49f513-d7d4-4144-8642-0822dde7b265",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "lte"
+        }
+      },
+      "review_class": "unlabelled_numeric_violation"
+    },
+    {
+      "turn": 3,
+      "message_id": "0924a18b-dd27-45df-8f02-3b8a45805ac0",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off"
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 4,
+      "message_id": "264b9da9-bbb1-42ed-954a-ca41eb2ee712",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L4-05": [
+    {
+      "turn": 1,
+      "message_id": "3237ae96-7050-454b-ac98-468117718b72",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "436e4919-448e-441a-bf2b-56425598b608",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "c9913679-92f5-4d76-82e4-6a53efa7fa27",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L4-06": [
+    {
+      "turn": 1,
+      "message_id": "d5d335e5-f602-4934-81ee-a8c37aaf6a8d",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 3,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "dd0333f0-0ca2-49be-a51a-99b46af2d58a",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "53331d73-e583-433b-878a-98d51170e2e1",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150,
+        "phase_count": 1
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L4-07": [
+    {
+      "turn": 1,
+      "message_id": "192d4994-8c89-47c3-b118-fbae35545173",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "be5b85b6-5963-4828-822a-ddf1ef3298ea",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "0eb4f087-5635-4ec3-8c9b-faa0f849d088",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 300,
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L5-01": [
+    {
+      "turn": 1,
+      "message_id": "a4786320-e20e-4d5f-a13a-2ffbe41ddae2",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "db21cd97-2122-4593-b01f-aadd8ee64eb9",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "e2311550-e8e5-41d5-a8f2-6e7543cac1ea",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 150,
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L5-02": [
+    {
+      "turn": 1,
+      "message_id": "59f505c5-a3d4-4f21-99da-03182cb90d0c",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "d7b4cfc1-c403-4bab-905e-af943d03e558",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "5fc70a1a-7487-405d-bc3f-6b095c0f2f11",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L5-03": [
+    {
+      "turn": 1,
+      "message_id": "0485790e-8c30-4c53-ae69-1794bec1dd5d",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "e2c1a90c-71cc-478c-b913-0a2ce486a3c2",
+      "filters": {
+        "supply_voltage_v": 220
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "b6c0ef18-4b0c-4e18-9986-8805b2480068",
+      "filters": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 4,
+      "message_id": "0171977b-8980-45e1-bd18-e8c38cea374e",
+      "filters": {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150,
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L5-04": [
+    {
+      "turn": 1,
+      "message_id": "71be90fd-5e04-4433-87e6-e6ca6c61cc08",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L5-05": [
+    {
+      "turn": 1,
+      "message_id": "239c60f1-c263-4b9a-8c89-18bb677a870b",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L5-06": [
+    {
+      "turn": 1,
+      "message_id": "3c3efdce-3513-4b6f-b400-f8a255037b5f",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L5-07": [
+    {
+      "turn": 1,
+      "message_id": "ded14ad4-e2f5-4656-9311-6f022d6b07ce",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L5-08": [
+    {
+      "turn": 1,
+      "message_id": "650a00f4-c9a2-4b10-aa72-c13050e48630",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L6-01": [
+    {
+      "turn": 1,
+      "message_id": "16056999-896b-422c-97e0-c3c7bad432c0",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "19301c8b-9109-45f8-834a-344562d0df16",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "be751d9a-cbab-4102-9086-9e1cda865c6a",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L6-02": [
+    {
+      "turn": 1,
+      "message_id": "c7e2a9b9-d148-44ef-83fc-8f433a4a0ef6",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "3f4f2004-f3c5-46d0-b6e4-6efe13d2461b",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "44a4f961-fba5-43a2-ae30-7ab28eddf1b3",
+      "filters": {
+        "service": "on_off",
+        "min_torque_nm": 100
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L6-03": [
+    {
+      "turn": 1,
+      "message_id": "81705bb3-9455-4729-88e1-f5844c67009d",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L6-04": [
+    {
+      "turn": 1,
+      "message_id": "b82c0f57-0b32-4b99-b601-e36bcd5499a6",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L6-05": [
+    {
+      "turn": 1,
+      "message_id": "020b7049-e857-4832-bf5a-999c75ef5913",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L6-06": [
+    {
+      "turn": 1,
+      "message_id": "ed7da627-7f22-4e73-85e5-26336a2e52c9",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L7-01": [
+    {
+      "turn": 1,
+      "message_id": "c53db094-5461-4968-a6f1-6e6242726978",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "9717bfb2-3ca1-48db-857c-a1c9919b02ae",
+      "filters": {
+        "supply_voltage_v": 220,
+        "enclosure": "weatherproof",
+        "service": "on_off",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gt"
+        }
+      },
+      "review_class": "unfulfilled_relative_lower_bound"
+    },
+    {
+      "turn": 3,
+      "message_id": "bcbc58ae-b5e5-49c3-99f1-eeb868b3ef8b",
+      "filters": {
+        "supply_voltage_v": 220,
+        "enclosure": "weatherproof",
+        "service": "on_off",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gt"
+        },
+        "frequency_hz": 50
+      },
+      "review_class": "unfulfilled_relative_lower_bound"
+    }
+  ],
+  "L7-02": [
+    {
+      "turn": 1,
+      "message_id": "a3eb5897-cbfe-4d97-85d4-f1725c8e83d0",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "e0e47d0e-ca0b-4278-9844-20b77007082c",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "714a7d42-8b7d-4b40-a6b5-3370ad783b43",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L7-03": [
+    {
+      "turn": 1,
+      "message_id": "33bad196-96fd-4b0f-87fe-bc52937c1e30",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off"
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "27f26c8e-11eb-4229-a00b-17f8d8302a1c",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off"
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "e11381ee-51fd-44a6-b1d1-b84da4dccff2",
+      "filters": {
+        "supply_voltage_v": 24,
+        "supply_current": "DC",
+        "service": "on_off"
+      },
+      "review_class": "no_technical_eligibility_violation_observed",
+      "scope_violation": "Selected a product outside the previously shown set"
+    }
+  ],
+  "L7-04": [
+    {
+      "turn": 1,
+      "message_id": "51547677-6625-4fa9-a5e0-e1e23c1d2bcb",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "9049deed-cb2d-45d9-aa75-3cc14264a4fc",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "90db34c3-e537-45d7-bbd7-48f1d6e538e4",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "min_torque_nm": 150
+      },
+      "review_class": "explicit_exclusions"
+    }
+  ],
+  "L7-05": [
+    {
+      "turn": 1,
+      "message_id": "7ef44938-d063-4b49-a356-fc81129141b3",
+      "filters": {
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 100
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "1ef99944-7dec-4b02-bfce-d52c3842a7bc",
+      "filters": {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 100
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "3aea5231-27e5-4b84-86bc-78562d29e811",
+      "filters": {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 100,
+        "enclosure": "weatherproof"
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 4,
+      "message_id": "59d348fb-eb87-4461-a5e4-a12197a89efd",
+      "filters": {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": 100,
+        "enclosure": "weatherproof",
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed",
+      "scope_violation": "Selected a product outside the previously shown set"
+    }
+  ],
+  "L7-06": [
+    {
+      "turn": 1,
+      "message_id": "b01ab739-44ab-45ac-9e30-935d3cd0c479",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "a5932d41-57ac-4901-befc-2eb91aabc851",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "2f26b88b-31a0-4982-8e60-dc879d75a7d8",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L7-07": [
+    {
+      "turn": 1,
+      "message_id": "82c08e35-358e-4826-a5f6-0b717e72316a",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "c24b817b-45f1-4501-9aaa-8cf136d9157c",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 4,
+      "message_id": "7018329e-4f70-4167-8b4f-467481119949",
+      "filters": {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "phase_count": 1,
+        "service": "on_off",
+        "min_torque_nm": 300,
+        "frequency_hz": 50
+      },
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L7-08": [
+    {
+      "turn": 1,
+      "message_id": "d17bcd63-3501-4aa5-a228-6554166dfdbe",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 2,
+      "message_id": "988beb62-2940-4e8d-b90d-5a08ad33ceec",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 3,
+      "message_id": "837c7f50-4451-4d52-af25-754da9af7bdf",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    },
+    {
+      "turn": 4,
+      "message_id": "b14dcddf-3359-4a8a-9961-34b841e2afef",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L7-09": [
+    {
+      "turn": 1,
+      "message_id": "d23713b8-9fac-4f15-bd27-aba552f09991",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L7-10": [
+    {
+      "turn": 1,
+      "message_id": "00cf60b8-6b7d-4dd9-bcb9-e28aa8021504",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ],
+  "L7-11": [
+    {
+      "turn": 1,
+      "message_id": "d20c5f5e-0c4d-4d6b-b024-bca1173f1278",
+      "filters": {
+        "frequency_hz": 50
+      },
+      "review_class": "explicit_dc_frequency_limitation"
+    }
+  ],
+  "L7-12": [
+    {
+      "turn": 1,
+      "message_id": "ccf327de-c180-42a4-973a-e28e566e13b0",
+      "filters": {},
+      "review_class": "no_technical_eligibility_violation_observed"
+    }
+  ]
+}

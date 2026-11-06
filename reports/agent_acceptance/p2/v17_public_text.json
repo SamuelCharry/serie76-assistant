@@ -1,0 +1,37 @@
+{
+  "sources": {
+    "<local scratch>\\behavior\\out_v17_base1_google_gemini-3.6-flash\\results.json": {
+      "responses": 146,
+      "strings": 4442,
+      "issues": 0
+    },
+    "<local scratch>\\behavior\\out_v17_final1_retry_google_gemini-3.6-flash\\results.json": {
+      "responses": 146,
+      "strings": 4073,
+      "issues": 0
+    },
+    "<local scratch>\\behavior\\out_v17_base2_google_gemini-3.6-flash\\results.json": {
+      "responses": 146,
+      "strings": 4195,
+      "issues": 0
+    },
+    "<local scratch>\\behavior\\out_v17_final2_google_gemini-3.6-flash\\results.json": {
+      "responses": 146,
+      "strings": 3958,
+      "issues": 0
+    },
+    "<local scratch>\\behavior\\out_v17_base3_google_gemini-3.6-flash\\results.json": {
+      "responses": 146,
+      "strings": 4350,
+      "issues": 0
+    },
+    "<local scratch>\\behavior\\out_v17_final3_google_gemini-3.6-flash\\results.json": {
+      "responses": 146,
+      "strings": 4095,
+      "issues": 0
+    }
+  },
+  "findings": [],
+  "errors": [],
+  "note": "Stored responses only; automated zero is not sufficient: blind review found baseline mintorquenm leakage not caught by detector."
+}

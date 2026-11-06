@@ -1,0 +1,17 @@
+{
+  "changes": "Per-turn checkpoints, redacted stdout/stderr retention, internal exit propagation and three fail-closed metadata retries; no request, model, scenario or latency-timer changes.",
+  "hashes": {
+    "run_screen.py": "09c08edf2587eb5a804203662dfb8502e5e520f7803fafaa50d577e34a745ea8",
+    "run_screen.py.pre_p2a": "af25db82583000fbd871fa570cf32db53566b8e6f1748467e79485e0dba328b4",
+    "behavior\\run_heldout.py": "4d31f95ffde9b629e809b86aa9143940b5f1cedf9e687c80c22a102631ce34bd",
+    "behavior\\run_heldout.py.pre_p2a": "098526507615772f5a3d3cb5e311c7fa78198d36869d68afa66ed443f16663cd"
+  },
+  "offline_proof": {
+    "provider_calls": 0,
+    "simulated_inference_calls": 1,
+    "metadata_checks": 4,
+    "checkpoint_turns": 1,
+    "budget_failure_stops_before_next_inference": true,
+    "wrapper_syntax_valid": true
+  }
+}

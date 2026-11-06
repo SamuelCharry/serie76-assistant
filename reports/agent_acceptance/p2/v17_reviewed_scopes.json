@@ -1,0 +1,1104 @@
+{
+  "notes": [
+    "Written after final code freeze and before inspecting any v17 response; user queries and CSV only.",
+    "Hazards persist until explicitly cleared. Source N/A lookup rows are audited for truthful values, not rejected merely for being unavailable.",
+    "Relative normative references: L2-10/L5-04 second correctly ranked model is 300 Nm; L7-06 second is 500 Nm. Actual reference drift requires separate review.",
+    "L7-09 explicitly requests strongest available despite no 10000 Nm match, so later turns drop that impossible minimum while preserving DC-only/enclosure/supply.",
+    "L7-10 turn 2 is contradictory and must not yield a positive recommendation; audit both bounds.",
+    "Definitions and direct code lookups have no selection scope; every displayed figure is still checked. Ranking optima and prose arithmetic require independent review."
+  ],
+  "scopes": {
+    "L1-06": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        },
+        "phase_count": 1
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "min_torque_nm": [
+          {
+            "value": 150,
+            "op": "gte"
+          },
+          {
+            "value": 500,
+            "op": "lte"
+          }
+        ]
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "min_torque_nm": [
+          {
+            "value": 150,
+            "op": "gte"
+          },
+          {
+            "value": 500,
+            "op": "lte"
+          }
+        ]
+      }
+    ],
+    "L1-08": [
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "supply_current": "DC",
+        "dc_only": true
+      },
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "supply_current": "DC"
+      },
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "supply_current": "DC"
+      }
+    ],
+    "L1-09": [
+      {},
+      {},
+      {
+        "phase_count": 3,
+        "min_torque_nm": 300
+      }
+    ],
+    "L2-01": [
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off"
+      }
+    ],
+    "L2-04": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        },
+        "phase_count": 1
+      }
+    ],
+    "L2-07": [
+      {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 110
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 80,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 80,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 80,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      }
+    ],
+    "L2-08": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      }
+    ],
+    "L2-09": [
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        }
+      }
+    ],
+    "L2-10": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 200,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 200,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gt"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gt"
+        },
+        "frequency_hz": 50
+      }
+    ],
+    "L3-02": [
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        }
+      }
+    ],
+    "L3-04": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 200,
+          "op": "gte"
+        },
+        "phase_count": 1
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gte"
+        },
+        "phase_count": 1
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gte"
+        },
+        "phase_count": 1,
+        "frequency_hz": 50
+      }
+    ],
+    "L3-05": [
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof"
+      },
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "supply_current": "DC",
+        "dc_only": true
+      },
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof"
+      },
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof"
+      }
+    ],
+    "L3-07": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        },
+        "phase_count": 3
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        },
+        "phase_count": 1
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 200,
+          "op": "lte"
+        },
+        "phase_count": 1
+      }
+    ],
+    "L3-08": [
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      }
+    ],
+    "L4-01": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": [
+          {
+            "value": 150,
+            "op": "gte"
+          },
+          {
+            "value": 550,
+            "op": "lte"
+          }
+        ]
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "min_torque_nm": [
+          {
+            "value": 150,
+            "op": "gte"
+          },
+          {
+            "value": 550,
+            "op": "lte"
+          }
+        ]
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      }
+    ],
+    "L4-02": [
+      {
+        "supply_voltage_v": 110,
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 220,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 220,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "explosionproof"
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "explosionproof"
+      }
+    ],
+    "L4-03": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 800,
+          "op": "gte"
+        },
+        "phase_count": 3
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 800,
+          "op": "lte"
+        },
+        "phase_count": 3
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 3
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 3,
+        "frequency_hz": 50
+      }
+    ],
+    "L4-05": [
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        },
+        "supply_current": "DC",
+        "dc_only": true
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        },
+        "supply_current": "AC"
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        },
+        "supply_current": "AC"
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        },
+        "supply_current": "AC"
+      }
+    ],
+    "L4-06": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      }
+    ],
+    "L4-07": [
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 200,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 200,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 200,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 200,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      }
+    ],
+    "L4-08": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        }
+      }
+    ],
+    "L5-01": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        },
+        "phase_count": 1
+      }
+    ],
+    "L5-03": [
+      {
+        "supply_voltage_v": 110,
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 130,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 130,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 130,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      }
+    ],
+    "L5-04": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 200,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 200,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gt"
+        }
+      }
+    ],
+    "L5-05": [
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 100,
+          "op": "gte"
+        }
+      }
+    ],
+    "L5-06": [
+      {},
+      {},
+      {
+        "phase_count": 3
+      }
+    ],
+    "L6-05": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 750,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 750,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 750,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      }
+    ],
+    "L7-01": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 50000,
+          "op": "gte"
+        },
+        "phase_count": 1
+      }
+    ],
+    "L7-02": [
+      {
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "frequency_hz": 50,
+        "max_operating_time_s": {
+          "value": 0,
+          "op": "lte"
+        }
+      }
+    ],
+    "L7-06": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "min_torque_nm": [
+          {
+            "value": 300,
+            "op": "gte"
+          },
+          {
+            "value": 1100,
+            "op": "lte"
+          }
+        ]
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "min_torque_nm": [
+          {
+            "value": 300,
+            "op": "gte"
+          },
+          {
+            "value": 1100,
+            "op": "lte"
+          }
+        ]
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "phase_count": 1,
+        "frequency_hz": 50,
+        "min_torque_nm": [
+          {
+            "value": 300,
+            "op": "gte"
+          },
+          {
+            "value": 1100,
+            "op": "lte"
+          }
+        ]
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gt"
+        },
+        "phase_count": 1,
+        "frequency_hz": 50
+      }
+    ],
+    "L7-07": [
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      },
+      {
+        "supply_voltage_v": 110,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 150,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      }
+    ],
+    "L7-08": [
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "modulating",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 300,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      }
+    ],
+    "L7-09": [
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "min_torque_nm": {
+          "value": 10000,
+          "op": "gte"
+        },
+        "supply_current": "DC",
+        "dc_only": true
+      },
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "supply_current": "DC",
+        "dc_only": true
+      },
+      {
+        "supply_voltage_v": 24,
+        "service": "on_off",
+        "enclosure": "explosionproof",
+        "supply_current": "DC",
+        "dc_only": true
+      }
+    ],
+    "L7-10": [
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": [
+          {
+            "value": 150,
+            "op": "gte"
+          },
+          {
+            "value": 300,
+            "op": "lte"
+          }
+        ]
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": [
+          {
+            "value": 500,
+            "op": "gte"
+          },
+          {
+            "value": 300,
+            "op": "lte"
+          }
+        ]
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gte"
+        }
+      },
+      {
+        "supply_voltage_v": 220,
+        "service": "on_off",
+        "enclosure": "weatherproof",
+        "min_torque_nm": {
+          "value": 500,
+          "op": "gte"
+        },
+        "frequency_hz": 50
+      }
+    ],
+    "L1-01": [
+      {}
+    ],
+    "L1-02": [
+      {}
+    ],
+    "L1-03": [
+      {}
+    ],
+    "L1-04": [
+      {}
+    ],
+    "L1-05": [
+      {}
+    ],
+    "L1-07": [
+      {},
+      {},
+      {}
+    ],
+    "L2-02": [
+      {}
+    ],
+    "L2-03": [
+      {}
+    ],
+    "L2-05": [
+      {}
+    ],
+    "L2-06": [
+      {}
+    ],
+    "L3-01": [
+      {}
+    ],
+    "L3-03": [
+      {}
+    ],
+    "L3-06": [
+      {},
+      {},
+      {}
+    ],
+    "L4-04": [
+      {},
+      {},
+      {}
+    ],
+    "L5-02": [
+      {}
+    ],
+    "L5-07": [
+      {},
+      {},
+      {}
+    ],
+    "L5-08": [
+      {},
+      {},
+      {}
+    ],
+    "L6-01": [
+      {}
+    ],
+    "L6-02": [
+      {}
+    ],
+    "L6-03": [
+      {}
+    ],
+    "L6-04": [
+      {},
+      {},
+      {}
+    ],
+    "L6-06": [
+      {},
+      {},
+      {}
+    ],
+    "L7-03": [
+      {}
+    ],
+    "L7-04": [
+      {}
+    ],
+    "L7-05": [
+      {}
+    ],
+    "L7-11": [
+      {},
+      {},
+      {},
+      {}
+    ]
+  }
+}

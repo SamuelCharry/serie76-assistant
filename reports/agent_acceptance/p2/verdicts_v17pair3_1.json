@@ -1,0 +1,602 @@
+{
+  "L1-01": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 1, turn 1: invents an active FLA <= 762 A constraint from the part number."
+    }
+  },
+  "L1-02": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L1-03": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L1-04": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L1-05": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L1-06": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L1-07": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 2, turn 1: hides the requested modulating duty rating among identical fields and never states its value."
+    }
+  },
+  "L1-08": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L1-09": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L2-01": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L2-02": {
+    "A": {
+      "v": 0,
+      "why": "Items 2/5, turn 1: explains operating time but omits starts per hour and the requested difference."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1/5, turn 1: requests model requirements instead of explaining the two terms."
+    }
+  },
+  "L2-03": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/5, turn 1: lists supply options and enclosure definitions without explaining where to identify the phase requirement."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1/5, turn 1: substitutes an unrelated model-validation failure for the requested explanation of phase information."
+    }
+  },
+  "L2-04": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L2-05": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/5, turn 1: defines motor power but never answers whether higher wattage necessarily means faster operation."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1/5, turn 1: defines motor power but never answers whether higher wattage necessarily means faster operation."
+    }
+  },
+  "L2-06": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L2-07": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L2-08": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: asks for service, voltage and torque even though all three were already supplied."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L2-09": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L2-10": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/2, turn 3: recommends the same 300 Nm model when asked for one stronger than it."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1/2, turn 3: recommends the same 300 Nm model when asked for one stronger than it."
+    }
+  },
+  "L3-01": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L3-02": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L3-03": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L3-04": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L3-05": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L3-06": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L3-07": {
+    "A": {
+      "v": 0,
+      "why": "Item 6, turn 1: exposes internal field name mintorquenm in the user-facing answer."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L3-08": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/2, turn 3: ignores the price/delivery retraction and fails to compare requested 50 Hz times."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1/2, turn 3: ignores the price/delivery retraction and fails to compare requested 50 Hz times."
+    }
+  },
+  "L4-01": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2/3, turn 3: removing only the upper bound also drops the retained 150 Nm minimum and shows undersized models."
+    }
+  },
+  "L4-02": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L4-03": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L4-04": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L4-05": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L4-06": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L4-07": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L4-08": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2/5, turn 4: explains ranking without identifying the requested motor-power tie."
+    }
+  },
+  "L5-01": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/2/3, turn 1: misses monof?sico, asks again for phase count and presents a three-phase model."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L5-02": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L5-03": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L5-04": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 2, turn 1: shows three models despite the explicit request for two; turn 3 also fails the stronger-model follow-up."
+    }
+  },
+  "L5-05": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L5-06": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1/5, turn 2: does not explain whether N/A means zero or unavailable, instead asking what to check."
+    }
+  },
+  "L5-07": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L5-08": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/5, turn 2: returns whole-catalogue voltage counts instead of the matching complete part numbers."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1/5, turn 2: returns whole-catalogue voltage counts instead of the matching complete part numbers."
+    }
+  },
+  "L6-01": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: refuses the commercial request but silently omits the requested published modulating torque."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L6-02": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L6-03": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L6-04": {
+    "A": {
+      "v": 0,
+      "why": "Items 1/5, turn 3: confuses a valve-sizing suitability guarantee with warranty terms and never addresses missing sizing data."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1/2, turn 2: ignores the stock retraction and fails to answer the on/off torque question."
+    }
+  },
+  "L6-05": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 2, turn 3: asks which actuator despite the explicit reference to the second model in the preceding list."
+    }
+  },
+  "L6-06": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L7-01": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L7-02": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2/3, turn 1: drops the zero-second limit, asks for it again and presents noncompliant models."
+    }
+  },
+  "L7-03": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L7-04": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1/5, turn 1: returns model counts instead of explaining the two torque ratings."
+    }
+  },
+  "L7-05": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L7-06": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 4: retains the withdrawn 1100 Nm ceiling and invents a 1100 Nm minimum instead of torque above 500 Nm."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2/3, turn 4: drops single-phase, presents a three-phase model and invents a 1100 Nm minimum."
+    }
+  },
+  "L7-07": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L7-08": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L7-09": {
+    "A": {
+      "v": 0,
+      "why": "Item 5, turn 3: asks which shown model the user means although no model was ever shown."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  },
+  "L7-10": {
+    "A": {
+      "v": 0,
+      "why": "Items 2/3, turn 3: drops the retained 500 Nm minimum and presents 80-150 Nm models after removing only the maximum."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2/5, turn 3: requests an already-specified limit rather than applying the explicit correction; turn 4 remains stuck."
+    }
+  },
+  "L7-11": {
+    "A": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Requirements addressed; published figures and applicable scopes match the catalogue."
+    }
+  }
+}

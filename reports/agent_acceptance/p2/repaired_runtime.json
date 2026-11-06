@@ -1,0 +1,23 @@
+{
+  "head": "1dda5f2532169fd435012f965689a4a88c075549",
+  "image": "sha256:650c61cf6e84264b875c446bb77f2e93d31f8f7d07e66cb91b423b5cdd150ec0",
+  "http_status": 200,
+  "ready": {
+    "status": "ready",
+    "catalog": {
+      "id": 2,
+      "document_sha256": "4c28023929183df8e2a763e759cc84572b44604b30837a21e22c1166f88267e0",
+      "pipeline_signature": "d7e1c05b179f6b44dc77cda695cfd83a4b570e0db1ee2083d537fd709df70b27",
+      "rows": 68
+    },
+    "context_terms": 16
+  },
+  "settings": {
+    "OPENROUTER_CHAT_MODEL": "google/gemini-3.6-flash",
+    "OPENROUTER_FALLBACK_MODEL": "",
+    "AGENT_PROMPT_VARIANT": ""
+  },
+  "source_files_verified": 74,
+  "source_matches": true,
+  "provider_inference_calls": 0
+}

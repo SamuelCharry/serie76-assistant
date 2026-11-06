@@ -1,0 +1,44 @@
+{
+  "hazard": [
+    "flammable vapours around the valve", "explosive atmosphere in a chemical plant",
+    "solvent handling area", "propane storage facility", "combustible dust near machinery",
+    "natural gas processing unit", "hydrogen production plant", "classified hazardous zone",
+    "refinery process area", "alcohol distillation plant",
+    "vapores inflamables alrededor de la válvula", "atmósfera explosiva en una planta química",
+    "zona de manipulación de disolventes", "almacenamiento de propano", "polvo combustible en la fábrica",
+    "planta de procesamiento de gas natural", "producción de hidrógeno", "zona clasificada peligrosa",
+    "área de procesos de una refinería", "destilería de alcohol"
+  ],
+  "safe_area": [
+    "unclassified safe area", "no hazardous atmosphere at the site", "outside the classified zone",
+    "ordinary nonhazardous location", "outdoor installation in a safe area", "rain exposure without explosive gases",
+    "normal industrial area", "site confirmed nonhazardous", "no flammable substances nearby", "weather exposure only",
+    "zona segura no clasificada", "sin atmósfera peligrosa en el sitio", "fuera de la zona clasificada",
+    "ubicación ordinaria sin riesgo de explosión", "instalación exterior en zona segura", "lluvia sin gases explosivos",
+    "área industrial normal", "sitio confirmado no peligroso", "sin sustancias inflamables cerca", "solo exposición a la intemperie"
+  ],
+  "on_off": [
+    "fully open or fully closed valve", "two position valve operation", "open and shut the valve",
+    "isolation valve service", "start and stop flow", "binary valve positions", "no intermediate positions needed",
+    "switch between open and closed", "simple shutoff operation", "on off actuator service",
+    "válvula completamente abierta o cerrada", "funcionamiento de dos posiciones", "abrir y cerrar la válvula",
+    "servicio de válvula de aislamiento", "iniciar y detener el caudal", "posiciones binarias de válvula",
+    "no necesita posiciones intermedias", "alternar entre abierto y cerrado", "operación de cierre simple", "servicio todo o nada"
+  ],
+  "modulating": [
+    "hold the valve at intermediate positions", "continuously adjust flow", "throttle flow gradually",
+    "proportional valve control", "position the valve partially open", "precise flow regulation",
+    "vary the valve opening", "stop at any point in the stroke", "mixing flow control", "modulating actuator service",
+    "mantener la válvula en posiciones intermedias", "ajustar el caudal continuamente", "regular el caudal gradualmente",
+    "control proporcional de válvula", "dejar la válvula parcialmente abierta", "regulación precisa de caudal",
+    "variar la apertura de la válvula", "detenerse en cualquier punto del recorrido", "control de flujo de mezcla", "servicio modulante"
+  ],
+  "out_of_scope_property": [
+    "actuator purchase price", "delivery lead time", "actuator weight", "noise level in decibels",
+    "operating temperature range", "wiring diagram", "installation dimensions", "expected service lifetime",
+    "maintenance schedule", "control signal compatibility",
+    "precio de compra del actuador", "plazo de entrega", "peso del actuador", "nivel de ruido en decibelios",
+    "rango de temperatura de operación", "diagrama de cableado", "dimensiones de instalación", "vida útil esperada",
+    "programa de mantenimiento", "compatibilidad de señal de control"
+  ]
+}

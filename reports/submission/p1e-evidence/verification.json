@@ -1,0 +1,97 @@
+{
+  "source_commits": {
+    "4906b62": "4906b6254a8568a05326ca776483220c7ccd2a02",
+    "95d0a50": "95d0a5064b3e533910af94d54af21edf6f083ccb",
+    "31f4329": "31f4329eb8213a216052dc71f03068459ec8e996",
+    "HEAD": "9f5d3c4aa60707e9061c8271ea62c8bf90ff9cb3"
+  },
+  "input_sha256": {
+    "reports/agent_acceptance/t14_oracle_pre_fix/flash_replay_cases.json": "0a61c675cb60a12f31a300de7b2def6c2778a519ca39ca283481c24b6c8a9195",
+    "reports/agent_acceptance/run_t12_no_env.py": "2b9702f37edd011a2c71949f6f037b9f782a17507af5e459a0b3131b0234a20d",
+    "scripts/agent_acceptance.py": "5eeedbfece9f54964889ec28ce3f6c9b0b02d17ada5d3d9c1d3b54a70d7e70c3",
+    "scripts/t14_oracle.py": "cfdab068bcba13ef3235e6c2a05f549e38193e220c8d2e23db24c48fb7defcf0",
+    "config/agent_acceptance_t14.json": "59554168a92b5c4f8fb41b28ddeb98cf69f760f8f396bad16f277a5e48fa0565"
+  },
+  "raw_replay_sha256": {
+    "4906b62": "1e37a92b0289339a3abc6f8edf63ebceef03ea7d508231c99dc15782c80b64f5",
+    "95d0a50": "9a04ac4d50208c61a2ec49236e797709e01279f0e2d35f2feee2bb10437a7587",
+    "head": "4e0e64af425ee01e9efd32478557b4992df11c686991892543524a5dbf83cafc"
+  },
+  "replay_exits": {
+    "4906b62": 1,
+    "95d0a50": 1,
+    "head": 1
+  },
+  "newly_failing_class_counts": {
+    "a": 0,
+    "b": 0,
+    "c": 0
+  },
+  "direct_unittest": {
+    "exit": 0,
+    "run": 660,
+    "passed": 658,
+    "skipped": 2,
+    "seconds": 347.273
+  },
+  "t14_runner_exit": 0,
+  "t14_gate_exits": {
+    "unittest": 0,
+    "v7": 0,
+    "t10": 0,
+    "t12": 0,
+    "t14": 0,
+    "schema": 0,
+    "public_text": 0,
+    "ranking": 0,
+    "replay": 1
+  },
+  "runner_unittest": {
+    "run": 660,
+    "passed": 658,
+    "skipped": 2,
+    "seconds": 325.302
+  },
+  "gate_counts": {
+    "v7": 453,
+    "t10": 48,
+    "t12": 47,
+    "t14": 42
+  },
+  "schema": {
+    "arrays": 6,
+    "bytes": 5520,
+    "depth": 7,
+    "enum_values": 108,
+    "forbidden_nodes": 0,
+    "get_actuator_object_arrays": 0,
+    "numeric_ranges": 0,
+    "required": 2
+  },
+  "ranking": {
+    "query_count": 40,
+    "judgment_count": 2720,
+    "means": {
+      "3": {
+        "precision": 0.9333333333333333,
+        "compliance_returned": 1.0,
+        "recall": 0.5073195554445554,
+        "ap": 0.5073195554445554,
+        "ndcg": 0.965377944025286
+      },
+      "5": {
+        "precision": 0.88,
+        "compliance_returned": 1.0,
+        "recall": 0.7371992590742591,
+        "ap": 0.7371992590742591,
+        "ndcg": 0.9701276656908694
+      }
+    },
+    "safety_failures": [],
+    "unexpected_empty_results": []
+  },
+  "runner_code_manifest_sha256": "eb64c783016c79874a3ae6933d719772fb8194fa09dff70a6142d114a4160e30",
+  "runner_code_manifest_files_verified": 191,
+  "runner_replay_matches_head_semantically": true,
+  "local_evidence_archive": "<local>\\AppData\\Local\\Temp\\series76-p1e-evidence-20261105-1938"
+}

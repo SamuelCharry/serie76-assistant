@@ -4,3 +4,4 @@
 *.png binary
 data/extracted/** -text
 data/reviewed/** -text
+reports/agent_acceptance/t14_live/heldout_v14.json -text

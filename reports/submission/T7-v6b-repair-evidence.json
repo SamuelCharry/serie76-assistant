@@ -1,0 +1,114 @@
+{
+  "mode": "scripted decisions; real PostgreSQL; no inference",
+  "cases": {
+    "exact_noncanonical": {
+      "query": "give me the specs for 761a0011300000/a",
+      "answer": "Interpreted '761a0011300000/a' as 761A00-11300000/A.\n761A00-11300000/A\n  • On/Off torque: 700 in-lb / 80 Nm\n  • Modulating torque: 580 in-lb / 65 Nm\n  • Duty S4 On/Off: 40%\n  • Duty S4 Modulating: 40%\n  • On/Off cycles per hour: 36\n  • Modulating starts per hour: 960\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • FLA at 50 Hz: 1.1 A\n  • FLA at 60 Hz: 1.2 A\n  • LRA at 50 Hz: 1.3 A\n  • LRA at 60 Hz: 1.4 A\n  • Motor power: 15 W\n  Source: Series 76 electrical catalogue, page 1.",
+      "lead": "Catalogue specifications for 761A00-11300000/A.",
+      "products": [
+        "761A00-11300000/A"
+      ],
+      "suggestions": [],
+      "clarification": null,
+      "trace": {
+        "name": "get_actuator",
+        "parameters": {
+          "part_numbers": [
+            "761A00-11300000/A"
+          ],
+          "focus": [],
+          "cancel_previous": false,
+          "explain_terms": []
+        },
+        "raw_parameters": {
+          "part_numbers": [
+            "761A0011300000"
+          ]
+        },
+        "model_calls": [
+          {
+            "name": "get_actuator",
+            "args": {
+              "part_numbers": [
+                "761A0011300000"
+              ]
+            }
+          }
+        ],
+        "overrides": [
+          "model_prefix_replaced_from_explicit_code"
+        ],
+        "model": {
+          "model": "scripted",
+          "latency_ms": 11,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 2,
+            "total_tokens": 12
+          },
+          "attempts": [
+            {
+              "attempt": 1,
+              "model": "primary",
+              "status": "ok",
+              "timeout_s": 45.0
+            }
+          ],
+          "decision_calls": 1
+        }
+      }
+    },
+    "EC35": {
+      "query": "Buy two units of 761A00-11300000/A and confirm delivery tomorrow.",
+      "answer": "I cannot place orders or confirm delivery. I can provide published catalogue specifications.\n761A00-11300000/A\n  • On/Off torque: 700 in-lb / 80 Nm\n  • Modulating torque: 580 in-lb / 65 Nm\n  • Duty S4 On/Off: 40%\n  • Duty S4 Modulating: 40%\n  • On/Off cycles per hour: 36\n  • Modulating starts per hour: 960\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • FLA at 50 Hz: 1.1 A\n  • FLA at 60 Hz: 1.2 A\n  • LRA at 50 Hz: 1.3 A\n  • LRA at 60 Hz: 1.4 A\n  • Motor power: 15 W\n  Source: Series 76 electrical catalogue, page 1.",
+      "lead": "I cannot place orders or confirm delivery; the cards show published catalogue specifications.",
+      "products": [
+        "761A00-11300000/A"
+      ],
+      "suggestions": [],
+      "clarification": null,
+      "trace": {
+        "name": "get_actuator",
+        "parameters": {
+          "part_numbers": [
+            "761A00-11300000/A"
+          ],
+          "focus": "overview",
+          "explain_terms": []
+        },
+        "raw_parameters": {
+          "field": "unsupported"
+        },
+        "model_calls": [
+          {
+            "name": "ask_clarification",
+            "args": {
+              "field": "unsupported"
+            }
+          }
+        ],
+        "overrides": [
+          "purchase_catalogue_lookup"
+        ],
+        "model": {
+          "model": "scripted",
+          "latency_ms": 1,
+          "usage": {
+            "input_tokens": 10,
+            "output_tokens": 2,
+            "total_tokens": 12
+          },
+          "attempts": [
+            {
+              "attempt": 1,
+              "model": "primary",
+              "status": "ok",
+              "timeout_s": 45.0
+            }
+          ],
+          "decision_calls": 1
+        }
+      }
+    }
+  }
+}

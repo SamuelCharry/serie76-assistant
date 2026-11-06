@@ -3,9 +3,8 @@
 package com.serie76.assistant.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +22,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.focus.FocusRequester
@@ -41,18 +46,36 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.serie76.assistant.BuildConfig
 import com.serie76.assistant.data.*
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.delay
 
 @Composable
 fun SeriesApp(viewModel: AppViewModel) {
+    DeveloperModeProvider { SeriesAppContent(viewModel) }
+}
+
+@Composable
+private fun SeriesAppContent(viewModel: AppViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val bindVoiceInput = remember(viewModel) { viewModel::bindVoiceInput }
+    val account = LocalAccount.current?.withVoiceCancellation(viewModel::cancelVoiceInput)
     val drawer = rememberDrawerState(DrawerValue.Closed)
     val keyboard = LocalSoftwareKeyboardController.current
+    val snackbar = remember { SnackbarHostState() }
+    LaunchedEffect(state.pendingDelete?.id, state.deleteNotice) {
+        val notice = state.deleteNotice ?: return@LaunchedEffect
+        if (state.pendingDelete != null) {
+            if (snackbar.showSnackbar("Conversation deleted", "Undo", duration = SnackbarDuration.Short) == SnackbarResult.ActionPerformed)
+                viewModel.undoDelete()
+        } else {
+            snackbar.showSnackbar(notice)
+            viewModel.clearDeleteNotice()
+        }
+    }
     val latestScreen by rememberUpdatedState(state.screen)
     LaunchedEffect(state.screen) {
         if (state.screen == "sessions") { keyboard?.hide(); drawer.open() } else drawer.close()
@@ -64,35 +87,45 @@ fun SeriesApp(viewModel: AppViewModel) {
             if (value == DrawerValue.Closed && latestScreen == "sessions") viewModel.dismissConversations()
         }
     }
-    BackHandler(state.screen == "debug") { viewModel.back() }
     BackHandler(state.screen == "sessions" || drawer.isOpen) { viewModel.dismissConversations() }
+    CompositionLocalProvider(LocalAccount provides account) {
+    Box(Modifier.fillMaxSize()) {
     ModalNavigationDrawer(
-        drawerState = drawer, gesturesEnabled = state.screen != "debug",
+        drawerState = drawer,
         scrimColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.24f),
         drawerContent = {
             ModalDrawerSheet(modifier = Modifier.fillMaxWidth(0.84f),
                 drawerContainerColor = MaterialTheme.colorScheme.background,
                 drawerShape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp)) {
                 ConversationsScreen(state, viewModel::newConversation, viewModel::open,
-                    { viewModel.refreshSessions() }, { viewModel.refreshSessions(more = true) },
-                    viewModel::dismissConversations, viewModel::debug)
+                    viewModel::retrySessions, { viewModel.refreshSessions(more = true) },
+                    viewModel::dismissConversations, viewModel::requestDelete)
             }
         }
     ) {
-        // Drawer does not replace or recreate the chat; only debug changes surface.
-        Crossfade(targetState = BuildConfig.DEBUG && state.screen == "debug",
-            animationSpec = tween(180), label = "Screen transition") { debug ->
-            if (debug) DeveloperScreen(state, viewModel::back, viewModel::debugMessage)
-            else ChatScreen(state, viewModel::showConversations, viewModel::draft, viewModel::send,
-                { viewModel.loadHistory() }, { viewModel.loadHistory(older = true) },
-                viewModel::reconcile, viewModel::debug, viewModel::newConversation)
-        }
+        ChatScreen(state, viewModel::showConversations, viewModel::draft, viewModel::send,
+                viewModel::retryHistory, { viewModel.loadHistory(older = true) },
+                viewModel::reconcile, viewModel::newConversation,
+                viewModel::chooseAnswer, viewModel::editAnswer, viewModel::submitAnswers,
+                viewModel::cancelQuestion, viewModel::activateComposer, viewModel::removeFilter,
+                viewModel::nextQuestion, viewModel::previousQuestion, viewModel::sendSuggestion,
+                bindVoiceInput = bindVoiceInput, onRetrySend = viewModel::retrySend)
+    }
+    SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
+    state.deleteCandidate?.let { session ->
+        AlertDialog(onDismissRequest = viewModel::cancelDelete, title = { Text("Delete conversation?") },
+            text = { Text("Delete ${session.title}?") },
+            confirmButton = { TextButton(onClick = viewModel::confirmDelete) { Text("Delete") } },
+            dismissButton = { TextButton(onClick = viewModel::cancelDelete) { Text("Cancel") } })
+    }
+    }
     }
 }
 
 @Composable
 fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) -> Unit,
-                        onRefresh: () -> Unit, onMore: () -> Unit, onClose: () -> Unit = {}, onDebug: () -> Unit = {}) {
+                        onRefresh: () -> Unit, onMore: () -> Unit, onClose: () -> Unit = {},
+                        onDelete: (Session) -> Unit = {}) {
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(horizontal = 20.dp)) {
         Row(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("Conversations", Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
@@ -114,7 +147,7 @@ fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) ->
             style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             if (state.sessionsLoading) item { LoadingLine("Loading conversations") }
-            state.sessionsError?.let { error -> item { ErrorPanel(error, "Try again", onRefresh) } }
+            state.sessionsError?.let { error -> item { ErrorPanel(error, "Retry", onRefresh) } }
             if (!state.sessionsLoading && state.sessionsError == null && state.sessions.isEmpty()) item {
                 Column(Modifier.fillMaxWidth().padding(top = 28.dp, bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Icon(HistoryLines, null, Modifier.size(28.dp), tint = MaterialTheme.colorScheme.primary)
@@ -124,8 +157,9 @@ fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) ->
                 }
             }
             items(state.sessions, key = Session::id) { session ->
-                Surface(onClick = { onOpen(session) }, enabled = !state.sending,
-                    modifier = Modifier.fillMaxWidth().animateItem().semantics { selected = session.id == state.sessionId },
+                Surface(modifier = Modifier.fillMaxWidth().animateItem()
+                    .combinedClickable(enabled = !state.sending, onClick = { onOpen(session) }, onLongClick = { onDelete(session) })
+                    .semantics { selected = session.id == state.sessionId },
                     shape = RoundedCornerShape(12.dp),
                     color = if (session.id == state.sessionId) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.background) {
                     Column(Modifier.padding(horizontal = 12.dp, vertical = 14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -139,18 +173,27 @@ fun ConversationsScreen(state: AppState, onNew: () -> Unit, onOpen: (Session) ->
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
         ProfileMenu()
-        DeveloperEntry(onDebug)
         Spacer(Modifier.height(12.dp))
     }
 }
 
 @Composable
 fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, onSend: () -> Unit,
-               onReload: () -> Unit, onOlder: () -> Unit, onReconcile: () -> Unit, onDebug: () -> Unit, onNew: () -> Unit = {}) {
+               onReload: () -> Unit, onOlder: () -> Unit, onReconcile: () -> Unit, onNew: () -> Unit = {},
+               onChoose: (String) -> Unit = {}, onEditAnswer: (Int) -> Unit = {}, onSubmitAnswers: () -> Unit = {},
+               onCancelQuestion: () -> Unit = {}, onActivateComposer: () -> Unit = {}, onRemoveFilter: (ActiveFilter) -> Unit = {},
+               onNextQuestion: () -> Unit = {}, onPreviousQuestion: () -> Unit = {}, onSuggestion: (Suggestion) -> Unit = {},
+               bindVoiceInput: BindVoiceInput? = null, onRetrySend: () -> Unit = onSend) {
     val listState = rememberLazyListState()
     val focus = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
     val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+    val developer = LocalDeveloperMode.current
+    var debugMessageId by rememberSaveable(state.sessionId) { mutableStateOf<String?>(null) }
+    LaunchedEffect(developer.enabled, state.screen) { if (!developer.enabled || state.screen != "chat") debugMessageId = null }
+    val voice = rememberVoiceInput(state.draft, state.screen == "chat" && state.canSend && debugMessageId == null,
+        state.sessionId, onDraft, bindVoiceInput)
+    val send = { voice.cancel(); onSend() }
     LaunchedEffect(state.messages.lastOrNull()?.id, state.sending) {
         if (state.messages.isNotEmpty()) listState.animateScrollToItem((listState.layoutInfo.totalItemsCount - 1).coerceAtLeast(0))
     }
@@ -164,29 +207,52 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
             TopAppBar(title = { Text(if (state.messages.isEmpty() && state.sessionId == null) "" else state.title,
                     maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleLarge) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                navigationIcon = { IconButton(onClick = onBack) { Icon(MenuLines, "Open conversation history") } },
-                actions = { IconButton(onClick = onNew, enabled = !state.sending) { Icon(EditLines, "New conversation") } })
+                navigationIcon = { IconButton(onClick = { voice.cancel(); onBack() }) { Icon(MenuLines, "Open conversation history") } },
+                actions = { IconButton(onClick = { voice.cancel(); onNew() }, enabled = !state.sending) { Icon(EditLines, "New conversation") } })
+            ActiveFilterTags(state.activeFilters, state.canSend, onRemoveFilter)
             }
         },
         bottomBar = {
             Surface(color = Color.Transparent) {
                 Column(Modifier.navigationBarsPadding().imePadding().padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    state.sendError?.let { ErrorPanel(it, if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile) }
+                    state.sendError?.let {
+                        ErrorPanel(it, if (state.needsReconcile && state.sessionId != null) "Reload conversation" else "Retry", onRetrySend)
+                        if (state.needsReconcile && state.sessionId == null) {
+                            Text("Your message may already be saved. Check conversations before retrying to avoid sending it twice.",
+                                style = MaterialTheme.typography.bodySmall)
+                            TextButton(onClick = onReconcile) { Text("Check conversations") }
+                        }
+                    }
                     if (state.needsReconcile && state.sendError == null) ErrorPanel("A previous request may have completed. Check saved messages before sending again.",
                         if (state.sessionId == null) "Check conversations" else "Reload conversation", onReconcile)
-                    Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(24.dp),
+                    if (state.needsReconcile && state.sendError == null && state.sessionId == null) {
+                        TextButton(onClick = onRetrySend) { Text("Retry") }
+                    }
+                    state.question?.let { QuestionCard(it, state.canSend, onChoose, onEditAnswer,
+                        onNextQuestion, onPreviousQuestion, onSubmitAnswers, onCancelQuestion,
+                        state.questionError, Modifier.weight(1f, fill = false)) }
+                    VoiceInputNotice(voice.state)
+                    Surface(modifier = Modifier.alpha(if (state.question != null && !state.composerActive) 0.5f else 1f)
+                        .pointerInput(onActivateComposer) {
+                            awaitEachGesture {
+                                awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                                onActivateComposer()
+                            }
+                        }, color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(24.dp),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
                         Row(Modifier.fillMaxWidth().padding(start = 20.dp, end = 10.dp, top = 16.dp, bottom = 10.dp),
                             verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            BasicTextField(value = state.draft, onValueChange = onDraft, minLines = 2, maxLines = 5,
-                                modifier = Modifier.weight(1f).focusRequester(focus).semantics { contentDescription = "Message" },
+                            BasicTextField(value = state.draft, onValueChange = { voice.cancel(); onDraft(it) }, minLines = 2, maxLines = 5,
+                                modifier = Modifier.weight(1f).focusRequester(focus).onFocusChanged { if (it.isFocused) onActivateComposer() }
+                                    .semantics { contentDescription = "Message" },
                                 textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
                                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimaryContainer), enabled = !state.sending,
-                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send), keyboardActions = KeyboardActions(onSend = { onSend() }),
+                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send), keyboardActions = KeyboardActions(onSend = { send() }),
                                 decorationBox = { field ->
-                                    Box { if (state.draft.isEmpty()) Text("Ask a question", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant); field() }
+                                    Box { if (state.draft.isEmpty()) Text(if (voice.state.active) "Listening…" else "Ask a question", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant); field() }
                                 })
-                            FilledIconButton(onClick = onSend, enabled = state.draft.isNotBlank() && !state.sending && !state.historyLoading && state.historyError == null && !state.needsReconcile,
+                            if (!state.sending) VoiceInputButton(voice)
+                            FilledIconButton(onClick = send, enabled = state.draft.isNotBlank() && !state.sending && !state.historyLoading && state.historyError == null && !state.needsReconcile,
                                 modifier = Modifier.size(48.dp).background(SoftAccent, CircleShape), colors = IconButtonDefaults.filledIconButtonColors(
                                     containerColor = Color.Transparent, contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                     disabledContainerColor = Color.Transparent,
@@ -201,23 +267,40 @@ fun ChatScreen(state: AppState, onBack: () -> Unit, onDraft: (String) -> Unit, o
     ) { insets ->
         Box(Modifier.fillMaxSize().padding(insets)) {
           if (state.messages.isEmpty() && !state.sending && !state.historyLoading && state.historyError == null && !keyboardVisible) {
-              HelloGreeting(Modifier.align(Alignment.Center))
+              HelloGreeting(Modifier.align(Alignment.Center).padding(horizontal = 24.dp), LocalAccount.current?.user?.name)
           }
           LazyColumn(Modifier.fillMaxSize(), state = listState,
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
             if (state.historyBefore != null) item { TextButton(colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onPrimaryContainer), onClick = onOlder, enabled = !state.historyLoading) { Text("Load earlier messages") } }
             if (state.historyLoading) item { LoadingLine("Loading messages") }
-            state.historyError?.let { item { ErrorPanel(it, "Try again", onReload) } }
-            items(state.messages, key = Message::id) { message -> MessageContent(message) }
+            state.historyError?.let { item { ErrorPanel(it, "Retry", onReload) } }
+            items(state.messages, key = Message::id) { message ->
+                MessageContent(message)
+                if (showDebugDetails(developer.enabled, message)) {
+                    IconButton(onClick = { voice.cancel(); debugMessageId = message.id }, modifier = Modifier.size(24.dp)
+                        .semantics { contentDescription = "Debug details" }) {
+                        Text("ⓘ", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.65f), style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+                if (message.role == "assistant" && message.id == state.messages.lastOrNull()?.id) {
+                    SuggestedReplyChips(visibleSuggestions(message, state.draft, state.suggestionsDismissed || state.sending),
+                        enabled = state.canSend, onReply = onSuggestion)
+                }
+            }
             if (state.sending) item {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(state.draft.trim(), style = MaterialTheme.typography.bodyLarge)
-                    ThinkingLabel()
+                    var stillWorking by remember { mutableStateOf(false) }
+                    LaunchedEffect(state.sending) { stillWorking = false; delay(8000); stillWorking = true }
+                    LoadingLine(if (stillWorking) "Still working…" else "Searching the catalog…")
                 }
             }
           }
         }
     }
+    }
+    if (developer.enabled) state.messages.firstOrNull { it.id == debugMessageId }?.let {
+        DeveloperSheet(it, onDismiss = { debugMessageId = null })
     }
 }
 
@@ -232,10 +315,34 @@ fun MessageContent(message: Message) {
             }
         } else {
             Text("Assistant", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(message.content, style = MaterialTheme.typography.bodyLarge)
+            Text(message.displayText(), style = MaterialTheme.typography.bodyLarge)
         }
-        if (message.products.size == 1) ProductCard(message.products.first())
-        else if (message.products.isNotEmpty()) ComparisonTable(message.products)
+        if (message.comparison != null) DifferenceComparisonCard(message.comparison)
+        if (message.recommendation != null) RecommendationBlock(message.recommendation)
+        else if (message.comparison == null && message.products.size == 1) ProductCard(message.products.first())
+        else if (message.comparison == null && message.products.isNotEmpty()) ComparisonTable(message.products)
+    }
+}
+
+@Composable
+fun RecommendationBlock(recommendation: Recommendation) {
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text("Ranked by ${recommendation.rankedBy}", style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.semantics { heading() })
+        recommendation.items.take(3).forEach { item ->
+            OutlinedCard(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(item.partNumber, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(item.reason, style = MaterialTheme.typography.bodyMedium)
+                    item.keyValues.forEach { value ->
+                        Text("${value.label}: ${value.value}", style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+        }
+        Text("Showing ${recommendation.items.size.coerceAtMost(3)} of ${recommendation.total}",
+            style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

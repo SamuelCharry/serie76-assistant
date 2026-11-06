@@ -1,0 +1,6 @@
+{
+  "purpose": "Offline ideal and recorded Flash replay; no inference.",
+  "provider": "scripted",
+  "model": "IdealModel",
+  "inference_allowed": false
+}

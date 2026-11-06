@@ -28,17 +28,34 @@ from backend.catalog.loader import NUMERIC_FIELDS, read_json
 from backend.catalog.repository import export_rows
 
 
-def http(base, path, body=None):
+def http(base, path, body=None, *, token=None):
+    headers = {"Content-Type": "application/json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     request = urllib.request.Request(
         base + path,
         data=json.dumps(body).encode() if body is not None else None,
-        headers={"Content-Type": "application/json"},
+        headers=headers,
     )
     try:
         with urllib.request.urlopen(request, timeout=10) as response:
             return response.status, json.load(response)
     except urllib.error.HTTPError as exc:
         return exc.code, json.load(exc)
+
+
+def demo_login(base):
+    """Use the public TEST ONLY README account, never provider/.env credentials."""
+    status, result = http(base, "/api/auth/login", {
+        "email": "demo@series76.test", "password": "Series76-Demo-1",
+    })
+    if status != 200 or not result.get("access_token"):
+        raise RuntimeError(f"Demo login failed (HTTP {status}); provision the documented test account")
+    return result["access_token"]
+
+
+def default_base_url():
+    return f"http://127.0.0.1:{os.getenv('API_PORT') or '8000'}"
 
 
 def wait_ready(base):
@@ -104,11 +121,12 @@ def benchmark(connection):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=Path("reports/postgres"))
-    parser.add_argument("--base-url", default="http://127.0.0.1:8000")
+    parser.add_argument("--base-url", help="Default: http://127.0.0.1:${API_PORT:-8000}")
     parser.add_argument("--restart", action="store_true")
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
     local_environment()
+    args.base_url = args.base_url or default_base_url()
     with connect() as connection:
         ready = readiness(connection)
         rows = export_rows(connection)
@@ -156,6 +174,7 @@ def main():
         )
     http_checks = []
     wait_ready(args.base_url)
+    token = demo_login(args.base_url)
     for path, body, expected_status, expected_total in [
         ("/health", None, 200, None),
         ("/api/actuators/764B00-11300000/A", None, 200, None),
@@ -178,16 +197,21 @@ def main():
             200,
             7,
         ),
-        ("/api/actuators/search", {"min_torque_nm": 100}, 200, 0),
-        ("/api/actuators/search", {"max_operating_time_s": 20}, 200, 0),
+        # Clarification retains the feasible candidate count, but exposes no
+        # products until service/frequency is resolved (current T8 contract).
+        ("/api/actuators/search", {"min_torque_nm": 100}, 200, 55),
+        ("/api/actuators/search", {"max_operating_time_s": 20}, 200, 14),
         ("/api/actuators/search", {"unknown": 1}, 422, None),
     ]:
-        status, response = http(args.base_url, path, body)
+        status, response = http(args.base_url, path, body, token=token)
         assert status == expected_status, (path, status)
         if expected_total is not None:
-            assert response["total"] == expected_total
+            assert response["total"] == expected_total, (path, body, response["total"], expected_total)
         if body and body in ({"min_torque_nm": 100}, {"max_operating_time_s": 20}):
             assert response["status"] == "needs_clarification"
+            assert response["products"] == []
+            expected_field = "service" if "min_torque_nm" in body else "frequency_hz"
+            assert response["fields"] == [expected_field]
         if path.endswith("764B00-11300000/A"):
             assert response["measurements"]["on_off_torque_nm"] == 1100
         http_checks.append(

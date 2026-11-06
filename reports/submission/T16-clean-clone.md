@@ -1,0 +1,56 @@
+# T16 — clean-clone, keyless reproduction
+
+Date: 2026-11-05. Tested source: `98168191488bb23bcd2c86e225ebd6a7aba187ae` on `release/submission`, cloned from GitHub into `<local-home>\Desktop\clean-test-T16`. Windows PowerShell, Git 2.54.0, Docker Compose 5.3.1, Python 3.12.10, Microsoft OpenJDK 17.0.21.0.2, Android SDK Platform 36. Docker layers, pip downloads and the host Gradle cache could be reused: this is a fresh checkout and database, not a cache-free or offline installation test.
+
+The evaluation followed the clone's English README and its explicit API/testing links. Required workspace guidance was read before cloning, but no working-checkout code, environment, credentials or data were copied into the test. Retained processed data was selected as the README's documented ingestion alternative; OCR was not rerun. No provider keys were supplied, no paid inference was invoked, and no APK was installed. Tests used the isolated database only.
+
+## Command → result
+
+Commands below run from the clone root unless stated otherwise. `TOKEN` means the token captured locally from login, never a committed value; `SESSION_ID` means the first successful lookup's returned UUID. HTTP commands use the README's documented alternate port. JSON files use PowerShell `Set-Content -Encoding ascii`, as in the linked API guide.
+
+| Step | Command / action | Result |
+|---|---|---|
+| Preflight | `Test-Path <local-home>\Desktop\clean-test-T16`; `docker ps --format '{{.Names}} {{.Ports}}'` | Clone path absent; original `serie76-assistant` containers on 5432/8000. No original stack mutation. |
+| Clone | `git clone --branch release/submission --single-branch https://github.com/SamuelCharry/serie76-assistant <local-home>\Desktop\clean-test-T16`; `git rev-parse HEAD`; `git status --short` | PASS: requested SHA, clean checkout. |
+| Configuration | `Copy-Item .env.example .env`; set `COMPOSE_PROJECT_NAME=serie76-clean`, `POSTGRES_PORT=55432`, `API_PORT=18000` in that file | PASS: `OPENROUTER_API_KEY` and `EMBEDDING_API_KEY` remained empty. Process checks also found no OpenRouter, Google, embedding or LangSmith credentials. Model-name defaults retained. |
+| 1, preliminary | `docker compose up --build -d`; `docker compose logs --no-color backend` | Exit 0, but **discarded as fresh-database evidence**: startup said `already_loaded`, zero users created. |
+| Isolation correction | `docker volume ls --filter label=com.docker.compose.project=serie76-clean`; `docker volume inspect serie76-clean_postgres_data`; `docker compose -p serie76-clean down -v` | Found an old test volume dated 2026-11-04, verified its `serie76-clean` project label, removed only that project's containers/network/volume under the task's explicit authorization. An initial inspection of guessed `serie76-clean_pgdata` returned “no such volume”; the listed actual volume name was then used. |
+| 1, authoritative | `docker compose up --build -d`; `curl.exe -sS http://localhost:18000/ready` | PASS: fresh volume created, image built, HTTP 200 `ready`, 68 rows and 16 glossary terms. |
+| 2 | `docker compose exec -T backend python -m backend.catalog.cli load data/extracted/series76` | PASS: shipped validated data loaded automatically; explicit reload returned `already_loaded`, 68 rows, active import 1. No OCR regeneration claimed. |
+| 3 | `docker compose logs --no-color backend` | PASS: `migrated`, catalogue `loaded` with 68 rows, glossary `loaded` with 16 terms, `Test-only demo users: 2 created`. |
+| 4 | `curl.exe -sS http://localhost:18000/api/auth/login -H "Content-Type: application/json" --data-binary "@login.json"` with documented `demo@series76.test` / `Series76-Demo-1` | PASS: access token and matching user returned; token withheld from evidence. |
+| 5a | `curl.exe -sS -w '\nHTTP_STATUS=%{http_code}' http://localhost:18000/api/conversation -H "Authorization: Bearer TOKEN" -H "Content-Type: application/json" --data-binary "@query.json"`, query `What is the motor power of 761A00-11300000/A?` | PASS: 200, 15 W, page 1 provenance, `llm_called:false`, attempts 0, embedding time 0. |
+| 5b | Same POST, query `Compare 761A00-11300000/A and 761B00-11300000/A` | PASS: 200, two comparison models, `llm_called:false`. Codes obtained from the README-linked retained catalogue. |
+| 6 | Same POST, query `I need an actuator for an outdoor valve` | PASS: HTTP 503, `error_code:not_configured`, documented unavailable-service text. |
+| 7 | `curl.exe -sS http://localhost:18000/api/sessions -H "Authorization: Bearer TOKEN"`; `curl.exe -sS http://localhost:18000/api/sessions/SESSION_ID/messages -H "Authorization: Bearer TOKEN"` | PASS: saved session listed; lookup session contained user and assistant messages. |
+| 8 | `docker compose restart backend`; GET `/ready`; GET same session messages with same token; POST exact lookup with returned `session_id`; GET messages again | PASS: same two messages survived restart, token remained valid, resumed POST 200 used same session; history grew to four messages. |
+| 9 setup | `python -m venv .venv`; `.\.venv\Scripts\Activate.ps1`; `pip install -r requirements-dev.txt` | PASS: fresh backend environment installed successfully using README-linked testing instructions. See D1. |
+| 9a | `$env:SERIES76_TEST_DB='1'; python -m unittest discover -s tests` | PASS, exit 0: 625 tests in 309.178 s, 623 passed and 2 skipped. Mock/tracing warnings appeared but no test failures. |
+| 9b | `python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json --config config/agent_acceptance_v7.json` | PASS, exit 0: 453 scenarios, `failing:[]`. |
+| 9c | `python scripts/check_tool_schemas.py` | PASS, exit 0: 5,520 bytes, 108 enum values, 6 arrays, depth 7, zero forbidden nodes/ranges/object arrays. |
+| 9d | `$env:API_PORT='18000'; python scripts/verify_catalog_db.py` | PASS, exit 0: 941/941 primary and 272/272 context checks, 625 tests, expected HTTP statuses; PostgreSQL 17.11, 68 rows, 869 numeric values, 4 source N/A rows. Its optional restart field is null; restart was independently tested in step 8. |
+| Optional dry-run | `docker compose run --rm --no-deps --entrypoint python -v ./config:/app/config:ro backend scripts/load_example_bank.py --dry-run` | PASS, exit 0: 658 examples + 100 anchors = 758 pending texts, `scope:model_pending`, existing vectors checked, zero inference. See D3. |
+| 10 prerequisite | Set `JAVA_HOME` to downloaded Microsoft JDK 17; set `ANDROID_HOME` to installed SDK; prepend their bin/platform-tools to PATH; `java -version`; `Test-Path "$env:ANDROID_HOME/platforms/android-36"`; `adb version` | PASS: JDK 17.0.21.0.2, SDK 36 present, adb 1.0.41. Host default JDK 21 was not used for the build. JDK ZIP obtained from Microsoft's public `https://aka.ms/download-jdk/microsoft-jdk-17-windows-x64.zip` and extracted outside the clone. |
+| 10 | `./mobile/android/gradlew.bat -p mobile/android testDebugUnitTest assembleDebug -PbackendUrl=http://10.0.2.2:18000/` | PASS: BUILD SUCCESSFUL in 2m 2s, 45 tasks executed; XML totals 74 tests, zero failures/errors/skips; debug APK generated, not installed. |
+| Documentation validation | `python scripts/check_docs_links.py`; `git diff --check` | PASS: 819 relative links/anchors checked, zero broken links; no whitespace errors. |
+| Cleanup | `docker compose -p serie76-clean down -v`; `docker ps`; `docker volume ls --filter label=com.docker.compose.project=serie76-clean` | PASS for Docker: test containers/network/volume removed; original containers still running on 5432/8000; no test volumes remain. |
+| Clone deletion | Coordinator removed the verified GitHub clone; worker checked `Test-Path -LiteralPath <local-home>\Desktop\clean-test-T16` | PASS: coordinator confirmed removal and the worker independently observed `False`. The earlier worker deletion attempt was rejected by execution policy; coordinator cleanup resolved that blocker. |
+
+## Findings, ordered by impact
+
+1. **D1 — missing backend environment handoff (documentation).** README reproduction gates said “in the activated backend Python environment”, but only OCR environment creation appeared earlier. The correct backend installation and database-enabled unittest command were buried in the testing link at the end. Added a direct link and explicit dependency/environment distinction at the reproduction gate.
+2. **D2 — incomplete copyable verification examples (documentation).** README mentioned keyless comparisons and 503 behavior without a concrete second valid code or free-language probe. Added the two successful/expected-failure query texts above. The Android README command only built the APK; the task's requested JVM test command existed in the linked testing guide. Added `testDebugUnitTest` to both README platform build commands.
+3. **D3 — keyless versus model-less dry-run ambiguity (documentation).** A copied `.env.example` names an embedding model despite its empty API key. Its dry-run therefore reports `model_pending` and checks the DB, rather than the adjacent model-less `input_only` description. Added the exact default behavior; neither dry-run mode performs inference.
+4. **E1 — reused test volume (environment).** A new clone does not imply a new Compose named volume. The initial contaminated startup was rejected, the test project's old volume removed, and all authoritative runtime checks used the newly created volume. This did not require a product-code fix.
+
+The executor rejected the initial combined guarded-delete/clone shell command before execution. A separate `Test-Path` established that the target did not exist, so plain `git clone` was used; no deletion was needed at startup.
+
+An exploratory comparison initially used the unverified code `761A00-12300000/A` and returned 503. That probe is not evidence of failure for the documented valid-code route; it was replaced with the two published codes above. The audit did not inspect or change application code to repair any runtime behavior.
+
+Windows PowerShell surfaced native stderr from pip/Docker as `NativeCommandError` under redirection. Pip still exited 0 and installed successfully. The first HTTP harness stopped at Docker's restart progress line because its own `ErrorActionPreference` was `Stop`; the harness was corrected to allow native progress stderr, and the complete login/query/restart/resume sequence passed. These are recorded harness artifacts, not hidden product failures.
+
+## Scope and disposition
+
+Functional steps 1–10 and final cleanup are complete. The isolated test containers, network, volume and clone folder were removed; the original stack was not modified.
+
+Only README documentation and this report changed. After test-stack teardown, these two files were copied to the unchanged source checkout for publication; the runtime evaluation used the independent clone throughout. Local token-free execution logs remain outside the clone in `<local-home>\Desktop\T16-evidence`. Fresh-container startup, retained-data loading, authentication, deterministic HTTP, expected keyless failure, persisted history and Android JVM/build verification are measured here. Fresh OCR, cold dependency downloads, production HTTPS, emulator/device integration, voice and real-provider interpretation remain outside this run. Existing historical model-quality findings are not resolved by these checks.

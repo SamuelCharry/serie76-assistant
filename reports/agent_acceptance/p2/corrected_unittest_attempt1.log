@@ -1,0 +1,20 @@
+...........................................Run compression is not enabled. Please update to the latest version of LangSmith. Falling back to regular multipart ingestion.
+..........................................................................................s.................................................................................................................................................................................................s............................................................F.....................................................................................................................................................................................................................................................................................................................................................................................................
+======================================================================
+FAIL: test_model_only_signals_intent_priority_not_new_filters_or_codes (test_shown_recommendation.ShownRecommendationTests.test_model_only_signals_intent_priority_not_new_filters_or_codes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_shown_recommendation.py", line 115, in test_model_only_signals_intent_priority_not_new_filters_or_codes
+    self.assertEqual(result.recommendation['items'][0]['part_number'], TRIPLE[1])
+AssertionError: '762B00-11320000/A' != '763A00-11320000/A'
+- 762B00-11320000/A
+?   ^^
++ 763A00-11320000/A
+?   ^^
+
+
+----------------------------------------------------------------------
+Ran 778 tests in 433.324s
+
+FAILED (failures=1, skipped=2)
+{"arrays": 6, "bytes": 5520, "depth": 7, "enum_values": 108, "forbidden_nodes": 0, "get_actuator_object_arrays": 0, "numeric_ranges": 0, "required": 2}

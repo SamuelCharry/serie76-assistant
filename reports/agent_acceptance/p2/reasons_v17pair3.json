@@ -1,0 +1,38 @@
+{
+ "base3_google_gemini-3.6-flash": [
+  "L1-01: Item 1, turn 1: invents an active FLA <= 762 A constraint from the part number.",
+  "L1-07: Item 2, turn 1: hides the requested modulating duty rating among identical fields and never states its value.",
+  "L2-02: Items 2/5, turn 1: explains operating time but omits starts per hour and the requested difference.",
+  "L2-03: Items 1/5, turn 1: substitutes an unrelated model-validation failure for the requested explanation of phase information.",
+  "L2-05: Items 1/5, turn 1: defines motor power but never answers whether higher wattage necessarily means faster operation.",
+  "L2-08: Item 2, turn 1: asks for service, voltage and torque even though all three were already supplied.",
+  "L2-10: Items 1/2, turn 3: recommends the same 300 Nm model when asked for one stronger than it.",
+  "L3-07: Item 6, turn 1: exposes internal field name mintorquenm in the user-facing answer.",
+  "L3-08: Items 1/2, turn 3: ignores the price/delivery retraction and fails to compare requested 50 Hz times.",
+  "L4-01: Items 2/3, turn 3: removing only the upper bound also drops the retained 150 Nm minimum and shows undersized models.",
+  "L5-01: Items 1/2/3, turn 1: misses monof?sico, asks again for phase count and presents a three-phase model.",
+  "L5-04: Item 2, turn 1: shows three models despite the explicit request for two; turn 3 also fails the stronger-model follow-up.",
+  "L5-06: Items 1/5, turn 2: does not explain whether N/A means zero or unavailable, instead asking what to check.",
+  "L5-08: Items 1/5, turn 2: returns whole-catalogue voltage counts instead of the matching complete part numbers.",
+  "L6-01: Item 2, turn 1: refuses the commercial request but silently omits the requested published modulating torque.",
+  "L6-04: Items 1/2, turn 2: ignores the stock retraction and fails to answer the on/off torque question.",
+  "L6-05: Item 2, turn 3: asks which actuator despite the explicit reference to the second model in the preceding list.",
+  "L7-02: Items 2/3, turn 1: drops the zero-second limit, asks for it again and presents noncompliant models.",
+  "L7-04: Items 1/5, turn 1: returns model counts instead of explaining the two torque ratings.",
+  "L7-06: Items 2/3, turn 4: drops single-phase, presents a three-phase model and invents a 1100 Nm minimum.",
+  "L7-09: Item 5, turn 3: asks which shown model the user means although no model was ever shown.",
+  "L7-10: Items 2/3, turn 3: drops the retained 500 Nm minimum and presents 80-150 Nm models after removing only the maximum."
+ ],
+ "final3_google_gemini-3.6-flash": [
+  "L2-02: Items 1/5, turn 1: requests model requirements instead of explaining the two terms.",
+  "L2-03: Items 1/5, turn 1: lists supply options and enclosure definitions without explaining where to identify the phase requirement.",
+  "L2-05: Items 1/5, turn 1: defines motor power but never answers whether higher wattage necessarily means faster operation.",
+  "L2-10: Items 1/2, turn 3: recommends the same 300 Nm model when asked for one stronger than it.",
+  "L3-08: Items 1/2, turn 3: ignores the price/delivery retraction and fails to compare requested 50 Hz times.",
+  "L4-08: Items 2/5, turn 4: explains ranking without identifying the requested motor-power tie.",
+  "L5-08: Items 1/5, turn 2: returns whole-catalogue voltage counts instead of the matching complete part numbers.",
+  "L6-04: Items 1/5, turn 3: confuses a valve-sizing suitability guarantee with warranty terms and never addresses missing sizing data.",
+  "L7-06: Item 2, turn 4: retains the withdrawn 1100 Nm ceiling and invents a 1100 Nm minimum instead of torque above 500 Nm.",
+  "L7-10: Items 2/5, turn 3: requests an already-specified limit rather than applying the explicit correction; turn 4 remains stuck."
+ ]
+}

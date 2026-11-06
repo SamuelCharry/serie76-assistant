@@ -1,0 +1,4058 @@
+{
+  "summary": {
+    "4906b62": {
+      "passed_conversations": 28,
+      "failed_conversations": 17,
+      "passed_turns": 73,
+      "turns": 91
+    },
+    "95d0a50": {
+      "passed_conversations": 28,
+      "failed_conversations": 17,
+      "passed_turns": 73,
+      "turns": 91
+    },
+    "head": {
+      "passed_conversations": 28,
+      "failed_conversations": 17,
+      "passed_turns": 73,
+      "turns": 91
+    },
+    "newly_failing_conversations": []
+  },
+  "ignored_fields": [
+    "elapsed_s",
+    "latency_ms",
+    "message_id",
+    "session_id"
+  ],
+  "conversations": [
+    {
+      "scenario": "T14_REPLAY_L1-01",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "For 761A00-11300000/A, report operating time and full-load current at 60 Hz.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "7557029cd23d4a1d7d856f4c733b13ab7b50c546fe20fe8307e3abb7bb5cbc0d",
+            "95d0a50": "7557029cd23d4a1d7d856f4c733b13ab7b50c546fe20fe8307e3abb7bb5cbc0d",
+            "head": "7557029cd23d4a1d7d856f4c733b13ab7b50c546fe20fe8307e3abb7bb5cbc0d"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "Now give the 50 Hz figures for that same reference.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "57dac2b2392e65ee4768afaba419902a857ca83c75440cb323c2565777e320d1",
+            "95d0a50": "57dac2b2392e65ee4768afaba419902a857ca83c75440cb323c2565777e320d1",
+            "head": "57dac2b2392e65ee4768afaba419902a857ca83c75440cb323c2565777e320d1"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L1-02",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Filter the catalogue to 24 V DC-compatible actuators for open/close duty; dual AC/DC supplies are acceptable.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "1699aacfce41790e5f09830baa796a85e2bfe99d318fa3bf806f8ccb4416deda",
+            "95d0a50": "1699aacfce41790e5f09830baa796a85e2bfe99d318fa3bf806f8ccb4416deda",
+            "head": "63ecf86ffc1ca162035c5965a6503f02ef09218b897f6a099c0ae0a5cb850c01"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: AC/DC, On/Off service, 24 V. Here are the leading published models.",
+                "+5 actuators meet: AC/DC, On/Off service, 24 V; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: AC/DC, On/Off service, 24 V. Here are the leading published models.",
+                "+5 actuators meet: AC/DC, On/Off service, 24 V; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L1-03",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I require a supply explicitly marked DC only, 24 V, modulating duty, and at least 130 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "178cc74ea37a144f6639dfae211bced0b51588f76c4d6e8459e77d928e800864",
+            "95d0a50": "178cc74ea37a144f6639dfae211bced0b51588f76c4d6e8459e77d928e800864",
+            "head": "011a42f49f87f24ff39a5226f8256c52aca8460dc912f0bb222de7b64f1ecfd4"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Exclude any AC/DC-labelled unit even if it can run on DC.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "344802b82f2a69ae6a982b5bb65f2fd8305454dec9f29fd23f8dea8a84251962",
+            "95d0a50": "344802b82f2a69ae6a982b5bb65f2fd8305454dec9f29fd23f8dea8a84251962",
+            "head": "040e2d521c89a45692cefc310ad7bcddc28b58a1b45752f93bc8fa01e71cc3b8"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L1-04",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Find 24 V on/off units rated for both AC and DC with a torque of at least 150 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "2463f3f51de26a33d730533de158e670605a0f39d4492c24dbc562b098888f61",
+            "95d0a50": "2463f3f51de26a33d730533de158e670605a0f39d4492c24dbc562b098888f61",
+            "head": "dd240978f698d4d12b029fd48ac049a77766475d70ae1f46c9499a99acb4a5fa"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 150 Nm.",
+                "+3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 150 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 150 Nm.",
+                "+3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 150 Nm; with published electrical data."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Compare the qualifying references using their published operating times.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "593ca0c253f7875854d0e80e00453bdaaf8eca1fdab7882936c4ae552ac4147c",
+            "95d0a50": "593ca0c253f7875854d0e80e00453bdaaf8eca1fdab7882936c4ae552ac4147c",
+            "head": "593ca0c253f7875854d0e80e00453bdaaf8eca1fdab7882936c4ae552ac4147c"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L1-05",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "For 761Y30-11370000/A, give modulating torque, motor power, and supply current type.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "f9690dcf7361c70205349482d4740edeb48d2849900d57ee9ae77ef1b0e56598",
+            "95d0a50": "f9690dcf7361c70205349482d4740edeb48d2849900d57ee9ae77ef1b0e56598",
+            "head": "f9690dcf7361c70205349482d4740edeb48d2849900d57ee9ae77ef1b0e56598"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L1-06",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Put 761A00-11300000/A and 761B00-11300000/A side by side for on/off torque and 50 Hz operating time.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "7efd050c53a3d2033960f173e209890f5cd514d72d19ffdb4f26a838fc2e91e4",
+            "95d0a50": "7efd050c53a3d2033960f173e209890f5cd514d72d19ffdb4f26a838fc2e91e4",
+            "head": "7efd050c53a3d2033960f173e209890f5cd514d72d19ffdb4f26a838fc2e91e4"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L1-07",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Look up 762A00-11330C00/A: are torque, motor power, and full-load current actually reported?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "312ca66c41519908417671305438ab41238f32ddf5a80774669fd16e7008cf4e",
+            "95d0a50": "312ca66c41519908417671305438ab41238f32ddf5a80774669fd16e7008cf4e",
+            "head": "312ca66c41519908417671305438ab41238f32ddf5a80774669fd16e7008cf4e"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "Keep unavailable fields as N/A rather than borrowing values from a single-phase version.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "ef45a9719a8f2e0b9ded9c0c3067e44619a662bb9804aecabba9fe258f595b23",
+            "95d0a50": "ef45a9719a8f2e0b9ded9c0c3067e44619a662bb9804aecabba9fe258f595b23",
+            "head": "ef45a9719a8f2e0b9ded9c0c3067e44619a662bb9804aecabba9fe258f595b23"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L2-01",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "The valve in our garden water system only needs to open and shut. The power is 110 volts and the motor will get rained on.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "bac1dc5f3dfd1e54d4e5d88f04fca4aa33d9db6ea34cf9642fd8a0f8de16b44c",
+            "95d0a50": "bac1dc5f3dfd1e54d4e5d88f04fca4aa33d9db6ea34cf9642fd8a0f8de16b44c",
+            "head": "4f720341331646684cde47e1068e1968d02d62524526855f4ba63d23ed5cf270"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V; with published electrical data. To narrow it down: minimum torque."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "The installer asked for at least 80 Nm. What options fit?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "ec88705e0d9b19d70821a744823732d554599177ffb98e14ffc99d2a96e6bf72",
+            "95d0a50": "ec88705e0d9b19d70821a744823732d554599177ffb98e14ffc99d2a96e6bf72",
+            "head": "ac67985be580c8b3181ad6c4e3ba2fbf4d9be61ce0574cc05a73fbb21a3dc61b"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 80 Nm. Here are the leading published models.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 80 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 80 Nm. Here are the leading published models.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 80 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L2-02",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I am new to these products. What can you help me find in the Series 76 range?",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: look up|find|compare|supply|voltage"
+            ],
+            "95d0a50": [
+              "missing answer concept: look up|find|compare|supply|voltage"
+            ],
+            "head": [
+              "missing answer concept: look up|find|compare|supply|voltage"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "81c0ddde15fe551c9f0cf5792107da644e5d15c64d01debad9024a649bef0bfa",
+            "95d0a50": "81c0ddde15fe551c9f0cf5792107da644e5d15c64d01debad9024a649bef0bfa",
+            "head": "81c0ddde15fe551c9f0cf5792107da644e5d15c64d01debad9024a649bef0bfa"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L2-03",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "What is the difference between a motor that just opens a valve and one that can leave it halfway open?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "5da36607025ea15cc6763c1b528ad728ad88188459fcefd3d56a929d653f154d",
+            "95d0a50": "5da36607025ea15cc6763c1b528ad728ad88188459fcefd3d56a929d653f154d",
+            "head": "5da36607025ea15cc6763c1b528ad728ad88188459fcefd3d56a929d653f154d"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L2-04",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "We need a valve motor for a small indoor water tank, away from anything flammable. We have 220 volts.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "cee01d0177d74f6b951a87846962e8e215b0f1ebb0b64c31bf16e2eec3516eb7",
+            "95d0a50": "cee01d0177d74f6b951a87846962e8e215b0f1ebb0b64c31bf16e2eec3516eb7",
+            "head": "959f17a51a70ca73ad4024e78e97dfeab6a47ea72196164dd4850cc748b8710d"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-23 actuators meet: Weatherproof, 220 V. To narrow it down: number of phases.",
+                "+23 actuators meet: Weatherproof, 220 V; with published electrical data. 4 more models within Weatherproof, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-23 actuators meet: Weatherproof, 220 V. To narrow it down: number of phases.",
+                "+23 actuators meet: Weatherproof, 220 V; with published electrical data. 4 more models within Weatherproof, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-23 actuators meet: Weatherproof, 220 V. To narrow it down: number of phases.",
+                "+23 actuators meet: Weatherproof, 220 V; with published electrical data. 4 more models within Weatherproof, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-23 actuators meet: Weatherproof, 220 V. To narrow it down: number of phases.",
+                "+23 actuators meet: Weatherproof, 220 V; with published electrical data. 4 more models within Weatherproof, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "It only opens and closes, and the valve needs 100 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "d285b32398e7685de11c03d4607363555235f7fd827dcee0f6653a793d34edbc",
+            "95d0a50": "d285b32398e7685de11c03d4607363555235f7fd827dcee0f6653a793d34edbc",
+            "head": "51e12b85db248be1ae0b9fd898fcd9a8f3eab5048080f053a1ff0a810cf0c01d"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-22 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 100 Nm. To narrow it down: number of phases.",
+                "+22 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 100 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-22 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 100 Nm. To narrow it down: number of phases.",
+                "+22 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 100 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-22 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 100 Nm. To narrow it down: number of phases.",
+                "+22 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 100 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-22 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 100 Nm. To narrow it down: number of phases.",
+                "+22 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 100 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L2-05",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "The equipment will be in a room where solvent vapour may be present. Does an ordinary rainproof cover make it suitable?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "55deb08425a8daf664f526466896addb5338d316ccebf5dea1ced38b69b6dabe",
+            "95d0a50": "55deb08425a8daf664f526466896addb5338d316ccebf5dea1ced38b69b6dabe",
+            "head": "55deb08425a8daf664f526466896addb5338d316ccebf5dea1ced38b69b6dabe"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L2-06",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Can you explain the difference between the current it takes to start and the current it uses while running?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "6f088ab24bd59a5106fa9238be9ed9051b0b36f8836104824117faafa2d4c277",
+            "95d0a50": "6f088ab24bd59a5106fa9238be9ed9051b0b36f8836104824117faafa2d4c277",
+            "head": "6f088ab24bd59a5106fa9238be9ed9051b0b36f8836104824117faafa2d4c277"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L2-07",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "We have a 24-volt battery and want the valve either fully open or fully shut.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "3fa5f988f24e90b3ac15db4d00f2deea8018c5dc480381db7999e7272842855d",
+            "95d0a50": "3fa5f988f24e90b3ac15db4d00f2deea8018c5dc480381db7999e7272842855d",
+            "head": "b23ff807d6152a38491955c4c762f6249132ac3228630f56b3414c569b8a6bcb"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: DC, On/Off service, 24 V. Here are the leading published models.",
+                "+5 actuators meet: DC, On/Off service, 24 V (including AC/DC models); with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: DC, On/Off service, 24 V. Here are the leading published models.",
+                "+5 actuators meet: DC, On/Off service, 24 V (including AC/DC models); with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "It needs 70 Nm. Can a model marked AC/DC use our battery?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "5e935daf6551c15300c3a78a61f3bda59ba7923c91cfe1f62d129ff68b432d87",
+            "95d0a50": "5e935daf6551c15300c3a78a61f3bda59ba7923c91cfe1f62d129ff68b432d87",
+            "head": "d0b118a2ba7e47d5160865a2cbfa9c80f66b7bc63be29b6be618c1def5216e70"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: AC/DC, On/Off service, 24 V, torque >= 70 Nm. Here are the leading published models.",
+                "+5 actuators meet: AC/DC, On/Off service, 24 V, torque >= 70 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: AC/DC, On/Off service, 24 V, torque >= 70 Nm. Here are the leading published models.",
+                "+5 actuators meet: AC/DC, On/Off service, 24 V, torque >= 70 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L2-08",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I need to replace a valve motor at a school swimming pool. It is outside, has 110-volt power, and needs 100 Nm to open and close.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "47fc75c79e60eaf5812867099f2808fca293c7c0f9cacab5f4edfe4c4cadec37",
+            "95d0a50": "47fc75c79e60eaf5812867099f2808fca293c7c0f9cacab5f4edfe4c4cadec37",
+            "head": "eb02a6b11e11edd5500f73ab3ef5af46a3513de2ac456dc9e46ca4e2c803e904"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-10 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 100 Nm. Here are the leading published models.",
+                "+10 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 100 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-10 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 100 Nm. Here are the leading published models.",
+                "+10 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 100 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Show the choices, then help me choose one from that list.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "44a48a76101c455042a7224799a9a53a0789533ade8030e40f930f47d805a1bf",
+            "95d0a50": "44a48a76101c455042a7224799a9a53a0789533ade8030e40f930f47d805a1bf",
+            "head": "44a48a76101c455042a7224799a9a53a0789533ade8030e40f930f47d805a1bf"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L2-09",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Our workshop has no flammable materials in the installation area. Do I need the explosionproof version anyway?",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: Weatherproof",
+              "missing answer concept: confirm|classification|general area"
+            ],
+            "95d0a50": [
+              "missing answer concept: Weatherproof",
+              "missing answer concept: confirm|classification|general area"
+            ],
+            "head": [
+              "missing answer concept: Weatherproof",
+              "missing answer concept: confirm|classification|general area"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "7c65babac377e6ea0d03ec4e738808868d85541ec8abcd9a05283a814819d691",
+            "95d0a50": "7c65babac377e6ea0d03ec4e738808868d85541ec8abcd9a05283a814819d691",
+            "head": "7c65babac377e6ea0d03ec4e738808868d85541ec8abcd9a05283a814819d691"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "The valve needs 150 Nm, opens and closes, and the supply is 220 V.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "62dba702fc33ba6f55fbe0438ea15411266e79b61e743a31e2f41c490e356d8d",
+            "95d0a50": "62dba702fc33ba6f55fbe0438ea15411266e79b61e743a31e2f41c490e356d8d",
+            "head": "c58a8996fa871fc3a34e462ed048712aea82884c7e34ab65b7722dbdc9a72351"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-29 actuators meet: On/Off service, 220 V, torque >= 150 Nm. To narrow it down: enclosure and number of phases.",
+                "+29 actuators meet: On/Off service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: enclosure and number of phases."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-29 actuators meet: On/Off service, 220 V, torque >= 150 Nm. To narrow it down: enclosure and number of phases.",
+                "+29 actuators meet: On/Off service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: enclosure and number of phases."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-29 actuators meet: On/Off service, 220 V, torque >= 150 Nm. To narrow it down: enclosure and number of phases.",
+                "+29 actuators meet: On/Off service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: enclosure and number of phases."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-29 actuators meet: On/Off service, 220 V, torque >= 150 Nm. To narrow it down: enclosure and number of phases.",
+                "+29 actuators meet: On/Off service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: enclosure and number of phases."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L3-01",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "24v. dc only.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "83e8ed8b6defd5ba8c7af0855b8e45bd503c8cd44caae5cd8823229cd26ee31c",
+            "95d0a50": "83e8ed8b6defd5ba8c7af0855b8e45bd503c8cd44caae5cd8823229cd26ee31c",
+            "head": "d0c6a1498c5dcba849f91c46646b85cf7156fd4a5eddb99d2df94fca2257771d"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: DC, DC-only models, 24 V. Here are the leading published models.",
+                "+5 actuators meet: DC, DC-only models, 24 V; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: DC, DC-only models, 24 V. Here are the leading published models.",
+                "+5 actuators meet: DC, DC-only models, 24 V; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "modulating. 130 Nm minimum.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "8921571106e08bc3dd9b5ea7e103ed566e7e4d7feb00bd8ecba32cbadb293085",
+            "95d0a50": "8921571106e08bc3dd9b5ea7e103ed566e7e4d7feb00bd8ecba32cbadb293085",
+            "head": "86153d847360d5cf1c435ade61a2176454507a8f7a7675c82e04d4aa80ea68e6"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "list matches",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "8ada7c6107a4b3e00f0c1c094a6f7a1d12cebc290414160bab258c80191c60f6",
+            "95d0a50": "8ada7c6107a4b3e00f0c1c094a6f7a1d12cebc290414160bab258c80191c60f6",
+            "head": "8ada7c6107a4b3e00f0c1c094a6f7a1d12cebc290414160bab258c80191c60f6"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L3-02",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "761Y30-11380000/A. AC or DC?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "567422787688979d4c69e6a56ad1cd2676332645dd8f62f983f8c665cea218d5",
+            "95d0a50": "567422787688979d4c69e6a56ad1cd2676332645dd8f62f983f8c665cea218d5",
+            "head": "567422787688979d4c69e6a56ad1cd2676332645dd8f62f983f8c665cea218d5"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "opening torque too",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "published specifications not shown"
+            ],
+            "95d0a50": [
+              "published specifications not shown"
+            ],
+            "head": [
+              "published specifications not shown"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "39ac8f66bd16a9a73325131d6825535d6c57fa22ca8a9e5168657ff7721ca42d",
+            "95d0a50": "39ac8f66bd16a9a73325131d6825535d6c57fa22ca8a9e5168657ff7721ca42d",
+            "head": "39ac8f66bd16a9a73325131d6825535d6c57fa22ca8a9e5168657ff7721ca42d"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L3-03",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "220v outdoor open close 200 Nm",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "d096a284b5e641b343bf074133a54974d8b56508e5d2c210e1a2cffabfb3551c",
+            "95d0a50": "d096a284b5e641b343bf074133a54974d8b56508e5d2c210e1a2cffabfb3551c",
+            "head": "64f7671ef07f2b9d374279c2e3300856dba8b2f0ba5e3e0fb84182e6f9cbc966"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-20 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 200 Nm. To narrow it down: number of phases.",
+                "+20 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 200 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-20 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 200 Nm. To narrow it down: number of phases.",
+                "+20 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 200 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-20 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 200 Nm. To narrow it down: number of phases.",
+                "+20 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 200 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-20 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 200 Nm. To narrow it down: number of phases.",
+                "+20 actuators meet: Weatherproof, On/Off service, 220 V, torque >= 200 Nm; with published electrical data. 4 more models within Weatherproof, On/Off service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "pick from what you just showed. shortest travel time",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: fastest|lowest operating time|shortest",
+              "no explicit selection from the shown models"
+            ],
+            "95d0a50": [
+              "missing answer concept: fastest|lowest operating time|shortest",
+              "no explicit selection from the shown models"
+            ],
+            "head": [
+              "missing answer concept: fastest|lowest operating time|shortest",
+              "no explicit selection from the shown models"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "3bfc43cfbeef77a5e8d2aa096e68006a6af01adac7391e2d9e7394c81442e7af",
+            "95d0a50": "3bfc43cfbeef77a5e8d2aa096e68006a6af01adac7391e2d9e7394c81442e7af",
+            "head": "3bfc43cfbeef77a5e8d2aa096e68006a6af01adac7391e2d9e7394c81442e7af"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L3-04",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Need a basic rundown of the available supplies. Keep it short.",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: 24",
+              "missing answer concept: 110",
+              "missing answer concept: 220"
+            ],
+            "95d0a50": [
+              "missing answer concept: 24",
+              "missing answer concept: 110",
+              "missing answer concept: 220"
+            ],
+            "head": [
+              "missing answer concept: 24",
+              "missing answer concept: 110",
+              "missing answer concept: 220"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "89b2c7081b0bcefb93decddf37e2bca3f522d0e915fbf184e18ac756a9605635",
+            "95d0a50": "89b2c7081b0bcefb93decddf37e2bca3f522d0e915fbf184e18ac756a9605635",
+            "head": "89b2c7081b0bcefb93decddf37e2bca3f522d0e915fbf184e18ac756a9605635"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L3-05",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "762B00-11330C00/A amps. no guesses.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "38855b0e156fd27764a426302fef66144c32af27e55e64d86b0c8e9c36a47ab5",
+            "95d0a50": "38855b0e156fd27764a426302fef66144c32af27e55e64d86b0c8e9c36a47ab5",
+            "head": "38855b0e156fd27764a426302fef66144c32af27e55e64d86b0c8e9c36a47ab5"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L4-01",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Find 24 V DC-only actuators for modulating service with at least 130 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "20869ee0a4a1250bb6f4df916027ad0b945a8cb5174b68ad78b58002ea70299c",
+            "95d0a50": "20869ee0a4a1250bb6f4df916027ad0b945a8cb5174b68ad78b58002ea70299c",
+            "head": "99f6e5eafb11d18595489e00ebf27a933c3ea5a573c2e4678efdd57dce8b02ff"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque ≥ 130 Nm.",
+                "+3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque ≥ 130 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque ≥ 130 Nm.",
+                "+3 actuators meet: DC, Modulating service, DC-only models, 24 V, torque ≥ 130 Nm; with published electrical data."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Correction: this is open/close service, and AC/DC models are allowed.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "a7bcf3e09069bf99312b419baed8444656dbb6b71c2e3ee1f4425e973b3d0285",
+            "95d0a50": "a7bcf3e09069bf99312b419baed8444656dbb6b71c2e3ee1f4425e973b3d0285",
+            "head": "072844dbe9ff663d2054d339fa872dd407d2d6f8359ae79655a3125b4982a4c8"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "Keep the same voltage and minimum torque.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "c15a3c07bf0d49031362ac778ccdf59fc88252c01e46c8f076fdd4654bcc1e06",
+            "95d0a50": "c15a3c07bf0d49031362ac778ccdf59fc88252c01e46c8f076fdd4654bcc1e06",
+            "head": "183bd27523bb1c4855eb710293c8a704912da57a12996c06185a257d7d71147c"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L4-02",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "List weatherproof 110 V open/close actuators needing no more than 30 seconds at 60 Hz.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "75a032b42d3b753648349200518e007f9d62a890d8cae5e59f3c1b1c94453e4d",
+            "95d0a50": "75a032b42d3b753648349200518e007f9d62a890d8cae5e59f3c1b1c94453e4d",
+            "head": "50c5b23884d4d709c1408934f3c49634d7abde60cdea7dfc776f6e29aad3be0b"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-7 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz, operating time <= 30 s. To narrow it down: minimum torque.",
+                "+7 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz, operating time <= 30 s; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-7 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz, operating time <= 30 s. To narrow it down: minimum torque.",
+                "+7 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz, operating time <= 30 s; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-7 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz, operating time <= 30 s. To narrow it down: minimum torque.",
+                "+7 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz, operating time <= 30 s; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-7 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz, operating time <= 30 s. To narrow it down: minimum torque.",
+                "+7 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz, operating time <= 30 s; with published electrical data. To narrow it down: minimum torque."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Remove that time limit.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "0d1757a9764abd3204f7144463c977331f1ada56c603859c308769a4e7399307",
+            "95d0a50": "0d1757a9764abd3204f7144463c977331f1ada56c603859c308769a4e7399307",
+            "head": "8886bae55a4e8e58022fc7c21cd52d662338f0bc9a495e9021a6a2ba5610c7fe"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V, 60 Hz; with published electrical data. To narrow it down: minimum torque."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "Keep 110 V and choose the highest on/off torque among the matches.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "7dc15d963f31cd594867b848e992e8b19950ae450a2fd0eb5cb424f20684a376",
+            "95d0a50": "7dc15d963f31cd594867b848e992e8b19950ae450a2fd0eb5cb424f20684a376",
+            "head": "7dc15d963f31cd594867b848e992e8b19950ae450a2fd0eb5cb424f20684a376"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L4-03",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I want an explosionproof 220 V modulating actuator for at least 150 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "133fc0b207b383eb135499aee18be2ca734eb117b08fefb08976fa787d6aa6dd",
+            "95d0a50": "133fc0b207b383eb135499aee18be2ca734eb117b08fefb08976fa787d6aa6dd",
+            "head": "6d2df9a961e08cd700f00caabad3cab2844a4faa047e3bf9d4aefcaef2587725"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-6 actuators meet: Explosionproof, Modulating service, 220 V, torque >= 150 Nm. Here are the leading published models.",
+                "+6 actuators meet: Explosionproof, Modulating service, 220 V, torque >= 150 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-6 actuators meet: Explosionproof, Modulating service, 220 V, torque >= 150 Nm. Here are the leading published models.",
+                "+6 actuators meet: Explosionproof, Modulating service, 220 V, torque >= 150 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "The installation has moved to a non-hazardous area; remove the explosionproof requirement.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "14c778203ee3133d9e09b09ec79d1571bbc4346e1f8c3fd9274627ebda8cdd95",
+            "95d0a50": "14c778203ee3133d9e09b09ec79d1571bbc4346e1f8c3fd9274627ebda8cdd95",
+            "head": "76ffc0abb995ea36a2eca2f31fda8b90a5c7e00054a803097724e95a41620c5f"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-26 actuators meet: Modulating service, 220 V, torque >= 150 Nm. To narrow it down: number of phases.",
+                "+26 actuators meet: Modulating service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within Modulating service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-26 actuators meet: Modulating service, 220 V, torque >= 150 Nm. To narrow it down: number of phases.",
+                "+26 actuators meet: Modulating service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within Modulating service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-26 actuators meet: Modulating service, 220 V, torque >= 150 Nm. To narrow it down: number of phases.",
+                "+26 actuators meet: Modulating service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within Modulating service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-26 actuators meet: Modulating service, 220 V, torque >= 150 Nm. To narrow it down: number of phases.",
+                "+26 actuators meet: Modulating service, 220 V, torque >= 150 Nm; with published electrical data. 4 more models within Modulating service, 220 V are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: number of phases."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "Do not change the voltage or modulating duty.",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "state supply_voltage_v: None != 220",
+              "active filter missing: supply_voltage_v"
+            ],
+            "95d0a50": [
+              "state supply_voltage_v: None != 220",
+              "active filter missing: supply_voltage_v"
+            ],
+            "head": [
+              "state supply_voltage_v: None != 220",
+              "active filter missing: supply_voltage_v"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "c057cade874da12417b8eecec0f185105b17aa82afb1e60a1f48e0584224b850",
+            "95d0a50": "c057cade874da12417b8eecec0f185105b17aa82afb1e60a1f48e0584224b850",
+            "head": "627d94b1aeee6f95b2f1a540d679863630b18e78a928e7f7fdc7112aa6cb27c4"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-42 actuators meet: Modulating service, torque >= 150 Nm. To narrow it down: current type.",
+                "+42 actuators meet: Modulating service, torque >= 150 Nm; with published electrical data. 4 more models within Modulating service are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: current type."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-42 actuators meet: Modulating service, torque >= 150 Nm. To narrow it down: current type.",
+                "+42 actuators meet: Modulating service, torque >= 150 Nm; with published electrical data. 4 more models within Modulating service are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: current type."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-42 actuators meet: Modulating service, torque >= 150 Nm. To narrow it down: current type.",
+                "+42 actuators meet: Modulating service, torque >= 150 Nm; with published electrical data. 4 more models within Modulating service are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: current type."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-42 actuators meet: Modulating service, torque >= 150 Nm. To narrow it down: current type.",
+                "+42 actuators meet: Modulating service, torque >= 150 Nm; with published electrical data. 4 more models within Modulating service are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. To narrow it down: current type."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L4-04",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Show 220 V three-phase open/close models giving at least 300 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "5a6cf99db5ce33afc1cb1c84ee5c27130631cc87950285a6ae980b0a6b418421",
+            "95d0a50": "5a6cf99db5ce33afc1cb1c84ee5c27130631cc87950285a6ae980b0a6b418421",
+            "head": "c53efa78f175a6c9fa0fe81258c6a23915ab9b5c46703e314f3c400003a3d40f"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-7 actuators meet: AC, 3-phase, On/Off service, 220 V, torque >= 300 Nm. Here are the leading published models.",
+                "+7 actuators meet: AC, 3-phase, On/Off service, 220 V, torque >= 300 Nm (including AC/DC models); with published electrical data. 4 more models within AC, 3-phase, On/Off service, 220 V (including AC/DC models) are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-7 actuators meet: AC, 3-phase, On/Off service, 220 V, torque >= 300 Nm. Here are the leading published models.",
+                "+7 actuators meet: AC, 3-phase, On/Off service, 220 V, torque >= 300 Nm (including AC/DC models); with published electrical data. 4 more models within AC, 3-phase, On/Off service, 220 V (including AC/DC models) are listed with N/A, without published values, and excluded from the published-data count; their performance eligibility is unverified. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "I got the wiring wrong: it is single phase.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "671ff7a436524197d70bf7442aed91f042bd6aab701162f5ab1ee894bbedaa79",
+            "95d0a50": "671ff7a436524197d70bf7442aed91f042bd6aab701162f5ab1ee894bbedaa79",
+            "head": "a81d4ce3a1478cebac6cb2f3ae6ca9803d1f4d0c559d5c3309b6f8b88cd7b933"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-17 actuators meet: AC, 1-phase, On/Off service, 220 V, torque >= 300 Nm. To narrow it down: enclosure.",
+                "+17 actuators meet: AC, 1-phase, On/Off service, 220 V, torque >= 300 Nm (including AC/DC models); with published electrical data. To narrow it down: enclosure."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-17 actuators meet: AC, 1-phase, On/Off service, 220 V, torque >= 300 Nm. To narrow it down: enclosure.",
+                "+17 actuators meet: AC, 1-phase, On/Off service, 220 V, torque >= 300 Nm (including AC/DC models); with published electrical data. To narrow it down: enclosure."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-17 actuators meet: AC, 1-phase, On/Off service, 220 V, torque >= 300 Nm. To narrow it down: enclosure.",
+                "+17 actuators meet: AC, 1-phase, On/Off service, 220 V, torque >= 300 Nm (including AC/DC models); with published electrical data. To narrow it down: enclosure."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-17 actuators meet: AC, 1-phase, On/Off service, 220 V, torque >= 300 Nm. To narrow it down: enclosure.",
+                "+17 actuators meet: AC, 1-phase, On/Off service, 220 V, torque >= 300 Nm (including AC/DC models); with published electrical data. To narrow it down: enclosure."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "Of the revised results, which has the shortest 50 Hz operating time?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "de1e16aec32809a961de5addb92d57b3fd06683ecdf1655aad2bddbb85ffe633",
+            "95d0a50": "de1e16aec32809a961de5addb92d57b3fd06683ecdf1655aad2bddbb85ffe633",
+            "head": "de1e16aec32809a961de5addb92d57b3fd06683ecdf1655aad2bddbb85ffe633"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L4-05",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Compare 761X30-11370000/A with 762X30-11370000/A.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "fde46a04ff8b0ad189c737b6d52ebbb72ff28463093842af5fa2d63d0c6c0168",
+            "95d0a50": "fde46a04ff8b0ad189c737b6d52ebbb72ff28463093842af5fa2d63d0c6c0168",
+            "head": "fde46a04ff8b0ad189c737b6d52ebbb72ff28463093842af5fa2d63d0c6c0168"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "Cancel that comparison. Look up 762Y30-11380000/A instead.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "d9e4de206b5b1405e1ad4559be00cda88a42b764e9416922294511ba9a8863e1",
+            "95d0a50": "d9e4de206b5b1405e1ad4559be00cda88a42b764e9416922294511ba9a8863e1",
+            "head": "d9e4de206b5b1405e1ad4559be00cda88a42b764e9416922294511ba9a8863e1"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 3,
+          "query": "What type of supply does this replacement use?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "b4ecad6210de6101835c331c1b99e25c43e50d68d42c5552af54afb199d7147c",
+            "95d0a50": "b4ecad6210de6101835c331c1b99e25c43e50d68d42c5552af54afb199d7147c",
+            "head": "b4ecad6210de6101835c331c1b99e25c43e50d68d42c5552af54afb199d7147c"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L4-06",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Find 110 V weatherproof open/close models rated at least 300 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "69ec1efe5b37d5316ac78b67d5ebca36d67c7d67fe655c937de9299c614939dd",
+            "95d0a50": "69ec1efe5b37d5316ac78b67d5ebca36d67c7d67fe655c937de9299c614939dd",
+            "head": "75c1c788371864a9035944cea34966cfdab522ac18fdf05386e2605412f7cb9c"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-7 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 300 Nm. Here are the leading published models.",
+                "+7 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 300 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-7 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 300 Nm. Here are the leading published models.",
+                "+7 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 300 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "I meant a maximum of 300 Nm, not a minimum.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "28a9de1cc8327488b9cdf73315ecb0cb4ef3948fc05859aa648adbaade026dda",
+            "95d0a50": "28a9de1cc8327488b9cdf73315ecb0cb4ef3948fc05859aa648adbaade026dda",
+            "head": "84fad9bd85262ef36805d258a42be8c12fc1da079e3b3da82d4030c1fa01e4ee"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: Weatherproof, On/Off service, 110 V, torque <= 300 Nm. Here are the leading published models.",
+                "+5 actuators meet: Weatherproof, On/Off service, 110 V, torque <= 300 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: Weatherproof, On/Off service, 110 V, torque <= 300 Nm. Here are the leading published models.",
+                "+5 actuators meet: Weatherproof, On/Off service, 110 V, torque <= 300 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "Now remove the torque restriction altogether.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "284e00ea113fb49f48fc8323e2f316cf5d14dba59324551349c5095519a90ce6",
+            "95d0a50": "284e00ea113fb49f48fc8323e2f316cf5d14dba59324551349c5095519a90ce6",
+            "head": "dd5385ed048c0bd91353fc523dabaec2370c6bfe42e6bc4cf1ac10607faf251b"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V. Here are the leading published models.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V. Here are the leading published models.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L5-01",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "¿Qué tiempo de operación tiene el 761A00-11300000/A a 50 Hz?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "9fe73ec520266677e056548bd1f32a6f9368f7cc66306e23860a6ca3828c87e3",
+            "95d0a50": "9fe73ec520266677e056548bd1f32a6f9368f7cc66306e23860a6ca3828c87e3",
+            "head": "9fe73ec520266677e056548bd1f32a6f9368f7cc66306e23860a6ca3828c87e3"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "¿Y cuánta corriente consume a esa frecuencia?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "61d7213331a847f288d7c546ae60db4edb30141bca7e9c4cf5c465601119cbb3",
+            "95d0a50": "61d7213331a847f288d7c546ae60db4edb30141bca7e9c4cf5c465601119cbb3",
+            "head": "61d7213331a847f288d7c546ae60db4edb30141bca7e9c4cf5c465601119cbb3"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L5-02",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Busco un actuador de 24 V de corriente continua solamente, para regulación y mínimo 130 Nm.",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "state service: None != 'modulating'",
+              "active filter missing: service"
+            ],
+            "95d0a50": [
+              "state service: None != 'modulating'",
+              "active filter missing: service"
+            ],
+            "head": [
+              "state service: None != 'modulating'",
+              "active filter missing: service"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "79c097dad72b136a8eb5dd06228cd77d2a9ab35d6f6bd292b9e30fb7210076b4",
+            "95d0a50": "79c097dad72b136a8eb5dd06228cd77d2a9ab35d6f6bd292b9e30fb7210076b4",
+            "head": "35092dd42d19fb28da4c1e43647783d5d8d416c7d7181552abcbb2803ccaea72"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: DC, DC-only models, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: DC, DC-only models, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: DC, DC-only models, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: DC, DC-only models, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Me equivoqué: será para abrir y cerrar; sí acepto alimentación AC/DC.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "fd587bd1cf79846d08b0424cd8b39fa1ed2ac8293df1afa939919a2fb2a24d67",
+            "95d0a50": "fd587bd1cf79846d08b0424cd8b39fa1ed2ac8293df1afa939919a2fb2a24d67",
+            "head": "035431970a3332a9077cdc723f35848cba9f9dc23f19f0c6e7b61fd28e2540f4"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm.",
+                "+3 actuators meet: AC/DC, On/Off service, 24 V, torque >= 130 Nm; with published electrical data."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L5-03",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "¿Puedes comparar el 761X30-11380000/A con el 761Y30-11380000/A?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "f06c8f83e837ede9733f9cce4b4f5b5896f076780a1a5b2bd982cba1b45e0335",
+            "95d0a50": "f06c8f83e837ede9733f9cce4b4f5b5896f076780a1a5b2bd982cba1b45e0335",
+            "head": "f06c8f83e837ede9733f9cce4b4f5b5896f076780a1a5b2bd982cba1b45e0335"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "De esos dos, ¿cuál entrega más par en operación de apertura y cierre?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "cc2af398d838731ddf1c54331c7cfde215eed11f4ea2244c2dd781844ec818be",
+            "95d0a50": "cc2af398d838731ddf1c54331c7cfde215eed11f4ea2244c2dd781844ec818be",
+            "head": "cc2af398d838731ddf1c54331c7cfde215eed11f4ea2244c2dd781844ec818be"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L5-04",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "nesecito uno para una válvula de agua al aire libre, sin gases inflamables, con 110 V y 80 Nm",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "2e2395a81c5b1414b50b0518849473f97eba0261bbba7f7408978ce10096a158",
+            "95d0a50": "2e2395a81c5b1414b50b0518849473f97eba0261bbba7f7408978ce10096a158",
+            "head": "8e88337fe8d5ae08b087650b2c632e42488bd0abbfc5ba8897c5763ba0502a67"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, 110 V, torque >= 80 Nm.",
+                "+11 actuators meet: Weatherproof, 110 V, torque >= 80 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, 110 V, torque >= 80 Nm.",
+                "+11 actuators meet: Weatherproof, 110 V, torque >= 80 Nm; with published electrical data."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "¿Qué opciones hay para abrir y cerrar?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "80aa429b026cb8f52346a294b0d5e3de6727cf99072c68ff0089375aed1895e5",
+            "95d0a50": "80aa429b026cb8f52346a294b0d5e3de6727cf99072c68ff0089375aed1895e5",
+            "head": "7fb4c7549f80523c32683174561ff2bf5d278b3f5f016ea3d16fcf2ae93627f6"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 80 Nm. Here are the leading published models.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 80 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 80 Nm. Here are the leading published models.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 80 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L5-05",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "¿Cuál es el par del 762A00-11330C00/A?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "9fa839a6a593bd38518f0b0a4346936bd567c66df1c415e9b4df0040a12f572b",
+            "95d0a50": "9fa839a6a593bd38518f0b0a4346936bd567c66df1c415e9b4df0040a12f572b",
+            "head": "9fa839a6a593bd38518f0b0a4346936bd567c66df1c415e9b4df0040a12f572b"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "Si aparece N/A, explícame qué significa sin inventar una cifra.",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: N/A",
+              "missing answer concept: source|not available|not published"
+            ],
+            "95d0a50": [
+              "missing answer concept: N/A",
+              "missing answer concept: source|not available|not published"
+            ],
+            "head": [
+              "missing answer concept: N/A",
+              "missing answer concept: source|not available|not published"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "ee8a3bd7543924df2cf0e99ed93683a8973395df9ce73710e5a9a49753cfb432",
+            "95d0a50": "ee8a3bd7543924df2cf0e99ed93683a8973395df9ce73710e5a9a49753cfb432",
+            "head": "ee8a3bd7543924df2cf0e99ed93683a8973395df9ce73710e5a9a49753cfb432"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L6-01",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Give the published on/off torque of 761B00-11300000/A and a delivered price to Bogota for two units.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "abb09a8f4e4830f4c75d6e1386bd22ef59e497d38bc83713925787ade64ca0bb",
+            "95d0a50": "abb09a8f4e4830f4c75d6e1386bd22ef59e497d38bc83713925787ade64ca0bb",
+            "head": "abb09a8f4e4830f4c75d6e1386bd22ef59e497d38bc83713925787ade64ca0bb"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L6-02",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "For 762X30-11380000/A, tell me its supply type and whether your warehouse can dispatch it tomorrow.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "b4a0d6452a9bcaa5420246a128a67dacfc15edef2832a1c758267affaafa7c6a",
+            "95d0a50": "b4a0d6452a9bcaa5420246a128a67dacfc15edef2832a1c758267affaafa7c6a",
+            "head": "b4a0d6452a9bcaa5420246a128a67dacfc15edef2832a1c758267affaafa7c6a"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L6-03",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "What is the 60 Hz operating time of 761A00-11300000/A, and which bolt pattern must I drill into my valve bracket?",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: (?:not|unavailable)[^.\\n]*(?:bolt|mounting|drill)"
+            ],
+            "95d0a50": [
+              "missing answer concept: (?:not|unavailable)[^.\\n]*(?:bolt|mounting|drill)"
+            ],
+            "head": [
+              "missing answer concept: (?:not|unavailable)[^.\\n]*(?:bolt|mounting|drill)"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "40e14b8a71cfb4fa1b11987cdfe5b704a41701c73ef387c1f5096cfc029efe5d",
+            "95d0a50": "40e14b8a71cfb4fa1b11987cdfe5b704a41701c73ef387c1f5096cfc029efe5d",
+            "head": "40e14b8a71cfb4fa1b11987cdfe5b704a41701c73ef387c1f5096cfc029efe5d"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L6-04",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I am considering 761Y30-11370000/A. Give its modulating torque and write a legally binding warranty covering solvent spills.",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: (?:not|unavailable)[^.\\n]*warranty"
+            ],
+            "95d0a50": [
+              "missing answer concept: (?:not|unavailable)[^.\\n]*warranty"
+            ],
+            "head": [
+              "missing answer concept: (?:not|unavailable)[^.\\n]*warranty"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "066d78d9786f4260c56f01bbe10e2518c529db95256ac0017ceca310afa5d004",
+            "95d0a50": "066d78d9786f4260c56f01bbe10e2518c529db95256ac0017ceca310afa5d004",
+            "head": "066d78d9786f4260c56f01bbe10e2518c529db95256ac0017ceca310afa5d004"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L7-01",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Hello there, I am trying to choose a valve actuator.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "523d7e66f766eb7fb5a718064988b0e19a73457f93e31d19a75bbd37d4ab0b5d",
+            "95d0a50": "523d7e66f766eb7fb5a718064988b0e19a73457f93e31d19a75bbd37d4ab0b5d",
+            "head": "523d7e66f766eb7fb5a718064988b0e19a73457f93e31d19a75bbd37d4ab0b5d"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "It is for clean water indoors, with 110 V power and simple opening and closing.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "d03e8b14b9c189bba0017d4ff63b01e8a14001f261fc9f8cdc2d846f2960a474",
+            "95d0a50": "d03e8b14b9c189bba0017d4ff63b01e8a14001f261fc9f8cdc2d846f2960a474",
+            "head": "de097050c26158f177e315d7551f43759cddec091d1b34a9f20dabbacc1168d3"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V; with published electrical data. To narrow it down: minimum torque."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-11 actuators meet: Weatherproof, On/Off service, 110 V. To narrow it down: minimum torque.",
+                "+11 actuators meet: Weatherproof, On/Off service, 110 V; with published electrical data. To narrow it down: minimum torque."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "The valve needs 80 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "2e01444b90564a85df623f9d8833316afc08283b24b74f6a32564356af2d0237",
+            "95d0a50": "2e01444b90564a85df623f9d8833316afc08283b24b74f6a32564356af2d0237",
+            "head": "2e01444b90564a85df623f9d8833316afc08283b24b74f6a32564356af2d0237"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 4,
+          "query": "Which of the models you showed would you choose for the shortest 60 Hz operating time?",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: fastest|shortest|lowest operating time",
+              "no explicit selection from the shown models"
+            ],
+            "95d0a50": [
+              "missing answer concept: fastest|shortest|lowest operating time",
+              "no explicit selection from the shown models"
+            ],
+            "head": [
+              "missing answer concept: fastest|shortest|lowest operating time",
+              "no explicit selection from the shown models"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "2ec74dbb552499ceb05e40dfdc74b9e7ca3712acd5aaa42393b9b09bdb18fd50",
+            "95d0a50": "2ec74dbb552499ceb05e40dfdc74b9e7ca3712acd5aaa42393b9b09bdb18fd50",
+            "head": "2ec74dbb552499ceb05e40dfdc74b9e7ca3712acd5aaa42393b9b09bdb18fd50"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L7-02",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Show weatherproof 110 V on/off models with at least 150 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "11c0355fab7d0e69cd6d05ca32fd4f5d85bc866ccf48aa6123965a047117ea99",
+            "95d0a50": "11c0355fab7d0e69cd6d05ca32fd4f5d85bc866ccf48aa6123965a047117ea99",
+            "head": "b1ed0ad5b38ccb2d7c8a99a886a04112d059f7e9885d5ca4a26462bf786ed184"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm. Here are the leading published models.",
+                "+9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm. Here are the leading published models.",
+                "+9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "My priority is the shortest operating time at 50 Hz.",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: Ranked by fastest|Ranked by lowest operating time"
+            ],
+            "95d0a50": [
+              "missing answer concept: Ranked by fastest|Ranked by lowest operating time"
+            ],
+            "head": [
+              "missing answer concept: Ranked by fastest|Ranked by lowest operating time"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "e63d2893cb78595f6963ce0665c4442a3f8b9c0a8e06a05ac3ff0b9367e5011b",
+            "95d0a50": "e63d2893cb78595f6963ce0665c4442a3f8b9c0a8e06a05ac3ff0b9367e5011b",
+            "head": "dde9f1e1a4f29665965a1575af80b8d113ebfa20264a396e0ad69144a39612d0"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-9 actuators meet: Weatherproof, On/Off service, 110 V, 50 Hz, torque >= 150 Nm. Here are the leading published models.",
+                "+9 actuators meet: Weatherproof, On/Off service, 110 V, 50 Hz, torque >= 150 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-9 actuators meet: Weatherproof, On/Off service, 110 V, 50 Hz, torque >= 150 Nm. Here are the leading published models.",
+                "+9 actuators meet: Weatherproof, On/Off service, 110 V, 50 Hz, torque >= 150 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "Which of those listed models meets that priority?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "68ca9af029f4a5f528252ae506386d1b11e74ed4bad4c80d0ad977236a71bd87",
+            "95d0a50": "68ca9af029f4a5f528252ae506386d1b11e74ed4bad4c80d0ad977236a71bd87",
+            "head": "68ca9af029f4a5f528252ae506386d1b11e74ed4bad4c80d0ad977236a71bd87"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 4,
+          "query": "Remind me of the recommended model's torque.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "44eca59add385392a0bc48e3f5bb1a9953bcfeafd71f1e272603f9e5655a43ec",
+            "95d0a50": "44eca59add385392a0bc48e3f5bb1a9953bcfeafd71f1e272603f9e5655a43ec",
+            "head": "44eca59add385392a0bc48e3f5bb1a9953bcfeafd71f1e272603f9e5655a43ec"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L7-03",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "List 24 V AC/DC open/close actuators with at least 80 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "84c4dde62a990914191869d52183c75afa1fc6a5837c15e8bea2ad31e604ee9d",
+            "95d0a50": "84c4dde62a990914191869d52183c75afa1fc6a5837c15e8bea2ad31e604ee9d",
+            "head": "b0facb9de33168283b7934cd4d67038d7adf92a682a332976dca44529e10e1b8"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-4 actuators meet: AC/DC, On/Off service, 24 V, torque >= 80 Nm.",
+                "+4 actuators meet: AC/DC, On/Off service, 24 V, torque >= 80 Nm; with published electrical data."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-4 actuators meet: AC/DC, On/Off service, 24 V, torque >= 80 Nm.",
+                "+4 actuators meet: AC/DC, On/Off service, 24 V, torque >= 80 Nm; with published electrical data."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Compare the first two models in your results.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "03ccf59a2cc24c214ea96ae7b80238cb83f9f8b9f716704d6c34b8e0127a6b7b",
+            "95d0a50": "03ccf59a2cc24c214ea96ae7b80238cb83f9f8b9f716704d6c34b8e0127a6b7b",
+            "head": "03ccf59a2cc24c214ea96ae7b80238cb83f9f8b9f716704d6c34b8e0127a6b7b"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 3,
+          "query": "Recommend one of those two for the higher torque.",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "winner does not optimize the requested published metric",
+              "ranking label does not describe the applied priority"
+            ],
+            "95d0a50": [
+              "winner does not optimize the requested published metric",
+              "ranking label does not describe the applied priority"
+            ],
+            "head": [
+              "winner does not optimize the requested published metric",
+              "ranking label does not describe the applied priority"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "d948d0f7eee3ace67a13121534f92e7e7b376e5d3ec3611f814fea043bd9aaaa",
+            "95d0a50": "d948d0f7eee3ace67a13121534f92e7e7b376e5d3ec3611f814fea043bd9aaaa",
+            "head": "d948d0f7eee3ace67a13121534f92e7e7b376e5d3ec3611f814fea043bd9aaaa"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L7-04",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I need 5000 Nm from a 24 V actuator, with modulating service.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "838846a29566a01093762eccf867b5e72e3d4c233234f76076b4b6c2713c5484",
+            "95d0a50": "838846a29566a01093762eccf867b5e72e3d4c233234f76076b4b6c2713c5484",
+            "head": "838846a29566a01093762eccf867b5e72e3d4c233234f76076b4b6c2713c5484"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "Do not silently reduce my torque requirement; explain whether the catalogue has a match.",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "state min_torque_nm: None != 5000",
+              "active filter missing: min_torque_nm"
+            ],
+            "95d0a50": [
+              "state min_torque_nm: None != 5000",
+              "active filter missing: min_torque_nm"
+            ],
+            "head": [
+              "state min_torque_nm: None != 5000",
+              "active filter missing: min_torque_nm"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "f061a7b4df2d3f2c9e32797d1abb8b7cf9e3fb558e981ac74e77021257761651",
+            "95d0a50": "f061a7b4df2d3f2c9e32797d1abb8b7cf9e3fb558e981ac74e77021257761651",
+            "head": "170b29a2befc8767f7948774853e0138698a9325811d07c5e3f2e9d4ae22da26"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: Modulating service, 24 V. Here are the leading published models.",
+                "+5 actuators meet: Modulating service, 24 V; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: Modulating service, 24 V. Here are the leading published models.",
+                "+5 actuators meet: Modulating service, 24 V; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L7-05",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Look up the complete part number 768Q99-11380000/A.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "aa893e4da50bd1deb881ee32ea9c24fe5933576bcbd16c398f2e526b27d7f0db",
+            "95d0a50": "aa893e4da50bd1deb881ee32ea9c24fe5933576bcbd16c398f2e526b27d7f0db",
+            "head": "fcb21b1c445ac344cc0b0bf33f7e2d70e8782e8c0bc9e262a7a40608b8c4a8d3"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-768Q99-11380000/A is not in the supplied Series 76 electrical catalogue.",
+                "+768Q99-11380000/A is not in the supplied Series 76 electrical catalogue (not found). Please check the Base Part Number; another code may be used for comparison, not as a substitute."
+              ]
+            },
+            {
+              "path": ".clarification",
+              "before": null,
+              "after": {
+                "field": "part_number",
+                "message": "768Q99-11380000/A is not in the supplied Series 76 electrical catalogue (not found). Please check the Base Part Number; another code may be used for comparison, not as a substitute.",
+                "options": []
+              }
+            },
+            {
+              "path": ".debug.attempts",
+              "before": 1,
+              "after": 0
+            },
+            {
+              "path": ".debug.llm_called",
+              "before": true,
+              "after": false
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-768Q99-11380000/A is not in the supplied Series 76 electrical catalogue.",
+                "+768Q99-11380000/A is not in the supplied Series 76 electrical catalogue (not found). Please check the Base Part Number; another code may be used for comparison, not as a substitute."
+              ]
+            },
+            {
+              "path": ".response.clarification",
+              "before": null,
+              "after": {
+                "field": "part_number",
+                "message": "768Q99-11380000/A is not in the supplied Series 76 electrical catalogue (not found). Please check the Base Part Number; another code may be used for comparison, not as a substitute.",
+                "options": []
+              }
+            },
+            {
+              "path": ".response.debug.attempts",
+              "before": 1,
+              "after": 0
+            },
+            {
+              "path": ".response.debug.llm_called",
+              "before": true,
+              "after": false
+            },
+            {
+              "path": ".trace.context_after.focus",
+              "removed": [
+                {
+                  "field": "overview",
+                  "service": null,
+                  "frequency_hz": null
+                }
+              ]
+            },
+            {
+              "path": ".trace.context_after.pending_clarification",
+              "added": "part_number"
+            },
+            {
+              "path": ".trace.model.attempts",
+              "before": [
+                {
+                  "model": "primary",
+                  "status": "ok",
+                  "attempt": 1,
+                  "timeout_s": 45.0
+                }
+              ],
+              "after": []
+            },
+            {
+              "path": ".trace.model.decision_calls",
+              "before": 1,
+              "after": 0
+            },
+            {
+              "path": ".trace.model.llm_called",
+              "added": false
+            },
+            {
+              "path": ".trace.model.model",
+              "removed": "ideal"
+            },
+            {
+              "path": ".trace.model.usage",
+              "removed": {}
+            },
+            {
+              "path": ".trace.model_calls",
+              "before": [
+                {
+                  "args": {
+                    "focus": [
+                      "overview"
+                    ],
+                    "part_numbers": [
+                      "768Q99-11380000/A"
+                    ]
+                  },
+                  "name": "get_actuator"
+                }
+              ],
+              "after": null
+            },
+            {
+              "path": ".trace.overrides",
+              "before": null,
+              "after": [
+                "well_formed_code_lookup"
+              ]
+            },
+            {
+              "path": ".trace.parameters.cancel_previous",
+              "removed": false
+            },
+            {
+              "path": ".trace.parameters.equivalent_enclosure",
+              "removed": null
+            },
+            {
+              "path": ".trace.parameters.equivalent_voltage_v",
+              "removed": null
+            },
+            {
+              "path": ".trace.parameters.explain_terms",
+              "removed": []
+            },
+            {
+              "path": ".trace.parameters.focus",
+              "removed": [
+                {
+                  "field": "overview",
+                  "service": null,
+                  "frequency_hz": null
+                }
+              ]
+            },
+            {
+              "path": ".trace.parameters.from_results_items",
+              "removed": ""
+            },
+            {
+              "path": ".trace.parameters.from_results_top",
+              "removed": 0
+            },
+            {
+              "path": ".trace.parameters.list_results",
+              "removed": false
+            },
+            {
+              "path": ".trace.parameters.reference_direction",
+              "removed": "lower"
+            },
+            {
+              "path": ".trace.parameters.reference_frequency_hz",
+              "removed": null
+            },
+            {
+              "path": ".trace.parameters.reference_index",
+              "removed": 0
+            },
+            {
+              "path": ".trace.parameters.reference_kind",
+              "removed": "none"
+            },
+            {
+              "path": ".trace.parameters.reference_metric",
+              "removed": "operating_time"
+            },
+            {
+              "path": ".trace.parameters.unsupported_requests",
+              "removed": []
+            },
+            {
+              "path": ".trace.raw_parameters.focus",
+              "removed": [
+                "overview"
+              ]
+            },
+            {
+              "path": ".trace.raw_parameters.part_numbers",
+              "removed": [
+                "768Q99-11380000/A"
+              ]
+            },
+            {
+              "path": ".trace.renderer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-get_actuator",
+                "+clarification"
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "If that exact reference is absent, say so instead of choosing a similar one.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "1cb571cad5c1d9078f37391ec6c0f17c59976a8d6e6b2c80b3f3279bb146b190",
+            "95d0a50": "1cb571cad5c1d9078f37391ec6c0f17c59976a8d6e6b2c80b3f3279bb146b190",
+            "head": "8be827d9d61ea6dc3d8ce8837ed7468bf92713d726bb10f1d1c0f9a7b173beae"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".trace.context_before.focus",
+              "removed": [
+                {
+                  "field": "overview",
+                  "service": null,
+                  "frequency_hz": null
+                }
+              ]
+            },
+            {
+              "path": ".trace.context_before.pending_clarification",
+              "added": "part_number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L7-06",
+      "status": {
+        "4906b62": "passed",
+        "95d0a50": "passed",
+        "head": "passed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I copied 761X30-1138000/A from a smudged label. Is that an exact catalogue reference?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "7488dd2767e13b9e3d183a9c90ab2a18c3cefad9dd2770f8fd199531744e6acb",
+            "95d0a50": "7488dd2767e13b9e3d183a9c90ab2a18c3cefad9dd2770f8fd199531744e6acb",
+            "head": "f184936654caa0e155f2ad5cfb5aa8f49df0834cf6bc9a6f8e52157e6d633136"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-'761X30-1138000/A' is not a complete Base Part Number and no catalogue code starts with it. Please check the code, including /A.",
+                "+'761X30-1138000/A' was not found in the catalogue. Did you mean 761X30-11380000/A? Please choose a complete code."
+              ]
+            },
+            {
+              "path": ".clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-'761X30-1138000/A' is not a complete Base Part Number and no catalogue code starts with it. Please check the code, including /A.",
+                "+'761X30-1138000/A' was not found in the catalogue. Did you mean 761X30-11380000/A? Please choose a complete code."
+              ]
+            },
+            {
+              "path": ".clarification.options",
+              "before": [],
+              "after": [
+                "761X30-11380000/A"
+              ]
+            },
+            {
+              "path": ".debug.attempts",
+              "before": 1,
+              "after": 0
+            },
+            {
+              "path": ".debug.llm_called",
+              "before": true,
+              "after": false
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-'761X30-1138000/A' is not a complete Base Part Number and no catalogue code starts with it. Please check the code, including /A.",
+                "+'761X30-1138000/A' was not found in the catalogue. Did you mean 761X30-11380000/A? Please choose a complete code."
+              ]
+            },
+            {
+              "path": ".response.clarification.message",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-'761X30-1138000/A' is not a complete Base Part Number and no catalogue code starts with it. Please check the code, including /A.",
+                "+'761X30-1138000/A' was not found in the catalogue. Did you mean 761X30-11380000/A? Please choose a complete code."
+              ]
+            },
+            {
+              "path": ".response.clarification.options",
+              "before": [],
+              "after": [
+                "761X30-11380000/A"
+              ]
+            },
+            {
+              "path": ".response.debug.attempts",
+              "before": 1,
+              "after": 0
+            },
+            {
+              "path": ".response.debug.llm_called",
+              "before": true,
+              "after": false
+            },
+            {
+              "path": ".trace.model.attempts",
+              "before": [
+                {
+                  "model": "primary",
+                  "status": "ok",
+                  "attempt": 1,
+                  "timeout_s": 45.0
+                }
+              ],
+              "after": []
+            },
+            {
+              "path": ".trace.model.decision_calls",
+              "before": 1,
+              "after": 0
+            },
+            {
+              "path": ".trace.model.llm_called",
+              "added": false
+            },
+            {
+              "path": ".trace.model.model",
+              "removed": "ideal"
+            },
+            {
+              "path": ".trace.model.usage",
+              "removed": {}
+            },
+            {
+              "path": ".trace.model_calls",
+              "before": [
+                {
+                  "args": {
+                    "focus": [
+                      "overview"
+                    ],
+                    "part_numbers": [
+                      "761X30-1138000/A"
+                    ]
+                  },
+                  "name": "get_actuator"
+                }
+              ],
+              "after": null
+            },
+            {
+              "path": ".trace.parameters.cancel_previous",
+              "removed": false
+            },
+            {
+              "path": ".trace.parameters.equivalent_enclosure",
+              "removed": null
+            },
+            {
+              "path": ".trace.parameters.equivalent_voltage_v",
+              "removed": null
+            },
+            {
+              "path": ".trace.parameters.explain_terms",
+              "removed": []
+            },
+            {
+              "path": ".trace.parameters.focus",
+              "removed": [
+                {
+                  "field": "overview",
+                  "service": null,
+                  "frequency_hz": null
+                }
+              ]
+            },
+            {
+              "path": ".trace.parameters.from_results_items",
+              "removed": ""
+            },
+            {
+              "path": ".trace.parameters.from_results_top",
+              "removed": 0
+            },
+            {
+              "path": ".trace.parameters.list_results",
+              "removed": false
+            },
+            {
+              "path": ".trace.parameters.part_numbers",
+              "removed": [
+                "761X30-1138000/A"
+              ]
+            },
+            {
+              "path": ".trace.parameters.reference_direction",
+              "removed": "lower"
+            },
+            {
+              "path": ".trace.parameters.reference_frequency_hz",
+              "removed": null
+            },
+            {
+              "path": ".trace.parameters.reference_index",
+              "removed": 0
+            },
+            {
+              "path": ".trace.parameters.reference_kind",
+              "removed": "none"
+            },
+            {
+              "path": ".trace.parameters.reference_metric",
+              "removed": "operating_time"
+            },
+            {
+              "path": ".trace.parameters.unsupported_requests",
+              "removed": []
+            },
+            {
+              "path": ".trace.raw_parameters.focus",
+              "removed": [
+                "overview"
+              ]
+            },
+            {
+              "path": ".trace.raw_parameters.part_numbers",
+              "removed": [
+                "761X30-1138000/A"
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "The missing digit is now readable: 761X30-11380000/A. What supply does it take?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "94e302b3cd1e5e4176949a89f0950292d0856d8206ec2e28b6095b5d98b8d256",
+            "95d0a50": "94e302b3cd1e5e4176949a89f0950292d0856d8206ec2e28b6095b5d98b8d256",
+            "head": "94e302b3cd1e5e4176949a89f0950292d0856d8206ec2e28b6095b5d98b8d256"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L7-07",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Can I have a 24 V DC-only actuator that is also rated for AC operation?",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "contradiction was not clarified"
+            ],
+            "95d0a50": [
+              "contradiction was not clarified"
+            ],
+            "head": [
+              "contradiction was not clarified"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "4fe67ff8d2ae26ede404bf0af69b0d7b8f5c7ac774dbd3c777a1aa4bccb06aab",
+            "95d0a50": "4fe67ff8d2ae26ede404bf0af69b0d7b8f5c7ac774dbd3c777a1aa4bccb06aab",
+            "head": "3200ddcdae74939e11d71f20e23f67582e06bde6769046138dba27d573796f59"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: DC, DC-only models, 24 V. Here are the leading published models.",
+                "+5 actuators meet: DC, DC-only models, 24 V; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: DC, DC-only models, 24 V. Here are the leading published models.",
+                "+5 actuators meet: DC, DC-only models, 24 V; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "I actually need one supply rating that supports either AC or DC, for open/close duty.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "25483435b7e8a3a4f7a38daaa9515c3b23bedab2e613dc3e0f2bf0834f245c2f",
+            "95d0a50": "25483435b7e8a3a4f7a38daaa9515c3b23bedab2e613dc3e0f2bf0834f245c2f",
+            "head": "84fa6ca21dfc0b72004a4946395c4ca9ec2dfdd4614d3acdd647d3d5658a418e"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: AC/DC, On/Off service, 24 V. Here are the leading published models.",
+                "+5 actuators meet: AC/DC, On/Off service, 24 V; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-5 actuators meet: AC/DC, On/Off service, 24 V. Here are the leading published models.",
+                "+5 actuators meet: AC/DC, On/Off service, 24 V; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L7-08",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Which supply voltages and enclosure types are represented in this catalogue?",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: Weatherproof",
+              "missing answer concept: Explosionproof",
+              "missing answer concept: 24",
+              "missing answer concept: 110",
+              "missing answer concept: 220"
+            ],
+            "95d0a50": [
+              "missing answer concept: Weatherproof",
+              "missing answer concept: Explosionproof",
+              "missing answer concept: 24",
+              "missing answer concept: 110",
+              "missing answer concept: 220"
+            ],
+            "head": [
+              "missing answer concept: Weatherproof",
+              "missing answer concept: Explosionproof",
+              "missing answer concept: 24",
+              "missing answer concept: 110",
+              "missing answer concept: 220"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "7d86319f75ae7e1e6e416b4f1b6a367a7703f78006745a2ad1b7ffce22422097",
+            "95d0a50": "7d86319f75ae7e1e6e416b4f1b6a367a7703f78006745a2ad1b7ffce22422097",
+            "head": "7d86319f75ae7e1e6e416b4f1b6a367a7703f78006745a2ad1b7ffce22422097"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 2,
+          "query": "For the 24 V choices, how does the available service differ between DC-only and AC/DC?",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "missing answer concept: DC",
+              "missing answer concept: AC/DC",
+              "missing answer concept: Modulating",
+              "missing answer concept: On/Off"
+            ],
+            "95d0a50": [
+              "missing answer concept: DC",
+              "missing answer concept: AC/DC",
+              "missing answer concept: Modulating",
+              "missing answer concept: On/Off"
+            ],
+            "head": [
+              "missing answer concept: DC",
+              "missing answer concept: AC/DC",
+              "missing answer concept: Modulating",
+              "missing answer concept: On/Off"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "7332cc560d78ebe869bc7bc5f2d2fba4bb15fdee9d2f168358b6c97179214640",
+            "95d0a50": "7332cc560d78ebe869bc7bc5f2d2fba4bb15fdee9d2f168358b6c97179214640",
+            "head": "7332cc560d78ebe869bc7bc5f2d2fba4bb15fdee9d2f168358b6c97179214640"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    },
+    {
+      "scenario": "T14_REPLAY_L7-09",
+      "status": {
+        "4906b62": "failed",
+        "95d0a50": "failed",
+        "head": "failed"
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "query": "Show 110 V weatherproof on/off models providing at least 100 Nm.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "bb1990e2682ac858185193cbcf2645788103fb9fb6a2fe074cb860499b05d27b",
+            "95d0a50": "bb1990e2682ac858185193cbcf2645788103fb9fb6a2fe074cb860499b05d27b",
+            "head": "54b35a5cbb02c1d1bfc1a20460a935f4901024ac7c5b569298ae6f802ff9986d"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-10 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 100 Nm. Here are the leading published models.",
+                "+10 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 100 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-10 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 100 Nm. Here are the leading published models.",
+                "+10 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 100 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "The site assessment now says flammable vapours can occur there.",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "c71f419c62cbd0e8f83d549586fd155529f113b586f50335f30ff0c97877684d",
+            "95d0a50": "c71f419c62cbd0e8f83d549586fd155529f113b586f50335f30ff0c97877684d",
+            "head": "89a41cd9629ec8b807aac2893288802b4bd1f6b2d9e940b43a0e615a90912a43"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": [
+            {
+              "path": ".answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-9 actuators meet: Explosionproof, On/Off service, 110 V, torque >= 100 Nm. Here are the leading published models.",
+                "+9 actuators meet: Explosionproof, On/Off service, 110 V, torque >= 100 Nm; with published electrical data. Here are the leading published models."
+              ]
+            },
+            {
+              "path": ".response.answer",
+              "diff": [
+                "--- before",
+                "+++ after",
+                "@@ -1 +1 @@",
+                "-9 actuators meet: Explosionproof, On/Off service, 110 V, torque >= 100 Nm. Here are the leading published models.",
+                "+9 actuators meet: Explosionproof, On/Off service, 110 V, torque >= 100 Nm; with published electrical data. Here are the leading published models."
+              ]
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "Reassess the list for that site and keep the voltage, duty, and torque requirements.",
+          "passed": {
+            "4906b62": false,
+            "95d0a50": false,
+            "head": false
+          },
+          "failures": {
+            "4906b62": [
+              "no matching products shown"
+            ],
+            "95d0a50": [
+              "no matching products shown"
+            ],
+            "head": [
+              "no matching products shown"
+            ]
+          },
+          "semantic_sha256": {
+            "4906b62": "31f00a76d7d58e848afdada50dfc801482eaf02a35e4fd4995c30f2f1ed1eb60",
+            "95d0a50": "31f00a76d7d58e848afdada50dfc801482eaf02a35e4fd4995c30f2f1ed1eb60",
+            "head": "31f00a76d7d58e848afdada50dfc801482eaf02a35e4fd4995c30f2f1ed1eb60"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        },
+        {
+          "turn": 4,
+          "query": "Does the catalogue alone establish suitability for my exact hazardous-area classification?",
+          "passed": {
+            "4906b62": true,
+            "95d0a50": true,
+            "head": true
+          },
+          "failures": {
+            "4906b62": [],
+            "95d0a50": [],
+            "head": []
+          },
+          "semantic_sha256": {
+            "4906b62": "76e532fdd0f5b20b54d536e8530094eb776e8d8c92f512803c44daa87691bb91",
+            "95d0a50": "76e532fdd0f5b20b54d536e8530094eb776e8d8c92f512803c44daa87691bb91",
+            "head": "76e532fdd0f5b20b54d536e8530094eb776e8d8c92f512803c44daa87691bb91"
+          },
+          "4906b62_to_95d0a50": [],
+          "95d0a50_to_head": []
+        }
+      ]
+    }
+  ]
+}

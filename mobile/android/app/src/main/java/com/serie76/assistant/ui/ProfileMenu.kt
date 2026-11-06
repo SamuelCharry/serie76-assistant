@@ -1,8 +1,10 @@
 package com.serie76.assistant.ui
 
 import android.content.Context
+import android.os.SystemClock
 import android.util.Patterns
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -45,18 +47,23 @@ fun ProfileMenu() {
 @Composable
 internal fun ProfileMenu(profile: ProfileDetails, onSave: (ProfileDetails) -> Unit, account: AccountControls? = null) {
     val appearance = LocalAppearance.current
+    val developer = LocalDeveloperMode.current
+    val unlock = remember { DeveloperUnlock() }
     var expanded by rememberSaveable { mutableStateOf(false) }
     var editing by rememberSaveable { mutableStateOf(false) }
     Box(Modifier.fillMaxWidth()) {
-        Surface(onClick = { expanded = true }, shape = RoundedCornerShape(12.dp),
+        Surface(shape = RoundedCornerShape(12.dp),
             color = MaterialTheme.colorScheme.background,
-            modifier = Modifier.fillMaxWidth().semantics { contentDescription = "Open profile menu" }) {
+            modifier = Modifier.fillMaxWidth()) {
             Row(Modifier.padding(vertical = 14.dp, horizontal = 4.dp),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(Modifier.size(40.dp).background(SoftAccent, CircleShape), contentAlignment = Alignment.Center) {
+                IconButton(onClick = { expanded = true }, modifier = Modifier.size(48.dp).background(SoftAccent, CircleShape)
+                    .semantics { contentDescription = "Open profile menu" }) {
                     Icon(ProfileLines, null, Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Column(Modifier.weight(1f).heightIn(min = 48.dp).clickable {
+                    if (unlock.tap(SystemClock.elapsedRealtime())) developer.toggle()
+                }, verticalArrangement = Arrangement.Center) {
                     Text(profile.name.ifBlank { "Profile" }, style = MaterialTheme.typography.titleSmall,
                         maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(profile.email.ifBlank { "Local profile" }, style = MaterialTheme.typography.bodySmall,

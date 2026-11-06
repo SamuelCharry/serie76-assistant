@@ -1,0 +1,242 @@
+{
+ "L1-01": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L1-02": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L1-03": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L1-04": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L1-05": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L1-06": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L1-07": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L1-08": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L1-09": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L2-01": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L2-02": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L2-03": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L2-04": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L2-05": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L2-06": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L2-07": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L2-08": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L2-09": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L2-10": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L3-01": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L3-02": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L3-03": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L3-04": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L3-05": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L3-06": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L3-07": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L3-08": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L4-01": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L4-02": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L4-03": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L4-04": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L4-05": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L4-06": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L4-07": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L4-08": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L5-01": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L5-02": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L5-03": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L5-04": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L5-05": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L5-06": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L5-07": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L5-08": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L6-01": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L6-02": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L6-03": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L6-04": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L6-05": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L6-06": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L7-01": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L7-02": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L7-03": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L7-04": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L7-05": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L7-06": {
+  "A": "out_v17_final3_google_gemini-3.6-flash",
+  "B": "out_v17_base3_google_gemini-3.6-flash"
+ },
+ "L7-07": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L7-08": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L7-09": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L7-10": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ },
+ "L7-11": {
+  "A": "out_v17_base3_google_gemini-3.6-flash",
+  "B": "out_v17_final3_google_gemini-3.6-flash"
+ }
+}

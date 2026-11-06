@@ -1,0 +1,1131 @@
+{
+  "multi_question": {
+    "session_id": "896427d7-6e98-475f-b461-a6e88db8edc4",
+    "answer": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: 70 Nm torque; FLA 5 A\n761X30-11320000/A: 80 Nm torque; FLA 0.6 A\n761A00-11320000/A: 80 Nm torque; FLA 0.7 A",
+    "message_id": "b79830ff-6d05-4a76-adac-a6f05d7841f0",
+    "products": [
+      {
+        "base_part_number": "761X30-11380000/A",
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 24,
+        "supply_current": "AC/DC",
+        "phase_count": null,
+        "data_status": "reported",
+        "service_layout": "on_off",
+        "measurements": {
+          "on_off_torque_in_lb": 620,
+          "on_off_torque_nm": 70,
+          "shared_torque_in_lb": null,
+          "shared_torque_nm": null
+        },
+        "field_status": {
+          "on_off_torque_nm": "reported",
+          "shared_torque_nm": "not_in_layout",
+          "on_off_torque_in_lb": "reported",
+          "shared_torque_in_lb": "not_in_layout"
+        },
+        "certification": {
+          "header": "EXPLOSIONPROOF - CSA",
+          "csa_status": "reported_in_header",
+          "footnote_marker": null
+        },
+        "notes": [
+          {
+            "text": "Hazardous Location Certification (Area Classification)",
+            "scope": {
+              "kind": "page",
+              "page": 3
+            }
+          },
+          {
+            "text": "Class I, Division 1, GRoups C, D; T4",
+            "scope": {
+              "kind": "page",
+              "page": 3
+            }
+          },
+          {
+            "text": "Ex d IIB T4 Gb",
+            "scope": {
+              "kind": "page",
+              "page": 3
+            }
+          },
+          {
+            "text": "Class I, Zone 1, AEx d IIB T4 Gb",
+            "scope": {
+              "kind": "page",
+              "page": 3
+            }
+          },
+          {
+            "text": "1Full load current (FLA) @ Max. rated load",
+            "scope": {
+              "kind": "page",
+              "page": 3
+            }
+          },
+          {
+            "text": "2. Locked rotor current (LRA) @ Locked rotor load",
+            "scope": {
+              "kind": "page",
+              "page": 3
+            }
+          },
+          {
+            "text": "3. Allowable motor voltage tolerance: +/- 10%",
+            "scope": {
+              "kind": "page",
+              "page": 3
+            }
+          },
+          {
+            "text": "4. Allowable power frequency tolerance: +/- 5%",
+            "scope": {
+              "kind": "page",
+              "page": 3
+            }
+          },
+          {
+            "text": "5. Duty cycle per IEC 60034-1 for on/off and modulating service",
+            "scope": {
+              "kind": "page",
+              "page": 3
+            }
+          },
+          {
+            "text": "6. Starts and cycles per hour based on rated torque",
+            "scope": {
+              "kind": "page",
+              "page": 3
+            }
+          }
+        ],
+        "source": {
+          "document": "series_76_electric_data.pdf",
+          "page": 3,
+          "table": "p3_t1"
+        },
+        "frequencies": [
+          {
+            "frequency_hz": null,
+            "frequency_scope": "not_specified",
+            "operating_time_s": 17,
+            "fla_a": 5,
+            "lra_a": 12.8
+          }
+        ]
+      },
+      {
+        "base_part_number": "761X30-11320000/A",
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "phase_count": 1,
+        "data_status": "reported",
+        "service_layout": "mixed",
+        "measurements": {
+          "on_off_torque_in_lb": 690,
+          "on_off_torque_nm": 80,
+          "shared_torque_in_lb": null,
+          "shared_torque_nm": null
+        },
+        "field_status": {
+          "on_off_torque_nm": "reported",
+          "shared_torque_nm": "not_in_layout",
+          "on_off_torque_in_lb": "reported",
+          "shared_torque_in_lb": "not_in_layout"
+        },
+        "certification": {
+          "header": "EXPLOSIONPROOF - CSA",
+          "csa_status": "reported_in_header",
+          "footnote_marker": null
+        },
+        "notes": [
+          {
+            "text": "Hazardous Location Certification (Area Classification)",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Class I, Division 1, Groups C, D; T4",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Ex d IIB T4 Gb",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Class I, Zone 1, AEx d IIB T4 Gb",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "2. Full load current (FLA) @ Max. rated load",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "3. Locked rotor current (LRA) @ Locked rotor load",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "4. Allowable motor voltage tolerance: +/- 10%",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "5. Allowable power frequency tolerance: +/- 5%",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "6. Duty cycle per IEC 60034-1 for on/off and modulating service",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "7. Starts and cycles per hour based on rated torque",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          }
+        ],
+        "source": {
+          "document": "series_76_electric_data.pdf",
+          "page": 4,
+          "table": "p4_t2"
+        },
+        "frequencies": [
+          {
+            "frequency_hz": 50,
+            "frequency_scope": "specified",
+            "operating_time_s": 23,
+            "fla_a": 0.6,
+            "lra_a": 0.7
+          },
+          {
+            "frequency_hz": 60,
+            "frequency_scope": "specified",
+            "operating_time_s": 20,
+            "fla_a": 0.6,
+            "lra_a": 0.7
+          }
+        ]
+      },
+      {
+        "base_part_number": "761A00-11320000/A",
+        "enclosure": "weatherproof",
+        "supply_voltage_v": 220,
+        "supply_current": "AC",
+        "phase_count": 1,
+        "data_status": "reported",
+        "service_layout": "mixed",
+        "measurements": {
+          "on_off_torque_in_lb": 700,
+          "on_off_torque_nm": 80,
+          "shared_torque_in_lb": null,
+          "shared_torque_nm": null
+        },
+        "field_status": {
+          "on_off_torque_nm": "reported",
+          "shared_torque_nm": "not_in_layout",
+          "on_off_torque_in_lb": "reported",
+          "shared_torque_in_lb": "not_in_layout"
+        },
+        "certification": {
+          "header": "WEATHERPROOF - CSA, CE, & UKCA",
+          "csa_status": "reported_in_header",
+          "footnote_marker": null
+        },
+        "notes": [
+          {
+            "text": "* Sizes 6 and 7 are not CSA Certified",
+            "scope": {
+              "kind": "table",
+              "table": "p1_t2"
+            }
+          },
+          {
+            "text": "1. Full load current (FLA) @ Max. rated load",
+            "scope": {
+              "kind": "page",
+              "page": 1
+            }
+          },
+          {
+            "text": "2. Locked rotor current (LRA) @ Locked rotor load",
+            "scope": {
+              "kind": "page",
+              "page": 1
+            }
+          },
+          {
+            "text": "3. Allowable motor voltage tolerance: +/- 10%",
+            "scope": {
+              "kind": "page",
+              "page": 1
+            }
+          },
+          {
+            "text": "4. Allowable power frequency tolerance: +/- 5%",
+            "scope": {
+              "kind": "page",
+              "page": 1
+            }
+          },
+          {
+            "text": "5. Duty cycle per IEC 60034-1 for on/off and modulating service",
+            "scope": {
+              "kind": "page",
+              "page": 1
+            }
+          },
+          {
+            "text": "6. Starts and cycles per hour based on rated torque",
+            "scope": {
+              "kind": "page",
+              "page": 1
+            }
+          }
+        ],
+        "source": {
+          "document": "series_76_electric_data.pdf",
+          "page": 1,
+          "table": "p1_t2"
+        },
+        "frequencies": [
+          {
+            "frequency_hz": 50,
+            "frequency_scope": "specified",
+            "operating_time_s": 20,
+            "fla_a": 0.7,
+            "lra_a": 0.7
+          },
+          {
+            "frequency_hz": 60,
+            "frequency_scope": "specified",
+            "operating_time_s": 17,
+            "fla_a": 0.7,
+            "lra_a": 0.7
+          }
+        ]
+      }
+    ],
+    "clarification": {
+      "field": "supply_voltage_v",
+      "message": "59 actuators meet: On/Off service, torque ≥ 70 Nm. To narrow it down: supply voltage and enclosure.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11380000/A: 70 Nm torque; FLA 5 A\n761X30-11320000/A: 80 Nm torque; FLA 0.6 A\n761A00-11320000/A: 80 Nm torque; FLA 0.7 A",
+      "options": [
+        "Use 24 V",
+        "Use 110 V",
+        "Use 220 V"
+      ]
+    },
+    "terms": [],
+    "assumptions": [],
+    "suggested_replies": [
+      "Compare top 2",
+      "Show all 59"
+    ],
+    "comparison": null,
+    "lead": "Ranked by closest torque at or above 70 Nm, then lowest FLA.",
+    "interaction": {
+      "kind": "question",
+      "questions": [
+        {
+          "id": "supply_voltage_v",
+          "prompt": "Which supply voltage?",
+          "options": [
+            {
+              "value": "24",
+              "label": "24 V",
+              "count": 5
+            },
+            {
+              "value": "110",
+              "label": "110 V",
+              "count": 21
+            },
+            {
+              "value": "220",
+              "label": "220 V",
+              "count": 33
+            }
+          ]
+        },
+        {
+          "id": "enclosure",
+          "prompt": "Which enclosure?",
+          "options": [
+            {
+              "value": "explosionproof",
+              "label": "Explosionproof",
+              "count": 25
+            },
+            {
+              "value": "weatherproof",
+              "label": "Weatherproof",
+              "count": 34
+            }
+          ]
+        }
+      ]
+    },
+    "suggestions": [
+      {
+        "label": "Compare top 2",
+        "action": {
+          "type": "compare_top",
+          "args": {
+            "n": 2
+          }
+        }
+      },
+      {
+        "label": "Show all 59",
+        "action": {
+          "type": "show_all",
+          "args": {}
+        }
+      }
+    ],
+    "active_filters": [
+      {
+        "field": "service",
+        "label": "On/Off service"
+      },
+      {
+        "field": "min_torque_nm",
+        "label": "torque ≥ 70 Nm"
+      }
+    ],
+    "recommendation": {
+      "ranked_by": "closest torque at or above 70 Nm, then lowest FLA",
+      "total": 59,
+      "shown": 3,
+      "items": [
+        {
+          "part_number": "761X30-11380000/A",
+          "reason": "70 Nm torque; FLA 5 A",
+          "key_values": [
+            {
+              "label": "On/Off torque",
+              "value": "70 Nm"
+            },
+            {
+              "label": "FLA",
+              "value": "5 A"
+            }
+          ]
+        },
+        {
+          "part_number": "761X30-11320000/A",
+          "reason": "80 Nm torque; FLA 0.6 A",
+          "key_values": [
+            {
+              "label": "On/Off torque",
+              "value": "80 Nm"
+            },
+            {
+              "label": "FLA",
+              "value": "0.6 A"
+            }
+          ]
+        },
+        {
+          "part_number": "761A00-11320000/A",
+          "reason": "80 Nm torque; FLA 0.7 A",
+          "key_values": [
+            {
+              "label": "On/Off torque",
+              "value": "80 Nm"
+            },
+            {
+              "label": "FLA",
+              "value": "0.7 A"
+            }
+          ]
+        }
+      ]
+    },
+    "debug": {
+      "latency_ms": 261,
+      "attempts": 1,
+      "llm_called": true
+    }
+  },
+  "recommendation_110v_explosionproof": {
+    "session_id": "896427d7-6e98-475f-b461-a6e88db8edc4",
+    "answer": "10 actuators meet: Explosionproof, On/Off service, 110 V, torque ≥ 70 Nm. Here are the leading published models.\nRanked by closest torque at or above 70 Nm, then lowest FLA.\n761X30-11300000/A: 80 Nm torque; FLA 1.1 A\n761Y30-11300000/A: 100 Nm torque; FLA 1.1 A\n762X30-11300000/A: 150 Nm torque; FLA 1.9 A",
+    "message_id": "16e12fa3-eaee-46cf-a69d-56abe8c10614",
+    "products": [
+      {
+        "base_part_number": "761X30-11300000/A",
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "phase_count": 1,
+        "data_status": "reported",
+        "service_layout": "mixed",
+        "measurements": {
+          "on_off_torque_in_lb": 690,
+          "on_off_torque_nm": 80,
+          "shared_torque_in_lb": null,
+          "shared_torque_nm": null
+        },
+        "field_status": {
+          "on_off_torque_nm": "reported",
+          "shared_torque_nm": "not_in_layout",
+          "on_off_torque_in_lb": "reported",
+          "shared_torque_in_lb": "not_in_layout"
+        },
+        "certification": {
+          "header": "EXPLOSIONPROOF - CSA",
+          "csa_status": "reported_in_header",
+          "footnote_marker": null
+        },
+        "notes": [
+          {
+            "text": "Hazardous Location Certification (Area Classification)",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Class I, Division 1, Groups C, D; T4",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Ex d IIB T4 Gb",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Class I, Zone 1, AEx d IIB T4 Gb",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "2. Full load current (FLA) @ Max. rated load",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "3. Locked rotor current (LRA) @ Locked rotor load",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "4. Allowable motor voltage tolerance: +/- 10%",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "5. Allowable power frequency tolerance: +/- 5%",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "6. Duty cycle per IEC 60034-1 for on/off and modulating service",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "7. Starts and cycles per hour based on rated torque",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          }
+        ],
+        "source": {
+          "document": "series_76_electric_data.pdf",
+          "page": 4,
+          "table": "p4_t1"
+        },
+        "frequencies": [
+          {
+            "frequency_hz": 50,
+            "frequency_scope": "specified",
+            "operating_time_s": 23,
+            "fla_a": 1.1,
+            "lra_a": 1.3
+          },
+          {
+            "frequency_hz": 60,
+            "frequency_scope": "specified",
+            "operating_time_s": 20,
+            "fla_a": 1.2,
+            "lra_a": 1.4
+          }
+        ]
+      },
+      {
+        "base_part_number": "761Y30-11300000/A",
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "phase_count": 1,
+        "data_status": "reported",
+        "service_layout": "mixed",
+        "measurements": {
+          "on_off_torque_in_lb": 860,
+          "on_off_torque_nm": 100,
+          "shared_torque_in_lb": null,
+          "shared_torque_nm": null
+        },
+        "field_status": {
+          "on_off_torque_nm": "reported",
+          "shared_torque_nm": "not_in_layout",
+          "on_off_torque_in_lb": "reported",
+          "shared_torque_in_lb": "not_in_layout"
+        },
+        "certification": {
+          "header": "EXPLOSIONPROOF - CSA",
+          "csa_status": "reported_in_header",
+          "footnote_marker": null
+        },
+        "notes": [
+          {
+            "text": "Hazardous Location Certification (Area Classification)",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Class I, Division 1, Groups C, D; T4",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Ex d IIB T4 Gb",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Class I, Zone 1, AEx d IIB T4 Gb",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "2. Full load current (FLA) @ Max. rated load",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "3. Locked rotor current (LRA) @ Locked rotor load",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "4. Allowable motor voltage tolerance: +/- 10%",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "5. Allowable power frequency tolerance: +/- 5%",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "6. Duty cycle per IEC 60034-1 for on/off and modulating service",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "7. Starts and cycles per hour based on rated torque",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          }
+        ],
+        "source": {
+          "document": "series_76_electric_data.pdf",
+          "page": 4,
+          "table": "p4_t1"
+        },
+        "frequencies": [
+          {
+            "frequency_hz": 50,
+            "frequency_scope": "specified",
+            "operating_time_s": 23,
+            "fla_a": 1.1,
+            "lra_a": 1.3
+          },
+          {
+            "frequency_hz": 60,
+            "frequency_scope": "specified",
+            "operating_time_s": 20,
+            "fla_a": 1.2,
+            "lra_a": 1.4
+          }
+        ]
+      },
+      {
+        "base_part_number": "762X30-11300000/A",
+        "enclosure": "explosionproof",
+        "supply_voltage_v": 110,
+        "supply_current": "AC",
+        "phase_count": 1,
+        "data_status": "reported",
+        "service_layout": "mixed",
+        "measurements": {
+          "on_off_torque_in_lb": 1350,
+          "on_off_torque_nm": 150,
+          "shared_torque_in_lb": null,
+          "shared_torque_nm": null
+        },
+        "field_status": {
+          "on_off_torque_nm": "reported",
+          "shared_torque_nm": "not_in_layout",
+          "on_off_torque_in_lb": "reported",
+          "shared_torque_in_lb": "not_in_layout"
+        },
+        "certification": {
+          "header": "EXPLOSIONPROOF - CSA",
+          "csa_status": "reported_in_header",
+          "footnote_marker": null
+        },
+        "notes": [
+          {
+            "text": "Hazardous Location Certification (Area Classification)",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Class I, Division 1, Groups C, D; T4",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Ex d IIB T4 Gb",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "Class I, Zone 1, AEx d IIB T4 Gb",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "2. Full load current (FLA) @ Max. rated load",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "3. Locked rotor current (LRA) @ Locked rotor load",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "4. Allowable motor voltage tolerance: +/- 10%",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "5. Allowable power frequency tolerance: +/- 5%",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "6. Duty cycle per IEC 60034-1 for on/off and modulating service",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          },
+          {
+            "text": "7. Starts and cycles per hour based on rated torque",
+            "scope": {
+              "kind": "page",
+              "page": 4
+            }
+          }
+        ],
+        "source": {
+          "document": "series_76_electric_data.pdf",
+          "page": 4,
+          "table": "p4_t1"
+        },
+        "frequencies": [
+          {
+            "frequency_hz": 50,
+            "frequency_scope": "specified",
+            "operating_time_s": 25,
+            "fla_a": 1.9,
+            "lra_a": 2.4
+          },
+          {
+            "frequency_hz": 60,
+            "frequency_scope": "specified",
+            "operating_time_s": 21,
+            "fla_a": 2,
+            "lra_a": 2.5
+          }
+        ]
+      }
+    ],
+    "clarification": null,
+    "terms": [],
+    "assumptions": [],
+    "suggested_replies": [
+      "Compare top 2",
+      "Show all 10"
+    ],
+    "comparison": null,
+    "lead": "Ranked by closest torque at or above 70 Nm, then lowest FLA.",
+    "interaction": null,
+    "suggestions": [
+      {
+        "label": "Compare top 2",
+        "action": {
+          "type": "compare_top",
+          "args": {
+            "n": 2
+          }
+        }
+      },
+      {
+        "label": "Show all 10",
+        "action": {
+          "type": "show_all",
+          "args": {}
+        }
+      }
+    ],
+    "active_filters": [
+      {
+        "field": "service",
+        "label": "On/Off service"
+      },
+      {
+        "field": "min_torque_nm",
+        "label": "torque ≥ 70 Nm"
+      },
+      {
+        "field": "supply_voltage_v",
+        "label": "110 V"
+      },
+      {
+        "field": "enclosure",
+        "label": "Explosionproof"
+      }
+    ],
+    "recommendation": {
+      "ranked_by": "closest torque at or above 70 Nm, then lowest FLA",
+      "total": 10,
+      "shown": 3,
+      "items": [
+        {
+          "part_number": "761X30-11300000/A",
+          "reason": "80 Nm torque; FLA 1.1 A",
+          "key_values": [
+            {
+              "label": "On/Off torque",
+              "value": "80 Nm"
+            },
+            {
+              "label": "FLA",
+              "value": "1.1 A"
+            }
+          ]
+        },
+        {
+          "part_number": "761Y30-11300000/A",
+          "reason": "100 Nm torque; FLA 1.1 A",
+          "key_values": [
+            {
+              "label": "On/Off torque",
+              "value": "100 Nm"
+            },
+            {
+              "label": "FLA",
+              "value": "1.1 A"
+            }
+          ]
+        },
+        {
+          "part_number": "762X30-11300000/A",
+          "reason": "150 Nm torque; FLA 1.9 A",
+          "key_values": [
+            {
+              "label": "On/Off torque",
+              "value": "150 Nm"
+            },
+            {
+              "label": "FLA",
+              "value": "1.9 A"
+            }
+          ]
+        }
+      ]
+    },
+    "debug": {
+      "latency_ms": 78,
+      "attempts": 0,
+      "llm_called": false
+    }
+  },
+  "fast_path_compare": {
+    "session_id": "a038eeb3-2795-4a2b-beff-a84ad75774be",
+    "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
+    "message_id": "a61ee23c-af32-41a2-813f-a2e101fe0628",
+    "products": [],
+    "clarification": null,
+    "terms": [],
+    "assumptions": [],
+    "suggested_replies": [],
+    "comparison": {
+      "layout": "table",
+      "models": [
+        "761A00-11300000/A",
+        "761B00-11300000/A"
+      ],
+      "summary": "761A00-11300000/A wins 5 of 7 differing fields with an agreed direction; 761B00-11300000/A wins 2. This is an unweighted field count, not an overall suitability rating.",
+      "assumptions": "More is better for torque and cycles; less is better for time, current and motor power.",
+      "rows": [
+        {
+          "field": "on_off_torque",
+          "label": "On/Off torque",
+          "values": [
+            "700 in-lb / 80 Nm",
+            "880 in-lb / 100 Nm"
+          ],
+          "better": 1
+        },
+        {
+          "field": "modulating_torque",
+          "label": "Modulating torque",
+          "values": [
+            "580 in-lb / 65 Nm",
+            "620 in-lb / 70 Nm"
+          ],
+          "better": 1
+        },
+        {
+          "field": "cycles_per_hour",
+          "label": "On/Off cycles",
+          "values": [
+            "36 /h",
+            "31 /h"
+          ],
+          "better": 0
+        },
+        {
+          "field": "operating_time_50hz_s",
+          "label": "Operating time at 50 Hz",
+          "values": [
+            "20 s",
+            "23 s"
+          ],
+          "better": 0
+        },
+        {
+          "field": "fla_50hz_a",
+          "label": "FLA at 50 Hz",
+          "values": [
+            "1.1 A",
+            "1.2 A"
+          ],
+          "better": 0
+        },
+        {
+          "field": "operating_time_60hz_s",
+          "label": "Operating time at 60 Hz",
+          "values": [
+            "17 s",
+            "19 s"
+          ],
+          "better": 0
+        },
+        {
+          "field": "fla_60hz_a",
+          "label": "FLA at 60 Hz",
+          "values": [
+            "1.2 A",
+            "1.3 A"
+          ],
+          "better": 0
+        }
+      ],
+      "hidden_rows": [
+        {
+          "field": "enclosure",
+          "label": "Enclosure",
+          "values": [
+            "Weatherproof",
+            "Weatherproof"
+          ],
+          "better": null
+        },
+        {
+          "field": "supply_voltage_v",
+          "label": "Supply voltage",
+          "values": [
+            "110 V",
+            "110 V"
+          ],
+          "better": null
+        },
+        {
+          "field": "supply_current",
+          "label": "Current type",
+          "values": [
+            "AC",
+            "AC"
+          ],
+          "better": null
+        },
+        {
+          "field": "phase_count",
+          "label": "Phases",
+          "values": [
+            "1",
+            "1"
+          ],
+          "better": null
+        },
+        {
+          "field": "motor_power_w",
+          "label": "Motor power",
+          "values": [
+            "15 W",
+            "15 W"
+          ],
+          "better": null
+        },
+        {
+          "field": "on_off_duty_s4_percent",
+          "label": "On/Off duty S4",
+          "values": [
+            "40 %",
+            "40 %"
+          ],
+          "better": null
+        },
+        {
+          "field": "modulating_duty_s4_percent",
+          "label": "Modulating duty S4",
+          "values": [
+            "40 %",
+            "40 %"
+          ],
+          "better": null
+        },
+        {
+          "field": "starts_per_hour",
+          "label": "Modulating starts",
+          "values": [
+            "960 /h",
+            "960 /h"
+          ],
+          "better": null
+        },
+        {
+          "field": "lra_50hz_a",
+          "label": "LRA at 50 Hz",
+          "values": [
+            "1.3 A",
+            "1.3 A"
+          ],
+          "better": null
+        },
+        {
+          "field": "lra_60hz_a",
+          "label": "LRA at 60 Hz",
+          "values": [
+            "1.4 A",
+            "1.4 A"
+          ],
+          "better": null
+        }
+      ],
+      "key_fields": [],
+      "key_fields_reason": ""
+    },
+    "lead": "761A00-11300000/A leads on On/Off cycles, Operating time at 50 Hz, FLA at 50 Hz; 761B00-11300000/A leads on On/Off torque, Modulating torque.",
+    "interaction": null,
+    "suggestions": [],
+    "active_filters": [],
+    "recommendation": null,
+    "debug": {
+      "latency_ms": 61,
+      "attempts": 0,
+      "llm_called": false
+    }
+  }
+}

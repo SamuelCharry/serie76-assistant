@@ -1,0 +1,23 @@
+{
+  "status": "complete",
+  "runner_exit": 0,
+  "required_exits": {
+    "unittest": 0,
+    "v7": 0,
+    "t10": 0,
+    "t12": 0,
+    "t14": 0,
+    "schema": 0,
+    "public_text": 0,
+    "ranking": 0,
+    "replay": 1
+  },
+  "oracle_tests": 119,
+  "oracle_exit": 0,
+  "unittest_tests": 797,
+  "unittest_skipped": 2,
+  "unittest_seconds": 461.868,
+  "provider_calls": 0,
+  "source_unchanged_during_gates": true,
+  "oracle_source_matches": true
+}

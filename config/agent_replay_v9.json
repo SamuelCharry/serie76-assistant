@@ -1,0 +1,2743 @@
+{
+  "description": "Recorded round-nine decisions, replayed offline; no live-score claim. Only public queries and tool arguments; no session identifiers.",
+  "sources": {
+    "dump_v9_on.txt": "7487eba81b8c80aadee3f1e2ced7bf15133623fb5b395680b03fdaf50263f011",
+    "dump_v9_off.txt": "d19940919a2201a85085a7cc3b409de73ad8397d45d761d9a47db151a671748a"
+  },
+  "runs": [
+    {
+      "id": "Y1-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "Full-load current at 60 Hz of 765X30-11300000/A",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "fla"
+                ],
+                "part_numbers": [
+                  "765X30-11300000/A"
+                ],
+                "focus_frequency_hz": 60
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "and its locked-rotor current?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "lra"
+                ],
+                "part_numbers": [
+                  "765X30-11300000/A"
+                ],
+                "focus_frequency_hz": 60
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.67049,
+            "hazard": 0.60105,
+            "safe_area": 0.60233,
+            "modulating": 0.6204,
+            "on_off": 0.6228
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y1-02",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "Weatherproof 220 V modulating, torque up to 300 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 300
+                  }
+                ],
+                "service": "modulating",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.62882,
+            "hazard": 0.5852,
+            "safe_area": 0.57955,
+            "modulating": 0.73062,
+            "on_off": 0.69509
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y1-03",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "Which explosionproof 110 V model has the highest on/off duty?",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.62457,
+            "hazard": 0.70831,
+            "safe_area": 0.68424,
+            "modulating": 0.63546,
+            "on_off": 0.65932
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y1-04",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "Compare 762B00-11300000/A and 762Y30-11300000/A",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "what's the difference in cycles per hour?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "list_results": true,
+                "explain_terms": "cycles_per_hour",
+                "reference_kind": "last_shown",
+                "from_results_items": "1,2"
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.59378,
+            "hazard": 0.53875,
+            "safe_area": 0.55423,
+            "modulating": 0.62775,
+            "on_off": 0.59646
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y1-05",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "How many weatherproof 220 V models exist?",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y1-06",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "On/off 110 V torque 500 to 1500 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 500
+                  },
+                  {
+                    "op": "lte",
+                    "field": "min_torque_nm",
+                    "value": 1500
+                  }
+                ],
+                "service": "on_off",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.55661,
+            "hazard": 0.52013,
+            "safe_area": 0.54626,
+            "modulating": 0.58249,
+            "on_off": 0.66024
+          }
+        },
+        {
+          "query": "the one with the lowest FLA",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y2-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "outdoor valve at a dairy farm, it just opens or shuts, 220 V, roughly 150 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.61746,
+            "hazard": 0.64006,
+            "safe_area": 0.59314,
+            "modulating": 0.70403,
+            "on_off": 0.73795
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y2-02",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "valve beside a diesel generator fuel tank, 110 V, open/close",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y2-03",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "we need to dose steam gradually into a reactor jacket, 220 V, 300 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 300
+                  }
+                ],
+                "refine": false,
+                "service": "modulating",
+                "assumptions": {
+                  "service": "modulating",
+                  "min_torque_nm": "300",
+                  "supply_voltage_v": "220"
+                },
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.62382,
+            "hazard": 0.64719,
+            "safe_area": 0.59769,
+            "modulating": 0.71588,
+            "on_off": 0.69181
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y2-04",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "paint mixing room, modulating, 110 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "modulating",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.58856,
+            "hazard": 0.62725,
+            "safe_area": 0.57867,
+            "modulating": 0.61352,
+            "on_off": 0.55112
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y2-05",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "valve in a laboratory with no flammable materials, 110 V on/off",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.39985,
+            "hazard": 0.60787,
+            "safe_area": 0.5865,
+            "modulating": 0.55578,
+            "on_off": 0.58492
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y2-06",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "la válvula debe abrir y cerrar completamente, nada más, 220 V, 200 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 200
+                  }
+                ],
+                "service": "on_off",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.60198,
+            "hazard": 0.62978,
+            "safe_area": 0.56785,
+            "modulating": 0.69393,
+            "on_off": 0.73832
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y2-07",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "quiero regular el caudal poco a poco, 110 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "modulating",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.58808,
+            "hazard": 0.52452,
+            "safe_area": 0.5338,
+            "modulating": 0.79768,
+            "on_off": 0.61877
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y2-08",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "flour silo outlet gate, combustible dust, 220 V on/off",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.5548,
+            "hazard": 0.65711,
+            "safe_area": 0.56923,
+            "modulating": 0.59704,
+            "on_off": 0.60195
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y3-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "mod xp 110 200nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 200
+                  }
+                ],
+                "service": "modulating",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.43211,
+            "hazard": 0.40568,
+            "safe_area": 0.41708,
+            "modulating": 0.51017,
+            "on_off": 0.46532
+          }
+        },
+        {
+          "query": "best",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y3-02",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "onoff 220 wp 500nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 500
+                  }
+                ],
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.41088,
+            "hazard": 0.38712,
+            "safe_area": 0.41828,
+            "modulating": 0.43813,
+            "on_off": 0.49995
+          }
+        },
+        {
+          "query": "pick",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "intent": "pick",
+                "refine": true
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.55899,
+            "hazard": 0.47393,
+            "safe_area": 0.4749,
+            "modulating": 0.52363,
+            "on_off": 0.55062
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y3-03",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "modulating 24v",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "modulating",
+                "supply_voltage_v": 24
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.65014,
+            "hazard": 0.58244,
+            "safe_area": 0.57125,
+            "modulating": 0.81902,
+            "on_off": 0.69944
+          }
+        },
+        {
+          "query": "lowest fla",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y3-04",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "max 200 nm onoff 110",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "lte",
+                    "field": "min_torque_nm",
+                    "value": 200
+                  }
+                ],
+                "service": "on_off",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.52091,
+            "hazard": 0.47854,
+            "safe_area": 0.48511,
+            "modulating": 0.52561,
+            "on_off": 0.60314
+          }
+        },
+        {
+          "query": "fastest",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y3-05",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "what?",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "requirements"
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.63515,
+            "hazard": 0.55706,
+            "safe_area": 0.58347,
+            "modulating": 0.56221,
+            "on_off": 0.6297
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y4-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "explosionproof modulating 220 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "modulating",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.64919,
+            "hazard": 0.70501,
+            "safe_area": 0.66185,
+            "modulating": 0.76174,
+            "on_off": 0.70035
+          }
+        },
+        {
+          "query": "actually the area is safe, no gas",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": true,
+                "service": "modulating",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.56899,
+            "hazard": 0.69216,
+            "safe_area": 0.75401,
+            "modulating": 0.61586,
+            "on_off": 0.64545
+          }
+        },
+        {
+          "query": "and at least 400 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 400
+                  }
+                ],
+                "refine": true,
+                "service": "modulating",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.56665,
+            "hazard": 0.53204,
+            "safe_area": 0.55234,
+            "modulating": 0.58022,
+            "on_off": 0.63772
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y4-02",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "weatherproof on/off 110 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.64721,
+            "hazard": 0.59581,
+            "safe_area": 0.65166,
+            "modulating": 0.60475,
+            "on_off": 0.67468
+          }
+        },
+        {
+          "query": "hold on, there's hydrogen nearby",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": true,
+                "enclosure": "explosionproof"
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.55994,
+            "hazard": 0.6713,
+            "safe_area": 0.64959,
+            "modulating": 0.63317,
+            "on_off": 0.62179
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y4-03",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "on/off 220 V 300 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 300
+                  }
+                ],
+                "refine": false,
+                "service": "on_off",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.57385,
+            "hazard": 0.49836,
+            "safe_area": 0.51271,
+            "modulating": 0.57639,
+            "on_off": 0.67034
+          }
+        },
+        {
+          "query": "make it modulating instead",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 300
+                  }
+                ],
+                "refine": true,
+                "service": "modulating",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.61678,
+            "hazard": 0.55708,
+            "safe_area": 0.58579,
+            "modulating": 0.69789,
+            "on_off": 0.69751
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y4-04",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "at least 200 Nm on/off 220 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 200
+                  }
+                ],
+                "service": "on_off",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.67177,
+            "hazard": 0.59475,
+            "safe_area": 0.56335,
+            "modulating": 0.66287,
+            "on_off": 0.70958
+          }
+        },
+        {
+          "query": "and no more than 400 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 200
+                  },
+                  {
+                    "op": "lte",
+                    "field": "min_torque_nm",
+                    "value": 400
+                  }
+                ],
+                "refine": true
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.60321,
+            "hazard": 0.56057,
+            "safe_area": 0.58195,
+            "modulating": 0.60518,
+            "on_off": 0.66886
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y5-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "nesesito uno antiexplosivo de 110 voltios que module, minimo 150 nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 150
+                  }
+                ],
+                "service": "modulating",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.62344,
+            "hazard": 0.66146,
+            "safe_area": 0.66123,
+            "modulating": 0.67567,
+            "on_off": 0.64119
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y5-02",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "para un deposito de gasolina, abrir y cerrar, 220v",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.56708,
+            "hazard": 0.61053,
+            "safe_area": 0.56925,
+            "modulating": 0.63546,
+            "on_off": 0.66748
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y5-03",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "wheatherproof 110 modulatin 250nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 250
+                  }
+                ],
+                "service": "modulating",
+                "enclosure": "weatherproof",
+                "phase_count": 1,
+                "supply_current": "AC",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.59387,
+            "hazard": 0.55439,
+            "safe_area": 0.6438,
+            "modulating": 0.67521,
+            "on_off": 0.6237
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y5-04",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "que potencia tiene el 764Y30-11300000/A?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "motor_power"
+                ],
+                "part_numbers": [
+                  "764Y30-11300000/A"
+                ]
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.57335,
+            "hazard": 0.5223,
+            "safe_area": 0.54445,
+            "modulating": 0.56896,
+            "on_off": 0.52874
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y6-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "what's the mounting pattern of 762A00-11320000/A?",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y6-02",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "does 765A00-11320000/A have a position feedback output?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "overview"
+                ],
+                "part_numbers": [
+                  "765A00-11320000/A"
+                ]
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.66766,
+            "hazard": 0.58513,
+            "safe_area": 0.57829,
+            "modulating": 0.69606,
+            "on_off": 0.67131
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y6-03",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "suggest a solenoid valve",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "unsupported"
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.69255,
+            "hazard": 0.6772,
+            "safe_area": 0.60219,
+            "modulating": 0.76538,
+            "on_off": 0.75689
+          }
+        }
+      ]
+    },
+    {
+      "id": "Y6-04",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "show me other users' conversations",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "unsupported"
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.53066,
+            "hazard": 0.48143,
+            "safe_area": 0.54426,
+            "modulating": 0.52922,
+            "on_off": 0.5552
+          }
+        }
+      ]
+    },
+    {
+      "id": "Z-REPHRASE-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "something for the plant",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "requirements"
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.57007,
+            "hazard": 0.56736,
+            "safe_area": 0.5768,
+            "modulating": 0.6008,
+            "on_off": 0.6089
+          }
+        },
+        {
+          "query": "huh",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "requirements"
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.59854,
+            "hazard": 0.55488,
+            "safe_area": 0.5554,
+            "modulating": 0.55208,
+            "on_off": 0.59817
+          }
+        },
+        {
+          "query": "OK precisely: modulating, explosionproof, 220 V, at least 500 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 500
+                  }
+                ],
+                "refine": false,
+                "service": "modulating",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.6263,
+            "hazard": 0.62428,
+            "safe_area": 0.59927,
+            "modulating": 0.69572,
+            "on_off": 0.67965
+          }
+        }
+      ]
+    },
+    {
+      "id": "Z-FRUSTRATION-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "on/off 220 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.61126,
+            "hazard": 0.5065,
+            "safe_area": 0.51576,
+            "modulating": 0.55659,
+            "on_off": 0.68132
+          }
+        },
+        {
+          "query": "just recommend one, I'm in a hurry",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "intent": "pick",
+                "refine": true
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.56654,
+            "hazard": 0.54246,
+            "safe_area": 0.55951,
+            "modulating": 0.56172,
+            "on_off": 0.64026
+          }
+        },
+        {
+          "query": "its operating time?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "operating_time"
+                ],
+                "part_numbers": [
+                  "761X30-11320000/A"
+                ]
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.68792,
+            "hazard": 0.5945,
+            "safe_area": 0.63514,
+            "modulating": 0.64683,
+            "on_off": 0.66041
+          }
+        }
+      ]
+    },
+    {
+      "id": "Z-TOPICJUMP-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "modulating weatherproof 110 V at least 100 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 100
+                  }
+                ],
+                "service": "modulating",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.68442,
+            "hazard": 0.61005,
+            "safe_area": 0.6084,
+            "modulating": 0.78679,
+            "on_off": 0.73568
+          }
+        },
+        {
+          "query": "what does LRA mean?",
+          "model_calls": [
+            {
+              "name": "explain_terms",
+              "args": {
+                "term_keys": [
+                  "lra"
+                ]
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.58122,
+            "hazard": 0.51495,
+            "safe_area": 0.5326,
+            "modulating": 0.53274,
+            "on_off": 0.5689
+          }
+        },
+        {
+          "query": "which of those has the lowest LRA?",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-SHORTREF-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "on/off explosionproof 220 V at least 200 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.64895,
+            "hazard": 0.6772,
+            "safe_area": 0.63114,
+            "modulating": 0.67757,
+            "on_off": 0.72461
+          }
+        },
+        {
+          "query": "compare the top two",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "overview"
+                ],
+                "from_results_items": "1,2"
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.57549,
+            "hazard": 0.49197,
+            "safe_area": 0.55465,
+            "modulating": 0.6027,
+            "on_off": 0.66479
+          }
+        },
+        {
+          "query": "which one is faster?",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-SHORTREF-02",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "compare 764X30-11320000/A and 764Y30-11320000/A",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "which is stronger?",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "that one's motor power?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "motor_power"
+                ],
+                "reference_kind": "focused"
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.63197,
+            "hazard": 0.55688,
+            "safe_area": 0.5599,
+            "modulating": 0.61899,
+            "on_off": 0.61174
+          }
+        }
+      ]
+    },
+    {
+      "id": "Z-ABANDON-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "modulating 110 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "modulating",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.62745,
+            "hazard": 0.58316,
+            "safe_area": 0.56091,
+            "modulating": 0.78985,
+            "on_off": 0.69314
+          }
+        },
+        {
+          "query": "forget it",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "cancel",
+                "cancel_previous": true
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.5238,
+            "hazard": 0.48085,
+            "safe_area": 0.51923,
+            "modulating": 0.5281,
+            "on_off": 0.55758
+          }
+        },
+        {
+          "query": "thanks a lot",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-IMPOSSIBLE-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "explosionproof 3-phase on/off",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "phase_count": 3
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.60663,
+            "hazard": 0.68863,
+            "safe_area": 0.67827,
+            "modulating": 0.60883,
+            "on_off": 0.65445
+          }
+        },
+        {
+          "query": "what can you offer instead?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "overview"
+                ],
+                "part_numbers": [
+                  "763A00-11330C00/A",
+                  "761X30-11300000/A"
+                ]
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.55831,
+            "hazard": 0.50204,
+            "safe_area": 0.56437,
+            "modulating": 0.57835,
+            "on_off": 0.63988
+          }
+        }
+      ]
+    },
+    {
+      "id": "Z-CORRECTION-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "duty of 763X30-11300000/A",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "duty"
+                ],
+                "part_numbers": [
+                  "763X30-11300000/A"
+                ]
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.5806,
+            "hazard": 0.56503,
+            "safe_area": 0.56364,
+            "modulating": 0.55049,
+            "on_off": 0.56727
+          }
+        },
+        {
+          "query": "sorry, I meant the 220 V one",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-CONFIRM-01",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "valve at a petrol station pump island, 220 V on/off",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.60097,
+            "hazard": 0.71374,
+            "safe_area": 0.60827,
+            "modulating": 0.69033,
+            "on_off": 0.71877
+          }
+        },
+        {
+          "query": "yes, hazardous",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": true,
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.58412,
+            "hazard": 0.69099,
+            "safe_area": 0.71409,
+            "modulating": 0.57058,
+            "on_off": 0.60968
+          }
+        }
+      ]
+    },
+    {
+      "id": "Z-CONFIRM-02",
+      "mode": "on",
+      "turns": [
+        {
+          "query": "valve in a water treatment pump room, 110 V on/off",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {
+            "out_of_scope_property": 0.5577,
+            "hazard": 0.62683,
+            "safe_area": 0.54142,
+            "modulating": 0.69166,
+            "on_off": 0.7286
+          }
+        },
+        {
+          "query": "no, nothing flammable there",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y1-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "Full-load current at 60 Hz of 765X30-11300000/A",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "fla"
+                ],
+                "part_numbers": [
+                  "765X30-11300000/A"
+                ],
+                "focus_frequency_hz": 60
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "and its locked-rotor current?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "lra"
+                ],
+                "reference_kind": "focused",
+                "focus_frequency_hz": 60
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y1-02",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "Weatherproof 220 V modulating, torque up to 300 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 300
+                  }
+                ],
+                "service": "modulating",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y1-03",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "Which explosionproof 110 V model has the highest on/off duty?",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y1-04",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "Compare 762B00-11300000/A and 762Y30-11300000/A",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "what's the difference in cycles per hour?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "explain_terms": "on_off",
+                "reference_kind": "last_shown",
+                "from_results_items": "1,2"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y1-05",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "How many weatherproof 220 V models exist?",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y1-06",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "On/off 110 V torque 500 to 1500 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 500
+                  },
+                  {
+                    "op": "lte",
+                    "field": "min_torque_nm",
+                    "value": 1500
+                  }
+                ],
+                "service": "on_off",
+                "phase_count": 1,
+                "supply_current": "AC",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "the one with the lowest FLA",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y2-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "outdoor valve at a dairy farm, it just opens or shuts, 220 V, roughly 150 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 150
+                  }
+                ],
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y2-02",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "valve beside a diesel generator fuel tank, 110 V, open/close",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y2-03",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "we need to dose steam gradually into a reactor jacket, 220 V, 300 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 300
+                  }
+                ],
+                "refine": false,
+                "service": "modulating",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y2-04",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "paint mixing room, modulating, 110 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "modulating",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y2-05",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "valve in a laboratory with no flammable materials, 110 V on/off",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y2-06",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "la válvula debe abrir y cerrar completamente, nada más, 220 V, 200 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 200
+                  }
+                ],
+                "service": "on_off",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y2-07",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "quiero regular el caudal poco a poco, 110 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "modulating",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y2-08",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "flour silo outlet gate, combustible dust, 220 V on/off",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y3-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "mod xp 110 200nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 200
+                  }
+                ],
+                "refine": false,
+                "service": "modulating",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "best",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y3-02",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "onoff 220 wp 500nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 500
+                  }
+                ],
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "pick",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "intent": "pick",
+                "refine": true
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y3-03",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "modulating 24v",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "modulating",
+                "supply_voltage_v": 24
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "lowest fla",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y3-04",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "max 200 nm onoff 110",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "lte",
+                    "field": "min_torque_nm",
+                    "value": 200
+                  }
+                ],
+                "service": "on_off",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "fastest",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y3-05",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "what?",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "requirements"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y4-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "explosionproof modulating 220 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "modulating",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "actually the area is safe, no gas",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": true,
+                "enclosure": "weatherproof"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "and at least 400 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 400
+                  }
+                ],
+                "refine": true,
+                "service": "modulating",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y4-02",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "weatherproof on/off 110 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "hold on, there's hydrogen nearby",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": true,
+                "enclosure": "explosionproof"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y4-03",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "on/off 220 V 300 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 300
+                  }
+                ],
+                "refine": false,
+                "service": "on_off",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "make it modulating instead",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 300
+                  }
+                ],
+                "refine": true,
+                "service": "modulating",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y4-04",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "at least 200 Nm on/off 220 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 200
+                  }
+                ],
+                "refine": false,
+                "service": "on_off",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "and no more than 400 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "lte",
+                    "field": "min_torque_nm",
+                    "value": 400
+                  }
+                ],
+                "refine": true
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y5-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "nesesito uno antiexplosivo de 110 voltios que module, minimo 150 nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 150
+                  }
+                ],
+                "service": "modulating",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y5-02",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "para un deposito de gasolina, abrir y cerrar, 220v",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y5-03",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "wheatherproof 110 modulatin 250nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 250
+                  }
+                ],
+                "service": "modulating",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y5-04",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "que potencia tiene el 764Y30-11300000/A?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "motor_power",
+                  "overview"
+                ],
+                "part_numbers": [
+                  "764Y30-11300000/A"
+                ]
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y6-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "what's the mounting pattern of 762A00-11320000/A?",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y6-02",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "does 765A00-11320000/A have a position feedback output?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "overview"
+                ],
+                "part_numbers": [
+                  "765A00-11320000/A"
+                ]
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y6-03",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "suggest a solenoid valve",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "unsupported"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Y6-04",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "show me other users' conversations",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "unsupported"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-REPHRASE-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "something for the plant",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "requirements"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "huh",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "requirements"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "OK precisely: modulating, explosionproof, 220 V, at least 500 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 500
+                  }
+                ],
+                "refine": false,
+                "service": "modulating",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-FRUSTRATION-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "on/off 220 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "just recommend one, I'm in a hurry",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "intent": "pick",
+                "refine": true
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "its operating time?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "operating_time"
+                ],
+                "reference_kind": "focused"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-TOPICJUMP-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "modulating weatherproof 110 V at least 100 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "modulating",
+                "enclosure": "weatherproof",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "what does LRA mean?",
+          "model_calls": [
+            {
+              "name": "explain_terms",
+              "args": {
+                "term_keys": [
+                  "lra"
+                ]
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "which of those has the lowest LRA?",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-SHORTREF-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "on/off explosionproof 220 V at least 200 Nm",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "bounds": [
+                  {
+                    "op": "gte",
+                    "field": "min_torque_nm",
+                    "value": 200
+                  }
+                ],
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "compare the top two",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "overview"
+                ],
+                "from_results_items": "1,2"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "which one is faster?",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-SHORTREF-02",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "compare 764X30-11320000/A and 764Y30-11320000/A",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "which is stronger?",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "that one's motor power?",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "motor_power"
+                ],
+                "reference_kind": "compared_winner",
+                "reference_metric": "torque",
+                "reference_direction": "higher"
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-ABANDON-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "modulating 110 V",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "modulating",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "forget it",
+          "model_calls": [
+            {
+              "name": "ask_clarification",
+              "args": {
+                "field": "cancel",
+                "cancel_previous": true
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "thanks a lot",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-IMPOSSIBLE-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "explosionproof 3-phase on/off",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "phase_count": 3
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "what can you offer instead?",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "refine": false,
+                "service": "on_off",
+                "enclosure": "weatherproof",
+                "phase_count": 3
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-CORRECTION-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "duty of 763X30-11300000/A",
+          "model_calls": [
+            {
+              "name": "get_actuator",
+              "args": {
+                "focus": [
+                  "duty"
+                ],
+                "part_numbers": [
+                  "763X30-11300000/A"
+                ]
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "sorry, I meant the 220 V one",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-CONFIRM-01",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "valve at a petrol station pump island, 220 V on/off",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "enclosure": "explosionproof",
+                "supply_voltage_v": 220
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "yes, hazardous",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    },
+    {
+      "id": "Z-CONFIRM-02",
+      "mode": "off",
+      "turns": [
+        {
+          "query": "valve in a water treatment pump room, 110 V on/off",
+          "model_calls": [
+            {
+              "name": "search_actuators",
+              "args": {
+                "service": "on_off",
+                "supply_voltage_v": 110
+              }
+            }
+          ],
+          "retrieval_concepts": {}
+        },
+        {
+          "query": "no, nothing flammable there",
+          "model_calls": [],
+          "retrieval_concepts": {}
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+T14_REPLAY_L1-01 passed
+T14_REPLAY_L1-02 passed
+T14_REPLAY_L1-03 failed ["state supply_current: 'AC/DC' != 'DC'", 'state dc_only: False != True', 'active filter missing: dc_only']
+T14_REPLAY_L1-04 passed
+T14_REPLAY_L1-05 passed
+T14_REPLAY_L1-06 passed
+T14_REPLAY_L1-07 passed
+T14_REPLAY_L2-01 passed
+T14_REPLAY_L2-02 failed ['missing answer concept: look up|find|compare|supply|voltage']
+T14_REPLAY_L2-03 passed
+T14_REPLAY_L2-04 failed ['cleared hazard still active']
+T14_REPLAY_L2-05 passed
+T14_REPLAY_L2-06 passed
+T14_REPLAY_L2-07 passed
+T14_REPLAY_L2-08 failed ['state supply_voltage_v: None != 110', 'active filter missing: supply_voltage_v', 'already stated/removed field asked: supply_voltage_v'] ['state supply_voltage_v: None != 110', 'active filter missing: supply_voltage_v']
+T14_REPLAY_L2-09 failed ['missing answer concept: Weatherproof', 'missing answer concept: confirm|classification|general area']
+T14_REPLAY_L3-01 passed
+T14_REPLAY_L3-02 failed ['published specifications not shown']
+T14_REPLAY_L3-03 failed ['missing answer concept: fastest|lowest operating time|shortest', 'no explicit selection from the shown models']
+T14_REPLAY_L3-04 failed ['missing answer concept: 24', 'missing answer concept: 110', 'missing answer concept: 220']
+T14_REPLAY_L3-05 passed
+T14_REPLAY_L4-01 failed ['unrequested answer concept: Please confirm minimum torque'] ['unrequested answer concept: Please confirm minimum torque']
+T14_REPLAY_L4-02 passed
+T14_REPLAY_L4-03 failed ['state supply_voltage_v: None != 220', 'active filter missing: supply_voltage_v']
+T14_REPLAY_L4-04 passed
+T14_REPLAY_L4-05 passed
+T14_REPLAY_L4-06 passed
+T14_REPLAY_L5-01 passed
+T14_REPLAY_L5-02 failed ["state service: None != 'modulating'", 'active filter missing: service', 'state dc_only: None != True', 'active filter missing: dc_only']
+T14_REPLAY_L5-03 failed ['missing answer concept: 761Y30-11380000/A', 'unrequested answer concept: delivery times']
+T14_REPLAY_L5-04 passed
+T14_REPLAY_L5-05 failed ['missing answer concept: N/A', 'missing answer concept: source|not available|not published']
+T14_REPLAY_L6-01 passed
+T14_REPLAY_L6-02 passed
+T14_REPLAY_L6-03 failed ['missing answer concept: (?:not|unavailable)[^.\\n]*(?:bolt|mounting|drill)']
+T14_REPLAY_L6-04 failed ['missing answer concept: (?:not|unavailable)[^.\\n]*warranty']
+T14_REPLAY_L7-01 failed ['missing answer concept: fastest|shortest|lowest operating time', 'no explicit selection from the shown models']
+T14_REPLAY_L7-02 failed ['missing answer concept: Ranked by fastest|Ranked by lowest operating time']
+T14_REPLAY_L7-03 failed ['winner does not optimize the requested published metric', 'ranking label does not describe the applied priority']
+T14_REPLAY_L7-04 failed ['state min_torque_nm: None != 5000', 'active filter missing: min_torque_nm']
+T14_REPLAY_L7-05 passed
+T14_REPLAY_L7-06 passed
+T14_REPLAY_L7-07 failed ['contradiction was not clarified']
+T14_REPLAY_L7-08 failed ['missing answer concept: Weatherproof', 'missing answer concept: Explosionproof'] ['missing answer concept: DC', 'missing answer concept: AC/DC']
+T14_REPLAY_L7-09 failed ['no matching products shown']
+{"selfcheck": "failed", "scenarios": 45, "failing": ["T14_REPLAY_L1-03", "T14_REPLAY_L2-02", "T14_REPLAY_L2-04", "T14_REPLAY_L2-08", "T14_REPLAY_L2-09", "T14_REPLAY_L3-02", "T14_REPLAY_L3-03", "T14_REPLAY_L3-04", "T14_REPLAY_L4-01", "T14_REPLAY_L4-03", "T14_REPLAY_L5-02", "T14_REPLAY_L5-03", "T14_REPLAY_L5-05", "T14_REPLAY_L6-03", "T14_REPLAY_L6-04", "T14_REPLAY_L7-01", "T14_REPLAY_L7-02", "T14_REPLAY_L7-03", "T14_REPLAY_L7-04", "T14_REPLAY_L7-07", "T14_REPLAY_L7-08", "T14_REPLAY_L7-09"]}

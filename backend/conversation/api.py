@@ -10,8 +10,9 @@ from fastapi.responses import JSONResponse
 from backend.auth.api import require_user
 
 from backend.app.contracts import ConversationRequest, ConversationResponse
+from backend.app.errors import DatabaseUnavailable, error_response
 from backend.catalog.db import connect
-from .agent import AgentUnavailable, run_agent
+from .agent import AgentUnavailable, InvalidInteraction, run_agent
 from . import store
 
 router = APIRouter(prefix="/api")
@@ -19,7 +20,7 @@ CAPACITY = BoundedSemaphore(4)
 
 
 def unavailable():
-    return HTTPException(503, "Conversation service unavailable. Check backend configuration and try again.")
+    return DatabaseUnavailable()
 
 
 @router.get("/sessions")
@@ -47,10 +48,21 @@ def messages(session_id: UUID, limit: int = Query(100, ge=1, le=100), before: in
         raise unavailable() from None
 
 
+@router.delete("/sessions/{session_id}", status_code=204)
+def delete_session(session_id: UUID, user=Depends(require_user)):
+    try:
+        with connect() as connection:
+            store.delete_session(connection, session_id, user['id'])
+    except store.MissingSession:
+        raise HTTPException(404, "Conversation not found") from None
+    except psycopg.Error:
+        raise unavailable() from None
+
+
 @router.post("/conversation", response_model=ConversationResponse)
 def conversation(request: ConversationRequest, user=Depends(require_user)):
     if not CAPACITY.acquire(blocking=False):
-        raise HTTPException(503, "The assistant is busy. Please try again shortly.")
+        return error_response('service_busy')
     try:
         session_id = request.session_id or uuid4()
         with connect() as connection:
@@ -63,21 +75,26 @@ def conversation(request: ConversationRequest, user=Depends(require_user)):
                     store.get_session(connection, session_id, user["id"])
                 history = store.history(connection, session_id, 12, internal=True, owner_id=user["id"])
                 context = store.recent_context(connection, session_id, user["id"])
-                result = run_agent(connection, request.query, history, context)
+                result = run_agent(connection, request.query, history, context, answers=request.answers,
+                                   remove_filters=request.remove_filters, user_name=user.get("name"), action=request.action)
                 message_id = store.append_turn(connection, session_id, request.query, result, new=request.session_id is None, owner_id=user["id"])
         return ConversationResponse(session_id=session_id, answer=result.answer,
                                     message_id=message_id, products=result.products,
                                     clarification=result.clarification, terms=result.terms,
-                                    assumptions=result.assumptions)
+                                    assumptions=result.assumptions,
+                                    suggested_replies=result.suggested_replies, comparison=result.comparison,
+                                    lead=result.lead, interaction=result.interaction,
+                                    suggestions=result.suggestions, active_filters=result.active_filters,
+                                    recommendation=result.recommendation, debug=result.debug)
+    except InvalidInteraction as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc), "error_code": exc.code})
     except store.MissingSession:
         raise HTTPException(404, "Conversation not found") from None
     except store.BusySession:
-        raise HTTPException(409, "A response is already being prepared for this conversation.") from None
+        return error_response('session_busy')
     except AgentUnavailable as exc:
         # Nothing was persisted: the transaction rolled back with the failed turn.
-        return JSONResponse(status_code=503, content={
-            "detail": "Conversation service unavailable. Check backend configuration and try again.",
-            "error_code": exc.code})
+        return error_response(exc.code)
     except psycopg.Error:
         raise unavailable() from None
     finally:

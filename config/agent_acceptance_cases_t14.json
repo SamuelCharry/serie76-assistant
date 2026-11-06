@@ -1,0 +1,1962 @@
+{
+  "version": "t14-oracle",
+  "cohort": "t14",
+  "scenarios": [
+    {
+      "id": "T14_search_priority_1",
+      "t14_class": "search_priority",
+      "turns": [
+        {
+          "query": "Show weatherproof 110 V on/off actuators delivering at least 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "service": "on_off",
+              "min_torque_nm": 80
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Use minimum travel duration at 60 Hz as the primary selection criterion.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "priority": {
+                "metric": "operating_time",
+                "direction": "lowest",
+                "frequency_hz": 60
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80,
+                  "frequency_hz": 60
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm",
+                  "frequency_hz"
+                ]
+              },
+              "ranking": {
+                "column": "operating_time_60hz_s",
+                "direction": "lowest",
+                "label": "fastest|lowest operating time"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_search_priority_2",
+      "t14_class": "search_priority",
+      "turns": [
+        {
+          "query": "Show weatherproof 110 V on/off actuators delivering at least 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "service": "on_off",
+              "min_torque_nm": 80
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "La prioridad es el menor tiempo de recorrido a 60 Hz.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "priority": {
+                "metric": "operating_time",
+                "direction": "lowest",
+                "frequency_hz": 60
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80,
+                  "frequency_hz": 60
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm",
+                  "frequency_hz"
+                ]
+              },
+              "ranking": {
+                "column": "operating_time_60hz_s",
+                "direction": "lowest",
+                "label": "fastest|lowest operating time"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_shown_priority_1",
+      "t14_class": "shown_priority",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A and 762A00-11300000/A.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "762A00-11300000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {}
+          }
+        },
+        {
+          "query": "Select from those two by minimum travel duration at 60 Hz.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "intent": "pick",
+              "priority": {
+                "metric": "operating_time",
+                "direction": "lowest",
+                "frequency_hz": 60
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "pick": true,
+              "ranking": {
+                "column": "operating_time_60hz_s",
+                "direction": "lowest",
+                "label": "fastest|lowest operating time",
+                "among": [
+                  "761A00-11300000/A",
+                  "762A00-11300000/A"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_shown_priority_2",
+      "t14_class": "shown_priority",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A and 762A00-11300000/A.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "762A00-11300000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {}
+          }
+        },
+        {
+          "query": "Of the compared units, choose the one completing movement sooner at 60 Hz.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "intent": "pick",
+              "priority": {
+                "metric": "operating_time",
+                "direction": "lowest",
+                "frequency_hz": 60
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "pick": true,
+              "ranking": {
+                "column": "operating_time_60hz_s",
+                "direction": "lowest",
+                "label": "fastest|lowest operating time",
+                "among": [
+                  "761A00-11300000/A",
+                  "762A00-11300000/A"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_torque_priority_1",
+      "t14_class": "torque_priority",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A and 762A00-11300000/A.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "762A00-11300000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {}
+          }
+        },
+        {
+          "query": "Choose from that pair for greater output torque in on/off service.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "intent": "pick",
+              "service": "on_off",
+              "priority": {
+                "metric": "torque",
+                "direction": "highest"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "pick": true,
+              "ranking": {
+                "column": "on_off_torque_nm",
+                "direction": "highest",
+                "label": "most torque|highest torque",
+                "among": [
+                  "761A00-11300000/A",
+                  "762A00-11300000/A"
+                ]
+              },
+              "forbidden_text": [
+                "delivery times"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_torque_priority_2",
+      "t14_class": "torque_priority",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A and 762A00-11300000/A.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "762A00-11300000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {}
+          }
+        },
+        {
+          "query": "De esos dos elige el que entrega más par para abrir y cerrar.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "intent": "pick",
+              "service": "on_off",
+              "priority": {
+                "metric": "torque",
+                "direction": "highest"
+              }
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "pick": true,
+              "ranking": {
+                "column": "on_off_torque_nm",
+                "direction": "highest",
+                "label": "most torque|highest torque",
+                "among": [
+                  "761A00-11300000/A",
+                  "762A00-11300000/A"
+                ]
+              },
+              "forbidden_text": [
+                "delivery times"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_warranty_1",
+      "t14_class": "warranty",
+      "turns": [
+        {
+          "query": "Report the torque of 761A00-11300000/A and its warranty coverage.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "torque"
+              ],
+              "unsupported_requests": [
+                "warranty"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "The catalogue does not publish warranty"
+              ],
+              "state": {
+                "published": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_warranty_2",
+      "t14_class": "warranty",
+      "turns": [
+        {
+          "query": "Alongside torque for 761A00-11300000/A, specify the binding guarantee.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "torque"
+              ],
+              "unsupported_requests": [
+                "warranty"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "The catalogue does not publish warranty"
+              ],
+              "state": {
+                "published": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_mounting_1",
+      "t14_class": "mounting",
+      "turns": [
+        {
+          "query": "Give the 60 Hz travel time for 761A00-11300000/A plus the bracket hole pattern.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "operating_time"
+              ],
+              "unsupported_requests": [
+                "bolt pattern"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "The catalogue does not publish bolt pattern"
+              ],
+              "state": {
+                "published": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_mounting_2",
+      "t14_class": "mounting",
+      "turns": [
+        {
+          "query": "For 761A00-11300000/A provide operating time at 60 Hz and the drilling layout.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761A00-11300000/A"
+              ],
+              "focus": [
+                "operating_time"
+              ],
+              "unsupported_requests": [
+                "bolt pattern"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "The catalogue does not publish bolt pattern"
+              ],
+              "state": {
+                "published": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_voltage_hyphen_1",
+      "t14_class": "voltage_hyphen",
+      "turns": [
+        {
+          "query": "Find weatherproof on/off units on 110-volt power with minimum 100 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "service": "on_off",
+              "min_torque_nm": 100
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_voltage_hyphen_2",
+      "t14_class": "voltage_hyphen",
+      "turns": [
+        {
+          "query": "Select outdoor open/close units needing 100 Nm from a 110-volt source.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "service": "on_off",
+              "min_torque_nm": 100
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_keep_voltage_1",
+      "t14_class": "keep_voltage",
+      "turns": [
+        {
+          "query": "Show weatherproof 110 V on/off actuators delivering at least 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "service": "on_off",
+              "min_torque_nm": 80
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Do not alter the voltage or service; leave those requirements intact.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "keep": [
+                "supply_voltage_v",
+                "service"
+              ],
+              "remove": [
+                "supply_voltage_v"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_keep_voltage_2",
+      "t14_class": "keep_voltage",
+      "turns": [
+        {
+          "query": "Show weatherproof 110 V on/off actuators delivering at least 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "service": "on_off",
+              "min_torque_nm": 80
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Conserva la tensión y el servicio que indiqué.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "keep": [
+                "supply_voltage_v",
+                "service"
+              ],
+              "remove": [
+                "supply_voltage_v"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_keep_quantity_1",
+      "t14_class": "keep_quantity",
+      "turns": [
+        {
+          "query": "Show weatherproof 110 V on/off actuators delivering at least 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "service": "on_off",
+              "min_torque_nm": 80
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Leave my torque floor in place without asking me to confirm it again.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 80,
+              "keep": [
+                "min_torque_nm"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              },
+              "forbidden_text": [
+                "Please confirm minimum torque"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_keep_quantity_2",
+      "t14_class": "keep_quantity",
+      "turns": [
+        {
+          "query": "Show weatherproof 110 V on/off actuators delivering at least 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "service": "on_off",
+              "min_torque_nm": 80
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Mantén el mínimo de par ya indicado.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "min_torque_nm": 80,
+              "keep": [
+                "min_torque_nm"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              },
+              "forbidden_text": [
+                "Please confirm minimum torque"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_keep_impossible_1",
+      "t14_class": "keep_impossible",
+      "turns": [
+        {
+          "query": "Find 24 V modulating units with a minimum of 5000 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 24,
+              "service": "modulating",
+              "min_torque_nm": 5000
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "service": "modulating",
+                  "min_torque_nm": 5000
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Do not weaken that torque limit; is there a matching unit?",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "keep": [
+                "min_torque_nm"
+              ],
+              "remove": [
+                "min_torque_nm"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "service": "modulating",
+                  "min_torque_nm": 5000
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              },
+              "required_text": [
+                "No actuator"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_keep_impossible_2",
+      "t14_class": "keep_impossible",
+      "turns": [
+        {
+          "query": "Find 24 V modulating units with a minimum of 5000 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 24,
+              "service": "modulating",
+              "min_torque_nm": 5000
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "service": "modulating",
+                  "min_torque_nm": 5000
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "The torque floor remains mandatory; reconsider availability under that requirement.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "keep": [
+                "min_torque_nm"
+              ],
+              "remove": [
+                "min_torque_nm"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "service": "modulating",
+                  "min_torque_nm": 5000
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              },
+              "required_text": [
+                "No actuator"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_keep_dc_exclusion_1",
+      "t14_class": "keep_dc_exclusion",
+      "turns": [
+        {
+          "query": "Find 24 V DC-only modulating units with at least 130 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "dc_only": true,
+              "service": "modulating",
+              "min_torque_nm": 130
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "dc_only": true,
+                  "service": "modulating",
+                  "min_torque_nm": 130
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "supply_current",
+                  "dc_only",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Units labelled AC/DC must stay excluded.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "keep": [
+                "dc_only",
+                "supply_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "dc_only": true,
+                  "service": "modulating",
+                  "min_torque_nm": 130
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "supply_current",
+                  "dc_only",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              },
+              "dc_only": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_keep_dc_exclusion_2",
+      "t14_class": "keep_dc_exclusion",
+      "turns": [
+        {
+          "query": "Find 24 V DC-only modulating units with at least 130 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "dc_only": true,
+              "service": "modulating",
+              "min_torque_nm": 130
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "dc_only": true,
+                  "service": "modulating",
+                  "min_torque_nm": 130
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "supply_current",
+                  "dc_only",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Continue to exclude dual AC/DC ratings.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "keep": [
+                "dc_only",
+                "supply_current"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "dc_only": true,
+                  "service": "modulating",
+                  "min_torque_nm": 130
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "supply_current",
+                  "dc_only",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              },
+              "dc_only": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_spanish_service_1",
+      "t14_class": "spanish_service",
+      "turns": [
+        {
+          "query": "Necesito 24 V exclusivamente de corriente continua para regulación, mínimo 130 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "dc_only": true,
+              "service": "modulating",
+              "min_torque_nm": 130,
+              "assumptions": [
+                {
+                  "field": "service",
+                  "user_phrase": "regulación"
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "dc_only": true,
+                  "service": "modulating",
+                  "min_torque_nm": 130
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "supply_current",
+                  "dc_only",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_spanish_service_2",
+      "t14_class": "spanish_service",
+      "turns": [
+        {
+          "query": "Para regular caudal busco 24 V solamente continua con al menos 130 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "supply_voltage_v": 24,
+              "supply_current": "DC",
+              "dc_only": true,
+              "service": "modulating",
+              "min_torque_nm": 130,
+              "assumptions": [
+                {
+                  "field": "service",
+                  "user_phrase": "regular caudal"
+                }
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 24,
+                  "supply_current": "DC",
+                  "dc_only": true,
+                  "service": "modulating",
+                  "min_torque_nm": 130
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "supply_current",
+                  "dc_only",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_contradiction_1",
+      "t14_class": "contradiction",
+      "turns": [
+        {
+          "query": "I require DC-only at 24 V and also acceptance of alternating current.",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "supply"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "clarify": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_contradiction_2",
+      "t14_class": "contradiction",
+      "turns": [
+        {
+          "query": "Only DC ratings are acceptable, but the actuator must also run on AC.",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "supply"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "clarify": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_capabilities_1",
+      "t14_class": "capabilities",
+      "turns": [
+        {
+          "query": "What assistance can you provide when selecting this product range?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "supply|voltage",
+                "torque"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_capabilities_2",
+      "t14_class": "capabilities",
+      "turns": [
+        {
+          "query": "How can you support my Series 76 selection?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "supply|voltage",
+                "torque"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_na_explanation_1",
+      "t14_class": "na_explanation",
+      "turns": [
+        {
+          "query": "Torque of 762A00-11330C00/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762A00-11330C00/A"
+              ],
+              "focus": [
+                "torque"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "N/A"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Please explain what N/A means for this missing value.",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "term_not_in_summary",
+              "topic": "source_na"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "N/A",
+                "not published|not available|source"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_na_explanation_2",
+      "t14_class": "na_explanation",
+      "turns": [
+        {
+          "query": "Torque of 762A00-11330C00/A?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "762A00-11330C00/A"
+              ],
+              "focus": [
+                "torque"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "N/A"
+              ]
+            }
+          }
+        },
+        {
+          "query": "Explícame N/A sin completar el dato ausente.",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "term_not_in_summary",
+              "topic": "source_na"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "N/A",
+                "not published|not available|source"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_single_reference_1",
+      "t14_class": "single_reference",
+      "turns": [
+        {
+          "query": "Show 761Y30-11380000/A.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761Y30-11380000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {}
+          }
+        },
+        {
+          "query": "Also tell me its opening torque.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [],
+              "reference_kind": "focused",
+              "focus": [
+                "torque"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "published": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_single_reference_2",
+      "t14_class": "single_reference",
+      "turns": [
+        {
+          "query": "Show 761Y30-11380000/A.",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [
+                "761Y30-11380000/A"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {}
+          }
+        },
+        {
+          "query": "What opening torque does that same unit provide?",
+          "scripted_decision": [
+            "get_actuator",
+            {
+              "part_numbers": [],
+              "reference_kind": "focused",
+              "focus": [
+                "torque"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "published": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_safe_site_1",
+      "t14_class": "safe_site",
+      "turns": [
+        {
+          "query": "This water installation is away from all flammable substances, 220 V, open/close at 100 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 220,
+              "service": "on_off",
+              "min_torque_nm": 100
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 220,
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "hazard_clear": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_safe_site_2",
+      "t14_class": "safe_site",
+      "turns": [
+        {
+          "query": "Nonflammable indoor water service, 220 V, on/off, at least 100 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 220,
+              "service": "on_off",
+              "min_torque_nm": 100
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "supply_voltage_v": 220,
+                  "service": "on_off",
+                  "min_torque_nm": 100
+                },
+                "questions_absent": [
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "hazard_clear": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_site_question_1",
+      "t14_class": "site_question",
+      "turns": [
+        {
+          "query": "For a nonflammable workshop, is explosionproof required?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "enclosure_guidance"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "Weatherproof",
+                "Explosionproof",
+                "confirm|classification"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_site_question_2",
+      "t14_class": "site_question",
+      "turns": [
+        {
+          "query": "Does a general area without flammable materials need explosionproof?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "enclosure_guidance"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "Weatherproof",
+                "Explosionproof",
+                "confirm|classification"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_supply_overview_1",
+      "t14_class": "supply_overview",
+      "turns": [
+        {
+          "query": "Summarize the electrical supply options briefly.",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "supply_overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "24",
+                "110",
+                "220",
+                "AC",
+                "DC"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_supply_overview_2",
+      "t14_class": "supply_overview",
+      "turns": [
+        {
+          "query": "Give an overview of the available power supplies.",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "supply_overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "24",
+                "110",
+                "220",
+                "AC",
+                "DC"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_compound_overview_1",
+      "t14_class": "compound_overview",
+      "turns": [
+        {
+          "query": "List the published supply voltages together with enclosure categories.",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "catalogue_overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "24",
+                "110",
+                "220",
+                "Weatherproof",
+                "Explosionproof"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_compound_overview_2",
+      "t14_class": "compound_overview",
+      "turns": [
+        {
+          "query": "Summarize enclosure choices and supply voltages in this catalogue.",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "catalogue_overview"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "24",
+                "110",
+                "220",
+                "Weatherproof",
+                "Explosionproof"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_scoped_service_overview_1",
+      "t14_class": "scoped_service_overview",
+      "turns": [
+        {
+          "query": "At 24 V, compare the service options for DC-only versus AC/DC ratings.",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "supply_services"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "DC",
+                "AC/DC",
+                "Modulating",
+                "On/Off"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_scoped_service_overview_2",
+      "t14_class": "scoped_service_overview",
+      "turns": [
+        {
+          "query": "For 24 V supplies, which services go with DC-only and with AC/DC?",
+          "scripted_decision": [
+            "ask_clarification",
+            {
+              "field": "requirements",
+              "topic": "supply_services"
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "required_text": [
+                "DC",
+                "AC/DC",
+                "Modulating",
+                "On/Off"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_retain_site_refinement_1",
+      "t14_class": "retain_site_refinement",
+      "turns": [
+        {
+          "query": "Show weatherproof 110 V on/off actuators delivering at least 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "service": "on_off",
+              "min_torque_nm": 80
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Reevaluate the selection, retaining voltage, service and torque.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "keep": [
+                "supply_voltage_v",
+                "service",
+                "min_torque_nm"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "T14_retain_site_refinement_2",
+      "t14_class": "retain_site_refinement",
+      "turns": [
+        {
+          "query": "Show weatherproof 110 V on/off actuators delivering at least 80 Nm.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "enclosure": "weatherproof",
+              "supply_voltage_v": 110,
+              "service": "on_off",
+              "min_torque_nm": 80
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "query": "Keep those electrical and torque requirements when reviewing the list again.",
+          "scripted_decision": [
+            "search_actuators",
+            {
+              "refine": true,
+              "keep": [
+                "supply_voltage_v",
+                "service",
+                "min_torque_nm"
+              ]
+            }
+          ],
+          "expect": {
+            "contract_v6": true,
+            "t14_oracle": {
+              "state": {
+                "filters": {
+                  "enclosure": "weatherproof",
+                  "supply_voltage_v": 110,
+                  "service": "on_off",
+                  "min_torque_nm": 80
+                },
+                "questions_absent": [
+                  "enclosure",
+                  "supply_voltage_v",
+                  "service",
+                  "min_torque_nm"
+                ],
+                "nonempty": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -9,7 +9,7 @@ UNIT = {"s": "s", "a": "A"}
 
 
 def _num(value):
-    return f"{value:g}" if isinstance(value, float) else str(value)
+    return str(value)
 
 
 def _frequency_label(product, qualifier):
@@ -21,7 +21,7 @@ def _frequency_label(product, qualifier):
 
 def _status_text(status):
     return {"source_NA": "N/A in the source table",
-            "not_in_layout": "not published in this table layout"}.get(status, "not available")
+            "not_in_layout": "not published for this model"}.get(status, "not available")
 
 
 def _torque(product, service):
@@ -33,7 +33,7 @@ def _torque(product, service):
         return None if status.get(f"{prefix}_torque_nm") == "not_in_layout" else _status_text(status.get(f"{prefix}_torque_nm"))
     text = " / ".join(x for x in (f"{_num(inlb)} in-lb" if inlb is not None else "",
                                   f"{_num(nm)} Nm" if nm is not None else "") if x)
-    return text + (" (published once for On/Off and modulating)" if layout == "shared" else "")
+    return text + (" (published once for On/Off and Modulating)" if layout == "shared" else "")
 
 
 def product_lines(product, focus, service=None):
@@ -42,7 +42,7 @@ def product_lines(product, focus, service=None):
     supply = f"{_num(product['supply_voltage_v'])} V {product['supply_current']}"
     if product.get("phase_count"):
         supply += f" {product['phase_count']}-phase"
-    header = f"{code} — {product['enclosure']}, {supply}"
+    header = f"{code} — {product['enclosure'].capitalize()}, {supply}"
     if product["data_status"] != "reported":
         return [header + ": every performance value of this row is N/A in the source table; nothing can be inferred."]
     lines = []
@@ -53,7 +53,7 @@ def product_lines(product, focus, service=None):
         for service in services:
             key = f"{service}_{field}"
             value = m.get(key)
-            name = {"on_off": "On/Off", "modulating": "Modulating", "shared": "On/Off and modulating (shared)"}[service]
+            name = {"on_off": "On/Off", "modulating": "Modulating", "shared": "On/Off and Modulating (shared)"}[service]
             if value is not None:
                 lines.append(f"{label} {name}: {_num(value)}{unit}")
             elif status.get(key) == "source_NA":
@@ -100,7 +100,7 @@ def product_lines(product, focus, service=None):
     if not lines:
         lines.append(f"The requested value is {_status_text('not_in_layout')}.")
     source = product.get("source", {})
-    return [header] + ["  • " + line for line in lines] + [f"  Source: series_76_electric_data.pdf, page {source.get('page')}, table {source.get('table')}."]
+    return [header] + ["  • " + line for line in lines] + [f"  Source: Series 76 electrical catalogue, page {source.get('page')}."]
 
 
 def render_lookup(products, focus, missing, notes):
@@ -180,7 +180,7 @@ CATALOG_NOTE = {
 def render_terms(terms, supplies):
     blocks = []
     for term in terms:
-        text = f"{term['label']}: {term['definition']} [{term['document']}, p. {term['page']}]"
+        text = f"{term['label']}: {term['definition']} [Series 76 summary, p. {term['page']}]"
         if term["term_key"] in CATALOG_NOTE:
             text += "\n" + CATALOG_NOTE[term["term_key"]]
         if term["term_key"].startswith("supply_"):

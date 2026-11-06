@@ -20,6 +20,8 @@ from .repository import export_rows, get_actuator, search_actuators
 
 def local_environment(path=Path(".env")):
     """CLI-only .env handling. Never print secrets; existing process env wins."""
+    if os.environ.get('SERIES76_SKIP_DOTENV') == '1':
+        return
     if not path.is_file():
         return
     values = {}
@@ -33,6 +35,7 @@ def local_environment(path=Path(".env")):
         "PGDATABASE": ("POSTGRES_DB", "series76"),
         "PGUSER": ("POSTGRES_USER", "series76"),
         "PGPASSWORD": ("POSTGRES_PASSWORD", ""),
+        "API_PORT": ("API_PORT", "8000"),
     }
     for target, (key, default) in mapping.items():
         os.environ.setdefault(target, values.get(key, default))

@@ -21,6 +21,8 @@ The production extractor reads the PDF, never `data/manual`, `data/reference` or
 
 ## Rerun
 
+The first OCR execution downloads public RapidOCR weights into the clone's `.cache/ocr`; recognition then runs locally. Provision those weights before an offline run. A ready export, including `manifest.json`, is stored in a per-document subfolder of `data/processed/new-import`, not directly at that root.
+
 Use Python 3.12, 64-bit. First execution downloads public OCR weights; subsequent recognition is local. Use a new output root to preserve evidence. Passing a directory processes a batch; `--no-images --threads 2` reduces retained images and controls runtime threads.
 
 Run only your shell block; `deactivate` leaves an active environment before switching.

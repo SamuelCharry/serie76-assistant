@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:17
+        image: pgvector/pgvector:pg17-trixie@sha256:01215e09bd4bd582d20230e025b6c971deeeffee49ceef1aae167e839cb62a7e
         env:
           POSTGRES_DB: series76
           POSTGRES_USER: series76
@@ -21,6 +21,7 @@ jobs:
       PGUSER: series76
       PGPASSWORD: ci-test-only
       SERIES76_TEST_DB: '1'
+      EMBEDDINGS_ENABLED: 'false' # Embedding tests inject a local deterministic fake.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -31,6 +32,8 @@ jobs:
       - run: python -m backend.catalog.cli load data/extracted/series76
       - run: python -m backend.catalog.cli load-context
       - run: python -m unittest discover -s tests
+      - run: python scripts/agent_acceptance.py selfcheck --cases config/agent_acceptance_cases_v7.json
+      - run: python scripts/check_tool_schemas.py
   android:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,602 @@
+{
+  "L1-01": {
+    "A": {
+      "v": 0,
+      "why": "Item 1, turn 1: invents an active FLA <= 762 A constraint from the part number."
+    },
+    "B": {
+      "v": 1,
+      "why": "Published 50 Hz timing and locked-rotor current match the exact catalogue row."
+    }
+  },
+  "L1-02": {
+    "A": {
+      "v": 1,
+      "why": "Published torque and both units match the exact catalogue row."
+    },
+    "B": {
+      "v": 1,
+      "why": "Published torque and both units match the exact catalogue row."
+    }
+  },
+  "L1-03": {
+    "A": {
+      "v": 1,
+      "why": "Product card supplies DC voltage and motor rating; additional figures match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Product card supplies DC voltage and motor rating; additional figures match the catalogue."
+    }
+  },
+  "L1-04": {
+    "A": {
+      "v": 1,
+      "why": "Starts and cycles are distinguished and match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Starts and cycles are distinguished and match the catalogue."
+    }
+  },
+  "L1-05": {
+    "A": {
+      "v": 1,
+      "why": "Published duty ratings match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Published duty ratings match the catalogue."
+    }
+  },
+  "L1-06": {
+    "A": {
+      "v": 1,
+      "why": "Retains the torque range, voltage, phase and enclosure while ranking by verified 50 Hz timing."
+    },
+    "B": {
+      "v": 1,
+      "why": "Retains the torque range, voltage, phase and enclosure while ranking by verified 50 Hz timing."
+    }
+  },
+  "L1-07": {
+    "A": {
+      "v": 1,
+      "why": "Replaces the correct comparison member, retains duty fields and adds verified 50 Hz currents."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2 and 5, turn 1: hides the requested modulating duty rating among identical fields instead of reporting it."
+    }
+  },
+  "L1-08": {
+    "A": {
+      "v": 1,
+      "why": "Correctly excludes dual-rated models initially, accepts them after retraction and identifies the fastest published option."
+    },
+    "B": {
+      "v": 1,
+      "why": "Correctly excludes dual-rated models initially, accepts them after retraction and identifies the fastest published option."
+    }
+  },
+  "L1-09": {
+    "A": {
+      "v": 1,
+      "why": "Preserves N/A and finds qualifying three-phase alternatives without transferring values."
+    },
+    "B": {
+      "v": 1,
+      "why": "Preserves N/A and finds qualifying three-phase alternatives without transferring values."
+    }
+  },
+  "L2-01": {
+    "A": {
+      "v": 1,
+      "why": "Interprets open-close service and voltage, provides grounded candidates and an answerable enclosure question."
+    },
+    "B": {
+      "v": 1,
+      "why": "Interprets open-close service and voltage, provides grounded candidates and an answerable enclosure question."
+    }
+  },
+  "L2-02": {
+    "A": {
+      "v": 0,
+      "why": "Items 2 and 5, turn 1: defines opening time but omits starts per hour and the requested distinction."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2 and 5, turn 1: defines opening time but omits starts per hour and the requested distinction."
+    }
+  },
+  "L2-03": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 1: responds with an unrelated model-verification failure instead of explaining where phase information appears."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 1: requests sizing inputs instead of answering the clear question about locating phase information."
+    }
+  },
+  "L2-04": {
+    "A": {
+      "v": 1,
+      "why": "Applies outdoor enclosure, single-phase supply, service and torque with catalogue-grounded options."
+    },
+    "B": {
+      "v": 1,
+      "why": "Applies outdoor enclosure, single-phase supply, service and torque with catalogue-grounded options."
+    }
+  },
+  "L2-05": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 1: does not answer whether larger motor power necessarily implies faster operation."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 1: does not answer whether larger motor power necessarily implies faster operation."
+    }
+  },
+  "L2-06": {
+    "A": {
+      "v": 1,
+      "why": "Explains full-load current consistently with the supplied glossary."
+    },
+    "B": {
+      "v": 1,
+      "why": "Explains full-load current consistently with the supplied glossary."
+    }
+  },
+  "L2-07": {
+    "A": {
+      "v": 1,
+      "why": "Preserves load, enclosure and service after correcting supply and identifies the fastest qualifying model."
+    },
+    "B": {
+      "v": 1,
+      "why": "Preserves load, enclosure and service after correcting supply and identifies the fastest qualifying model."
+    }
+  },
+  "L2-08": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: asks for service, voltage and torque even though the user supplied all three."
+    },
+    "B": {
+      "v": 1,
+      "why": "Recognizes combustible vapour, warns against weatherproof substitution and restores explosionproof candidates."
+    }
+  },
+  "L2-09": {
+    "A": {
+      "v": 1,
+      "why": "Accepts explicit hazard clearance and retains voltage, service and torque."
+    },
+    "B": {
+      "v": 1,
+      "why": "Accepts explicit hazard clearance and retains voltage, service and torque."
+    }
+  },
+  "L2-10": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 3: recommends the same 300 Nm model when asked for a stronger alternative; turn 1 ignores two-model limit."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 3: recommends the same 300 Nm model instead of finding a stronger alternative."
+    }
+  },
+  "L3-01": {
+    "A": {
+      "v": 1,
+      "why": "Motor rating matches the exact catalogue row; brief qualification does not obscure it."
+    },
+    "B": {
+      "v": 1,
+      "why": "Motor rating matches the exact catalogue row; brief qualification does not obscure it."
+    }
+  },
+  "L3-02": {
+    "A": {
+      "v": 1,
+      "why": "Correctly interprets outdoor open-close requirements and supplies qualifying models."
+    },
+    "B": {
+      "v": 1,
+      "why": "Correctly interprets outdoor open-close requirements and supplies qualifying models."
+    }
+  },
+  "L3-03": {
+    "A": {
+      "v": 1,
+      "why": "Reports verified DC currents without inventing mains-frequency values."
+    },
+    "B": {
+      "v": 1,
+      "why": "Reports verified DC currents without inventing mains-frequency values."
+    }
+  },
+  "L3-04": {
+    "A": {
+      "v": 1,
+      "why": "Replaces the torque minimum and retains all other requirements when changing ranking."
+    },
+    "B": {
+      "v": 1,
+      "why": "Replaces the torque minimum and retains all other requirements when changing ranking."
+    }
+  },
+  "L3-05": {
+    "A": {
+      "v": 1,
+      "why": "Handles DC-only exclusion and retraction correctly, then presents two valid candidates."
+    },
+    "B": {
+      "v": 1,
+      "why": "Handles DC-only exclusion and retraction correctly, then presents two valid candidates."
+    }
+  },
+  "L3-06": {
+    "A": {
+      "v": 0,
+      "why": "Item 1, turn 2: answers for the first comparison member when the user explicitly requested the second."
+    },
+    "B": {
+      "v": 1,
+      "why": "Resolves the second comparison member and reports its verified current and on/off torque."
+    }
+  },
+  "L3-07": {
+    "A": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 2: drops the single-phase correction and presents three-phase models."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 2: drops the single-phase correction and presents three-phase models."
+    }
+  },
+  "L3-08": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 3: continues refusing price and delivery after their withdrawal, omitting the requested 50 Hz timing comparison."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 3: continues refusing price and delivery after their withdrawal, omitting the requested 50 Hz timing comparison."
+    }
+  },
+  "L4-01": {
+    "A": {
+      "v": 1,
+      "why": "Retains the lower bound when removing the upper bound and reports the correct fastest modulating tie."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 3: removing only the upper torque bound also removes the 150 Nm minimum and shows undersized models."
+    }
+  },
+  "L4-02": {
+    "A": {
+      "v": 1,
+      "why": "Correctly updates voltage, removes the torque minimum and identifies the motor-power tie."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 2, turn 1: asks again for service, voltage and torque already explicitly provided."
+    }
+  },
+  "L4-03": {
+    "A": {
+      "v": 1,
+      "why": "Replaces the inequality, removes torque limits and correctly ranks the retained three-phase scope."
+    },
+    "B": {
+      "v": 1,
+      "why": "Replaces the inequality, removes torque limits and correctly ranks the retained three-phase scope."
+    }
+  },
+  "L4-04": {
+    "A": {
+      "v": 1,
+      "why": "Replaces both comparison members and answers using the new pair and correct frequency."
+    },
+    "B": {
+      "v": 1,
+      "why": "Replaces both comparison members and answers using the new pair and correct frequency."
+    }
+  },
+  "L4-05": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: requests already supplied service, voltage and torque instead of stating the impossible DC-only on/off combination."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 3 and 5, turn 1: falsely says the catalogue does not publish Nm despite published torque values."
+    }
+  },
+  "L4-06": {
+    "A": {
+      "v": 1,
+      "why": "Maintains hazardous-site protection through the weatherproof request and subsequent hazard confirmation."
+    },
+    "B": {
+      "v": 1,
+      "why": "Maintains hazardous-site protection through the weatherproof request and subsequent hazard confirmation."
+    }
+  },
+  "L4-07": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: requests service, voltage and torque already explicitly stated."
+    },
+    "B": {
+      "v": 1,
+      "why": "Applies hazard clearance and supply correction while retaining torque and service; final timing is verified."
+    }
+  },
+  "L4-08": {
+    "A": {
+      "v": 0,
+      "why": "Items 2 and 5, turn 4: gives a generic ranking explanation instead of showing the explicitly requested motor-power tie."
+    },
+    "B": {
+      "v": 1,
+      "why": "Changes ranking priority, explicitly discloses the motor-power tie and avoids claiming measured energy savings."
+    }
+  },
+  "L5-01": {
+    "A": {
+      "v": 0,
+      "why": "Items 1, 2 and 3, turn 1: misses monof?sico, asks for phase again and presents a three-phase model."
+    },
+    "B": {
+      "v": 1,
+      "why": "Understands corrupted Spanish wording and retains single-phase supply, enclosure, service and torque."
+    }
+  },
+  "L5-02": {
+    "A": {
+      "v": 1,
+      "why": "Understands the Spanish current request and reports the correct 50 Hz value."
+    },
+    "B": {
+      "v": 1,
+      "why": "Understands the Spanish current request and reports the correct 50 Hz value."
+    }
+  },
+  "L5-03": {
+    "A": {
+      "v": 1,
+      "why": "Preserves Spanish service and torque requirements through supply and ranking changes."
+    },
+    "B": {
+      "v": 1,
+      "why": "Preserves Spanish service and torque requirements through supply and ranking changes."
+    }
+  },
+  "L5-04": {
+    "A": {
+      "v": 1,
+      "why": "Resolves the second model and finds strictly stronger alternatives with retained voltage, enclosure and service."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 2, turn 1: shows three models despite the explicit two-model request; turn 3 also fails the stronger-than-reference instruction."
+    }
+  },
+  "L5-05": {
+    "A": {
+      "v": 1,
+      "why": "Recognizes the hazardous site and accepts explicit hazard clearance without dropping load or supply."
+    },
+    "B": {
+      "v": 1,
+      "why": "Recognizes the hazardous site and accepts explicit hazard clearance without dropping load or supply."
+    }
+  },
+  "L5-06": {
+    "A": {
+      "v": 1,
+      "why": "Preserves missing torque, explains N/A and provides published three-phase alternatives."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 2: ignores the clear Spanish question about whether N/A means zero or unavailable."
+    }
+  },
+  "L5-07": {
+    "A": {
+      "v": 1,
+      "why": "Rejects the incomplete identifier, accepts its correction and preserves the requested frequency."
+    },
+    "B": {
+      "v": 1,
+      "why": "Rejects the incomplete identifier, accepts its correction and preserves the requested frequency."
+    }
+  },
+  "L5-08": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 2: lists whole-catalogue voltage counts instead of the requested matching complete part numbers."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 2: lists whole-catalogue voltage counts instead of the requested matching complete part numbers."
+    }
+  },
+  "L6-01": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: commercial-data refusal suppresses the explicitly requested, available modulating torque."
+    },
+    "B": {
+      "v": 1,
+      "why": "Declines commercial information while still providing the requested verified torque."
+    }
+  },
+  "L6-02": {
+    "A": {
+      "v": 1,
+      "why": "Declines unavailable mounting data and reports verified 50 Hz timing."
+    },
+    "B": {
+      "v": 1,
+      "why": "Declines unavailable mounting data and reports verified 50 Hz timing."
+    }
+  },
+  "L6-03": {
+    "A": {
+      "v": 1,
+      "why": "Product card confirms 220 V; catalogue figures are correct and hydraulic supply is declined."
+    },
+    "B": {
+      "v": 1,
+      "why": "Product card confirms 220 V; catalogue figures are correct and hydraulic supply is declined."
+    }
+  },
+  "L6-04": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 2: repeats the stock refusal after withdrawal and omits the requested torque availability."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 3: treats a valve-sizing suitability question as warranty terms, leaving the actual question unanswered."
+    }
+  },
+  "L6-05": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 3: asks which model despite the unambiguous second-model reference and omits its current."
+    },
+    "B": {
+      "v": 1,
+      "why": "Provides qualifying candidates, resolves the second model and declines unavailable warranty data."
+    }
+  },
+  "L6-06": {
+    "A": {
+      "v": 1,
+      "why": "Rejects the invented identifier and reports the real model without unsupported site approval."
+    },
+    "B": {
+      "v": 1,
+      "why": "Rejects the invented identifier and reports the real model without unsupported site approval."
+    }
+  },
+  "L7-01": {
+    "A": {
+      "v": 1,
+      "why": "States impossibility and labels the closest catalogue alternative as failing the requested torque."
+    },
+    "B": {
+      "v": 1,
+      "why": "States impossibility and labels the closest catalogue alternative as failing the requested torque."
+    }
+  },
+  "L7-02": {
+    "A": {
+      "v": 1,
+      "why": "Preserves the zero-second bound, states impossibility and clearly labels the nearest alternative."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 1: drops the explicit zero-second bound and presents noncompliant models."
+    }
+  },
+  "L7-03": {
+    "A": {
+      "v": 1,
+      "why": "Voltage options and reported versus missing-data model counts match the catalogue."
+    },
+    "B": {
+      "v": 1,
+      "why": "Voltage options and reported versus missing-data model counts match the catalogue."
+    }
+  },
+  "L7-04": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 5, turn 1: returns model counts instead of explaining the two torque ratings."
+    },
+    "B": {
+      "v": 1,
+      "why": "Explains both services and output torque using the supplied glossary."
+    }
+  },
+  "L7-05": {
+    "A": {
+      "v": 1,
+      "why": "Preserves every missing performance value and does not infer data from another row."
+    },
+    "B": {
+      "v": 1,
+      "why": "Preserves every missing performance value and does not infer data from another row."
+    }
+  },
+  "L7-06": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 4: retains the withdrawn 1100 Nm ceiling and invents an equal minimum instead of torque above 500 Nm."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 4: drops the retained single-phase requirement, shows three-phase equipment and incorrectly sets a 1100 Nm minimum."
+    }
+  },
+  "L7-07": {
+    "A": {
+      "v": 1,
+      "why": "Tracks ordinal corrections and the selected model while reporting verified frequency-specific current and torque."
+    },
+    "B": {
+      "v": 1,
+      "why": "Tracks ordinal corrections and the selected model while reporting verified frequency-specific current and torque."
+    }
+  },
+  "L7-08": {
+    "A": {
+      "v": 1,
+      "why": "Retains modulating service and torque while changing priorities; reported figures and winning timing are verified."
+    },
+    "B": {
+      "v": 1,
+      "why": "Retains modulating service and torque while changing priorities; reported figures and winning timing are verified."
+    }
+  },
+  "L7-09": {
+    "A": {
+      "v": 0,
+      "why": "Items 1 and 2, turn 2: retains the 10000 Nm minimum when asked for the strongest available with unchanged supply and enclosure."
+    },
+    "B": {
+      "v": 0,
+      "why": "Item 2, turn 2: asks again for service, voltage and torque rather than addressing the requested strongest available alternative."
+    }
+  },
+  "L7-10": {
+    "A": {
+      "v": 0,
+      "why": "Items 2 and 3, turn 3: removing only the maximum also drops the corrected 500 Nm minimum and presents undersized models."
+    },
+    "B": {
+      "v": 0,
+      "why": "Items 1, 2 and 5, turns 3-4: fails the explicit maximum-only removal and repeatedly asks for an already stated limit."
+    }
+  },
+  "L7-11": {
+    "A": {
+      "v": 1,
+      "why": "Preserves unqualified versus DC timing bases, reports correct values and declines unavailable purchase prices."
+    },
+    "B": {
+      "v": 1,
+      "why": "Preserves unqualified versus DC timing bases, reports correct values and declines unavailable purchase prices."
+    }
+  }
+}

@@ -1,0 +1,1864 @@
+{
+  "mode": "scripted; PostgreSQL values; no model inference",
+  "code_commit": "fd43ce88e0b5f93aee05bfc068cb3449d5481f0d",
+  "scenarios": 453,
+  "failing": [],
+  "scanner": {
+    "saved_responses_scanned": 89,
+    "replay_turns_checked_by_acceptance": 760,
+    "issues": []
+  },
+  "examples": [
+    {
+      "scenario": "T9_R1_pair",
+      "status": "passed",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A vs 761B00-11300000/A",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.065,
+          "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
+          "comparison": {
+            "layout": "table",
+            "models": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ],
+            "summary": "761A00-11300000/A wins 5 of 7 differing fields with an agreed direction; 761B00-11300000/A wins 2. This is an unweighted field count, not an overall suitability rating.",
+            "assumptions": "More is better for torque and cycles; less is better for time, current and motor power.",
+            "rows": [
+              {
+                "field": "on_off_torque",
+                "label": "On/Off torque",
+                "values": [
+                  "700 in-lb / 80 Nm",
+                  "880 in-lb / 100 Nm"
+                ],
+                "better": 1
+              },
+              {
+                "field": "modulating_torque",
+                "label": "Modulating torque",
+                "values": [
+                  "580 in-lb / 65 Nm",
+                  "620 in-lb / 70 Nm"
+                ],
+                "better": 1
+              },
+              {
+                "field": "cycles_per_hour",
+                "label": "On/Off cycles",
+                "values": [
+                  "36 /h",
+                  "31 /h"
+                ],
+                "better": 0
+              },
+              {
+                "field": "operating_time_50hz_s",
+                "label": "Operating time at 50 Hz",
+                "values": [
+                  "20 s",
+                  "23 s"
+                ],
+                "better": 0
+              },
+              {
+                "field": "fla_50hz_a",
+                "label": "FLA at 50 Hz",
+                "values": [
+                  "1.1 A",
+                  "1.2 A"
+                ],
+                "better": 0
+              },
+              {
+                "field": "operating_time_60hz_s",
+                "label": "Operating time at 60 Hz",
+                "values": [
+                  "17 s",
+                  "19 s"
+                ],
+                "better": 0
+              },
+              {
+                "field": "fla_60hz_a",
+                "label": "FLA at 60 Hz",
+                "values": [
+                  "1.2 A",
+                  "1.3 A"
+                ],
+                "better": 0
+              }
+            ],
+            "hidden_rows": [
+              {
+                "field": "enclosure",
+                "label": "Enclosure",
+                "values": [
+                  "Weatherproof",
+                  "Weatherproof"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_voltage_v",
+                "label": "Supply voltage",
+                "values": [
+                  "110 V",
+                  "110 V"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_current",
+                "label": "Current type",
+                "values": [
+                  "AC",
+                  "AC"
+                ],
+                "better": null
+              },
+              {
+                "field": "phase_count",
+                "label": "Phases",
+                "values": [
+                  "1",
+                  "1"
+                ],
+                "better": null
+              },
+              {
+                "field": "motor_power_w",
+                "label": "Motor power",
+                "values": [
+                  "15 W",
+                  "15 W"
+                ],
+                "better": null
+              },
+              {
+                "field": "on_off_duty_s4_percent",
+                "label": "On/Off duty S4",
+                "values": [
+                  "40 %",
+                  "40 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "modulating_duty_s4_percent",
+                "label": "Modulating duty S4",
+                "values": [
+                  "40 %",
+                  "40 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "starts_per_hour",
+                "label": "Modulating starts",
+                "values": [
+                  "960 /h",
+                  "960 /h"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_50hz_a",
+                "label": "LRA at 50 Hz",
+                "values": [
+                  "1.3 A",
+                  "1.3 A"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_60hz_a",
+                "label": "LRA at 60 Hz",
+                "values": [
+                  "1.4 A",
+                  "1.4 A"
+                ],
+                "better": null
+              }
+            ],
+            "missing_models": [],
+            "key_fields": [],
+            "key_fields_reason": ""
+          },
+          "recommendation": null,
+          "active_filters": [],
+          "debug": {
+            "latency_ms": 43,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        },
+        {
+          "query": "which one do you recommend and why?",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.086,
+          "answer": "I recommend 761A00-11300000/A: Weatherproof; FLA at 50 Hz 1.1 A. Ranked by lowest FLA, then shortest operating time, then part number. Versus 761B00-11300000/A: FLA at 50 Hz: 1.1 A vs 1.2 A; FLA at 60 Hz: 1.2 A vs 1.3 A; Operating time at 50 Hz: 20 s vs 23 s. Choose 761B00-11300000/A only if its On/Off torque advantage (880 in-lb / 100 Nm vs 700 in-lb / 80 Nm) matters more than the stated priority. Assumes no torque requirement; tell me the torque you need.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "comparison": null,
+          "recommendation": {
+            "ranked_by": "lowest FLA, then shortest operating time, then part number",
+            "total": 2,
+            "shown": 2,
+            "items": [
+              {
+                "part_number": "761A00-11300000/A",
+                "reason": "Weatherproof; FLA at 50 Hz 1.1 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "80 Nm"
+                  },
+                  {
+                    "label": "Modulating torque",
+                    "value": "65 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.1 A"
+                  },
+                  {
+                    "label": "Enclosure",
+                    "value": "Weatherproof"
+                  }
+                ]
+              },
+              {
+                "part_number": "761B00-11300000/A",
+                "reason": "Weatherproof; On/Off torque 100 Nm; Modulating torque 70 Nm; FLA 50 Hz 1.2 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "100 Nm"
+                  },
+                  {
+                    "label": "Modulating torque",
+                    "value": "70 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.2 A"
+                  },
+                  {
+                    "label": "Enclosure",
+                    "value": "Weatherproof"
+                  }
+                ]
+              }
+            ]
+          },
+          "active_filters": [],
+          "debug": {
+            "latency_ms": 62,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "T9_R1_top_two",
+      "status": "passed",
+      "turns": [
+        {
+          "query": "on/off 220 V weatherproof at least 150 Nm",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.09,
+          "answer": "21 actuators meet: Weatherproof, On/Off service, 220 V, torque ≥ 150 Nm. To narrow it down: number of phases.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 1 A\n762B00-11320000/A: On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n763A00-11330C00/A: Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A",
+          "comparison": null,
+          "recommendation": {
+            "ranked_by": "closest torque at or above 150 Nm, then lowest FLA",
+            "total": 21,
+            "shown": 3,
+            "items": [
+              {
+                "part_number": "762A00-11320000/A",
+                "reason": "On/Off torque 150 Nm; FLA 50 Hz 1 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "150 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1 A"
+                  }
+                ]
+              },
+              {
+                "part_number": "762B00-11320000/A",
+                "reason": "On/Off torque 200 Nm; FLA 50 Hz 1.1 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "200 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.1 A"
+                  }
+                ]
+              },
+              {
+                "part_number": "763A00-11330C00/A",
+                "reason": "Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A",
+                "key_values": [
+                  {
+                    "label": "Shared torque",
+                    "value": "300 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1 A"
+                  }
+                ]
+              }
+            ]
+          },
+          "active_filters": [
+            {
+              "field": "enclosure",
+              "label": "Weatherproof"
+            },
+            {
+              "field": "service",
+              "label": "On/Off service"
+            },
+            {
+              "field": "supply_voltage_v",
+              "label": "220 V"
+            },
+            {
+              "field": "min_torque_nm",
+              "label": "torque ≥ 150 Nm"
+            }
+          ],
+          "debug": {
+            "latency_ms": 67,
+            "attempts": 1,
+            "llm_called": true,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        },
+        {
+          "query": "compare the top 2",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.053,
+          "answer": "Comparing 762A00-11320000/A vs 762B00-11320000/A. 10 identical fields hidden.\nOn/Off torque: 1330 in-lb / 150 Nm vs 1750 in-lb / 200 Nm\nModulating torque: 1150 in-lb / 130 Nm vs 1330 in-lb / 150 Nm\nOn/Off cycles: 30 /h vs 21 /h\nOperating time at 50 Hz: 21 s vs 29 s\nFLA at 50 Hz: 1 A vs 1.1 A\nOperating time at 60 Hz: 18 s vs 24 s\nFLA at 60 Hz: 1 A vs 1.1 A",
+          "comparison": {
+            "layout": "table",
+            "models": [
+              "762A00-11320000/A",
+              "762B00-11320000/A"
+            ],
+            "summary": "762A00-11320000/A wins 5 of 7 differing fields with an agreed direction; 762B00-11320000/A wins 2. This is an unweighted field count, not an overall suitability rating.",
+            "assumptions": "More is better for torque and cycles; less is better for time, current and motor power.",
+            "rows": [
+              {
+                "field": "on_off_torque",
+                "label": "On/Off torque",
+                "values": [
+                  "1330 in-lb / 150 Nm",
+                  "1750 in-lb / 200 Nm"
+                ],
+                "better": 1
+              },
+              {
+                "field": "modulating_torque",
+                "label": "Modulating torque",
+                "values": [
+                  "1150 in-lb / 130 Nm",
+                  "1330 in-lb / 150 Nm"
+                ],
+                "better": 1
+              },
+              {
+                "field": "cycles_per_hour",
+                "label": "On/Off cycles",
+                "values": [
+                  "30 /h",
+                  "21 /h"
+                ],
+                "better": 0
+              },
+              {
+                "field": "operating_time_50hz_s",
+                "label": "Operating time at 50 Hz",
+                "values": [
+                  "21 s",
+                  "29 s"
+                ],
+                "better": 0
+              },
+              {
+                "field": "fla_50hz_a",
+                "label": "FLA at 50 Hz",
+                "values": [
+                  "1 A",
+                  "1.1 A"
+                ],
+                "better": 0
+              },
+              {
+                "field": "operating_time_60hz_s",
+                "label": "Operating time at 60 Hz",
+                "values": [
+                  "18 s",
+                  "24 s"
+                ],
+                "better": 0
+              },
+              {
+                "field": "fla_60hz_a",
+                "label": "FLA at 60 Hz",
+                "values": [
+                  "1 A",
+                  "1.1 A"
+                ],
+                "better": 0
+              }
+            ],
+            "hidden_rows": [
+              {
+                "field": "enclosure",
+                "label": "Enclosure",
+                "values": [
+                  "Weatherproof",
+                  "Weatherproof"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_voltage_v",
+                "label": "Supply voltage",
+                "values": [
+                  "220 V",
+                  "220 V"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_current",
+                "label": "Current type",
+                "values": [
+                  "AC",
+                  "AC"
+                ],
+                "better": null
+              },
+              {
+                "field": "phase_count",
+                "label": "Phases",
+                "values": [
+                  "1",
+                  "1"
+                ],
+                "better": null
+              },
+              {
+                "field": "motor_power_w",
+                "label": "Motor power",
+                "values": [
+                  "40 W",
+                  "40 W"
+                ],
+                "better": null
+              },
+              {
+                "field": "on_off_duty_s4_percent",
+                "label": "On/Off duty S4",
+                "values": [
+                  "35 %",
+                  "35 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "modulating_duty_s4_percent",
+                "label": "Modulating duty S4",
+                "values": [
+                  "40 %",
+                  "40 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "starts_per_hour",
+                "label": "Modulating starts",
+                "values": [
+                  "960 /h",
+                  "960 /h"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_50hz_a",
+                "label": "LRA at 50 Hz",
+                "values": [
+                  "1.1 A",
+                  "1.1 A"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_60hz_a",
+                "label": "LRA at 60 Hz",
+                "values": [
+                  "1.2 A",
+                  "1.2 A"
+                ],
+                "better": null
+              }
+            ],
+            "missing_models": [],
+            "key_fields": [],
+            "key_fields_reason": ""
+          },
+          "recommendation": null,
+          "active_filters": [
+            {
+              "field": "service",
+              "label": "On/Off service"
+            },
+            {
+              "field": "enclosure",
+              "label": "Weatherproof"
+            },
+            {
+              "field": "min_torque_nm",
+              "label": "torque ≥ 150 Nm"
+            },
+            {
+              "field": "supply_voltage_v",
+              "label": "220 V"
+            }
+          ],
+          "debug": {
+            "latency_ms": 31,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        },
+        {
+          "query": "which is better for me?",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.067,
+          "answer": "I recommend 762A00-11320000/A: On/Off torque 150 Nm; meets Weatherproof, On/Off service, 220 V, torque ≥ 150 Nm. Ranked by closest torque at or above 150 Nm, then lowest FLA, then shortest operating time, then part number. Versus 762B00-11320000/A: FLA at 50 Hz: 1 A vs 1.1 A; FLA at 60 Hz: 1 A vs 1.1 A; Operating time at 50 Hz: 21 s vs 29 s. Choose 762B00-11320000/A only if its On/Off torque advantage (1750 in-lb / 200 Nm vs 1330 in-lb / 150 Nm) matters more than the stated priority. Assumes no preference on phase count; tell me if that matters.",
+          "comparison": null,
+          "recommendation": {
+            "ranked_by": "closest torque at or above 150 Nm, then lowest FLA, then shortest operating time, then part number",
+            "total": 2,
+            "shown": 2,
+            "items": [
+              {
+                "part_number": "762A00-11320000/A",
+                "reason": "On/Off torque 150 Nm; meets Weatherproof, On/Off service, 220 V, torque ≥ 150 Nm",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "150 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1 A"
+                  }
+                ]
+              },
+              {
+                "part_number": "762B00-11320000/A",
+                "reason": "On/Off torque 200 Nm; FLA 50 Hz 1.1 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "200 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.1 A"
+                  }
+                ]
+              }
+            ]
+          },
+          "active_filters": [
+            {
+              "field": "enclosure",
+              "label": "Weatherproof"
+            },
+            {
+              "field": "supply_voltage_v",
+              "label": "220 V"
+            },
+            {
+              "field": "service",
+              "label": "On/Off service"
+            },
+            {
+              "field": "min_torque_nm",
+              "label": "torque ≥ 150 Nm"
+            }
+          ],
+          "debug": {
+            "latency_ms": 44,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "T9_R1_new_bound",
+      "status": "passed",
+      "turns": [
+        {
+          "query": "Compare 762A00-11320000/A vs 763A00-11320000/A vs 764A00-11320000/A",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.088,
+          "answer": "Comparing 762A00-11320000/A vs 763A00-11320000/A vs 764A00-11320000/A. 4 identical fields hidden.\nMotor power: 40 W vs 40 W vs 180 W\nOn/Off torque: 1330 in-lb / 150 Nm vs 2650 in-lb / 300 Nm vs 6650 in-lb / 750 Nm\nOn/Off duty S4: 35 % vs 40 % vs 25 %\nModulating torque: 1150 in-lb / 130 Nm vs 1950 in-lb / 220 Nm vs 6020 in-lb / 680 Nm\nModulating duty S4: 40 % vs 40 % vs 35 %\nOn/Off cycles: 30 /h vs 24 /h vs 13 /h\nModulating starts: 960 /h vs 960 /h vs 840 /h\nOperating time at 50 Hz: 21 s vs 29 s vs 33 s\nFLA at 50 Hz: 1 A vs 1.3 A vs 3 A\nLRA at 50 Hz: 1.1 A vs 1.5 A vs 3.9 A\nOperating time at 60 Hz: 18 s vs 24 s vs 27 s\nFLA at 60 Hz: 1 A vs 1.3 A vs 3.2 A\nLRA at 60 Hz: 1.2 A vs 1.4 A vs 3.8 A",
+          "comparison": {
+            "layout": "cards",
+            "models": [
+              "762A00-11320000/A",
+              "763A00-11320000/A",
+              "764A00-11320000/A"
+            ],
+            "summary": "Compare 3 models using the published torque, operating time, FLA and motor power.",
+            "assumptions": "",
+            "rows": [
+              {
+                "field": "motor_power_w",
+                "label": "Motor power",
+                "values": [
+                  "40 W",
+                  "40 W",
+                  "180 W"
+                ],
+                "better": null
+              },
+              {
+                "field": "on_off_torque",
+                "label": "On/Off torque",
+                "values": [
+                  "1330 in-lb / 150 Nm",
+                  "2650 in-lb / 300 Nm",
+                  "6650 in-lb / 750 Nm"
+                ],
+                "better": null
+              },
+              {
+                "field": "on_off_duty_s4_percent",
+                "label": "On/Off duty S4",
+                "values": [
+                  "35 %",
+                  "40 %",
+                  "25 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "modulating_torque",
+                "label": "Modulating torque",
+                "values": [
+                  "1150 in-lb / 130 Nm",
+                  "1950 in-lb / 220 Nm",
+                  "6020 in-lb / 680 Nm"
+                ],
+                "better": null
+              },
+              {
+                "field": "modulating_duty_s4_percent",
+                "label": "Modulating duty S4",
+                "values": [
+                  "40 %",
+                  "40 %",
+                  "35 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "cycles_per_hour",
+                "label": "On/Off cycles",
+                "values": [
+                  "30 /h",
+                  "24 /h",
+                  "13 /h"
+                ],
+                "better": null
+              },
+              {
+                "field": "starts_per_hour",
+                "label": "Modulating starts",
+                "values": [
+                  "960 /h",
+                  "960 /h",
+                  "840 /h"
+                ],
+                "better": null
+              },
+              {
+                "field": "operating_time_50hz_s",
+                "label": "Operating time at 50 Hz",
+                "values": [
+                  "21 s",
+                  "29 s",
+                  "33 s"
+                ],
+                "better": null
+              },
+              {
+                "field": "fla_50hz_a",
+                "label": "FLA at 50 Hz",
+                "values": [
+                  "1 A",
+                  "1.3 A",
+                  "3 A"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_50hz_a",
+                "label": "LRA at 50 Hz",
+                "values": [
+                  "1.1 A",
+                  "1.5 A",
+                  "3.9 A"
+                ],
+                "better": null
+              },
+              {
+                "field": "operating_time_60hz_s",
+                "label": "Operating time at 60 Hz",
+                "values": [
+                  "18 s",
+                  "24 s",
+                  "27 s"
+                ],
+                "better": null
+              },
+              {
+                "field": "fla_60hz_a",
+                "label": "FLA at 60 Hz",
+                "values": [
+                  "1 A",
+                  "1.3 A",
+                  "3.2 A"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_60hz_a",
+                "label": "LRA at 60 Hz",
+                "values": [
+                  "1.2 A",
+                  "1.4 A",
+                  "3.8 A"
+                ],
+                "better": null
+              }
+            ],
+            "hidden_rows": [
+              {
+                "field": "enclosure",
+                "label": "Enclosure",
+                "values": [
+                  "Weatherproof",
+                  "Weatherproof",
+                  "Weatherproof"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_voltage_v",
+                "label": "Supply voltage",
+                "values": [
+                  "220 V",
+                  "220 V",
+                  "220 V"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_current",
+                "label": "Current type",
+                "values": [
+                  "AC",
+                  "AC",
+                  "AC"
+                ],
+                "better": null
+              },
+              {
+                "field": "phase_count",
+                "label": "Phases",
+                "values": [
+                  "1",
+                  "1",
+                  "1"
+                ],
+                "better": null
+              }
+            ],
+            "missing_models": [],
+            "key_fields": [
+              "cycles_per_hour",
+              "fla_50hz_a",
+              "fla_60hz_a",
+              "lra_50hz_a"
+            ],
+            "key_fields_reason": "Fields you filtered on, then the ones that differ most"
+          },
+          "recommendation": null,
+          "active_filters": [],
+          "debug": {
+            "latency_ms": 63,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        },
+        {
+          "query": "I need at least 200 Nm on/off and low current, which should I buy?",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.076,
+          "answer": "I recommend 763A00-11320000/A: Weatherproof; FLA at 50 Hz 1.3 A; meets On/Off service, torque ≥ 200 Nm. Ranked by lowest FLA, then shortest operating time, then part number. Versus 764A00-11320000/A: FLA at 50 Hz: 1.3 A vs 3 A; FLA at 60 Hz: 1.3 A vs 3.2 A; Operating time at 50 Hz: 29 s vs 33 s. Choose 764A00-11320000/A only if its On/Off torque advantage (6650 in-lb / 750 Nm vs 2650 in-lb / 300 Nm) matters more than the stated priority.\n762A00-11320000/A is out: On/Off torque 150 Nm < 200 Nm.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "comparison": null,
+          "recommendation": {
+            "ranked_by": "lowest FLA, then shortest operating time, then part number",
+            "total": 2,
+            "shown": 2,
+            "items": [
+              {
+                "part_number": "763A00-11320000/A",
+                "reason": "Weatherproof; FLA at 50 Hz 1.3 A; meets On/Off service, torque ≥ 200 Nm",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "300 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.3 A"
+                  },
+                  {
+                    "label": "Enclosure",
+                    "value": "Weatherproof"
+                  }
+                ]
+              },
+              {
+                "part_number": "764A00-11320000/A",
+                "reason": "Weatherproof; On/Off torque 750 Nm; FLA 50 Hz 3 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "750 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "3 A"
+                  },
+                  {
+                    "label": "Enclosure",
+                    "value": "Weatherproof"
+                  }
+                ]
+              }
+            ]
+          },
+          "active_filters": [
+            {
+              "field": "service",
+              "label": "On/Off service"
+            },
+            {
+              "field": "min_torque_nm",
+              "label": "torque ≥ 200 Nm"
+            }
+          ],
+          "debug": {
+            "latency_ms": 55,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "T9_R1_spanish",
+      "status": "passed",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A vs 761B00-11300000/A",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.065,
+          "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
+          "comparison": {
+            "layout": "table",
+            "models": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ],
+            "summary": "761A00-11300000/A wins 5 of 7 differing fields with an agreed direction; 761B00-11300000/A wins 2. This is an unweighted field count, not an overall suitability rating.",
+            "assumptions": "More is better for torque and cycles; less is better for time, current and motor power.",
+            "rows": [
+              {
+                "field": "on_off_torque",
+                "label": "On/Off torque",
+                "values": [
+                  "700 in-lb / 80 Nm",
+                  "880 in-lb / 100 Nm"
+                ],
+                "better": 1
+              },
+              {
+                "field": "modulating_torque",
+                "label": "Modulating torque",
+                "values": [
+                  "580 in-lb / 65 Nm",
+                  "620 in-lb / 70 Nm"
+                ],
+                "better": 1
+              },
+              {
+                "field": "cycles_per_hour",
+                "label": "On/Off cycles",
+                "values": [
+                  "36 /h",
+                  "31 /h"
+                ],
+                "better": 0
+              },
+              {
+                "field": "operating_time_50hz_s",
+                "label": "Operating time at 50 Hz",
+                "values": [
+                  "20 s",
+                  "23 s"
+                ],
+                "better": 0
+              },
+              {
+                "field": "fla_50hz_a",
+                "label": "FLA at 50 Hz",
+                "values": [
+                  "1.1 A",
+                  "1.2 A"
+                ],
+                "better": 0
+              },
+              {
+                "field": "operating_time_60hz_s",
+                "label": "Operating time at 60 Hz",
+                "values": [
+                  "17 s",
+                  "19 s"
+                ],
+                "better": 0
+              },
+              {
+                "field": "fla_60hz_a",
+                "label": "FLA at 60 Hz",
+                "values": [
+                  "1.2 A",
+                  "1.3 A"
+                ],
+                "better": 0
+              }
+            ],
+            "hidden_rows": [
+              {
+                "field": "enclosure",
+                "label": "Enclosure",
+                "values": [
+                  "Weatherproof",
+                  "Weatherproof"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_voltage_v",
+                "label": "Supply voltage",
+                "values": [
+                  "110 V",
+                  "110 V"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_current",
+                "label": "Current type",
+                "values": [
+                  "AC",
+                  "AC"
+                ],
+                "better": null
+              },
+              {
+                "field": "phase_count",
+                "label": "Phases",
+                "values": [
+                  "1",
+                  "1"
+                ],
+                "better": null
+              },
+              {
+                "field": "motor_power_w",
+                "label": "Motor power",
+                "values": [
+                  "15 W",
+                  "15 W"
+                ],
+                "better": null
+              },
+              {
+                "field": "on_off_duty_s4_percent",
+                "label": "On/Off duty S4",
+                "values": [
+                  "40 %",
+                  "40 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "modulating_duty_s4_percent",
+                "label": "Modulating duty S4",
+                "values": [
+                  "40 %",
+                  "40 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "starts_per_hour",
+                "label": "Modulating starts",
+                "values": [
+                  "960 /h",
+                  "960 /h"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_50hz_a",
+                "label": "LRA at 50 Hz",
+                "values": [
+                  "1.3 A",
+                  "1.3 A"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_60hz_a",
+                "label": "LRA at 60 Hz",
+                "values": [
+                  "1.4 A",
+                  "1.4 A"
+                ],
+                "better": null
+              }
+            ],
+            "missing_models": [],
+            "key_fields": [],
+            "key_fields_reason": ""
+          },
+          "recommendation": null,
+          "active_filters": [],
+          "debug": {
+            "latency_ms": 44,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        },
+        {
+          "query": "¿cuál me recomiendas?",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.08,
+          "answer": "I recommend 761A00-11300000/A: Weatherproof; FLA at 50 Hz 1.1 A. Ranked by lowest FLA, then shortest operating time, then part number. Versus 761B00-11300000/A: FLA at 50 Hz: 1.1 A vs 1.2 A; FLA at 60 Hz: 1.2 A vs 1.3 A; Operating time at 50 Hz: 20 s vs 23 s. Choose 761B00-11300000/A only if its On/Off torque advantage (880 in-lb / 100 Nm vs 700 in-lb / 80 Nm) matters more than the stated priority. Assumes no torque requirement; tell me the torque you need.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "comparison": null,
+          "recommendation": {
+            "ranked_by": "lowest FLA, then shortest operating time, then part number",
+            "total": 2,
+            "shown": 2,
+            "items": [
+              {
+                "part_number": "761A00-11300000/A",
+                "reason": "Weatherproof; FLA at 50 Hz 1.1 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "80 Nm"
+                  },
+                  {
+                    "label": "Modulating torque",
+                    "value": "65 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.1 A"
+                  },
+                  {
+                    "label": "Enclosure",
+                    "value": "Weatherproof"
+                  }
+                ]
+              },
+              {
+                "part_number": "761B00-11300000/A",
+                "reason": "Weatherproof; On/Off torque 100 Nm; Modulating torque 70 Nm; FLA 50 Hz 1.2 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "100 Nm"
+                  },
+                  {
+                    "label": "Modulating torque",
+                    "value": "70 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.2 A"
+                  },
+                  {
+                    "label": "Enclosure",
+                    "value": "Weatherproof"
+                  }
+                ]
+              }
+            ]
+          },
+          "active_filters": [],
+          "debug": {
+            "latency_ms": 58,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "T9_R1_list",
+      "status": "passed",
+      "turns": [
+        {
+          "query": "on/off 220 V weatherproof at least 150 Nm",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.099,
+          "answer": "21 actuators meet: Weatherproof, On/Off service, 220 V, torque ≥ 150 Nm. To narrow it down: number of phases.\nRanked by closest torque at or above 150 Nm, then lowest FLA.\n762A00-11320000/A: On/Off torque 150 Nm; FLA 50 Hz 1 A\n762B00-11320000/A: On/Off torque 200 Nm; FLA 50 Hz 1.1 A\n763A00-11330C00/A: Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A",
+          "comparison": null,
+          "recommendation": {
+            "ranked_by": "closest torque at or above 150 Nm, then lowest FLA",
+            "total": 21,
+            "shown": 3,
+            "items": [
+              {
+                "part_number": "762A00-11320000/A",
+                "reason": "On/Off torque 150 Nm; FLA 50 Hz 1 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "150 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1 A"
+                  }
+                ]
+              },
+              {
+                "part_number": "762B00-11320000/A",
+                "reason": "On/Off torque 200 Nm; FLA 50 Hz 1.1 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "200 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.1 A"
+                  }
+                ]
+              },
+              {
+                "part_number": "763A00-11330C00/A",
+                "reason": "Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A",
+                "key_values": [
+                  {
+                    "label": "Shared torque",
+                    "value": "300 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1 A"
+                  }
+                ]
+              }
+            ]
+          },
+          "active_filters": [
+            {
+              "field": "enclosure",
+              "label": "Weatherproof"
+            },
+            {
+              "field": "service",
+              "label": "On/Off service"
+            },
+            {
+              "field": "supply_voltage_v",
+              "label": "220 V"
+            },
+            {
+              "field": "min_torque_nm",
+              "label": "torque ≥ 150 Nm"
+            }
+          ],
+          "debug": {
+            "latency_ms": 75,
+            "attempts": 1,
+            "llm_called": true,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        },
+        {
+          "query": "of those, which one for low power?",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.079,
+          "answer": "I recommend 762A00-11320000/A: Motor power 40 W; meets Weatherproof, On/Off service, 220 V, torque ≥ 150 Nm. Ranked by lowest motor power, then lowest FLA, then shortest operating time, then part number. The priority ties at 40 W; fastest operating time breaks the tie. Versus 763A00-11330C00/A: Operating time at 50 Hz: 21 s vs 32 s; Operating time at 60 Hz: 18 s vs 26 s; LRA at 50 Hz: 1.1 A vs 1.2 A. Choose 763A00-11330C00/A only if its On/Off cycles advantage (39 /h vs 30 /h) matters more than the stated priority. Assumes no preference on phase count; tell me if that matters.",
+          "comparison": null,
+          "recommendation": {
+            "ranked_by": "lowest motor power, then lowest FLA, then shortest operating time, then part number",
+            "total": 3,
+            "shown": 3,
+            "items": [
+              {
+                "part_number": "762A00-11320000/A",
+                "reason": "Motor power 40 W; meets Weatherproof, On/Off service, 220 V, torque ≥ 150 Nm",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "150 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1 A"
+                  }
+                ]
+              },
+              {
+                "part_number": "763A00-11330C00/A",
+                "reason": "Shared torque 300 Nm (same torque for On/Off and Modulating); FLA 50 Hz 1 A",
+                "key_values": [
+                  {
+                    "label": "Shared torque",
+                    "value": "300 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1 A"
+                  }
+                ]
+              },
+              {
+                "part_number": "762B00-11320000/A",
+                "reason": "On/Off torque 200 Nm; FLA 50 Hz 1.1 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "200 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.1 A"
+                  }
+                ]
+              }
+            ]
+          },
+          "active_filters": [
+            {
+              "field": "enclosure",
+              "label": "Weatherproof"
+            },
+            {
+              "field": "supply_voltage_v",
+              "label": "220 V"
+            },
+            {
+              "field": "service",
+              "label": "On/Off service"
+            },
+            {
+              "field": "min_torque_nm",
+              "label": "torque ≥ 150 Nm"
+            }
+          ],
+          "debug": {
+            "latency_ms": 57,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "T9_R1_tie",
+      "status": "passed",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A vs 761B00-11300000/A",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.065,
+          "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
+          "comparison": {
+            "layout": "table",
+            "models": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ],
+            "summary": "761A00-11300000/A wins 5 of 7 differing fields with an agreed direction; 761B00-11300000/A wins 2. This is an unweighted field count, not an overall suitability rating.",
+            "assumptions": "More is better for torque and cycles; less is better for time, current and motor power.",
+            "rows": [
+              {
+                "field": "on_off_torque",
+                "label": "On/Off torque",
+                "values": [
+                  "700 in-lb / 80 Nm",
+                  "880 in-lb / 100 Nm"
+                ],
+                "better": 1
+              },
+              {
+                "field": "modulating_torque",
+                "label": "Modulating torque",
+                "values": [
+                  "580 in-lb / 65 Nm",
+                  "620 in-lb / 70 Nm"
+                ],
+                "better": 1
+              },
+              {
+                "field": "cycles_per_hour",
+                "label": "On/Off cycles",
+                "values": [
+                  "36 /h",
+                  "31 /h"
+                ],
+                "better": 0
+              },
+              {
+                "field": "operating_time_50hz_s",
+                "label": "Operating time at 50 Hz",
+                "values": [
+                  "20 s",
+                  "23 s"
+                ],
+                "better": 0
+              },
+              {
+                "field": "fla_50hz_a",
+                "label": "FLA at 50 Hz",
+                "values": [
+                  "1.1 A",
+                  "1.2 A"
+                ],
+                "better": 0
+              },
+              {
+                "field": "operating_time_60hz_s",
+                "label": "Operating time at 60 Hz",
+                "values": [
+                  "17 s",
+                  "19 s"
+                ],
+                "better": 0
+              },
+              {
+                "field": "fla_60hz_a",
+                "label": "FLA at 60 Hz",
+                "values": [
+                  "1.2 A",
+                  "1.3 A"
+                ],
+                "better": 0
+              }
+            ],
+            "hidden_rows": [
+              {
+                "field": "enclosure",
+                "label": "Enclosure",
+                "values": [
+                  "Weatherproof",
+                  "Weatherproof"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_voltage_v",
+                "label": "Supply voltage",
+                "values": [
+                  "110 V",
+                  "110 V"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_current",
+                "label": "Current type",
+                "values": [
+                  "AC",
+                  "AC"
+                ],
+                "better": null
+              },
+              {
+                "field": "phase_count",
+                "label": "Phases",
+                "values": [
+                  "1",
+                  "1"
+                ],
+                "better": null
+              },
+              {
+                "field": "motor_power_w",
+                "label": "Motor power",
+                "values": [
+                  "15 W",
+                  "15 W"
+                ],
+                "better": null
+              },
+              {
+                "field": "on_off_duty_s4_percent",
+                "label": "On/Off duty S4",
+                "values": [
+                  "40 %",
+                  "40 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "modulating_duty_s4_percent",
+                "label": "Modulating duty S4",
+                "values": [
+                  "40 %",
+                  "40 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "starts_per_hour",
+                "label": "Modulating starts",
+                "values": [
+                  "960 /h",
+                  "960 /h"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_50hz_a",
+                "label": "LRA at 50 Hz",
+                "values": [
+                  "1.3 A",
+                  "1.3 A"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_60hz_a",
+                "label": "LRA at 60 Hz",
+                "values": [
+                  "1.4 A",
+                  "1.4 A"
+                ],
+                "better": null
+              }
+            ],
+            "missing_models": [],
+            "key_fields": [],
+            "key_fields_reason": ""
+          },
+          "recommendation": null,
+          "active_filters": [],
+          "debug": {
+            "latency_ms": 42,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        },
+        {
+          "query": "which do you recommend for low power?",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.084,
+          "answer": "I recommend 761A00-11300000/A: Weatherproof; Motor power 15 W. Ranked by lowest motor power, then lowest FLA, then shortest operating time, then part number. The priority ties at 15 W; lowest FLA breaks the tie. Versus 761B00-11300000/A: FLA at 50 Hz: 1.1 A vs 1.2 A; FLA at 60 Hz: 1.2 A vs 1.3 A; Operating time at 50 Hz: 20 s vs 23 s. Choose 761B00-11300000/A only if its On/Off torque advantage (880 in-lb / 100 Nm vs 700 in-lb / 80 Nm) matters more than the stated priority. Assumes no torque requirement; tell me the torque you need.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "comparison": null,
+          "recommendation": {
+            "ranked_by": "lowest motor power, then lowest FLA, then shortest operating time, then part number",
+            "total": 2,
+            "shown": 2,
+            "items": [
+              {
+                "part_number": "761A00-11300000/A",
+                "reason": "Weatherproof; Motor power 15 W",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "80 Nm"
+                  },
+                  {
+                    "label": "Modulating torque",
+                    "value": "65 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.1 A"
+                  },
+                  {
+                    "label": "Enclosure",
+                    "value": "Weatherproof"
+                  }
+                ]
+              },
+              {
+                "part_number": "761B00-11300000/A",
+                "reason": "Weatherproof; On/Off torque 100 Nm; Modulating torque 70 Nm; FLA 50 Hz 1.2 A",
+                "key_values": [
+                  {
+                    "label": "On/Off torque",
+                    "value": "100 Nm"
+                  },
+                  {
+                    "label": "Modulating torque",
+                    "value": "70 Nm"
+                  },
+                  {
+                    "label": "FLA 50 Hz",
+                    "value": "1.2 A"
+                  },
+                  {
+                    "label": "Enclosure",
+                    "value": "Weatherproof"
+                  }
+                ]
+              }
+            ]
+          },
+          "active_filters": [],
+          "debug": {
+            "latency_ms": 56,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "T9_R1_none",
+      "status": "passed",
+      "turns": [
+        {
+          "query": "Compare 761A00-11300000/A vs 761B00-11300000/A",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.063,
+          "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\nOn/Off torque: 700 in-lb / 80 Nm vs 880 in-lb / 100 Nm\nModulating torque: 580 in-lb / 65 Nm vs 620 in-lb / 70 Nm\nOn/Off cycles: 36 /h vs 31 /h\nOperating time at 50 Hz: 20 s vs 23 s\nFLA at 50 Hz: 1.1 A vs 1.2 A\nOperating time at 60 Hz: 17 s vs 19 s\nFLA at 60 Hz: 1.2 A vs 1.3 A",
+          "comparison": {
+            "layout": "table",
+            "models": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ],
+            "summary": "761A00-11300000/A wins 5 of 7 differing fields with an agreed direction; 761B00-11300000/A wins 2. This is an unweighted field count, not an overall suitability rating.",
+            "assumptions": "More is better for torque and cycles; less is better for time, current and motor power.",
+            "rows": [
+              {
+                "field": "on_off_torque",
+                "label": "On/Off torque",
+                "values": [
+                  "700 in-lb / 80 Nm",
+                  "880 in-lb / 100 Nm"
+                ],
+                "better": 1
+              },
+              {
+                "field": "modulating_torque",
+                "label": "Modulating torque",
+                "values": [
+                  "580 in-lb / 65 Nm",
+                  "620 in-lb / 70 Nm"
+                ],
+                "better": 1
+              },
+              {
+                "field": "cycles_per_hour",
+                "label": "On/Off cycles",
+                "values": [
+                  "36 /h",
+                  "31 /h"
+                ],
+                "better": 0
+              },
+              {
+                "field": "operating_time_50hz_s",
+                "label": "Operating time at 50 Hz",
+                "values": [
+                  "20 s",
+                  "23 s"
+                ],
+                "better": 0
+              },
+              {
+                "field": "fla_50hz_a",
+                "label": "FLA at 50 Hz",
+                "values": [
+                  "1.1 A",
+                  "1.2 A"
+                ],
+                "better": 0
+              },
+              {
+                "field": "operating_time_60hz_s",
+                "label": "Operating time at 60 Hz",
+                "values": [
+                  "17 s",
+                  "19 s"
+                ],
+                "better": 0
+              },
+              {
+                "field": "fla_60hz_a",
+                "label": "FLA at 60 Hz",
+                "values": [
+                  "1.2 A",
+                  "1.3 A"
+                ],
+                "better": 0
+              }
+            ],
+            "hidden_rows": [
+              {
+                "field": "enclosure",
+                "label": "Enclosure",
+                "values": [
+                  "Weatherproof",
+                  "Weatherproof"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_voltage_v",
+                "label": "Supply voltage",
+                "values": [
+                  "110 V",
+                  "110 V"
+                ],
+                "better": null
+              },
+              {
+                "field": "supply_current",
+                "label": "Current type",
+                "values": [
+                  "AC",
+                  "AC"
+                ],
+                "better": null
+              },
+              {
+                "field": "phase_count",
+                "label": "Phases",
+                "values": [
+                  "1",
+                  "1"
+                ],
+                "better": null
+              },
+              {
+                "field": "motor_power_w",
+                "label": "Motor power",
+                "values": [
+                  "15 W",
+                  "15 W"
+                ],
+                "better": null
+              },
+              {
+                "field": "on_off_duty_s4_percent",
+                "label": "On/Off duty S4",
+                "values": [
+                  "40 %",
+                  "40 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "modulating_duty_s4_percent",
+                "label": "Modulating duty S4",
+                "values": [
+                  "40 %",
+                  "40 %"
+                ],
+                "better": null
+              },
+              {
+                "field": "starts_per_hour",
+                "label": "Modulating starts",
+                "values": [
+                  "960 /h",
+                  "960 /h"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_50hz_a",
+                "label": "LRA at 50 Hz",
+                "values": [
+                  "1.3 A",
+                  "1.3 A"
+                ],
+                "better": null
+              },
+              {
+                "field": "lra_60hz_a",
+                "label": "LRA at 60 Hz",
+                "values": [
+                  "1.4 A",
+                  "1.4 A"
+                ],
+                "better": null
+              }
+            ],
+            "missing_models": [],
+            "key_fields": [],
+            "key_fields_reason": ""
+          },
+          "recommendation": null,
+          "active_filters": [],
+          "debug": {
+            "latency_ms": 41,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        },
+        {
+          "query": "I need at least 200 Nm on/off, which is best?",
+          "passed": true,
+          "failures": [],
+          "elapsed_s": 0.061,
+          "answer": "None of the shown models meets every requirement. Nearest shown model: 761B00-11300000/A; it still fails: On/Off torque 100 Nm < 200 Nm.\n761A00-11300000/A is out: On/Off torque 80 Nm < 200 Nm.\n761B00-11300000/A is out: On/Off torque 100 Nm < 200 Nm.\nEnclosure not specified: Weatherproof is for general areas; choose Explosionproof for hazardous areas.",
+          "comparison": null,
+          "recommendation": {
+            "ranked_by": "closest torque at or above 200 Nm, then lowest FLA, then shortest operating time, then part number",
+            "total": 0,
+            "shown": 0,
+            "items": []
+          },
+          "active_filters": [
+            {
+              "field": "service",
+              "label": "On/Off service"
+            },
+            {
+              "field": "min_torque_nm",
+              "label": "torque ≥ 200 Nm"
+            }
+          ],
+          "debug": {
+            "latency_ms": 34,
+            "attempts": 0,
+            "llm_called": false,
+            "retrieval": {
+              "examples": [],
+              "concepts": {},
+              "embedding_ms": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

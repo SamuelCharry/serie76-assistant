@@ -1,0 +1,17 @@
+{
+ "google_gemini-3.6-flash": [
+  "L1-05: Items 1/2/3, turn 1: restricts DC-compatible request to AC/DC, omitting five DC-only models; ten eligible models, not five.",
+  "L2-03: Items 2/5, turn 1: explains only fully open/closed operation; omits partway modulation and the requested difference.",
+  "L2-05: Items 1/3/5, turn 1: falsely says travel time is unpublished; the exact model has a published 50 Hz time of 23 s.",
+  "L2-06: Items 1/5, turn 1: gives catalogue-wide enclosure counts without answering whether the specified model is weatherproof.",
+  "L4-05: Items 1 and 2, turn 2: interprets higher torque as highest operating time, answering the wrong selection criterion.",
+  "L5-04: Items 1-3, turns 1-2: explicitly excluded AC/DC models are listed and recommended instead of DC-only models.",
+  "L6-02: Item 2, turn 1: declines wiring information but silently omits requested motor wattage, which the catalogue publishes as 15 W.",
+  "L6-04: Items 2/5, turn 1: lists valid electrical supplies but silently drops the pneumatic quotation request instead of declining it.",
+  "L7-03: Item 2, turns 1-3: replaces requested shortest-time objective with FLA or torque ranking; final choice happens to be fastest but objective remains discarded.",
+  "L7-04: Items 1/5, turn 3: answers the site-specific safety question with an unrelated N/A definition, leaving catalogue sufficiency unanswered.",
+  "L7-07: Items 1/2, turn 1: rejects a valid model overview as unpublished instead of giving available specifications; accurate second-turn data cannot repair that failure.",
+  "L7-08: Item 5, turns 1/3: repeats no match without explaining why; catalogue has no Weatherproof DC-only unit, independently of the extreme torque requirement.",
+  "L7-09: Items 1-3, turns 1-3: ignores specified model, reasks identity, never distinguishes DC-only; reports 34 Weatherproof models although CSV contains 38."
+ ]
+}

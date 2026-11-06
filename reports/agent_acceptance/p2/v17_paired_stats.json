@@ -1,0 +1,65 @@
+{
+  "pairs": [
+    {
+      "index": 1,
+      "conversations": 60,
+      "baseline_passes": 37,
+      "final_passes": 47,
+      "baseline_only": 2,
+      "final_only": 12,
+      "mcnemar_exact_p": 0.012939453125
+    },
+    {
+      "index": 2,
+      "conversations": 60,
+      "baseline_passes": 35,
+      "final_passes": 46,
+      "baseline_only": 2,
+      "final_only": 13,
+      "mcnemar_exact_p": 0.00738525390625
+    },
+    {
+      "index": 3,
+      "conversations": 60,
+      "baseline_passes": 38,
+      "final_passes": 50,
+      "baseline_only": 1,
+      "final_only": 13,
+      "mcnemar_exact_p": 0.0018310546875
+    }
+  ],
+  "summary": {
+    "base": {
+      "passes": [
+        37,
+        35,
+        38
+      ],
+      "mean_pass_count": 36.666666666666664,
+      "pass_pow_k": {
+        "1": 0.6111111111111112,
+        "2": 0.5777777777777777,
+        "3": 0.55
+      },
+      "all_three_pass": 33,
+      "conversations": 60
+    },
+    "final": {
+      "passes": [
+        47,
+        46,
+        50
+      ],
+      "mean_pass_count": 47.666666666666664,
+      "pass_pow_k": {
+        "1": 0.7944444444444444,
+        "2": 0.7555555555555555,
+        "3": 0.7166666666666667
+      },
+      "all_three_pass": 43,
+      "conversations": 60
+    }
+  },
+  "mean_rule_passed": true,
+  "pass_pow_k_definition": "Probability all k selected runs pass, estimated from three repeats; not pass@k."
+}

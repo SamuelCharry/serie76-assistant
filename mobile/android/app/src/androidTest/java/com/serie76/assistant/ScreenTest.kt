@@ -61,7 +61,8 @@ class ScreenTest {
                 session.copy(id = "third", title = "24 V power requirements", preview = "Look up published data for a low-voltage application.")))
             override suspend fun messages(sessionId: String, before: Long?) = MessagesPage(sessionId, session.title,
                 listOf(Message("saved-user", "user", "Look up 761A00-11300000/A"), Message("saved-answer", "assistant", "Saved response", listOf(product))))
-            override suspend fun send(query: String, sessionId: String?) = ConversationResponse("test-session", "Published data", "answer")
+            override suspend fun send(query: String, sessionId: String?, answers: Map<String, String>, removeFilters: List<String>, action: SuggestionAction?) = ConversationResponse("test-session", "Published data", "answer")
+            override suspend fun deleteSession(sessionId: String) {}
         }
         compose.setContent { SeriesTheme(darkOverride = false) { SeriesApp(androidx.lifecycle.viewmodel.compose.viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST") override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T = AppViewModel(repo, SavedStateHandle()) as T
@@ -197,13 +198,18 @@ class ScreenTest {
     @Test fun developerShowsParametersAndReturnedData() {
         val parameters = buildJsonObject { putJsonArray("part_numbers") { add(product.partNumber) } }
         val returned = buildJsonObject { put("status", "ok"); put("source", "PostgreSQL test fixture") }
-        val state = AppState(screen = "debug", messages = listOf(Message("answer", "assistant", "Published catalogue data is shown below.")))
-        compose.setContent { SeriesTheme(darkOverride = false) { DeveloperScreen(state, {}, {}, { id ->
-            DebugResponse(id, "test-session", listOf(ToolCall("get_actuator", parameters, returned)))
-        }) } }
-        compose.onNodeWithText("get_actuator").assertExists()
-        compose.onNodeWithText("Parameters").assertExists()
-        compose.onNodeWithText("Returned data").assertExists()
+        val message = Message("answer", "assistant", "Published catalogue data is shown below.")
+        compose.setContent { SeriesTheme(darkOverride = false) {
+            androidx.compose.runtime.CompositionLocalProvider(LocalDeveloperMode provides DeveloperMode(true)) {
+                DeveloperSheet(message, {}, { id ->
+                    DebugResponse(id, "test-session", listOf(ToolCall("get_actuator", parameters, returned)))
+                })
+            }
+        } }
+        compose.onNodeWithText("▸ Tools called").performClick()
+        compose.onNodeWithText("[\n    \"get_actuator\"\n]").assertExists()
+        compose.onNodeWithText("▸ 1. get_actuator · Validated parameters").assertExists()
+        compose.onNodeWithText("▸ 1. get_actuator · Returned data").assertExists()
         screenshot("developer-debug")
     }
 

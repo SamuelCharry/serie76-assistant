@@ -1,0 +1,62 @@
+Window root 0
+Printing with useUnmergedTree = 'true'
+Node #367 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ |-Node #371 at (l=0.0, t=136.0, r=1080.0, b=2337.0)px
+   IsTraversalGroup = 'true'
+   VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+   Actions = [ScrollBy, ScrollByOffset]
+    |-Node #373 at (l=74.0, t=799.0, r=719.0, b=929.0)px
+    | Text = '[Welcome back]'
+    | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |-Node #374 at (l=74.0, t=982.0, r=575.0, b=1037.0)px
+    | Text = '[Sign in to your workspace.]'
+    | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |-Node #375 at (l=74.0, t=1090.0, r=1006.0, b=1261.0)px
+    | ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+    | ContentDescription = '[Sign in email]'
+    | EditableText = ''
+    | Focused = 'false'
+    | ImeAction = 'Next'
+    | InputText = ''
+    | IsEditable = 'true'
+    | TextSelectionRange = 'TextRange(0, 0)'
+    | Actions = [GetTextLayoutResult, InsertTextAtCursor, OnAutofillText, OnClick, OnLongClick, PasteText, PerformImeAction, RequestFocus, SetSelection, SetText]
+    | MergeDescendants = 'true'
+    |  |-Node #379 at (l=74.0, t=1114.0, r=1006.0, b=1261.0)px
+    |  |-Node #384 at (l=116.0, t=1156.0, r=221.0, b=1219.0)px
+    |  | Text = '[Email]'
+    |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |  |-Node #381 at (l=116.0, t=1156.0, r=964.0, b=1219.0)px
+    |-Node #385 at (l=74.0, t=1314.0, r=1006.0, b=1485.0)px
+    | ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+    | ContentDescription = '[Sign in password]'
+    | EditableText = ''
+    | Focused = 'false'
+    | ImeAction = 'Done'
+    | InputText = ''
+    | IsEditable = 'true'
+    | TextSelectionRange = 'TextRange(0, 0)'
+    | [Password]
+    | Actions = [GetTextLayoutResult, InsertTextAtCursor, OnAutofillText, OnClick, OnLongClick, PasteText, PerformImeAction, RequestFocus, SetSelection, SetText]
+    | MergeDescendants = 'true'
+    |  |-Node #389 at (l=74.0, t=1338.0, r=1006.0, b=1485.0)px
+    |  |-Node #398 at (l=116.0, t=1380.0, r=301.0, b=1443.0)px
+    |  | Text = '[Password]'
+    |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |  |-Node #395 at (l=116.0, t=1380.0, r=842.0, b=1443.0)px
+    |  |-Node #391 at (l=853.0, t=1360.0, r=1006.0, b=1465.0)px
+    |    Focused = 'false'
+    |    Role = 'Button'
+    |    Actions = [OnClick, RequestFocus]
+    |    MergeDescendants = 'true'
+    |     |-Node #393 at (l=885.0, t=1386.0, r=974.0, b=1439.0)px
+    |       Text = '[Show]'
+    |       Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |-Node #399 at (l=74.0, t=1538.0, r=1006.0, b=1675.0)px
+      Role = 'Button'
+      [Disabled]
+      Actions = [OnClick]
+      MergeDescendants = 'true'
+       |-Node #401 at (l=488.0, t=1580.0, r=593.0, b=1633.0)px
+         Text = '[Sign in]'
+         Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]

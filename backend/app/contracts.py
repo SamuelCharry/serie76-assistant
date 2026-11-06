@@ -6,11 +6,14 @@ class ConversationRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     session_id: UUID | None = None
     query: str = Field(min_length=1, max_length=4000)
+    answers: dict[str, str] = Field(default_factory=dict)
+    remove_filters: list[str] = Field(default_factory=list, max_length=20)
+    action: dict | None = None
 
     @field_validator("query")
     @classmethod
     def nonblank_query(cls, value: str) -> str:
-        if not value.strip():
+        if not value.strip() or '\x00' in value:
             raise ValueError("query must not be blank")
         return value
 
@@ -23,3 +26,11 @@ class ConversationResponse(BaseModel):
     clarification: dict | None = None  # {field, message, options?, conflict?} when the agent asks
     terms: list[dict] = Field(default_factory=list)  # verbatim glossary quotes with page
     assumptions: list[dict] = Field(default_factory=list)  # user wording the agent mapped to a filter
+    suggested_replies: list[str] = Field(default_factory=list)
+    comparison: dict | None = None
+    lead: str | None = None
+    interaction: dict | None = None
+    suggestions: list[str | dict] = Field(default_factory=list)
+    active_filters: list[dict] = Field(default_factory=list)
+    recommendation: dict | None = None
+    debug: dict = Field(default_factory=dict)

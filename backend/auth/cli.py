@@ -26,9 +26,10 @@ def create_user(connection, email, name, password):
 
 # Public assessment credentials: TEST ONLY, never use these accounts in production.
 DEMO_USERS = [
-    {"email": "demo@series76.test", "name": "Test-only demo", "password": "Series76-Demo-1"},
-    {"email": "reviewer@series76.test", "name": "Test-only reviewer", "password": "Series76-Demo-2"},
+    {"email": "demo@series76.test", "name": "Demo Engineer", "password": "Series76-Demo-1"},
+    {"email": "reviewer@series76.test", "name": "Review Engineer", "password": "Series76-Demo-2"},
 ]
+DEMO_NAMES = {account['email']: account['name'] for account in DEMO_USERS}
 
 
 def ensure_demo_users(connection):
@@ -50,6 +51,9 @@ def ensure_demo_users(connection):
         if not connection.execute("SELECT id FROM series76.users WHERE email=%s", (email,)).fetchone():
             create_user(connection, email, account["name"], account["password"])
             created += 1
+        if email in DEMO_NAMES:
+            connection.execute("UPDATE series76.users SET name=%s WHERE email=%s AND name IS DISTINCT FROM %s",
+                               (DEMO_NAMES[email], email, DEMO_NAMES[email]))
     return created
 
 

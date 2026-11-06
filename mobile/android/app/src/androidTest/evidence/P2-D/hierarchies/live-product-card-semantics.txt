@@ -1,0 +1,227 @@
+Window root 0
+Printing with useUnmergedTree = 'true'
+Node #367 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ |-Node #408 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ | IsContainer = 'true'
+ |  |-Node #478 at (l=0.0, t=304.0, r=1080.0, b=2079.0)px
+ |  | CollectionInfo = 'androidx.compose.ui.semantics.CollectionInfo@811c085'
+ |  | IsTraversalGroup = 'true'
+ |  | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+ |  | Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+ |  |  |-Node #528 at (l=187.0, t=346.0, r=1027.0, b=548.0)px
+ |  |  | IsContainer = 'true'
+ |  |  |  |-Node #529 at (l=229.0, t=388.0, r=985.0, b=506.0)px
+ |  |  |    Text = '[What is the motor power of 761A00-11300000/A?]'
+ |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |  |-Node #532 at (l=53.0, t=611.0, r=205.0, b=658.0)px
+ |  |  | Text = '[Assistant]'
+ |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |  |-Node #533 at (l=53.0, t=690.0, r=1027.0, b=808.0)px
+ |  |  | Text = '[Catalogue specifications for 761A00-11300000/A.]'
+ |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |  |-Node #534 at (l=53.0, t=840.0, r=1027.0, b=1370.0)px
+ |  |    IsContainer = 'true'
+ |  |     |-Node #537 at (l=95.0, t=882.0, r=564.0, b=944.0)px
+ |  |     | Text = '[761A00-11300000/A]'
+ |  |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |     |-Node #538 at (l=95.0, t=970.0, r=675.0, b=1017.0)px
+ |  |     | Text = '[Weatherproof · 110 V AC · 1 phase]'
+ |  |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |     |-Node #541 at (l=95.0, t=1072.0, r=519.0, b=1119.0)px
+ |  |     | Text = '[Motor power]'
+ |  |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |     |-Node #542 at (l=561.0, t=1072.0, r=985.0, b=1119.0)px
+ |  |     | Text = '[15 W]'
+ |  |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |     |-Node #544 at (l=95.0, t=1145.0, r=736.0, b=1186.0)px
+ |  |     | Text = '[Source: series_76_electric_data.pdf, page 1]'
+ |  |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |     |-Node #545 at (l=95.0, t=1213.0, r=593.0, b=1318.0)px
+ |  |       Focused = 'false'
+ |  |       Role = 'Button'
+ |  |       Actions = [OnClick, RequestFocus]
+ |  |       MergeDescendants = 'true'
+ |  |        |-Node #547 at (l=127.0, t=1239.0, r=561.0, b=1292.0)px
+ |  |          Text = '[Source notes & exceptions]'
+ |  |          Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |-Node #443 at (l=0.0, t=0.0, r=1080.0, b=304.0)px
+ |  | IsTraversalGroup = 'true'
+ |  |  |-Node #444 at (l=0.0, t=136.0, r=1080.0, b=304.0)px
+ |  |     |-Node #446 at (l=22.0, t=168.0, r=127.0, b=273.0)px
+ |  |     | Focused = 'false'
+ |  |     | Role = 'Button'
+ |  |     | Actions = [OnClick, RequestFocus]
+ |  |     | MergeDescendants = 'true'
+ |  |     |  |-Node #447 at (l=43.0, t=189.0, r=106.0, b=252.0)px
+ |  |     |    ContentDescription = '[Open conversation history]'
+ |  |     |    Role = 'Image'
+ |  |     |-Node #448 at (l=148.0, t=182.0, r=932.0, b=257.0)px
+ |  |     |  |-Node #449 at (l=148.0, t=182.0, r=932.0, b=257.0)px
+ |  |     |    Text = '[What is the motor power of 761A00-11300000/A?]'
+ |  |     |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |  |     |-Node #452 at (l=954.0, t=168.0, r=1059.0, b=273.0)px
+ |  |       Focused = 'false'
+ |  |       Role = 'Button'
+ |  |       Actions = [OnClick, RequestFocus]
+ |  |       MergeDescendants = 'true'
+ |  |        |-Node #453 at (l=975.0, t=189.0, r=1038.0, b=252.0)px
+ |  |          ContentDescription = '[New conversation]'
+ |  |          Role = 'Image'
+ |  |-Node #460 at (l=0.0, t=2079.0, r=1080.0, b=2400.0)px
+ |    IsContainer = 'true'
+ |     |-Node #462 at (l=42.0, t=2111.0, r=1038.0, b=2305.0)px
+ |       IsContainer = 'true'
+ |        |-Node #464 at (l=95.0, t=2161.0, r=718.0, b=2279.0)px
+ |        | ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+ |        | ContentDescription = '[Message]'
+ |        | EditableText = ''
+ |        | Focused = 'false'
+ |        | ImeAction = 'Send'
+ |        | InputText = ''
+ |        | IsEditable = 'true'
+ |        | TextSelectionRange = 'TextRange(0, 0)'
+ |        | Actions = [GetTextLayoutResult, InsertTextAtCursor, OnAutofillText, OnClick, OnLongClick, PasteText, PerformImeAction, RequestFocus, SetSelection, SetText]
+ |        | MergeDescendants = 'true'
+ |        |  |-Node #522 at (l=95.0, t=2161.0, r=381.0, b=2216.0)px
+ |        |  | Text = '[Ask a question]'
+ |        |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+ |        |  |-Node #468 at (l=95.0, t=2161.0, r=385.0, b=2279.0)px
+ |        |-Node #523 at (l=739.0, t=2153.0, r=865.0, b=2279.0)px
+ |        | Focused = 'false'
+ |        | Role = 'Button'
+ |        | Actions = [OnClick, RequestFocus]
+ |        | MergeDescendants = 'true'
+ |        |  |-Node #524 at (l=771.0, t=2185.0, r=834.0, b=2248.0)px
+ |        |    ContentDescription = '[Voice input]'
+ |        |    Role = 'Image'
+ |        |-Node #472 at (l=886.0, t=2153.0, r=1012.0, b=2279.0)px
+ |          Role = 'Button'
+ |          [Disabled]
+ |          Actions = [OnClick]
+ |          MergeDescendants = 'true'
+ |           |-Node #474 at (l=918.0, t=2185.0, r=981.0, b=2248.0)px
+ |             ContentDescription = '[Send message]'
+ |             Role = 'Image'
+ |-Node #411 at (l=-907.0, t=0.0, r=0.0, b=2400.0)px
+   PaneTitle = 'Navigation menu'
+    |-Node #412 at (l=-907.0, t=0.0, r=0.0, b=2400.0)px
+      IsContainer = 'true'
+       |-Node #413 at (l=-907.0, t=136.0, r=0.0, b=2337.0)px
+          |-Node #414 at (l=-854.0, t=136.0, r=-53.0, b=2337.0)px
+             |-Node #416 at (l=-854.0, t=183.0, r=-179.0, b=258.0)px
+             | Text = '[Conversations]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #417 at (l=-168.0, t=168.0, r=-63.0, b=273.0)px
+             | Focused = 'false'
+             | Role = 'Button'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |  |-Node #418 at (l=-147.0, t=189.0, r=-84.0, b=252.0)px
+             |    ContentDescription = '[Close conversation history]'
+             |    Role = 'Image'
+             |-Node #421 at (l=-854.0, t=381.0, r=-53.0, b=518.0)px
+             | Focused = 'false'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |  |-Node #425 at (l=-728.0, t=426.0, r=-147.0, b=473.0)px
+             |    Text = '[New chat]'
+             |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #427 at (l=-854.0, t=592.0, r=-729.0, b=643.0)px
+             | Text = '[Recent]'
+             | [Heading]
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #428 at (l=-854.0, t=675.0, r=-53.0, b=2102.0)px
+             | CollectionInfo = 'androidx.compose.ui.semantics.CollectionInfo@415aeda'
+             | IsTraversalGroup = 'true'
+             | VerticalScrollAxisRange = 'ScrollAxisRange(value=500.0, maxValue=600.0, reverseScrolling=false)'
+             | Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+             |  |-Node #487 at (l=-854.0, t=675.0, r=-53.0, b=915.0)px
+             |  | Focused = 'false'
+             |  | IsContainer = 'true'
+             |  | Selected = 'false'
+             |  | Actions = [OnClick, OnLongClick, RequestFocus]
+             |  | MergeDescendants = 'true'
+             |  |  |-Node #489 at (l=-822.0, t=712.0, r=-85.0, b=821.0)px
+             |  |  | Text = '[What is the 50 Hz locked-rotor current of 764Y30-11320000/A?]'
+             |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |  |-Node #490 at (l=-822.0, t=837.0, r=-739.0, b=878.0)px
+             |  |    Text = '[Nov 6]'
+             |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |-Node #492 at (l=-854.0, t=931.0, r=-53.0, b=1171.0)px
+             |  | Focused = 'false'
+             |  | IsContainer = 'true'
+             |  | Selected = 'false'
+             |  | Actions = [OnClick, OnLongClick, RequestFocus]
+             |  | MergeDescendants = 'true'
+             |  |  |-Node #494 at (l=-822.0, t=968.0, r=-85.0, b=1077.0)px
+             |  |  | Text = '[Show the on/off duty rating for 763X30-11320000/A.]'
+             |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |  |-Node #495 at (l=-822.0, t=1093.0, r=-739.0, b=1134.0)px
+             |  |    Text = '[Nov 6]'
+             |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |-Node #497 at (l=-854.0, t=1187.0, r=-53.0, b=1427.0)px
+             |  | Focused = 'false'
+             |  | IsContainer = 'true'
+             |  | Selected = 'false'
+             |  | Actions = [OnClick, OnLongClick, RequestFocus]
+             |  | MergeDescendants = 'true'
+             |  |  |-Node #499 at (l=-822.0, t=1224.0, r=-85.0, b=1333.0)px
+             |  |  | Text = '[The label says 764X30. Can you identify the exact supply voltage from that alone?]'
+             |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |  |-Node #500 at (l=-822.0, t=1349.0, r=-739.0, b=1390.0)px
+             |  |    Text = '[Nov 6]'
+             |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |-Node #502 at (l=-854.0, t=1443.0, r=-53.0, b=1683.0)px
+             |  | Focused = 'false'
+             |  | IsContainer = 'true'
+             |  | Selected = 'false'
+             |  | Actions = [OnClick, OnLongClick, RequestFocus]
+             |  | MergeDescendants = 'true'
+             |  |  |-Node #504 at (l=-822.0, t=1480.0, r=-85.0, b=1589.0)px
+             |  |  | Text = '[Does 888Q12-00000000/A exist in this catalogue?]'
+             |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |  |-Node #505 at (l=-822.0, t=1605.0, r=-739.0, b=1646.0)px
+             |  |    Text = '[Nov 6]'
+             |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |-Node #507 at (l=-854.0, t=1699.0, r=-53.0, b=1939.0)px
+             |  | Focused = 'false'
+             |  | IsContainer = 'true'
+             |  | Selected = 'false'
+             |  | Actions = [OnClick, OnLongClick, RequestFocus]
+             |  | MergeDescendants = 'true'
+             |  |  |-Node #509 at (l=-822.0, t=1736.0, r=-85.0, b=1845.0)px
+             |  |  | Text = '[I need 220 V explosionproof on/off, at least 3000 Nm, with an operating time below one second at 50 ]'
+             |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |  |-Node #510 at (l=-822.0, t=1861.0, r=-739.0, b=1902.0)px
+             |  |    Text = '[Nov 6]'
+             |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |  |-Node #512 at (l=-854.0, t=1955.0, r=-53.0, b=2195.0)px
+             |    Focused = 'false'
+             |    IsContainer = 'true'
+             |    Selected = 'false'
+             |    Actions = [OnClick, OnLongClick, RequestFocus]
+             |    MergeDescendants = 'true'
+             |     |-Node #514 at (l=-822.0, t=1992.0, r=-85.0, b=2101.0)px
+             |     | Text = '[Find an actuator requiring 12 V DC with at least 100 Nm for open/close.]'
+             |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |     |-Node #515 at (l=-822.0, t=2117.0, r=-739.0, b=2158.0)px
+             |       Text = '[Nov 6]'
+             |       Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #431 at (l=-854.0, t=2105.0, r=-53.0, b=2305.0)px
+               IsContainer = 'true'
+                |-Node #433 at (l=-843.0, t=2142.0, r=-717.0, b=2268.0)px
+                | ContentDescription = '[Open profile menu]'
+                | Focused = 'false'
+                | Role = 'Button'
+                | Actions = [OnClick, RequestFocus]
+                | MergeDescendants = 'true'
+                |-Node #435 at (l=-685.0, t=2142.0, r=-64.0, b=2268.0)px
+                  Focused = 'false'
+                  Actions = [OnClick, RequestFocus]
+                  MergeDescendants = 'true'
+                   |-Node #436 at (l=-685.0, t=2159.0, r=-414.0, b=2210.0)px
+                   | Text = '[Demo Engineer]'
+                   | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+                   |-Node #437 at (l=-685.0, t=2210.0, r=-382.0, b=2251.0)px
+                     Text = '[demo@series76.test]'
+                     Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]

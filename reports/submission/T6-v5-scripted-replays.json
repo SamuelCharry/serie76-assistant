@@ -1,0 +1,774 @@
+[
+  {
+    "scenario": "dc_no_frequency",
+    "kind": "recorded tool arguments replayed offline against fixed code",
+    "turns": [
+      {
+        "query": "What is the full load current of 761X30-11370000/A at 60 Hz?",
+        "scripted_call": [
+          "get_actuator",
+          {
+            "focus": [
+              "fla"
+            ],
+            "focus_frequency_hz": 60,
+            "part_numbers": [
+              "761X30-11370000/A"
+            ]
+          }
+        ],
+        "answer": "761X30-11370000/A\n  • FLA (DC: no mains frequency): 5 A\n  Source: series_76_electric_data.pdf, page 3, table p3_t2.",
+        "products": [
+          "761X30-11370000/A"
+        ],
+        "clarification": null,
+        "context": {
+          "focus": [
+            {
+              "field": "fla",
+              "frequency_hz": 60,
+              "service": null
+            }
+          ],
+          "part_numbers": [
+            "761X30-11370000/A"
+          ]
+        },
+        "trace": [
+          {
+            "name": "get_actuator",
+            "parameters": {
+              "part_numbers": [
+                "761X30-11370000/A"
+              ],
+              "focus": [
+                {
+                  "field": "fla",
+                  "frequency_hz": 60,
+                  "service": null
+                }
+              ],
+              "cancel_previous": false,
+              "explain_terms": []
+            },
+            "raw_parameters": {
+              "focus": [
+                "fla"
+              ],
+              "focus_frequency_hz": 60,
+              "part_numbers": [
+                "761X30-11370000/A"
+              ]
+            },
+            "validation": [
+              "ok"
+            ],
+            "context_before": {},
+            "renderer": "get_actuator",
+            "context_after": {
+              "focus": [
+                {
+                  "field": "fla",
+                  "frequency_hz": 60,
+                  "service": null
+                }
+              ],
+              "part_numbers": [
+                "761X30-11370000/A"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "scenario": "followup_ambiguous_it",
+    "kind": "recorded tool arguments replayed offline against fixed code",
+    "turns": [
+      {
+        "query": "Compare 761A00-11300000/A and 761B00-11300000/A",
+        "scripted_call": [
+          "get_actuator",
+          {
+            "part_numbers": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ]
+          }
+        ],
+        "answer": "Comparing 761A00-11300000/A vs 761B00-11300000/A. 10 identical fields hidden.\non off torque in lb: 700 in-lb vs 880 in-lb\non off torque nm: 80 Nm vs 100 Nm\nmodulating torque in lb: 580 in-lb vs 620 in-lb\nmodulating torque nm: 65 Nm vs 70 Nm\ncycles per hour: 36 vs 31\noperating time 60 Hz s: 17 s vs 19 s\nfla 60 Hz a: 1.2 A vs 1.3 A\noperating time 50 Hz s: 20 s vs 23 s\nfla 50 Hz a: 1.1 A vs 1.2 A",
+        "products": [],
+        "clarification": null,
+        "context": {
+          "focus": [
+            {
+              "field": "overview"
+            }
+          ],
+          "part_numbers": [
+            "761A00-11300000/A",
+            "761B00-11300000/A"
+          ]
+        },
+        "trace": [
+          {
+            "name": "get_actuator",
+            "parameters": {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ],
+              "focus": [],
+              "cancel_previous": false,
+              "explain_terms": []
+            },
+            "raw_parameters": {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ]
+            },
+            "validation": [
+              "ok"
+            ],
+            "context_before": {},
+            "renderer": "get_actuator",
+            "context_after": {
+              "focus": [
+                {
+                  "field": "overview"
+                }
+              ],
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "query": "what is its LRA?",
+        "scripted_call": [
+          "get_actuator",
+          {
+            "focus": [
+              "lra"
+            ],
+            "part_numbers": [
+              "761A00-11300000/A",
+              "761B00-11300000/A"
+            ]
+          }
+        ],
+        "answer": "Which of the previously listed actuators do you mean? Please give its complete part number.",
+        "products": [],
+        "clarification": {
+          "field": "which_product",
+          "message": "Which of the previously listed actuators do you mean? Please give its complete part number."
+        },
+        "context": {
+          "focus": [
+            {
+              "field": "overview"
+            }
+          ],
+          "part_numbers": [
+            "761A00-11300000/A",
+            "761B00-11300000/A"
+          ],
+          "pending_clarification": "which_product"
+        },
+        "trace": [
+          {
+            "name": "get_actuator",
+            "parameters": {
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ],
+              "focus": [
+                {
+                  "field": "lra",
+                  "frequency_hz": null,
+                  "service": null
+                }
+              ],
+              "cancel_previous": false,
+              "explain_terms": []
+            },
+            "raw_parameters": {
+              "focus": [
+                "lra"
+              ],
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ]
+            },
+            "validation": [
+              "ok"
+            ],
+            "context_before": {
+              "focus": [
+                {
+                  "field": "overview"
+                }
+              ],
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ]
+            },
+            "overrides": [
+              "ambiguous_singular_reference"
+            ],
+            "renderer": "clarification",
+            "context_after": {
+              "focus": [
+                {
+                  "field": "overview"
+                }
+              ],
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761B00-11300000/A"
+              ],
+              "pending_clarification": "which_product"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "scenario": "h_informal_onoff",
+    "kind": "corrected scripted interpretation; not real-model verification",
+    "turns": [
+      {
+        "query": "I just need it to fully open or fully close a valve, 110 V, at least 50 Nm",
+        "scripted_call": [
+          "search_actuators",
+          {
+            "service": "on_off",
+            "supply_voltage_v": 110,
+            "bounds": [
+              {
+                "field": "min_torque_nm",
+                "value": 50,
+                "op": "gte"
+              }
+            ]
+          }
+        ],
+        "answer": "21 actuators meet: On/Off service, 110 V, torque >= 50 Nm. Which enclosure do you need? Options: explosionproof, weatherproof.",
+        "products": [],
+        "clarification": {
+          "field": "enclosure",
+          "message": "21 actuators meet: On/Off service, 110 V, torque >= 50 Nm. Which enclosure do you need? Options: explosionproof, weatherproof.",
+          "options": [
+            "Use explosionproof",
+            "Use weatherproof"
+          ]
+        },
+        "context": {
+          "pagination": {
+            "has_more": false
+          },
+          "filters": {
+            "service": "on_off",
+            "supply_voltage_v": "110",
+            "min_torque_nm": {
+              "value": "50",
+              "op": "gte"
+            },
+            "limit": 5,
+            "offset": 0
+          },
+          "focus": [
+            {
+              "field": "torque",
+              "service": "on_off"
+            }
+          ],
+          "pending_clarification": "enclosure",
+          "part_numbers": []
+        },
+        "trace": [
+          {
+            "name": "search_actuators",
+            "parameters": {
+              "service": "on_off",
+              "supply_voltage_v": "110",
+              "min_torque_nm": {
+                "value": "50",
+                "op": "gte"
+              },
+              "limit": 5,
+              "offset": 0
+            },
+            "raw_parameters": {
+              "service": "on_off",
+              "supply_voltage_v": 110,
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "value": 50,
+                  "op": "gte"
+                }
+              ]
+            },
+            "validation": [
+              "ok"
+            ],
+            "context_before": {},
+            "renderer": "clarification",
+            "context_after": {
+              "pagination": {
+                "has_more": false
+              },
+              "filters": {
+                "service": "on_off",
+                "supply_voltage_v": "110",
+                "min_torque_nm": {
+                  "value": "50",
+                  "op": "gte"
+                },
+                "limit": 5,
+                "offset": 0
+              },
+              "focus": [
+                {
+                  "field": "torque",
+                  "service": "on_off"
+                }
+              ],
+              "pending_clarification": "enclosure",
+              "part_numbers": []
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "scenario": "t6_manual_03",
+    "kind": "corrected scripted interpretation; not real-model verification",
+    "turns": [
+      {
+        "query": "I need at least 70 Nm",
+        "scripted_call": [
+          "search_actuators",
+          {
+            "bounds": [
+              {
+                "field": "min_torque_nm",
+                "op": "gte",
+                "value": 70
+              }
+            ]
+          }
+        ],
+        "answer": "Is the actuator for On/Off or modulating service?",
+        "products": [],
+        "clarification": {
+          "field": "service",
+          "message": "Is the actuator for On/Off or modulating service?",
+          "fields": [
+            "service"
+          ]
+        },
+        "context": {
+          "pagination": {
+            "has_more": false
+          },
+          "filters": {
+            "min_torque_nm": {
+              "value": "70",
+              "op": "gte"
+            },
+            "limit": 5,
+            "offset": 0
+          },
+          "pending_clarification": "service"
+        },
+        "trace": [
+          {
+            "name": "search_actuators",
+            "parameters": {
+              "min_torque_nm": {
+                "value": "70",
+                "op": "gte"
+              },
+              "limit": 5,
+              "offset": 0
+            },
+            "raw_parameters": {
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 70
+                }
+              ]
+            },
+            "validation": [
+              "ok"
+            ],
+            "context_before": {},
+            "renderer": "clarification",
+            "context_after": {
+              "pagination": {
+                "has_more": false
+              },
+              "filters": {
+                "min_torque_nm": {
+                  "value": "70",
+                  "op": "gte"
+                },
+                "limit": 5,
+                "offset": 0
+              },
+              "pending_clarification": "service"
+            }
+          }
+        ]
+      },
+      {
+        "query": "Busco un actuador para exteriores que sea muy rápido y no consuma mucha energía.",
+        "scripted_call": [
+          "search_actuators",
+          {
+            "enclosure": "weatherproof",
+            "refine": false,
+            "sort_by": [
+              "fastest",
+              "lowest_power"
+            ]
+          }
+        ],
+        "answer": "34 actuators match weatherproof. Top 3 ranked by shortest operating time, then lowest motor power. Motor power is the published rated motor power, not total electrical consumption. Ranking uses the lowest published value across frequencies; all displayed values retain their frequency.\n\n761A00-11300000/A\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • Motor power: 15 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.\n\n761A00-11320000/A\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • Motor power: 15 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t2.\n\n762A00-11300000/A\n  • Operating time at 50 Hz: 21 s\n  • Operating time at 60 Hz: 18 s\n  • Motor power: 40 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.\nWhich supply voltage do you need?",
+        "products": [
+          "761A00-11300000/A",
+          "761A00-11320000/A",
+          "762A00-11300000/A"
+        ],
+        "clarification": {
+          "field": "supply_voltage_v",
+          "message": "34 actuators match weatherproof. Top 3 ranked by shortest operating time, then lowest motor power. Motor power is the published rated motor power, not total electrical consumption. Ranking uses the lowest published value across frequencies; all displayed values retain their frequency.\n\n761A00-11300000/A\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • Motor power: 15 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.\n\n761A00-11320000/A\n  • Operating time at 50 Hz: 20 s\n  • Operating time at 60 Hz: 17 s\n  • Motor power: 15 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t2.\n\n762A00-11300000/A\n  • Operating time at 50 Hz: 21 s\n  • Operating time at 60 Hz: 18 s\n  • Motor power: 40 W\n  Source: series_76_electric_data.pdf, page 1, table p1_t1.\nWhich supply voltage do you need?",
+          "options": [
+            "Use 110 V",
+            "Use 220 V"
+          ]
+        },
+        "context": {
+          "pagination": {
+            "has_more": true
+          },
+          "filters": {
+            "enclosure": "weatherproof",
+            "limit": 3,
+            "offset": 0,
+            "sort_by": [
+              "fastest",
+              "lowest_power"
+            ]
+          },
+          "pending_clarification": "supply_voltage_v",
+          "focus": [
+            {
+              "field": "operating_time"
+            },
+            {
+              "field": "motor_power"
+            }
+          ],
+          "part_numbers": [
+            "761A00-11300000/A",
+            "761A00-11320000/A",
+            "762A00-11300000/A"
+          ]
+        },
+        "trace": [
+          {
+            "name": "search_actuators",
+            "parameters": {
+              "enclosure": "weatherproof",
+              "limit": 3,
+              "offset": 0,
+              "sort_by": [
+                "fastest",
+                "lowest_power"
+              ]
+            },
+            "raw_parameters": {
+              "enclosure": "weatherproof",
+              "refine": false,
+              "sort_by": [
+                "fastest",
+                "lowest_power"
+              ]
+            },
+            "validation": [
+              "ok"
+            ],
+            "context_before": {
+              "pagination": {
+                "has_more": false
+              },
+              "filters": {
+                "min_torque_nm": {
+                  "value": "70",
+                  "op": "gte"
+                },
+                "limit": 5,
+                "offset": 0
+              },
+              "pending_clarification": "service"
+            },
+            "renderer": "clarification",
+            "context_after": {
+              "pagination": {
+                "has_more": true
+              },
+              "filters": {
+                "enclosure": "weatherproof",
+                "limit": 3,
+                "offset": 0,
+                "sort_by": [
+                  "fastest",
+                  "lowest_power"
+                ]
+              },
+              "pending_clarification": "supply_voltage_v",
+              "focus": [
+                {
+                  "field": "operating_time"
+                },
+                {
+                  "field": "motor_power"
+                }
+              ],
+              "part_numbers": [
+                "761A00-11300000/A",
+                "761A00-11320000/A",
+                "762A00-11300000/A"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "scenario": "missing_service_then_answer",
+    "kind": "recorded tool arguments replayed offline against fixed code",
+    "turns": [
+      {
+        "query": "I need a 110 V actuator with 100 Nm of torque",
+        "scripted_call": [
+          "search_actuators",
+          {
+            "bounds": [
+              {
+                "field": "min_torque_nm",
+                "op": "gte",
+                "value": 100
+              }
+            ],
+            "supply_voltage_v": 110
+          }
+        ],
+        "answer": "Is the actuator for On/Off or modulating service?",
+        "products": [],
+        "clarification": {
+          "field": "service",
+          "message": "Is the actuator for On/Off or modulating service?",
+          "fields": [
+            "service"
+          ]
+        },
+        "context": {
+          "pagination": {
+            "has_more": false
+          },
+          "filters": {
+            "supply_voltage_v": "110",
+            "min_torque_nm": {
+              "value": "100",
+              "op": "gte"
+            },
+            "limit": 5,
+            "offset": 0
+          },
+          "pending_clarification": "service"
+        },
+        "trace": [
+          {
+            "name": "search_actuators",
+            "parameters": {
+              "supply_voltage_v": "110",
+              "min_torque_nm": {
+                "value": "100",
+                "op": "gte"
+              },
+              "limit": 5,
+              "offset": 0
+            },
+            "raw_parameters": {
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 100
+                }
+              ],
+              "supply_voltage_v": 110
+            },
+            "validation": [
+              "ok"
+            ],
+            "context_before": {},
+            "renderer": "clarification",
+            "context_after": {
+              "pagination": {
+                "has_more": false
+              },
+              "filters": {
+                "supply_voltage_v": "110",
+                "min_torque_nm": {
+                  "value": "100",
+                  "op": "gte"
+                },
+                "limit": 5,
+                "offset": 0
+              },
+              "pending_clarification": "service"
+            }
+          }
+        ]
+      },
+      {
+        "query": "On/off",
+        "scripted_call": [
+          "search_actuators",
+          {
+            "bounds": [
+              {
+                "field": "min_torque_nm",
+                "op": "gte",
+                "value": 100
+              }
+            ],
+            "refine": true,
+            "service": "on_off",
+            "supply_voltage_v": 110
+          }
+        ],
+        "answer": "19 actuators meet: On/Off service, 110 V, torque >= 100 Nm. Which enclosure do you need? Options: explosionproof, weatherproof.",
+        "products": [],
+        "clarification": {
+          "field": "enclosure",
+          "message": "19 actuators meet: On/Off service, 110 V, torque >= 100 Nm. Which enclosure do you need? Options: explosionproof, weatherproof.",
+          "options": [
+            "Use explosionproof",
+            "Use weatherproof"
+          ]
+        },
+        "context": {
+          "pagination": {
+            "has_more": false
+          },
+          "filters": {
+            "supply_voltage_v": "110",
+            "min_torque_nm": {
+              "value": "100",
+              "op": "gte"
+            },
+            "service": "on_off",
+            "limit": 5,
+            "offset": 0
+          },
+          "pending_clarification": "enclosure",
+          "focus": [
+            {
+              "field": "torque",
+              "service": "on_off"
+            }
+          ],
+          "part_numbers": []
+        },
+        "trace": [
+          {
+            "name": "search_actuators",
+            "parameters": {
+              "supply_voltage_v": "110",
+              "min_torque_nm": {
+                "value": "100",
+                "op": "gte"
+              },
+              "service": "on_off",
+              "limit": 5,
+              "offset": 0
+            },
+            "raw_parameters": {
+              "bounds": [
+                {
+                  "field": "min_torque_nm",
+                  "op": "gte",
+                  "value": 100
+                }
+              ],
+              "refine": true,
+              "service": "on_off",
+              "supply_voltage_v": 110
+            },
+            "validation": [
+              "ok"
+            ],
+            "context_before": {
+              "pagination": {
+                "has_more": false
+              },
+              "filters": {
+                "supply_voltage_v": "110",
+                "min_torque_nm": {
+                  "value": "100",
+                  "op": "gte"
+                },
+                "limit": 5,
+                "offset": 0
+              },
+              "pending_clarification": "service"
+            },
+            "renderer": "clarification",
+            "context_after": {
+              "pagination": {
+                "has_more": false
+              },
+              "filters": {
+                "supply_voltage_v": "110",
+                "min_torque_nm": {
+                  "value": "100",
+                  "op": "gte"
+                },
+                "service": "on_off",
+                "limit": 5,
+                "offset": 0
+              },
+              "pending_clarification": "enclosure",
+              "focus": [
+                {
+                  "field": "torque",
+                  "service": "on_off"
+                }
+              ],
+              "part_numbers": []
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

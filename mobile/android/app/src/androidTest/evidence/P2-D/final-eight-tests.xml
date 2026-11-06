@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.serie76.assistant.P2LiveDeviceAcceptanceTest" tests="8" failures="0" errors="0" skipped="0" time="106.033" timestamp="2026-11-06T14:57:46" hostname="localhost">
+  <properties>
+    <property name="device" value="Series76_API35(AVD) - 15" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="demoLoginConversationsAndNewChat" classname="com.serie76.assistant.P2LiveDeviceAcceptanceTest" time="22.007" />
+  <testcase name="keylessTwoCodeComparisonHasTableWithoutInternalNames" classname="com.serie76.assistant.P2LiveDeviceAcceptanceTest" time="11.008" />
+  <testcase name="keylessProductCardHasFiguresWithoutInternalNames" classname="com.serie76.assistant.P2LiveDeviceAcceptanceTest" time="9.298" />
+  <testcase name="closedPortShowsFriendlyErrorRetryAndResponsiveNavigation" classname="com.serie76.assistant.P2ControlledDeviceAcceptanceTest" time="10.688" />
+  <testcase name="fakeVoiceTranscriptReachesComposerAndNeverAutoSends" classname="com.serie76.assistant.P2ControlledDeviceAcceptanceTest" time="4.462" />
+  <testcase name="deleteUndoRestoresConversationWithoutBackendDelete" classname="com.serie76.assistant.P2ControlledDeviceAcceptanceTest" time="12.971" />
+  <testcase name="sevenProfileTapsUnlockAnswerToolsParametersAndData" classname="com.serie76.assistant.P2ControlledDeviceAcceptanceTest" time="12.793" />
+  <testcase name="fifteenSecondResponseKeepsVisibleLoadingUntilCompletion" classname="com.serie76.assistant.P2ControlledDeviceAcceptanceTest" time="20.069" />
+</testsuite>

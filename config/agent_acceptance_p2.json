@@ -1,0 +1,6 @@
+{
+  "purpose": "Offline P2 diagnostic oracle: original defects plus two new paraphrases per class; not held-out",
+  "provider": "scripted",
+  "model": "IdealModel",
+  "inference_allowed": false
+}

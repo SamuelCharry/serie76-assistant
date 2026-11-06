@@ -1,0 +1,122 @@
+{
+  "L3-02": {
+    "A": {
+      "v": 1,
+      "why": "Voltage correction and torque retraction respected; 50 Hz comparison agrees with catalogue."
+    }
+  },
+  "L3-03": {
+    "A": {
+      "v": 1,
+      "why": "Price declined; torque and starts per hour match the requested part and service."
+    }
+  },
+  "L3-04": {
+    "A": {
+      "v": 1,
+      "why": "Phase correction retained; lowest 50 Hz FLA tie verified against catalogue."
+    }
+  },
+  "L3-05": {
+    "A": {
+      "v": 1,
+      "why": "Requested 110 V AC supply is visible in the product card; additional specifications match catalogue."
+    }
+  },
+  "L3-06": {
+    "A": {
+      "v": 1,
+      "why": "Correct motor power; distinguishes rated motor power from total consumption."
+    }
+  },
+  "L3-07": {
+    "A": {
+      "v": 1,
+      "why": "Impossible torque explicitly rejected; nearest model clearly marked noncompliant and matches catalogue."
+    }
+  },
+  "L3-08": {
+    "A": {
+      "v": 1,
+      "why": "Requests the complete part number instead of inventing specifications."
+    }
+  },
+  "L4-01": {
+    "A": {
+      "v": 1,
+      "why": "Upper bound replaces lower bound and survives service change; fastest eligible model verified."
+    }
+  },
+  "L4-02": {
+    "A": {
+      "v": 1,
+      "why": "Correctly distinguishes DC-only from AC/DC and restores exclusion after retraction."
+    }
+  },
+  "L4-03": {
+    "A": {
+      "v": 1,
+      "why": "Torque condition removed; service changed; lowest motor power and tie-break values verified."
+    }
+  },
+  "L4-04": {
+    "A": {
+      "v": 1,
+      "why": "Comparison replacement, field restriction and final part change respected; figures match catalogue."
+    }
+  },
+  "L4-05": {
+    "A": {
+      "v": 1,
+      "why": "Uses corrected 110 V supply and retains phase, enclosure, service and torque minimum."
+    }
+  },
+  "L4-06": {
+    "A": {
+      "v": 1,
+      "why": "Frequency correction applied; both operating times match catalogue."
+    }
+  },
+  "L4-07": {
+    "A": {
+      "v": 0,
+      "why": "Items 2/3/5, turn 2: retains obsolete candidate subset; falsely calls 940 Nm lowest when eligible 761X30-11320000/A provides 80 Nm."
+    }
+  },
+  "L4-08": {
+    "A": {
+      "v": 1,
+      "why": "Part correction retains requested on/off torque field; both values verified."
+    }
+  },
+  "L5-01": {
+    "A": {
+      "v": 1,
+      "why": "Spanish requirements and voltage correction retained; fastest eligible 50 Hz model verified."
+    }
+  },
+  "L5-02": {
+    "A": {
+      "v": 1,
+      "why": "Second-model reference resolved; stronger alternatives preserve supply, enclosure and service."
+    }
+  },
+  "L5-03": {
+    "A": {
+      "v": 1,
+      "why": "Hazard initially recognized; explicit nonhazardous relocation and weatherproof request respected; figures verified."
+    }
+  },
+  "L5-04": {
+    "A": {
+      "v": 1,
+      "why": "Price declined; source N/A preserved; refuses substitution and reports available identification."
+    }
+  },
+  "L5-05": {
+    "A": {
+      "v": 1,
+      "why": "Correct model and 50 Hz operating time despite damaged Spanish characters."
+    }
+  }
+}

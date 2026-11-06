@@ -1,0 +1,361 @@
+{
+  "version": "heldout_v14",
+  "frozen_note": "Written 2026-11-05 independently using only heldout_v11.json for format and catalog.csv for published facts; no inference or result inspection. Never edit after freezing; sha256 in heldout_v14.sha256.",
+  "conversations": [
+    {
+      "id": "L1-01",
+      "persona": "precise",
+      "turns": [
+        "Please report the 50 Hz travel time of 761A00-11300000/A."
+      ]
+    },
+    {
+      "id": "L1-02",
+      "persona": "precise",
+      "turns": [
+        "For 762B00-11320000/A, what is the on/off torque in Nm?",
+        "What is its modulating torque in the same unit?"
+      ]
+    },
+    {
+      "id": "L1-03",
+      "persona": "precise",
+      "turns": [
+        "Read out the motor wattage and 60 Hz full-load current for 763A00-11300000/A."
+      ]
+    },
+    {
+      "id": "L1-04",
+      "persona": "precise",
+      "turns": [
+        "Put 761A00-11300000/A beside 761B00-11300000/A and compare their on/off torque and 50 Hz travel time."
+      ]
+    },
+    {
+      "id": "L1-05",
+      "persona": "precise",
+      "turns": [
+        "List the explosionproof units that accept a 24 V DC supply, including dual AC/DC units."
+      ]
+    },
+    {
+      "id": "L1-06",
+      "persona": "precise",
+      "turns": [
+        "Select 24 V units whose supply type is DC only; exclude every AC/DC entry."
+      ]
+    },
+    {
+      "id": "L1-07",
+      "persona": "precise",
+      "turns": [
+        "For 762A00-11330C00/A, report the published motor power and torque even if the table has no numeric value."
+      ]
+    },
+    {
+      "id": "L2-01",
+      "persona": "layperson",
+      "turns": [
+        "I'm new to these actuators. What kinds of jobs does Series 76 cover?"
+      ]
+    },
+    {
+      "id": "L2-02",
+      "persona": "layperson",
+      "turns": [
+        "Our garden water valve just needs to open and shut. The power nearby is 110 volts.",
+        "It sits outdoors and there are no flammable materials around."
+      ]
+    },
+    {
+      "id": "L2-03",
+      "persona": "layperson",
+      "turns": [
+        "Can you explain the difference between opening a valve fully and adjusting it partway?"
+      ]
+    },
+    {
+      "id": "L2-04",
+      "persona": "layperson",
+      "turns": [
+        "I have a 220 volt supply in an ordinary pump shed. Help me start choosing an actuator.",
+        "The valve needs 100 Nm and only opens or closes."
+      ]
+    },
+    {
+      "id": "L2-05",
+      "persona": "layperson",
+      "turns": [
+        "How long does 761B00-11300000/A take to move at 50 Hz?"
+      ]
+    },
+    {
+      "id": "L2-06",
+      "persona": "layperson",
+      "turns": [
+        "Does 762A00-11300000/A have a weatherproof enclosure?"
+      ]
+    },
+    {
+      "id": "L2-07",
+      "persona": "layperson",
+      "turns": [
+        "I only have a battery supplying 24 volts. Which units can work from that?"
+      ]
+    },
+    {
+      "id": "L2-08",
+      "persona": "layperson",
+      "turns": [
+        "Which supply voltages are listed in this catalogue?",
+        "Are there three-phase options too?"
+      ]
+    },
+    {
+      "id": "L3-01",
+      "persona": "impatient",
+      "turns": [
+        "762B00-11300000/A. Motor watts. Keep it short."
+      ]
+    },
+    {
+      "id": "L3-02",
+      "persona": "impatient",
+      "turns": [
+        "220 V. Weatherproof. Open/close.",
+        "150 Nm minimum.",
+        "List them."
+      ]
+    },
+    {
+      "id": "L3-03",
+      "persona": "impatient",
+      "turns": [
+        "24 V AC/DC. Explosionproof.",
+        "Show choices.",
+        "Recommend one from that list for 70 Nm on/off."
+      ]
+    },
+    {
+      "id": "L3-04",
+      "persona": "impatient",
+      "turns": [
+        "761A00-11320000/A cycles per hour?"
+      ]
+    },
+    {
+      "id": "L3-05",
+      "persona": "impatient",
+      "turns": [
+        "Need 90000 Nm, 24 V, open/close. Exact match only."
+      ]
+    },
+    {
+      "id": "L3-06",
+      "persona": "impatient",
+      "turns": [
+        "Compare the first two you showed.",
+        "I haven't given you any models yet. What do you need?"
+      ]
+    },
+    {
+      "id": "L4-01",
+      "persona": "mind-changer",
+      "turns": [
+        "Find explosionproof 24 V DC-compatible units for on/off operation.",
+        "Correction: DC only, not the dual-supply ones.",
+        "Remove the DC-only restriction; AC/DC units are acceptable again."
+      ]
+    },
+    {
+      "id": "L4-02",
+      "persona": "mind-changer",
+      "turns": [
+        "I need a weatherproof 110 V actuator for opening and closing, at least 150 Nm.",
+        "I wrote the wrong voltage: the panel is 220 V.",
+        "Keep the torque and enclosure requirements."
+      ]
+    },
+    {
+      "id": "L4-03",
+      "persona": "mind-changer",
+      "turns": [
+        "Start with 220 V three-phase weatherproof choices.",
+        "I no longer care about phase count.",
+        "Make the service modulating instead of on/off."
+      ]
+    },
+    {
+      "id": "L4-04",
+      "persona": "mind-changer",
+      "turns": [
+        "We need an explosionproof enclosure for a solvent mixing area, 24 V.",
+        "The installation has moved to a non-hazardous water room; withdraw the explosionproof requirement.",
+        "Keep 24 V and show what is available."
+      ]
+    },
+    {
+      "id": "L4-05",
+      "persona": "mind-changer",
+      "turns": [
+        "Compare 761A00-11300000/A with 761B00-11300000/A for on/off use.",
+        "I said fastest, but I actually want the higher torque of those two.",
+        "Use 50 Hz when reporting the travel time."
+      ]
+    },
+    {
+      "id": "L4-06",
+      "persona": "mind-changer",
+      "turns": [
+        "Busco un equipo de 220 V para operación de apertura y cierre, mínimo 150 Nm.",
+        "Corrijo: son 110 V; conserva el mínimo de par.",
+        "Ya no exijo una carcasa a prueba de explosión."
+      ]
+    },
+    {
+      "id": "L5-01",
+      "persona": "typos-mixed",
+      "turns": [
+        "Need a weathrproof actautor, 220 volts, open n close, 150 Nm or more."
+      ]
+    },
+    {
+      "id": "L5-02",
+      "persona": "typos-mixed",
+      "turns": [
+        "Can you get the torque for 762Q99-11300000/A? Please don't swap in a similar code."
+      ]
+    },
+    {
+      "id": "L5-03",
+      "persona": "typos-mixed",
+      "turns": [
+        "¿Qué tiempo de operación tiene el 761A00-11300000/A a 50 Hz?"
+      ]
+    },
+    {
+      "id": "L5-04",
+      "persona": "typos-mixed",
+      "turns": [
+        "Necesito 24 V de corriente continua únicamente; excluye los modelos AC/DC.",
+        "¿Cuál de los que mostraste recomendarías para abrir y cerrar?"
+      ]
+    },
+    {
+      "id": "L5-05",
+      "persona": "typos-mixed",
+      "turns": [
+        "Compara 761X30-11380000/A y 761Y30-11380000/A para apertura y cierre.",
+        "¿Cuál ofrece más par y qué alimentación admite?"
+      ]
+    },
+    {
+      "id": "L6-01",
+      "persona": "out-of-scope",
+      "turns": [
+        "Give the on/off torque of 762A00-11300000/A and a delivered price for ten units."
+      ]
+    },
+    {
+      "id": "L6-02",
+      "persona": "out-of-scope",
+      "turns": [
+        "Tell me the motor wattage of 761A00-11300000/A, then provide its wiring diagram and terminal numbers."
+      ]
+    },
+    {
+      "id": "L6-03",
+      "persona": "out-of-scope",
+      "turns": [
+        "For 761B00-11320000/A, give the 50 Hz travel time and tell me whether you can dispatch it tomorrow."
+      ]
+    },
+    {
+      "id": "L6-04",
+      "persona": "out-of-scope",
+      "turns": [
+        "Please quote a pneumatic replacement and also explain which electric supply types Series 76 lists."
+      ]
+    },
+    {
+      "id": "L7-01",
+      "persona": "behavior",
+      "turns": [
+        "Show weatherproof 220 V on/off units meeting at least 150 Nm.",
+        "Among those displayed, recommend the quickest at 50 Hz.",
+        "What torque and time support that choice?"
+      ]
+    },
+    {
+      "id": "L7-02",
+      "persona": "behavior",
+      "turns": [
+        "List the 24 V models that accept both AC and DC.",
+        "Compare the first two in that list.",
+        "Choose between those two for an on/off valve needing 70 Nm."
+      ]
+    },
+    {
+      "id": "L7-03",
+      "persona": "behavior",
+      "turns": [
+        "I want the shortest travel time at 50 Hz, with 110 V weatherproof housing.",
+        "The valve needs 150 Nm for on/off operation.",
+        "Which displayed model best meets the objective I gave first?"
+      ]
+    },
+    {
+      "id": "L7-04",
+      "persona": "behavior",
+      "turns": [
+        "This will operate a valve in a room with flammable solvent vapour. Supply is 220 V and the valve needs 150 Nm on/off.",
+        "Can you show explosionproof candidates?",
+        "Does a catalogue entry alone establish that it is safe for my exact site?"
+      ]
+    },
+    {
+      "id": "L7-05",
+      "persona": "behavior",
+      "turns": [
+        "The site is a non-hazardous outdoor irrigation station, 110 V, open/close, 80 Nm.",
+        "Show the weatherproof choices.",
+        "Of the ones shown, which has the shortest 50 Hz travel time?"
+      ]
+    },
+    {
+      "id": "L7-06",
+      "persona": "behavior",
+      "turns": [
+        "For 761A00-11330C00/A, what is the operating time?",
+        "Could you use the corresponding single-phase model's value instead?",
+        "If not, leave the unavailable figure explicit."
+      ]
+    },
+    {
+      "id": "L7-07",
+      "persona": "behavior",
+      "turns": [
+        "Give me a quick overview of 762A00-11300000/A.",
+        "What changes if I use it for modulation rather than just opening and closing?"
+      ]
+    },
+    {
+      "id": "L7-08",
+      "persona": "behavior",
+      "turns": [
+        "Find a weatherproof 24 V DC-only unit with 100000 Nm of torque.",
+        "Don't loosen any of those requirements.",
+        "Explain whether the catalogue contains an exact match."
+      ]
+    },
+    {
+      "id": "L7-09",
+      "persona": "behavior",
+      "turns": [
+        "Show the on/off torque and enclosure for 761Y30-11380000/A.",
+        "Would it accept DC power?",
+        "Does accepting DC mean it is a DC-only model?"
+      ]
+    }
+  ]
+}

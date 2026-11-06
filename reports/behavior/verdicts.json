@@ -1,0 +1,381 @@
+{
+ "note": "Per-conversation strict verdicts (1 = pass, 0 = fail) from the independent reviewer of each held-out round. Paired: same conversations, two configurations.",
+ "aggregate_rounds": [
+  {
+   "round": 3,
+   "config": "rules",
+   "passed": 21,
+   "total": 45
+  },
+  {
+   "round": 4,
+   "config": "rules",
+   "passed": 24,
+   "total": 45
+  },
+  {
+   "round": 5,
+   "config": "rules",
+   "passed": 21,
+   "total": 44
+  },
+  {
+   "round": 6,
+   "config": "rules",
+   "passed": 28,
+   "total": 43
+  },
+  {
+   "round": 7,
+   "config": "rules",
+   "passed": 24,
+   "total": 43
+  },
+  {
+   "round": 8,
+   "config": "retrieval_on",
+   "passed": 25,
+   "total": 41
+  },
+  {
+   "round": 8,
+   "config": "retrieval_off",
+   "passed": 26,
+   "total": 41
+  }
+ ],
+ "paired": {
+  "round9_retrieval": {
+   "Y1-01": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y1-02": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y1-03": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y1-05": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y1-06": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y2-05": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y2-06": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y2-08": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y3-01": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y3-03": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y3-04": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y3-05": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y4-02": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y4-03": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y5-01": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y5-02": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y5-03": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y6-01": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y6-03": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y6-04": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Z-REPHRASE-01": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Z-FRUSTRATION-01": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Z-TOPICJUMP-01": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Z-SHORTREF-01": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Z-SHORTREF-02": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Z-ABANDON-01": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Z-CONFIRM-01": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Z-CONFIRM-02": {
+    "retrieval_on": 1,
+    "retrieval_off": 1
+   },
+   "Y1-04": {
+    "retrieval_on": 0,
+    "retrieval_off": 0
+   },
+   "Y2-01": {
+    "retrieval_on": 0,
+    "retrieval_off": 0
+   },
+   "Y2-02": {
+    "retrieval_on": 0,
+    "retrieval_off": 0
+   },
+   "Y2-03": {
+    "retrieval_on": 0,
+    "retrieval_off": 0
+   },
+   "Y2-04": {
+    "retrieval_on": 0,
+    "retrieval_off": 0
+   },
+   "Y3-02": {
+    "retrieval_on": 0,
+    "retrieval_off": 0
+   },
+   "Y4-01": {
+    "retrieval_on": 0,
+    "retrieval_off": 0
+   },
+   "Y4-04": {
+    "retrieval_on": 0,
+    "retrieval_off": 0
+   },
+   "Y6-02": {
+    "retrieval_on": 0,
+    "retrieval_off": 0
+   },
+   "Z-CORRECTION-01": {
+    "retrieval_on": 0,
+    "retrieval_off": 0
+   },
+   "Y2-07": {
+    "retrieval_on": 1,
+    "retrieval_off": 0
+   },
+   "Y5-04": {
+    "retrieval_on": 1,
+    "retrieval_off": 0
+   },
+   "Z-IMPOSSIBLE-01": {
+    "retrieval_on": 0,
+    "retrieval_off": 1
+   }
+  },
+  "round10_models": {
+   "K1-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K1-02": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K1-03": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K1-04": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K1-05": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K1-06": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K2-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K2-02": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K2-08": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K3-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K3-03": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K3-04": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K3-05": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K4-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K4-04": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K5-03": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K6-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K6-04": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "L-FRUSTRATION-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "L-TOPICJUMP-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "L-SHORTREF-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "L-SHORTREF-02": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "L-ABANDON-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "L-IMPOSSIBLE-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "L-CORRECTION-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K2-03": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 0
+   },
+   "K2-04": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 0
+   },
+   "K2-05": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 0
+   },
+   "K2-06": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 0
+   },
+   "K2-07": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 0
+   },
+   "K4-02": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 0
+   },
+   "K5-01": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 0
+   },
+   "K6-02": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 0
+   },
+   "L-REPHRASE-01": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 0
+   },
+   "L-CONFIRM-02": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 0
+   },
+   "K3-02": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 0
+   },
+   "K5-02": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 0
+   },
+   "L-CONFIRM-01": {
+    "gemini-3.6-flash": 1,
+    "gemini-3.1-pro-preview": 0
+   },
+   "K4-03": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K5-04": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 1
+   },
+   "K6-03": {
+    "gemini-3.6-flash": 0,
+    "gemini-3.1-pro-preview": 1
+   }
+  }
+ }
+}

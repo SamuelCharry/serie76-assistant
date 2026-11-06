@@ -1,0 +1,10 @@
+{
+ "google_gemini-3.6-flash": [
+  "L1-02: Item 2, turn 3: asks which model despite the unambiguous second model in the preceding comparison; requested starts per hour omitted.",
+  "L2-07: Item 2, turn 1: asks for service, voltage, and torque already explicitly stated; no candidates or useful clarification provided.",
+  "L2-09: Item 7, turn 1: response takes 16.8 seconds, exceeding the 15-second failure threshold.",
+  "L4-07: Items 2/3/5, turn 2: retains obsolete candidate subset; falsely calls 940 Nm lowest when eligible 761X30-11320000/A provides 80 Nm.",
+  "L6-02: Item 2, turn 3: asks which actuator despite the unambiguous second-model reference; omits its requested 50 Hz operating time.",
+  "L7-06: Items 1/3, turn 2: greatest-torque recommendation is 2000 Nm, overlooking qualifying 765Y30-11320000/A at 3000 Nm."
+ ]
+}

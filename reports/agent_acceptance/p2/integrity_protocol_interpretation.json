@@ -1,0 +1,22 @@
+{
+  "message_id": "msg_57477ea7c31c",
+  "received_after": "v17pair1 completed and candidate full-output inspection",
+  "original_rule": "Mean final >= baseline; integrity compliance 1.0, zero wrong figures; p95 <=10 s; required gates pass.",
+  "coordinator_interpretation": "No integrity regression vs baseline; explicitly report shared production defects.",
+  "additional_instruction": "After frozen v17 decision, repair strict relative-reference constraints at final response boundary with offline invariant tests only; do not rerun paid v17.",
+  "reporting_rule": "Keep absolute compliance and new candidate regressions separate; distinguish post-decision repaired head from paid-measured commit.",
+  "field_level_caveat": "L7-06 final1 retains the withdrawn ceiling unlike baseline1; both impose an erroneous 1100 Nm minimum, baseline additionally drops phase.",
+  "post_decision_scope_authorization": {
+    "message_id": "msg_65ebb490be5d",
+    "decision_requires_user_confirmation": true,
+    "if_adopted": "Offline-only candidate repair of withdrawn ceiling, ordinal second-reference, strict-relative requirement, and invented 1100 Nm minimum; final-boundary invariants and paraphrases; P2 100 plus new cases and all gates pass; no paid rerun.",
+    "if_rejected": "Git revert P2 source; retain P2 oracle/config/runner as historical evidence with expected failures, not gate; only strict-relative invariant repair; original full/T14 gates pass."
+  },
+  "user_adoption_authorization": {
+    "message_id": "msg_58183c6ef90c",
+    "decision": "ADOPT",
+    "explicit_exception_to_original_rule": true,
+    "measured_commit": "3ede96cb371c39e4fd6988dc098a47c46dee3a5f",
+    "scope": "offline scope A; no new paid inference; distinguish repaired head"
+  }
+}

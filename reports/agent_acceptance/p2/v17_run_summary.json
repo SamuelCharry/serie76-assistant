@@ -1,0 +1,311 @@
+{
+  "runs": [
+    {
+      "tag": "v17_base1",
+      "conversations": 60,
+      "turns": 146,
+      "http_statuses": {
+        "200": 146
+      },
+      "p95_s": 6.61,
+      "max_s": 8.02,
+      "above_10_s": 0,
+      "spend_usd": "0.375522975",
+      "values_checked": 3396,
+      "wrong_figures": 0,
+      "flagged_turns": 10,
+      "raw_screening_compliance": 0.9315068493150684,
+      "eligibility_locations": [
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L2-10",
+          4
+        ],
+        [
+          "L4-01",
+          3
+        ],
+        [
+          "L5-01",
+          1
+        ],
+        [
+          "L7-02",
+          1
+        ],
+        [
+          "L7-06",
+          4
+        ],
+        [
+          "L7-10",
+          3
+        ],
+        [
+          "L7-10",
+          4
+        ]
+      ],
+      "invented_filter_locations": [
+        [
+          "L1-01",
+          1,
+          "max_fla_a"
+        ],
+        [
+          "L7-09",
+          2,
+          "min_torque_nm"
+        ]
+      ]
+    },
+    {
+      "tag": "v17_final1_retry",
+      "conversations": 60,
+      "turns": 146,
+      "http_statuses": {
+        "200": 146
+      },
+      "p95_s": 8.33,
+      "max_s": 17.89,
+      "above_10_s": 3,
+      "spend_usd": "0.390818000",
+      "values_checked": 3044,
+      "wrong_figures": 0,
+      "flagged_turns": 3,
+      "raw_screening_compliance": 0.9794520547945206,
+      "eligibility_locations": [
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L2-10",
+          4
+        ]
+      ],
+      "invented_filter_locations": [
+        [
+          "L7-09",
+          2,
+          "min_torque_nm"
+        ]
+      ]
+    },
+    {
+      "tag": "v17_base2",
+      "conversations": 60,
+      "turns": 146,
+      "http_statuses": {
+        "200": 146
+      },
+      "p95_s": 6.19,
+      "max_s": 11.23,
+      "above_10_s": 1,
+      "spend_usd": "0.401642900",
+      "values_checked": 3145,
+      "wrong_figures": 0,
+      "flagged_turns": 11,
+      "raw_screening_compliance": 0.9246575342465754,
+      "eligibility_locations": [
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L2-10",
+          4
+        ],
+        [
+          "L3-07",
+          2
+        ],
+        [
+          "L4-01",
+          3
+        ],
+        [
+          "L5-01",
+          1
+        ],
+        [
+          "L7-02",
+          1
+        ],
+        [
+          "L7-06",
+          4
+        ],
+        [
+          "L7-10",
+          3
+        ],
+        [
+          "L7-10",
+          4
+        ]
+      ],
+      "invented_filter_locations": [
+        [
+          "L1-01",
+          1,
+          "max_fla_a"
+        ],
+        [
+          "L7-09",
+          2,
+          "min_torque_nm"
+        ]
+      ]
+    },
+    {
+      "tag": "v17_final2",
+      "conversations": 60,
+      "turns": 146,
+      "http_statuses": {
+        "200": 146
+      },
+      "p95_s": 5.8,
+      "max_s": 8.52,
+      "above_10_s": 0,
+      "spend_usd": "0.402584450",
+      "values_checked": 2876,
+      "wrong_figures": 0,
+      "flagged_turns": 3,
+      "raw_screening_compliance": 0.9794520547945206,
+      "eligibility_locations": [
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L3-07",
+          2
+        ]
+      ],
+      "invented_filter_locations": [
+        [
+          "L7-09",
+          2,
+          "min_torque_nm"
+        ]
+      ]
+    },
+    {
+      "tag": "v17_base3",
+      "conversations": 60,
+      "turns": 146,
+      "http_statuses": {
+        "200": 146
+      },
+      "p95_s": 5.4,
+      "max_s": 7.72,
+      "above_10_s": 0,
+      "spend_usd": "0.388103100",
+      "values_checked": 3317,
+      "wrong_figures": 0,
+      "flagged_turns": 11,
+      "raw_screening_compliance": 0.9246575342465754,
+      "eligibility_locations": [
+        [
+          "L2-10",
+          3
+        ],
+        [
+          "L2-10",
+          4
+        ],
+        [
+          "L4-01",
+          3
+        ],
+        [
+          "L5-01",
+          1
+        ],
+        [
+          "L7-02",
+          1
+        ],
+        [
+          "L7-06",
+          4
+        ],
+        [
+          "L7-10",
+          3
+        ],
+        [
+          "L7-10",
+          4
+        ]
+      ],
+      "invented_filter_locations": [
+        [
+          "L1-01",
+          1,
+          "max_fla_a"
+        ],
+        [
+          "L7-09",
+          2,
+          "min_torque_nm"
+        ],
+        [
+          "L7-09",
+          3,
+          "min_torque_nm"
+        ]
+      ]
+    },
+    {
+      "tag": "v17_final3",
+      "conversations": 60,
+      "turns": 146,
+      "http_statuses": {
+        "200": 146
+      },
+      "p95_s": 5.7,
+      "max_s": 9.0,
+      "above_10_s": 0,
+      "spend_usd": "0.388188625",
+      "values_checked": 3014,
+      "wrong_figures": 0,
+      "flagged_turns": 2,
+      "raw_screening_compliance": 0.9863013698630136,
+      "eligibility_locations": [
+        [
+          "L2-10",
+          3
+        ]
+      ],
+      "invented_filter_locations": [
+        [
+          "L7-09",
+          2,
+          "min_torque_nm"
+        ]
+      ]
+    }
+  ],
+  "pooled_latency": {
+    "base": {
+      "turns": 438,
+      "p95_s": 6.06,
+      "max_s": 11.23,
+      "above_10_s": 1
+    },
+    "final": {
+      "turns": 438,
+      "p95_s": 6.69,
+      "max_s": 17.89,
+      "above_10_s": 3
+    }
+  },
+  "observed_completed_run_spend_usd": "2.346860050",
+  "excluded_attempt_spend_usd": "0.357069350",
+  "note": "Raw screening flags require explicit adjudication; not a perfect-integrity claim."
+}

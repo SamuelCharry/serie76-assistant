@@ -4,6 +4,8 @@
 
 Esquema relacional, autoridad numérica y filas concretas detrás de las herramientas.
 
+T9 añade `series76.example_bank`, `concept_anchor` y `example_dataset` mediante migraciones 007/008: vectores de 768 dimensiones, frases/interpretaciones, procedencia, actividad y manifiestos versionados. No son fuente de cifras técnicas. El diagrama y consultas siguientes muestran el núcleo relacional; [pin pgvector compatible con glibc](operations.md#pgvector) y [carga del banco](operations.md#example-bank).
+
 ```mermaid
 erDiagram
     documents ||--o{ imports : sources

@@ -1,5 +1,7 @@
 # Android verification
 
+Current emulator acceptance: [8/8 selected tests (P2-D)](../../reports/submission/P2-D.md), covering real keyless login/cards/comparison and controlled debug, errors, delay, Undo and injected voice. Actual microphone recognition/permissions and login/debug fault paths still need checks. The records below are historical snapshots, not the current total.
+
 The archived auth-v7 record reports 14 JVM tests and 15 Compose tests: 29 distinct cases with no errors or skips. One additional native live test with two accounts made 30 distinct Android cases. Debug and unsigned release APKs built; emulator verification used Android 15/API 35. The HTTP checks covered user isolation and token/history persistence across backend restart using controlled interpretation.
 
 T1 later recorded 15 JVM tests, failures=0, errors=0, skipped=0, and successful debug/release builds. These are separate verification snapshots, not additive unique coverage.

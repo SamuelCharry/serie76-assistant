@@ -2,9 +2,19 @@ package com.serie76.assistant.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.JsonTransformingSerializer
+import kotlinx.serialization.json.jsonObject
 
 @Serializable
 data class Session(
@@ -25,6 +35,13 @@ data class Message(
     val products: List<Product> = emptyList(),
     @SerialName("created_at") val createdAt: String = "",
     val sequence: Long = 0,
+    @SerialName("suggested_replies") val suggestedReplies: List<String> = emptyList(),
+    val comparison: DifferenceComparison? = null,
+    val lead: String? = null,
+    val interaction: Interaction? = null,
+    val suggestions: List<@Serializable(with = SuggestionSerializer::class) Suggestion>? = null,
+    val recommendation: Recommendation? = null,
+    @SerialName("active_filters") val activeFilters: List<ActiveFilter> = emptyList(),
 )
 
 @Serializable
@@ -40,6 +57,9 @@ data class MessagesPage(
 data class ConversationRequest(
     val query: String,
     @SerialName("session_id") val sessionId: String? = null,
+    val answers: Map<String, String> = emptyMap(),
+    @SerialName("remove_filters") val removeFilters: List<String> = emptyList(),
+    val action: SuggestionAction? = null,
 )
 
 @Serializable
@@ -48,6 +68,77 @@ data class ConversationResponse(
     val answer: String,
     @SerialName("message_id") val messageId: String,
     val products: List<Product> = emptyList(),
+    @SerialName("suggested_replies") val suggestedReplies: List<String> = emptyList(),
+    val comparison: DifferenceComparison? = null,
+    val lead: String? = null,
+    val interaction: Interaction? = null,
+    val suggestions: List<@Serializable(with = SuggestionSerializer::class) Suggestion>? = null,
+    val recommendation: Recommendation? = null,
+    @SerialName("active_filters") val activeFilters: List<ActiveFilter> = emptyList(),
+)
+
+@Serializable
+data class Interaction(val kind: String = "question", val questions: List<Question> = emptyList())
+
+@Serializable
+data class Question(val id: String, val prompt: String, val options: List<QuestionOption>)
+
+@Serializable
+data class QuestionOption(val value: String, val label: String, val count: Int? = null,
+                          val description: String? = null)
+
+@Serializable data class SuggestionAction(val type: String, val args: JsonObject = JsonObject(emptyMap()))
+@Serializable data class Suggestion(val label: String, val action: SuggestionAction? = null)
+object SuggestionSerializer : JsonTransformingSerializer<Suggestion>(Suggestion.serializer()) {
+    override fun transformDeserialize(element: JsonElement): JsonElement =
+        if (element is JsonPrimitive) JsonObject(mapOf("label" to element)) else element
+}
+@Serializable data class RecommendationValue(val label: String, val value: String)
+@Serializable data class RecommendationItem(
+    @SerialName("part_number") val partNumber: String, val reason: String,
+    @SerialName("key_values") val keyValues: List<RecommendationValue> = emptyList(),
+)
+@Serializable data class Recommendation(
+    @SerialName("ranked_by") val rankedBy: String, val total: Int,
+    val shown: Int, val items: List<RecommendationItem> = emptyList(),
+)
+
+@Serializable
+data class ActiveFilter(val field: String, val label: String)
+
+/** Legacy persisted comparisons used a/b strings for values and direction. */
+object BetterIndexSerializer : KSerializer<Int> {
+    override val descriptor = PrimitiveSerialDescriptor("BetterIndex", PrimitiveKind.INT)
+    override fun deserialize(decoder: Decoder): Int {
+        val value = (decoder as JsonDecoder).decodeJsonElement().jsonPrimitive
+        return value.intOrNull ?: when (value.content) {
+            "a" -> 0
+            "b" -> 1
+            else -> error("Invalid comparison direction")
+        }
+    }
+    override fun serialize(encoder: Encoder, value: Int) = encoder.encodeInt(value)
+}
+
+@Serializable
+data class DifferenceRow(
+    val field: String, val label: String, val a: String = "", val b: String = "",
+    @Serializable(with = BetterIndexSerializer::class) val better: Int? = null,
+    val values: List<String> = emptyList(),
+) {
+    val displayValues: List<String> get() = values.ifEmpty { listOf(a, b) }
+}
+
+@Serializable
+data class DifferenceComparison(
+    val models: List<String>, val rows: List<DifferenceRow>,
+    @SerialName("identical_fields_hidden") val identicalFieldsHidden: Int = 0,
+    val layout: String = "table",
+    val summary: String = "",
+    val assumptions: String = "",
+    @SerialName("hidden_rows") val hiddenRows: List<DifferenceRow> = emptyList(),
+    @SerialName("key_fields") val keyFields: List<String> = emptyList(),
+    @SerialName("key_fields_reason") val keyFieldsReason: String = "",
 )
 
 @Serializable
@@ -70,11 +161,28 @@ data class Product(
 data class ProductSource(val document: String = "", val page: Int? = null, val table: String? = null)
 
 @Serializable
-data class ToolCall(val name: String, val parameters: JsonElement, val data: JsonElement)
+data class ToolCall(
+    val name: String? = null,
+    val parameters: JsonElement = JsonObject(emptyMap()),
+    val data: JsonElement = JsonObject(emptyMap()),
+    @SerialName("raw_parameters") val rawParameters: JsonElement? = null,
+    @SerialName("validated_parameters") val validatedParameters: JsonElement? = null,
+    @SerialName("merged_parameters") val mergedParameters: JsonElement? = null,
+    val validation: JsonElement? = null,
+    val model: JsonElement? = null,
+    val renderer: JsonElement? = null,
+    @SerialName("context_before") val contextBefore: JsonElement? = null,
+    @SerialName("context_after") val contextAfter: JsonElement? = null,
+)
 
 @Serializable
 data class DebugResponse(
     @SerialName("message_id") val messageId: String,
     @SerialName("session_id") val sessionId: String,
-    @SerialName("tool_calls") val toolCalls: List<ToolCall>,
+    @SerialName("tool_calls") val toolCalls: List<ToolCall> = emptyList(),
+    @SerialName("latency_ms") val latencyMs: Long? = null,
+    val attempts: Int? = null,
+    @SerialName("llm_called") val llmCalled: Boolean? = null,
+    val debug: JsonObject = JsonObject(emptyMap()),
+    val retrieval: JsonElement? = null,
 )

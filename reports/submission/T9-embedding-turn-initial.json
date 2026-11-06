@@ -1,0 +1,291 @@
+{
+  "mode": "live Google embeddings; scripted chat decisions; no chat inference",
+  "calls": 6,
+  "results": [
+    {
+      "query": "actuator for an ethanol tank farm, 110 V",
+      "expected": "hazard",
+      "filters": {
+        "supply_voltage_v": 110,
+        "limit": 5,
+        "offset": 0
+      },
+      "hazard": false,
+      "questions": [
+        "enclosure"
+      ],
+      "retrieval": {
+        "examples": [
+          {
+            "id": 605,
+            "similarity": 0.86576
+          },
+          {
+            "id": 534,
+            "similarity": 0.84637
+          },
+          {
+            "id": 296,
+            "similarity": 0.84103
+          },
+          {
+            "id": 309,
+            "similarity": 0.83169
+          },
+          {
+            "id": 16,
+            "similarity": 0.82537
+          }
+        ],
+        "concepts": {
+          "out_of_scope_property": 0.7211,
+          "hazard": 0.64154,
+          "safe_area": 0.61843,
+          "modulating": 0.72727,
+          "on_off": 0.72754
+        },
+        "embedding_ms": 1502.92
+      }
+    },
+    {
+      "query": "actuator near paint vapours, 110 V",
+      "expected": "hazard",
+      "filters": {
+        "supply_voltage_v": 110,
+        "limit": 5,
+        "offset": 0
+      },
+      "hazard": false,
+      "questions": [
+        "enclosure"
+      ],
+      "retrieval": {
+        "examples": [
+          {
+            "id": 195,
+            "similarity": 0.82603
+          },
+          {
+            "id": 576,
+            "similarity": 0.82361
+          },
+          {
+            "id": 38,
+            "similarity": 0.82307
+          },
+          {
+            "id": 404,
+            "similarity": 0.81632
+          },
+          {
+            "id": 155,
+            "similarity": 0.81568
+          }
+        ],
+        "concepts": {
+          "out_of_scope_property": 0.69675,
+          "hazard": 0.66432,
+          "safe_area": 0.64683,
+          "modulating": 0.69548,
+          "on_off": 0.70758
+        },
+        "embedding_ms": 384.15
+      }
+    },
+    {
+      "query": "que abra y cierre, 110 V, at least 70 Nm",
+      "expected": "on_off",
+      "filters": {
+        "supply_voltage_v": 110,
+        "min_torque_nm": "70",
+        "limit": 5,
+        "offset": 0
+      },
+      "hazard": false,
+      "questions": [
+        "service"
+      ],
+      "retrieval": {
+        "examples": [
+          {
+            "id": 95,
+            "similarity": 0.92874
+          },
+          {
+            "id": 24,
+            "similarity": 0.89412
+          },
+          {
+            "id": 192,
+            "similarity": 0.89335
+          },
+          {
+            "id": 34,
+            "similarity": 0.89319
+          },
+          {
+            "id": 356,
+            "similarity": 0.89289
+          }
+        ],
+        "concepts": {
+          "out_of_scope_property": 0.65061,
+          "hazard": 0.56457,
+          "safe_area": 0.58807,
+          "modulating": 0.65071,
+          "on_off": 0.67205
+        },
+        "embedding_ms": 375.91
+      }
+    },
+    {
+      "query": "throttle smoothly, 110 V",
+      "expected": "modulating",
+      "filters": {
+        "supply_voltage_v": 110,
+        "service": "modulating",
+        "limit": 5,
+        "offset": 0
+      },
+      "hazard": false,
+      "questions": [
+        "enclosure"
+      ],
+      "retrieval": {
+        "examples": [
+          {
+            "id": 331,
+            "similarity": 0.79528
+          },
+          {
+            "id": 186,
+            "similarity": 0.79229
+          },
+          {
+            "id": 624,
+            "similarity": 0.77616
+          },
+          {
+            "id": 501,
+            "similarity": 0.76644
+          },
+          {
+            "id": 606,
+            "similarity": 0.76366
+          }
+        ],
+        "concepts": {
+          "out_of_scope_property": 0.6257,
+          "hazard": 0.56071,
+          "safe_area": 0.55879,
+          "modulating": 0.75659,
+          "on_off": 0.66245
+        },
+        "embedding_ms": 380.18
+      }
+    },
+    {
+      "query": "ordinary nonhazardous location, 110 V",
+      "expected": "safe_area",
+      "filters": {
+        "supply_voltage_v": 110,
+        "enclosure": "weatherproof",
+        "limit": 5,
+        "offset": 0
+      },
+      "hazard": false,
+      "questions": [],
+      "retrieval": {
+        "examples": [
+          {
+            "id": 640,
+            "similarity": 0.83366
+          },
+          {
+            "id": 195,
+            "similarity": 0.81025
+          },
+          {
+            "id": 386,
+            "similarity": 0.80191
+          },
+          {
+            "id": 155,
+            "similarity": 0.80176
+          },
+          {
+            "id": 558,
+            "similarity": 0.78096
+          }
+        ],
+        "concepts": {
+          "out_of_scope_property": 0.63316,
+          "hazard": 0.72623,
+          "safe_area": 0.8249,
+          "modulating": 0.6134,
+          "on_off": 0.60508
+        },
+        "embedding_ms": 395.64
+      }
+    },
+    {
+      "query": "not a hazardous area, on/off, 110 V",
+      "expected": "safe_area",
+      "filters": {
+        "supply_voltage_v": 110,
+        "enclosure": "weatherproof",
+        "limit": 5,
+        "offset": 0
+      },
+      "hazard": false,
+      "questions": [],
+      "retrieval": {
+        "examples": [
+          {
+            "id": 195,
+            "similarity": 0.91075
+          },
+          {
+            "id": 155,
+            "similarity": 0.89839
+          },
+          {
+            "id": 284,
+            "similarity": 0.87442
+          },
+          {
+            "id": 625,
+            "similarity": 0.87336
+          },
+          {
+            "id": 386,
+            "similarity": 0.86451
+          }
+        ],
+        "concepts": {
+          "out_of_scope_property": 0.65645,
+          "hazard": 0.71003,
+          "safe_area": 0.73091,
+          "modulating": 0.62234,
+          "on_off": 0.67884
+        },
+        "embedding_ms": 373.81
+      }
+    }
+  ],
+  "thresholds": {
+    "hazard": 0.7,
+    "safe_area": 0.75,
+    "on_off": 0.72,
+    "modulating": 0.72,
+    "out_of_scope_property": 0.78
+  },
+  "margins": {
+    "hazard": 0.08,
+    "safe_area": 0.08,
+    "on_off": 0.08,
+    "modulating": 0.08
+  },
+  "fewshot_min_similarity": 0.7,
+  "evidence_scope": "Calibration/smoke only; not held-out semantic or live-chat acceptance"
+}

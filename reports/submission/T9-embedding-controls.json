@@ -1,0 +1,533 @@
+{
+  "mode": "live Google embeddings only; no chat inference",
+  "calls": 16,
+  "results": [
+    {
+      "query": "clean water pumping station, 110 V",
+      "accepted": [],
+      "available": true,
+      "examples": [],
+      "concepts": {
+        "out_of_scope_property": 0.44123,
+        "hazard": 0.48264,
+        "safe_area": 0.48068,
+        "modulating": 0.47121,
+        "on_off": 0.48211
+      },
+      "embedding_ms": 3997.04
+    },
+    {
+      "query": "valve for an irrigation system, 220 V",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 522,
+          "similarity": 0.8049
+        },
+        {
+          "id": 592,
+          "similarity": 0.79182
+        },
+        {
+          "id": 221,
+          "similarity": 0.74981
+        },
+        {
+          "id": 296,
+          "similarity": 0.74905
+        },
+        {
+          "id": 660,
+          "similarity": 0.74314
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.5395,
+        "hazard": 0.54748,
+        "safe_area": 0.47921,
+        "modulating": 0.61855,
+        "on_off": 0.64271
+      },
+      "embedding_ms": 402.52
+    },
+    {
+      "query": "actuator outdoors in the rain, 110 V",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 26,
+          "similarity": 0.82173
+        },
+        {
+          "id": 68,
+          "similarity": 0.80767
+        },
+        {
+          "id": 38,
+          "similarity": 0.80701
+        },
+        {
+          "id": 534,
+          "similarity": 0.80172
+        },
+        {
+          "id": 579,
+          "similarity": 0.79827
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.6785,
+        "hazard": 0.54846,
+        "safe_area": 0.6839,
+        "modulating": 0.69455,
+        "on_off": 0.69708
+      },
+      "embedding_ms": 414.86
+    },
+    {
+      "query": "actuator for a hospital water line",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 137,
+          "similarity": 0.77042
+        },
+        {
+          "id": 273,
+          "similarity": 0.7553
+        },
+        {
+          "id": 570,
+          "similarity": 0.75161
+        },
+        {
+          "id": 38,
+          "similarity": 0.7179
+        },
+        {
+          "id": 26,
+          "similarity": 0.71758
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.75295,
+        "hazard": 0.59008,
+        "safe_area": 0.59612,
+        "modulating": 0.76435,
+        "on_off": 0.76833
+      },
+      "embedding_ms": 360.74
+    },
+    {
+      "query": "hot water valve, 110 V, 70 Nm",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 34,
+          "similarity": 0.87974
+        },
+        {
+          "id": 24,
+          "similarity": 0.86627
+        },
+        {
+          "id": 192,
+          "similarity": 0.86217
+        },
+        {
+          "id": 37,
+          "similarity": 0.86045
+        },
+        {
+          "id": 153,
+          "similarity": 0.85935
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.64801,
+        "hazard": 0.57474,
+        "safe_area": 0.52067,
+        "modulating": 0.67049,
+        "on_off": 0.68988
+      },
+      "embedding_ms": 451.49
+    },
+    {
+      "query": "compressed air line in a normal factory",
+      "accepted": [],
+      "available": true,
+      "examples": [],
+      "concepts": {
+        "out_of_scope_property": 0.57746,
+        "hazard": 0.7028,
+        "safe_area": 0.76275,
+        "modulating": 0.62262,
+        "on_off": 0.62214
+      },
+      "embedding_ms": 428.11
+    },
+    {
+      "query": "no flammable materials in this area",
+      "accepted": [
+        "safe_area"
+      ],
+      "available": true,
+      "examples": [
+        {
+          "id": 593,
+          "similarity": 0.71319
+        },
+        {
+          "id": 373,
+          "similarity": 0.71166
+        },
+        {
+          "id": 619,
+          "similarity": 0.7046
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.59712,
+        "hazard": 0.73775,
+        "safe_area": 0.8959,
+        "modulating": 0.57593,
+        "on_off": 0.59305
+      },
+      "embedding_ms": 411.76
+    },
+    {
+      "query": "nonhazardous indoor water service, 110 V",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 640,
+          "similarity": 0.77215
+        },
+        {
+          "id": 558,
+          "similarity": 0.77107
+        },
+        {
+          "id": 195,
+          "similarity": 0.74965
+        },
+        {
+          "id": 386,
+          "similarity": 0.74943
+        },
+        {
+          "id": 605,
+          "similarity": 0.74842
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.61595,
+        "hazard": 0.64248,
+        "safe_area": 0.69125,
+        "modulating": 0.61654,
+        "on_off": 0.62831
+      },
+      "embedding_ms": 434.25
+    },
+    {
+      "query": "I need an actuator, 110 V",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 15,
+          "similarity": 0.91383
+        },
+        {
+          "id": 84,
+          "similarity": 0.90487
+        },
+        {
+          "id": 464,
+          "similarity": 0.8864
+        },
+        {
+          "id": 28,
+          "similarity": 0.8828
+        },
+        {
+          "id": 38,
+          "similarity": 0.88176
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.76905,
+        "hazard": 0.56776,
+        "safe_area": 0.56189,
+        "modulating": 0.72959,
+        "on_off": 0.74644
+      },
+      "embedding_ms": 375.41
+    },
+    {
+      "query": "110 V AC single phase actuator",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 16,
+          "similarity": 0.8675
+        },
+        {
+          "id": 22,
+          "similarity": 0.85452
+        },
+        {
+          "id": 38,
+          "similarity": 0.84734
+        },
+        {
+          "id": 121,
+          "similarity": 0.83382
+        },
+        {
+          "id": 531,
+          "similarity": 0.82811
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.69805,
+        "hazard": 0.54234,
+        "safe_area": 0.55366,
+        "modulating": 0.68482,
+        "on_off": 0.69952
+      },
+      "embedding_ms": 368.25
+    },
+    {
+      "query": "recommend a valve actuator for my process",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 78,
+          "similarity": 0.85998
+        },
+        {
+          "id": 570,
+          "similarity": 0.85
+        },
+        {
+          "id": 273,
+          "similarity": 0.82951
+        },
+        {
+          "id": 425,
+          "similarity": 0.81695
+        },
+        {
+          "id": 384,
+          "similarity": 0.81446
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.76754,
+        "hazard": 0.64345,
+        "safe_area": 0.63869,
+        "modulating": 0.79805,
+        "on_off": 0.776
+      },
+      "embedding_ms": 372.85
+    },
+    {
+      "query": "at least 100 Nm and 30 seconds",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 485,
+          "similarity": 0.90115
+        },
+        {
+          "id": 279,
+          "similarity": 0.8914
+        },
+        {
+          "id": 480,
+          "similarity": 0.88172
+        },
+        {
+          "id": 253,
+          "similarity": 0.8764
+        },
+        {
+          "id": 369,
+          "similarity": 0.86743
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.61572,
+        "hazard": 0.59265,
+        "safe_area": 0.59657,
+        "modulating": 0.65972,
+        "on_off": 0.66494
+      },
+      "embedding_ms": 415.11
+    },
+    {
+      "query": "explosionproof actuator with 70 Nm torque",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 404,
+          "similarity": 0.90767
+        },
+        {
+          "id": 27,
+          "similarity": 0.89756
+        },
+        {
+          "id": 596,
+          "similarity": 0.88157
+        },
+        {
+          "id": 430,
+          "similarity": 0.87605
+        },
+        {
+          "id": 551,
+          "similarity": 0.86767
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.65898,
+        "hazard": 0.68882,
+        "safe_area": 0.64366,
+        "modulating": 0.70685,
+        "on_off": 0.708
+      },
+      "embedding_ms": 347.99
+    },
+    {
+      "query": "gas-free safe area, 220 V",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 362,
+          "similarity": 0.8451
+        },
+        {
+          "id": 640,
+          "similarity": 0.80768
+        },
+        {
+          "id": 625,
+          "similarity": 0.80304
+        },
+        {
+          "id": 513,
+          "similarity": 0.79431
+        },
+        {
+          "id": 386,
+          "similarity": 0.78523
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.60082,
+        "hazard": 0.71088,
+        "safe_area": 0.69921,
+        "modulating": 0.55077,
+        "on_off": 0.57873
+      },
+      "embedding_ms": 397.61
+    },
+    {
+      "query": "not modulating, just on/off, 110 V",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 186,
+          "similarity": 0.90488
+        },
+        {
+          "id": 124,
+          "similarity": 0.88869
+        },
+        {
+          "id": 477,
+          "similarity": 0.8661
+        },
+        {
+          "id": 38,
+          "similarity": 0.86603
+        },
+        {
+          "id": 231,
+          "similarity": 0.86058
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.66178,
+        "hazard": 0.59957,
+        "safe_area": 0.61289,
+        "modulating": 0.75336,
+        "on_off": 0.7261
+      },
+      "embedding_ms": 369.79
+    },
+    {
+      "query": "modulating service, not on/off, 220 V",
+      "accepted": [],
+      "available": true,
+      "examples": [
+        {
+          "id": 186,
+          "similarity": 0.92085
+        },
+        {
+          "id": 433,
+          "similarity": 0.91019
+        },
+        {
+          "id": 281,
+          "similarity": 0.90838
+        },
+        {
+          "id": 365,
+          "similarity": 0.90823
+        },
+        {
+          "id": 157,
+          "similarity": 0.90136
+        }
+      ],
+      "concepts": {
+        "out_of_scope_property": 0.68306,
+        "hazard": 0.60913,
+        "safe_area": 0.59406,
+        "modulating": 0.83951,
+        "on_off": 0.77145
+      },
+      "embedding_ms": 366.1
+    }
+  ],
+  "thresholds": {
+    "hazard": 0.7,
+    "safe_area": 0.75,
+    "on_off": 0.72,
+    "modulating": 0.72,
+    "out_of_scope_property": 0.78
+  },
+  "margins": {
+    "hazard": 0.08,
+    "safe_area": 0.08,
+    "on_off": 0.08,
+    "modulating": 0.08
+  },
+  "fewshot_min_similarity": 0.7,
+  "evidence_scope": "Calibration/smoke only; not held-out semantic or live-chat acceptance"
+}

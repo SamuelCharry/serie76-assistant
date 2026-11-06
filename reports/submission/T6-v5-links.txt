@@ -1,0 +1,3 @@
+Checked 475 relative Markdown links/anchors; 0 broken
+
+Exit: 0

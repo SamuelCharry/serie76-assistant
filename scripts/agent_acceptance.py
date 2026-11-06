@@ -19,6 +19,8 @@ import argparse
 import hashlib
 import json
 import os
+import re
+from copy import deepcopy
 import sys
 import time
 from contextlib import contextmanager
@@ -35,6 +37,12 @@ OUT = ROOT / "reports/agent_acceptance/v2"  # overridden by --cohort
 CONFIG = ROOT / "config/agent_acceptance.json"
 CASES = ROOT / "config/agent_acceptance_cases.json"
 FROZEN_FILES = [ "config/agent_acceptance_cases.json", "scripts/agent_acceptance.py",
+                "scripts/acceptance_contract.py", "backend/conversation/interactions.py",
+                "backend/catalog/migrations/005_message_interactions.sql",
+                "scripts/check_public_text.py",
+                "backend/conversation/quality.py", "backend/conversation/store.py",
+                "backend/conversation/tool_wire.py",
+                "backend/catalog/migrations/004_message_presentation.sql",
                 "backend/conversation/agent.py", "backend/conversation/policy.py", "backend/conversation/rendering.py",
                 "backend/conversation/api.py", "backend/app/contracts.py", "backend/catalog/models.py",
                 "backend/catalog/repository.py", "backend/catalog/context.py", "data/extracted/series76_summary/terms.json",
@@ -146,24 +154,71 @@ def configure_env(config, key):
 
 # --- scoring ------------------------------------------------------------------------------
 def same(a, b):
+    if isinstance(a, dict) and isinstance(b, dict):
+        a = {k: v for k, v in a.items() if v is not None}
+        b = {k: v for k, v in b.items() if v is not None}
+        return a.keys() == b.keys() and all(same(a[k], b[k]) for k in a)
+    if isinstance(a, list) and isinstance(b, list):
+        return len(a) == len(b) and all(same(x, y) for x, y in zip(a, b))
     try:
         return Decimal(str(a)) == Decimal(str(b))
     except Exception:
         return a == b
 
 
-def check(expect, observed):
-    failures = []
+def numeric_equal(a, b):
+    if isinstance(a, bool) or isinstance(b, bool):
+        return False
+    try:
+        a, b = Decimal(str(a)), Decimal(str(b))
+        return a.is_finite() and b.is_finite() and a == b
+    except Exception:
+        return False
+
+
+def argument_matches(field, got, expected, queries=()):
+    """Only numeric bound fields bridge scalar/bound representations; never drop op.
+
+    Old scalar expectations may accept a gte bound only when the case's current or
+    preceding query explicitly says at least/minimum for that same value.
+    Other operators require explicit {value, op} expectations.
+    """
+    from backend.catalog.repository import COMPARISONS
+    if field not in COMPARISONS:
+        return same(got, expected)
+    if isinstance(expected, list):
+        return isinstance(got, list) and len(got) == len(expected) and all(
+            argument_matches(field, a, b, queries) for a, b in zip(got, expected))
+    if isinstance(expected, dict):
+        if set(expected) != {"value", "op"}:
+            return False
+        if not isinstance(got, dict):
+            # Legacy scalar inputs have the repository's inclusive default only.
+            got = {"value": got, "op": "gte" if field.startswith("min_") else "lte"}
+        return (set(got) == {"value", "op"} and expected["op"] in {"gt", "gte", "lt", "lte"}
+                and got["op"] == expected["op"] and numeric_equal(got["value"], expected["value"]))
+    if isinstance(got, dict):
+        stated_minimum = any(numeric_equal(m, expected) for q in queries for m in re.findall(
+            r"(?:at least|minimum(?: of)?)\s+(\d+(?:\.\d+)?)", q.lower()))
+        return (field.startswith("min_") and stated_minimum and set(got) == {"value", "op"}
+                and got["op"] == "gte" and numeric_equal(got["value"], expected))
+    return same(got, expected)
+
+
+def check(expect, observed, queries=()):
+    from scripts.check_public_text import response_text_issues
+    from backend.catalog.repository import COMPARISONS
+    failures = response_text_issues(observed)
     trace = observed["trace"]
     params = trace.get("parameters") or {}
     if "tool" in expect and trace.get("name") != expect["tool"]:
         failures.append(f"tool {trace.get('name')} != {expect['tool']}")
     for field, value in (expect.get("args") or {}).items():
-        got = params.get(field)
-        if isinstance(value, list):
-            if sorted(got or []) != sorted(value):
+        got = trace.get("raw_parameters", {}).get(field) if field == "cancel_previous" else params.get(field)
+        if isinstance(value, list) and field not in COMPARISONS:
+            if not same(got or [], value):
                 failures.append(f"{field} {got} != {value}")
-        elif not same(got, value):
+        elif not argument_matches(field, got, value, queries):
             failures.append(f"{field} {got} != {value}")
     if expect.get("only_filters"):
         from backend.conversation.policy import FILTER_FIELDS
@@ -182,22 +237,103 @@ def check(expect, observed):
     for text in expect.get("not_contains", []):
         if text in observed["answer"]:
             failures.append(f"forbidden text: {text}")
+    for text in expect.get('lead_contains', []):
+        if text not in (observed.get('lead') or ''):
+            failures.append(f'missing lead text: {text}')
+    if 'interaction_option_labels' in expect:
+        labels = [option['label'] for question in (observed.get('interaction') or {}).get('questions', [])
+                  for option in question.get('options', [])]
+        if labels != expect['interaction_option_labels']:
+            failures.append(f'option labels {labels} differ')
     codes = [p["base_part_number"] for p in observed["products"]]
     for code in expect.get("products_include", []):
         if code not in codes:
             failures.append(f"product {code} missing")
+    if "comparison_models" in expect and (observed.get("comparison") or {}).get("models") != expect["comparison_models"]:
+        failures.append("comparison models differ")
     if expect.get("no_products") and codes:
         failures.append(f"unexpected products {codes[:3]}")
+    recommendation = observed.get('recommendation') or {}
+    if expect.get('recommendation_codes_once'):
+        for item in recommendation.get('items', []):
+            code = item['part_number']
+            if observed['answer'].count(code) != 1:
+                failures.append('ranked code repeated or absent in answer: ' + code)
+    if 'recommendation_total' in expect and recommendation.get('total') != expect['recommendation_total']:
+        failures.append('recommendation total differs')
+    recommendation_codes = [item['part_number'] for item in recommendation.get('items', [])]
+    if 'recommendation_first' in expect and (recommendation_codes or [None])[0] != expect['recommendation_first']:
+        failures.append('recommended winner differs')
+    if 'recommendation_scope' in expect and not set(recommendation_codes) <= set(expect['recommendation_scope']):
+        failures.append('recommendation escaped the shown set')
+    if expect.get('recommendation_safe'):
+        from scripts.acceptance_contract import eligible_codes
+        filters = (trace.get('context_after') or {}).get('filters') or {}
+        if not set(recommendation_codes) <= set(eligible_codes(filters)):
+            failures.append('recommendation violates the independent CSV requirements oracle')
+    if expect.get('recommendation_ranked_by') and not recommendation.get('ranked_by'):
+        failures.append('ranking explanation missing')
+    if 'debug_llm_called' in expect and observed.get('debug', {}).get('llm_called') != expect['debug_llm_called']:
+        failures.append('debug model-call flag differs')
+    if 'interaction_count_at_least' in expect and len((observed.get('interaction') or {}).get('questions', [])) < expect['interaction_count_at_least']:
+        failures.append('too few simultaneous questions')
+    if "candidates_include" in expect:
+        if "recorded_candidate_failures" in observed:
+            # Older recordings omitted SQL candidates. Preserve the original
+            # candidate-only verdict; do not invent evidence or query today's DB.
+            failures.extend(observed["recorded_candidate_failures"])
+        else:
+            for code in expect["candidates_include"]:
+                if code not in observed.get("candidates", []):
+                    failures.append("SQL candidate missing: " + code)
+    if "product_count" in expect and len(codes) != expect["product_count"]:
+        failures.append("product count differs")
+    if expect.get("no_clarification") and clarification is not None:
+        failures.append("unexpected clarification")
+    if "suggested_replies_count" in expect and len(observed.get("suggested_replies", [])) != expect["suggested_replies_count"]:
+        failures.append("suggested reply count differs")
+    for suggestion in expect.get("suggestions_exclude", []):
+        if suggestion in observed.get("suggested_replies", []):
+            failures.append("inappropriate suggested reply: " + suggestion)
+    context = trace.get("context_after") or {}
+    if expect.get("cancel_cleared") and (context.get("filters") or context.get("pending_clarification")):
+        failures.append("cancel retained filters or pending clarification")
+    for name in expect.get("context_filter_absent", []):
+        if name in context.get("filters", {}):
+            failures.append("unexpected retained filter: " + name)
     terms = [t["term_key"] for t in observed["terms"]]
     for term in expect.get("terms", []):
         if term not in terms:
             failures.append(f"term {term} missing")
+    if expect.get('contract_v6'):
+        from scripts.acceptance_contract import verify
+        failures.extend(verify(expect, observed))
+    if 't10_oracle' in expect:
+        failures.extend(t10_oracle().verify(expect['t10_oracle'], observed))
+    if 't12_oracle' in expect:
+        from scripts.t12_oracle import verify
+        failures.extend(verify(expect['t12_oracle'], observed))
+    if 't14_oracle' in expect:
+        from scripts.t14_oracle import verify
+        failures.extend(verify(expect['t14_oracle'], observed))
     return failures
 
 
-def score(turn, observed):
+def t10_oracle():
+    """Load the optional offline oracle without making tests a runtime dependency."""
+    import importlib.util
+    name = '_acceptance_t10_oracle'
+    if name not in sys.modules:
+        spec = importlib.util.spec_from_file_location(name, ROOT / 'tests/test_t10_oracle.py')
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        spec.loader.exec_module(module)
+    return sys.modules[name]
+
+
+def score(turn, observed, queries=None):
     options = turn.get("expect_any") or [turn["expect"]]
-    results = [check(o, observed) for o in options]
+    results = [check(o, observed, queries or [turn["query"]]) for o in options]
     best = min(results, key=len)
     return not best, best
 
@@ -224,7 +360,8 @@ def scenario_environment():
         yield connection
 
     try:
-        with patch("backend.conversation.api.connect", same_connection):
+        from collections import deque
+        with patch("backend.conversation.api.connect", same_connection), patch('backend.conversation.agent._call_times', deque()):
             yield app, connection, user
     finally:
         app.dependency_overrides.clear()
@@ -234,6 +371,8 @@ def scenario_environment():
 
 
 def run_scenario(scenario, model_factory):
+    if scenario.get('t10_defect'):
+        scenario = t10_oracle().resolve(scenario)
     from fastapi.testclient import TestClient
     from backend.conversation import store
     turns, session = [], None
@@ -243,6 +382,7 @@ def run_scenario(scenario, model_factory):
             with patch("backend.conversation.agent.create_model_client", lambda: model_factory(scenario, index)):
                 started = time.perf_counter()
                 body = {"query": turn["query"]} | ({"session_id": session} if session else {})
+                body.update({k: turn[k] for k in ('answers', 'remove_filters', 'action') if k in turn})
                 response = client.post("/api/conversation", json=body)
             elapsed = time.perf_counter() - started
             if response.status_code == 503:
@@ -253,14 +393,29 @@ def run_scenario(scenario, model_factory):
             session = payload["session_id"]
             debug = store.debug_for_message(connection, payload["message_id"], user)["tool_calls"][0]
             trace = {k: debug.get(k) for k in ("name", "parameters", "raw_parameters", "validation", "renderer",
-                                                 "overrides", "context_before", "context_after", "model")}
+                                                 "overrides", "context_before", "context_after", "model", "model_calls")}
             observed = dict(answer=payload["answer"], products=payload["products"], terms=payload["terms"],
-                            clarification=payload["clarification"], assumptions=payload["assumptions"], trace=trace)
-            passed, failures = score(turn, observed)
+                            clarification=payload["clarification"], assumptions=payload["assumptions"], trace=trace,
+                            suggested_replies=payload["suggested_replies"], comparison=payload["comparison"],
+                            candidates=[p["base_part_number"] for p in debug.get("data", {}).get("products", [])] or debug.get("data", {}).get("candidates", []))
+            observed.update({k: payload[k] for k in ('lead', 'interaction', 'suggestions', 'active_filters', 'recommendation', 'debug')})
+            observed['candidate_total'] = debug.get('data', {}).get('total')
+            if debug.get('name') == 'search_actuators' and observed['candidate_total'] is not None:
+                from backend.catalog.models import SearchFilters
+                from backend.catalog.repository import search_actuators
+                filters = (debug.get('context_after') or {}).get('filters') or {}
+                full = search_actuators(connection, SearchFilters.model_validate(dict(filters, limit=100, offset=0)), allow_ambiguous=True)
+                observed['eligible_codes'] = [p['base_part_number'] for p in full['products']]
+            passed, failures = score(turn, observed, [t["query"] for t in scenario["turns"][:index + 1]])
             turns.append(dict(query=turn["query"], passed=passed, failures=failures, elapsed_s=round(elapsed, 3),
                               answer=payload["answer"], clarification=payload["clarification"],
                               products=[p["base_part_number"] for p in payload["products"]],
-                              terms=[t["term_key"] for t in payload["terms"]], assumptions=payload["assumptions"], trace=trace))
+                              terms=[t["term_key"] for t in payload["terms"]], assumptions=payload["assumptions"], trace=trace,
+                              suggested_replies=payload["suggested_replies"], comparison=payload["comparison"],
+                              candidates=observed["candidates"]))
+            turns[-1].update({k: observed.get(k) for k in ('lead', 'interaction', 'suggestions', 'active_filters', 'recommendation', 'debug', 'candidate_total', 'eligible_codes')})
+            turns[-1]['product_snapshots'] = payload['products']
+            turns[-1]['response'] = payload
     return dict(status="passed" if all(t["passed"] for t in turns) else "failed", turns=turns)
 
 
@@ -321,7 +476,7 @@ IDEAL = {
     "h_duty_threshold": [("search_actuators", {"service": "modulating", "min_duty_s4_percent": 50})],
     "h_definition_speed": [("explain_terms", {"term_keys": ["operating_speed"]})],
     "h_definition_nema": [("ask_clarification", {"field": "term_not_in_summary"})],
-    "h_followup_frequency": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "max_fla_a": 1.5}),
+    "h_followup_frequency": [("search_actuators", {"service": "on_off", "supply_voltage_v": 110, "max_fla_a": {"value": 1.5, "op": "lt"}}),
                              ("search_actuators", {"refine": True, "frequency_hz": 60})],
     "h_followup_second": [("get_actuator", {"part_numbers": ["761A00-11300000/A", "761B00-11300000/A"]}),
                           ("get_actuator", {"part_numbers": ["761B00-11300000/A"], "focus": "motor_power"})],
@@ -347,6 +502,40 @@ IDEAL = {
 }
 
 
+IDEAL.update({'t6_manual_01': [('search_actuators', {'min_torque_nm': 70}),
+                  ('get_actuator',
+                   {'part_numbers': ['761A00-11300000/A'],
+                    'focus': [{'field': 'torque', 'service': 'on_off'},
+                              {'field': 'operating_time', 'frequency_hz': 60}]})],
+ 't6_manual_02': [('search_actuators', {'min_torque_nm': 70}),
+                  ('search_actuators',
+                   {'enclosure': 'explosionproof',
+                    'supply_voltage_v': 24,
+                    'supply_current': 'DC',
+                    'service': 'modulating',
+                    'min_torque_in_lb': {'value': 1000, 'op': 'gt'}})],
+ 't6_manual_03': [('search_actuators', {'min_torque_nm': 70}),
+                  ('search_actuators',
+                   {'enclosure': 'weatherproof', 'sort_by': ['fastest', 'lowest_power']})],
+ 't6_manual_04': [('search_actuators', {'min_torque_nm': 70}),
+                  ('search_actuators',
+                   {'supply_voltage_v': 110, 'min_torque_in_lb': {'value': 100000, 'op': 'gte'}})],
+ 't6_manual_05': [('search_actuators', {'min_torque_nm': 70}),
+                  ('ask_clarification', {'field': 'decline'})],
+ 't6_manual_06': [('search_actuators', {'min_torque_nm': 70}),
+                  ('ask_clarification', {'field': 'cancel'})],
+ 't6_manual_07': [('search_actuators', {'min_torque_nm': 70}),
+                  ('ask_clarification', {'field': 'unsupported', 'cancel_previous': True})],
+ 't6_manual_08': [('search_actuators', {'min_torque_nm': 70}),
+                  ('search_actuators',
+                   {'supply_voltage_v': 110,
+                    'min_torque_in_lb': {'value': 100000, 'op': 'gt'},
+                    'cancel_previous': True})]})
+
+
+IDEAL["h_no_match_power"] = [("search_actuators", {"service": "on_off", "max_motor_power_w": {"value": 5, "op": "lt"}})]
+
+
 def manifest(cases_path=CASES):
     files = {path: sha(path) for path in FROZEN_FILES}
     rel = str(Path(cases_path).resolve().relative_to(ROOT)).replace("\\", "/")
@@ -354,14 +543,33 @@ def manifest(cases_path=CASES):
     return files
 
 
-def command_selfcheck(cases):
+def command_selfcheck(cases, evidence_path=None):
     bad = []
+    evidence = []
+    selected = {'EC05','EC10','EC15','EC20','EC25','EC30','EC35','EC40','h_compare_three','h4_hello','t6_manual_04',
+                'T8_recommendation','T8_fast_compare','T8_mining', 'heldout_P5-01', 'heldout_P2-03',
+                'heldout_B-FRUSTRATION-01', 'heldout_B-SHORTREF-01', 'heldout_P6-01', 'heldout_P1-03',
+                'heldout_v2_Q1-03', 'heldout_v2_Q3-04', 'heldout_v2_Q4-03', 'heldout_v2_Q5-05',
+                'heldout_v2_C-FRUSTRATION-01', 'heldout_v2_C-SHORTREF-02', 'heldout_v2_Q6-01',
+                'heldout_v3_R1-02', 'heldout_v3_R1-03', 'heldout_v3_R5-01', 'heldout_v3_R5-05',
+                'heldout_v3_R6-01', 'heldout_v3_R6-02', 'heldout_v3_R6-03',
+                'heldout_v3_D-FRUSTRATION-01', 'heldout_v3_D-TOPICJUMP-01',
+                'heldout_v3_D-IMPOSSIBLE-01', 'heldout_v3_D-CONFIRM-01',
+                'heldout_v4_S1-05', 'heldout_v4_S1-06', 'heldout_v4_S2-06',
+                'heldout_v4_S3-01', 'heldout_v4_S5-04', 'heldout_v4_S6-02',
+                'heldout_v4_E-SHORTREF-01', 'heldout_v4_E-IMPOSSIBLE-01',
+                'heldout_v4_E-CONFIRM-01'}
     for scenario in cases["scenarios"]:
-        result = run_scenario(scenario, lambda s, i: IdealModel(IDEAL[s["id"]][i]))
+        result = run_scenario(scenario, lambda s, i: IdealModel(s['turns'][i].get('scripted_decision') or IDEAL[s["id"]][i]))
         print(scenario["id"], result["status"], *[t["failures"] for t in result["turns"] if t["failures"]])
         if result["status"] != "passed":
             bad.append(scenario["id"])
-    print(json.dumps(dict(selfcheck="ok" if not bad else "failed", failing=bad)))
+        if scenario.get('t14_class') or scenario.get('t12_class') or scenario.get('t10_defect') or scenario['id'] in selected or scenario['id'].startswith('T9_R1_') or result['status'] != 'passed':
+            evidence.append(dict(scenario=scenario['id'], **result))
+    print(json.dumps(dict(selfcheck="ok" if not bad else "failed", scenarios=len(cases['scenarios']), failing=bad)))
+    if evidence_path:
+        Path(evidence_path).write_text(json.dumps(dict(mode='scripted; no model inference',
+            scenarios=len(cases['scenarios']), failing=bad, examples=evidence), ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     return 1 if bad else 0
 
 
@@ -434,6 +642,25 @@ def command_run(config, cases, only, cases_path=CASES):
     print(json.dumps(dict(spent_conservative_usd=round(ledger.spent(), 6))))
 
 
+def rescore_record(record, scenario):
+    """Score recorded observations, not rerendered answers; never mutate evidence."""
+    result = deepcopy(record)
+    for index, turn in enumerate(result.get("turns", [])):
+        expected = scenario["turns"][index]
+        if turn["query"] != expected["query"]:
+            raise ValueError("Recorded query differs from case; refuse rescore")
+        observed = dict(turn, products=turn.get('product_snapshots', [{"base_part_number": code} for code in turn["products"]]),
+                        terms=[{"term_key": key} for key in turn["terms"]])
+        if "candidates" not in turn:
+            observed["recorded_candidate_failures"] = [f for f in turn["failures"] if f.startswith("SQL candidate missing: ")]
+        turn["passed"], turn["failures"] = score(expected, observed, [t["query"] for t in scenario["turns"][:index + 1]])
+    if result["status"] in ("passed", "failed"):
+        if len(result["turns"]) != len(scenario["turns"]):
+            raise ValueError("Incomplete non-provider record; refuse rescore")
+        result["status"] = "passed" if all(t["passed"] for t in result["turns"]) else "failed"
+    return result
+
+
 def command_report(config, cases):
     results = read_jsonl(OUT / "results.jsonl")
     ledger = read_jsonl(OUT / "ledger.jsonl")
@@ -441,6 +668,9 @@ def command_report(config, cases):
     for r in results:
         if r["status"] != "provider_failure" or r["scenario"] not in final:
             final[r["scenario"]] = r
+    recorded_counts = {status: sum(r["status"] == status for r in final.values()) for status in ("passed", "failed", "provider_failure")}
+    definitions = {s["id"]: s for s in cases["scenarios"]}
+    final = {name: rescore_record(record, definitions[name]) for name, record in final.items()}
     categories = {}
     for s in cases["scenarios"]:
         r = final.get(s["id"])
@@ -455,6 +685,8 @@ def command_report(config, cases):
     latencies = sorted(e["latency_s"] for e in ledger if e["state"] == "settled")
     summary = dict(
         cohort=cases["version"], model=config["model"], provider=config["provider"],
+        rescored=True, recorded_counts=recorded_counts,
+        candidate_evidence_note="Older recordings omitted SQL candidates; only those original candidate-check verdicts are retained, other checks rescored",
         scenarios=len(cases["scenarios"]), passed=sum(r["status"] == "passed" for r in final.values()),
         failed=sum(r["status"] == "failed" for r in final.values()),
         provider_failure_only=sum(r["status"] == "provider_failure" for r in final.values()),
@@ -484,6 +716,7 @@ def main():
     parser.add_argument("--config", type=Path, default=CONFIG)
     parser.add_argument("--cohort", default="v2", help="reports/agent_acceptance/<cohort>; v1 is archived")
     parser.add_argument("--cases", default=str(CASES))
+    parser.add_argument('--evidence', type=Path, help='Write selected selfcheck JSON examples (no inference)')
     args = parser.parse_args()
     OUT = ROOT / "reports/agent_acceptance" / args.cohort
     CONFIG = args.config.resolve()
@@ -491,7 +724,7 @@ def main():
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     cases = json.loads(Path(args.cases).read_text(encoding="utf-8"))
     if args.command == "selfcheck":
-        return command_selfcheck(cases)
+        return command_selfcheck(cases, args.evidence)
     if args.command == "probe":
         return command_probe(config)
     if args.command == "run":

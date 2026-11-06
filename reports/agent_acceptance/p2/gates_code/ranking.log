@@ -1,0 +1,55 @@
+{
+  "scope": "Oracle filters and stated objective; no LLM or natural-language interpretation. Synthetic plant requests, not a sampled user population.",
+  "collection_size": 68,
+  "query_count": 40,
+  "judgment_count": 2720,
+  "visible_k": 3,
+  "comparison_depth_k": 5,
+  "binary_relevance": "grade >= 1",
+  "means": {
+    "3": {
+      "precision": 0.9333333333333333,
+      "compliance_returned": 1.0,
+      "recall": 0.5073195554445554,
+      "ap": 0.5073195554445554,
+      "ndcg": 0.965377944025286
+    },
+    "5": {
+      "precision": 0.88,
+      "compliance_returned": 1.0,
+      "recall": 0.7371992590742591,
+      "ap": 0.7371992590742591,
+      "ndcg": 0.9701276656908694
+    }
+  },
+  "feasible_query_count": 39,
+  "means_feasible_only": {
+    "3": {
+      "precision": 0.9572649572649573,
+      "compliance_returned": 1.0,
+      "recall": 0.520327749173903,
+      "ap": 0.520327749173903,
+      "ndcg": 0.990131224641319
+    },
+    "5": {
+      "precision": 0.9025641025641026,
+      "compliance_returned": 1.0,
+      "recall": 0.7561018041787273,
+      "ap": 0.7561018041787273,
+      "ndcg": 0.9950027340419173
+    }
+  },
+  "empty_gold_query_ids": [
+    "T11-R36"
+  ],
+  "nonempty_returned_query_count": 39,
+  "map_full": 0.975,
+  "map_full_feasible_only": 1.0,
+  "safety_failures": [],
+  "unexpected_empty_results": [],
+  "worst_query_ids": [
+    "T11-R36",
+    "T11-R39",
+    "T11-R01"
+  ]
+}

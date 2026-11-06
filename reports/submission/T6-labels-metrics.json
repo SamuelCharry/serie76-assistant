@@ -1,0 +1,10 @@
+{
+  "enum_values": 83,
+  "arrays": 6,
+  "required": 3,
+  "depth": 7,
+  "numeric_ranges": 0,
+  "forbidden_nodes": 0,
+  "get_actuator_object_arrays": 0,
+  "bytes": 3945
+}

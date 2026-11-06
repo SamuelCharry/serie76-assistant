@@ -1,0 +1,122 @@
+{
+  "L1-01": {
+    "A": {
+      "v": 1,
+      "why": "Requirements retained; fastest selection and locked-rotor current match the catalogue."
+    }
+  },
+  "L1-02": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 3: asks which model despite the unambiguous second model in the preceding comparison; requested starts per hour omitted."
+    }
+  },
+  "L1-03": {
+    "A": {
+      "v": 1,
+      "why": "Lower bound retained, upper bound applied then withdrawn, and operating-time ranking matches the catalogue."
+    }
+  },
+  "L1-04": {
+    "A": {
+      "v": 1,
+      "why": "Preserves unavailable values, rejects inference, and supplies reported 220 V alternatives with accurate counts."
+    }
+  },
+  "L1-05": {
+    "A": {
+      "v": 1,
+      "why": "Both torque ratings match the exact catalogue part number."
+    }
+  },
+  "L1-06": {
+    "A": {
+      "v": 1,
+      "why": "Both frequency-specific operating times match the catalogue."
+    }
+  },
+  "L1-07": {
+    "A": {
+      "v": 1,
+      "why": "Motor power and full-load current match the catalogue."
+    }
+  },
+  "L1-08": {
+    "A": {
+      "v": 1,
+      "why": "Product card supplies the requested voltage and phase count; additional figures match the catalogue."
+    }
+  },
+  "L1-09": {
+    "A": {
+      "v": 1,
+      "why": "Correctly labels catalogue cycles as On/Off and starts as Modulating."
+    }
+  },
+  "L2-01": {
+    "A": {
+      "v": 1,
+      "why": "Outdoor and open/close interpretation, retained torque, corrected voltage, and displayed figures are correct."
+    }
+  },
+  "L2-02": {
+    "A": {
+      "v": 1,
+      "why": "Resolves the second model, preserves supply and enclosure, increases torque strictly, and selects the fastest displayed candidate."
+    }
+  },
+  "L2-03": {
+    "A": {
+      "v": 1,
+      "why": "Retains explosionproof protection, cautions about site classification, and recommends qualifying catalogue candidates."
+    }
+  },
+  "L2-04": {
+    "A": {
+      "v": 1,
+      "why": "Accepts the nonhazardous correction, retains voltage and torque, and ranks weatherproof choices by operating time."
+    }
+  },
+  "L2-05": {
+    "A": {
+      "v": 1,
+      "why": "Torque explanation matches the supplied glossary."
+    }
+  },
+  "L2-06": {
+    "A": {
+      "v": 1,
+      "why": "Plain-language modulating explanation matches the supplied glossary."
+    }
+  },
+  "L2-07": {
+    "A": {
+      "v": 0,
+      "why": "Item 2, turn 1: asks for service, voltage, and torque already explicitly stated; no candidates or useful clarification provided."
+    }
+  },
+  "L2-08": {
+    "A": {
+      "v": 1,
+      "why": "Motor power matches the catalogue; consumption distinction is clear."
+    }
+  },
+  "L2-09": {
+    "A": {
+      "v": 0,
+      "why": "Item 7, turn 1: response takes 16.8 seconds, exceeding the 15-second failure threshold."
+    }
+  },
+  "L2-10": {
+    "A": {
+      "v": 1,
+      "why": "Full-load current definition matches the supplied glossary."
+    }
+  },
+  "L3-01": {
+    "A": {
+      "v": 1,
+      "why": "Retains corrected torque and supply, selects the fastest qualifying model, and explicitly states the phase assumption."
+    }
+  }
+}
