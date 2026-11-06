@@ -2,6 +2,8 @@
 
 App nativa en Kotlin con Jetpack Compose. El ViewModel controla estado; el repositorio encapsula HTTP y permite pruebas con respuestas controladas.
 
+El [diseño de la app](https://github.com/SamuelCharry/serie76-assistant/wiki/Diseno-de-la-app) explica por qué se separaron esas responsabilidades y cómo se eligieron las tarjetas, las preguntas y los controles de voz.
+
 | Capa | Responsabilidad |
 |---|---|
 | Compose | Login, conversaciones, chat, tarjetas, comparación y debug |

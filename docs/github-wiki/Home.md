@@ -17,6 +17,7 @@ La idea que guía el backend es sencilla: el modelo ayuda a entender la pregunta
 
 ### Parte B · App Android
 
+- [Diseño de la app: interacción, patrones e iteraciones](https://github.com/SamuelCharry/serie76-assistant/wiki/Diseno-de-la-app)
 - [Configuración de la app](https://github.com/SamuelCharry/serie76-assistant/wiki/Configuracion-base-Android)
 - [Lista de conversaciones](https://github.com/SamuelCharry/serie76-assistant/wiki/Pantalla-Conversaciones)
 - [Chat y comparación de productos](https://github.com/SamuelCharry/serie76-assistant/wiki/Pantalla-Chat-activo)

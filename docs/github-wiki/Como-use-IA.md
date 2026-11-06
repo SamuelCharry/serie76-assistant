@@ -1,6 +1,6 @@
 # Cómo usé IA durante el desarrollo
 
-Usé IA para planear, escribir código, preparar pruebas, revisar fallos y trabajar la documentación. Claude Code coordinó parte del trabajo y Codex implementó y revisó cambios mediante Orca. La [configuración del proyecto](https://github.com/SamuelCharry/serie76-assistant/tree/main/.claude) está incluida en la entrega.
+Usé IA para escribir código, preparar pruebas, revisar fallos y trabajar la documentación. Claude Code coordinó parte del trabajo y Codex implementó y revisó cmbios mediante Orca. La [configuración del proyecto](https://github.com/SamuelCharry/serie76-assistant/tree/main/.claude) está incluida en la entrega.
 
 Aquí la IA aparece en dos lugares distintos: como ayuda para desarrollar el proyecto y como modelo que interpreta preguntas dentro de la app. Que un asistente escriba una prueba no demuestra que el producto funcione; por eso se guardaron resultados, comparaciones y reproducciones.
 
@@ -8,7 +8,7 @@ Esta cronología resume hitos del historial Git y de los informes. No reconstruy
 
 ## 2 de noviembre · Dividir el problema
 
-El trabajo comenzó con la estructura del proyecto, un experimento de extracción y una división por hitos. Se dejó contexto para continuar con otro agente sin empezar de cero. La IA ayudó a convertir el assessment en tareas concretas: datos, backend, app y pruebas.
+El trabajo comenzó con la estructura del proyecto, un experimento de extracción y una división por hitos. Se dejó contexto para continuar con otro agente sin empezar de cero. La IA ayudó a convertir el assessment en tareas concretas: datos, backend, app y pruebas. También creamaos issues para poder seguir el trabajo en github.
 
 [Inicio del proyecto](https://github.com/SamuelCharry/serie76-assistant/commit/d1604bd) · [Primer relevo](https://github.com/SamuelCharry/serie76-assistant/commit/a048e41).
 
@@ -38,7 +38,9 @@ Se prepararon pruebas con decisiones ya fijadas: si el código falla incluso rec
 
 Se compararon variantes con casos congelados y respuestas mezcladas para revisión ciega. Una propuesta de estado completo salió peor y se descartó. La mejora del diseño anterior sí aumentó la aprobación, pero también dejó fallos: se registraron y corrigieron, sin presentar las pruebas offline como una nueva medición del modelo.
 
-La revisión asistida por IA se complementó con auditorías de valores contra el catálogo. Después se reprodujo la entrega desde su etiqueta. Mi parte incluyó decidir qué adoptar, autorizar gasto y probar la app; el reconocimiento real con micrófono lo confirmé manualmente en el emulador.
+La revisión asistida por IA se complementócon auditorías de valores contra el catálogo. Después se reprodujo la entrega desde su etiqueta.
+
+Mi parte tambien incluyó decidir qué adoptar, autorizar gastos y probar la app fisicamente para poder generar incluso más pruebas y una interacción natural; el reconocimiento real con micrófono lo confirmé manualmente en el emulador también.
 
 [Experimento descartado](https://github.com/SamuelCharry/serie76-assistant/blob/main/reports/submission/SV2-experiment.md) · [Comparación final y reparaciones](https://github.com/SamuelCharry/serie76-assistant/blob/main/reports/submission/P2-A.md) · [Reproducción de la entrega](https://github.com/SamuelCharry/serie76-assistant/blob/main/reports/submission/T18-tag-clean-clone.md).
 

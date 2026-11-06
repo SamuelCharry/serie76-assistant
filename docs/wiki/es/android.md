@@ -4,6 +4,8 @@
 
 La app está hecha en Kotlin y Compose. Esta guía explica cómo compilarla, qué hace cada pantalla y dónde buscar cuando falla una petición.
 
+El [diseño de la app](https://github.com/SamuelCharry/serie76-assistant/wiki/Diseno-de-la-app) explica las decisiones de interacción, los patrones de código y las iteraciones que llevaron a estas pantallas.
+
 ```mermaid
 flowchart LR
     UI[UI Compose] --> VM[ViewModel y StateFlow]

@@ -2,6 +2,8 @@
 
 This is the Kotlin and Jetpack Compose app. Open this folder in Android Studio and use JDK 17 with SDK Platform 36. It runs on API 26 or later.
 
+For the reasoning behind the screens, state management and recovery behavior, see [Mobile app design](https://github.com/SamuelCharry/serie76-assistant/wiki/Diseno-de-la-app) (in Spanish).
+
 From the repository root:
 
 ```powershell

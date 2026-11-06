@@ -42,4 +42,6 @@ La mejora final se aceptó aun con regresiones nuevas, como excepción explícit
 
 Las tarjetas facilitan comparar productos; el debug permite revisar de dónde salió una respuesta sin llenar el chat de detalles internos. La voz pasa primero por un editor: el usuario puede corregir la transcripción antes de enviarla. Android se encarga del reconocimiento y el backend recibe texto.
 
+El [diseño de la app](https://github.com/SamuelCharry/serie76-assistant/wiki/Diseno-de-la-app) desarrolla estas decisiones, los patrones de código y dos ejemplos de cambios guiados por pruebas.
+
 [Chat](https://github.com/SamuelCharry/serie76-assistant/wiki/Pantalla-Chat-activo) · [Debug](https://github.com/SamuelCharry/serie76-assistant/wiki/Pantalla-Developer-Debug) · [Voz](https://github.com/SamuelCharry/serie76-assistant/wiki/Parte-C2-Mensajes-de-voz).

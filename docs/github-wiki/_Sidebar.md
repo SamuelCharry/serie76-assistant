@@ -14,6 +14,7 @@
 
 ### Part B · Mobile App
 
+- [Diseño de la app](https://github.com/SamuelCharry/serie76-assistant/wiki/Diseno-de-la-app)
 - [Configuración](https://github.com/SamuelCharry/serie76-assistant/wiki/Configuracion-base-Android)
 - [Conversaciones](https://github.com/SamuelCharry/serie76-assistant/wiki/Pantalla-Conversaciones)
 - [Chat](https://github.com/SamuelCharry/serie76-assistant/wiki/Pantalla-Chat-activo)

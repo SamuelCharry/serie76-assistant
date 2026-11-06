@@ -4,6 +4,8 @@
 
 The app is built with Kotlin and Compose. This guide covers building it, using its screens and finding the cause of a failed request.
 
+[Mobile app design](https://github.com/SamuelCharry/serie76-assistant/wiki/Diseno-de-la-app) explains the interaction choices, implementation patterns and iterations behind these screens (in Spanish).
+
 ```mermaid
 flowchart LR
     UI[Compose UI] --> VM[ViewModel and StateFlow]
