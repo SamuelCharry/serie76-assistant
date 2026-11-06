@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from backend.catalog.db import connect
 
-scratch = Path(r'C:\Users\nrir\AppData\Roaming\orca\chat-scratch\97d6b63f2a41ae2054d3f6922c392659')
+scratch = Path(r'<local>\AppData\Roaming\orca\chat-scratch\97d6b63f2a41ae2054d3f6922c392659')
 source = json.loads((scratch/'behavior/out_v13or_google_gemini-3.6-flash/results.json').read_text(encoding='utf-8'))
 out = Path('reports/agent_acceptance/t14_oracle_pre_fix')
 scenarios, traces = [], {}

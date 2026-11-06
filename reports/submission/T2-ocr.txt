@@ -1,7 +1,7 @@
-C:\Users\nrir\Desktop\dev\serie76-assistant\.cache\pipeline-fixtures
+<local>\Desktop\dev\serie76-assistant\.cache\pipeline-fixtures
 {
   "status": "passed",
-  "original_output": "C:\\Users\\nrir\\Desktop\\dev\\serie76-assistant\\data\\processed\\acceptance-isolated\\doc-series_76_electric_data-4c28023929183df8-9882bf8659",
+  "original_output": "<local>\\Desktop\\dev\\serie76-assistant\\data\\processed\\acceptance-isolated\\doc-series_76_electric_data-4c28023929183df8-9882bf8659",
   "reference_and_network_isolation": {
     "guard_self_test_passed": true,
     "forbidden_reference_reads": [],

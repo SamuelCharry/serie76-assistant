@@ -8,7 +8,7 @@ from backend.catalog.repository import get_actuator
 from backend.catalog.models import SearchFilters
 from backend.conversation import integrity,shown_recommendation,policy
 parser=argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--source',type=Path,default=Path(r'C:\Users\nrir\AppData\Roaming\orca\chat-scratch\97d6b63f2a41ae2054d3f6922c392659'))
+parser.add_argument('--source',type=Path,default=Path(r'<local>\AppData\Roaming\orca\chat-scratch\97d6b63f2a41ae2054d3f6922c392659'))
 source=parser.parse_args().source/'behavior/out_v15_v1/results.json'
 data=json.loads(source.read_text(encoding='utf-8'))
 out=Path('reports/agent_acceptance/p1_f')

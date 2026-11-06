@@ -103,9 +103,9 @@ test_unitless_correction_requires_one_prior_dimension (test_p2_oracle.QuantityGr
 FAIL: test_P2_code_ordinal_starts_1 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '960' not found in 'which of the previously listed actuators do you mean? please give its complete part number.'
 
@@ -113,9 +113,9 @@ AssertionError: Regex didn't match: '960' not found in 'which of the previously 
 FAIL: test_P2_code_ordinal_starts_2 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '960' not found in 'which of the previously listed actuators do you mean? please give its complete part number.'
 
@@ -123,9 +123,9 @@ AssertionError: Regex didn't match: '960' not found in 'which of the previously 
 FAIL: test_P2_code_ordinal_starts_3 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_starts_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '960' not found in 'which of the previously listed actuators do you mean? please give its complete part number.'
 
@@ -133,9 +133,9 @@ AssertionError: Regex didn't match: '960' not found in 'which of the previously 
 FAIL: test_P2_code_ordinal_time_1 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_time_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '30 s' not found in 'which of the previously listed actuators do you mean? please give its complete part number.\nthe catalogue does not publish delivery date.\nthe catalogue does not publish delivery times or lead times.'
 
@@ -143,9 +143,9 @@ AssertionError: Regex didn't match: '30 s' not found in 'which of the previously
 FAIL: test_P2_code_ordinal_time_2 (test_p2_oracle.P2Oracle.test_P2_code_ordinal_time_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 78, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '30 s' not found in 'which of the previously listed actuators do you mean? please give its complete part number.\nthe catalogue does not publish delivery date.\nthe catalogue does not publish delivery times or lead times.'
 
@@ -153,9 +153,9 @@ AssertionError: Regex didn't match: '30 s' not found in 'which of the previously
 FAIL: test_P2_code_pick_after_removal_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
     self.assertEqual(ranked[:1], [expected['first']], result.answer)
 AssertionError: Lists differ: ['764Y30-11320000/A'] != ['761X30-11320000/A']
 
@@ -174,9 +174,9 @@ First differing element 0:
 FAIL: test_P2_code_pick_after_removal_2 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check_case
     self.assertNotIn(field, filters, result.answer)
 AssertionError: 'min_torque_nm' unexpectedly found in {'limit': 5, 'offset': 0, 'service': 'on_off', 'enclosure': 'explosionproof', 'min_torque_nm': {'op': 'gte', 'value': '940'}, 'supply_voltage_v': 220} : 764Y30-11320000/A has the lowest torque: 940 Nm.
 
@@ -184,9 +184,9 @@ AssertionError: 'min_torque_nm' unexpectedly found in {'limit': 5, 'offset': 0, 
 FAIL: test_P2_code_pick_after_removal_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_after_removal_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
     self.assertEqual(ranked[:1], [expected['first']], result.answer)
 AssertionError: Lists differ: ['764Y30-11320000/A'] != ['761X30-11320000/A']
 
@@ -205,9 +205,9 @@ First differing element 0:
 FAIL: test_P2_code_pick_initial_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 108, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 108, in check_case
     self.assertTrue(visible, result.answer)
 AssertionError: set() is not true : Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.
 
@@ -215,9 +215,9 @@ AssertionError: set() is not true : Tell me what it must do: open/close or modul
 FAIL: test_P2_code_pick_initial_2 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 108, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 108, in check_case
     self.assertTrue(visible, result.answer)
 AssertionError: set() is not true : Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.
 
@@ -225,9 +225,9 @@ AssertionError: set() is not true : Tell me what it must do: open/close or modul
 FAIL: test_P2_code_pick_initial_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_initial_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 108, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 108, in check_case
     self.assertTrue(visible, result.answer)
 AssertionError: set() is not true : Tell me what it must do: open/close or modulate, supply voltage, and the torque you need.
 
@@ -235,9 +235,9 @@ AssertionError: set() is not true : Tell me what it must do: open/close or modul
 FAIL: test_P2_code_pick_new_objective_1 (test_p2_oracle.P2Oracle.test_P2_code_pick_new_objective_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
     self.assertEqual(ranked[:1], [expected['first']], result.answer)
 AssertionError: Lists differ: ['765X30-11320000/A'] != ['765Y30-11320000/A']
 
@@ -256,9 +256,9 @@ First differing element 0:
 FAIL: test_P2_code_pick_new_objective_3 (test_p2_oracle.P2Oracle.test_P2_code_pick_new_objective_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 117, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 97, in check_case
     self.assertEqual(ranked[:1], [expected['first']], result.answer)
 AssertionError: Lists differ: ['765X30-11320000/A'] != ['765Y30-11320000/A']
 

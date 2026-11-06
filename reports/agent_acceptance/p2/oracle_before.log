@@ -9,9 +9,9 @@ At line:3 char:1
 FAIL: test_P2_compound_booking_1 (test_p2_oracle.P2Oracle.test_P2_compound_booking_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '1.5 a' not found in "the catalogue doesn't publish maintenance interval for
 763y30-11320000/a. i can compare its published electrical fields."
@@ -20,9 +20,9 @@ AssertionError: Regex didn't match: '1.5 a' not found in "the catalogue doesn't 
 FAIL: test_P2_compound_booking_3 (test_p2_oracle.P2Oracle.test_P2_compound_booking_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '1.5 a' not found in "the catalogue doesn't publish maintenance interval for
 763y30-11320000/a. i can compare its published electrical fields."
@@ -31,9 +31,9 @@ AssertionError: Regex didn't match: '1.5 a' not found in "the catalogue doesn't 
 FAIL: test_P2_compound_certification_1 (test_p2_oracle.P2Oracle.test_P2_compound_certification_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '4.6 a' not found in "the catalogue doesn't publish wiring diagram. i can compare
 its published electrical fields."
@@ -42,9 +42,9 @@ its published electrical fields."
 FAIL: test_P2_compound_certification_3 (test_p2_oracle.P2Oracle.test_P2_compound_certification_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '4.6 a' not found in "the catalogue doesn't publish wiring diagram. i can compare
 its published electrical fields."
@@ -53,9 +53,9 @@ its published electrical fields."
 FAIL: test_P2_compound_lookup_1 (test_p2_oracle.P2Oracle.test_P2_compound_lookup_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: 'operating time at 50 hz' not found in 'the catalogue does not publish delivery
 times. i can show the published model specifications.\nthe catalogue does not publish delivery times or lead times.'
@@ -64,9 +64,9 @@ times. i can show the published model specifications.\nthe catalogue does not pu
 FAIL: test_P2_compound_lookup_2 (test_p2_oracle.P2Oracle.test_P2_compound_lookup_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: 'operating time at 50 hz' not found in 'the catalogue does not publish delivery
 times. i can show the published model specifications.\nthe catalogue does not publish delivery times or lead times.'
@@ -75,9 +75,9 @@ times. i can show the published model specifications.\nthe catalogue does not pu
 FAIL: test_P2_compound_lookup_3 (test_p2_oracle.P2Oracle.test_P2_compound_lookup_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: 'operating time at 50 hz' not found in 'the catalogue does not publish delivery
 times. i can show the published model specifications.\nthe catalogue does not publish delivery times or lead times.'
@@ -86,9 +86,9 @@ times. i can show the published model specifications.\nthe catalogue does not pu
 FAIL: test_P2_compound_search_1 (test_p2_oracle.P2Oracle.test_P2_compound_search_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'min_torque_nm' not found in {} : The catalogue doesn't publish prices. A weighted price score is
 unavailable.
@@ -97,9 +97,9 @@ unavailable.
 FAIL: test_P2_compound_search_3 (test_p2_oracle.P2Oracle.test_P2_compound_search_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'min_torque_nm' not found in {} : The catalogue doesn't publish prices. A weighted price score is
 unavailable.
@@ -108,9 +108,9 @@ unavailable.
 FAIL: test_P2_contextual_enclosure_1 (test_p2_oracle.P2Oracle.test_P2_contextual_enclosure_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 43, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 43, in check_case
     self.assertIsNone(re.search(pattern, result.answer, re.I), result.answer)
 AssertionError: <re.Match object; span=(21, 47), match='across the whole catalogue'> is not None : Published
 enclosures across the whole catalogue: Explosionproof (30 models) with published data; 0 more Explosionproof models
@@ -121,9 +121,9 @@ listed with N/A, excluded from that count.
 FAIL: test_P2_contextual_enclosure_3 (test_p2_oracle.P2Oracle.test_P2_contextual_enclosure_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 43, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 43, in check_case
     self.assertIsNone(re.search(pattern, result.answer, re.I), result.answer)
 AssertionError: <re.Match object; span=(21, 47), match='across the whole catalogue'> is not None : Published
 enclosures across the whole catalogue: Explosionproof (30 models) with published data; 0 more Explosionproof models
@@ -134,9 +134,9 @@ listed with N/A, excluded from that count.
 FAIL: test_P2_directional_removal_1 (test_p2_oracle.P2Oracle.test_P2_directional_removal_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'min_torque_nm' not found in {'service': 'on_off', 'enclosure': 'weatherproof', 'supply_voltage_v':
 220, 'phase_count': 1, 'limit': 5, 'offset': 0} : 16 actuators meet: Weatherproof, 1-phase, On/Off service, 220 V;
@@ -150,9 +150,9 @@ Ranked by lowest FLA, then shortest operating time.
 FAIL: test_P2_directional_removal_2 (test_p2_oracle.P2Oracle.test_P2_directional_removal_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'min_torque_nm' not found in {'service': 'on_off', 'enclosure': 'weatherproof', 'supply_voltage_v':
 220, 'phase_count': 1, 'limit': 5, 'offset': 0} : 16 actuators meet: Weatherproof, 1-phase, On/Off service, 220 V;
@@ -166,9 +166,9 @@ Ranked by lowest FLA, then shortest operating time.
 FAIL: test_P2_directional_removal_3 (test_p2_oracle.P2Oracle.test_P2_directional_removal_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'min_torque_nm' not found in {'service': 'on_off', 'enclosure': 'weatherproof', 'supply_voltage_v':
 220, 'phase_count': 1, 'limit': 5, 'offset': 0} : 16 actuators meet: Weatherproof, 1-phase, On/Off service, 220 V;
@@ -182,9 +182,9 @@ Ranked by lowest FLA, then shortest operating time.
 FAIL: test_P2_elliptical_limit_1 (test_p2_oracle.P2Oracle.test_P2_elliptical_limit_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
     self.assertEqual(canonical(field, filters[field]), canonical(field, value), result.answer)
 AssertionError: Lists differ: [(500.0, 'gte')] != [(750.0, 'gte')]
 
@@ -206,9 +206,9 @@ First differing element 0:
 FAIL: test_P2_elliptical_limit_2 (test_p2_oracle.P2Oracle.test_P2_elliptical_limit_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
     self.assertEqual(canonical(field, filters[field]), canonical(field, value), result.answer)
 AssertionError: Lists differ: [(500.0, 'gte')] != [(750.0, 'gte')]
 
@@ -230,9 +230,9 @@ First differing element 0:
 FAIL: test_P2_elliptical_limit_3 (test_p2_oracle.P2Oracle.test_P2_elliptical_limit_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
     self.assertEqual(canonical(field, filters[field]), canonical(field, value), result.answer)
 AssertionError: Lists differ: [(500.0, 'gte')] != [(750.0, 'gte')]
 
@@ -254,9 +254,9 @@ First differing element 0:
 FAIL: test_P2_enclosure_replacement_1 (test_p2_oracle.P2Oracle.test_P2_enclosure_replacement_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'enclosure' not found in {'service': 'on_off', 'min_torque_nm': {'op': 'gte', 'value': '150'},
 'supply_voltage_v': 220, 'limit': 5, 'offset': 0} : Which published enclosure matches your site? Explosionproof: Built
@@ -274,9 +274,9 @@ Enclosure not specified: Weatherproof is for general areas; choose Explosionproo
 FAIL: test_P2_enclosure_replacement_2 (test_p2_oracle.P2Oracle.test_P2_enclosure_replacement_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'enclosure' not found in {'service': 'on_off', 'min_torque_nm': {'op': 'gte', 'value': '150'},
 'supply_voltage_v': 220, 'limit': 5, 'offset': 0} : 29 actuators meet: On/Off service, 220 V, torque >= 150 Nm; with
@@ -293,9 +293,9 @@ Enclosure not specified: Weatherproof is for general areas; choose Explosionproo
 FAIL: test_P2_enclosure_replacement_3 (test_p2_oracle.P2Oracle.test_P2_enclosure_replacement_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'enclosure' not found in {'service': 'on_off', 'min_torque_nm': {'op': 'gte', 'value': '150'},
 'supply_voltage_v': 220, 'limit': 5, 'offset': 0} : 29 actuators meet: On/Off service, 220 V, torque >= 150 Nm; with
@@ -312,9 +312,9 @@ Enclosure not specified: Weatherproof is for general areas; choose Explosionproo
 FAIL: test_P2_equal_comparison_field_1 (test_p2_oracle.P2Oracle.test_P2_equal_comparison_field_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: 'operating time at 50 hz' not found in 'comparing 761x30-11320000/a vs
 761y30-11320000/a. 15 identical fields hidden.\non/off torque: 690 in-lb / 80 nm vs 790 in-lb / 90 nm\nmodulating
@@ -324,9 +324,9 @@ torque: 550 in-lb / 65 nm vs 630 in-lb / 72 nm'
 FAIL: test_P2_equal_comparison_field_2 (test_p2_oracle.P2Oracle.test_P2_equal_comparison_field_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: 'operating time at 50 hz' not found in 'comparing 761x30-11320000/a vs
 761y30-11320000/a. 15 identical fields hidden.\non/off torque: 690 in-lb / 80 nm vs 790 in-lb / 90 nm\nmodulating
@@ -336,9 +336,9 @@ torque: 550 in-lb / 65 nm vs 630 in-lb / 72 nm'
 FAIL: test_P2_equal_comparison_field_3 (test_p2_oracle.P2Oracle.test_P2_equal_comparison_field_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: 'operating time at 50 hz' not found in 'comparing 761x30-11320000/a vs
 761y30-11320000/a. 15 identical fields hidden.\non/off torque: 690 in-lb / 80 nm vs 790 in-lb / 90 nm\nmodulating
@@ -348,9 +348,9 @@ torque: 550 in-lb / 65 nm vs 630 in-lb / 72 nm'
 FAIL: test_P2_global_rerank_1 (test_p2_oracle.P2Oracle.test_P2_global_rerank_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 60, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 60, in check_case
     self.assertEqual(ranked[:1], [expected['first']], result.answer)
 AssertionError: Lists differ: ['764Y30-11320000/A'] != ['764X30-11320000/A']
 
@@ -372,9 +372,9 @@ Hz advantage (2.2 A vs 3.3 A) matters more than the stated priority.
 FAIL: test_P2_glossary_routing_1 (test_p2_oracle.P2Oracle.test_P2_glossary_routing_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 43, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 43, in check_case
     self.assertIsNone(re.search(pattern, result.answer, re.I), result.answer)
 AssertionError: <re.Match object; span=(3, 17), match='actuators meet'> is not None : 59 actuators meet: On/Off
 service; with published electrical data. 4 more models within On/Off service are listed with N/A, without published
@@ -386,9 +386,9 @@ without published values, and excluded from the published-data count; their perf
 FAIL: test_P2_glossary_routing_2 (test_p2_oracle.P2Oracle.test_P2_glossary_routing_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 43, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 43, in check_case
     self.assertIsNone(re.search(pattern, result.answer, re.I), result.answer)
 AssertionError: <re.Match object; span=(3, 17), match='actuators meet'> is not None : 59 actuators meet: On/Off
 service; with published electrical data. 4 more models within On/Off service are listed with N/A, without published
@@ -400,9 +400,9 @@ without published values, and excluded from the published-data count; their perf
 FAIL: test_P2_identifier_quantity_1 (test_p2_oracle.P2Oracle.test_P2_identifier_quantity_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 39, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 39, in check_case
     self.assertNotIn(field, filters, result.answer)
 AssertionError: 'max_fla_a' unexpectedly found in {'frequency_hz': 50, 'max_fla_a': {'value': '764', 'op': 'lte'}} :
 764A00-11300000/A
@@ -415,9 +415,9 @@ Motor power is the rated power of the internal motor; the catalogue does not pub
 FAIL: test_P2_inclusive_bound_1 (test_p2_oracle.P2Oracle.test_P2_inclusive_bound_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
     self.assertEqual(canonical(field, filters[field]), canonical(field, value), result.answer)
 AssertionError: Lists differ: [(800.0, 'gt')] != [(800.0, 'gte')]
 
@@ -438,9 +438,9 @@ Ranked by closest torque above 800 Nm, then lowest FLA.
 FAIL: test_P2_inclusive_bound_2 (test_p2_oracle.P2Oracle.test_P2_inclusive_bound_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
     self.assertEqual(canonical(field, filters[field]), canonical(field, value), result.answer)
 AssertionError: Lists differ: [(800.0, 'gt')] != [(800.0, 'gte')]
 
@@ -461,9 +461,9 @@ Ranked by closest torque above 800 Nm, then lowest FLA.
 FAIL: test_P2_inclusive_bound_3 (test_p2_oracle.P2Oracle.test_P2_inclusive_bound_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 60, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 60, in check_case
     self.assertEqual(ranked[:1], [expected['first']], result.answer)
 AssertionError: Lists differ: ['765Y30-11320000/A'] != ['764X30-11320000/A']
 
@@ -482,9 +482,9 @@ First differing element 0:
 FAIL: test_P2_motor_total_1 (test_p2_oracle.P2Oracle.test_P2_motor_total_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '540 w' not found in '764y30-11320000/a\n � motor power: 180 w\n source: series 76
 electrical catalogue, page 4.\nmotor power is the rated power of the internal motor; the catalogue does not publish
@@ -494,9 +494,9 @@ total electrical consumption.'
 FAIL: test_P2_motor_total_2 (test_p2_oracle.P2Oracle.test_P2_motor_total_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '540 w' not found in '764y30-11320000/a\n � motor power: 180 w\n source: series 76
 electrical catalogue, page 4.\nmotor power is the rated power of the internal motor; the catalogue does not publish
@@ -506,9 +506,9 @@ total electrical consumption.'
 FAIL: test_P2_motor_total_3 (test_p2_oracle.P2Oracle.test_P2_motor_total_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '540 w' not found in '764y30-11320000/a\n � motor power: 180 w\n source: series 76
 electrical catalogue, page 4.\nmotor power is the rated power of the internal motor; the catalogue does not publish
@@ -518,9 +518,9 @@ total electrical consumption.'
 FAIL: test_P2_numeric_alternatives_1 (test_p2_oracle.P2Oracle.test_P2_numeric_alternatives_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 63, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 63, in check_case
     self.assertTrue(ranked, result.answer)
 AssertionError: [] is not true : No actuator in the supplied catalogue meets all of: On/Off service, 220 V, torque >=
 50000 Nm.
@@ -535,9 +535,9 @@ Enclosure not specified: Weatherproof is for general areas; choose Explosionproo
 FAIL: test_P2_numeric_alternatives_2 (test_p2_oracle.P2Oracle.test_P2_numeric_alternatives_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 63, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 63, in check_case
     self.assertTrue(ranked, result.answer)
 AssertionError: [] is not true : No actuator in the supplied catalogue meets all of: On/Off service, 220 V, torque >=
 50000 Nm.
@@ -552,9 +552,9 @@ Enclosure not specified: Weatherproof is for general areas; choose Explosionproo
 FAIL: test_P2_numeric_alternatives_3 (test_p2_oracle.P2Oracle.test_P2_numeric_alternatives_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 63, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 63, in check_case
     self.assertTrue(ranked, result.answer)
 AssertionError: [] is not true : No actuator in the supplied catalogue meets all of: On/Off service, 220 V, torque >=
 50000 Nm.
@@ -569,9 +569,9 @@ Enclosure not specified: Weatherproof is for general areas; choose Explosionproo
 FAIL: test_P2_phase_grounding_1 (test_p2_oracle.P2Oracle.test_P2_phase_grounding_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'phase_count' not found in {'enclosure': 'weatherproof', 'service': 'on_off', 'supply_voltage_v': 220,
 'min_torque_nm': {'value': '150', 'op': 'gte'}, 'limit': 5, 'offset': 0} : 21 actuators meet: Weatherproof, On/Off
@@ -589,9 +589,9 @@ Ranked by closest torque at or above 150 Nm, then lowest FLA.
 FAIL: test_P2_phase_grounding_2 (test_p2_oracle.P2Oracle.test_P2_phase_grounding_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'phase_count' not found in {'enclosure': 'weatherproof', 'service': 'on_off', 'supply_voltage_v': 220,
 'min_torque_nm': {'value': '150', 'op': 'gte'}, 'limit': 5, 'offset': 0} : 21 actuators meet: Weatherproof, On/Off
@@ -608,9 +608,9 @@ Ranked by closest torque at or above 150 Nm, then lowest FLA.
 FAIL: test_P2_quantity_words_1 (test_p2_oracle.P2Oracle.test_P2_quantity_words_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'max_operating_time_s' not found in {'enclosure': 'explosionproof', 'service': 'on_off',
 'supply_voltage_v': 220, 'frequency_hz': 50, 'min_torque_nm': {'value': '3000', 'op': 'gte'}, 'limit': 5, 'offset': 0}
@@ -625,9 +625,9 @@ Ranked by closest torque at or above 3000 Nm, then lowest FLA.
 FAIL: test_P2_quantity_words_2 (test_p2_oracle.P2Oracle.test_P2_quantity_words_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'max_operating_time_s' not found in {'enclosure': 'explosionproof', 'service': 'on_off',
 'supply_voltage_v': 220, 'frequency_hz': 50, 'min_torque_nm': {'value': '3000', 'op': 'gte'}, 'limit': 5, 'offset': 0}
@@ -642,9 +642,9 @@ Ranked by closest torque at or above 3000 Nm, then lowest FLA.
 FAIL: test_P2_quantity_words_3 (test_p2_oracle.P2Oracle.test_P2_quantity_words_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'max_operating_time_s' not found in {'enclosure': 'explosionproof', 'service': 'on_off',
 'supply_voltage_v': 220, 'frequency_hz': 50, 'min_torque_nm': {'value': '3000', 'op': 'gte'}, 'limit': 5, 'offset': 0}
@@ -659,9 +659,9 @@ Ranked by closest torque at or above 3000 Nm, then lowest FLA.
 FAIL: test_P2_range_bounds_1 (test_p2_oracle.P2Oracle.test_P2_range_bounds_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'min_torque_nm' not found in {} : These requirements could not be applied together. Please restate the
 supply, service and limits you need.
@@ -670,9 +670,9 @@ supply, service and limits you need.
 FAIL: test_P2_range_bounds_2 (test_p2_oracle.P2Oracle.test_P2_range_bounds_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'min_torque_nm' not found in {} : These requirements could not be applied together. Please restate the
 supply, service and limits you need.
@@ -681,9 +681,9 @@ supply, service and limits you need.
 FAIL: test_P2_range_bounds_3 (test_p2_oracle.P2Oracle.test_P2_range_bounds_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'min_torque_nm' not found in {} : These requirements could not be applied together. Please restate the
 supply, service and limits you need.
@@ -692,9 +692,9 @@ supply, service and limits you need.
 FAIL: test_P2_reference_position_1 (test_p2_oracle.P2Oracle.test_P2_reference_position_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
     self.assertEqual(canonical(field, filters[field]), canonical(field, value), result.answer)
 AssertionError: Lists differ: [(150.0, 'gte')] != [(300.0, 'gt')]
 
@@ -713,9 +713,9 @@ First differing element 0:
 FAIL: test_P2_reference_position_2 (test_p2_oracle.P2Oracle.test_P2_reference_position_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
     self.assertEqual(canonical(field, filters[field]), canonical(field, value), result.answer)
 AssertionError: Lists differ: [(150.0, 'gte')] != [(300.0, 'gt')]
 
@@ -734,9 +734,9 @@ First differing element 0:
 FAIL: test_P2_reference_position_3 (test_p2_oracle.P2Oracle.test_P2_reference_position_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
     self.assertEqual(canonical(field, filters[field]), canonical(field, value), result.answer)
 AssertionError: Lists differ: [(150.0, 'gte')] != [(300.0, 'gt')]
 
@@ -758,9 +758,9 @@ On/Off torque: 2650 in-lb / 300 Nm vs 1330 in-lb / 150 Nm. Choose 762A00-1130000
 FAIL: test_P2_relative_search_1 (test_p2_oracle.P2Oracle.test_P2_relative_search_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
     self.assertEqual(canonical(field, filters[field]), canonical(field, value), result.answer)
 AssertionError: Lists differ: [(150.0, 'gte')] != [(200.0, 'gt')]
 
@@ -781,9 +781,9 @@ shown model meeting every requirement.
 FAIL: test_P2_relative_search_3 (test_p2_oracle.P2Oracle.test_P2_relative_search_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 37, in check_case
     self.assertEqual(canonical(field, filters[field]), canonical(field, value), result.answer)
 AssertionError: Lists differ: [(150.0, 'gte')] != [(200.0, 'gt')]
 
@@ -802,9 +802,9 @@ First differing element 0:
 FAIL: test_P2_same_turn_correction_1 (test_p2_oracle.P2Oracle.test_P2_same_turn_correction_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'supply_voltage_v' not found in {'enclosure': 'weatherproof', 'phase_count': 1, 'service': 'on_off',
 'min_torque_nm': {'value': '80', 'op': 'gte'}, 'limit': 5, 'offset': 0} : I could not verify every presented model
@@ -824,9 +824,9 @@ Ranked by closest torque at or above 80 Nm, then lowest FLA.
 FAIL: test_P2_same_turn_correction_2 (test_p2_oracle.P2Oracle.test_P2_same_turn_correction_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'supply_voltage_v' not found in {'enclosure': 'weatherproof', 'phase_count': 1, 'service': 'on_off',
 'min_torque_nm': {'value': '80', 'op': 'gte'}, 'limit': 5, 'offset': 0} : I could not verify every presented model
@@ -846,9 +846,9 @@ Ranked by closest torque at or above 80 Nm, then lowest FLA.
 FAIL: test_P2_same_turn_correction_3 (test_p2_oracle.P2Oracle.test_P2_same_turn_correction_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 36, in check_case
     self.assertIn(field, filters, result.answer)
 AssertionError: 'supply_voltage_v' not found in {'enclosure': 'weatherproof', 'phase_count': 1, 'service': 'on_off',
 'min_torque_nm': {'value': '80', 'op': 'gte'}, 'limit': 5, 'offset': 0} : I could not verify every presented model
@@ -868,9 +868,9 @@ Ranked by closest torque at or above 80 Nm, then lowest FLA.
 FAIL: test_P2_unsupported_coverage_1 (test_p2_oracle.P2Oracle.test_P2_unsupported_coverage_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: 'colou?r' not found in 'the catalogue does not publish mounting dimensions.\ni can
 show published specs for 761b00-11300000/a.'
@@ -879,9 +879,9 @@ show published specs for 761b00-11300000/a.'
 FAIL: test_P2_unsupported_coverage_2 (test_p2_oracle.P2Oracle.test_P2_unsupported_coverage_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: 'colou?r' not found in 'the catalogue does not publish mounting dimensions.\ni can
 show published specs for 761b00-11300000/a.'
@@ -890,9 +890,9 @@ show published specs for 761b00-11300000/a.'
 FAIL: test_P2_unsupported_coverage_3 (test_p2_oracle.P2Oracle.test_P2_unsupported_coverage_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: 'colou?r' not found in 'the catalogue does not publish mounting dimensions.\ni can
 show published specs for 761b00-11300000/a.'
@@ -901,9 +901,9 @@ show published specs for 761b00-11300000/a.'
 FAIL: test_P2_visible_limit_1 (test_p2_oracle.P2Oracle.test_P2_visible_limit_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 49, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 49, in check_case
     self.assertEqual(len(visible), expected['visible_count'], result.answer)
 AssertionError: 3 != 2 : 9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm; with published
 electrical data. Here are the leading published models.
@@ -917,9 +917,9 @@ Ranked by closest torque at or above 150 Nm, then lowest FLA.
 FAIL: test_P2_visible_limit_2 (test_p2_oracle.P2Oracle.test_P2_visible_limit_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 49, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 49, in check_case
     self.assertEqual(len(visible), expected['visible_count'], result.answer)
 AssertionError: 3 != 2 : 9 actuators meet: Weatherproof, On/Off service, 110 V, torque >= 150 Nm; with published
 electrical data. Here are the leading published models.
@@ -932,9 +932,9 @@ Ranked by closest torque at or above 150 Nm, then lowest FLA.
 FAIL: test_P2_visible_limit_3 (test_p2_oracle.P2Oracle.test_P2_visible_limit_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 49, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 49, in check_case
     self.assertEqual(len(visible), expected['visible_count'], result.answer)
 AssertionError: 3 != 2 : 9 actuators meet: Weatherproof, 110 V, torque >= 150 Nm; with published electrical data.
 To narrow it down: service.
@@ -948,9 +948,9 @@ Ranked by closest torque at or above 150 Nm, then lowest FLA.
 FAIL: test_P2_withdrawn_unsupported_1 (test_p2_oracle.P2Oracle.test_P2_withdrawn_unsupported_1)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '360 nm' not found in "the catalogue doesn't publish prices. a weighted price
 score is unavailable."
@@ -959,9 +959,9 @@ score is unavailable."
 FAIL: test_P2_withdrawn_unsupported_2 (test_p2_oracle.P2Oracle.test_P2_withdrawn_unsupported_2)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '360 nm' not found in "the catalogue doesn't publish prices. a weighted price
 score is unavailable."
@@ -970,9 +970,9 @@ score is unavailable."
 FAIL: test_P2_withdrawn_unsupported_3 (test_p2_oracle.P2Oracle.test_P2_withdrawn_unsupported_3)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 76, in check
     self.check_case(scenario)
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_p2_oracle.py", line 41, in check_case
     self.assertRegex(result.answer.lower(), pattern.lower())
 AssertionError: Regex didn't match: '360 nm' not found in "the catalogue doesn't publish prices. a weighted price
 score is unavailable.\n59 actuators meet: modulating service; with published electrical data. 4 more models within

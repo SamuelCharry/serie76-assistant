@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from backend.catalog.db import connect
-src=Path(r'C:\Users\nrir\AppData\Roaming\orca\chat-scratch\97d6b63f2a41ae2054d3f6922c392659')
+src=Path(r'<local>\AppData\Roaming\orca\chat-scratch\97d6b63f2a41ae2054d3f6922c392659')
 data=json.loads((src/'behavior/out_v15_v1/results.json').read_text(encoding='utf-8'))
 out=Path('reports/agent_acceptance/p1_f');out.mkdir(exist_ok=True)
 traces={}

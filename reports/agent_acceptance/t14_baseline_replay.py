@@ -8,7 +8,7 @@ import sys
 import tarfile
 
 root=Path.cwd()
-target=Path(r'C:\Users\nrir\AppData\Roaming\orca\chat-scratch\97d6b63f2a41ae2054d3f6922c392659\t14_baseline')
+target=Path(r'<local>\AppData\Roaming\orca\chat-scratch\97d6b63f2a41ae2054d3f6922c392659\t14_baseline')
 target.mkdir(exist_ok=True)
 with tarfile.open(fileobj=io.BytesIO(subprocess.check_output(['git','archive','e90c397']))) as archive:
     archive.extractall(target,filter='data')

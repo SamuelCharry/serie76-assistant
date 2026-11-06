@@ -4,7 +4,7 @@
 FAIL: test_model_only_signals_intent_priority_not_new_filters_or_codes (test_shown_recommendation.ShownRecommendationTests.test_model_only_signals_intent_priority_not_new_filters_or_codes)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\nrir\Desktop\dev\serie76-assistant\tests\test_shown_recommendation.py", line 115, in test_model_only_signals_intent_priority_not_new_filters_or_codes
+  File "<local>\Desktop\dev\serie76-assistant\tests\test_shown_recommendation.py", line 115, in test_model_only_signals_intent_priority_not_new_filters_or_codes
     self.assertEqual(result.recommendation['items'][0]['part_number'], TRIPLE[1])
 AssertionError: '762B00-11320000/A' != '763A00-11320000/A'
 - 762B00-11320000/A
